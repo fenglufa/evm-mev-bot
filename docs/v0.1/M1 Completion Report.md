@@ -282,9 +282,15 @@ Fixture 覆盖（`fixtures/replay/`，要求 ≥5，实际 7 个用例 8 个区�
 
 1. 只证实了**一个**池子。没有 Factory/`PairCreated` 的证据，所以新池子无法自动进入状态——
    目前只能往 `data/protocols/*.json` 增加一份带证据的 attest。自动发现属于后续里程碑。
+   **【M2 撤回：本条与下面第 3 条关于 `0xcaafb95f…` 的判断都错了，根因是把「本地语料里搜不到」
+   当成「链上不存在」；两个 Factory 实测存在且可枚举，池子数已从 1 增至 4。
+   见 `M2 Completion Report.md` 第 2 节与第 10 节第 1 条。】**
 2. 手续费未证实（`fee = None`）。任何依赖手续费的定价计算在 M1 阶段拿不到这个数。
 3. 非 V2 的 `Sync` 形状发射者被有意忽略而不是解码：语料里占 `Sync` 日志 1,629/2,345 的
    `0xad153c84…`，以及 18 条的 `0xcaafb95f…`。要接它们需要各自的身份证据，不能靠 topic0。
+   **【M2 更新：`0xcaafb95f…` 已用 `PairCreated` + `factory()` + `allPairs(38)` 举出身份，
+   进 registry 并进图；`0xad153c84…` 仍然被拒（`factory()` revert、不在两个 Factory 的 45 个
+   `allPairs` 里），保持忽略是正确的。】**
 4. `token1` `0x4200…0006` 只有「它是该池 token1() 的返回值」这一层证据；
    它的 `symbol()/name()` 没有取证，所以报告里不称其为 WETH。
 5. 本地既有历史文件里的 `log_index` 是**每笔交易内**的序号，不是块内全局序号——实测该语料
