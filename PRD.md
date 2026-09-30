@@ -2,41 +2,37 @@
 
 ## Product Requirements Document
 
-**项目名称：** EVM MEV Bot
-**当前版本：** v0.1
-**文档性质：** 项目总 PRD + 长期范围约束
-**目标语言：** Rust
-**目标平台：** EVM-compatible Blockchains
-**项目阶段：** 从零开始的新项目
+项目名称：EVM MEV Bot
+当前产品目标：GIWA Testnet Arbitrage Bot
+当前 PRD 版本：v0.2
+目标语言：Rust
+目标链：GIWA Testnet
+协议方向：V2-style AMM Arbitrage
+项目阶段：从历史 Replay 基础设施进入真实 EVM Simulation / Live / Execution 阶段
 
 ---
 
 # 1. 文档目的
 
-本文档不是单纯用于描述产品功能。
+本文档不是单纯用于描述软件功能。
 
-本文档的核心职责是：
+本文档负责定义：
 
-1. 定义 EVM MEV Bot 到底是什么；
-2. 明确项目长期技术方向；
-3. 明确 v0.1 应该做什么；
-4. 明确 v0.1 不应该做什么；
-5. 明确系统边界；
-6. 明确核心数据流；
-7. 明确模块职责；
-8. 明确后续版本演进方向；
-9. 明确每个阶段的验收标准；
-10. 防止项目在开发过程中逐渐演变成：
+1. 当前项目到底要解决什么问题；
+2. 当前项目真正的产品目标；
+3. 当前阶段应该做什么；
+4. 当前阶段明确不应该做什么；
+5. 系统核心架构；
+6. 数据流；
+7. 模块职责；
+8. GIWA Testnet 的特殊能力；
+9. 后续开发里程碑；
+10. 每个里程碑的验收标准；
+11. 项目防跑偏规则。
 
-* 通用 EVM 交易分析系统；
-* 通用区块链数据平台；
-* 通用交易语义识别系统；
-* ABI/Selector 数据库；
-* 区块链浏览器；
-* AI Agent 平台；
-* 通用套利研究平台。
+任何后续需求，如果与本文档定义的当前产品目标冲突：
 
-**任何后续需求，如果与本文档定义的核心目标冲突，应优先修改 PRD，而不是直接进入代码。**
+> 优先修改 PRD，而不是直接进入代码。
 
 ---
 
@@ -44,82 +40,277 @@
 
 ## 2.1 一句话定义
 
-> **EVM MEV Bot 是一个基于 Rust 构建的、面向多个 EVM 链的低延迟 MEV 机会发现、模拟、风险判断和交易执行系统。**
+> EVM MEV Bot 当前是一个基于 Rust 构建、专注于 GIWA Testnet 的低延迟 DEX Arbitrage Bot。
 
-系统最终目标不是“理解区块链上的所有交易”。
-
-系统最终目标是：
-
-> **在尽可能短的时间内发现具有真实盈利可能的 MEV Opportunity，并通过模拟、风险控制和执行链路将 Opportunity 转化为真实交易。**
-
----
-
-# 3. 核心目标
-
-系统的最终核心链路：
+系统最终要完成的核心闭环是：
 
 ```text
-Blockchain
-    ↓
-Block / Transaction / Log / State Change
-    ↓
+GIWA Chain Event
+        ↓
 Market State
-    ↓
-Pool State
-    ↓
+        ↓
 Liquidity Graph
-    ↓
-Opportunity Detection
-    ↓
-Simulation
-    ↓
-Profit Calculation
-    ↓
+        ↓
+Arbitrage Opportunity
+        ↓
+EVM Simulation
+        ↓
+Profitability
+        ↓
 Risk Control
-    ↓
-Execution
-    ↓
+        ↓
+Transaction Construction
+        ↓
+Signing
+        ↓
+GIWA Sequencer
+        ↓
 On-chain Result
-    ↓
-Metrics / Replay
+        ↓
+Actual Profit
+        ↓
+Replay / Metrics
 ```
 
-整个系统应该围绕这一条链路建设。
+当前项目不是为了构建：
+
+* 通用区块链分析平台；
+* 通用 EVM 数据平台；
+* 通用 ABI 数据库；
+* 通用 Token 分析平台；
+* 通用 AI Agent；
+* 通用套利研究平台；
+* 多链交易终端。
+
+项目唯一核心目标是：
+
+> **在 GIWA Testnet 上真正跑通一个可验证的套利 Bot。**
 
 ---
 
-# 4. 产品北极星
+# 3. 当前阶段的产品目标
 
-## 4.1 North Star
+## 3.1 第一目标
+
+最终必须实现：
 
 ```text
-Chain Event
-     ↓
-State Change
-     ↓
-Market State
-     ↓
-Graph Change
-     ↓
-Opportunity
-     ↓
-Simulation
-     ↓
-Risk
-     ↓
-Execution
-     ↓
-Result
-     ↓
-Metrics
-     ↓
-Replay
-     ↺
+GIWA Testnet
+    ↓
+发现真实套利机会
+    ↓
+本地 EVM Simulation
+    ↓
+确认真实可执行
+    ↓
+计算真实 Gas / Profit
+    ↓
+Risk Decision
+    ↓
+构造套利交易
+    ↓
+签名
+    ↓
+发送到 GIWA
+    ↓
+链上执行
+    ↓
+Receipt
+    ↓
+验证实际结果
 ```
 
-## 4.2 核心原则
+这条链路完整跑通，才认为当前项目真正完成了第一阶段产品目标。
 
-系统必须优先保证：
+---
+
+# 4. 当前阶段必须收敛
+
+## 4.1 当前只做 GIWA
+
+当前产品只针对：
+
+```text
+GIWA Testnet
+```
+
+不把以下链作为当前运行目标：
+
+```text
+Ethereum
+BSC
+Base
+Arbitrum
+Optimism
+Polygon
+其他 EVM Chain
+```
+
+---
+
+# 5. 关于多 EVM 的处理原则
+
+项目底层代码仍然保持合理的 EVM 抽象。
+
+但是：
+
+> **“具备 EVM 抽象能力”不等于“当前实现多链切换”。**
+
+当前不要求实现：
+
+```text
+--chain giwa
+--chain base
+--chain bsc
+--chain ethereum
+```
+
+也不要求：
+
+```text
+BaseAdapter
+BscAdapter
+EthereumAdapter
+```
+
+当前不为了多链提前增加：
+
+* 多链配置系统；
+* 多链 Provider 管理；
+* 多链运行模式；
+* 多链测试矩阵；
+* 多链部署；
+* 多链监控；
+* 多链 Execution；
+* 多链私有交易。
+
+---
+
+# 6. 为什么暂时不做多链
+
+多链支持并不是简单修改：
+
+```text
+chain_id
+RPC URL
+```
+
+不同 EVM 链可能在以下方面存在实际差异：
+
+* RPC；
+* WebSocket；
+* Block timing；
+* Gas model；
+* Transaction propagation；
+* Mempool；
+* Sequencer；
+* Private transaction；
+* Bundle；
+* DEX；
+* Factory；
+* Router；
+* Pool；
+* Token；
+* Finality；
+* MEV submission。
+
+因此：
+
+> 在 GIWA 的 Live + Simulation + Execution 完成之前，不提前抽象多链运行系统。
+
+---
+
+# 7. 当前项目的真正成功标准
+
+不是：
+
+```text
+能够支持很多链
+```
+
+而是：
+
+```text
+能够在 GIWA Testnet 上稳定完成套利闭环
+```
+
+最终至少需要证明：
+
+1. 能够接收 GIWA 实时链数据；
+2. 能够正确维护 Pool State；
+3. 能够发现套利 Opportunity；
+4. 能够在本地 EVM 中模拟；
+5. 模拟结果与实际 EVM 行为一致；
+6. 能够计算 Gas；
+7. 能够计算可执行 Profit；
+8. Risk 能够阻止不安全机会；
+9. 能够构造合法交易；
+10. 能够签名；
+11. 能够发送交易；
+12. GIWA 能够实际打包；
+13. 能够读取 Receipt；
+14. 能够计算实际结果；
+15. 能够 Replay 当时发生的一切。
+
+---
+
+# 8. 当前 North Star
+
+```text
+                    GIWA Testnet
+                         │
+                         ▼
+                   Chain Event
+                         │
+                         ▼
+                  Protocol Decode
+                         │
+                         ▼
+                    State Update
+                         │
+                         ▼
+                    Market Graph
+                         │
+                         ▼
+                 Opportunity Detection
+                         │
+                         ▼
+                     Simulation
+                         │
+                         ▼
+                   Profitability
+                         │
+                         ▼
+                     Risk Check
+                         │
+                         ▼
+                Transaction Builder
+                         │
+                         ▼
+                       Signer
+                         │
+                         ▼
+                  GIWA Sequencer
+                         │
+                         ▼
+                   On-chain Result
+                         │
+                         ▼
+                     Metrics
+                         │
+                         ▼
+                      Replay
+                         │
+                         └───────────────↺
+```
+
+---
+
+# 9. 核心设计原则
+
+## 9.1 Correctness First
+
+当前优先级：
 
 ```text
 Correctness
@@ -131,2286 +322,313 @@ Latency
 Complexity
 ```
 
-但是在进入 Live MEV 阶段后，延迟会成为与正确性同等级的重要指标。
-
----
-
-# 5. 产品目标
-
-## 5.1 长期目标
-
-构建一个：
-
-* Rust 原生；
-* 多 EVM 链；
-* 低延迟；
-* 状态驱动；
-* Opportunity-driven；
-* Simulation-first；
-* Risk-controlled；
-* Execution-ready；
-* 可 Replay；
-* 可 Benchmark；
-* 可扩展协议；
-
-的 MEV Bot。
-
----
-
-# 6. 第一阶段目标
-
-v0.1 不追求真正赚钱。
-
-v0.1 的目标是建立：
-
-> **可靠的 Chain → State → Graph → Opportunity 基础设施。**
-
-即：
+进入 GIWA Live MEV 后：
 
 ```text
-Chain
- ↓
-Block
- ↓
-Log
- ↓
-Protocol Event
- ↓
-Pool State
- ↓
-Graph
- ↓
-Arbitrage Opportunity
+Correctness ≈ Latency
 ```
 
-v0.1 完成以后，系统应该能够回答：
+但：
 
-> “当前链上的某个区块变化后，哪些流动性池发生变化？这些变化形成了什么新的交易路径？这些路径是否存在理论套利机会？”
+> 不能为了追求低延迟而牺牲状态正确性。
 
 ---
 
-# 7. 最终产品能力
+# 10. State First
 
-长期产品由以下能力组成：
-
-```text
-┌───────────────────────────────────────┐
-│              EVM MEV Bot              │
-├───────────────────────────────────────┤
-│ Chain Layer                           │
-│ Protocol Layer                        │
-│ State Layer                           │
-│ Graph Layer                           │
-│ Opportunity Layer                     │
-│ Simulation Layer                      │
-│ Risk Layer                            │
-│ Execution Layer                       │
-│ Signer Layer                          │
-│ Replay Layer                           │
-│ Metrics Layer                         │
-└───────────────────────────────────────┘
-```
-
-核心路径：
+禁止：
 
 ```text
-Chain
-  ↓
-Protocol
-  ↓
-State
-  ↓
-Graph
-  ↓
 Opportunity
-  ↓
-Simulation
-  ↓
-Risk
-  ↓
-Execution
-```
-
-Replay / Metrics 横向贯穿整个系统。
-
----
-
-# 8. 明确不做的事情
-
-这是本 PRD 最重要的章节之一。
-
-## 8.1 不做通用交易语义系统
-
-不构建：
-
-```text
-Transaction
- ↓
-Semantic Classification
- ↓
-Universal Meaning
-```
-
-系统不需要理解链上所有交易。
-
-只需要理解：
-
-> **与 MEV Opportunity 有关的交易、事件和状态变化。**
-
----
-
-## 8.2 不做通用 ABI 数据库
-
-不以：
-
-* ABI 收集；
-* Selector 收集；
-* Function Signature 收集；
-* Contract 分类；
-
-作为项目主线。
-
-这些数据只能服务于：
-
-```text
-Protocol Adapter
-Pool Discovery
-Event Decode
-State Update
-```
-
-不能反过来让整个项目围绕 ABI 数据建设。
-
----
-
-## 8.3 不做区块链浏览器
-
-不做：
-
-* 全链交易浏览器；
-* 地址画像；
-* Contract Explorer；
-* Token Explorer；
-* 通用交易搜索；
-* 通用数据 API。
-
----
-
-## 8.4 不做通用区块链数据平台
-
-不构建：
-
-```text
-Raw Blockchain Data
-      ↓
-Data Warehouse
-      ↓
-Universal Analytics
-```
-
-数据只保存 MEV Bot 真正需要的数据。
-
----
-
-## 8.5 不做 AI Agent
-
-不做：
-
-* AI Trading Agent；
-* LLM Strategy；
-* Prompt Strategy；
-* AI 自动分析机会；
-* AI 决策交易。
-
-MEV Hot Path 不允许依赖 LLM。
-
----
-
-## 8.6 不做 Sandwich
-
-项目不以 Sandwich 为策略方向。
-
-优先策略：
-
-1. Arbitrage；
-2. Backrun；
-3. 后续再扩展其他 MEV Strategy。
-
----
-
-## 8.7 不做一开始支持所有协议
-
-初期只实现：
-
-> 能形成稳定 Opportunity 的少量成熟 AMM 协议。
-
-协议数量不是第一阶段目标。
-
----
-
-## 8.8 不一开始支持所有 AMM 类型
-
-第一阶段优先：
-
-> Uniswap V2-style Constant Product AMM
-
-暂不以：
-
-* Uniswap V3；
-* CLMM；
-* StableSwap；
-* Concentrated Liquidity；
-
-作为 v0.1 的核心实现。
-
----
-
-## 8.9 不做跨链套利
-
-“多 EVM 链”意味着：
-
-```text
-Chain A
-Chain B
-Chain C
-```
-
-拥有统一架构。
-
-并不意味着 v0.x 就实现：
-
-```text
-Chain A Token
     ↓
-Bridge
+RPC Query
     ↓
-Chain B Token
+RPC Query
+    ↓
+RPC Query
 ```
 
-跨链套利属于后续独立能力。
-
----
-
-# 9. 产品策略范围
-
-长期优先级：
+正确方式：
 
 ```text
-P0
-DEX Arbitrage
-
-P0
-Backrun
-
-P1
-Multi-hop Arbitrage
-
-P1
-Private Transaction / Bundle
-
-P1
-Advanced Simulation
-
-P2
-Advanced Token Analysis
-
-P2
-Additional MEV Strategies
-
-P3
-Cross-chain MEV
-```
-
----
-
-# 10. v0.1 产品目标
-
-v0.1 必须完成：
-
-```text
-EVM Chain Adapter
-        ↓
-Historical Blocks
-        ↓
-Event Decoder
-        ↓
-Pool Registry
-        ↓
-Pool State
-        ↓
-StateStore
-        ↓
-Graph
-        ↓
-Opportunity Detector
-        ↓
-Replay
-```
-
-最终可以：
-
-```text
-给定：
-
-Chain
-Block Range
-
-得到：
-
-Pool State
-Graph
-Opportunity
-Expected Profit
-```
-
----
-
-# 11. v0.1 核心用户场景
-
-虽然这是一个后端系统，但必须从真实使用场景定义需求。
-
-## 场景 1：历史 Replay
-
-输入：
-
-```text
-chain = xxx
-from_block = X
-to_block = Y
-```
-
-系统：
-
-```text
-读取 Block
- ↓
-读取 Logs
- ↓
-Decode
- ↓
-更新 Pool State
- ↓
-构建 Graph
- ↓
-寻找 Opportunity
-```
-
-输出：
-
-```text
-Block
-Pool Changes
-Graph Changes
-Opportunities
-Expected Profit
-```
-
----
-
-# 12. 场景 2：Opportunity Replay
-
-给定一个历史区块：
-
-```text
-Block 100
-```
-
-系统应该能够重新构造：
-
-```text
-Pool State @ Block 100
-```
-
-然后运行：
-
-```text
-Opportunity Detector
-```
-
-得到：
-
-```text
-Opportunity A
-Opportunity B
-Opportunity C
-```
-
-相同输入必须产生相同结果。
-
----
-
-# 13. 场景 3：Live Chain
-
-未来进入 Live 模式：
-
-```text
-WebSocket
- ↓
-New Block
- ↓
-Logs
- ↓
-Decode
- ↓
+Chain Event
+    ↓
 State Update
- ↓
-Graph Update
- ↓
+    ↓
+Memory State
+    ↓
+Graph
+    ↓
 Opportunity
 ```
 
-Live Pipeline 必须和 Replay 使用相同的 State 更新逻辑。
+Hot Path 中的 Pool State、Graph、Opportunity 必须以内存数据为主。
 
-即：
+---
+
+# 11. Replay First
+
+所有生产逻辑必须遵循：
 
 ```text
 Replay
-   ↘
-    State Engine
-   ↗
+   ↓
+Validate
+   ↓
+Benchmark
+   ↓
 Live
 ```
 
-而不是：
+不能：
 
 ```text
-Replay → 一套逻辑
-
-Live → 另一套逻辑
+先写 Live
+再想办法测试
 ```
 
 ---
 
-# 14. 场景 4：多 EVM 链
+# 12. Live 和 Replay 同源
 
-系统可以通过配置切换：
+Replay 和 Live 必须共享：
 
 ```text
-Chain A
-Chain B
-Chain C
+Protocol Decoder
+State Engine
+Graph
+Opportunity
+Simulation
 ```
 
-业务层不应该出现：
-
-```rust
-if chain == xxx
-```
-
-这样的链特化逻辑。
-
-链差异必须进入：
+即：
 
 ```text
-ChainAdapter
-ChainProfile
-ProtocolAdapter
+              ┌── Replay
+              │
+Input ────────┤
+              │
+              └── Live
+                    │
+                    ▼
+               Same State
+               Same Graph
+               Same Opportunity
 ```
+
+不能维护两套业务逻辑。
 
 ---
 
-# 15. 系统总体架构
+# 13. Simulation First
+
+Graph 只能回答：
+
+> “这里可能存在套利机会。”
+
+Simulation 才回答：
+
+> “这笔真实交易在真实 EVM 状态下是否真的能够执行？”
+
+因此：
 
 ```text
-                       ┌───────────────┐
-                       │   Blockchain  │
-                       └───────┬───────┘
-                               │
-                         Chain Adapter
-                               │
-                               ▼
-                       ┌───────────────┐
-                       │ Block / Logs  │
-                       └───────┬───────┘
-                               │
-                        Protocol Adapter
-                               │
-                               ▼
-                       ┌───────────────┐
-                       │ State Engine  │
-                       └───────┬───────┘
-                               │
-                               ▼
-                       ┌───────────────┐
-                       │  StateStore   │
-                       └───────┬───────┘
-                               │
-                         Graph Snapshot
-                               │
-                               ▼
-                       ┌───────────────┐
-                       │    Graph      │
-                       └───────┬───────┘
-                               │
-                               ▼
-                       ┌───────────────┐
-                       │ Opportunity   │
-                       └───────┬───────┘
-                               │
-                               ▼
-                       ┌───────────────┐
-                       │  Simulation   │
-                       └───────┬───────┘
-                               │
-                               ▼
-                       ┌───────────────┐
-                       │     Risk      │
-                       └───────┬───────┘
-                               │
-                               ▼
-                       ┌───────────────┐
-                       │   Execution   │
-                       └───────────────┘
+Graph
+  ↓
+Candidate
+  ↓
+Simulation
+  ↓
+Executable Opportunity
 ```
 
 ---
 
-# 16. Chain Layer
+# 14. 当前产品边界
 
-## 16.1 职责
+## 当前核心策略
 
-Chain Layer 负责：
+第一阶段只实现：
 
-* RPC；
-* WebSocket；
-* Block；
-* Transaction；
-* Receipt；
-* Log；
-* Chain ID；
-* Block Number；
-* Block Timestamp；
-* Provider Failover。
+> Two-pool V2-style DEX Arbitrage
 
-不负责：
-
-* DEX；
-* Pool；
-* Arbitrage；
-* Opportunity。
-
----
-
-# 17. ChainAdapter
-
-核心接口概念：
-
-```rust
-trait ChainAdapter {
-    fn chain_id(&self) -> ChainId;
-
-    async fn latest_block(&self) -> Result<BlockNumber>;
-
-    async fn get_block(
-        &self,
-        block: BlockNumber
-    ) -> Result<BlockData>;
-
-    async fn get_logs(
-        &self,
-        filter: LogFilter
-    ) -> Result<Vec<Log>>;
-
-    async fn subscribe_blocks(
-        &self
-    ) -> Result<BlockStream>;
-}
-```
-
-实际 API 可以根据最终 Rust 技术选型调整。
-
-原则不变：
-
-> 上层业务不能依赖具体 RPC Provider。
-
----
-
-# 18. ChainProfile
-
-每条链拥有：
+即：
 
 ```text
-ChainProfile
-├── chain_id
-├── name
-├── rpc_http
-├── rpc_ws
-├── native_token
-├── block_time
-├── protocol_registry
-├── execution_config
-└── capability_flags
+Token A
+   ↓
+Pool A
+   ↓
+Token B
+   ↓
+Pool B
+   ↓
+Token A
 ```
 
-例如：
+暂不把以下策略纳入当前主线：
+
+* Sandwich；
+* Backrun；
+* Liquidation；
+* NFT MEV；
+* Intent；
+* Cross-chain Arbitrage；
+* V3；
+* StableSwap；
+* Lending Arbitrage；
+* Generalized MEV。
+
+---
+
+# 15. 当前协议范围
+
+第一阶段：
 
 ```text
-GIWA
-Ethereum
-BSC
-Base
-Arbitrum
+V2-style Constant Product AMM
 ```
 
-未来都应该通过 Profile 接入。
-
----
-
-# 19. Provider Failover
-
-生产系统不能依赖单 RPC。
-
-至少设计：
-
-```text
-Provider A
-Provider B
-Provider C
-```
-
-能力：
-
-* timeout；
-* retry；
-* health check；
-* fallback；
-* rate limit；
-* provider latency metrics。
-
-v0.1 可以先实现接口和基本 failover。
-
----
-
-# 20. Protocol Layer
-
-Protocol Layer 是整个项目非常重要的一层。
-
-Chain：
-
-> “这是哪个链？”
-
-Protocol：
-
-> “这个合约按照什么 DEX 协议工作？”
-
----
-
-# 21. ProtocolAdapter
-
-```rust
-trait ProtocolAdapter {
-    fn protocol_id(&self) -> ProtocolId;
-
-    fn decode_log(
-        &self,
-        log: &Log
-    ) -> Result<Option<ProtocolEvent>>;
-
-    fn discover_pool(
-        &self,
-        address: Address
-    ) -> Result<Option<PoolMeta>>;
-}
-```
-
-第一阶段实现：
-
-```text
-V2-style AMM
-```
-
----
-
-# 22. V2-style AMM
-
-第一阶段核心模型：
+数学模型：
 
 ```text
 x * y = k
 ```
 
-池：
-
-```text
-Token A
-   ↕
-Pool
-   ↕
-Token B
-```
-
-State：
+池状态至少包括：
 
 ```text
 reserve0
 reserve1
 fee
+token0
+token1
 ```
 
 ---
 
-# 23. Pool Registry
+# 16. M1-M3 已完成基础
 
-Pool Registry 是 v0.1 的核心数据基础。
-
-每个 Pool：
+当前项目已经完成：
 
 ```text
-Pool
-├── chain_id
-├── address
-├── protocol
-├── token0
-├── token1
-├── fee
-└── pool_type
+M1
+GIWA Historical Data Correctness
+        ↓
+M2
+GIWA Market Graph
+        ↓
+M3
+GIWA Arbitrage Opportunity
 ```
 
-注意：
-
-> Pool Registry 必须有明确来源和证据。
-
-不能因为一个合约：
-
-* 有 Transfer；
-* 有 Swap；
-* 有两个 Token；
-
-就直接认定它是 Pool。
+这些成果属于当前系统的基础设施，不应推倒重做。
 
 ---
 
-# 24. Pool Discovery
+# 17. M1：Historical Data Correctness
 
-Pool Discovery 支持：
+状态：
 
-### 方式一：Factory Discovery
+> COMPLETE
+
+M1 已验证：
+
+* GIWA Testnet Chain ID；
+* Historical Block；
+* Pool；
+* Token；
+* Sync；
+* Reserve；
+* Event ordering；
+* Evidence；
+* Replay 基础；
+* Unattested emitter rejection；
+* U256 数值安全。
+
+核心原则：
+
+> Reserve 必须来自经过身份验证的 Sync，而不是从 Swap 推测。
+
+---
+
+# 18. M2：Market Graph
+
+状态：
+
+> COMPLETE
+
+M2 建立：
 
 ```text
-Factory
- ↓
-PairCreated
- ↓
 Pool Registry
-```
-
-### 方式二：历史数据发现
-
-从已经验证的数据中发现：
-
-```text
-Contract
- ↓
-Event
- ↓
-Pool relationship
-```
-
-### 方式三：配置注册
-
-对于已知协议：
-
-```toml
-[[pools]]
-address = "..."
-token0 = "..."
-token1 = "..."
-```
-
----
-
-# 25. 已验证数据输入
-
-项目允许从：
-
-```text
-/Volumes/superfs/giwa-mev
-```
-
-提取已经验证的数据。
-
-这些数据的角色是：
-
-```text
-Initial Facts
-Fixtures
-Registry Seed
-Historical Validation Data
-```
-
-而不是：
-
-```text
-Runtime Semantic Engine
-```
-
----
-
-# 26. 数据导入原则
-
-进入新项目的数据必须区分：
-
-```text
-Verified
-Candidate
-Unknown
-```
-
-只有：
-
-```text
-Verified
-```
-
-的数据才能作为：
-
-* Pool Registry；
-* Token Registry；
-* Protocol Registry；
-* Fixture；
-
-的可信输入。
-
----
-
-# 27. State Layer
-
-State Layer 是 MEV Bot 的核心。
-
-目标：
-
-> **在内存中维护当前可用于 Opportunity Detection 的 Market State。**
-
----
-
-# 28. StateStore
-
-核心状态：
-
-```text
+      ↓
 StateStore
-├── Pools
-├── Reserves
-├── Tokens
-├── Block
-└── Metadata
+      ↓
+GraphBuilder
+      ↓
+GraphSnapshot
 ```
 
-核心 API：
-
-```rust
-get_pool()
-get_reserve()
-update_pool()
-snapshot()
-```
-
----
-
-# 29. Pool State
-
-```text
-PoolState
-├── reserve0
-├── reserve1
-├── block_number
-└── log_index
-```
-
-状态必须有时间点：
-
-```text
-Pool State @ Block N
-```
-
-而不是只有：
-
-```text
-Pool State
-```
-
----
-
-# 30. Reserve Update
-
-对于 V2-style AMM：
-
-```text
-Sync
- ↓
-reserve0
-reserve1
-```
-
-优先使用协议定义的状态同步事件更新 Reserve。
-
-不要：
-
-```text
-看到 Swap
-↓
-自己推算 reserve
-```
-
-作为唯一状态来源。
-
----
-
-# 31. Token Metadata
-
-Token：
+图模型：
 
 ```text
 Token
-├── chain_id
-├── address
-├── decimals
-├── symbol?
-└── status
-```
-
-其中：
-
-```text
-symbol
-```
-
-属于辅助信息。
-
-核心计算不能依赖 symbol。
-
----
-
-# 32. State Snapshot
-
-Graph 不应该直接操作可变 StateStore。
-
-推荐：
-
-```text
-StateStore
-     ↓
-Immutable Snapshot
-     ↓
-Graph
-```
-
-这样可以避免：
-
-* 锁竞争；
-* 状态读取不一致；
-* Graph 计算过程中 State 被修改。
-
----
-
-# 33. Graph Layer
-
-Graph 是 Opportunity Detection 的基础。
-
-模型：
-
-```text
-Token = Node
-Pool  = Edge
-```
-
-例如：
-
-```text
-USDC
- ↓
-WETH
- ↓
-DAI
- ↓
-USDC
-```
-
----
-
-# 34. Pool Graph
-
-一个 Pool：
-
-```text
-USDC / WETH
-```
-
-形成：
-
-```text
-USDC → WETH
-WETH → USDC
-```
-
-两条方向边。
-
----
-
-# 35. Graph Edge
-
-```text
-GraphEdge
-├── pool
-├── token_in
-├── token_out
-├── fee
-├── reserve_in
-└── reserve_out
-```
-
----
-
-# 36. Graph 的职责
-
-Graph 负责：
-
-* 路径搜索；
-* Cycle Detection；
-* Candidate Generation。
-
-Graph 不负责：
-
-* 最终 Profit；
-* 最终 Gas；
-* 最终 Simulation；
-* 最终 Execution。
-
----
-
-# 37. Opportunity Layer
-
-Opportunity 是整个系统的核心业务对象。
-
-```text
-Opportunity
-├── chain
-├── block
-├── path
-├── input_token
-├── estimated_input
-├── estimated_output
-├── estimated_profit
-├── gas_estimate
-├── confidence
-└── source
-```
-
----
-
-# 38. 第一种 Opportunity
-
-v0.1：
-
-> Two-Pool Arbitrage
-
-结构：
-
-```text
-A
- ↓
-Pool 1
- ↓
-B
- ↓
-Pool 2
- ↓
-A
-```
-
-例如：
-
-```text
-USDC
- ↓
-DEX A
- ↓
-WETH
- ↓
-DEX B
- ↓
-USDC
-```
-
----
-
-# 39. Two-Pool Arbitrage
-
-系统应该能够计算：
-
-```text
-Input
-Output
-Profit
-```
-
-并寻找：
-
-```text
-Optimal Input
-```
-
-不能只判断：
-
-```text
-price_a < price_b
-```
-
-就认为存在套利。
-
----
-
-# 40. Multi-Hop Opportunity
-
-v0.1 后半阶段支持：
-
-```text
-A
- ↓
-B
- ↓
-C
- ↓
-A
-```
-
-初始限制：
-
-```text
-2 ~ 4 hops
-```
-
-避免无限路径搜索。
-
----
-
-# 41. Graph 与 Opportunity 的关系
-
-```text
-Graph
- ↓
-Candidate
- ↓
-Analytical Calculation
- ↓
-Opportunity
-```
-
-Graph 是：
-
-> Candidate Generator
-
-而不是：
-
-> Profit Truth Engine
-
----
-
-# 42. 数值计算原则
-
-快速搜索可以使用：
-
-```text
-f64
-```
-
-但：
-
-> 最终金额计算必须保留精确整数语义。
-
-Token Amount：
-
-```text
-U256
-```
-
-不能因为方便直接全部转换成：
-
-```text
-f64
-```
-
----
-
-# 43. Simulation Layer
-
-v0.1：
-
-```text
-Simulation Interface
-```
-
-可以存在。
-
-但不要求完成完整 REVM。
-
-接口应该提前固定：
-
-```rust
-trait Simulator {
-    async fn simulate(
-        &self,
-        opportunity: &Opportunity
-    ) -> Result<SimulationResult>;
-}
-```
-
----
-
-# 44. Simulation 的职责
-
-Simulation 最终负责验证：
-
-```text
-Opportunity
- ↓
-Transaction
- ↓
-EVM Execution
- ↓
-Actual State Transition
- ↓
-Actual Output
-```
-
-最终确认：
-
-```text
-Profit > 0
-```
-
----
-
-# 45. Risk Layer
-
-风险控制必须独立。
-
-```rust
-trait RiskPolicy {
-    fn evaluate(
-        &self,
-        opportunity: &Opportunity
-    ) -> RiskDecision;
-}
-```
-
-未来包括：
-
-* minimum profit；
-* maximum gas；
-* maximum slippage；
-* maximum loss；
-* consecutive failure；
-* token risk；
-* liquidity risk；
-* execution risk。
-
----
-
-# 46. Execution Layer
-
-Execution 最终负责：
-
-```text
-Opportunity
- ↓
-Transaction
- ↓
-Signer
- ↓
-RPC / Private Relay
- ↓
-Blockchain
-```
-
----
-
-# 47. v0.1 Execution
-
-v0.1 不执行真实交易。
-
-提供：
-
-```text
-NullExecutor
-```
-
-或者：
-
-```text
-DryRunExecutor
-```
-
-用于：
-
-```text
-Opportunity
- ↓
-Execution Request
- ↓
-Log
-```
-
----
-
-# 48. Signer Layer
-
-Signer 独立于 Execution。
-
-未来支持：
-
-```text
-Private Key
-Hardware Wallet
-Remote Signer
-KMS
-```
-
-v0.1 只定义接口。
-
----
-
-# 49. Replay Layer
-
-Replay 是本项目的核心能力之一。
-
-因为 MEV 系统必须能够回答：
-
-> “为什么当时没有发现这个机会？”
-
-或者：
-
-> “为什么这个机会判断错了？”
-
----
-
-# 50. Replay Architecture
-
-```text
-Historical Block
-      ↓
-Chain Adapter
-      ↓
-Protocol Decoder
-      ↓
-State Engine
-      ↓
-Graph
-      ↓
-Opportunity
-      ↓
-Simulation
-      ↓
-Result
-```
-
-Replay 和 Live 使用相同：
-
-```text
-State Engine
-Protocol Decoder
-Graph
-Opportunity
-```
-
----
-
-# 51. Replay CLI
-
-目标形式：
-
-```bash
-evm-mev replay \
-  --chain xxx \
-  --from-block X \
-  --to-block Y
-```
-
-输出：
-
-```text
-blocks
-pool_updates
-graph_updates
-opportunities
-profit
-latency
-```
-
----
-
-# 52. Deterministic Replay
-
-相同：
-
-```text
-Chain
-Block Range
-Input Data
-Configuration
-```
-
-必须产生相同：
-
-```text
-Pool State
-Graph
-Opportunity
-```
-
-这是核心验收条件。
-
----
-
-# 53. Metrics
-
-Metrics 至少记录：
-
-```text
-block_received_at
-block_processed_at
-state_updated_at
-graph_updated_at
-opportunity_detected_at
-simulation_started_at
-simulation_finished_at
-execution_started_at
-```
-
-未来重点指标：
-
-```text
-block → opportunity latency
-opportunity → simulation latency
-simulation → execution latency
-```
-
----
-
-# 54. 项目 Workspace
-
-推荐：
-
-```text
-evm-mev-bot/
-│
-├── Cargo.toml
-│
-├── crates/
-│   ├── core/
-│   ├── chain/
-│   ├── protocol/
-│   ├── state/
-│   ├── graph/
-│   ├── opportunity/
-│   ├── simulation/
-│   ├── risk/
-│   ├── execution/
-│   ├── signer/
-│   ├── pipeline/
-│   ├── replay/
-│   ├── metrics/
-│   └── cli/
-│
-├── contracts/
-├── config/
-├── fixtures/
-├── data/
-├── docs/
-└── tests/
-```
-
----
-
-# 55. Crate 职责边界
-
-## core
-
-只放：
-
-* 基础类型；
-* Domain Model；
-* Error；
-* 基础 Traits。
-
-不放业务实现。
-
----
-
-## chain
-
-负责：
-
-* RPC；
-* WS；
-* Block；
-* Receipt；
-* Logs；
-* Provider。
-
----
-
-## protocol
-
-负责：
-
-* DEX；
-* AMM；
-* Event Decode；
-* Pool Discovery。
-
----
-
-## state
-
-负责：
-
-* Pool State；
-* Token State；
-* StateStore；
-* Snapshot。
-
----
-
-## graph
-
-负责：
-
-* Token Graph；
-* Path；
-* Cycle；
-* Candidate。
-
----
-
-## opportunity
-
-负责：
-
-* Arbitrage；
-* Optimal Input；
-* Profit Estimation；
-* Opportunity。
-
----
-
-## simulation
-
-负责：
-
-* EVM Simulation；
-* REVM；
-* State Override；
-* Execution Result。
-
----
-
-## risk
-
-负责：
-
-* Risk Policy；
-* Limits；
-* Circuit Breaker。
-
----
-
-## execution
-
-负责：
-
-* Transaction Construction；
-* Broadcast；
-* Private Submission；
-* Bundle。
-
----
-
-## signer
-
-负责：
-
-* Signing。
-
----
-
-## replay
-
-负责：
-
-* Historical Replay；
-* Deterministic Replay；
-* Regression。
-
----
-
-## metrics
-
-负责：
-
-* Latency；
-* Opportunity；
-* Execution；
-* Profit；
-* Failure。
-
----
-
-## pipeline
-
-负责：
-
-> 把所有模块连接起来。
-
-它不应该成为新的业务逻辑黑盒。
-
----
-
-## cli
-
-负责：
-
-```text
-run
-replay
-inspect
-benchmark
-```
-
----
-
-# 56. 配置体系
-
-配置必须支持：
-
-```toml
-[chain]
-name = "..."
-chain_id = 123
-
-[rpc]
-http = "..."
-ws = "..."
-
-[protocol]
-enabled = ["v2"]
-
-[opportunity]
-max_hops = 4
-min_profit = "..."
-
-[risk]
-max_gas = "..."
-```
-
-业务代码不应该硬编码：
-
-```text
-RPC
-Chain ID
+  ↕
 Pool
+  ↕
 Token
 ```
 
----
+同一 Token Pair 的多个 Pool 必须保留。
 
-# 57. v0.1 功能范围
-
-## P0
-
-### Chain
-
-* [x] Chain abstraction
-* [x] Block fetching
-* [x] Logs fetching
-* [x] Basic WS abstraction
-* [x] Provider abstraction
-
-### Protocol
-
-* [x] V2-style AMM
-* [x] Event decode
-* [x] Pool registry
-* [x] Pool discovery
-
-### State
-
-* [x] Token
-* [x] Pool
-* [x] Reserve
-* [x] StateStore
-* [x] Snapshot
-
-### Graph
-
-* [x] Token node
-* [x] Pool edge
-* [x] Directed edge
-* [x] Cycle detection
-
-### Opportunity
-
-* [x] Two-pool arbitrage
-* [x] Optimal input
-* [x] Profit estimation
-* [x] 2~4 hop bounded search
-
-### Replay
-
-* [x] Historical replay
-* [x] Deterministic replay
-* [x] Fixture replay
-
----
-
-# 58. v0.1 不纳入完成定义
-
-以下即使存在代码，也不代表 v0.1 必须完成：
-
-* REVM 完整交易模拟；
-* 私有 Relay；
-* Bundle；
-* 真实签名；
-* 真实广播；
-* Flashbots；
-* Flashblocks；
-* V3；
-* CLMM；
-* 跨链；
-* Sandwich；
-* Liquidation；
-* NFT MEV；
-* Intent MEV；
-* AI Strategy；
-* Dashboard；
-* Web UI。
-
----
-
-# 59. v0.1 开发阶段
-
-## Phase 1：Foundation
-
-完成：
+GraphSnapshot 必须绑定：
 
 ```text
-Workspace
-Core Types
-Error
-Traits
-Config
-CLI
-```
-
-验收：
-
-```text
-cargo check
-cargo test
-cargo fmt --check
-cargo clippy
+chain_id
+block_number
+block_hash
 ```
 
 ---
 
-# 60. Phase 2：Chain
+# 19. M3：Arbitrage Opportunity
 
-完成：
+状态：
 
-```text
-ChainAdapter
-Provider
-Block
-Log
-Receipt
-```
+> COMPLETE
 
-验收：
-
-能够读取真实链历史区块。
-
----
-
-# 61. Phase 3：Protocol
-
-完成：
+M3 已完成：
 
 ```text
-V2 Adapter
-Factory
-Pair
-Sync
-Swap
-```
-
-验收：
-
-能够从真实历史数据识别：
-
-```text
-Factory
-Pool
-Token0
-Token1
-Reserve
-```
-
----
-
-# 62. Phase 4：State
-
-完成：
-
-```text
-StateStore
-PoolState
-TokenState
-Snapshot
-```
-
-验收：
-
-连续处理：
-
-```text
-Block N
-Block N+1
-Block N+2
-```
-
-状态正确更新。
-
----
-
-# 63. Phase 5：Replay
-
-完成：
-
-```text
-Block Range
- ↓
-Event
- ↓
-State
-```
-
-验收：
-
-同一输入执行两次：
-
-```text
-Output A == Output B
-```
-
----
-
-# 64. Phase 6：Graph
-
-完成：
-
-```text
-Pool → Edge
-Token → Node
-```
-
-验收：
-
-人工构造：
-
-```text
-A/B
-B/C
-C/A
-```
-
-能够发现：
-
-```text
-A → B → C → A
-```
-
----
-
-# 65. Phase 7：Two-Pool Arbitrage
-
-完成：
-
-```text
-Pool A/B #1
-Pool A/B #2
-```
-
-构造：
-
-```text
-price1 < price2
-```
-
-系统能够：
-
-```text
-发现机会
-计算最佳输入
-计算预期输出
-计算理论利润
-```
-
----
-
-# 66. Phase 8：Multi-Hop
-
-支持：
-
-```text
-A → B → C → A
-```
-
-最多：
-
-```text
-4 hops
-```
-
-必须限制：
-
-```text
-max_hops
-max_paths
-```
-
-防止 Graph Search 爆炸。
-
----
-
-# 67. v0.1 验收标准
-
-## A. 编译
-
-```text
-cargo fmt --check
-PASS
-```
-
-```text
-cargo test
-PASS
-```
-
-```text
-cargo clippy
-PASS
-```
-
----
-
-# 68. B. Chain
-
-必须能够：
-
-* 读取历史 Block；
-* 获取 Logs；
-* 获取 Receipt；
-* 正确处理 Block Number；
-* 正确处理 Chain ID。
-
----
-
-# 69. C. Pool
-
-必须能够：
-
-* 识别 Pool；
-* 识别 token0；
-* 识别 token1；
-* 获取 Reserve；
-* 按 Block 保存 State。
-
----
-
-# 70. D. State
-
-必须：
-
-```text
-State(N)
-→ Event
-→ State(N+1)
-```
-
-结果确定。
-
-不能：
-
-* 随机；
-* 依赖处理顺序；
-* 状态污染；
-* 隐式 RPC 查询。
-
----
-
-# 71. E. Graph
-
-必须能够：
-
-```text
-Pool
-→ Edge
-→ Path
-→ Cycle
-```
-
-并支持：
-
-```text
-2-hop
-3-hop
-4-hop
-```
-
----
-
-# 72. F. Opportunity
-
-必须能够通过 Fixture 验证：
-
-### 无套利
-
-```text
-Pool A = 1:1
-Pool B = 1:1
-```
-
-结果：
-
-```text
-No Opportunity
-```
-
-### 存在套利
-
-```text
-Pool A = 1:1
-Pool B = 1:1.1
-```
-
-结果：
-
-```text
+GraphSnapshot
+      ↓
+Two-pool candidate
+      ↓
+Proven fee
+      ↓
+Exact U256 math
+      ↓
+Optimal input search
+      ↓
+Gross Profit
+      ↓
 Opportunity
 ```
 
-### 最优输入
+M3 的 Opportunity 是：
 
-理论计算结果必须与：
+> 理论上具有套利价值的候选机会。
 
-```text
-Brute Force
-```
+它不是：
 
-或：
-
-```text
-Local Search
-```
-
-处于允许误差范围内。
+> 已经确认可以真实执行的交易。
 
 ---
 
-# 73. G. Replay
+# 20. Opportunity 生命周期
 
-同一：
-
-```text
-Block Range
-```
-
-重复运行：
-
-```text
-Run A
-Run B
-```
-
-必须：
-
-```text
-State A == State B
-Graph A == Graph B
-Opportunity A == Opportunity B
-```
-
----
-
-# 74. H. 数值安全
-
-必须覆盖：
-
-* U256；
-* 大额 Token；
-* 小额 Token；
-* 0 Reserve；
-* 极端 Decimal；
-* Fee；
-* Overflow；
-* Underflow；
-* Division by zero。
-
-系统不得因为非法池状态：
-
-```text
-panic
-```
-
----
-
-# 75. I. 性能
-
-v0.1 不以最终生产性能为目标。
-
-但架构必须避免明显错误：
-
-不能：
-
-```text
-每发现一个 Opportunity
-    ↓
-RPC
-    ↓
-RPC
-    ↓
-RPC
-```
-
-应该：
-
-```text
-Block
- ↓
-State Update
- ↓
-Memory State
- ↓
-Opportunity
-```
-
----
-
-# 76. Hot Path 原则
-
-最终 Hot Path：
-
-```text
-Block
- ↓
-Event
- ↓
-State
- ↓
-Graph
- ↓
-Opportunity
- ↓
-Simulation
- ↓
-Risk
- ↓
-Execution
-```
-
-不允许：
-
-```text
-Database
-HTTP API
-LLM
-External Search
-```
-
-成为 Hot Path 必经依赖。
-
----
-
-# 77. 内存优先
-
-MEV Hot Path 数据：
-
-```text
-Pool
-Reserve
-Graph
-Opportunity
-```
-
-优先保存在：
-
-```text
-RAM
-```
-
-数据库主要用于：
-
-* 历史数据；
-* Replay；
-* Metrics；
-* Debug；
-* Research。
-
----
-
-# 78. 正确性原则
-
-系统必须区分：
-
-```text
-Observed
-Derived
-Estimated
-Simulated
-Executed
-```
-
-例如：
-
-```text
-Reserve
-```
-
-是：
-
-```text
-Observed
-```
-
-而：
-
-```text
-Expected Profit
-```
-
-属于：
-
-```text
-Estimated
-```
-
-REVM 结果属于：
-
-```text
-Simulated
-```
-
-链上 Receipt 才是：
-
-```text
-Executed Result
-```
-
-不能混淆。
-
----
-
-# 79. Opportunity 生命周期
+最终生命周期：
 
 ```text
 Detected
@@ -2426,6 +644,8 @@ Execution Submitted
 Included
    ↓
 Confirmed
+   ↓
+Executed Result
 ```
 
 失败：
@@ -2439,28 +659,208 @@ Rejected
 或者：
 
 ```text
-Submitted
+Simulated
    ↓
 Failed
 ```
 
+或者：
+
+```text
+Submitted
+   ↓
+Execution Failed
+```
+
 ---
 
-# 80. Profit 定义
+# 21. 数据可信度
 
-必须明确：
+系统必须严格区分：
+
+```text
+Observed
+Derived
+Estimated
+Simulated
+Executed
+Unknown
+```
+
+例如：
+
+| 数据                | 类型                   |
+| ----------------- | -------------------- |
+| Chain ID          | Verified             |
+| Pool Address      | Verified             |
+| Reserve           | Observed             |
+| Price             | Derived              |
+| Gross Profit      | Estimated            |
+| Simulation Output | Simulated            |
+| Gas Used          | Simulated / Executed |
+| Receipt           | Executed             |
+| Actual Profit     | Executed             |
+
+禁止把：
+
+```text
+Estimated
+```
+
+写成：
+
+```text
+Executed
+```
+
+---
+
+# 22. Simulation
+
+## 22.1 目标
+
+M4 开始实现真实 EVM Simulation。
+
+核心：
+
+```text
+Opportunity
+     ↓
+Transaction
+     ↓
+Real EVM Execution
+     ↓
+Execution Result
+```
+
+优先使用：
+
+> REVM
+
+作为本地 EVM execution engine。
+
+---
+
+# 23. Simulation 不是数学模拟
+
+禁止只实现：
+
+```text
+reserve math
+```
+
+然后声称：
+
+```text
+EVM Simulation
+```
+
+真实 Simulation 必须执行：
+
+* Token bytecode；
+* Pool bytecode；
+* Router / Executor bytecode；
+* ERC20 transfer；
+* approve；
+* swap；
+* fee；
+* tax；
+* revert；
+* gas；
+* state transition。
+
+---
+
+# 24. Simulation State
+
+Simulation 必须与 Opportunity 对应到同一个历史状态。
+
+至少需要：
+
+```text
+chain_id
+block_number
+block_hash
+```
+
+理想情况下：
+
+```text
+Opportunity State
+        ==
+Simulation State
+```
+
+禁止：
+
+```text
+Opportunity @ Block N
+Simulation @ latest
+```
+
+导致状态漂移。
+
+---
+
+# 25. Simulation Request
+
+概念模型：
+
+```text
+SimulationRequest
+├── chain
+├── block
+├── opportunity
+├── from
+├── to
+├── value
+├── calldata
+├── gas_limit
+├── block_context
+└── state_source
+```
+
+---
+
+# 26. Simulation Result
+
+至少包含：
+
+```text
+SimulationResult
+├── success
+├── revert_reason
+├── gas_used
+├── output
+├── logs
+├── state_changes
+├── token_deltas
+├── gross_profit
+├── gas_cost
+└── net_profit
+```
+
+所有字段必须区分：
+
+```text
+Known
+Unknown
+NotComputable
+```
+
+禁止伪造数据。
+
+---
+
+# 27. Gross Profit 与 Net Profit
+
+必须严格区分：
 
 ```text
 Gross Profit
+=
+Output - Input
 ```
-
-与：
-
-```text
-Net Profit
-```
-
-的区别。
 
 最终：
 
@@ -2475,147 +875,1321 @@ Output
 - Execution Cost
 ```
 
-v0.1 主要计算：
+如果 Gas 与 Profit Token 无法可靠换算：
 
-```text
-Theoretical Gross Profit
-```
+> Net Profit 必须为 Unknown / NotComputable。
 
-后续 Simulation 才逐步引入真实成本。
+不能使用未经证明的价格进行“看起来完整”的计算。
 
 ---
 
-# 81. Gas
+# 28. Token Tax / Transfer Tax
 
-v0.1：
+M4 必须验证：
 
 ```text
-Gas Estimate Interface
+Analytical Result
+        vs
+Actual EVM Simulation
 ```
 
-可以存在。
+特别是已经观察到的 GIWA Testnet Token Tax 场景。
 
-但不要因为没有完整 Gas Model 而阻塞：
+如果：
 
 ```text
+Analytical Output
+!=
+Simulation Output
+```
+
+必须解释原因。
+
+不能修改 M3 数学模型强行让结果一致。
+
+---
+
+# 29. M4 验收目标
+
+M4 必须至少证明：
+
+### A
+
+存在独立 `simulation` crate。
+
+### B
+
+真正运行本地 EVM。
+
+### C
+
+M3 Opportunity 可以转换为 SimulationRequest。
+
+### D
+
+真实 Pool / Token / Router / Executor bytecode 可以参与执行。
+
+### E
+
+Simulation Block 与 Opportunity Block 一致。
+
+### F
+
+可以获得：
+
+```text
+success
+output
+gas_used
+logs
+```
+
+### G
+
+可以区分：
+
+```text
+success
+revert
+out-of-gas
+state mismatch
+invalid transaction
+```
+
+### H
+
+无 Tax 场景：
+
+```text
+Analytical
+≈
+Simulation
+```
+
+差异必须可解释。
+
+### I
+
+Tax Token 场景：
+
+```text
+Analytical
+!=
+Simulation
+```
+
+并解释差异。
+
+### J
+
+得到真实 Simulation Gross Profit。
+
+### K
+
+得到真实 Gas Used / Gas Cost。
+
+### L
+
+如果可以可靠换算：
+
+```text
+Net Profit
+```
+
+否则：
+
+```text
+Unknown / NotComputable
+```
+
+### M
+
+Risk Policy 可以基于 Simulation Result 工作。
+
+### N
+
+至少一个真实 GIWA Historical Opportunity 完成本地 Simulation。
+
+### O
+
+Simulation 必须 deterministic。
+
+### P
+
+必须通过：
+
+```text
+cargo fmt --check
+cargo check --workspace --all-targets
+cargo test --workspace
+cargo clippy --workspace --all-targets -- -D warnings
+```
+
+### Q
+
+必须产生 M4 Completion Report。
+
+---
+
+# 30. PathFinder
+
+当前不预设最终设计。
+
+M3 当前只需要：
+
+```text
+Two-pool candidate enumeration
+```
+
+M4 不因为未来需要多跳套利而提前引入复杂 PathFinder。
+
+M4 完成后，根据：
+
+* Opportunity 数据结构；
+* Simulation 结果；
+* 实际 GIWA 流动性规模；
+* 两池套利覆盖率；
+* 多跳机会数量；
+* Simulation 成本；
+
+再决定：
+
+```text
+PathFinder
+```
+
+的最终设计。
+
+候选方案可以包括：
+
+```text
+Direct Enumeration
+Bellman-Ford
+SPFA
+Bounded DFS
+Graph Search
+Hybrid
+```
+
+但在没有真实需求证据前：
+
+> 不提前实现。
+
+---
+
+# 31. contracts/
+
+当前仓库暂不强制建立最终套利合约架构。
+
+M4 完成后再决定。
+
+未来可能需要：
+
+```text
+EOA
+ ↓
+ArbitrageExecutor
+ ↓
+Pool A
+ ↓
+Pool B
+ ↓
+Profit Check
+```
+
+但具体设计必须基于：
+
+* Simulation；
+* Transaction Construction；
+* Gas；
+* Atomicity；
+* Router；
+* GIWA execution semantics；
+
+进行决定。
+
+不能为了“以后可能需要”提前实现一个复杂的 Universal Arbitrage Contract。
+
+---
+
+# 32. M5：GIWA Live Pipeline
+
+M5 的目标：
+
+> 从 Historical Replay 进入 GIWA Testnet Live。
+
+核心：
+
+```text
+GIWA WebSocket
+       ↓
+New Block
+       ↓
+Logs
+       ↓
+Decode
+       ↓
+State Update
+       ↓
+Graph Update
+       ↓
+Opportunity
+```
+
+必须与 Replay 使用相同：
+
+```text
+Protocol Decoder
+State Engine
 Graph
 Opportunity
-Replay
 ```
 
 ---
 
-# 82. 数据质量等级
+# 33. Live Data Source
 
-项目中的数据统一使用：
+初始：
 
 ```text
-Verified
-Derived
-Estimated
-Unknown
+WebSocket
++
+RPC
 ```
 
-例如：
+必须具备：
 
-| 数据                | 类型                 |
-| ----------------- | ------------------ |
-| Chain ID          | Verified           |
-| Pool Address      | Verified           |
-| Reserve           | Observed           |
-| Token Decimals    | Verified / Unknown |
-| Price             | Derived            |
-| Arbitrage Profit  | Estimated          |
-| Simulation Profit | Simulated          |
-| Actual Profit     | Executed           |
+* New Block；
+* Log；
+* Receipt；
+* Block Context；
+* Reconnect；
+* Timeout；
+* Basic retry。
 
 ---
 
-# 83. Error Handling
+# 34. FlashblockSource
+
+GIWA 后续 Live Hot Path 必须考虑：
+
+```text
+FlashblockSource
+```
+
+目标：
+
+> 在完整 Block 产生之前获得更早的 GIWA 市场状态变化。
+
+概念：
+
+```text
+GIWA Flashblock
+       ↓
+Partial State Change
+       ↓
+State Update
+       ↓
+Graph
+       ↓
+Opportunity
+       ↓
+Simulation
+```
+
+如果 Flashblock 数据不可用：
+
+```text
+Flashblock
+    ↓
+Fallback
+    ↓
+Normal Block
+```
+
+---
+
+# 35. Flashblock Stale Protection
+
+如果 Opportunity 在 Flashblock 状态下产生：
+
+```text
+Flashblock N
+    ↓
+Simulation
+    ↓
+Flashblock N+1
+```
+
+则必须检查：
+
+```text
+Opportunity State
+==
+Current State
+```
+
+如果状态已经变化：
+
+> 原 Opportunity 必须失效。
+
+禁止使用过期 Opportunity 直接执行。
+
+---
+
+# 36. Live Latency
+
+M5 开始正式记录：
+
+```text
+block_received
+decode_started
+decode_finished
+state_updated
+graph_updated
+opportunity_detected
+simulation_started
+simulation_finished
+execution_started
+```
+
+至少能够计算：
+
+```text
+Block → Opportunity
+Opportunity → Simulation
+Simulation → Execution
+```
+
+---
+
+# 37. M6：GIWA Execution
+
+M6 的目标：
+
+```text
+Simulation
+    ↓
+Risk
+    ↓
+Transaction Builder
+    ↓
+Signer
+    ↓
+GIWA Submission
+```
+
+---
+
+# 38. Transaction Builder
+
+负责：
+
+```text
+Opportunity
+    ↓
+Transaction
+```
+
+包括：
+
+* target；
+* calldata；
+* value；
+* gas limit；
+* gas parameters；
+* nonce；
+* chain ID。
+
+禁止 Transaction Builder 自己决定：
+
+```text
+Opportunity
+```
+
+它只负责把已经批准的 Opportunity 转换成交易。
+
+---
+
+# 39. Signer
+
+Signer 独立于 Execution。
+
+未来可以支持：
+
+```text
+Private Key
+Hardware Wallet
+Remote Signer
+KMS
+```
+
+当前 GIWA Testnet 阶段优先支持：
+
+> 安全的本地测试签名方案。
+
+私钥不得：
+
+* 写入源码；
+* 提交 Git；
+* 写入 fixture；
+* 写入日志。
+
+---
+
+# 40. SequencerDirect
+
+GIWA Execution 必须支持：
+
+```text
+SequencerDirect
+```
+
+它是 GIWA 专属 Execution Path。
+
+概念：
+
+```text
+Opportunity
+      ↓
+Transaction
+      ↓
+Signer
+      ↓
+SequencerDirect
+      ↓
+GIWA Sequencer
+```
+
+与通用：
+
+```text
+eth_sendRawTransaction
+```
+
+路径分离。
+
+---
+
+# 41. SequencerDirect 的职责
+
+负责：
+
+* GIWA Sequencer submission；
+* RPC endpoint；
+* timeout；
+* retry；
+* submission latency；
+* transaction hash；
+* receipt tracking。
+
+如果存在多个可用 submission endpoint，可以后续支持：
+
+```text
+Endpoint A
+Endpoint B
+Endpoint C
+      ↓
+First successful submission
+```
+
+但必须基于真实 GIWA endpoint 行为验证后实现。
+
+---
+
+# 42. M7：GIWA Testnet Real Arbitrage
+
+这是当前项目第一个真正意义上的产品验收阶段。
+
+必须实现：
+
+```text
+Live Event
+   ↓
+State
+   ↓
+Graph
+   ↓
+Opportunity
+   ↓
+Simulation
+   ↓
+Risk
+   ↓
+Transaction
+   ↓
+Signer
+   ↓
+SequencerDirect
+   ↓
+GIWA
+   ↓
+Receipt
+   ↓
+Actual Result
+```
+
+---
+
+# 43. M7 成功标准
+
+至少成功验证一次：
+
+```text
+Real Opportunity
+        ↓
+Real Simulation
+        ↓
+Risk Approved
+        ↓
+Real Transaction
+        ↓
+GIWA Included
+        ↓
+Receipt Success
+        ↓
+Expected Token Delta
+        ↓
+Actual Profit Verified
+```
+
+如果最终交易没有盈利，也必须能够解释：
+
+* Opportunity 预测；
+* Simulation；
+* Gas；
+* Actual execution；
+* State difference；
+* Profit difference。
+
+---
+
+# 44. 实际 Profit
+
+最终 Profit 必须来自：
+
+```text
+Transaction Receipt
++
+Token Balance Delta
++
+Gas Cost
++
+Execution Cost
+```
+
+而不是：
+
+```text
+Opportunity.gross_profit
+```
+
+直接当作实际利润。
+
+---
+
+# 45. M8：GIWA Optimization & Hardening
+
+真实 Testnet 跑通之后，再优化：
+
+```text
+Latency
+Throughput
+State Update
+Graph Update
+Simulation
+RPC
+Submission
+Recovery
+```
+
+重点：
+
+* Flashblock latency；
+* Decode parallelism；
+* lock reduction；
+* memory allocation；
+* RPC latency；
+* simulation latency；
+* transaction submission latency；
+* stale opportunity rejection；
+* retry；
+* recovery；
+* circuit breaker。
+
+---
+
+# 46. 当前版本路线
+
+当前项目不再按照“先把多链做出来”的路线推进。
+
+新的路线：
+
+```text
+M1
+GIWA Historical Data Correctness
+        ✓
+
+M2
+GIWA Market Graph
+        ✓
+
+M3
+GIWA Arbitrage Opportunity
+        ✓
+
+M4
+EVM Simulation / Profitability
+        ← CURRENT
+
+M5
+GIWA Live Pipeline
+        ↓
+
+M6
+GIWA Execution
+        ↓
+
+M7
+GIWA Testnet Real Arbitrage
+        ↓
+
+M8
+GIWA Latency / Reliability / Hardening
+```
+
+---
+
+# 47. 当前版本与未来多链
+
+多链不是当前版本目标。
+
+只有当：
+
+```text
+M7 GIWA Testnet
+```
+
+真正完成后，才重新评估：
+
+```text
+Ethereum
+BSC
+Base
+Arbitrum
+其他 EVM
+```
+
+届时再决定是否引入：
+
+```text
+ChainProfile
+ChainAdapter
+ProviderManager
+ExecutionAdapter
+```
+
+---
+
+# 48. 未来多链的原则
+
+如果未来开始多链：
+
+```text
+ChainProfile
+      ↓
+ChainAdapter
+      ↓
+Normalized Chain Data
+      ↓
+Shared State
+      ↓
+Shared Graph
+      ↓
+Shared Opportunity
+```
+
+业务层禁止：
+
+```rust
+if chain_id == ...
+```
+
+链特化逻辑必须位于：
+
+```text
+Chain
+Protocol
+Execution
+```
+
+边界以内。
+
+---
+
+# 49. GIWA 与未来 EVM 的关系
+
+GIWA 是当前唯一目标链。
+
+但是核心业务逻辑不应该写成：
+
+```text
+GiwaArbitrageCalculator
+GiwaOpportunity
+GiwaGraph
+```
+
+而应该保持：
+
+```text
+Generic EVM
+     ↓
+GIWA-specific Chain Source
+     ↓
+GIWA-specific Execution
+```
+
+这样未来才能在真实需求出现时进行多链扩展。
+
+---
+
+# 50. 最终架构
+
+当前最终目标架构：
+
+```text
+                       GIWA TESTNET
+                            │
+             ┌──────────────┴──────────────┐
+             │                             │
+       Normal Block                   Flashblock
+             │                             │
+             └──────────────┬──────────────┘
+                            │
+                       Chain Layer
+                            │
+                            ▼
+                   Protocol Adapter
+                            │
+                            ▼
+                       State Engine
+                            │
+                            ▼
+                       StateStore
+                            │
+                            ▼
+                     Graph Builder
+                            │
+                            ▼
+                    Opportunity
+                            │
+                            ▼
+                       Simulation
+                         REVM
+                            │
+                            ▼
+                     Profitability
+                            │
+                            ▼
+                         Risk
+                            │
+                            ▼
+                  Transaction Builder
+                            │
+                            ▼
+                         Signer
+                            │
+                            ▼
+                   SequencerDirect
+                            │
+                            ▼
+                       GIWA Chain
+                            │
+                            ▼
+                         Receipt
+                            │
+                            ▼
+                    Actual Result
+                            │
+                  ┌─────────┴─────────┐
+                  │                   │
+                Metrics             Replay
+```
+
+---
+
+# 51. Workspace
+
+当前规划：
+
+```text
+evm-mev-bot/
+├── Cargo.toml
+├── crates/
+│   ├── core/
+│   ├── chain/
+│   ├── protocol/
+│   ├── state/
+│   ├── graph/
+│   ├── opportunity/
+│   ├── simulation/
+│   ├── risk/
+│   ├── execution/
+│   ├── signer/
+│   ├── pipeline/
+│   ├── replay/
+│   ├── metrics/
+│   └── cli/
+├── contracts/
+├── config/
+├── fixtures/
+├── data/
+├── docs/
+└── tests/
+```
+
+注意：
+
+> `contracts/` 当前只是未来可能需要的能力边界，不代表当前必须立即实现最终套利合约。
+
+---
+
+# 52. 模块职责
+
+## core
+
+负责：
+
+* ChainId；
+* BlockNumber；
+* Address；
+* Token；
+* PoolId；
+* Amount；
+* 公共错误；
+* 公共类型。
+
+---
+
+## chain
+
+负责：
+
+* RPC；
+* WebSocket；
+* Block；
+* Log；
+* Receipt；
+* Chain Event；
+* GIWA Live Source；
+* FlashblockSource。
+
+不负责：
+
+* Arbitrage；
+* Opportunity；
+* Profit calculation。
+
+---
+
+## protocol
+
+负责：
+
+* V2-style AMM；
+* Event Decode；
+* Pool Discovery；
+* Fee Evidence；
+* Protocol-specific normalization。
+
+---
+
+## state
+
+负责：
+
+```text
+Event
+ ↓
+StateUpdate
+ ↓
+StateStore
+```
+
+保证：
+
+* deterministic；
+* ordered；
+* no hidden RPC；
+* no state pollution。
+
+---
+
+## graph
+
+负责：
+
+```text
+StateStore
+ ↓
+GraphSnapshot
+```
+
+当前：
+
+> Two-pool candidate discovery。
+
+未来：
+
+> PathFinder。
+
+但 PathFinder 的最终设计在 M4 后确定。
+
+---
+
+## opportunity
+
+负责：
+
+* Arbitrage Candidate；
+* Route；
+* Input；
+* Output；
+* Gross Profit；
+* Search；
+* Opportunity lifecycle。
+
+不负责：
+
+* EVM execution；
+* transaction signing；
+* network submission。
+
+---
+
+## simulation
+
+负责：
+
+* REVM；
+* state loading；
+* transaction execution；
+* gas；
+* output；
+* revert；
+* state changes；
+* simulation profit。
+
+---
+
+## risk
+
+负责：
+
+* Minimum Profit；
+* Maximum Gas；
+* Slippage；
+* Simulation success；
+* Stale state；
+* Token risk；
+* Execution risk；
+* Circuit breaker。
+
+---
+
+## execution
+
+负责：
+
+```text
+Opportunity
+ ↓
+Transaction
+ ↓
+Submission
+```
+
+GIWA 当前重点：
+
+```text
+SequencerDirect
+```
+
+---
+
+## signer
+
+负责：
+
+```text
+Transaction
+ ↓
+Signature
+ ↓
+Signed Transaction
+```
+
+---
+
+## replay
+
+负责：
+
+```text
+Historical Data
+ ↓
+Same Pipeline
+ ↓
+Same Result
+```
+
+---
+
+## metrics
+
+负责：
+
+* latency；
+* opportunity；
+* simulation；
+* execution；
+* profit；
+* failures；
+* system health。
+
+---
+
+# 53. Hot Path
+
+最终 Hot Path：
+
+```text
+GIWA Event
+   ↓
+Decode
+   ↓
+State
+   ↓
+Graph
+   ↓
+Opportunity
+   ↓
+Simulation
+   ↓
+Risk
+   ↓
+Execution
+```
+
+Hot Path 不允许依赖：
+
+```text
+LLM
+Database
+External Search
+External API
+Explorer
+```
+
+数据库可以用于：
+
+* History；
+* Metrics；
+* Debug；
+* Replay；
+* Research。
+
+但不能成为 Hot Path 的必经依赖。
+
+---
+
+# 54. 数值安全
+
+所有核心金额使用：
+
+```text
+U256
+```
 
 禁止：
+
+```text
+f32
+f64
+```
+
+参与最终：
+
+* Swap；
+* Profit；
+* Gas；
+* Token amount；
+* Execution。
+
+如果使用浮点数：
+
+> 只能用于非权威的近似展示或筛选。
+
+最终结论必须使用精确整数。
+
+---
+
+# 55. Error Handling
+
+不可控输入路径禁止：
 
 ```rust
 unwrap()
 expect()
+panic!()
 ```
 
-出现在不可控输入路径。
-
-尤其是：
+尤其包括：
 
 ```text
 RPC
 Log
-ABI Decode
+ABI
 Token
 Pool
 Amount
+Simulation
+Execution
+Receipt
 ```
 
-必须显式处理错误。
+所有异常必须明确处理。
 
 ---
 
-# 84. 可观测性
+# 56. Determinism
 
-至少提供：
+以下输入相同：
 
 ```text
-blocks_processed
-logs_processed
-pools_updated
-graph_updates
-opportunities_detected
-opportunities_rejected
-simulation_count
-execution_count
+Chain
+Block
+Input Data
+Configuration
 ```
 
----
-
-# 85. 日志原则
-
-日志应该服务于：
+必须得到：
 
 ```text
-Debug
-Replay
-Performance
-Incident
+State A == State B
+Graph A == Graph B
+Opportunity A == Opportunity B
+Simulation A == Simulation B
 ```
 
-而不是输出大量无价值信息。
+对于存在环境依赖的执行结果，必须明确记录：
 
-Hot Path 不应该因为日志产生严重性能损耗。
+```text
+block hash
+state source
+configuration
+```
 
 ---
 
-# 86. 测试策略
+# 57. Same Block Ordering
 
-四层测试。
+同一个 Block 内：
+
+```text
+transaction_index
+    ↓
+log_index
+```
+
+必须作为确定性排序依据。
+
+不能依赖：
+
+* RPC 返回顺序；
+* HashMap iteration；
+* 并发完成顺序。
+
+---
+
+# 58. Evidence First
+
+所有真实链数据优先使用：
+
+```text
+Verified Evidence
+      ↓
+Index
+      ↓
+Raw Data
+      ↓
+RPC Validation
+      ↓
+Re-fetch
+```
+
+禁止：
+
+> 为了让测试通过而制造假的链上数据。
+
+---
+
+# 59. Real Data First
+
+任何关键结论必须尽可能通过真实 GIWA 数据验证。
+
+例如：
+
+```text
+Pool
+Token
+Factory
+Fee
+Reserve
+Block
+Transaction
+Receipt
+```
+
+必须能够追溯到：
+
+```text
+Historical Block
+Evidence
+Fixture
+RPC
+```
+
+---
+
+# 60. 测试策略
 
 ## Unit
 
-测试：
+覆盖：
 
 * Math；
 * Fee；
 * Pool；
 * State；
-* Graph。
+* Graph；
+* Opportunity；
+* Simulation；
+* Risk。
 
 ## Fixture
 
-测试：
+覆盖：
 
 * Real Pool；
 * Real Event；
-* Real Block。
+* Real Block；
+* Real Transaction；
+* Real Receipt。
 
 ## Replay
 
-测试：
+覆盖：
 
 ```text
 Historical Block Range
@@ -2623,859 +2197,1571 @@ Historical Block Range
 
 ## Integration
 
-测试：
+覆盖：
 
 ```text
-Chain
-→ State
-→ Graph
-→ Opportunity
+GIWA
+ ↓
+State
+ ↓
+Graph
+ ↓
+Opportunity
+ ↓
+Simulation
 ```
 
----
+## End-to-End
 
-# 87. 生产前必须增加
-
-后续版本必须增加：
+最终覆盖：
 
 ```text
-REVM
-Private Relay
-Signer
+GIWA Live
+ ↓
+Opportunity
+ ↓
+Simulation
+ ↓
+Risk
+ ↓
 Execution
-Live WS
-Provider Failover
-Latency Benchmark
+ ↓
+Receipt
 ```
 
 ---
 
-# 88. 版本路线
+# 61. M4 测试重点
 
-版本不拆成大量微小审计版本。
-
-每个版本代表一个完整能力域。
+必须至少拥有：
 
 ```text
-v0.1
-State + Graph + Opportunity
+No-opportunity
+Profitable
+Unprofitable
+Revert
+Out-of-gas
+State mismatch
+Tax token
+No-tax token
+Gas calculation
+```
 
-v0.2
-EVM Simulation / REVM
+以及真实 GIWA Historical Opportunity。
 
-v0.3
-Risk + Transaction Construction + Execution
+---
 
-v0.4
-Low-Latency Live Pipeline
+# 62. 可观测性
 
-v0.5
-Multi-Protocol / Multi-Chain
+至少记录：
 
-v0.6
-Backrun Strategy
+```text
+blocks_received
+blocks_processed
+logs_processed
+pools_updated
+graph_updates
+opportunities_detected
+opportunities_rejected
+simulation_started
+simulation_finished
+simulation_failed
+execution_started
+execution_submitted
+execution_confirmed
+execution_failed
+```
 
-v0.7
-Private Submission / Bundle
+以及：
 
-v0.8
-Advanced Token Risk / Tax / Honeypot
-
-v0.9
-Production Hardening
-
-v1.0
-Production EVM MEV Bot
+```text
+block_to_opportunity_latency
+opportunity_to_simulation_latency
+simulation_latency
+simulation_to_execution_latency
+execution_latency
+total_latency
 ```
 
 ---
 
-# 89. v0.2
+# 63. Profit Metrics
 
-核心：
+必须区分：
+
+```text
+Theoretical Gross Profit
+Simulated Gross Profit
+Simulated Net Profit
+Executed Gross Profit
+Executed Net Profit
+```
+
+不能只保存：
+
+```text
+profit
+```
+
+而不知道它来自哪个阶段。
+
+---
+
+# 64. Opportunity 与 Execution 的边界
+
+Opportunity：
+
+> “应该交易什么？”
+
+Simulation：
+
+> “真实 EVM 执行会发生什么？”
+
+Risk：
+
+> “现在是否允许交易？”
+
+Execution：
+
+> “如何把批准的交易送上链？”
+
+Signer：
+
+> “如何合法签名？”
+
+SequencerDirect：
+
+> “如何最快提交给 GIWA？”
+
+这些职责必须保持分离。
+
+---
+
+# 65. 不能因为当前是 Testnet 而降低正确性要求
+
+Testnet 不是：
+
+> 可以随便模拟。
+
+Testnet 的意义是：
+
+> 在真实 EVM / 真实 GIWA execution environment 中低成本验证完整系统。
+
+因此：
+
+```text
+Testnet
+≠
+Mock Chain
+```
+
+---
+
+# 66. 当前不做的事情
+
+以下全部不进入当前开发主线：
+
+## 多链
+
+```text
+BSC
+Base
+Ethereum
+Arbitrum
+Polygon
+```
+
+## 多协议
+
+```text
+V3
+StableSwap
+其他复杂 AMM
+```
+
+## 其他 MEV Strategy
+
+```text
+Sandwich
+Backrun
+Liquidation
+NFT
+Intent
+Cross-chain
+```
+
+## 通用基础设施
+
+```text
+Universal ABI Database
+Universal Explorer
+Universal Blockchain Indexer
+AI Agent
+Generic Analytics
+```
+
+## 过早优化
+
+```text
+复杂微服务
+分布式系统
+数据库驱动 Hot Path
+```
+
+---
+
+# 67. 当前尤其不做
+
+以下内容如果没有 M4/M5/M6 的真实需求，不得提前实现：
+
+```text
+Universal Router
+Universal Arbitrage Contract
+Complex Flash Loan Framework
+Multi-chain Runtime
+Multi-chain Config UI
+Generic PathFinder
+Complex Bundle Engine
+General Token Risk Platform
+```
+
+---
+
+# 68. GIWA 专属能力
+
+当前可以实现 GIWA 专属能力。
+
+原因不是：
+
+> 把系统写死。
+
+而是：
+
+> 当前产品本身就是 GIWA Testnet Arbitrage Bot。
+
+GIWA 专属能力包括：
+
+```text
+FlashblockSource
+SequencerDirect
+GIWA Chain Source
+GIWA Execution
+GIWA latency metrics
+```
+
+这些能力必须被隔离在 Chain / Execution 边界中。
+
+---
+
+# 69. FlashblockSource 与 SequencerDirect 的关系
+
+二者分别解决：
+
+```text
+FlashblockSource
+=
+更早发现机会
+```
+
+和：
+
+```text
+SequencerDirect
+=
+更快提交交易
+```
+
+完整链路：
+
+```text
+FlashblockSource
+       ↓
+State
+       ↓
+Graph
+       ↓
+Opportunity
+       ↓
+Simulation
+       ↓
+Risk
+       ↓
+SequencerDirect
+```
+
+因此它们不是独立的“附加功能”。
+
+它们最终共同服务于：
+
+> GIWA Arbitrage Hot Path。
+
+---
+
+# 70. GIWA Testnet → Mainnet
+
+当前项目首先完成：
+
+```text
+GIWA Testnet
+```
+
+未来 GIWA Mainnet 上线后：
+
+> 优先目标是通过 Chain Configuration / Network Profile 切换网络身份，而不是重写 State / Graph / Opportunity。
+
+但是：
+
+> 不能假设 Testnet 与 Mainnet 完全一致。
+
+Mainnet 切换前必须重新验证：
+
+* Chain ID；
+* RPC；
+* WebSocket；
+* Flashblock；
+* Sequencer；
+* DEX；
+* Factory；
+* Pool；
+* Token；
+* Gas；
+* Finality；
+* Transaction submission；
+* Contract deployment；
+* Execution semantics。
+
+因此：
+
+```text
+Testnet → Mainnet
+```
+
+应该是：
+
+```text
+配置切换
++
+重新验证
+```
+
+而不是：
+
+```text
+代码重写
+```
+
+---
+
+# 71. Provider
+
+当前不建立复杂的多链 Provider Manager。
+
+GIWA Testnet 阶段至少需要：
+
+```text
+Primary RPC
+Fallback RPC
+```
+
+具备：
+
+* timeout；
+* retry；
+* health check；
+* latency measurement。
+
+复杂 Provider Failover 放到 M8。
+
+---
+
+# 72. Configuration
+
+当前配置重点：
+
+```text
+GIWA Testnet
+```
+
+例如概念：
+
+```text
+chain_id
+rpc_http
+rpc_ws
+flashblock_ws
+sequencer_rpc
+native_token
+protocol_registry
+execution_config
+simulation_config
+risk_config
+```
+
+配置用于：
+
+> GIWA 环境切换和运行参数。
+
+不是用于当前实现多链运行。
+
+---
+
+# 73. CLI
+
+最终目标：
+
+```text
+evm-mev replay
+evm-mev simulate
+evm-mev scan
+evm-mev live
+evm-mev dry-run
+evm-mev execute
+```
+
+当前只实现当前阶段真正需要的命令。
+
+不为了“未来 CLI 完整”提前实现全部命令。
+
+---
+
+# 74. Replay CLI
+
+目标：
+
+```text
+evm-mev replay \
+  --from-block X \
+  --to-block Y
+```
+
+输出：
+
+```text
+blocks
+pool_updates
+graph_updates
+opportunities
+simulation_results
+profit
+latency
+```
+
+---
+
+# 75. Live CLI
+
+未来：
+
+```text
+evm-mev live
+```
+
+启动：
+
+```text
+GIWA Live Source
+      ↓
+State
+      ↓
+Graph
+      ↓
+Opportunity
+```
+
+---
+
+# 76. Dry Run
+
+在真实 Execution 前必须提供：
+
+```text
+DryRun
+```
+
+模式：
 
 ```text
 Opportunity
  ↓
-REVM
- ↓
-Actual EVM Simulation
-```
-
-能力：
-
-* State Override；
-* Transaction Simulation；
-* Gas；
-* Slippage；
-* Actual Output；
-* Profit；
-* Failure Reason。
-
----
-
-# 90. v0.3
-
-核心：
-
-```text
 Simulation
  ↓
 Risk
  ↓
 Transaction
  ↓
-Execution
+Log
 ```
 
-能力：
-
-* Transaction Builder；
-* Signer；
-* Risk Policy；
-* Gas Policy；
-* Dry Run；
-* RPC Broadcast。
-
----
-
-# 91. v0.4
-
-核心：
-
-> Low Latency
-
-从：
+但：
 
 ```text
-Historical Replay
+不签名
+不广播
 ```
 
-进入：
+---
+
+# 77. Real Execution
+
+真实执行必须明确开启。
+
+例如概念：
 
 ```text
-Live Chain
+--execute
 ```
 
-重点：
-
-* WS；
-* Block Feed；
-* Incremental State；
-* Parallel Decode；
-* Lock Reduction；
-* Latency Benchmark。
-
----
-
-# 92. v0.5
-
-核心：
-
-> Multi-Protocol / Multi-Chain
-
-增加：
+默认：
 
 ```text
-V3
-StableSwap
-Additional DEX
-Additional EVM Chains
+Disabled
 ```
 
-但每个协议必须：
+防止：
+
+> Bot 启动后意外发送真实交易。
+
+---
+
+# 78. 安全原则
+
+私钥：
 
 ```text
-Protocol Adapter
+Never commit
+Never log
+Never fixture
+Never hardcode
 ```
 
-隔离。
-
----
-
-# 93. v0.6
-
-核心：
-
-> Backrun
-
-重点：
-
-```text
-Pending / Included Transaction
- ↓
-State Change
- ↓
-Opportunity
- ↓
-Backrun
-```
-
----
-
-# 94. v0.7
-
-核心：
-
-> Private Execution
-
-增加：
-
-* Private RPC；
-* Bundle；
-* Relay；
-* Bribe；
-* Inclusion Strategy。
-
----
-
-# 95. v0.8
-
-核心：
-
-> Token Risk
-
-增加：
-
-* Fee-on-transfer；
-* Tax；
-* Honeypot；
-* Transfer restrictions；
-* Dynamic token behavior。
-
-注意：
-
-这仍然是为了：
-
-> 判断某个 Opportunity 是否安全执行。
-
-不是重新建设一个通用 Token 分析平台。
-
----
-
-# 96. v0.9
-
-核心：
-
-> Production Hardening
-
-包括：
-
-* 高可用；
-* Provider Failover；
-* Recovery；
-* Circuit Breaker；
-* Persistent State；
-* Monitoring；
-* Alert；
-* Benchmark；
-* Chaos Test。
-
----
-
-# 97. v1.0
-
-v1.0 的定义：
-
-> 可以在真实 EVM 主网上持续运行，并在风险控制下自动发现、模拟和执行 MEV Opportunity。
-
----
-
-# 98. 关键架构原则
-
-## 原则 1：MEV First
-
-所有功能都必须回答：
-
-> 这个东西是否直接服务于 MEV Opportunity？
-
-如果不能：
-
-> 不进入核心系统。
-
----
-
-## 原则 2：State First
-
-不要：
-
-```text
-Opportunity
- ↓
-RPC Query
- ↓
-RPC Query
-```
-
-而是：
-
-```text
-Chain Event
- ↓
-State
- ↓
-Opportunity
-```
-
----
-
-## 原则 3：Protocol Adapter
-
-协议差异必须隔离：
-
-```text
-Protocol
- ↓
-Adapter
- ↓
-Normalized State
-```
-
-上层不应该知道具体 DEX 实现细节。
-
----
-
-## 原则 4：Graph 不是最终答案
-
-Graph 负责：
-
-```text
-Candidate
-```
-
-最终答案来自：
+Execution 必须明确区分：
 
 ```text
 Simulation
+DryRun
+RealExecution
+```
+
+不能因为配置错误从：
+
+```text
+DryRun
+```
+
+静默变成：
+
+```text
+RealExecution
 ```
 
 ---
 
-## 原则 5：Replay First
+# 79. Risk
 
-任何生产策略都必须：
+至少：
 
 ```text
+Simulation Success
+AND
+Net Profit > Minimum Profit
+AND
+Gas < Maximum Gas
+AND
+Opportunity State Fresh
+AND
+Slippage < Maximum Slippage
+```
+
+才可以：
+
+```text
+Accept
+```
+
+否则：
+
+```text
+Reject
+```
+
+无法确定：
+
+```text
+Unknown
+```
+
+不能默认 Accept。
+
+---
+
+# 80. Stale Opportunity
+
+Opportunity 必须绑定：
+
+```text
+chain_id
+block_number
+block_hash
+state_version
+```
+
+如果状态发生变化：
+
+```text
+Opportunity
+      ↓
+Stale
+```
+
+必须重新：
+
+```text
+Detect
+Simulation
+Risk
+```
+
+不能继续使用。
+
+---
+
+# 81. Transaction Atomicity
+
+套利交易必须保证：
+
+```text
+Swap A
+  ↓
+Swap B
+  ↓
+Profit Check
+```
+
+如果最终无法达到预期：
+
+```text
+Revert
+```
+
+不能出现：
+
+```text
+只完成第一腿
+```
+
+导致资产损失。
+
+具体 Atomic Arbitrage Executor 设计：
+
+> M4 后确定。
+
+---
+
+# 82. Gas
+
+Gas 必须来自真实 EVM Simulation。
+
+优先：
+
+```text
+gas_used
+```
+
+而不是固定：
+
+```text
+estimated_gas = 300000
+```
+
+Gas Cost：
+
+```text
+gas_used
+×
+effective_gas_price
+```
+
+必须使用精确整数。
+
+---
+
+# 83. Latency
+
+最终必须记录：
+
+```text
+T0 = event received
+T1 = decoded
+T2 = state updated
+T3 = graph updated
+T4 = opportunity detected
+T5 = simulation started
+T6 = simulation finished
+T7 = risk approved
+T8 = transaction signed
+T9 = transaction submitted
+T10 = included
+T11 = confirmed
+```
+
+最终可以计算：
+
+```text
+T4 - T0
+T6 - T4
+T9 - T6
+T10 - T9
+T11 - T0
+```
+
+---
+
+# 84. Benchmark
+
+M8 前不进行过度优化。
+
+但必须建立 Benchmark：
+
+```text
+Decode
+State Update
+Graph Update
+Opportunity Search
+Simulation
+Transaction Build
+Signing
+Submission
+```
+
+---
+
+# 85. 数据库原则
+
+Hot Path：
+
+```text
+RAM
+```
+
+数据库用于：
+
+```text
+Historical Data
+Metrics
 Replay
- ↓
-Validate
- ↓
-Benchmark
- ↓
-Live
+Debug
+Research
 ```
 
----
-
-## 原则 6：Live 和 Replay 同源
-
-两者必须共享：
+不允许：
 
 ```text
-Decoder
-State
-Graph
+每一个 Pool Update
+    ↓
+Database
+    ↓
 Opportunity
 ```
 
+成为核心实时路径。
+
 ---
 
-## 原则 7：Hot Path 极简
+# 86. 日志原则
 
-Hot Path 不允许引入：
+日志服务于：
 
 ```text
-LLM
-Database
-External API
-Web Search
+Debug
+Replay
+Performance
+Incident
+Audit
 ```
 
-等非必要依赖。
+不输出大量无意义数据。
+
+Hot Path 日志必须可控。
 
 ---
 
-# 99. 防跑偏机制
+# 87. 错误分类
 
-以后任何新增需求必须回答以下问题：
-
-### Q1
-
-它是否直接服务：
+错误至少区分：
 
 ```text
-Chain
-State
-Graph
+Data Error
+Decode Error
+State Error
+Graph Error
+Opportunity Error
+Simulation Error
+Risk Rejection
+Transaction Error
+Signing Error
+Submission Error
+Execution Error
+Receipt Error
+```
+
+不要所有错误统一为：
+
+```text
+Unknown Error
+```
+
+---
+
+# 88. 代码质量
+
+必须保持：
+
+```text
+cargo fmt --check
+cargo check --workspace --all-targets
+cargo test --workspace
+cargo clippy --workspace --all-targets -- -D warnings
+```
+
+全部通过。
+
+---
+
+# 89. Production Code 原则
+
+禁止在 Production Code 中出现：
+
+```text
+unwrap()
+expect()
+panic!()
+```
+
+除非经过明确证明：
+
+> 该状态在类型系统 / 构造器 / 不变量中绝对成立。
+
+测试代码可以根据测试目的使用，但 Production Hot Path 必须严格控制。
+
+---
+
+# 90. 数值原则
+
+核心数学：
+
+```text
+U256
+```
+
+必须覆盖：
+
+* Overflow；
+* Underflow；
+* Zero；
+* Division by zero；
+* Extreme reserve；
+* Extreme amount；
+* Fee；
+* Decimal；
+* Rounding。
+
+非法 Pool State：
+
+> 不能导致整个 Bot Panic。
+
+---
+
+# 91. M1-M3 不回退
+
+后续开发不能破坏已经验证的：
+
+```text
+M1 Data Correctness
+M2 Graph Correctness
+M3 Opportunity Correctness
+```
+
+任何新功能必须：
+
+```text
+cargo test
+```
+
+保持既有测试全部通过。
+
+---
+
+# 92. M4 不修改 M3 数学模型以适配 Simulation
+
+如果出现：
+
+```text
+M3 Analytical
+!=
+M4 Simulation
+```
+
+必须首先检查：
+
+1. Pool State；
+2. Block；
+3. Bytecode；
+4. Router；
+5. Token behavior；
+6. Transfer Tax；
+7. Fee；
+8. Rounding；
+9. Execution order；
+10. Gas；
+11. State override。
+
+只有证明 M3 模型错误，才能修改 M3。
+
+禁止：
+
+> 为了让测试通过而强行让 Simulation 等于 Analytical。
+
+---
+
+# 93. M4 的核心原则
+
+M4 最重要的不是：
+
+> “把 REVM 接进来。”
+
+而是：
+
+> **证明 Opportunity → Real EVM Execution 的桥梁是正确的。**
+
+---
+
+# 94. M5 的核心原则
+
+M5 最重要的不是：
+
+> “接上 WebSocket。”
+
+而是：
+
+> **证明 Replay 与 Live 使用同一套 State Semantics。**
+
+---
+
+# 95. M6 的核心原则
+
+M6 最重要的不是：
+
+> “能够发送交易。”
+
+而是：
+
+> **只发送经过 Simulation + Risk 验证的交易。**
+
+---
+
+# 96. M7 的核心原则
+
+M7 最重要的不是：
+
+> “成功发出一笔交易。”
+
+而是：
+
+> **完成一次从机会发现到链上结果验证的完整套利闭环。**
+
+---
+
+# 97. M8 的核心原则
+
+M8 才开始真正回答：
+
+> “这个 Bot 能不能在 GIWA Testnet 上长期、稳定、低延迟运行？”
+
+---
+
+# 98. 未来扩展顺序
+
+当前推荐：
+
+```text
+GIWA Testnet
+      ↓
+Simulation
+      ↓
+Live
+      ↓
+Execution
+      ↓
+Real Arbitrage
+      ↓
+Latency Optimization
+      ↓
+Reliability
+      ↓
+PathFinder
+      ↓
+More Protocols
+      ↓
+More Chains
+```
+
+而不是：
+
+```text
+多链
+ ↓
+多协议
+ ↓
+复杂 Graph
+ ↓
+Simulation
+ ↓
+Execution
+```
+
+---
+
+# 99. 未来 Multi-chain Gate
+
+只有满足以下条件后，才进入多链：
+
+```text
+GIWA Testnet Real Arbitrage
+        ✓
+Simulation Stable
+        ✓
+Execution Stable
+        ✓
+Flashblock Stable
+        ✓
+SequencerDirect Stable
+        ✓
+Latency Measured
+        ✓
+Failure Recovery
+        ✓
+```
+
+届时重新评估：
+
+```text
+ChainProfile
+ChainAdapter
+ExecutionAdapter
+ProviderManager
+```
+
+---
+
+# 100. 最终产品演进
+
+当前：
+
+```text
+GIWA Testnet Arbitrage Bot
+```
+
+未来：
+
+```text
+GIWA Mainnet Arbitrage Bot
+```
+
+再未来：
+
+```text
+EVM Arbitrage Engine
+```
+
+最终才可能：
+
+```text
+Multi-EVM MEV Bot
+```
+
+顺序必须是：
+
+```text
+先做深
+再做广
+```
+
+而不是：
+
+```text
+先做广
+再做深
+```
+
+---
+
+# 101. 防跑偏机制
+
+任何新需求必须回答：
+
+## Q1
+
+是否直接服务：
+
+```text
 Opportunity
 Simulation
 Risk
 Execution
+Latency
+Profit
 ```
 
 之一？
 
 如果不是：
 
-> 默认拒绝进入核心项目。
+> 默认不进入核心项目。
 
 ---
 
-### Q2
+## Q2
 
-它是否属于 MEV Bot Hot Path？
+是否属于：
+
+```text
+GIWA Testnet Arbitrage
+```
+
+当前目标？
 
 如果不是：
 
-> 应该放到 Research / Tooling / Replay / Metrics。
+> 默认延后。
 
 ---
 
-### Q3
+## Q3
 
-它是否能提高：
+是否能够提高：
 
 ```text
 Opportunity Detection
 Simulation Accuracy
 Execution Success
 Latency
+Profitability
+Reliability
 ```
 
 之一？
 
 如果都不能：
 
-> 不应该成为当前阶段重点。
+> 不作为当前重点。
 
 ---
 
-### Q4
+## Q4
 
-它是否需要建立一个全新的“大系统”？
+是否为了未来“可能支持多链”而提前增加复杂度？
+
+如果是：
+
+> 延后。
+
+---
+
+## Q5
+
+是否建立了一个全新的“大系统”？
 
 例如：
 
 ```text
-Universal ABI Engine
-Semantic Engine
-Data Platform
-AI Agent
+Universal ABI Platform
+Blockchain Data Platform
+AI Agent Platform
+Universal Analytics
 ```
 
 如果是：
 
-> 必须单独评估，不能直接并入核心项目。
+> 不进入核心项目。
 
 ---
 
-# 100. 需求进入标准
+# 102. 新需求进入标准
 
-所有新需求进入项目之前必须标记：
+所有新增需求必须标记：
 
 ```text
 Priority:
 P0 / P1 / P2 / P3
 
 Stage:
-v0.1 / v0.2 / ...
+M4 / M5 / M6 / M7 / M8 / Future
 
 Layer:
 Chain / Protocol / State / Graph /
-Opportunity / Simulation / Risk / Execution
+Opportunity / Simulation / Risk /
+Execution / Signer / Replay / Metrics
+
+GIWA Specific:
+Yes / No
 
 Hot Path:
 Yes / No
+
+Real Money Impact:
+Yes / No
 ```
 
-没有这些信息，不进入开发。
+没有这些信息：
+
+> 不进入开发。
 
 ---
 
-# 101. 需求冻结原则
-
-v0.1 开始开发以后：
-
-如果出现新的想法，例如：
+# 103. 当前 P0
 
 ```text
-要不要支持 V3？
-要不要做 Sandwich？
-要不要做 AI？
-要不要做 Token Scanner？
-要不要做 Dashboard？
-要不要做跨链？
+P0
+M4 Real EVM Simulation
 ```
 
-默认：
-
-> 不立即加入 v0.1。
-
-统一进入：
+之后：
 
 ```text
-Future Backlog
-```
+P0
+GIWA Live Pipeline
 
-等待版本评审。
+P0
+GIWA Execution
+
+P0
+GIWA Testnet Real Arbitrage
+```
 
 ---
 
-# 102. v0.1 最终 Definition of Done
-
-v0.1 不是：
-
-> “代码写完了”。
-
-而必须同时满足：
+# 104. 当前 P1
 
 ```text
-                v0.1
-                 │
-      ┌──────────┼──────────┐
-      ↓          ↓          ↓
-   Chain       State      Protocol
-      │          │          │
-      └──────────┼──────────┘
-                 ↓
-               Graph
-                 ↓
-           Opportunity
-                 ↓
-              Replay
+Flashblock Optimization
+Latency Benchmark
+Provider Reliability
+Risk Hardening
+Recovery
+Circuit Breaker
 ```
-
-并满足：
-
-1. 可以读取真实 EVM 历史区块；
-2. 可以识别目标 AMM Pool；
-3. 可以维护 Pool State；
-4. 可以构建 Token/Pool Graph；
-5. 可以发现 Two-Pool Arbitrage；
-6. 可以计算理论最优输入；
-7. 可以计算理论利润；
-8. 可以发现有限 Multi-Hop Opportunity；
-9. 可以 Replay；
-10. Replay 是 deterministic；
-11. 所有核心逻辑具有测试；
-12. 数值计算不会产生未处理溢出；
-13. Chain 与 Protocol 已经完成抽象；
-14. 代码没有把具体链硬编码进核心业务；
-15. v0.1 不需要真实交易执行。
 
 ---
 
-# 103. 最重要的成功标准
-
-v0.1 最重要的不是：
+# 105. 当前 P2
 
 ```text
-代码量
+PathFinder
+Multi-hop
+Additional GIWA Protocols
+Advanced Token Risk
 ```
 
-不是：
+具体优先级根据真实数据重新决定。
+
+---
+
+# 106. 当前 P3 / Future
 
 ```text
-支持多少协议
+BSC
+Base
+Ethereum
+Arbitrum
+V3
+StableSwap
+Backrun
+Private Bundle
+Cross-chain
 ```
 
-也不是：
+---
+
+# 107. 最终目标
+
+当前项目真正需要达到的最终阶段不是：
+
+> “我们实现了一个很漂亮的 EVM MEV Framework。”
+
+而是：
+
+> **“我们在 GIWA Testnet 上拥有一个能够实时发现、模拟、判断、执行并验证套利机会的真实 Bot。”**
+
+---
+
+# 108. 最终闭环
 
 ```text
-支持多少链
+                         GIWA TESTNET
+                              │
+                              ▼
+                    ┌──────────────────┐
+                    │  Block/Flashblock │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ Protocol Decoder │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │   State Engine   │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │  Market Graph    │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │   Opportunity    │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │      REVM        │
+                    │    Simulation    │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │  Profitability   │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │      Risk        │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │    Transaction   │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │      Signer      │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ SequencerDirect  │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                       GIWA CHAIN
+                             │
+                             ▼
+                         Receipt
+                             │
+                             ▼
+                     Actual Profit
+                             │
+                  ┌──────────┴──────────┐
+                  ▼                     ▼
+               Metrics                Replay
+                  │                     │
+                  └──────────┬──────────┘
+                             │
+                             └───────↺
+```
+
+---
+
+# 109. 项目最终原则
+
+整个项目只遵循几个核心原则：
+
+### 1. 先做深，再做广
+
+先把 GIWA 做通，再考虑多链。
+
+### 2. 先模拟，再执行
+
+没有真实 Simulation，不进入 Real Execution。
+
+### 3. 先 Replay，再 Live
+
+任何 Live 行为都必须可以被 Replay 验证。
+
+### 4. State First
+
+Opportunity 不应该依赖大量实时 RPC Query。
+
+### 5. Simulation First
+
+Graph 发现候选，Simulation 决定真实可执行性。
+
+### 6. Evidence First
+
+真实链数据优先，禁止猜测和伪造。
+
+### 7. Exact Math
+
+核心金额使用 U256，禁止浮点数参与最终决策。
+
+### 8. Hot Path 极简
+
+不要让：
+
+```text
+Database
+HTTP
+LLM
+External Search
+```
+
+成为 Hot Path 必经依赖。
+
+### 9. GIWA-specific capability 可以存在
+
+但必须隔离在：
+
+```text
+Chain
+Execution
+```
+
+边界中。
+
+### 10. 不为未来需求提前复杂化
+
+尤其：
+
+```text
+Multi-chain
+PathFinder
+contracts
+Multi-protocol
+Private Bundle
+```
+
+都必须在真实需求出现之后再设计。
+
+---
+
+# 110. 当前开发指令
+
+截至本 PRD：
+
+> **当前唯一开发任务是 M4：EVM Simulation / Profitability。**
+
+M4 完成之前：
+
+```text
+不要实现多链
+不要实现最终 PathFinder
+不要实现复杂 contracts
+不要实现 Flashblock Live Pipeline
+不要实现 SequencerDirect
+不要实现真实交易广播
+```
+
+M4 完成之后，再按照：
+
+```text
+M4
+ ↓
+重新评估 PathFinder / contracts
+ ↓
+M5 GIWA Live
+ ↓
+M6 GIWA Execution
+ ↓
+M7 GIWA Testnet Real Arbitrage
+```
+
+继续推进。
+
+---
+
+# 111. 最终验收定义
+
+当且仅当以下链路能够在 GIWA Testnet 上完成：
+
+```text
+GIWA Event
+   ↓
+State
+   ↓
+Graph
+   ↓
+Opportunity
+   ↓
+Simulation
+   ↓
+Risk
+   ↓
+Transaction
+   ↓
+Signer
+   ↓
+GIWA Sequencer
+   ↓
+On-chain Inclusion
+   ↓
+Receipt
+   ↓
+Actual Profit Verification
+```
+
+并且：
+
+```text
+Replay
+```
+
+可以解释该次执行全过程时：
+
+> 当前阶段的 GIWA Arbitrage Bot 才算真正完成。
+
+---
+
+# 112. 项目方向总结
+
+本项目当前不是：
+
+```text
+“做一个支持所有 EVM 链的 MEV Framework”
 ```
 
 而是：
 
-> **能够从真实链历史状态中，可靠地恢复 Market State，并从 Market State 中稳定、可重复地发现真实存在的套利机会。**
-
-即：
-
 ```text
-真实链数据
-      ↓
-正确 State
-      ↓
-正确 Graph
-      ↓
-正确 Opportunity
+“先做出一个真正能在 GIWA Testnet 上跑起来的 Arbitrage Bot”
 ```
 
----
-
-# 104. 项目第一性原理
-
-整个项目最终可以压缩成：
+技术路线：
 
 ```text
-Observe
+正确性
    ↓
-Understand Market State
-   ↓
-Find Price Inefficiency
-   ↓
-Prove It
-   ↓
-Execute It
-   ↓
-Measure It
-   ↓
-Improve It
-```
-
-其中：
-
-```text
-Observe
-```
-
-不是为了理解所有链上交易。
-
-而是为了：
-
-> **获得 MEV 所需要的市场状态。**
-
----
-
-# 105. 最终架构边界
-
-项目应该始终保持：
-
-```text
-                EVM MEV BOT
-                     │
-       ┌─────────────┼─────────────┐
-       │             │             │
-     Chain        Protocol       State
-       │             │             │
-       └─────────────┼─────────────┘
-                     ↓
-                   Graph
-                     ↓
-               Opportunity
-                     ↓
-                Simulation
-                     ↓
-                   Risk
-                     ↓
-                Execution
-```
-
-外围：
-
-```text
-Replay
-Metrics
-Fixtures
-Research Data
-```
-
-服务于核心。
-
-而不是反过来让：
-
-```text
-Research
-Semantic
-Data
-AI
-Dashboard
-```
-
-成为核心。
-
----
-
-# 106. 项目开发铁律
-
-以后整个项目开发过程中，以以下十条作为最高级工程约束：
-
-### 1.
-
-**MEV 是目的，不是顺便支持的功能。**
-
-### 2.
-
-**State 是核心资产。**
-
-### 3.
-
-**Protocol 必须 Adapter 化。**
-
-### 4.
-
-**Graph 只负责发现 Candidate。**
-
-### 5.
-
-**Simulation 才负责证明 Opportunity。**
-
-### 6.
-
-**Execution 必须建立在 Simulation + Risk 之上。**
-
-### 7.
-
-**Replay 必须和 Live 使用同一套核心逻辑。**
-
-### 8.
-
-**Hot Path 必须保持极简。**
-
-### 9.
-
-**不要为了“理解更多数据”而扩大系统边界。**
-
-### 10.
-
-**任何新功能如果不能明确提升 Opportunity Discovery、Simulation、Risk、Execution 或 Latency，就不能成为当前阶段核心工作。**
-
----
-
-# 107. v0.1 开发起点
-
-在真正开始写业务代码之前，首先完成：
-
-```text
-1. Repository 初始化
-2. Workspace 初始化
-3. Core Domain Model
-4. Chain Trait
-5. Protocol Trait
-6. State Trait
-7. Graph Trait
-8. Opportunity Trait
-9. Replay Trait
-10. CLI
-11. Fixture 体系
-12. 测试体系
-```
-
-然后才进入：
-
-```text
-真实链
- ↓
-真实 Pool
- ↓
-真实 State
- ↓
-真实 Opportunity
-```
-
----
-
-# 108. 第一条实际业务闭环
-
-v0.1 第一个真正需要跑通的完整闭环：
-
-```text
-Historical Block
-      ↓
-Pool Event
-      ↓
-Pool State
-      ↓
-Two Pool
-      ↓
-Price Difference
-      ↓
-Optimal Input
-      ↓
-Expected Profit
-      ↓
 Opportunity
+   ↓
+真实 EVM Simulation
+   ↓
+GIWA Live
+   ↓
+低延迟
+   ↓
+Risk
+   ↓
+Execution
+   ↓
+真实套利
+   ↓
+优化
+   ↓
+扩展
 ```
-
-只要这条链路没有完全跑通：
-
-> 不应该开始大量扩展其他协议、策略或复杂功能。
-
----
-
-# 109. PRD 变更规则
-
-本文档可以修改。
-
-但是修改必须明确：
-
-```text
-Change
-Reason
-Impact
-Version
-```
-
-禁止：
-
-> 在代码实现过程中悄悄改变产品定义。
-
-任何架构重大变化，都应该先修改 PRD，再修改代码。
-
----
-
-# 110. 最终产品愿景
 
 最终：
 
-```text
-                EVM MEV BOT
-                     │
-        ┌────────────┴────────────┐
-        │                         │
-      Multi-Chain             Low Latency
-        │                         │
-        └────────────┬────────────┘
-                     │
-               Market State
-                     │
-               Opportunity
-                     │
-                Simulation
-                     │
-                  Risk
-                     │
-                Execution
-                     │
-                Real Profit
-```
-
-目标不是做最大的区块链基础设施。
-
-目标是做一个：
-
-> **小而强、低延迟、状态准确、机会判断可靠、能够真正执行交易的 EVM MEV Bot。**
-
----
-
-# 111. 当前阶段唯一核心问题
-
-在 v0.1 开始之后，所有工程问题最终都应该回到一个问题：
-
-> **我们能不能准确、低成本、可重复地知道“现在市场状态是什么，以及这个状态是否产生了可执行的 MEV Opportunity”？**
-
-如果答案还是否定的：
-
-```text
-不要扩展功能。
-不要增加复杂架构。
-不要做 UI。
-不要做 AI。
-不要做通用数据系统。
-```
-
-继续把：
-
-```text
-Chain
- ↓
-State
- ↓
-Graph
- ↓
-Opportunity
-```
-
-做好。
-
-这就是 EVM MEV Bot v0.1 的核心。
+> **先让 Bot 活起来，再让 Bot 变快，最后让 Bot 变广。**
