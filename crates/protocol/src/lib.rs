@@ -4,6 +4,7 @@
 //! decides whether and how to apply it.
 
 pub mod adapter;
+pub mod calls;
 pub mod error;
 pub mod event;
 pub mod registry;
@@ -11,6 +12,7 @@ pub mod signatures;
 pub mod v2;
 
 pub use adapter::ProtocolAdapter;
+pub use calls::{CallReturn, Reserves, V2Call};
 pub use error::{ProtocolError, Result};
 pub use event::{LogPosition, PoolCreatedEvent, ProtocolEvent, SwapEvent, SyncEvent};
 pub use registry::{AttestationEvidence, PoolAttestation, Registry, RegistryError};

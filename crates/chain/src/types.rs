@@ -15,6 +15,36 @@ pub struct ChainBlock {
     pub transaction_count: usize,
 }
 
+/// The header fields an EVM execution is measured against.
+///
+/// Deliberately separate from [`ChainBlock`]: the block fixtures recorded by
+/// earlier milestones serialize `ChainBlock`, and replay data already on disk
+/// must keep loading untouched.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct BlockContext {
+    pub chain_id: ChainId,
+    pub number: BlockNumber,
+    /// Verified identity of the state this context describes.
+    pub hash: B256,
+    pub timestamp: u64,
+    pub gas_limit: u64,
+    /// `None` when the block carries no EIP-1559 base fee, i.e. the chain uses
+    /// legacy gas pricing at this height.
+    pub base_fee_per_gas: Option<u128>,
+    /// `excessBlobGas`: EIP-4844's running blob-gas total, which a Cancun-or-later
+    /// EVM needs in order to price the blob opcodes.
+    ///
+    /// `None` means the source did not carry the field — a legacy block, or a
+    /// recording made before anyone needed it. It does not mean zero: an execution
+    /// under a blob-era ruleset has to be told the block's own value or refuse, the
+    /// same rule §60 states for bytecode.
+    #[serde(default)]
+    pub excess_blob_gas: Option<u64>,
+    pub beneficiary: Address,
+    /// `mixHash`, which is the randomness field post-merge.
+    pub prevrandao: Option<B256>,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChainTransaction {
     pub hash: TxHash,

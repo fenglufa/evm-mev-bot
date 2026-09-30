@@ -1,0 +1,25 @@
+[package]
+name = "evm-simulation"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+evm-core.workspace = true
+evm-chain.workspace = true
+evm-protocol.workspace = true
+alloy-primitives.workspace = true
+async-trait.workspace = true
+hex.workspace = true
+revm.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+evm-graph.workspace = true
+evm-opportunity.workspace = true
+evm-replay.workspace = true
+evm-risk.workspace = true
+evm-state.workspace = true
+tokio.workspace = true

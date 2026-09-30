@@ -9,7 +9,8 @@ use evm_core::{BlockNumber, ChainId, LogIndex, TxHash, TxIndex};
 use crate::adapter::ChainAdapter;
 use crate::error::{ChainError, Result};
 use crate::types::{
-    BlockData, CallRequest, ChainBlock, ChainLog, ChainReceipt, ChainTransaction, LogFilter,
+    BlockContext, BlockData, CallRequest, ChainBlock, ChainLog, ChainReceipt, ChainTransaction,
+    LogFilter,
 };
 
 /// JSON-RPC over HTTP. The only place in the codebase that knows the wire
@@ -266,6 +267,54 @@ impl ChainAdapter for HttpChainAdapter {
         })
     }
 
+    async fn get_block_context(&self, number: BlockNumber) -> Result<BlockContext> {
+        let raw = self
+            .request("eth_getBlockByNumber", json!([block_param(number), false]))
+            .await?;
+        if raw.is_null() {
+            return Err(ChainError::MissingData(format!(
+                "block {} not available",
+                number.0
+            )));
+        }
+        let get = |key: &str| -> Result<&Value> {
+            raw.get(key)
+                .ok_or_else(|| ChainError::Decode(format!("block is missing `{key}`")))
+        };
+        // A legacy-pricing block simply has no baseFeePerGas field; that is
+        // recorded as None rather than as zero, because the two mean different
+        // things when the effective gas price is computed.
+        let base_fee_per_gas = match raw.get("baseFeePerGas") {
+            None | Some(Value::Null) => None,
+            Some(v) => Some(
+                u128::try_from(parse_u256(v, "block.baseFeePerGas")?).map_err(|_| {
+                    ChainError::Decode("block.baseFeePerGas does not fit in u128".to_string())
+                })?,
+            ),
+        };
+        // An absent `excessBlobGas` is recorded as None, not as zero: the two mean
+        // different things to a blob-era ruleset, and inventing the field would be
+        // the same mistake §60 forbids for bytecode.
+        let excess_blob_gas = match raw.get("excessBlobGas") {
+            None | Some(Value::Null) => None,
+            Some(v) => Some(parse_u64(v, "block.excessBlobGas")?),
+        };
+        Ok(BlockContext {
+            chain_id: self.chain_id,
+            number: BlockNumber(parse_u64(get("number")?, "block.number")?),
+            hash: parse_b256(get("hash")?, "block.hash")?,
+            timestamp: parse_u64(get("timestamp")?, "block.timestamp")?,
+            gas_limit: parse_u64(get("gasLimit")?, "block.gasLimit")?,
+            base_fee_per_gas,
+            excess_blob_gas,
+            beneficiary: parse_address(get("miner")?, "block.miner")?,
+            prevrandao: raw
+                .get("mixHash")
+                .map(|v| parse_b256(v, "block.mixHash"))
+                .transpose()?,
+        })
+    }
+
     async fn get_block_data(&self, number: BlockNumber) -> Result<BlockData> {
         let block = self.get_block(number).await?;
         let raw_block = self
@@ -389,5 +438,46 @@ impl ChainAdapter for HttpChainAdapter {
             )
             .await?;
         parse_bytes(&raw, "eth_call result")
+    }
+
+    async fn get_code(&self, at: BlockNumber, address: Address) -> Result<Bytes> {
+        let raw = self
+            .request("eth_getCode", json!([address.to_string(), block_param(at)]))
+            .await?;
+        parse_bytes(&raw, "eth_getCode result")
+    }
+
+    async fn get_balance(&self, at: BlockNumber, address: Address) -> Result<U256> {
+        let raw = self
+            .request(
+                "eth_getBalance",
+                json!([address.to_string(), block_param(at)]),
+            )
+            .await?;
+        parse_u256(&raw, "eth_getBalance result")
+    }
+
+    async fn get_storage_at(&self, at: BlockNumber, address: Address, slot: U256) -> Result<U256> {
+        let raw = self
+            .request(
+                "eth_getStorageAt",
+                json!([
+                    address.to_string(),
+                    format!("0x{slot:064x}"),
+                    block_param(at)
+                ]),
+            )
+            .await?;
+        parse_u256(&raw, "eth_getStorageAt result")
+    }
+
+    async fn get_nonce(&self, at: BlockNumber, address: Address) -> Result<u64> {
+        let raw = self
+            .request(
+                "eth_getTransactionCount",
+                json!([address.to_string(), block_param(at)]),
+            )
+            .await?;
+        parse_u64(&raw, "eth_getTransactionCount result")
     }
 }

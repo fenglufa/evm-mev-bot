@@ -1,0 +1,305 @@
+{
+  "milestone": "M4",
+  "purpose": "Evidence that the state source, the execution target and the gas semantics this milestone simulates against are the ones the chain actually has. Every number was read from the archive node or from a committed block fixture by a script; none of it is estimated.",
+  "chain": {
+    "chain_id": 91342,
+    "rpc": "https://sepolia-rpc.giwa.io",
+    "archive_capability": "eth_getCode, eth_getBalance, eth_getStorageAt and eth_call all answered for block param 0x2377e01 (37191169). Historical state at the opportunity block is servable, which is the precondition \u00a717 needs before any claim of real-state simulation."
+  },
+  "state_pin": {
+    "block_number": 37191169,
+    "block_hash": "0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670",
+    "parent_hash": "0x4737ebf79fe910a932e25ce08b88435e829d919f2432f1b38b453ac3dda069d6",
+    "timestamp": 1790536285,
+    "gas_limit": 60000000,
+    "gas_used_by_block": 2180262,
+    "base_fee_per_gas": 300,
+    "beneficiary": "0x4200000000000000000000000000000000000011",
+    "prevrandao": "0x27b7fa76c0ac53b3e000e6e6d80224f1a86b1e059e408034b76f287c6630d7d1",
+    "difficulty": 0,
+    "transaction_count": 35,
+    "cross_check": "hash, parentHash, timestamp and transaction_count equal the committed fixture fixtures/real-m3/block-37191169.json, the block M2's snapshot and M3's opportunity are bound to. The height the archive node pins by this hash is the height the opportunity was priced on.",
+    "next_block": {
+      "number": 37191170,
+      "hash": "0xed068516efe1bbfdd17c49d2d7f7cdc13340277a80c7de54b8aa6b6b0674f1f8",
+      "parent_hash_of_next": "0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670",
+      "note": "37191170's parent is 37191169's hash, so 37191169 is not the tip and its post-state is what a transaction arriving after that block would have seen."
+    }
+  },
+  "pools": {
+    "note": "Both pools of M3's opportunity, read at block 37191169 (the state after that block executed).",
+    "pool_A": {
+      "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "factory_slot_3": {
+        "slot": "0x3",
+        "value": "0x0000000000000000000000005f6e8a566c0944af181f158e6dee60bafbaf3b9e"
+      },
+      "token0_slot_4": {
+        "slot": "0x4",
+        "value": "0x0000000000000000000000004200000000000000000000000000000000000006"
+      },
+      "token1_slot_5": {
+        "slot": "0x5",
+        "value": "0x000000000000000000000000cffe7472a7a1a6947f56233854ae91a54c862f62"
+      },
+      "reserves_slot_6": {
+        "value": "0x6ab96a5d00000000000279990e77bd34e6b300000000000000001fec55161350",
+        "packed_uint112x2_u32": [
+          35099900253008,
+          45655538604883371699,
+          1790536285,
+          0
+        ]
+      },
+      "getReserves_at_pin": {
+        "reserve0": 35099900253008,
+        "reserve1": 45655538604883371699,
+        "blockTimestampLast": 1790536285
+      },
+      "erc20_balanceOf_pair": {
+        "WETH": 35099900253008,
+        "TTAX": 45655538604883371699
+      },
+      "last_sync_log_in_block": {
+        "log_index": 29,
+        "reserve0": 35099900253008,
+        "reserve1": 45655538604883371699
+      },
+      "code": {
+        "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+        "at": "0x2377e01",
+        "size": 5393,
+        "sha256": "75030560bcd62c8bf746f3b8d8c6f71ee0515e16c2c86561280c2f9dea6802fa",
+        "keccak_present": null
+      }
+    },
+    "pool_B": {
+      "address": "0x5bef6275607901dcd58160356660151be0637440",
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "factory_slot_3": {
+        "slot": "0x3",
+        "value": "0x0000000000000000000000001e594a501d8dca00b988e0dff7966cb0a223cdac"
+      },
+      "token0_slot_4": {
+        "slot": "0x4",
+        "value": "0x0000000000000000000000004200000000000000000000000000000000000006"
+      },
+      "token1_slot_5": {
+        "slot": "0x5",
+        "value": "0x000000000000000000000000cffe7472a7a1a6947f56233854ae91a54c862f62"
+      },
+      "reserves_slot_6": {
+        "value": "0x6ab96a5d0000000000025e2609223623153e00000000000000002153378e5e5f",
+        "packed_uint112x2_u32": [
+          36641298079327,
+          43677608078641141054,
+          1790536285,
+          0
+        ]
+      },
+      "getReserves_at_pin": {
+        "reserve0": 36641298079327,
+        "reserve1": 43677608078641141054,
+        "blockTimestampLast": 1790536285
+      },
+      "erc20_balanceOf_pair": {
+        "WETH": 36641298079327,
+        "TTAX": 43677608078641141054
+      },
+      "last_sync_log_in_block": {
+        "log_index": 34,
+        "reserve0": 36641298079327,
+        "reserve1": 43677608078641141054
+      },
+      "code": {
+        "address": "0x5bef6275607901dcd58160356660151be0637440",
+        "at": "0x2377e01",
+        "size": 5393,
+        "sha256": "75030560bcd62c8bf746f3b8d8c6f71ee0515e16c2c86561280c2f9dea6802fa",
+        "keccak_present": null
+      }
+    },
+    "quadruple_agreement": "For each pool: storage slot 6 unpacked == getReserves() == balanceOf(pair) for both tokens == the pool's last Sync log in block 37191169 == the reserves M3 priced on. Four independent reads of one number, so what a simulation loads is the state the opportunity was found in, not a re-derivation of it.",
+    "slot_layout": "slot 3 factory, slot 4 token0, slot 5 token1, slot 6 packed uint112 reserve0 | uint112 reserve1 | uint32 blockTimestampLast, slot 7 initializable flag = 1. Located by reading slots 0..11 and matching against the numbers above, not assumed from documentation."
+  },
+  "execution_target": {
+    "question": "\u00a712 requires the execution target to be chosen from what the chain actually offers, not assumed to be a canonical router.",
+    "candidates": [
+      {
+        "target": "bespoke executor 0xd9559016db7331a1146daa8f1d6dc833f147460d",
+        "code": {
+          "address": "0xd9559016db7331a1146daa8f1d6dc833f147460d",
+          "at": "0x2377e01",
+          "size": 16012,
+          "sha256": "449eb37acf8105d7a184403fb8947e26e81d15a8739fe0133cbabf37598ec9f9",
+          "keccak_present": null
+        },
+        "used_by": "the real transaction that ran this route in block 37191169 (tx_index 18, hash 0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba)",
+        "entry_selector": "0x31e37530",
+        "calldata_bytes": 580,
+        "verdict": "rejected as M4's target",
+        "why": "its calldata is a packed blob in the caller's own encoding, with no published ABI. Simulating through it means the semantics of the simulation come from a guess about that encoding, and a guess is not evidence."
+      },
+      {
+        "target": "the V2 Pair contracts themselves (0xf487d533cae6cddd0c7e7bbbac084dd04d876578, 0x5bef6275607901dcd58160356660151be0637440)",
+        "code": {
+          "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+          "at": "0x2377e01",
+          "size": 5393,
+          "sha256": "75030560bcd62c8bf746f3b8d8c6f71ee0515e16c2c86561280c2f9dea6802fa",
+          "keccak_present": null
+        },
+        "verdict": "chosen",
+        "why": "swap(uint256,uint256,address,bytes), approve 0x095ea7b3, transfer 0xa9059cbb and WETH deposit()/withdraw() are exactly the surfaces this block's own logs attest to, so no new contract and no invented ABI is required. The bytecode executed is the deployed pair's, and the state it reads is the pinned one.",
+        "swap_selector": {
+          "value": "0x022c0d9f",
+          "correction": "This entry previously read 0x022c0400, written from recollection and never checked. It was wrong. The wrong value is recorded here rather than quietly edited out because the mistake is the evidence for why every selector in crates/protocol/src/calls.rs is derived by keccak256 and then asserted against a chain observation.",
+          "derived": "keccak256(\"swap(uint256,uint256,address,bytes)\") = 022c0d9f... — computed twice by independent implementations (alloy-primitives keccak256 in selector_of, and OpenSSL's keccak-256 via python3 hashlib), agreeing.",
+          "observed_onchain": [
+            {
+              "tx": "0xc465dc6a45cd4f95557de30eb398a5e7aa337deb54590b21a29b7bfad999d1dc",
+              "block": 37187701,
+              "to": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+              "input_selector": "0x022c0d9f",
+              "input_bytes": 164
+            },
+            {
+              "tx": "0x17b7478a4de1e89bae1243d4855bfd272dd4b1797b130e607cee51b309fa4555",
+              "block": 37187959,
+              "to": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+              "input_selector": "0x022c0d9f",
+              "input_bytes": 164
+            },
+            {
+              "tx": "0x85b403a16aa281fd584c9bb6f1253d68073f34becede8f107a0582baaf79926d",
+              "block": 37189041,
+              "to": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+              "input_selector": "0x022c0d9f",
+              "input_bytes": 164
+            }
+          ],
+          "decoded_sample": {
+            "tx": "0xc465dc6a45cd4f95557de30eb398a5e7aa337deb54590b21a29b7bfad999d1dc",
+            "from": "0x24a403f324f27c8d33127e91d668609235d66c91",
+            "value": "0x0",
+            "amount0Out": 0,
+            "amount1Out": 3626443575520596526,
+            "to": "0x24a403f324f27c8d33127e91d668609235d66c91",
+            "data_length": 0,
+            "meaning": "A caller on this chain takes one side out and hands back nothing in the data field: exact-OUT semantics, empty callback payload, msg.value 0, recipient is the caller itself. That is the same shape M4's plan builds, so the plan's calldata is not a theoretical construct — it is a 164-byte layout the chain has already accepted from an EOA at this pool."
+          },
+          "swaps_found_by": "eth_getLogs on pool A for topic0 0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822 (Swap(address,uint256,uint256,uint256,uint256,address)) over blocks 37187584..37194240, then eth_getTransactionByHash for each hit. 4 logs; 3 direct pair calls and 1 via the executor."
+        }
+      }
+    ],
+    "no_new_contract": "\u00a713 allows a minimal ArbitrageExecutor only when the environment offers nothing suitable. It does not need one: the pair is directly callable. M4 therefore adds no Solidity, and \u00a714's prohibited shapes (universal router, multi-DEX router, flash loan, bundle, vault, strategy engine) are not approached.",
+    "atomicity_limitation": "The chosen target is a sequence of transactions from one sender, not one atomic call. The simulation therefore measures swap economics and gas, not atomicity. Atomicity belongs to production execution, which \u00a711 and \u00a747 forbid in this milestone."
+  },
+  "tokens": {
+    "WETH": {
+      "address": "0x4200000000000000000000000000000000000006",
+      "code": {
+        "address": "0x4200000000000000000000000000000000000006",
+        "at": "0x2377e01",
+        "size": 2846,
+        "sha256": "b0c360135740f26e3861421a76871a81288df3ae043c552922c7782cd7f7007d",
+        "keccak_present": null
+      },
+      "decimals": "18, attested in data/protocols-m3/v2-sepolia-42000006-cffe7472.json"
+    },
+    "TTAX": {
+      "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "code": {
+        "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+        "at": "0x2377e01",
+        "size": 4827,
+        "sha256": "02833fa622f5d85207a897c49450374c1f97a7d8e57f0732d18e0b672804e544",
+        "keccak_present": null
+      },
+      "decimals": "18, attested in the same file"
+    },
+    "weth_conversion": "deposit() 0xd0e30db0 and withdraw() 0x2e1a7d4d are what let profit be expressed in the native unit without asserting 1 WETH == 1 ETH (\u00a732): the conversion is executed by the real WETH contract, and the native balance delta is measured afterwards."
+  },
+  "transfer_tax": {
+    "rule": "\u00a723 forbids carrying over the assumption transferred == received. This section is evidence that the assumption is false here; the simulator never encodes a tax rate.",
+    "measured_from": "the Swap, Sync and Transfer logs of tx_index 18 in fixtures/real-m3/block-37191169.json - the token's own accounting on a real trade of this exact route",
+    "leg_1_pool_A_out": {
+      "ttax_pair_paid_out": 3990893194401672331,
+      "ttax_arrived_at_sender": 3871166398569622162,
+      "charge_taken": 119726795832050169,
+      "charge_exact": "floor(3990893194401672331 * 3 / 100) == 119726795832050169",
+      "rounding": "the charge truncates, so the retained amount is not an exact ratio either"
+    },
+    "leg_2_pair_B_in": {
+      "ttax_sender_delivered_to_B": 3871166398569622162,
+      "ttax_credited_to_B_balance": 3677608078641141054,
+      "charge_taken": 193558319928481108,
+      "charge_exact": "floor(3871166398569622162 * 5 / 100) == 193558319928481108"
+    },
+    "combined_retention_basis_points": 9215,
+    "combined": "3677608078641141054 / 3990893194401672331 = 9215 / 10000 basis points - the 0.9215 factor M3 had to bracket from trade data, which is 0.97 * 0.95",
+    "consequence": "pool B's K check sees 3677608078641141054 TTAX, not the 3990893194401672331 the first pair said it paid out. A simulation that runs the real token code gets that for free; a model that assumes delivery does not. The gap is M4's finding, not an arithmetic error in M3."
+  },
+  "gas_semantics": {
+    "base_fee_per_gas": 300,
+    "real_transaction": {
+      "hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+      "type": "0x2",
+      "max_fee_per_gas": 1000600,
+      "max_priority_fee_per_gas": 1000000,
+      "gas_limit": 3000000,
+      "effective_gas_price": 1000300,
+      "gas_used": 172207,
+      "status": "0x1"
+    },
+    "arithmetic": "effective_gas_price 1000300 == base_fee_per_gas 300 + max_priority_fee_per_gas 1000000, and max_fee_per_gas 1000600 >= effective. gas_used 172207 != gas_limit 3000000: the limit is the ceiling the sender asked to be allowed, the used figure is what the EVM charged. \u00a728 and \u00a729 are both read off this block, not chosen.",
+    "eip1559": "the block header carries baseFeePerGas and the transaction is type 0x2, so this chain prices gas by EIP-1559 at this height; legacy-only chains would answer with no base fee and the same code path must then say so instead of substituting zero.",
+    "outside_evm_gas": {
+      "blobGasUsed": "0x16120",
+      "cumulativeGasUsed": "0x14ca9e",
+      "daFootprintGasScalar": "0x190",
+      "effectiveGasPrice": "0xf436c",
+      "gasUsed": "0x2a0af",
+      "l1BaseFeeScalar": "0x558",
+      "l1BlobBaseFee": "0x3ea0a13",
+      "l1BlobBaseFeeScalar": "0xc3c9d",
+      "l1Fee": "0x3e00eca01",
+      "l1GasPrice": "0x38758f9f",
+      "l1GasUsed": "0xe2c"
+    },
+    "outside_evm_gas_note": "This chain is an OP-stack rollup: the receipt carries l1GasUsed, l1GasPrice, l1BaseFeeScalar, l1BlobBaseFee, l1BlobBaseFeeScalar and l1Fee beside the EVM fields. l1Fee is charged outside EVM execution, so no simulation's gas_used can see it. Recorded as a fidelity limit (\u00a744), not modeled.",
+    "engine_fidelity_check": "our own transaction sequence for the same route is compared against gas_used 172207 in the completion report; agreement to the same order of magnitude is evidence that the engine, rather than the route, is doing the counting."
+  },
+  "real_transaction_calibration": {
+    "route": "WETH -> pool A -> TTAX -> pool B -> WETH: the same two pools and the same direction as M3's opportunity 1",
+    "weth_in": 2829357023446,
+    "ttax_out_of_A": 3990893194401672331,
+    "ttax_in_to_B": 3677608078641141054,
+    "weth_out": 3358701920673,
+    "profit_weth_wei": 529344897227,
+    "profit_cross_check": "weth_out - weth_in = 529344897227 == the profit word the executor itself emitted in log 36: 529344897227",
+    "m3_opportunity_1": {
+      "input": 714844720992,
+      "expected_output": 744486240802,
+      "gross_profit": 29641519810,
+      "source": "docs/v0.1/M3 Completion Report.md fact table, from the same block"
+    },
+    "why_it_is_not_ground_truth": "\u00a770. This transaction is a fact about a market, not M4's answer key: it ran at 2829357023446 wei input rather than 714844720992, and against the state mid-block rather than the post-block reserves M3 priced on. If the simulation disagrees with it, both numbers stay on the table and the disagreement gets described - neither one gets edited to fit."
+  },
+  "balances_at_pin": {
+    "executor_native": 0,
+    "executor_weth": 100699976786272,
+    "executor_ttax": 0,
+    "real_sender_native": 1708347470172240,
+    "pair_A_native": 0,
+    "override_rule": "\u00a718: the only override M4 may apply is the simulated sender's native balance (and its allowances), because no historical account is expected to be pre-funded for a route it never took. Pool reserves, pair token balances and deployed code are never overridden."
+  },
+  "raw_calldata_evidence": {
+    "selector": "0x31e37530",
+    "calldata": "0x31e37530000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000001e402377e020200f487d533cae6cddd0c7e7bbbac084dd04d8765780902f1ac0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d599244127a005bef6275607901dcd58160356660151be06374400902f1ac000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000246139ca80000200f487d533cae6cddd0c7e7bbbac084dd04d8765784200000000000000000000000000000000000006cffe7472a7a1a6947f56233854ae91a54c862f6200001e0000000000000000000000000000000000000000000000007530005bef6275607901dcd58160356660151be0637440cffe7472a7a1a6947f56233854ae91a54c862f62420000000000000000000000000000000000000600001e000000000000000000000000000000000000000000000000c35000000000000000000000000000000000000000000000000000000292c2d200d60000000000000000000000000000000000000000000000000000003d9fb5106500000000000000000000000000000000000000000000000035ab64861b1e0dfb0000000000000000000000000000000000000000000000000000030d3a0a684000000000000000000000000000000000000000000000000000000000",
+    "note": "\u00a756: kept verbatim and deliberately undecoded. The executor's encoding is undocumented and no conclusion in this milestone rests on reading it."
+  }
+}

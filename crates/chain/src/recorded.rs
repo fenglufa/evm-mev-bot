@@ -1,14 +1,14 @@
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
-use alloy_primitives::Bytes;
+use alloy_primitives::{Address, Bytes, U256};
 use async_trait::async_trait;
 
 use evm_core::{BlockNumber, ChainId};
 
 use crate::adapter::ChainAdapter;
 use crate::error::{ChainError, Result};
-use crate::types::{BlockData, CallRequest, ChainBlock, ChainLog, LogFilter};
+use crate::types::{BlockContext, BlockData, CallRequest, ChainBlock, ChainLog, LogFilter};
 
 /// Offline replay input: the same normalized blocks a provider would return,
 /// read from disk. Live and replay therefore share the pipeline below the
@@ -195,6 +195,42 @@ impl ChainAdapter for RecordedChainAdapter {
         Err(ChainError::MissingData(format!(
             "recorded data cannot serve eth_call for {:?}",
             request.to
+        )))
+    }
+
+    async fn get_block_context(&self, number: BlockNumber) -> Result<BlockContext> {
+        let _ = number;
+        Err(ChainError::MissingData(format!(
+            "recorded block {} carries no execution header",
+            number.0
+        )))
+    }
+
+    async fn get_code(&self, at: BlockNumber, address: Address) -> Result<Bytes> {
+        let _ = at;
+        Err(ChainError::MissingData(format!(
+            "recorded data cannot serve eth_getCode for {address:?}"
+        )))
+    }
+
+    async fn get_balance(&self, at: BlockNumber, address: Address) -> Result<U256> {
+        let _ = at;
+        Err(ChainError::MissingData(format!(
+            "recorded data cannot serve eth_getBalance for {address:?}"
+        )))
+    }
+
+    async fn get_storage_at(&self, at: BlockNumber, address: Address, slot: U256) -> Result<U256> {
+        let _ = at;
+        Err(ChainError::MissingData(format!(
+            "recorded data cannot serve eth_getStorageAt for {address:?} slot {slot:#x}"
+        )))
+    }
+
+    async fn get_nonce(&self, at: BlockNumber, address: Address) -> Result<u64> {
+        let _ = at;
+        Err(ChainError::MissingData(format!(
+            "recorded data cannot serve eth_getTransactionCount for {address:?}"
         )))
     }
 }
