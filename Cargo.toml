@@ -1,0 +1,34 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/core",
+    "crates/chain",
+    "crates/protocol",
+    "crates/state",
+    "crates/replay",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[workspace.dependencies]
+evm-core = { path = "crates/core" }
+evm-chain = { path = "crates/chain" }
+evm-protocol = { path = "crates/protocol" }
+evm-state = { path = "crates/state" }
+evm-replay = { path = "crates/replay" }
+
+alloy-primitives = { version = "=1.5.2", features = ["serde"] }
+alloy-sol-types = "=1.5.2"
+async-trait = "=0.1.89"
+hex = "=0.4.3"
+reqwest = { version = "=0.12.28", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.145"
+thiserror = "=2.0.17"
+tokio = { version = "=1.52.1", features = ["macros", "rt-multi-thread", "time", "fs", "sync"] }
+
+[profile.dev]
+opt-level = 0

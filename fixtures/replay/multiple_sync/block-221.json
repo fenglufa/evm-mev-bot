@@ -1,0 +1,42 @@
+{
+  "block": {
+    "chain_id": 91342,
+    "number": 221,
+    "hash": "0x00000000000000000000000000000000000000000000000000000000000000dd",
+    "parent_hash": "0x00000000000000000000000000000000000000000000000000000000000000dc",
+    "timestamp": 1790000221,
+    "transaction_count": 1
+  },
+  "transactions": [
+    {
+      "hash": "0xa2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2",
+      "tx_index": 0,
+      "from": "0x6666666666666666666666666666666666666666",
+      "to": "0x1111111111111111111111111111111111111111",
+      "value": "0x0",
+      "input": "0xdeadbeef"
+    }
+  ],
+  "receipts": [
+    {
+      "tx_hash": "0xa2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2",
+      "tx_index": 0,
+      "block_number": 221,
+      "status": true,
+      "logs": [
+        {
+          "chain_id": 91342,
+          "block_number": 221,
+          "tx_hash": "0xa2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2",
+          "tx_index": 0,
+          "log_index": 3,
+          "address": "0x1111111111111111111111111111111111111111",
+          "topics": [
+            "0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1"
+          ],
+          "data": "0x000000000000000000000000000000000000000000000000000000000000007800000000000000000000000000000000000000000000000000000000000000b4"
+        }
+      ]
+    }
+  ]
+}

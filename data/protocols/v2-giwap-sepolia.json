@@ -1,0 +1,99 @@
+{
+  "pools": [
+    {
+      "protocol": "v2-compatible",
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3978e57bbceb7666d54a03551c03691f897f6092"
+      },
+      "token0": {
+        "chain_id": 91342,
+        "address": "0x304912af0ce0dd6479735634d567715107bdc0c6"
+      },
+      "token1": {
+        "chain_id": 91342,
+        "address": "0x4200000000000000000000000000000000000006"
+      },
+      "fee": null,
+      "pool_type": "ConstantProduct",
+      "evidence": {
+        "identity": [
+          {
+            "source": "EthCall",
+            "block_number": 37257255,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() -> 0x0902f1ac, returns reserve0/reserve1/blockTimestampLast (3 words)"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37257255,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "name() -> \"Giwap LPs\""
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37257255,
+            "transaction_hash": "0x0021b1b3197efe3219b2db23729dc50253e205eaed303f1d03070b1c240d71ae",
+            "log_index": 180,
+            "signature": "Transfer(address,address,uint256) emitted by the pool itself (LP token)"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37257255,
+            "transaction_hash": "0x0021b1b3197efe3219b2db23729dc50253e205eaed303f1d03070b1c240d71ae",
+            "log_index": 182,
+            "signature": "Mint(address,uint256,uint256)"
+          }
+        ],
+        "tokens": [
+          {
+            "source": "EthCall",
+            "block_number": 37257255,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0() -> 0x304912af0ce0dd6479735634d567715107bdc0c6"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37257255,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1() -> 0x4200000000000000000000000000000000000006"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37257255,
+            "transaction_hash": "0x0021b1b3197efe3219b2db23729dc50253e205eaed303f1d03070b1c240d71ae",
+            "log_index": 177,
+            "signature": "token0 Transfer in the same transaction as the pool Sync"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37257255,
+            "transaction_hash": "0x0021b1b3197efe3219b2db23729dc50253e205eaed303f1d03070b1c240d71ae",
+            "log_index": 179,
+            "signature": "token1 (WETH) Transfer in the same transaction as the pool Sync"
+          }
+        ],
+        "state": [
+          {
+            "source": "ChainLog",
+            "block_number": 37257255,
+            "transaction_hash": "0x0021b1b3197efe3219b2db23729dc50253e205eaed303f1d03070b1c240d71ae",
+            "log_index": 181,
+            "signature": "Sync(uint112,uint112) reserve0=2849387467534192263206 reserve1=141265148507902942209"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37257255,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() at this block equals the last Sync of this block (cross-check only, not the state source)"
+          }
+        ]
+      }
+    }
+  ]
+}
