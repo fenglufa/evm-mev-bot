@@ -1,0 +1,319 @@
+{
+  "pools": [
+    {
+      "protocol": "v2-compatible",
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578"
+      },
+      "token0": {
+        "chain_id": 91342,
+        "address": "0x4200000000000000000000000000000000000006"
+      },
+      "token1": {
+        "chain_id": 91342,
+        "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62"
+      },
+      "fee": {
+        "numerator": 997,
+        "denominator": 1000
+      },
+      "pool_type": "ConstantProduct",
+      "evidence": {
+        "identity": [
+          {
+            "source": "ChainLog",
+            "block_number": 37187524,
+            "transaction_hash": "0x9d070982ee1a5ad59c12937b44d67a99924ebef9474ad9924e4b09981e4f137a",
+            "log_index": 16,
+            "signature": "PairCreated(address,address,address,uint256) topic0 0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9 emitted by factory 0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e: pair (0x4200000000000000000000000000000000000006, 0xcffe7472a7a1a6947f56233854ae91a54c862f62), pair = 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, index 2. Re-read from the chain at block 37187524, where this is the factory's only PairCreated log; topics and data word 0 both resolve to this address."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() selector 0x0902f1ac returns three words (reserve0, reserve1, blockTimestampLast) \u2014 the constant-product pair surface this crate quotes."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0() selector 0x0dfe1681 -> 0x4200000000000000000000000000000000000006 (WETH), matching topic 1 of the creation log."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "factory() selector 0xc45a0155 -> 0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e, the very address that emitted this pool's PairCreated log."
+          },
+          {
+            "source": "Bytecode",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "eth_getCode -> 5393 bytes, sha256 75030560bcd62c8bf746f3b8d8c6f71ee0515e16c2c86561280c2f9dea6802fa. Byte-identical to the other pool attested in this file, so both are the same deployed pair implementation."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "Negative evidence: token1(), name(), symbol(), decimals(), feeTo() and feeToSetter() all answer \"execution reverted\" at block 37191169, and both factories revert allPairsLength()/feeTo() as well. Nothing on this chain discloses the pool's fee tier, so the fee is attested from the pool's own trades below rather than defaulted."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37187701,
+            "transaction_hash": "0xc465dc6a45cd4f95557de30eb398a5e7aa337deb54590b21a29b7bfad999d1dc",
+            "log_index": 72,
+            "signature": "Fee bracket 0->1: Swap amountIn=4 000 000 000 000, amountOut=3 626 443 575 520 596 526 against pre-trade reserves (40 000 000 000 000, 40 000 000 000 000 000 000 \u2014 the reserves this pool's immediately preceding `Sync` log carries, block 37187536 log 147 (its seeding event); a pair emits `Sync` before its `Swap` event, so this trade's own transaction already carries the post-trade pair (44 000 000 000 000, 36 373 556 424 479 403 474) at block 37187701 log 71, and post minus pre is exactly (+amountIn, -amountOut)). The quote y = floor(x*r*Ro/(Ri + x*r)) is strictly increasing in r, so this one trade pins r = n/d to the half-open interval [18132217877602982630/18186778212239701737, 36264435755205965270/36373556424479403473)."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37187959,
+            "transaction_hash": "0x17b7478a4de1e89bae1243d4855bfd272dd4b1797b130e607cee51b309fa4555",
+            "log_index": 22,
+            "signature": "Fee bracket 0->1: Swap amountIn=2 200 000 000 000, amountOut=1 727 124 625 194 359 444 against pre-trade reserves (44 000 000 000 000, 36 373 556 424 479 403 474 \u2014 the reserves this pool's immediately preceding `Sync` log carries, block 37187954 log 29; a pair emits `Sync` before its `Swap` event, so this trade's own transaction already carries the post-trade pair (46 200 000 000 000, 34 646 431 799 285 044 030) at block 37187959 log 21, and post minus pre is exactly (+amountIn, -amountOut)). The quote y = floor(x*r*Ro/(Ri + x*r)) is strictly increasing in r, so this one trade pins r = n/d to the half-open interval [3454249250388718888/3464643179928504403, 3838054722654132100/3849603533253893781)."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37189041,
+            "transaction_hash": "0x85b403a16aa281fd584c9bb6f1253d68073f34becede8f107a0582baaf79926d",
+            "log_index": 56,
+            "signature": "Fee bracket 1->0: Swap amountIn=15 000 000 000 000 000 000, amountOut=13 929 456 770 438 against pre-trade reserves (34 646 431 799 285 044 030, 46 200 000 000 000 \u2014 the reserves this pool's immediately preceding `Sync` log carries, block 37187959 log 21; a pair emits `Sync` before its `Swap` event, so this trade's own transaction already carries the post-trade pair (49 646 431 799 285 044 030, 32 270 543 229 562) at block 37189041 log 55, and post minus pre is exactly (+amountIn, -amountOut)). The quote y = floor(x*r*Ro/(Ri + x*r)) is strictly increasing in r, so this one trade pins r = n/d to the half-open interval [2193663518173043067506901965387/2200264311106500000000000000000, 2298123685705257720396751035377/2305038802111500000000000000000)."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37191169,
+            "transaction_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+            "log_index": 30,
+            "signature": "Fee bracket 0->1: Swap amountIn=2 829 357 023 446, amountOut=3 990 893 194 401 672 331 against pre-trade reserves (32 270 543 229 562, 49 646 431 799 285 044 030 \u2014 the reserves this pool's immediately preceding `Sync` log carries, block 37189041 log 55; a pair emits `Sync` before its `Swap` event, so this trade's own transaction already carries the post-trade pair (35 099 900 253 008, 45 655 538 604 883 371 699) at block 37191169 log 29, and post minus pre is exactly (+amountIn, -amountOut)). The quote y = floor(x*r*Ro/(Ri + x*r)) is strictly increasing in r, so this one trade pins r = n/d to the half-open interval [64394145677251974861341218324511/64587909405468380015131537927377, 32197072838625987438738244969646/32293954702734190006858429707827)."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37191169,
+            "transaction_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+            "log_index": 30,
+            "signature": "Intersecting the interval of all 4 bracketed trades of this pool gives r in [18132217877602982630/18186778212239701737, 32197072838625987438738244969646/32293954702734190006858429707827) as exact rationals, relative width 1.577e-19. Of the 21 standard fee tiers considered, exactly [[997, 1000], [9970, 10000]] fall inside it (one rational written twice) and 19 fall outside, 996/1000 and 998/1000 among them. The attested fee is therefore 997/1000 retained."
+          }
+        ],
+        "tokens": [
+          {
+            "source": "ChainLog",
+            "block_number": 37187524,
+            "transaction_hash": "0x9d070982ee1a5ad59c12937b44d67a99924ebef9474ad9924e4b09981e4f137a",
+            "log_index": 16,
+            "signature": "topics 1 and 2 of the creation log are 0x4200000000000000000000000000000000000006 and 0xcffe7472a7a1a6947f56233854ae91a54c862f62 (WETH and TTAX), already sorted, and token0() returns topic 1."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1() reverts, so the second side is pinned by the balances the chain itself reports: balanceOf(0xf487d533cae6cddd0c7e7bbbac084dd04d876578) at block 37191169 is 35 099 900 253 008 on 0x4200000000000000000000000000000000000006 and 45 655 538 604 883 371 699 on 0xcffe7472a7a1a6947f56233854ae91a54c862f62 \u2014 each exactly equal to the corresponding word of this pool's Sync log at B, residual zero."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "0x4200000000000000000000000000000000000006: symbol \"WETH\", name \"Wrapped Ether\", decimals 18, 2846 bytes of code."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "0xcffe7472a7a1a6947f56233854ae91a54c862f62: symbol \"TTAX\", name \"GIWA Test Tax\", decimals 18, 4827 bytes of code."
+          }
+        ],
+        "state": [
+          {
+            "source": "ChainLog",
+            "block_number": 37191169,
+            "transaction_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+            "log_index": 29,
+            "signature": "Sync(uint112,uint112) data 0x00000000000000000000000000000000000000000000000000001fec5516135000000000000000000000000000000000000000000000000279990e77bd34e6b3 -> reserve0=35 099 900 253 008, reserve1=45 655 538 604 883 371 699. This is the state the market graph is taken at."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() at block 37191169 = (35 099 900 253 008, 45 655 538 604 883 371 699, 1790536285): the two reserves equal the Sync log above word for word, and blockTimestampLast 1790536285 equals block 37191169's header timestamp."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37191169,
+            "transaction_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+            "log_index": 29,
+            "signature": "The pool has 6 Sync logs between its creation (37187524) and head 37402775; the one at block 37191169 is the last. Zero Sync logs in 37191170..37402775, queried in 9 999-block windows with no window failing, so the reserves attested here are still the pool's live state and no later trade overwrites them."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37187536,
+            "transaction_hash": "0xe856a91be57d23ffcc4f6db096ac333530753f1d1f127e5d9cea6ed10ccdd83f",
+            "log_index": 147,
+            "signature": "First Sync of this pool: reserve0=40 000 000 000 000, reserve1=40 000 000 000 000 000 000 \u2014 the seeding event, which fixes how thin this pool is."
+          },
+          {
+            "source": "RecordedCapture",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "Whole block captured to fixtures/real-m3/block-37191169.json and replayed through the recorded adapter: 35 transactions, 54 logs, log_index contiguous from 0, block hash 0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670, every log on chain 91342 at block 37191169."
+          }
+        ]
+      }
+    },
+    {
+      "protocol": "v2-compatible",
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x5bef6275607901dcd58160356660151be0637440"
+      },
+      "token0": {
+        "chain_id": 91342,
+        "address": "0x4200000000000000000000000000000000000006"
+      },
+      "token1": {
+        "chain_id": 91342,
+        "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62"
+      },
+      "fee": {
+        "numerator": 997,
+        "denominator": 1000
+      },
+      "pool_type": "ConstantProduct",
+      "evidence": {
+        "identity": [
+          {
+            "source": "ChainLog",
+            "block_number": 37187526,
+            "transaction_hash": "0x4abf2be0adee4b703bffef123c138067a05dcb257fc841c2a1d376ac7a225ee7",
+            "log_index": 161,
+            "signature": "PairCreated(address,address,address,uint256) topic0 0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9 emitted by factory 0x1e594a501d8dca00b988e0dff7966cb0a223cdac: pair (0x4200000000000000000000000000000000000006, 0xcffe7472a7a1a6947f56233854ae91a54c862f62), pair = 0x5bef6275607901dcd58160356660151be0637440, index 2. Re-read from the chain at block 37187526, where this is the factory's only PairCreated log; topics and data word 0 both resolve to this address."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() selector 0x0902f1ac returns three words (reserve0, reserve1, blockTimestampLast) \u2014 the constant-product pair surface this crate quotes."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0() selector 0x0dfe1681 -> 0x4200000000000000000000000000000000000006 (WETH), matching topic 1 of the creation log."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "factory() selector 0xc45a0155 -> 0x1e594a501d8dca00b988e0dff7966cb0a223cdac, the very address that emitted this pool's PairCreated log."
+          },
+          {
+            "source": "Bytecode",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "eth_getCode -> 5393 bytes, sha256 75030560bcd62c8bf746f3b8d8c6f71ee0515e16c2c86561280c2f9dea6802fa. Byte-identical to the other pool attested in this file, so both are the same deployed pair implementation."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "Negative evidence: token1(), name(), symbol(), decimals(), feeTo() and feeToSetter() all answer \"execution reverted\" at block 37191169, and both factories revert allPairsLength()/feeTo() as well. Nothing on this chain discloses the pool's fee tier, so the fee is attested from the pool's own trades below rather than defaulted."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37191169,
+            "transaction_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+            "log_index": 35,
+            "signature": "Fee bracket 1->0: Swap amountIn=3 677 608 078 641 141 054, amountOut=3 358 701 920 673 against pre-trade reserves (40 000 000 000 000 000 000, 40 000 000 000 000 \u2014 the reserves this pool's immediately preceding `Sync` log carries, block 37187542 log 245 (its seeding event); a pair emits `Sync` before its `Swap` event, so this trade's own transaction already carries the post-trade pair (43 677 608 078 641 141 054, 36 641 298 079 327) at block 37191169 log 34, and post minus pre is exactly (+amountIn, -amountOut)). The quote y = floor(x*r*Ro/(Ri + x*r)) is strictly increasing in r, so this one trade pins r = n/d to the half-open interval [22391346137820000000000000000000/22458722304738516745668981398443, 33587019206740000000000000000000/33688083457106855716483811812401)."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37191169,
+            "transaction_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+            "log_index": 35,
+            "signature": "Intersecting the interval of all 1 bracketed trades of this pool gives r in [22391346137820000000000000000000/22458722304738516745668981398443, 33587019206740000000000000000000/33688083457106855716483811812401) as exact rationals, relative width 3.250e-13. Of the 21 standard fee tiers considered, exactly [[997, 1000], [9970, 10000]] fall inside it (one rational written twice) and 19 fall outside, 996/1000 and 998/1000 among them. The attested fee is therefore 997/1000 retained."
+          }
+        ],
+        "tokens": [
+          {
+            "source": "ChainLog",
+            "block_number": 37187526,
+            "transaction_hash": "0x4abf2be0adee4b703bffef123c138067a05dcb257fc841c2a1d376ac7a225ee7",
+            "log_index": 161,
+            "signature": "topics 1 and 2 of the creation log are 0x4200000000000000000000000000000000000006 and 0xcffe7472a7a1a6947f56233854ae91a54c862f62 (WETH and TTAX), already sorted, and token0() returns topic 1."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1() reverts, so the second side is pinned by the balances the chain itself reports: balanceOf(0x5bef6275607901dcd58160356660151be0637440) at block 37191169 is 36 641 298 079 327 on 0x4200000000000000000000000000000000000006 and 43 677 608 078 641 141 054 on 0xcffe7472a7a1a6947f56233854ae91a54c862f62 \u2014 each exactly equal to the corresponding word of this pool's Sync log at B, residual zero."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "0x4200000000000000000000000000000000000006: symbol \"WETH\", name \"Wrapped Ether\", decimals 18, 2846 bytes of code."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "0xcffe7472a7a1a6947f56233854ae91a54c862f62: symbol \"TTAX\", name \"GIWA Test Tax\", decimals 18, 4827 bytes of code."
+          }
+        ],
+        "state": [
+          {
+            "source": "ChainLog",
+            "block_number": 37191169,
+            "transaction_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+            "log_index": 34,
+            "signature": "Sync(uint112,uint112) data 0x00000000000000000000000000000000000000000000000000002153378e5e5f0000000000000000000000000000000000000000000000025e2609223623153e -> reserve0=36 641 298 079 327, reserve1=43 677 608 078 641 141 054. This is the state the market graph is taken at."
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() at block 37191169 = (36 641 298 079 327, 43 677 608 078 641 141 054, 1790536285): the two reserves equal the Sync log above word for word, and blockTimestampLast 1790536285 equals block 37191169's header timestamp."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37191169,
+            "transaction_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+            "log_index": 34,
+            "signature": "The pool has 2 Sync logs between its creation (37187526) and head 37402775; the one at block 37191169 is the last. Zero Sync logs in 37191170..37402775, queried in 9 999-block windows with no window failing, so the reserves attested here are still the pool's live state and no later trade overwrites them."
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37187542,
+            "transaction_hash": "0xa2f81ac151373896ed26b04106d9130e271d4ce7a1c06fdfb08db314490baf97",
+            "log_index": 245,
+            "signature": "First Sync of this pool: reserve0=40 000 000 000 000, reserve1=40 000 000 000 000 000 000 \u2014 the seeding event, which fixes how thin this pool is."
+          },
+          {
+            "source": "RecordedCapture",
+            "block_number": 37191169,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "Whole block captured to fixtures/real-m3/block-37191169.json and replayed through the recorded adapter: 35 transactions, 54 logs, log_index contiguous from 0, block hash 0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670, every log on chain 91342 at block 37191169."
+          }
+        ]
+      }
+    }
+  ]
+}

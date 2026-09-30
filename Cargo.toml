@@ -6,6 +6,7 @@ members = [
     "crates/protocol",
     "crates/state",
     "crates/graph",
+    "crates/opportunity",
     "crates/replay",
 ]
 
@@ -20,6 +21,8 @@ evm-chain = { path = "crates/chain" }
 evm-protocol = { path = "crates/protocol" }
 evm-state = { path = "crates/state" }
 evm-replay = { path = "crates/replay" }
+evm-graph = { path = "crates/graph" }
+evm-opportunity = { path = "crates/opportunity" }
 
 alloy-primitives = { version = "=1.5.2", features = ["serde"] }
 alloy-sol-types = "=1.5.2"
