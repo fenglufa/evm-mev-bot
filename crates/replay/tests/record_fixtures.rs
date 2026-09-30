@@ -371,35 +371,47 @@ fn regenerate_synthetic_fixtures() {
     );
 }
 
-/// Chain 91342, block 37257255: the block used by the real data acceptance
-/// test. Pool 0x3978e57b.. syncs three times in it (global log indexes 150,
-/// 174, 181), and its last sync is what `getReserves()` reports at that block.
+/// Chain 91342, the real blocks the acceptance tests read.
+///
+/// Two creation blocks, two creation-plus-first-sync blocks, and the two blocks
+/// the attested pools actually trade in:
+///
+/// - 5455035: `PairCreated` for pool 0x3978e57b.. by factory 0x4c91edd1..
+/// - 5457650: `PairCreated` for pool 0x8df9062f.. (log 8) and that pool's first
+///   `Sync` (log 13), which is also what `getReserves()` reports there.
+/// - 10544346: `PairCreated` for pool 0x4db758ab.. (log 0) and its first `Sync`.
+/// - 31390683: `PairCreated` for pool 0xcaafb95f.. by factory 0xd51d7c2a..
+/// - 37257255: pool 0x3978e57b.. syncs three times (global log indexes 150,
+///   174, 181) and its last sync is what `getReserves()` reports there.
+/// - 37258093: the block two attested pools sync in — 0x3978e57b.. at global log
+///   30 and 0xcaafb95f.. at global log 50 — which is what lets the market graph
+///   test put two real pools and three real tokens in one same-block snapshot.
 #[tokio::test]
-#[ignore = "reads the live RPC; run deliberately to refresh the real fixture"]
+#[ignore = "reads the live RPC; run deliberately to refresh the real fixtures"]
 async fn capture_real_block() {
-    const REAL_BLOCK: u64 = 37257255;
+    const REAL_BLOCKS: [u64; 6] = [5455035, 5457650, 10544346, 31390683, 37257255, 37258093];
     let adapter = evm_chain::HttpChainAdapter::connect("https://sepolia-rpc.giwa.io")
         .await
         .expect("rpc reachable");
-    let data = adapter
-        .get_block_data(BlockNumber(REAL_BLOCK))
-        .await
-        .expect("historical block readable");
 
     let dir = fixtures_root().join("real");
     std::fs::create_dir_all(&dir).expect("create real fixture directory");
-    let path = dir.join(format!("block-{REAL_BLOCK}.json"));
-    std::fs::write(
-        &path,
-        serde_json::to_string_pretty(&data).expect("serialize"),
-    )
-    .expect("write real fixture");
-
-    let logs = data.ordered_logs().len();
-    println!(
-        "{}: {} transactions, {} logs",
-        path.display(),
-        data.transactions.len(),
-        logs
-    );
+    for number in REAL_BLOCKS {
+        let data = adapter
+            .get_block_data(BlockNumber(number))
+            .await
+            .expect("historical block readable");
+        let path = dir.join(format!("block-{number}.json"));
+        std::fs::write(
+            &path,
+            serde_json::to_string_pretty(&data).expect("serialize"),
+        )
+        .unwrap_or_else(|e| panic!("write {}: {e}", path.display()));
+        println!(
+            "{}: {} transactions, {} logs",
+            path.display(),
+            data.transactions.len(),
+            data.ordered_logs().len()
+        );
+    }
 }

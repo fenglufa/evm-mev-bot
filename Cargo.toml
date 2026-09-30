@@ -5,6 +5,7 @@ members = [
     "crates/chain",
     "crates/protocol",
     "crates/state",
+    "crates/graph",
     "crates/replay",
 ]
 

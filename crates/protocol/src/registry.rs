@@ -52,6 +52,10 @@ pub enum RegistryError {
     Format(String),
     #[error("pool {0} is attested without evidence ({1})")]
     Unevidenced(String, String),
+    #[error("pool {0} is attested twice with different content ({1})")]
+    Conflict(String, String),
+    #[error("pool {0} attests the same token on both sides ({1})")]
+    DegeneratePair(String, String),
 }
 
 /// Pools the project has verified, and why. Loaded from `data/protocols/*.json`.
@@ -71,6 +75,51 @@ impl Registry {
         };
         registry.validate()?;
         Ok(registry)
+    }
+
+    /// Every `*.json` in the directory, merged into one registry.
+    ///
+    /// Files are read in sorted order so the merged result never depends on
+    /// directory order. A pool that two files attest differently is refused:
+    /// two contradictory attestations of one address is a data bug, and merging
+    /// them silently would pick a winner by filename.
+    pub fn load_dir(dir: &Path) -> std::result::Result<Self, RegistryError> {
+        let read = std::fs::read_dir(dir)
+            .map_err(|e| RegistryError::Io(format!("{}: {e}", dir.display())))?;
+        let mut files: Vec<_> = read
+            .filter_map(|entry| entry.ok().map(|e| e.path()))
+            .filter(|path| path.extension().is_some_and(|e| e == "json"))
+            .collect();
+        files.sort();
+        let mut merged = Self::default();
+        for path in files {
+            merged.merge(Self::load(&path)?)?;
+        }
+        Ok(merged)
+    }
+
+    pub fn merge(&mut self, other: Self) -> std::result::Result<(), RegistryError> {
+        for (id, attestation) in other.pools {
+            match self.pools.get(&id) {
+                Some(existing) if *existing == attestation => {}
+                Some(existing) => {
+                    return Err(RegistryError::Conflict(
+                        format!("{id:?}"),
+                        format!(
+                            "one file attests {} [{:?}], another attests {:?} [{:?}]",
+                            existing.protocol,
+                            existing.token0.address,
+                            attestation.protocol,
+                            attestation.token0.address
+                        ),
+                    ))
+                }
+                None => {
+                    self.pools.insert(id, attestation);
+                }
+            }
+        }
+        Ok(())
     }
 
     /// Refuses to load a registry that asserts a pool with no evidence behind it.
@@ -93,6 +142,12 @@ impl Registry {
                 return Err(RegistryError::Unevidenced(
                     format!("{id:?}"),
                     "token chain id does not match pool chain id".to_string(),
+                ));
+            }
+            if attestation.token0 == attestation.token1 {
+                return Err(RegistryError::DegeneratePair(
+                    format!("{id:?}"),
+                    format!("{:?}", attestation.token0.address),
                 ));
             }
         }
@@ -204,5 +259,136 @@ mod tests {
             ChainId(1),
             address!("0x3978e57bbceb7666d54a03551c03691f897f6092")
         )));
+    }
+
+    #[test]
+    fn a_pool_whose_two_tokens_are_the_same_is_refused() {
+        let mut a = attestation(true);
+        a.token1 = a.token0;
+        let pool = a.pool;
+        let registry = Registry {
+            pools: [(pool, a)].into_iter().collect(),
+        };
+        assert!(matches!(
+            registry.validate(),
+            Err(RegistryError::DegeneratePair(_, _))
+        ));
+    }
+
+    /// A scratch directory holding registry files, named so two test threads
+    /// never share one.
+    fn registry_dir(tag: &str, files: &[(&str, &[PoolAttestation])]) -> std::path::PathBuf {
+        let nanos = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .expect("clock")
+            .as_nanos();
+        let dir =
+            std::env::temp_dir().join(format!("evm-registry-{tag}-{}-{nanos}", std::process::id()));
+        std::fs::create_dir_all(&dir).expect("create registry directory");
+        for (name, pools) in files {
+            let value = serde_json::json!({ "pools": pools });
+            std::fs::write(
+                dir.join(name),
+                serde_json::to_string_pretty(&value).expect("serialize"),
+            )
+            .expect("write registry file");
+        }
+        dir
+    }
+
+    #[test]
+    fn several_files_merge_into_one_registry() {
+        let left = attestation(true);
+        let mut right = attestation(true);
+        right.pool = PoolId::new(
+            ChainId(91342),
+            address!("0xcaafb95fc292c10a526f03fa480407bb438dac67"),
+        );
+        let dir = registry_dir(
+            "merge",
+            &[
+                ("a.json", std::slice::from_ref(&left)),
+                ("b.json", std::slice::from_ref(&right)),
+            ],
+        );
+        let merged = Registry::load_dir(&dir).expect("merge two files");
+        assert_eq!(merged.pools.len(), 2);
+        assert!(merged.is_pool(left.pool));
+        assert!(merged.is_pool(right.pool));
+        std::fs::remove_dir_all(&dir).ok();
+
+        // One attestation repeated across files is a duplicate, not a conflict.
+        let dir = registry_dir(
+            "duplicate",
+            &[
+                ("a.json", std::slice::from_ref(&left)),
+                ("b.json", std::slice::from_ref(&left)),
+            ],
+        );
+        let merged = Registry::load_dir(&dir).expect("duplicate merges");
+        assert_eq!(merged.pools.len(), 1);
+        std::fs::remove_dir_all(&dir).ok();
+    }
+
+    #[test]
+    fn two_files_that_attest_one_pool_differently_are_refused() {
+        let left = attestation(true);
+        let mut right = attestation(true);
+        // Same pool address, different token side — the conflict a silent merge
+        // would resolve by filename order.
+        right.token0 = TokenId::new(
+            ChainId(91342),
+            address!("0x0000000000000000000000000000000000000111"),
+        );
+        let dir = registry_dir("conflict", &[("a.json", &[left]), ("b.json", &[right])]);
+        let err = Registry::load_dir(&dir).expect_err("conflicting files refused");
+        assert!(
+            matches!(err, RegistryError::Conflict(_, _)),
+            "expected a conflict, got {err}"
+        );
+        std::fs::remove_dir_all(&dir).ok();
+    }
+
+    #[test]
+    fn the_committed_registry_files_all_validate() {
+        let dir = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../data/protocols")
+            .canonicalize()
+            .expect("registry directory");
+        let registry = Registry::load_dir(&dir).expect("committed registry loads");
+        assert_eq!(
+            registry.pools.len(),
+            4,
+            "one attestation per evidenced pool, nothing more"
+        );
+
+        // Counted, not assumed: each attestation stands on its own evidence and
+        // each names a distinct pair on one chain.
+        let mut pairs = std::collections::BTreeSet::new();
+        for attestation in registry.pools.values() {
+            assert!(
+                attestation.evidence.is_complete(),
+                "{} lacks evidence",
+                attestation.pool.address
+            );
+            for refs in [
+                &attestation.evidence.identity,
+                &attestation.evidence.tokens,
+                &attestation.evidence.state,
+            ] {
+                assert!(
+                    !refs.is_empty() && refs.iter().all(|e| e.block_number.is_some()),
+                    "{} has an unevidenced claim",
+                    attestation.pool.address
+                );
+            }
+            assert_eq!(attestation.token0.chain_id, attestation.pool.chain_id);
+            assert_eq!(attestation.token1.chain_id, attestation.pool.chain_id);
+            assert_ne!(attestation.token0, attestation.token1);
+            assert!(
+                pairs.insert((attestation.token0, attestation.token1)),
+                "two pools attest the same pair"
+            );
+        }
     }
 }

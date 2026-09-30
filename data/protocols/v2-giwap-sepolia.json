@@ -33,6 +33,34 @@
             "signature": "name() -> \"Giwap LPs\""
           },
           {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "factory() -> 0x4c91edd11191ca66e6f2c98448355fa2e7cfbd5b"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "symbol() -> \"GIWAPDEX-LP\""
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "feeTo() -> 0x017e7e58 execution reverted, and feeToSetter() -> 0x094b7415 execution reverted: no fee tier is attested, so fee stays null"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 5455035,
+            "transaction_hash": "0x5a3b723f92fd94c8496e8ed99458373ab0db5777a0d901c68ebb9cfa71621c9e",
+            "log_index": 3,
+            "signature": "PairCreated(address,address,address,uint256) emitted by factory 0x4c91edd11191ca66e6f2c98448355fa2e7cfbd5b: pair (0x304912af, 0x4200000000000000000000000000000000000006), this pool, index 1"
+          },
+          {
             "source": "ChainLog",
             "block_number": 37257255,
             "transaction_hash": "0x0021b1b3197efe3219b2db23729dc50253e205eaed303f1d03070b1c240d71ae",
@@ -63,6 +91,20 @@
             "signature": "token1() -> 0x4200000000000000000000000000000000000006"
           },
           {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0().symbol() -> \"GIWAP\", token0().decimals() -> 18"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1().symbol() -> \"WETH\", token1().decimals() -> 18"
+          },
+          {
             "source": "ChainLog",
             "block_number": 37257255,
             "transaction_hash": "0x0021b1b3197efe3219b2db23729dc50253e205eaed303f1d03070b1c240d71ae",
@@ -86,11 +128,271 @@
             "signature": "Sync(uint112,uint112) reserve0=2849387467534192263206 reserve1=141265148507902942209"
           },
           {
+            "source": "ChainLog",
+            "block_number": 37258093,
+            "transaction_hash": "0x7fc2077e15e1dd1c3b2634bb829459c2522debef35898886ee31c63bd4d5e558",
+            "log_index": 30,
+            "signature": "Sync(uint112,uint112) reserve0=2849566765086289340844 reserve1=141242920674394454220 — the state the real market graph is taken at"
+          },
+          {
             "source": "EthCall",
             "block_number": 37257255,
             "transaction_hash": null,
             "log_index": null,
             "signature": "getReserves() at this block equals the last Sync of this block (cross-check only, not the state source)"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() at this block equals log 30, and its blockTimestampLast 1790603209 equals this block's header timestamp"
+          }
+        ]
+      }
+    },
+    {
+      "protocol": "v2-compatible",
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x8df9062fc2995b06de754c040f1f7eac411abbdb"
+      },
+      "token0": {
+        "chain_id": 91342,
+        "address": "0x304912af0ce0dd6479735634d567715107bdc0c6"
+      },
+      "token1": {
+        "chain_id": 91342,
+        "address": "0xfa0d1d1703b55929e262d9301a001d30e45b97a2"
+      },
+      "fee": null,
+      "pool_type": "ConstantProduct",
+      "evidence": {
+        "identity": [
+          {
+            "source": "ChainLog",
+            "block_number": 5457650,
+            "transaction_hash": "0x16bb72392a14615a88397aab79c603116599a729809b875ac2d30b77cb45aa43",
+            "log_index": 8,
+            "signature": "PairCreated(address,address,address,uint256) emitted by factory 0x4c91edd11191ca66e6f2c98448355fa2e7cfbd5b: pair (0x304912af, 0xfa0d1d17), this pool, index 2"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 5457650,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() -> 0x0902f1ac, returns reserve0/reserve1/blockTimestampLast (3 words)"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 5457650,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "name() -> \"Giwap LPs\", symbol() -> \"GIWAPDEX-LP\""
+          },
+          {
+            "source": "EthCall",
+            "block_number": 5457650,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "factory() -> 0x4c91edd11191ca66e6f2c98448355fa2e7cfbd5b, which lists this pool at allPairs(1) of allPairsLength() = 3"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "feeTo() -> 0x017e7e58 execution reverted, and feeToSetter() -> 0x094b7415 execution reverted: no fee tier is attested, so fee stays null"
+          }
+        ],
+        "tokens": [
+          {
+            "source": "EthCall",
+            "block_number": 5457650,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0() -> 0x304912af0ce0dd6479735634d567715107bdc0c6"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 5457650,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1() -> 0xfa0d1d1703b55929e262d9301a001d30e45b97a2"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0().symbol() -> \"GIWAP\", token0().decimals() -> 18"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1().symbol() -> \"USDT\", token1().name() -> \"USDT Token\", token1().decimals() -> 18"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 5457650,
+            "transaction_hash": "0x16bb72392a14615a88397aab79c603116599a729809b875ac2d30b77cb45aa43",
+            "log_index": 11,
+            "signature": "token0 Transfer in the same transaction as the pool's first Sync"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 5457650,
+            "transaction_hash": "0x16bb72392a14615a88397aab79c603116599a729809b875ac2d30b77cb45aa43",
+            "log_index": 12,
+            "signature": "token1 Transfer in the same transaction as the pool's first Sync"
+          }
+        ],
+        "state": [
+          {
+            "source": "ChainLog",
+            "block_number": 5457650,
+            "transaction_hash": "0x16bb72392a14615a88397aab79c603116599a729809b875ac2d30b77cb45aa43",
+            "log_index": 13,
+            "signature": "Sync(uint112,uint112) reserve0=1000000000000000000000 reserve1=2000000000000000000000"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 5457650,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() at this block equals log 13, and its blockTimestampLast 1758802766 equals this block's header timestamp"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 5457650,
+            "transaction_hash": "0x16bb72392a14615a88397aab79c603116599a729809b875ac2d30b77cb45aa43",
+            "log_index": 14,
+            "signature": "Mint(address,uint256,uint256) in the same transaction: this is the pool's own liquidity event, not a synthetic reserve"
+          }
+        ]
+      }
+    },
+    {
+      "protocol": "v2-compatible",
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x4db758ab5e494d5b81627dd39258240aa9db9d46"
+      },
+      "token0": {
+        "chain_id": 91342,
+        "address": "0x4200000000000000000000000000000000000006"
+      },
+      "token1": {
+        "chain_id": 91342,
+        "address": "0xfa0d1d1703b55929e262d9301a001d30e45b97a2"
+      },
+      "fee": null,
+      "pool_type": "ConstantProduct",
+      "evidence": {
+        "identity": [
+          {
+            "source": "ChainLog",
+            "block_number": 10544346,
+            "transaction_hash": "0x47b9abdb10cd3b794f5031f692bb65bd57cb0f4f0db7e9725e4a7ebe9f85e62c",
+            "log_index": 0,
+            "signature": "PairCreated(address,address,address,uint256) emitted by factory 0x4c91edd11191ca66e6f2c98448355fa2e7cfbd5b: pair (0x4200000000000000000000000000000000000006, 0xfa0d1d17), this pool, index 3"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 10544346,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() -> 0x0902f1ac, returns reserve0/reserve1/blockTimestampLast (3 words)"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 10544346,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "name() -> \"Giwap LPs\", symbol() -> \"GIWAPDEX-LP\""
+          },
+          {
+            "source": "EthCall",
+            "block_number": 10544346,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "factory() -> 0x4c91edd11191ca66e6f2c98448355fa2e7cfbd5b, which lists this pool at allPairs(2) of allPairsLength() = 3"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "feeTo() -> 0x017e7e58 execution reverted, and feeToSetter() -> 0x094b7415 execution reverted: no fee tier is attested, so fee stays null"
+          }
+        ],
+        "tokens": [
+          {
+            "source": "EthCall",
+            "block_number": 10544346,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0() -> 0x4200000000000000000000000000000000000006"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 10544346,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1() -> 0xfa0d1d1703b55929e262d9301a001d30e45b97a2"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0().symbol() -> \"WETH\", token0().name() -> \"Wrapped Ether\", token0().decimals() -> 18"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1().symbol() -> \"USDT\", token1().decimals() -> 18"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 10544346,
+            "transaction_hash": "0x47b9abdb10cd3b794f5031f692bb65bd57cb0f4f0db7e9725e4a7ebe9f85e62c",
+            "log_index": 4,
+            "signature": "token0 (WETH) Transfer in the same transaction as the pool's first Sync"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 10544346,
+            "transaction_hash": "0x47b9abdb10cd3b794f5031f692bb65bd57cb0f4f0db7e9725e4a7ebe9f85e62c",
+            "log_index": 5,
+            "signature": "token1 Transfer in the same transaction as the pool's first Sync"
+          }
+        ],
+        "state": [
+          {
+            "source": "ChainLog",
+            "block_number": 10544346,
+            "transaction_hash": "0x47b9abdb10cd3b794f5031f692bb65bd57cb0f4f0db7e9725e4a7ebe9f85e62c",
+            "log_index": 6,
+            "signature": "Sync(uint112,uint112) reserve0=1000000000 reserve1=2800000000000"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 10544346,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() at this block equals log 6, and its blockTimestampLast 1763889462 equals this block's header timestamp"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 10544346,
+            "transaction_hash": "0x47b9abdb10cd3b794f5031f692bb65bd57cb0f4f0db7e9725e4a7ebe9f85e62c",
+            "log_index": 7,
+            "signature": "Mint(address,uint256,uint256) in the same transaction: this is the pool's own liquidity event, not a synthetic reserve"
           }
         ]
       }

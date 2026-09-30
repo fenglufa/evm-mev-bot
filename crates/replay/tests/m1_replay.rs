@@ -349,11 +349,19 @@ async fn snapshot_iteration_order_is_determined_by_identity() {
 
 // --- the real chain --------------------------------------------------------
 
-/// The registry file is the only thing that says this pool is a pool.
+/// The registry file is the only thing that says this pool is a pool. The same
+/// file carries the two pools M2 evidenced from their own `PairCreated` logs, so
+/// the count here is the file's, not the one pool M1 started from.
 #[test]
 fn the_committed_registry_attests_the_real_pool_with_evidence() {
     let registry = Registry::load(&registry_path()).expect("registry loads and validates");
-    assert_eq!(registry.pools.len(), 1);
+    assert_eq!(registry.pools.len(), 3);
+    let pairs: std::collections::BTreeSet<_> = registry
+        .pools
+        .values()
+        .map(|a| (a.token0, a.token1))
+        .collect();
+    assert_eq!(pairs.len(), 3, "three attestations, three distinct pairs");
     let attestation = registry
         .get(pool(REAL_POOL))
         .expect("real pool is attested");

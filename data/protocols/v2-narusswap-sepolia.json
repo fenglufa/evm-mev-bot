@@ -1,0 +1,134 @@
+{
+  "pools": [
+    {
+      "protocol": "v2-compatible",
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xcaafb95fc292c10a526f03fa480407bb438dac67"
+      },
+      "token0": {
+        "chain_id": 91342,
+        "address": "0x0274c57358c3a6b8a08b7297ba51665c303a471f"
+      },
+      "token1": {
+        "chain_id": 91342,
+        "address": "0x4200000000000000000000000000000000000006"
+      },
+      "fee": null,
+      "pool_type": "ConstantProduct",
+      "evidence": {
+        "identity": [
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() -> 0x0902f1ac returns 3 words (reserve0/reserve1/blockTimestampLast)"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "name() -> \"Narusswap V2\""
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "symbol() -> \"NARU-V2\""
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "factory() -> 0xd51d7c2a3b9b0f6876336c165adda94468500c47"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37258093,
+            "transaction_hash": "0xbdea3d7883e2d82d1e2ca4290222d496e045e7c4d387372d8afb973cfc6475b0",
+            "log_index": 51,
+            "signature": "Swap-shaped log 0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822 (3 topics, 128-byte data) emitted by the pool itself"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 31390683,
+            "transaction_hash": "0x55f28ca8295e4526361edfc735b3eedb69052051591c52d98fac06b278ef3578",
+            "log_index": 7,
+            "signature": "PairCreated(address,address,address,uint256) emitted by factory 0xd51d7c2a3b9b0f6876336c165adda94468500c47: pair (0x0274c573, 0x4200000000000000000000000000000000000006), this pool, index 39"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "feeTo() -> 0x017e7e58 execution reverted, and feeToSetter() -> 0x094b7415 execution reverted: no fee tier is attested, so fee stays null"
+          }
+        ],
+        "tokens": [
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0() -> 0x0274c57358c3a6b8a08b7297ba51665c303a471f"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1() -> 0x4200000000000000000000000000000000000006"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token0().symbol() -> \"HYANGNO\", token0().decimals() -> 18"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "token1().symbol() -> \"WETH\", token1().decimals() -> 18"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37258093,
+            "transaction_hash": "0xbdea3d7883e2d82d1e2ca4290222d496e045e7c4d387372d8afb973cfc6475b0",
+            "log_index": 49,
+            "signature": "Transfer of token0 in the same transaction as the pool Sync"
+          },
+          {
+            "source": "ChainLog",
+            "block_number": 37258093,
+            "transaction_hash": "0xbdea3d7883e2d82d1e2ca4290222d496e045e7c4d387372d8afb973cfc6475b0",
+            "log_index": 48,
+            "signature": "Transfer of token1 in the same transaction as the pool Sync"
+          }
+        ],
+        "state": [
+          {
+            "source": "ChainLog",
+            "block_number": 37258093,
+            "transaction_hash": "0xbdea3d7883e2d82d1e2ca4290222d496e045e7c4d387372d8afb973cfc6475b0",
+            "log_index": 50,
+            "signature": "Sync(uint112,uint112) reserve0=125338144751901190262 reserve1=175861646008610376"
+          },
+          {
+            "source": "EthCall",
+            "block_number": 37258093,
+            "transaction_hash": null,
+            "log_index": null,
+            "signature": "getReserves() at this block returns the same two reserves, and its blockTimestampLast 1790603209 equals the header timestamp of block 37258093 (cross-check only, not the state source)"
+          }
+        ]
+      }
+    }
+  ]
+}
