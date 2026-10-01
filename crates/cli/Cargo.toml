@@ -18,6 +18,7 @@ evm-opportunity.workspace = true
 evm-replay.workspace = true
 evm-simulation.workspace = true
 evm-risk.workspace = true
+evm-execution.workspace = true
 evm-live.workspace = true
 evm-metrics.workspace = true
 evm-pipeline.workspace = true

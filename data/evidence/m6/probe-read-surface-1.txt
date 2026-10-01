@@ -1,0 +1,27 @@
+eth_chainId []
+{"jsonrpc":"2.0","result":"0x164ce","id":1}
+
+eth_blockNumber []
+{"jsonrpc":"2.0","result":"0x23bfe15","id":1}
+
+eth_getTransactionCount ["0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c","latest"]
+{"jsonrpc":"2.0","result":"0x0","id":1}
+
+eth_getTransactionCount ["0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c","pending"]
+{"jsonrpc":"2.0","result":"0x0","id":1}
+
+eth_getBalance ["0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c","latest"]
+{"jsonrpc":"2.0","result":"0x470de4df820000","id":1}
+
+eth_maxPriorityFeePerGas []
+{"jsonrpc":"2.0","result":"0xf4240","id":1}
+
+eth_accounts []
+{"jsonrpc":"2.0","result":[],"id":1}
+
+eth_feeHistory ["0x2",[0.5],"latest"]
+{"jsonrpc":"2.0","error":{"code":-32602,"message":"Invalid params","data":"invalid type: sequence, expected a string at line 1 column 0"},"id":1}
+
+txpool_status []
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+

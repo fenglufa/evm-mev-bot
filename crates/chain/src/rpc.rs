@@ -105,7 +105,13 @@ impl HttpChainAdapter {
     }
 }
 
-fn parse_u64(value: &Value, context: &str) -> Result<u64> {
+/// The provider's hex-quantity and hex-bytes field rules.
+///
+/// Public for the same reason [`chain_block_from_value`] is: a reader of a single
+/// transaction receipt (`crates/execution`) needs fields a block-shaped adapter never
+/// asked for, and a second copy of these rules would be a second definition of what a
+/// malformed quantity means on this repository's only chain interface.
+pub fn parse_u64(value: &Value, context: &str) -> Result<u64> {
     let text = value
         .as_str()
         .ok_or_else(|| ChainError::Decode(format!("{context} is not a hex string: {value}")))?;
@@ -113,28 +119,28 @@ fn parse_u64(value: &Value, context: &str) -> Result<u64> {
         .map_err(|e| ChainError::Decode(format!("{context} `{text}`: {e}")))
 }
 
-fn parse_address(value: &Value, context: &str) -> Result<Address> {
+pub fn parse_address(value: &Value, context: &str) -> Result<Address> {
     let text = value
         .as_str()
         .ok_or_else(|| ChainError::Decode(format!("{context} is not an address: {value}")))?;
     Address::from_str(text).map_err(|e| ChainError::Decode(format!("{context} `{text}`: {e}")))
 }
 
-fn parse_b256(value: &Value, context: &str) -> Result<B256> {
+pub fn parse_b256(value: &Value, context: &str) -> Result<B256> {
     let text = value
         .as_str()
         .ok_or_else(|| ChainError::Decode(format!("{context} is not a hash: {value}")))?;
     B256::from_str(text).map_err(|e| ChainError::Decode(format!("{context} `{text}`: {e}")))
 }
 
-fn parse_bytes(value: &Value, context: &str) -> Result<Bytes> {
+pub fn parse_bytes(value: &Value, context: &str) -> Result<Bytes> {
     let text = value
         .as_str()
         .ok_or_else(|| ChainError::Decode(format!("{context} is not bytes: {value}")))?;
     Bytes::from_str(text).map_err(|e| ChainError::Decode(format!("{context} `{text}`: {e}")))
 }
 
-fn parse_u256(value: &Value, context: &str) -> Result<U256> {
+pub fn parse_u256(value: &Value, context: &str) -> Result<U256> {
     let text = value
         .as_str()
         .ok_or_else(|| ChainError::Decode(format!("{context} is not a quantity: {value}")))?;
@@ -170,7 +176,13 @@ pub fn chain_block_from_value(chain_id: ChainId, raw: &Value) -> Result<ChainBlo
     })
 }
 
-fn normalize_log(chain_id: ChainId, raw: &Value) -> Result<ChainLog> {
+/// A log from a provider's own JSON.
+///
+/// Public for the same reason [`chain_block_from_value`] is: the execution layer reads
+/// a single transaction receipt, which the block-oriented [`ChainAdapter`] methods do
+/// not serve, and a second copy of this parsing would be a second set of rules for what
+/// a log is (§9's one state semantics, applied one layer below state again).
+pub fn chain_log_from_value(chain_id: ChainId, raw: &Value) -> Result<ChainLog> {
     let get = |key: &str| -> Result<&Value> {
         raw.get(key)
             .ok_or_else(|| ChainError::Decode(format!("log is missing `{key}`: {raw}")))
@@ -206,7 +218,7 @@ fn normalize_receipt(chain_id: ChainId, raw: &Value) -> Result<ChainReceipt> {
         .ok_or_else(|| ChainError::Decode("receipt has no logs array".to_string()))?;
     let mut logs = logs
         .iter()
-        .map(|l| normalize_log(chain_id, l))
+        .map(|l| chain_log_from_value(chain_id, l))
         .collect::<Result<Vec<_>>>()?;
     logs.sort();
     let status = raw
@@ -448,7 +460,7 @@ impl ChainAdapter for HttpChainAdapter {
             .ok_or_else(|| ChainError::Decode("eth_getLogs did not return an array".to_string()))?;
         let mut logs = raw
             .iter()
-            .map(|l| normalize_log(self.chain_id, l))
+            .map(|l| chain_log_from_value(self.chain_id, l))
             .collect::<Result<Vec<_>>>()?;
         logs.sort();
         Ok(logs)

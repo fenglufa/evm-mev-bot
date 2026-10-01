@@ -1451,6 +1451,7 @@ dependencies = [
  "clap",
  "evm-chain",
  "evm-core",
+ "evm-execution",
  "evm-graph",
  "evm-live",
  "evm-metrics",
@@ -1474,6 +1475,29 @@ dependencies = [
  "alloy-primitives",
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "evm-execution"
+version = "0.1.0"
+dependencies = [
+ "alloy-primitives",
+ "async-trait",
+ "evm-chain",
+ "evm-core",
+ "evm-metrics",
+ "evm-protocol",
+ "evm-replay",
+ "evm-risk",
+ "evm-simulation",
+ "evm-state",
+ "hex",
+ "k256",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
 ]
 
 [[package]]
@@ -1543,6 +1567,7 @@ dependencies = [
  "async-trait",
  "evm-chain",
  "evm-core",
+ "evm-execution",
  "evm-graph",
  "evm-live",
  "evm-metrics",
@@ -1608,7 +1633,9 @@ dependencies = [
  "async-trait",
  "evm-chain",
  "evm-core",
+ "evm-execution",
  "evm-graph",
+ "evm-metrics",
  "evm-opportunity",
  "evm-protocol",
  "evm-replay",

@@ -1,0 +1,24 @@
+eth_sendRawTransaction
+{"jsonrpc":"2.0","error":{"code":-32602,"message":"missing value for required argument 0"},"id":1}
+
+etch_sendRawTransaction
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+engine_submitBlock
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+mev_sendBundle
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+eth_sendRawTransactionFlashblock
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+sequencer_submit
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+giwa_sendRawTransaction
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+txpool_content
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+

@@ -1,0 +1,130 @@
+{
+  "counters": {
+    "blocks": 50,
+    "candidate_rejections": 2,
+    "candidates": 4,
+    "decline.funding_unavailable": 1,
+    "event.canonical": 50,
+    "event.gap_detected": 1,
+    "event.gap_recovered": 1,
+    "execution_skipped_not_accepted": 1,
+    "graph_edges": 102,
+    "graph_skip.NotAtTargetBlock": 79,
+    "graph_skipped_pools": 79,
+    "invalidated_by_pool": 0,
+    "logs": 3499,
+    "opportunities_found": 2,
+    "opportunity_registered": 2,
+    "pool_created_events": 0,
+    "registrations": 4,
+    "rejected_syncs": 0,
+    "rejections": 0,
+    "risk.reject": 1,
+    "simulation_enqueued": 1,
+    "swap_events": 5,
+    "sync_events": 5,
+    "syncs_applied": 5,
+    "unattested_syncs": 0,
+    "unclaimed_logs": 3489
+  },
+  "latency": [
+    {
+      "measured": true,
+      "name": "block_to_graph",
+      "stats": {
+        "count": 44,
+        "max_ms": 1,
+        "min_ms": 0,
+        "name": "block_to_graph",
+        "p50_ms": 0,
+        "p95_ms": 1,
+        "p99_ms": 1,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "block_to_opportunity",
+      "stats": {
+        "count": 4,
+        "max_ms": 2,
+        "min_ms": 0,
+        "name": "block_to_opportunity",
+        "p50_ms": 0,
+        "p95_ms": 2,
+        "p99_ms": 2,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "block_to_risk",
+      "stats": {
+        "count": 1,
+        "max_ms": 25,
+        "min_ms": 25,
+        "name": "block_to_risk",
+        "p50_ms": 25,
+        "p95_ms": 25,
+        "p99_ms": 25,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "block_to_simulation_end",
+      "stats": {
+        "count": 1,
+        "max_ms": 24,
+        "min_ms": 24,
+        "name": "block_to_simulation_end",
+        "p50_ms": 24,
+        "p95_ms": 24,
+        "p99_ms": 24,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "chain_to_received",
+      "stats": {
+        "count": 50,
+        "max_ms": 307020490,
+        "min_ms": 306976903,
+        "name": "chain_to_received",
+        "p50_ms": 306998195,
+        "p95_ms": 307018490,
+        "p99_ms": 307020490,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "simulation_duration",
+      "stats": {
+        "count": 1,
+        "max_ms": 21,
+        "min_ms": 21,
+        "name": "simulation_duration",
+        "p50_ms": 21,
+        "p95_ms": 21,
+        "p99_ms": 21,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "simulation_queue_wait",
+      "stats": {
+        "count": 1,
+        "max_ms": 0,
+        "min_ms": 0,
+        "name": "simulation_queue_wait",
+        "p50_ms": 0,
+        "p95_ms": 0,
+        "p99_ms": 0,
+        "unit": "ms"
+      }
+    }
+  ]
+}

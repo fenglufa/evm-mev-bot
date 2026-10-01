@@ -1,0 +1,21 @@
+endpoint https://sepolia-rpc-flashblocks.giwa.io
+
+eth_chainId
+{"jsonrpc":"2.0","result":"0x164ce","id":1}
+
+
+eth_blockNumber
+{"jsonrpc":"2.0","result":"0x23bfe7b","id":1}
+
+
+eth_sendRawTransaction(no params, whitelist check)
+{"jsonrpc":"2.0","error":{"code":-32602,"message":"missing value for required argument 0"},"id":1}
+
+
+eth_sendRawTransaction(undecodable payload)
+{"jsonrpc":"2.0","error":{"code":-32602,"message":"rlp: value size exceeds available input length"},"id":1}
+
+
+eth_getTransactionCount(no-params-payload,undecodable)
+{"jsonrpc":"2.0","error":{"code":-32602,"message":"rlp: non-canonical size information for types.DynamicFeeTx"},"id":1}
+

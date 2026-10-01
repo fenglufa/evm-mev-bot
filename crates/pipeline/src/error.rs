@@ -48,6 +48,12 @@ pub enum PipelineError {
     Config(String),
     #[error("evidence file {path} could not be written: {detail}")]
     Evidence { path: PathBuf, detail: String },
+    /// M6's lane, refused before a session starts. Terminal on purpose: a run that
+    /// quietly carried on without the execution lane it was asked for would report
+    /// the same numbers as a run that never asked, and the operator would find out
+    /// from an evidence file after spending the session's wall clock.
+    #[error("execution lane could not be started: {0}")]
+    Execution(String),
     /// §46's boundary check, phrased as the failure it is: the registry attests
     /// pools for one chain and the endpoint answered `eth_chainId` for another.
     /// Nothing downstream can notice, so this stops the run before a block is

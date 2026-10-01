@@ -1,0 +1,31 @@
+eth_getRawTransactionByHash
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+
+eth_getRawTransactionByNumber
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+
+eth_getRawTransactionReceipt
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+
+eth_getTransactionByHash
+{"jsonrpc":"2.0","result":{"accessList":[],"blockHash":"0xf59e5496e4fcebcf6bab35de3edfde7f9944a69646ff86eb378e8ee1cc2d5292","blockNumber":"0x23bfe3d","blockTimestamp":"0x6abdea99","chainId":"0x164ce","from":"0x8cbb81bd9a527d4804324d7171b8b79c43289627","gas":"0xe130","gasPrice":"0xea12c","hash":"0xff9ce7c9899e0bcf1029d520274562af95f913b2e66c3e4aaee55d5920610da8","input":"0x86770afc0000000000000000000000000000000000000000000000000000000000000000","maxFeePerGas":"0x3bc6d8","maxPriorityFeePerGas":"0xe9fb9","nonce":"0x1af","r":"0xf75c346522dda0dab6e76c8588e66581252f1a86b4874b26e87e4604672e3eef","s":"0x2fc0f076f7e6e50ca3361bc62984de693b42f462c6a79823ab69c8199f35eefc","to":"0x780ae565a4104b3099dab7
+
+eth_maxPriorityFeePerGas
+{"jsonrpc":"2.0","result":"0xf4240","id":1}
+
+
+eth_createAccessList
+{"jsonrpc":"2.0","error":{"code":-32601,"message":"rpc method is not whitelisted"},"id":1}
+
+
+eth_getBlockReceipts
+{"jsonrpc":"2.0","result":[{"blobGasUsed":"0xad70","blockHash":"0x6f82e6843c2a423f55f070075819942f9900d7ad2f7e7bc438664e975d014a03","blockNumber":"0x23c000d","contractAddress":null,"cumulativeGasUsed":"0xe032","daFootprintGasScalar":"0x190","depositNonce":"0x23c002b","depositReceiptVersion":"0x1","effectiveGasPrice":"0x0","from":"0xdeaddeaddeaddeaddeaddeaddeaddeaddead0001","gasUsed":"0xe032","l1BaseFeeScalar":"0x558","l1BlobBaseFee":"0x39a8d56","l1BlobBaseFeeScalar":"0xc3c9d","l1Fee":"0x0","l1GasPrice":"0x425ba7a9","l1GasUsed":"0x6f5","logs":[],"logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000curl: (56) Failure writing output to destination, passed 1369 returned 0
+
+
+debug_traceTransaction
+{"jsonrpc":"2.0","result":{"failed":false,"gas":47270,"returnValue":"0x","structLogs":[{"depth":1,"gas":36456,"gasCost":3,"op":"PUSH1","pc":0,"refund":0,"stack":[]},{"depth":1,"gas":36453,"gasCost":3,"op":"PUSH1","pc":2,"refund":0,"stack":["0x80"]},{"depth":1,"gas":36450,"gasCost":12,"op":"MSTORE","pc":4,"refund":0,"stack":["0x80","0x40"]},{"depth":1,"gas":36438,"gasCost":3,"op":"PUSH1","pc":5,"refund":0,"stack":[]},{"depth":1,"gas":36435,"gasCost":2,"op":"CALLDATASIZE","pc":7,"refund":0,"stack":["0x4"]},{"depth":1,"gas":36433,"gasCost":3,"op":"LT","pc":8,"refund":0,"stack":["0x4","0x24"]},{"depth":1,"gas":36430,"gasCost":3,"op":"PUSH2","pc":9,"refund":0,"stack":["0x0"]},{"depth":1,"gas":364curl: (56) Failure writing output to destination, passed 1369 returned 0
+
+

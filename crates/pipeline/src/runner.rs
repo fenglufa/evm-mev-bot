@@ -37,6 +37,7 @@ use tokio::task::JoinHandle;
 
 use evm_chain::{ChainAdapter, HttpChainAdapter, RecordedChainAdapter};
 use evm_core::BlockNumber;
+use evm_execution::{AttemptProvenance, ExecutionStage, Freshness, SenderFunding};
 use evm_live::{
     now_unix_ms, BlockAnnouncement, FlashblockSource, MarketDataSource, MarketEvent, PollingSource,
     SourceKind, SourceStatus, WebSocketSource,
@@ -79,6 +80,10 @@ pub struct SessionReport {
     pub accepts: u64,
     pub rejects: u64,
     pub unknowns: u64,
+    /// M6's two boundaries, as counts: attempts the lane was given, and attempts
+    /// whose bytes reached a node. Both zero for a run with no lane.
+    pub executions: u64,
+    pub sent: u64,
     pub evidence_dir: PathBuf,
     pub metrics: Value,
     pub session: Value,
@@ -105,12 +110,26 @@ struct Session<'a> {
     /// Findings handed to a worker whose answer has not come back yet. §49's
     /// shutdown drain waits on exactly this number.
     jobs_in_flight: u64,
+    /// M6's lane, when the run asked for one. `None` is M5's run: the loop ends
+    /// at the risk decision and nothing downstream is even constructed.
+    execution: Option<ExecutionStage>,
+    /// Attempts the lane was asked about, and how many of them let bytes leave
+    /// the process. Two numbers because §2.2's whole point is that they are not
+    /// one number: an accepted finding with a built transaction is an attempt that
+    /// sent nothing.
+    executions: u64,
+    sent: u64,
     /// §8: the reason a run must be reported as failed rather than as finished.
     fatal: Option<PipelineError>,
 }
 
 impl<'a> Session<'a> {
-    fn new(config: &'a PipelineConfig, engine: MarketEngine, evidence: EvidenceWriter) -> Self {
+    fn new(
+        config: &'a PipelineConfig,
+        engine: MarketEngine,
+        evidence: EvidenceWriter,
+        execution: Option<ExecutionStage>,
+    ) -> Self {
         Self {
             config,
             engine,
@@ -123,6 +142,9 @@ impl<'a> Session<'a> {
             unknowns: 0,
             last_block: None,
             jobs_in_flight: 0,
+            execution,
+            executions: 0,
+            sent: 0,
             fatal: None,
         }
     }
@@ -134,6 +156,33 @@ impl<'a> Session<'a> {
         if self.config.progress {
             println!("{line}");
         }
+    }
+
+    /// M6's part of the session record: what the run was allowed to do after the
+    /// risk decision, which wallet it could have moved (§19's question), and what
+    /// it actually did with the two.
+    ///
+    /// A lane-less run still gets the whole object, with the counts read from
+    /// fields that were never touched rather than from a `null` a reader has to
+    /// interpret: "no executions were attempted, because there was no lane" is the
+    /// sentence §48's record has to be able to say on its own.
+    fn execution_summary(&self) -> Value {
+        json!({
+            "configuration": self.config.execution_description(),
+            "attempts": self.executions,
+            "signed_bytes_to_a_node": self.sent,
+            "lifecycle_records": self
+                .execution
+                .as_ref()
+                .map(|stage| stage.ledger().len()),
+            "signer": self.execution.as_ref().map(|stage| match stage.signer_address() {
+                Ok(address) => format!("{address:#x}"),
+                // The mode's own reason it has no account — which for `build-only`
+                // is the point, stated by the signer rather than inferred from an
+                // empty field.
+                Err(reason) => reason.to_string(),
+            }),
+        })
     }
 
     /// How many findings one block may be handed on. Bounded by the queue's own
@@ -567,6 +616,90 @@ impl<'a> Session<'a> {
             hop("block_to_risk"),
             outcome.queue_wait_ms,
         ));
+        self.on_execution(&outcome, &decision, result.map(|run| run.as_ref()))
+            .await
+    }
+
+    /// M6's lane, and the only place in this crate that reaches past a risk
+    /// decision. A run without a configured lane returns here having done nothing,
+    /// which is M5's behaviour kept as the default rather than as a flag that
+    /// changes semantics somewhere else (§20).
+    ///
+    /// Three rules decide what crosses, and this file re-decides none of them:
+    ///
+    /// - the input is a `RiskDecision` and a `SimulationResult`, never an
+    ///   `Opportunity` (§45);
+    /// - a finding the risk layer did not accept is counted and not written —
+    ///   `executions.jsonl` is the file of *attempts*, and §51 forbids the silent
+    ///   drop rather than the loud skip;
+    /// - whether the sender was funded by the chain or by a simulation override is
+    ///   quoted out of the request that applied it, because §34's whole question —
+    ///   buildable, or submittable — turns on that one fact.
+    ///
+    /// What the lane answers is written to three files and printed as one line:
+    /// the attempt with its §29 lifecycle record, the signed envelope (§52) when
+    /// bytes were made, and what the endpoint said (§53) when it was asked.
+    async fn on_execution(
+        &mut self,
+        outcome: &SimOutcome,
+        decision: &evm_risk::RiskDecision,
+        run: Option<&evm_simulation::SimulationResult>,
+    ) -> Result<()> {
+        let Some(stage) = self.execution.as_mut() else {
+            return Ok(());
+        };
+        if !decision.accepted() {
+            self.engine
+                .metrics_mut()
+                .bump("execution_skipped_not_accepted");
+            return Ok(());
+        }
+        let Some(run) = run else {
+            // The refused path wrote its own line and returned before the risk
+            // layer was reached, so there is no run here to hand over.
+            unreachable!("a refused simulation never reaches the execution lane");
+        };
+        let opportunity_id = outcome.id.to_string();
+        let state_fingerprint = outcome.state_version.to_string();
+        let funding = match &outcome.sender_override {
+            Some(reason) => SenderFunding::Overridden {
+                detail: reason.clone(),
+            },
+            None => SenderFunding::RealState {
+                source: outcome.state_source.clone(),
+            },
+        };
+        // §31's freshness leg is stated rather than assumed: this method returned
+        // early above the moment the engine stopped tracking this finding, so the
+        // lifecycle's own answer at this point is `active`.
+        let provenance = AttemptProvenance {
+            opportunity_id: &opportunity_id,
+            state_fingerprint: &state_fingerprint,
+            funding,
+            freshness: Freshness::Active,
+        };
+        let report = stage
+            .on_risk_decision(run, decision, provenance, self.engine.metrics_mut())
+            .await;
+        self.executions += 1;
+        if report.sent {
+            self.sent += 1;
+        }
+        self.evidence
+            .line(EvidenceFile::Executions, &report.to_json())?;
+        if let Some(signed) = &report.signed {
+            self.evidence.line(
+                EvidenceFile::SignedTransactions,
+                &serde_json::to_value(signed).expect("the signed envelope serializes"),
+            )?;
+        }
+        if let Some(submission) = &report.submission {
+            self.evidence.line(
+                EvidenceFile::Submissions,
+                &serde_json::to_value(submission).expect("the submission row serializes"),
+            )?;
+        }
+        self.say(report.line());
         Ok(())
     }
 }
@@ -818,6 +951,21 @@ fn load_registries(dirs: &[PathBuf]) -> Result<Registry> {
     Ok(merged)
 }
 
+/// §46's registry half, asked for on its own: the chain ids the attested pools name,
+/// deduped and sorted. A run that uses the lane without moving market data — §35's
+/// validation transaction — still has to answer the same question, and re-deriving it
+/// somewhere else is how two answers to one rule start disagreeing.
+///
+/// More than one id is not an error here: it is the list, and the caller decides that a
+/// run on one chain cannot mean two of them.
+pub fn attested_chain_ids(dirs: &[PathBuf]) -> Result<Vec<u64>> {
+    let registry = load_registries(dirs)?;
+    let mut ids: Vec<u64> = registry.pools.keys().map(|pool| pool.chain_id.0).collect();
+    ids.sort_unstable();
+    ids.dedup();
+    Ok(ids)
+}
+
 /// Run one session to completion and return its record.
 pub async fn run(config: &PipelineConfig) -> Result<SessionReport> {
     let clock = Clock::new();
@@ -889,12 +1037,42 @@ pub async fn run(config: &PipelineConfig) -> Result<SessionReport> {
         chain_id.0,
         started_unix_ms
     );
+    // M6's lane, connected before the session starts and for the whole of it.
+    //
+    // A lane that was asked for and cannot connect ends the run. This is the one
+    // place the pipeline could quietly degrade instead — fall back to M5's shape
+    // and report a normal session — and it is the case §58 exists to prevent: the
+    // numbers would be identical to a run that never asked to execute, so the
+    // operator would learn about the missing lane from an evidence file after
+    // paying for a session that could not produce one.
+    let execution = match &config.execution {
+        None => None,
+        Some(setup) => {
+            let url = config.rpc_url.as_deref().ok_or_else(|| {
+                PipelineError::Config(format!(
+                    "the execution lane ({}) reads a fee, a nonce and a canonical block from \
+                     an endpoint, and this run has none — a replay supplies recorded blocks, \
+                     which is not a node to send through",
+                    setup.mode.name()
+                ))
+            })?;
+            Some(
+                ExecutionStage::connect(url, chain_id.0, setup.clone(), clock)
+                    .await
+                    .map_err(|error| PipelineError::Execution(error.to_string()))?,
+            )
+        }
+    };
     // One directory per session: a rerun into the same `--out-dir` lands beside
     // the previous run instead of appending to its lines and overwriting its
     // summary files (§48 asks for a session record, and two sessions in one file
     // is neither).
-    let evidence = EvidenceWriter::open(&config.evidence_dir.join(&session_id), &session_id)?;
-    let mut session = Session::new(config, engine, evidence);
+    let evidence = EvidenceWriter::open(
+        &config.evidence_dir.join(&session_id),
+        &session_id,
+        config.execution.is_some(),
+    )?;
+    let mut session = Session::new(config, engine, evidence, execution);
 
     let (sink, mut events) = mpsc::channel::<MarketEvent>(config.queues.event_capacity.max(1));
     let stop = Arc::new(AtomicBool::new(false));
@@ -1182,9 +1360,8 @@ impl Session<'_> {
             "capability": capability,
             "sources": sources,
             "simulation_workers": workers,
-            "no_execution": evm_risk::NO_BROADCAST,
-            "milestone_note": "M5 stops at a risk decision: nothing here broadcasts, signs, \
-                              deploys, or bids gas (§26).",
+            "execution": self.execution_summary(),
+            "milestone": "M6",
         });
         let session = session_record(&record);
         self.evidence.write_whole("live-session.json", &session)?;
@@ -1199,6 +1376,8 @@ impl Session<'_> {
                 accepts: self.accepts,
                 rejects: self.rejects,
                 unknowns: self.unknowns,
+                executions: self.executions,
+                sent: self.sent,
                 evidence_dir: self.evidence.dir().to_path_buf(),
                 metrics,
                 session,

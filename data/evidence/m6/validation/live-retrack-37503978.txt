@@ -1,0 +1,21 @@
+# M6 §41 实链复验（只读，未发送任何交易）
+
+命令：
+  CC=clang CXX=clang++ CXXFLAGS="-include cstdint" \
+  cargo test -p evm-execution --test real_validation_live --offline -- --ignored --nocapture
+
+时间：2026-10-01T11:15:47Z（本机 UTC+8 19:15）
+读的端点与交易：来自 data/evidence/m6/validation/node-answers-37503978.json 与 /Volumes/superfs/evm-mev-bot/data/evidence/m6/validation/validate-91342-1790849090542/signed-transactions.jsonl
+运行模式：ExecutionMode::SignOnly（该模式不可广播，因此这条复验不会花任何钱、不会动用 nonce）
+
+原始输出：
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.77s
+     Running tests/real_validation_live.rs (target/debug/deps/real_validation_live-c12f16402f08f97c)
+
+running 2 tests
+test the_wallet_holds_what_the_frozen_cost_section_says_it_should ... ok
+live re-track: tx 0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95 in block 37503978 (0xfdf3508c899e7ff9d8fd8fd35300a7d6adfab97ca869f5df2e0b086d685ce3af), status Included, gas_used 21000, l2 bill 21008421000 wei, l1 fee 7305258344 wei — endpoint https://sepolia-rpc.giwa.io
+test the_fixed_tracker_reads_the_same_inclusion_the_saved_answers_describe ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.97s
+

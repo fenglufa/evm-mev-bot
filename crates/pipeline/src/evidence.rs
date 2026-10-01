@@ -5,7 +5,10 @@
 //! produced them and each line carries the identity of the record above it:
 //! a state update names its block, transaction hash, transaction index and log
 //! index; a finding names the state version it was priced against; a simulation
-//! result names the finding and the block it read.
+//! result names the finding and the block it read. M6 extends the same chain one
+//! link further — an execution row names the finding, the simulation and the risk
+//! decision it came from (§37), and the signed and submission rows name the
+//! execution they belong to (§52, §53).
 //!
 //! §49's other half lives in [`EvidenceWriter::finish`]: the two summary files
 //! are written to a temporary name and renamed into place, so a process that
@@ -36,6 +39,15 @@ pub enum EvidenceFile {
     Declines,
     /// Reconnects, subscription answers, provider errors.
     Status,
+    /// M6 §37: one row per attempt that reached the execution lane, with the four
+    /// ids and the rung it ended at.
+    Executions,
+    /// M6 §52: the signed envelope — chain, nonce, type, `to`, value, gas, fee,
+    /// the calldata's hash and the recovered sender. Never the key.
+    SignedTransactions,
+    /// M6 §53: what the endpoint answered, including the run that answered
+    /// `BLOCKED` because it accepts no submission at all.
+    Submissions,
 }
 
 impl EvidenceFile {
@@ -50,7 +62,19 @@ impl EvidenceFile {
             Self::Candidates => "candidates.jsonl",
             Self::Declines => "declines.jsonl",
             Self::Status => "status.jsonl",
+            Self::Executions => "executions.jsonl",
+            Self::SignedTransactions => "signed-transactions.jsonl",
+            Self::Submissions => "submissions.jsonl",
         }
+    }
+
+    /// Whether this file exists only because a run had somewhere to send a
+    /// transaction to.
+    pub const fn is_execution_lane(self) -> bool {
+        matches!(
+            self,
+            Self::Executions | Self::SignedTransactions | Self::Submissions
+        )
     }
 }
 
@@ -70,13 +94,14 @@ impl EvidenceWriter {
     /// append rather than truncate, and an existing directory is reused rather
     /// than cleared: §43's real runs are evidence, and a write that has to restart
     /// must not destroy what it already recorded.
-    pub fn open(dir: &Path, session_id: &str) -> Result<Self> {
-        std::fs::create_dir_all(dir).map_err(|error| PipelineError::Evidence {
-            path: dir.to_path_buf(),
-            detail: format!("could not create the session directory: {error}"),
-        })?;
-        let mut files = Vec::new();
-        for kind in [
+    ///
+    /// `execution_lane` decides whether M6's three files are part of this
+    /// session's shape at all. A run without a lane gets no `executions.jsonl`
+    /// rather than an empty one, because "there were no attempts" and "this run
+    /// could not make an attempt" are different answers to a reader holding one
+    /// file and no session record.
+    pub fn open(dir: &Path, session_id: &str, execution_lane: bool) -> Result<Self> {
+        let mut kinds: Vec<EvidenceFile> = vec![
             EvidenceFile::Blocks,
             EvidenceFile::Events,
             EvidenceFile::StateUpdates,
@@ -86,7 +111,40 @@ impl EvidenceWriter {
             EvidenceFile::Candidates,
             EvidenceFile::Declines,
             EvidenceFile::Status,
-        ] {
+        ];
+        if execution_lane {
+            kinds.extend([
+                EvidenceFile::Executions,
+                EvidenceFile::SignedTransactions,
+                EvidenceFile::Submissions,
+            ]);
+        }
+        Self::open_kinds(dir, session_id, &kinds)
+    }
+
+    /// A session directory holding only M6's three files: the run that produced
+    /// these rows moved no market data at all, and an empty `blocks.jsonl` beside
+    /// them would read as a stream that saw nothing rather than as a run that
+    /// never had one. This is §35's validation transaction's writer.
+    pub fn execution_only(dir: &Path, session_id: &str) -> Result<Self> {
+        Self::open_kinds(
+            dir,
+            session_id,
+            &[
+                EvidenceFile::Executions,
+                EvidenceFile::SignedTransactions,
+                EvidenceFile::Submissions,
+            ],
+        )
+    }
+
+    fn open_kinds(dir: &Path, session_id: &str, kinds: &[EvidenceFile]) -> Result<Self> {
+        std::fs::create_dir_all(dir).map_err(|error| PipelineError::Evidence {
+            path: dir.to_path_buf(),
+            detail: format!("could not create the session directory: {error}"),
+        })?;
+        let mut files = Vec::new();
+        for kind in kinds {
             let path = dir.join(kind.file_name());
             let opened = OpenOptions::new()
                 .create(true)
@@ -192,9 +250,9 @@ impl EvidenceWriter {
 /// under its own name rather than being dropped.
 pub fn session_record(record: &Value) -> Value {
     let mut session = serde_json::Map::new();
-    session.insert("milestone".to_string(), serde_json::json!("M5"));
     for key in [
         "session_id",
+        "milestone",
         "chain_id",
         "source",
         "start_block",
@@ -240,7 +298,7 @@ mod tests {
     fn lines_append_and_carry_the_session_id() {
         let dir = temp_dir("append");
         {
-            let mut writer = EvidenceWriter::open(&dir, "s1").expect("open");
+            let mut writer = EvidenceWriter::open(&dir, "s1", false).expect("open");
             writer
                 .line(EvidenceFile::Blocks, &json!({"number": 10}))
                 .expect("line");
@@ -251,7 +309,7 @@ mod tests {
         }
         // Reopening the same session directory appends instead of truncating.
         {
-            let mut writer = EvidenceWriter::open(&dir, "s2").expect("reopen");
+            let mut writer = EvidenceWriter::open(&dir, "s2", false).expect("reopen");
             writer
                 .line(EvidenceFile::Blocks, &json!({"number": 12}))
                 .expect("line");
@@ -270,10 +328,10 @@ mod tests {
     #[test]
     fn a_whole_file_rename_leaves_no_partial_behind() {
         let dir = temp_dir("whole");
-        let writer = EvidenceWriter::open(&dir, "s3").expect("open");
+        let writer = EvidenceWriter::open(&dir, "s3", false).expect("open");
         drop(writer);
         // `write_whole` needs a live handle, so reopen mutably.
-        let mut writer = EvidenceWriter::open(&dir, "s3").expect("reopen");
+        let mut writer = EvidenceWriter::open(&dir, "s3", false).expect("reopen");
         writer
             .write_whole("metrics.json", &json!({"blocks": 4}))
             .expect("write");
@@ -291,9 +349,36 @@ mod tests {
     }
 
     #[test]
+    fn the_execution_files_belong_only_to_a_run_that_has_a_lane() {
+        let without = temp_dir("lane-off");
+        {
+            let mut writer = EvidenceWriter::open(&without, "s5", false).expect("open");
+            // Asking for a row the session cannot produce is the failure this
+            // split exists to make loud.
+            let error = writer
+                .line(EvidenceFile::Executions, &json!({"execution_id": "x"}))
+                .expect_err("no executions file was opened");
+            assert!(error.to_string().contains("not opened"), "{error}");
+            assert!(!without.join("executions.jsonl").exists());
+            assert!(without.join("blocks.jsonl").exists());
+        }
+        let with = temp_dir("lane-on");
+        {
+            let mut writer = EvidenceWriter::open(&with, "s6", true).expect("open");
+            writer
+                .line(EvidenceFile::Executions, &json!({"execution_id": "x"}))
+                .expect("line");
+        }
+        assert!(with.join("executions.jsonl").exists());
+        std::fs::remove_dir_all(&without).ok();
+        std::fs::remove_dir_all(&with).ok();
+    }
+
+    #[test]
     fn the_session_record_states_every_field_a_reader_asks_for() {
         let record = session_record(&json!({
             "session_id": "s4",
+            "milestone": "M6",
             "chain_id": 91342,
             "source": "websocket",
             "end_block": 12,
@@ -317,6 +402,11 @@ mod tests {
         }
         assert_eq!(record["end_block"], 12);
         assert_eq!(record["source"], "websocket");
+        assert_eq!(
+            record["milestone"], "M6",
+            "which milestone a run belongs to is a fact about the run, so it travels from \
+             the record the runner wrote rather than from this file's prose"
+        );
         assert_eq!(
             record["start_block"],
             Value::Null,

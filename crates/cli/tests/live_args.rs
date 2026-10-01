@@ -16,6 +16,7 @@
 use std::process::{Command, Output};
 
 use evm_cli::{default_registry_dirs, parse_live};
+use evm_execution::ExecutionMode;
 use evm_pipeline::config::{CanonicalSource, QueueConfig};
 
 /// One `live` invocation, spelled the way it would be typed.
@@ -261,6 +262,60 @@ fn the_help_text_states_the_ban_it_is_under() {
         "help is where a reader looks for what a tool can do; a sending method named here \
          would be the §26 ban broken in public"
     );
+    // M6 widened what the binary may be asked to do, so the same test now pins the
+    // two things the widening did not touch: the lane has to be named by a flag that
+    // takes a mode word and not a key, and §34's limit has to be in the public
+    // description rather than only in a source comment.
+    assert!(
+        help.contains("--execution-mode") && help.contains("§34"),
+        "a reader of --help has to learn both that there is a lane and what it still may not \
+         do: {help}"
+    );
+    assert!(
+        !help.contains("--private-key") && !help.contains("--key"),
+        "no flag may take key material (§17): {help}"
+    );
+}
+
+#[test]
+fn the_execution_lane_is_absent_unless_named_and_takes_no_key() {
+    // §20: no flag at all means M5's run. This is acceptance U in its command-line
+    // form — the binary that *can* be told to sign is the one that will not unless
+    // a reader spells it out.
+    let plain = live(&["--rpc-url", "http://127.0.0.1:1"]).expect("a config");
+    assert!(
+        plain.execution.is_none(),
+        "no --execution-mode means no lane, not a lane that defaults to something"
+    );
+
+    for (flag, expected) in [
+        ("build-only", ExecutionMode::BuildOnly),
+        ("sign-only", ExecutionMode::SignOnly),
+        ("submit", ExecutionMode::Submit),
+    ] {
+        let armed = live(&["--rpc-url", "http://127.0.0.1:1", "--execution-mode", flag])
+            .expect("a lane config");
+        let setup = armed.execution.expect("the lane the flag asked for");
+        assert_eq!(setup.mode, expected);
+        assert_eq!(armed.rpc_url.as_deref(), Some("http://127.0.0.1:1"));
+    }
+
+    // §20's other half: a typo is refused where a person can see it, rather than
+    // quietly becoming the safe mode.
+    let typo = live(&[
+        "--rpc-url",
+        "http://127.0.0.1:1",
+        "--execution-mode",
+        "submmit",
+    ])
+    .expect_err("a misspelled mode is not a run");
+    assert!(typo.contains("submmit"), "{typo}");
+
+    // And a lane with no endpoint is refused at the flag stage: the lane prices a
+    // fee and reads a nonce from a node, which a recording does not have.
+    let stranded = live(&["--replay-dir", "some/dir", "--execution-mode", "sign-only"])
+        .expect_err("a replay has no endpoint for the lane to send through");
+    assert!(stranded.contains("--rpc-url"), "{stranded}");
 }
 
 /// The built binary, with none of the endpoint variables inherited — the tests

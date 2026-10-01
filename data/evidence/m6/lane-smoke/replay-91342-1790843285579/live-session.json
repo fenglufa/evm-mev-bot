@@ -1,0 +1,146 @@
+{
+  "blocks": 50,
+  "capability": {
+    "replay": {
+      "probed": true,
+      "transport": "recorded"
+    }
+  },
+  "chain_id": 91342,
+  "end_block": 37191199,
+  "ended_at_unix_ms": 1790843292815,
+  "ended_by": "every source ended",
+  "endpoints": {
+    "flashblocks_url": null,
+    "rpc_url": "https://sepolia-rpc.giwa.io",
+    "ws_url": null
+  },
+  "events": 52,
+  "execution": {
+    "attempts": 0,
+    "configuration": {
+      "detail": "an intent whose sender was funded by a simulation override is built and recorded, and never submitted",
+      "endpoint": "https://sepolia-rpc.giwa.io",
+      "fee_policy": {
+        "base_fee_headroom": {
+          "headroom_blocks": 2
+        }
+      },
+      "gas_policy": "simulation gas + 20000",
+      "lane": "build-only",
+      "maximum_gas_limit": 60000000,
+      "may_sign": false,
+      "may_submit": false,
+      "receipt_attempts": 12,
+      "receipt_pause_ms": 1000,
+      "require_unoverridden_state": true
+    },
+    "lifecycle_records": 0,
+    "signed_bytes_to_a_node": 0,
+    "signer": "signing failed: no key read: mode is build-only"
+  },
+  "findings_settled": 2,
+  "ledger": {
+    "duplicates": 0,
+    "evicted_for_space": 0,
+    "highest_active": 2,
+    "invalidated_by_pool": 0,
+    "registered": 2
+  },
+  "milestone": "M6",
+  "opportunities": 2,
+  "pools": {
+    "known": 4,
+    "registry": 6,
+    "synced": 4
+  },
+  "queues": {
+    "event_queue": {
+      "bounded": true,
+      "capacity": 32,
+      "on_full": "block the source; market events are never dropped (§51)"
+    },
+    "outcome_queue": {
+      "bounded": true,
+      "capacity": 32,
+      "on_full": "block the worker, not the pipeline"
+    },
+    "simulation_queue": {
+      "bounded": true,
+      "capacity": 16,
+      "on_full": "decline the job, count it, keep the finding in the ledger; ingestion never waits on a simulation (§23)"
+    },
+    "simulation_workers": 2
+  },
+  "registry_dirs": [
+    "data/protocols",
+    "data/protocols-m3"
+  ],
+  "risk_decisions": {
+    "accept": 0,
+    "reject": 1,
+    "unknown": 0
+  },
+  "risk_thresholds": {
+    "detail": "an unset maximum_gas is answered per block by that block's own gas limit",
+    "maximum_gas": null,
+    "minimum_net_profit_wei": "0"
+  },
+  "session_id": "replay-91342-1790843285579",
+  "simulation_workers": [
+    {
+      "idle_polls": 21,
+      "jobs_abandoned": 0,
+      "jobs_refused": 0,
+      "jobs_run": 0,
+      "span_ms": 6318,
+      "worker": 0
+    },
+    {
+      "idle_polls": 19,
+      "jobs_abandoned": 0,
+      "jobs_refused": 0,
+      "jobs_run": 1,
+      "span_ms": 6318,
+      "worker": 1
+    }
+  ],
+  "simulations": 1,
+  "source": "replay",
+  "sources": [
+    {
+      "capability": {
+        "probed": true,
+        "transport": "recorded"
+      },
+      "error": null,
+      "report": {
+        "cycles": 8,
+        "detail": null,
+        "ended_by": "Exhausted",
+        "events_sent": 52,
+        "read_failures": 0,
+        "source": "Replay",
+        "tracker": {
+          "announced": 50,
+          "blocks_skipped": 0,
+          "conflicts": 0,
+          "duplicates": 0,
+          "emitted": 50,
+          "gaps_detected": 1,
+          "gaps_recovered": 1,
+          "gaps_unrecovered": 0,
+          "highest_announced": 37191199,
+          "next_expected": 37191200,
+          "stale": 0
+        }
+      },
+      "source": "replay"
+    }
+  ],
+  "start_block": 37191149,
+  "started_at_unix_ms": 1790843285579,
+  "state_changes": 9,
+  "state_source": "recorded:fixtures/simulation-m4/dump-37191169.json@37191169",
+  "wrapped_native": "0x4200000000000000000000000000000000000006"
+}

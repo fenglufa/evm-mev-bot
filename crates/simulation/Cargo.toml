@@ -17,7 +17,9 @@ serde_json.workspace = true
 thiserror.workspace = true
 
 [dev-dependencies]
+evm-execution.workspace = true
 evm-graph.workspace = true
+evm-metrics.workspace = true
 evm-opportunity.workspace = true
 evm-replay.workspace = true
 evm-risk.workspace = true

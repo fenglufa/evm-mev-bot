@@ -1,0 +1,122 @@
+{
+ "milestone": "M6",
+ "purpose": "The node's own answers about the one transaction §35 asked for: the receipt the lane was refused for, the block that receipt names, and the wallet state that pays for it. Recorded after the run from the same endpoint, so the binding check the lane failed can be re-run offline against what the chain holds now.",
+ "session_id": "validate-91342-1790849090542",
+ "evidence_of": "data/evidence/m6/validation/validate-91342-1790849090542",
+ "endpoint": "https://sepolia-rpc.giwa.io",
+ "chain_id": {
+  "result": "0x164ce"
+ },
+ "transaction_hash": "0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95",
+ "sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+ "captured_at_unix_ms": 1790849717103,
+ "attempts": {
+  "eth_getTransactionReceipt": {
+   "params": [
+    "0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95"
+   ],
+   "result": {
+    "blobGasUsed": "0x9c40",
+    "blockHash": "0xfdf3508c899e7ff9d8fd8fd35300a7d6adfab97ca869f5df2e0b086d685ce3af",
+    "blockNumber": "0x23c43ea",
+    "contractAddress": null,
+    "cumulativeGasUsed": "0x140f62",
+    "daFootprintGasScalar": "0x190",
+    "effectiveGasPrice": "0xf43d1",
+    "from": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+    "gasUsed": "0x5208",
+    "l1BaseFeeScalar": "0x558",
+    "l1BlobBaseFee": "0x3b2fd9b",
+    "l1BlobBaseFeeScalar": "0xc3c9d",
+    "l1Fee": "0x1b36d6568",
+    "l1GasPrice": "0x3f669e1f",
+    "l1GasUsed": "0x640",
+    "logs": [],
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "status": "0x1",
+    "to": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+    "transactionHash": "0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95",
+    "transactionIndex": "0x9",
+    "type": "0x2"
+   }
+  },
+  "eth_getBlockByNumber": {
+   "params": [
+    "0x23c43ea",
+    false
+   ],
+   "result": {
+    "number": "0x23c43ea",
+    "hash": "0xfdf3508c899e7ff9d8fd8fd35300a7d6adfab97ca869f5df2e0b086d685ce3af",
+    "parentHash": "0xf96826d211d8773e34223803ec473020a593f4e0994dc8c511f679047d049ea9",
+    "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+    "miner": "0x4200000000000000000000000000000000000011",
+    "stateRoot": "0x01fc9bea6e78fcda7d4d88d7fd57e9dce1e7ba8b35ef4c88b284821825ff2d4c",
+    "transactionsRoot": "0x306ec29e64cd1a39709e59e19a4228ea37648ab3229526aac43652ad5d29e2ec",
+    "receiptsRoot": "0xf88ccf557b25a92e7fd5e77c2d51a252701664c3db65fe425f815a5fda5fe2b3",
+    "difficulty": "0x0",
+    "extraData": "0x01000000fa000000060000000000000000",
+    "size": "0x40ed",
+    "gasLimit": "0x3938700",
+    "gasUsed": "0xb189e3",
+    "timestamp": "0x6abe3046",
+    "baseFeePerGas": "0x191",
+    "blobGasUsed": "0x394680",
+    "excessBlobGas": "0x0"
+   },
+   "note": "Only the header fields are kept. `transactions` and `logsBloom` carry no weight in §27's binding check and are the bulk of the payload."
+  },
+  "eth_getBlockByNumber_latest": {
+   "params": [
+    "latest",
+    false
+   ],
+   "result": {
+    "number": "0x23c4657",
+    "hash": "0x296b2597f0e575c5257df70c076795825c2e19ee50bf0d077d0d552563d1a3be"
+   }
+  },
+  "eth_getTransactionCount": {
+   "params": [
+    "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+    "latest"
+   ],
+   "result": "0x1"
+  },
+  "eth_getTransactionCount_at_receipt_block": {
+   "params": [
+    "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+    "0x23c43ea"
+   ],
+   "result": "0x1"
+  },
+  "eth_getBalance": {
+   "params": [
+    "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+    "latest"
+   ],
+   "result": "0x470dde47e18a10"
+  },
+  "eth_getRawTransactionByHash": {
+   "params": [
+    "0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95"
+   ],
+   "error": {
+    "code": -32601,
+    "message": "rpc method is not whitelisted"
+   },
+   "note": "Recorded because §14's round trip would otherwise have a second way to check the bytes: this endpoint will not hand back the raw transaction it stored, so the decode is verified against the receipt and the block instead."
+  }
+ },
+ "cost": {
+  "balance_before_wei": "20000000000000000",
+  "balance_before_source": "data/evidence/m6/probe-summary.md row 30, read from this same endpoint before the run",
+  "balance_after_wei": "19999971686320656",
+  "l2_gas_bill_wei": "21008421000",
+  "l2_gas_bill_words": "gasUsed 21000 * effectiveGasPrice 1000401 = 21008421000; the ceiling the signed intent carried was gas_limit 21000 * maxFeePerGas 1000806 = 21016926000 (both figures read out of signed-transactions.jsonl, not typed here), so the chain charged 8505000 wei less than that ceiling, and the L2 bill alone is still short of the real total because l1Fee sits outside it",
+  "l1_data_fee_wei": "7305258344",
+  "total_wei": "28313679344",
+  "share_of_wallet_percent": "0.0001416",
+  "identity": "balance_before - balance_after == l2_gas_bill + l1_data_fee, checked by the script that wrote this file and asserted rather than printed"
+ }
+}

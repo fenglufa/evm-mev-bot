@@ -13,6 +13,7 @@ members = [
     "crates/live",
     "crates/metrics",
     "crates/pipeline",
+    "crates/execution",
     "crates/cli",
 ]
 
@@ -34,6 +35,7 @@ evm-risk = { path = "crates/risk" }
 evm-live = { path = "crates/live" }
 evm-metrics = { path = "crates/metrics" }
 evm-pipeline = { path = "crates/pipeline" }
+evm-execution = { path = "crates/execution" }
 
 alloy-primitives = { version = "=1.7.3", features = ["serde"] }
 alloy-sol-types = "=1.7.3"
@@ -41,6 +43,10 @@ async-trait = "=0.1.89"
 clap = { version = "=4.6.6", features = ["derive", "env"] }
 futures-util = { version = "=0.3.34", default-features = false, features = ["std", "sink"] }
 hex = "=0.4.3"
+# secp256k1 for local signing (§16). Pinned to the version revm already resolves, and
+# only the ECDSA + arithmetic pieces are enabled: no keystore, no derivation path, no
+# mnemonic, so nothing in this dependency can read a wallet file.
+k256 = { version = "=0.13.4", default-features = false, features = ["ecdsa", "arithmetic", "std"] }
 reqwest = { version = "=0.12.28", default-features = false, features = ["json", "rustls-tls"] }
 revm = { version = "=43.0.3", default-features = false, features = ["std", "asyncdb"] }
 serde = { version = "=1.0.229", features = ["derive"] }

@@ -141,6 +141,18 @@ pub struct SimOutcome {
     /// the job was planned, from the pinned header.
     pub risk: RiskThresholds,
     pub state_source: String,
+    /// The one balance this run manufactured, quoted in the simulation's own
+    /// words, or `None` when it manufactured none.
+    ///
+    /// M4's §58 scaffolds the test sender with a `StateOverride` so a route can
+    /// pay for gas, and that override is what §34 of M6 asks about: a transaction
+    /// whose sender could only pay because of it is buildable evidence and is not
+    /// submittable. This field is carried out of the request that applied it
+    /// rather than re-derived here, because the run's whole claim to have funded
+    /// a sender is a fact about which override *was* in the request, and a
+    /// pipeline-side guess about that is exactly the kind of statement an
+    /// evidence file should not have to trust.
+    pub sender_override: Option<String>,
     /// The finding's own claim, kept beside the answer it got.
     pub analytical_output: U256,
     pub gross_profit: U256,
@@ -596,6 +608,13 @@ async fn run_job(index: usize, job: SimulationJob, clock: Clock) -> SimOutcome {
     } = job;
     let analytical_output = request.route.analytical_output;
     let gross_profit = request.route.analytical_gross_profit;
+    // Quoted before the run, from the request that applies it: this is the one
+    // balance the run manufactured, and §34's answer about whether a transaction
+    // may reach a node reads it rather than inferring it from a mode.
+    let sender_override = request
+        .sender_setup_override()
+        .ok()
+        .map(|setup| setup.reason);
     let started = clock.now_ms();
     // The queue wait is the part of §23's latency that is *this design's* cost,
     // so it is measured as itself rather than folded into the run.
@@ -615,6 +634,7 @@ async fn run_job(index: usize, job: SimulationJob, clock: Clock) -> SimOutcome {
         timing,
         risk,
         state_source,
+        sender_override,
         analytical_output,
         gross_profit,
         queue_wait_ms: queue_wait,

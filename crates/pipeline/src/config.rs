@@ -14,6 +14,7 @@ use alloy_primitives::U256;
 use serde::Serialize;
 
 use evm_chain::BlockContext;
+use evm_execution::ExecutionSetup;
 use evm_live::{FlashblockConfig, SourceConfig};
 use evm_opportunity::LedgerPolicy;
 use evm_risk::RiskThresholds;
@@ -190,6 +191,19 @@ pub struct PipelineConfig {
     /// its own (§18, §19). `None` — the only setting a live run uses — means every
     /// state read goes to the endpoint named above.
     pub state_dump: Option<PathBuf>,
+    /// M6's execution lane, and `None` is M5's run exactly: no intent is formed,
+    /// nothing is built, signed or sent, and the session record says the lane was
+    /// absent rather than leaving the reader to infer it from an empty file.
+    ///
+    /// `Some` is not a licence to broadcast. Two independent facts stand between a
+    /// configured lane and a node, and both are the execution crate's, not this
+    /// file's: §20's mode defaults to `BuildOnly` and only `Submit` may send, and
+    /// §34 refuses to send any intent whose sender was funded by a simulation
+    /// override — which, as long as M4's §58 scaffolding is what makes a simulated
+    /// arbitrage payable, is every simulated arbitrage. Configuring `Submit`
+    /// therefore buys a signed transaction and a recorded blocked submission, not
+    /// a trade.
+    pub execution: Option<ExecutionSetup>,
     /// §75: print one line per stage as it happens, on the way a reader of a live
     /// run wants it. Off by default so a test run stays quiet; the CLI turns it on
     /// and `--quiet` turns it back off.
@@ -224,6 +238,7 @@ impl PipelineConfig {
             risk: RiskConfig::default(),
             wrapped_native: None,
             state_dump: None,
+            execution: None,
             progress: false,
         }
     }
@@ -240,6 +255,38 @@ impl PipelineConfig {
         // would only make a replay run slower than the chain it came from.
         config.source.poll_interval_ms = 0;
         config
+    }
+
+    /// What this run does after the risk decision, in the words §48's session
+    /// record carries.
+    ///
+    /// `None` is written as an absence rather than omitted: a reader comparing two
+    /// sessions has to be able to tell "this run had no execution lane" from "this
+    /// run's record did not look that far". And when the lane is present, the two
+    /// facts that decide whether anything can reach a node — the mode and §34's
+    /// override rule — are stated in the same object that names the endpoint, so a
+    /// `submit` run cannot be read as a promise it never made.
+    pub fn execution_description(&self) -> serde_json::Value {
+        match &self.execution {
+            None => serde_json::json!({
+                "lane": "absent",
+                "detail": "this run ends at the risk decision; no execution intent is formed",
+            }),
+            Some(setup) => serde_json::json!({
+                "lane": setup.mode.name(),
+                "may_sign": setup.mode.may_read_key(),
+                "may_submit": setup.mode.may_submit(),
+                "endpoint": self.rpc_url,
+                "fee_policy": setup.fee,
+                "gas_policy": setup.build.gas.describe(),
+                "maximum_gas_limit": setup.build.maximum_gas_limit,
+                "require_unoverridden_state": setup.build.require_unoverridden_state,
+                "receipt_attempts": setup.receipts.attempts,
+                "receipt_pause_ms": setup.receipts.between_attempts.as_millis(),
+                "detail": "an intent whose sender was funded by a simulation override is built \
+                           and recorded, and never submitted",
+            }),
+        }
     }
 }
 
@@ -280,6 +327,39 @@ mod tests {
             ..RiskConfig::default()
         };
         assert_eq!(configured.thresholds(&header).maximum_gas, 1234);
+    }
+
+    #[test]
+    fn a_run_without_the_execution_lane_says_so_instead_of_leaving_the_field_out() {
+        let config = PipelineConfig::live(
+            Some("http://127.0.0.1:1"),
+            None,
+            Vec::new(),
+            PathBuf::from("data/evidence/none"),
+        );
+        let described = config.execution_description();
+        assert_eq!(described["lane"], "absent");
+        assert!(config.execution.is_none(), "a live run does not opt in");
+        // A configured lane still answers two separate questions: what the mode
+        // allows, and what §34 forbids regardless of the mode.
+        let armed = PipelineConfig {
+            execution: Some(ExecutionSetup::default()),
+            ..config
+        };
+        let build_only = armed.execution_description();
+        assert_eq!(build_only["lane"], "build-only");
+        assert_eq!(build_only["may_sign"], false);
+        assert_eq!(build_only["may_submit"], false);
+        let submit = PipelineConfig {
+            execution: Some(ExecutionSetup {
+                mode: evm_execution::ExecutionMode::Submit,
+                ..ExecutionSetup::default()
+            }),
+            ..armed
+        };
+        let described = submit.execution_description();
+        assert_eq!(described["may_submit"], true);
+        assert_eq!(described["require_unoverridden_state"], true);
     }
 
     fn test_header() -> BlockContext {
