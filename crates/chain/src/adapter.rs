@@ -45,3 +45,62 @@ pub trait ChainAdapter: Send + Sync {
     /// way the chain would, and that starts from what the chain says they are.
     async fn get_nonce(&self, at: BlockNumber, address: Address) -> Result<u64>;
 }
+
+/// One adapter, held by two owners.
+///
+/// The live pipeline needs the *same* adapter answering the block reads on the
+/// state path and the state reads inside a simulation, and §62's one-provider
+/// rule is a lot easier to hold when there is literally one object than when a
+/// report claims two clones happen to point at the same backend. `Arc` is also
+/// what lets the pipeline be generic over `dyn ChainAdapter` — so the recorded
+/// directory and the live node travel through the same ingestion code (§9).
+#[async_trait]
+impl<T: ChainAdapter + ?Sized> ChainAdapter for std::sync::Arc<T> {
+    fn chain_id(&self) -> ChainId {
+        (**self).chain_id()
+    }
+
+    async fn latest_block(&self) -> Result<BlockNumber> {
+        (**self).latest_block().await
+    }
+
+    async fn get_block(&self, number: BlockNumber) -> Result<ChainBlock> {
+        (**self).get_block(number).await
+    }
+
+    async fn get_block_data(&self, number: BlockNumber) -> Result<BlockData> {
+        (**self).get_block_data(number).await
+    }
+
+    async fn get_block_context(&self, number: BlockNumber) -> Result<BlockContext> {
+        (**self).get_block_context(number).await
+    }
+
+    async fn get_logs(&self, filter: LogFilter) -> Result<Vec<ChainLog>> {
+        (**self).get_logs(filter).await
+    }
+
+    async fn call(
+        &self,
+        at: BlockNumber,
+        request: &CallRequest,
+    ) -> Result<alloy_primitives::Bytes> {
+        (**self).call(at, request).await
+    }
+
+    async fn get_code(&self, at: BlockNumber, address: Address) -> Result<alloy_primitives::Bytes> {
+        (**self).get_code(at, address).await
+    }
+
+    async fn get_balance(&self, at: BlockNumber, address: Address) -> Result<U256> {
+        (**self).get_balance(at, address).await
+    }
+
+    async fn get_storage_at(&self, at: BlockNumber, address: Address, slot: U256) -> Result<U256> {
+        (**self).get_storage_at(at, address, slot).await
+    }
+
+    async fn get_nonce(&self, at: BlockNumber, address: Address) -> Result<u64> {
+        (**self).get_nonce(at, address).await
+    }
+}

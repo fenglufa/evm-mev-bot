@@ -1,0 +1,20 @@
+=== https://sepolia-rpc.giwa.io forced HTTP/1.1 upgrade
+HTTP/1.1 405 Method Not Allowed
+Date: Wed, 30 Sep 2026 23:16:38 GMT
+Content-Length: 0
+Connection: keep-alive
+set-cookie: __cf_bm=J6nVarcBqZpTokR0qkx42yXOwl8WxuW1CHdJqObo9eM-1790810198.5624583-1.0.1.1-HX8kst.8nolZUj2z6iqjbxmde4wEdYJTHV4SDSqFDuoaM0yQAapDoS_iq1WHMX7NW2aLkHRMk7SvQL_KEBx30DFMWWuLe_C6MxaKZun3CMR3EvMSjNASYpDq8GoDJ1.9; HttpOnly; SameSite=None; Secure; Path=/; Domain=giwa.io; Expires=Wed, 30 Sep 2026 23:46:38 GMT
+Vary: Origin
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+=== https://sepolia-rpc.giwa.io http1.1 ALPN only
+=== https://sepolia-rpc-flashblocks.giwa.io forced HTTP/1.1 upgrade
+HTTP/1.1 405 Method Not Allowed
+Date: Wed, 30 Sep 2026 23:16:39 GMT
+Content-Length: 0
+Connection: keep-alive
+set-cookie: __cf_bm=svd6pZwgQUZe4_4GMTZkkSOIafoMPxS7RPFxGpW6rfA-1790810199.3151119-1.0.1.1-w4f.VoAk1mFkwbWmswjKeiFb882cY6b1uSodemP9r12UeNJoYN1neOxZIQlUGxNgUcdm9D1xzT5XNeMM.8OMRgNbjXPlDJSyl95fxDaA3P0zF_omQnuPbHgmuD8BXh_2; HttpOnly; SameSite=None; Secure; Path=/; Domain=giwa.io; Expires=Wed, 30 Sep 2026 23:46:39 GMT
+Vary: Origin
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+=== https://sepolia-rpc-flashblocks.giwa.io http1.1 ALPN only

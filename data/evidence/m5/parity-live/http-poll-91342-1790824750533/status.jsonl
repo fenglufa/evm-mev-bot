@@ -1,0 +1,4 @@
+{"gap_detected":{"from":37191150,"to":37479634},"session_id":"http-poll-91342-1790824750533"}
+{"session_id":"http-poll-91342-1790824750533","source_run_ended":{"error":"source did not end within 7700 ms of the stop request","report":null,"source":"http-poll"}}
+{"session_id":"http-poll-91342-1790824750533","simulation_worker":{"idle_polls":243,"jobs_abandoned":0,"jobs_refused":0,"jobs_run":0,"span_ms":54456,"worker":0}}
+{"session_id":"http-poll-91342-1790824750533","simulation_worker":{"idle_polls":113,"jobs_abandoned":0,"jobs_refused":0,"jobs_run":1,"span_ms":54456,"worker":1}}

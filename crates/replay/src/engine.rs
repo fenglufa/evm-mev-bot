@@ -3,6 +3,7 @@ use evm_core::{BlockNumber, ChainId};
 use evm_protocol::{ProtocolAdapter, ProtocolEvent};
 use evm_state::{InMemoryStateStore, StateError, StateSnapshot, StateStore, StateUpdate};
 
+use crate::audit::{ChangeSource, StateChange, Written};
 use crate::error::{ReplayError, Result};
 use crate::pipeline::EventPipeline;
 
@@ -17,6 +18,14 @@ pub struct ReplayReport {
     pub sync_events: u64,
     pub swap_events: u64,
     pub pool_created_events: u64,
+    /// Logs no adapter claimed. §51 forbids a decode failure or an unknown pool
+    /// being swallowed, and "we looked at 40 logs and 39 of them were nobody's
+    /// business" is only auditable if the 39 are counted.
+    pub unclaimed_logs: u64,
+    /// Syncs the store could not be asked about at all, because the pool is not
+    /// attested: a reserve statement that names an address this project has not
+    /// verified. Refused, and said so.
+    pub unattested_syncs: u64,
     pub registrations: u64,
     pub syncs_applied: u64,
     /// Syncs the store refused because the reserves themselves are not a state
@@ -27,6 +36,11 @@ pub struct ReplayReport {
     /// Pools the store knows (registered), and how many of them have reserves.
     pub pools: usize,
     pub synced_pools: usize,
+    /// §11: every write the store accepted, with its chain position, the event
+    /// that produced it, and both sides of the value. Recorded, not derived —
+    /// the engine is where the store was asked, so this is the only place the
+    /// "before" still existed.
+    pub state_changes: Vec<StateChange>,
 }
 
 /// Block range in, pool state out. The engine holds no chain-specific logic: it
@@ -98,6 +112,7 @@ impl<A: ChainAdapter> ReplayEngine<A> {
         for log in data.ordered_logs() {
             report.logs += 1;
             let Some(event) = self.pipeline.decode(log)? else {
+                report.unclaimed_logs += 1;
                 continue;
             };
             match &event {
@@ -105,11 +120,19 @@ impl<A: ChainAdapter> ReplayEngine<A> {
                 ProtocolEvent::Swap(_) => report.swap_events += 1,
                 ProtocolEvent::PoolCreated(_) => report.pool_created_events += 1,
             }
-            for update in self
+            let updates = self
                 .pipeline
-                .updates_for(&event, self.store.pool_meta(event.pool()))
-            {
+                .updates_for(&event, self.store.pool_meta(event.pool()));
+            if updates.is_empty() && matches!(event, ProtocolEvent::Sync(_)) {
+                // A reserve statement about a pool nothing attests. Nothing is
+                // written, and the refusal is counted rather than left as an
+                // absence (§51).
+                report.unattested_syncs += 1;
+            }
+            for update in updates {
                 let is_sync = matches!(update, StateUpdate::PoolSynced { .. });
+                let pool = update.pool();
+                let before = self.store.pool_state(pool).copied();
                 if let Err(err) = self.store.apply(update) {
                     // An empty reserve side is a fact about the market, not a
                     // fault in this run: refuse that one statement, keep the
@@ -123,6 +146,21 @@ impl<A: ChainAdapter> ReplayEngine<A> {
                     }
                     return Err(err.into());
                 }
+                report.state_changes.push(StateChange {
+                    block_number: log.block_number,
+                    tx_hash: log.tx_hash,
+                    tx_index: log.tx_index,
+                    log_index: log.log_index,
+                    pool,
+                    source: ChangeSource::of(&event),
+                    written: if is_sync {
+                        Written::ReserveStatement
+                    } else {
+                        Written::Registration
+                    },
+                    before,
+                    after: self.store.pool_state(pool).copied(),
+                });
                 if is_sync {
                     report.syncs_applied += 1;
                 } else {

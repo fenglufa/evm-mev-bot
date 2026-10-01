@@ -4,10 +4,12 @@
 //! block travel through identical code. Determinism is a requirement, not a
 //! hope: the same input replayed twice must produce the same snapshot.
 
+pub mod audit;
 pub mod engine;
 pub mod error;
 pub mod pipeline;
 
+pub use audit::{ChangeSource, StateChange, Written};
 pub use engine::{ReplayEngine, ReplayReport};
 pub use error::{ReplayError, Result};
 pub use pipeline::EventPipeline;

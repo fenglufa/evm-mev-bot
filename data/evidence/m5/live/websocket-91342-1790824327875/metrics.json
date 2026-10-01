@@ -1,0 +1,73 @@
+{
+  "counters": {
+    "blocks": 120,
+    "candidate_rejections": 0,
+    "candidates": 0,
+    "canonical_forwarded_for_reconciliation": 120,
+    "event.candidate": 224,
+    "event.candidate_resolved": 110,
+    "event.canonical": 120,
+    "event.gap_detected": 41,
+    "event.gap_recovered": 41,
+    "event.subscription": 1,
+    "event.unknown": 5,
+    "graph_edges": 238,
+    "graph_skipped_pools": 0,
+    "invalidated_by_pool": 0,
+    "logs": 9613,
+    "opportunities_found": 0,
+    "pool_created_events": 0,
+    "registrations": 1,
+    "rejected_syncs": 0,
+    "rejections": 0,
+    "swap_events": 38,
+    "sync_events": 69,
+    "syncs_applied": 69,
+    "unattested_syncs": 0,
+    "unclaimed_logs": 9506
+  },
+  "latency": [
+    {
+      "measured": true,
+      "name": "block_to_graph",
+      "stats": {
+        "count": 119,
+        "max_ms": 2031,
+        "min_ms": 694,
+        "name": "block_to_graph",
+        "p50_ms": 887,
+        "p95_ms": 1435,
+        "p99_ms": 1785,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "block_to_opportunity",
+      "stats": {
+        "count": 57,
+        "max_ms": 1785,
+        "min_ms": 695,
+        "name": "block_to_opportunity",
+        "p50_ms": 871,
+        "p95_ms": 1403,
+        "p99_ms": 1785,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "chain_to_received",
+      "stats": {
+        "count": 120,
+        "max_ms": 4405,
+        "min_ms": 2384,
+        "name": "chain_to_received",
+        "p50_ms": 2967,
+        "p95_ms": 3666,
+        "p99_ms": 4004,
+        "unit": "ms"
+      }
+    }
+  ]
+}

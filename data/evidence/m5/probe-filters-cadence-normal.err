@@ -1,0 +1,3 @@
+=== filter / stream methods
+--- polling eth_getFilterChanges for 20s
+=== block cadence, 12 consecutive blocks

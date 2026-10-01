@@ -1,0 +1,162 @@
+[
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 570
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/ws",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 101 Switching Protocols",
+    "bytes": 577
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/websocket",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 572
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/v2/ws",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 404 Not Found",
+    "bytes": 624
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/rpc",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 572
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 571
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/ws",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 101 Switching Protocols",
+    "bytes": 576
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/websocket",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 570
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/v2/ws",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 404 Not Found",
+    "bytes": 623
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/rpc",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 572
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 571
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/ws",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 101 Switching Protocols",
+    "bytes": 576
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/websocket",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 572
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/v2/ws",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 404 Not Found",
+    "bytes": 624
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/rpc",
+    "alpn_offered": "http/1.1",
+    "alpn_negotiated": "http/1.1",
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 572
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 572
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/ws",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 101 Switching Protocols",
+    "bytes": 577
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/websocket",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 572
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/v2/ws",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 404 Not Found",
+    "bytes": 623
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/rpc",
+    "alpn_offered": null,
+    "alpn_negotiated": null,
+    "status_line": "HTTP/1.1 405 Method Not Allowed",
+    "bytes": 572
+  }
+]

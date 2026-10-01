@@ -1,0 +1,830 @@
+[
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "transport": "https POST",
+    "rows": [
+      {
+        "method": "web3_clientVersion",
+        "answer": "string \"reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu\""
+      },
+      {
+        "method": "eth_chainId",
+        "answer": "string \"0x164ce\""
+      },
+      {
+        "method": "eth_blockNumber",
+        "answer": "string \"0x23bad5b\""
+      },
+      {
+        "method": "eth_syncing",
+        "answer": "boolean false"
+      },
+      {
+        "method": "eth_getBalance",
+        "answer": "string \"0x0\""
+      },
+      {
+        "method": "eth_getTransactionCount",
+        "answer": "string \"0x1\""
+      },
+      {
+        "method": "eth_getCode",
+        "answer": "string \"0x608060405234801561000f575f5ffd5b50600436106100cf575f3560e"
+      },
+      {
+        "method": "eth_getStorageAt",
+        "answer": "string \"0x000000000000000000000000000000000000000000000000008e1bc9b"
+      },
+      {
+        "method": "eth_call",
+        "answer": {
+          "code": 3,
+          "message": "execution reverted"
+        }
+      },
+      {
+        "method": "eth_gasPrice",
+        "answer": "string \"0xf43b8\""
+      },
+      {
+        "method": "eth_maxPriorityFeePerGas",
+        "answer": "string \"0xf4240\""
+      },
+      {
+        "method": "eth_feeHistory",
+        "answer": "object {\"baseFeePerBlobGas\":[\"0x1\",\"0x1\",\"0x1\"],\"baseFeePerGas\":[\"0"
+      },
+      {
+        "method": "eth_getBlockByNumber",
+        "answer": "object {\"baseFeePerGas\":\"0x178\",\"blobGasUsed\":\"0x322580\",\"difficult"
+      },
+      {
+        "method": "eth_getBlockByNumber#full",
+        "answer": "object {\"baseFeePerGas\":\"0x178\",\"blobGasUsed\":\"0x322580\",\"difficult"
+      },
+      {
+        "method": "eth_getBlockReceipts",
+        "answer": "object [{\"blobGasUsed\":\"0xb3b0\",\"blockHash\":\"0x26145bb7a710e3f789ea"
+      },
+      {
+        "method": "eth_getLogs",
+        "answer": "object [{\"address\":\"0xb691e7c374490905136b17cd34f1ea4a3a140635\",\"bl"
+      },
+      {
+        "method": "eth_estimateGas",
+        "answer": {
+          "code": 3,
+          "message": "execution reverted"
+        }
+      },
+      {
+        "method": "eth_sendRawTransaction",
+        "answer": {
+          "code": -32602,
+          "message": "typed transaction too short"
+        }
+      },
+      {
+        "method": "eth_sendTransaction",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "txpool_status",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "trace_block",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "rpc_methods",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_getBlockRollupHashes",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_subscribe#newHeads",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#newBlockHeaders",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#logs",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#syncing",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-flashblocks",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-flashblock",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-newFlashblocks",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-pendingLogs",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "giwa_subscribe#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_flashblocks#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "flashblocks#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "engine_subscribe#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      }
+    ]
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "transport": "wss /ws",
+    "connect": "OPEN",
+    "rows": [
+      {
+        "method": "web3_clientVersion",
+        "answer": "string \"reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu\""
+      },
+      {
+        "method": "eth_chainId",
+        "answer": "string \"0x164ce\""
+      },
+      {
+        "method": "eth_blockNumber",
+        "answer": "string \"0x23bad63\""
+      },
+      {
+        "method": "eth_syncing",
+        "answer": "boolean false"
+      },
+      {
+        "method": "eth_getBalance",
+        "answer": "string \"0x0\""
+      },
+      {
+        "method": "eth_getTransactionCount",
+        "answer": "string \"0x1\""
+      },
+      {
+        "method": "eth_getCode",
+        "answer": "string \"0x608060405234801561000f575f5ffd5b50600436106100cf575f3560e"
+      },
+      {
+        "method": "eth_getStorageAt",
+        "answer": "string \"0x000000000000000000000000000000000000000000000000008e1bc9b"
+      },
+      {
+        "method": "eth_call",
+        "answer": {
+          "code": 3,
+          "message": "execution reverted"
+        }
+      },
+      {
+        "method": "eth_gasPrice",
+        "answer": "string \"0xf43b7\""
+      },
+      {
+        "method": "eth_maxPriorityFeePerGas",
+        "answer": "string \"0xf4240\""
+      },
+      {
+        "method": "eth_feeHistory",
+        "answer": "object {\"baseFeePerBlobGas\":[\"0x1\",\"0x1\",\"0x1\"],\"baseFeePerGas\":[\"0"
+      },
+      {
+        "method": "eth_getBlockByNumber",
+        "answer": "object {\"baseFeePerGas\":\"0x178\",\"blobGasUsed\":\"0x1d69b0\",\"difficult"
+      },
+      {
+        "method": "eth_getBlockByNumber#full",
+        "answer": "object {\"baseFeePerGas\":\"0x177\",\"blobGasUsed\":\"0x643520\",\"difficult"
+      },
+      {
+        "method": "eth_getBlockReceipts",
+        "answer": "object [{\"blobGasUsed\":\"0xb3b0\",\"blockHash\":\"0x78e7492b3839e00425af"
+      },
+      {
+        "method": "eth_getLogs",
+        "answer": "object [{\"address\":\"0xb691e7c374490905136b17cd34f1ea4a3a140635\",\"bl"
+      },
+      {
+        "method": "eth_estimateGas",
+        "answer": {
+          "code": 3,
+          "message": "execution reverted"
+        }
+      },
+      {
+        "method": "eth_sendRawTransaction",
+        "answer": {
+          "code": -32602,
+          "message": "typed transaction too short"
+        }
+      },
+      {
+        "method": "eth_sendTransaction",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "txpool_status",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "trace_block",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "rpc_methods",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_getBlockRollupHashes",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_subscribe#newHeads",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#newBlockHeaders",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#logs",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#syncing",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-flashblocks",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-flashblock",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-newFlashblocks",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-pendingLogs",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "giwa_subscribe#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_flashblocks#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "flashblocks#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "engine_subscribe#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      }
+    ],
+    "notifications": 0
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "transport": "https POST",
+    "rows": [
+      {
+        "method": "web3_clientVersion",
+        "answer": "string \"reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu\""
+      },
+      {
+        "method": "eth_chainId",
+        "answer": "string \"0x164ce\""
+      },
+      {
+        "method": "eth_blockNumber",
+        "answer": "string \"0x23bad71\""
+      },
+      {
+        "method": "eth_syncing",
+        "answer": "boolean false"
+      },
+      {
+        "method": "eth_getBalance",
+        "answer": "string \"0x0\""
+      },
+      {
+        "method": "eth_getTransactionCount",
+        "answer": "string \"0x1\""
+      },
+      {
+        "method": "eth_getCode",
+        "answer": "string \"0x608060405234801561000f575f5ffd5b50600436106100cf575f3560e"
+      },
+      {
+        "method": "eth_getStorageAt",
+        "answer": "string \"0x000000000000000000000000000000000000000000000000008e1bc9b"
+      },
+      {
+        "method": "eth_call",
+        "answer": {
+          "code": 3,
+          "message": "execution reverted"
+        }
+      },
+      {
+        "method": "eth_gasPrice",
+        "answer": "string \"0xf43b9\""
+      },
+      {
+        "method": "eth_maxPriorityFeePerGas",
+        "answer": "string \"0xf4240\""
+      },
+      {
+        "method": "eth_feeHistory",
+        "answer": "object {\"baseFeePerBlobGas\":[\"0x1\",\"0x1\",\"0x1\"],\"baseFeePerGas\":[\"0"
+      },
+      {
+        "method": "eth_getBlockByNumber",
+        "answer": "object {\"baseFeePerGas\":\"0x179\",\"blobGasUsed\":\"0x2e8a10\",\"difficult"
+      },
+      {
+        "method": "eth_getBlockByNumber#full",
+        "answer": "object {\"baseFeePerGas\":\"0x179\",\"blobGasUsed\":\"0x3bfc40\",\"difficult"
+      },
+      {
+        "method": "eth_getBlockReceipts",
+        "answer": "object [{\"blobGasUsed\":\"0xb3b0\",\"blockHash\":\"0x6b04eb944378d19c9930"
+      },
+      {
+        "method": "eth_getLogs",
+        "answer": "object [{\"address\":\"0x37cd68c3aa5cbb95918844f0cc341d1905f4fcbd\",\"bl"
+      },
+      {
+        "method": "eth_estimateGas",
+        "answer": {
+          "code": 3,
+          "message": "execution reverted"
+        }
+      },
+      {
+        "method": "eth_sendRawTransaction",
+        "answer": {
+          "code": -32602,
+          "message": "typed transaction too short"
+        }
+      },
+      {
+        "method": "eth_sendTransaction",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "txpool_status",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "trace_block",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "rpc_methods",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_getBlockRollupHashes",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_subscribe#newHeads",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#newBlockHeaders",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#logs",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#syncing",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-flashblocks",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-flashblock",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-newFlashblocks",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-pendingLogs",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "giwa_subscribe#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_flashblocks#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "flashblocks#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "engine_subscribe#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      }
+    ]
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "transport": "wss /ws",
+    "connect": "OPEN",
+    "rows": [
+      {
+        "method": "web3_clientVersion",
+        "answer": "string \"reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu\""
+      },
+      {
+        "method": "eth_chainId",
+        "answer": "string \"0x164ce\""
+      },
+      {
+        "method": "eth_blockNumber",
+        "answer": "string \"0x23bad7a\""
+      },
+      {
+        "method": "eth_syncing",
+        "answer": "boolean false"
+      },
+      {
+        "method": "eth_getBalance",
+        "answer": "string \"0x0\""
+      },
+      {
+        "method": "eth_getTransactionCount",
+        "answer": "string \"0x1\""
+      },
+      {
+        "method": "eth_getCode",
+        "answer": "string \"0x608060405234801561000f575f5ffd5b50600436106100cf575f3560e"
+      },
+      {
+        "method": "eth_getStorageAt",
+        "answer": "string \"0x000000000000000000000000000000000000000000000000008e1bc9b"
+      },
+      {
+        "method": "eth_call",
+        "answer": {
+          "code": 3,
+          "message": "execution reverted"
+        }
+      },
+      {
+        "method": "eth_gasPrice",
+        "answer": "string \"0xf43b6\""
+      },
+      {
+        "method": "eth_maxPriorityFeePerGas",
+        "answer": "string \"0xf4240\""
+      },
+      {
+        "method": "eth_feeHistory",
+        "answer": "object {\"baseFeePerBlobGas\":[\"0x1\",\"0x1\",\"0x1\"],\"baseFeePerGas\":[\"0"
+      },
+      {
+        "method": "eth_getBlockByNumber",
+        "answer": "object {\"baseFeePerGas\":\"0x177\",\"blobGasUsed\":\"0x1fbb70\",\"difficult"
+      },
+      {
+        "method": "eth_getBlockByNumber#full",
+        "answer": "object {\"baseFeePerGas\":\"0x176\",\"blobGasUsed\":\"0x270b50\",\"difficult"
+      },
+      {
+        "method": "eth_getBlockReceipts",
+        "answer": "object [{\"blobGasUsed\":\"0xb3b0\",\"blockHash\":\"0xba78f41467522eee79a7"
+      },
+      {
+        "method": "eth_getLogs",
+        "answer": "object [{\"address\":\"0xb691e7c374490905136b17cd34f1ea4a3a140635\",\"bl"
+      },
+      {
+        "method": "eth_estimateGas",
+        "answer": {
+          "code": 3,
+          "message": "execution reverted"
+        }
+      },
+      {
+        "method": "eth_sendRawTransaction",
+        "answer": {
+          "code": -32602,
+          "message": "typed transaction too short"
+        }
+      },
+      {
+        "method": "eth_sendTransaction",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "txpool_status",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "trace_block",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "rpc_methods",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_getBlockRollupHashes",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_subscribe#newHeads",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#newBlockHeaders",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#logs",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#syncing",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-flashblocks",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-flashblock",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-newFlashblocks",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "eth_subscribe#GUESS-pendingLogs",
+        "answer": {
+          "code": -32603,
+          "message": "Internal error"
+        }
+      },
+      {
+        "method": "giwa_subscribe#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "eth_flashblocks#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "flashblocks#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      },
+      {
+        "method": "engine_subscribe#GUESS",
+        "answer": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        }
+      }
+    ],
+    "notifications": 0
+  }
+]

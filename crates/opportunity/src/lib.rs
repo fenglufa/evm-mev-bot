@@ -30,6 +30,7 @@ mod support;
 
 pub mod detector;
 pub mod error;
+pub mod lifecycle;
 pub mod math;
 pub mod optimizer;
 pub mod path;
@@ -39,6 +40,10 @@ pub use detector::{
     RejectionReason, SkippedPair,
 };
 pub use error::{MathError, OpportunityError, PathError, Result};
+pub use lifecycle::{
+    Direction, LedgerPolicy, LedgerStats, Lifecycle, OpportunityId, OpportunityLedger, Registered,
+    Staleness, TrackedOpportunity,
+};
 pub use math::{swap_exact_in, swap_through_two_hops};
 pub use optimizer::{
     find_optimal_input, OptimizedCycle, PricedCycle, PricedHop, SearchPolicy, SearchRecord,

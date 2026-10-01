@@ -1,2 +1,6 @@
 /target
 .DS_Store
+
+# Written on demand by `cargo test -p evm-pipeline --test record_corpus -- --ignored`;
+# nothing reads it, and the archive node still has these blocks.
+fixtures/live-m5/corpus/

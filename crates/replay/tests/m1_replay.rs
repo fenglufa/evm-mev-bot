@@ -18,7 +18,7 @@ use evm_core::{
 use evm_protocol::{
     AttestationEvidence, PoolAttestation, ProtocolError, Registry, V2Adapter, V2Topics,
 };
-use evm_replay::{ReplayEngine, ReplayError, ReplayReport};
+use evm_replay::{ChangeSource, ReplayEngine, ReplayError, ReplayReport, StateChange, Written};
 use evm_state::{InMemoryStateStore, StateError, UpdatePosition};
 
 const CHAIN: ChainId = ChainId(91342);
@@ -170,6 +170,121 @@ async fn the_later_sync_is_the_state() {
         (U256::from(120u128), U256::from(180u128))
     );
     assert_eq!(state.block_number, BlockNumber(221));
+}
+
+/// §11: every write the store accepted is recorded with the chain position that
+/// produced it and both sides of the value, so a state claim can be audited from
+/// the run's own output instead of by re-running the replay.
+#[tokio::test]
+async fn every_applied_write_carries_its_position_event_and_both_sides() {
+    let (_engine, report) = replay_all("multiple_sync", &[(POOL_A, 220)]).await;
+    let written: Vec<Written> = report
+        .state_changes
+        .iter()
+        .map(|change| change.written)
+        .collect();
+    assert_eq!(
+        written,
+        vec![
+            Written::Registration,
+            Written::ReserveStatement,
+            Written::ReserveStatement
+        ],
+        "{:#?}",
+        report.state_changes
+    );
+    // Every write here came from a `Sync` log, including the registration: the
+    // pool became known because its first reserve statement needed metadata.
+    assert!(
+        report
+            .state_changes
+            .iter()
+            .all(|change| change.source == ChangeSource::Sync),
+        "{:#?}",
+        report.state_changes
+    );
+    let syncs: Vec<&StateChange> = report
+        .state_changes
+        .iter()
+        .filter(|change| change.written == Written::ReserveStatement)
+        .collect();
+    assert_eq!(syncs.len(), 2);
+    // The first statement of a pool has no previous value to compare against.
+    assert_eq!(syncs[0].before, None);
+    let first = syncs[0].after.expect("a sync states reserves");
+    assert_eq!(
+        (first.reserve0, first.reserve1),
+        (U256::from(100u128), U256::from(200u128))
+    );
+    // The second carries the first as its `before`, so the change itself is the
+    // record — not a snapshot someone has to remember to take.
+    assert_eq!(syncs[1].before, Some(first));
+    let second = syncs[1].after.expect("synced");
+    assert_eq!(
+        (second.reserve0, second.reserve1),
+        (U256::from(120u128), U256::from(180u128))
+    );
+    assert_eq!(
+        (
+            syncs[0].block_number.0,
+            syncs[0].log_index.0,
+            syncs[0].tx_index.0
+        ),
+        (220, 5, 0),
+        "the position is the log's own, in chain order"
+    );
+    assert_eq!(
+        (
+            syncs[1].block_number.0,
+            syncs[1].log_index.0,
+            syncs[1].tx_index.0
+        ),
+        (221, 3, 0)
+    );
+    let first_tx = format!("{:#x}", syncs[0].tx_hash.0);
+    assert!(
+        first_tx.starts_with("0xa1a1"),
+        "the audit line points at the fixture's own transaction: {first_tx}"
+    );
+    assert_eq!(syncs[0].pool, pool(POOL_A));
+    // The display form is what a session file prints: no field has to be inferred.
+    let line = syncs[1].to_string();
+    for part in [
+        "block 221",
+        "tx 0",
+        "log 3",
+        &POOL_A.to_string(),
+        "Sync",
+        "synced",
+        "100/200 -> 120/180",
+    ] {
+        assert!(line.contains(part), "{line} is missing {part}");
+    }
+}
+
+/// A swap is decoded, can bring a pool into existence through attested metadata,
+/// and never states a reserve (§12's authority rule, checked where the writes are
+/// counted rather than in a comment).
+#[tokio::test]
+async fn a_swap_registers_a_pool_but_never_states_reserves() {
+    let (_engine, report) = replay_all("swap_only", &[(POOL_A, 200)]).await;
+    assert_eq!(report.swap_events, 1);
+    assert_eq!(report.state_changes.len(), 1, "{:#?}", report.state_changes);
+    let change = &report.state_changes[0];
+    assert_eq!(change.source, ChangeSource::Swap);
+    assert_eq!(change.written, Written::Registration);
+    assert_eq!(change.before, None);
+    assert_eq!(
+        change.after, None,
+        "a registration sets identity, not reserves"
+    );
+    assert!(
+        report
+            .state_changes
+            .iter()
+            .all(|change| change.written != Written::ReserveStatement),
+        "no swap may ever appear as a reserve authority"
+    );
 }
 
 /// Same-block ordering: the store follows log index, not the order the receipts

@@ -1,0 +1,4 @@
+{"gap_detected":{"from":37191150,"to":37191199},"session_id":"replay-91342-1790825517095"}
+{"session_id":"replay-91342-1790825517095","source_run_ended":{"error":null,"report":{"cycles":7,"detail":null,"ended_by":"StopRequested","events_sent":52,"read_failures":0,"source":"Replay","tracker":{"announced":50,"blocks_skipped":0,"conflicts":0,"duplicates":0,"emitted":50,"gaps_detected":1,"gaps_recovered":1,"gaps_unrecovered":0,"highest_announced":37191199,"next_expected":37191200,"stale":0}},"source":"replay"}}
+{"session_id":"replay-91342-1790825517095","simulation_worker":{"idle_polls":21,"jobs_abandoned":0,"jobs_refused":0,"jobs_run":0,"span_ms":6321,"worker":0}}
+{"session_id":"replay-91342-1790825517095","simulation_worker":{"idle_polls":19,"jobs_abandoned":0,"jobs_refused":0,"jobs_run":1,"span_ms":6321,"worker":1}}

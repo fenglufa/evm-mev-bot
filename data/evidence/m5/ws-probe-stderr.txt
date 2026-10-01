@@ -1,0 +1,2 @@
+--- wss://sepolia-rpc.giwa.io/ws: collecting notifications for 40s
+--- wss://sepolia-rpc-flashblocks.giwa.io/ws: collecting notifications for 40s

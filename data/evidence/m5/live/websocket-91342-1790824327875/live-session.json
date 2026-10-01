@@ -1,0 +1,296 @@
+{
+  "blocks": 120,
+  "capability": {
+    "flashblock": {
+      "connect": {
+        "detail": "eth_getBlockByNumber(\"pending\") answered a header",
+        "status": "PASS"
+      },
+      "decode": {
+        "fields": [
+          "number",
+          "hash",
+          "parentHash",
+          "timestamp",
+          "transactions",
+          "gasUsed"
+        ],
+        "gas_used": 2291038,
+        "hash": "0xf7ac142bcb7f365e3056ee1a6b27d4d8d5a089d60bdebaa814f8d08feab3f7c0",
+        "number": 37479216,
+        "status": "PASS",
+        "transaction_count": 21
+      },
+      "end_to_end": {
+        "detail": "a candidate stream was carried through the unified pipeline and reconciled against canonical blocks in the same session; no state was ever taken from a candidate",
+        "note": "M5 does not broadcast, does not sign and does not execute (§26)",
+        "status": "PARTIAL"
+      },
+      "endpoint": "https://sepolia-rpc-flashblocks.giwa.io",
+      "endpoint_configured_from": "cli/env",
+      "fallback": {
+        "detail": "canonical ingestion runs on the polling/WebSocket source regardless of this source; a candidate cannot advance state, so there is nothing for it to overwrite",
+        "status": "PASS"
+      },
+      "newheads_reconciliation": {
+        "canonical_covered": 111,
+        "canonical_seen": 120,
+        "detail": "candidates reconciled against canonical announcements from the same pipeline",
+        "matched_candidate_hash": 0,
+        "status": "PASS"
+      },
+      "probed": true,
+      "sequence": {
+        "distinct_candidates": 228,
+        "expired": 0,
+        "hash_refreshes": 112,
+        "numbers_seen": 116,
+        "resolved": 111,
+        "sequence_anomalies": 5,
+        "span_ms": 119986,
+        "status": "PASS"
+      },
+      "state_integration": {
+        "detail": "block 37479216 is pending and its own hash 0xf7ac142bcb7f365e3056ee1a6b27d4d8d5a089d60bdebaa814f8d08feab3f7c0 resolves to nothing, so no state can be read at a candidate",
+        "probe_method": "eth_getBlockByHash",
+        "provider_answer": "null",
+        "status": "BLOCKED"
+      },
+      "subscription": {
+        "detail": "subscription is probed by the WebSocket source, whose capability record carries the provider's own error string",
+        "status": "NOT_PROBED_HERE"
+      },
+      "transport": "http"
+    },
+    "websocket": {
+      "probed": true,
+      "subscription": {
+        "attempted": [
+          "newHeads",
+          "newBlockHeaders"
+        ],
+        "consequence": "polling eth_blockNumber over the same connection; §73 records this as BLOCKED",
+        "provider_answer": "newHeads -> rpc request failed: eth_subscribe: rpc returned an error payload: {\"code\":-32603,\"message\":\"Internal error\"}; newBlockHeaders -> rpc request failed: eth_subscribe: rpc returned an error payload: {\"code\":-32603,\"message\":\"Internal error\"}",
+        "subscribed": false
+      },
+      "transport": "websocket"
+    }
+  },
+  "chain_id": 91342,
+  "end_block": 37479331,
+  "ended_at_unix_ms": 1790824452054,
+  "ended_by": "duration elapsed",
+  "endpoints": {
+    "flashblocks_url": "https://sepolia-rpc-flashblocks.giwa.io",
+    "rpc_url": "https://sepolia-rpc.giwa.io",
+    "ws_url": "wss://sepolia-rpc.giwa.io/ws"
+  },
+  "events": 542,
+  "findings_settled": 0,
+  "ledger": {
+    "duplicates": 0,
+    "evicted_for_space": 0,
+    "highest_active": 0,
+    "invalidated_by_pool": 0,
+    "registered": 0
+  },
+  "milestone": "M5",
+  "milestone_note": "M5 stops at a risk decision: nothing here broadcasts, signs, deploys, or bids gas (§26).",
+  "no_execution": "no broadcast: M4 simulates. An Accept here means the simulation satisfied the stated thresholds, not that a transaction was or may be sent.",
+  "opportunities": 0,
+  "pools": {
+    "known": 1,
+    "registry": 6,
+    "synced": 1
+  },
+  "queues": {
+    "event_queue": {
+      "bounded": true,
+      "capacity": 32,
+      "on_full": "block the source; market events are never dropped (§51)"
+    },
+    "outcome_queue": {
+      "bounded": true,
+      "capacity": 32,
+      "on_full": "block the worker, not the pipeline"
+    },
+    "simulation_queue": {
+      "bounded": true,
+      "capacity": 16,
+      "on_full": "decline the job, count it, keep the finding in the ledger; ingestion never waits on a simulation (§23)"
+    },
+    "simulation_workers": 2
+  },
+  "registry_dirs": [
+    "data/protocols",
+    "data/protocols-m3"
+  ],
+  "risk_decisions": {
+    "accept": 0,
+    "reject": 0,
+    "unknown": 0
+  },
+  "risk_thresholds": {
+    "detail": "an unset maximum_gas is answered per block by that block's own gas limit",
+    "maximum_gas": null,
+    "minimum_net_profit_wei": "0"
+  },
+  "session_id": "websocket-91342-1790824327875",
+  "simulation_workers": [
+    {
+      "idle_polls": 398,
+      "jobs_abandoned": 0,
+      "jobs_refused": 0,
+      "jobs_run": 0,
+      "span_ms": 120904,
+      "worker": 0
+    },
+    {
+      "idle_polls": 397,
+      "jobs_abandoned": 0,
+      "jobs_refused": 0,
+      "jobs_run": 0,
+      "span_ms": 120904,
+      "worker": 1
+    }
+  ],
+  "simulations": 0,
+  "source": "websocket",
+  "sources": [
+    {
+      "capability": {
+        "probed": true,
+        "subscription": {
+          "attempted": [
+            "newHeads",
+            "newBlockHeaders"
+          ],
+          "consequence": "polling eth_blockNumber over the same connection; §73 records this as BLOCKED",
+          "provider_answer": "newHeads -> rpc request failed: eth_subscribe: rpc returned an error payload: {\"code\":-32603,\"message\":\"Internal error\"}; newBlockHeaders -> rpc request failed: eth_subscribe: rpc returned an error payload: {\"code\":-32603,\"message\":\"Internal error\"}",
+          "subscribed": false
+        },
+        "transport": "websocket"
+      },
+      "error": null,
+      "report": {
+        "cycles": 79,
+        "detail": null,
+        "ended_by": "StopRequested",
+        "events_sent": 203,
+        "read_failures": 0,
+        "source": "WebSocket",
+        "tracker": {
+          "announced": 121,
+          "blocks_skipped": 0,
+          "conflicts": 0,
+          "duplicates": 0,
+          "emitted": 121,
+          "gaps_detected": 41,
+          "gaps_recovered": 41,
+          "gaps_unrecovered": 0,
+          "highest_announced": 37479332,
+          "next_expected": 37479333,
+          "stale": 0
+        }
+      },
+      "source": "websocket"
+    },
+    {
+      "capability": {
+        "connect": {
+          "detail": "eth_getBlockByNumber(\"pending\") answered a header",
+          "status": "PASS"
+        },
+        "decode": {
+          "fields": [
+            "number",
+            "hash",
+            "parentHash",
+            "timestamp",
+            "transactions",
+            "gasUsed"
+          ],
+          "gas_used": 2291038,
+          "hash": "0xf7ac142bcb7f365e3056ee1a6b27d4d8d5a089d60bdebaa814f8d08feab3f7c0",
+          "number": 37479216,
+          "status": "PASS",
+          "transaction_count": 21
+        },
+        "end_to_end": {
+          "detail": "a candidate stream was carried through the unified pipeline and reconciled against canonical blocks in the same session; no state was ever taken from a candidate",
+          "note": "M5 does not broadcast, does not sign and does not execute (§26)",
+          "status": "PARTIAL"
+        },
+        "endpoint": "https://sepolia-rpc-flashblocks.giwa.io",
+        "endpoint_configured_from": "cli/env",
+        "fallback": {
+          "detail": "canonical ingestion runs on the polling/WebSocket source regardless of this source; a candidate cannot advance state, so there is nothing for it to overwrite",
+          "status": "PASS"
+        },
+        "newheads_reconciliation": {
+          "canonical_covered": 111,
+          "canonical_seen": 120,
+          "detail": "candidates reconciled against canonical announcements from the same pipeline",
+          "matched_candidate_hash": 0,
+          "status": "PASS"
+        },
+        "probed": true,
+        "sequence": {
+          "distinct_candidates": 228,
+          "expired": 0,
+          "hash_refreshes": 112,
+          "numbers_seen": 116,
+          "resolved": 111,
+          "sequence_anomalies": 5,
+          "span_ms": 119986,
+          "status": "PASS"
+        },
+        "state_integration": {
+          "detail": "block 37479216 is pending and its own hash 0xf7ac142bcb7f365e3056ee1a6b27d4d8d5a089d60bdebaa814f8d08feab3f7c0 resolves to nothing, so no state can be read at a candidate",
+          "probe_method": "eth_getBlockByHash",
+          "provider_answer": "null",
+          "status": "BLOCKED"
+        },
+        "subscription": {
+          "detail": "subscription is probed by the WebSocket source, whose capability record carries the provider's own error string",
+          "status": "NOT_PROBED_HERE"
+        },
+        "transport": "http"
+      },
+      "error": null,
+      "report": {
+        "cycles": 236,
+        "detail": {
+          "canonical_covered": 111,
+          "canonical_seen": 120,
+          "distinct_candidates": 228,
+          "expired": 0,
+          "gas_used_max": 15686187,
+          "hash_refreshes": 112,
+          "highest_canonical": 37479331,
+          "highest_pending": 37479336,
+          "matched": 0,
+          "numbers_seen": 116,
+          "observations": 236,
+          "read_failures": 0,
+          "reads": 236,
+          "resolved": 111,
+          "sequence_anomalies": 5,
+          "span_ms": 119986,
+          "transactions_observed": 8000
+        },
+        "ended_by": "StopRequested",
+        "events_sent": 344,
+        "read_failures": 0,
+        "source": "Flashblock",
+        "tracker": null
+      },
+      "source": "flashblock"
+    }
+  ],
+  "start_block": 37479211,
+  "started_at_unix_ms": 1790824327875,
+  "state_changes": 70,
+  "state_source": "chain: the source this run reads its blocks from",
+  "wrapped_native": "0x4200000000000000000000000000000000000006"
+}

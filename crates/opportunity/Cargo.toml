@@ -7,6 +7,7 @@ license.workspace = true
 [dependencies]
 evm-core.workspace = true
 evm-graph.workspace = true
+evm-state.workspace = true
 alloy-primitives.workspace = true
 serde.workspace = true
 thiserror.workspace = true

@@ -1,0 +1,125 @@
+{
+  "blocks": 48,
+  "capability": {
+    "replay": {
+      "probed": true,
+      "transport": "recorded"
+    }
+  },
+  "chain_id": 91342,
+  "end_block": 37472544,
+  "ended_at_unix_ms": 1790826078121,
+  "ended_by": "every source ended",
+  "endpoints": {
+    "flashblocks_url": null,
+    "rpc_url": null,
+    "ws_url": null
+  },
+  "events": 50,
+  "findings_settled": 0,
+  "ledger": {
+    "duplicates": 0,
+    "evicted_for_space": 0,
+    "highest_active": 0,
+    "invalidated_by_pool": 0,
+    "registered": 0
+  },
+  "milestone": "M5",
+  "milestone_note": "M5 stops at a risk decision: nothing here broadcasts, signs, deploys, or bids gas (§26).",
+  "no_execution": "no broadcast: M4 simulates. An Accept here means the simulation satisfied the stated thresholds, not that a transaction was or may be sent.",
+  "opportunities": 0,
+  "pools": {
+    "known": 1,
+    "registry": 6,
+    "synced": 1
+  },
+  "queues": {
+    "event_queue": {
+      "bounded": true,
+      "capacity": 32,
+      "on_full": "block the source; market events are never dropped (§51)"
+    },
+    "outcome_queue": {
+      "bounded": true,
+      "capacity": 32,
+      "on_full": "block the worker, not the pipeline"
+    },
+    "simulation_queue": {
+      "bounded": true,
+      "capacity": 16,
+      "on_full": "decline the job, count it, keep the finding in the ledger; ingestion never waits on a simulation (§23)"
+    },
+    "simulation_workers": 2
+  },
+  "registry_dirs": [
+    "data/protocols",
+    "data/protocols-m3"
+  ],
+  "risk_decisions": {
+    "accept": 0,
+    "reject": 0,
+    "unknown": 0
+  },
+  "risk_thresholds": {
+    "detail": "an unset maximum_gas is answered per block by that block's own gas limit",
+    "maximum_gas": null,
+    "minimum_net_profit_wei": "0"
+  },
+  "session_id": "replay-91342-1790826072401",
+  "simulation_workers": [
+    {
+      "idle_polls": 17,
+      "jobs_abandoned": 0,
+      "jobs_refused": 0,
+      "jobs_run": 0,
+      "span_ms": 5419,
+      "worker": 0
+    },
+    {
+      "idle_polls": 18,
+      "jobs_abandoned": 0,
+      "jobs_refused": 0,
+      "jobs_run": 0,
+      "span_ms": 5419,
+      "worker": 1
+    }
+  ],
+  "simulations": 0,
+  "source": "replay",
+  "sources": [
+    {
+      "capability": {
+        "probed": true,
+        "transport": "recorded"
+      },
+      "error": null,
+      "report": {
+        "cycles": 7,
+        "detail": null,
+        "ended_by": "Exhausted",
+        "events_sent": 50,
+        "read_failures": 0,
+        "source": "Replay",
+        "tracker": {
+          "announced": 48,
+          "blocks_skipped": 0,
+          "conflicts": 0,
+          "duplicates": 0,
+          "emitted": 48,
+          "gaps_detected": 1,
+          "gaps_recovered": 1,
+          "gaps_unrecovered": 0,
+          "highest_announced": 37472544,
+          "next_expected": 37472545,
+          "stale": 0
+        }
+      },
+      "source": "replay"
+    }
+  ],
+  "start_block": 37472496,
+  "started_at_unix_ms": 1790826072401,
+  "state_changes": 43,
+  "state_source": "chain: the source this run reads its blocks from",
+  "wrapped_native": "0x4200000000000000000000000000000000000006"
+}

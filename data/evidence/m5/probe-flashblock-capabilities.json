@@ -1,0 +1,308 @@
+[
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "connect": "OPEN",
+    "rate": {
+      "samples": 120,
+      "sleep_ms": 100,
+      "wall_ms": 39879,
+      "avg_iter_ms": 335
+    },
+    "pending_numbers_observed": 40,
+    "distinct_pending_hashes": 108,
+    "rerresh_interval_ms": {
+      "n": 68,
+      "min": 318,
+      "p50": 324,
+      "p95": 410,
+      "max": 450
+    },
+    "per_number_top": [
+      {
+        "number": 37466102,
+        "samples": 3,
+        "distinct_hashes": 3,
+        "tx_min": 23,
+        "tx_max": 45,
+        "span_ms": 646
+      },
+      {
+        "number": 37466103,
+        "samples": 3,
+        "distinct_hashes": 3,
+        "tx_min": 20,
+        "tx_max": 35,
+        "span_ms": 658
+      },
+      {
+        "number": 37466104,
+        "samples": 3,
+        "distinct_hashes": 3,
+        "tx_min": 25,
+        "tx_max": 48,
+        "span_ms": 640
+      },
+      {
+        "number": 37466105,
+        "samples": 3,
+        "distinct_hashes": 3,
+        "tx_min": 24,
+        "tx_max": 39,
+        "span_ms": 638
+      },
+      {
+        "number": 37466106,
+        "samples": 3,
+        "distinct_hashes": 3,
+        "tx_min": 27,
+        "tx_max": 48,
+        "span_ms": 646
+      },
+      {
+        "number": 37466107,
+        "samples": 3,
+        "distinct_hashes": 3,
+        "tx_min": 13,
+        "tx_max": 40,
+        "span_ms": 642
+      },
+      {
+        "number": 37466108,
+        "samples": 4,
+        "distinct_hashes": 3,
+        "tx_min": 18,
+        "tx_max": 38,
+        "span_ms": 977
+      },
+      {
+        "number": 37466109,
+        "samples": 1,
+        "distinct_hashes": 1,
+        "tx_min": 30,
+        "tx_max": 30,
+        "span_ms": 0
+      }
+    ],
+    "probe_block": {
+      "t": 1790811224346,
+      "number": 37466109,
+      "hash": "0x2d75a1fa5d5e53f2796d5524921c9f70044427dbb4c621c8827082b4c018e370",
+      "parent": "0x0be5d6a824e07e3d04302d0767139c64ad6c7088e6d3fa0bfb09dcc26331ed4b",
+      "txs": 30,
+      "gasUsed": 10840292,
+      "ts": 1790811225
+    },
+    "capabilities": {
+      "eth_getBlockByNumber(pending,full)": {
+        "outcome": "OK",
+        "shape": "object{baseFeePerGas,blobGasUsed,difficulty,excessBlobGas,extraData,gasLimit,gasUsed,hash,logsBloom,miner,mixHash,nonce,number,parentBeaconBlockRoot,parentHash,receiptsRoot,requestsHash,sha3Uncles,size,stateRoot,timestamp,transactions,transactionsRoot,uncles,withdrawals,withdrawalsRoot}"
+      },
+      "eth_getBlockByHash(pendingHash,false)": {
+        "outcome": "OK",
+        "shape": "null"
+      },
+      "eth_getLogs(blockHash=pendingHash)": {
+        "outcome": "ERROR",
+        "code": -32001,
+        "message": "block not found: hash 0x2d75a1fa5d5e53f2796d5524921c9f70044427dbb4c621c8827082b4c018e370"
+      },
+      "eth_getLogs(number=pendingNumber)": {
+        "outcome": "OK",
+        "shape": "array[0]"
+      },
+      "eth_getBlockReceipts(pendingHash)": {
+        "outcome": "OK",
+        "shape": "null"
+      },
+      "eth_getBlockReceipts(pending)": {
+        "outcome": "OK",
+        "shape": "array[9] of object{blobGasUsed,blockHash,blockNumber,contractAddress,cumulativeGasUsed,daFootprintGasScalar,depositNonce,depositReceiptVersion,effectiveGasPrice,from,gasUsed,l1BaseFeeScalar,l1BlobBaseFee,l1BlobBaseFeeScalar,l1Fee,l1GasPrice,l1GasUsed,logs,logsBloom,status,to,transactionHash,transactionIndex,type}"
+      },
+      "eth_call(at pendingHash)": {
+        "outcome": "ERROR",
+        "code": -32001,
+        "message": "block not found: hash 0x2d75a1fa5d5e53f2796d5524921c9f70044427dbb4c621c8827082b4c018e370"
+      },
+      "eth_call(at pendingTag)": {
+        "outcome": "OK",
+        "shape": "string 0x"
+      },
+      "eth_getBalance(at pendingHash)": {
+        "outcome": "ERROR",
+        "code": -32001,
+        "message": "block not found: hash 0x2d75a1fa5d5e53f2796d5524921c9f70044427dbb4c621c8827082b4c018e370"
+      },
+      "eth_getStorageAt(at pendingHash)": {
+        "outcome": "ERROR",
+        "code": -32001,
+        "message": "block not found: hash 0x2d75a1fa5d5e53f2796d5524921c9f70044427dbb4c621c8827082b4c018e370"
+      },
+      "eth_getTransactionReceipt(pending tx)": {
+        "note": "needs a tx hash from the pending block",
+        "skipped": true
+      }
+    },
+    "pendingTx": {
+      "hash": "0x839754ecc6072b12a9d5d9d6f90d899d6ca84288a3a74d65ebecd3107e682e5c",
+      "in_pending_block": true,
+      "eth_getTransactionByHash": {
+        "outcome": "OK",
+        "shape": "object{blockHash,blockNumber,blockTimestamp,from,gas,gasPrice,hash,input,mint,r,s,sourceHash,to,transactionIndex,type,v,value,yParity}"
+      },
+      "eth_getTransactionReceipt": {
+        "outcome": "OK",
+        "shape": "object{blobGasUsed,blockHash,blockNumber,contractAddress,cumulativeGasUsed,daFootprintGasScalar,depositNonce,depositReceiptVersion,effectiveGasPrice,from,gasUsed,l1BaseFeeScalar,l1BlobBaseFee,l1BlobBaseFeeScalar,l1Fee,l1GasPrice,l1GasUsed,logs,logsBloom,status,to,transactionHash,transactionIndex,type}"
+      }
+    }
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "connect": "OPEN",
+    "rate": {
+      "samples": 120,
+      "sleep_ms": 100,
+      "wall_ms": 38851,
+      "avg_iter_ms": 326
+    },
+    "pending_numbers_observed": 40,
+    "distinct_pending_hashes": 40,
+    "rerresh_interval_ms": {
+      "n": 0,
+      "p50": null,
+      "p95": null
+    },
+    "per_number_top": [
+      {
+        "number": 37466144,
+        "samples": 3,
+        "distinct_hashes": 1,
+        "tx_min": 53,
+        "tx_max": 53,
+        "span_ms": 633
+      },
+      {
+        "number": 37466145,
+        "samples": 3,
+        "distinct_hashes": 1,
+        "tx_min": 37,
+        "tx_max": 37,
+        "span_ms": 625
+      },
+      {
+        "number": 37466146,
+        "samples": 3,
+        "distinct_hashes": 1,
+        "tx_min": 48,
+        "tx_max": 48,
+        "span_ms": 630
+      },
+      {
+        "number": 37466147,
+        "samples": 3,
+        "distinct_hashes": 1,
+        "tx_min": 38,
+        "tx_max": 38,
+        "span_ms": 645
+      },
+      {
+        "number": 37466148,
+        "samples": 3,
+        "distinct_hashes": 1,
+        "tx_min": 47,
+        "tx_max": 47,
+        "span_ms": 646
+      },
+      {
+        "number": 37466149,
+        "samples": 3,
+        "distinct_hashes": 1,
+        "tx_min": 41,
+        "tx_max": 41,
+        "span_ms": 622
+      },
+      {
+        "number": 37466150,
+        "samples": 3,
+        "distinct_hashes": 1,
+        "tx_min": 51,
+        "tx_max": 51,
+        "span_ms": 787
+      },
+      {
+        "number": 37466151,
+        "samples": 3,
+        "distinct_hashes": 1,
+        "tx_min": 33,
+        "tx_max": 33,
+        "span_ms": 645
+      }
+    ],
+    "probe_block": {
+      "t": 1790811267538,
+      "number": 37466151,
+      "hash": "0xa8a06953f2066b78c05c31c10d95af23363769ebf508763bd92cb62a8bb3a742",
+      "parent": "0x4d6d69668ee97f8ca13b9d2776802e1848de3d36a9f7643536921598bdcb6f04",
+      "txs": 33,
+      "gasUsed": 5211313,
+      "ts": 1790811267
+    },
+    "capabilities": {
+      "eth_getBlockByNumber(pending,full)": {
+        "outcome": "OK",
+        "shape": "object{baseFeePerGas,blobGasUsed,difficulty,excessBlobGas,extraData,gasLimit,gasUsed,hash,logsBloom,miner,mixHash,nonce,number,parentBeaconBlockRoot,parentHash,receiptsRoot,requestsHash,sha3Uncles,size,stateRoot,timestamp,transactions,transactionsRoot,uncles,withdrawals,withdrawalsRoot}"
+      },
+      "eth_getBlockByHash(pendingHash,false)": {
+        "outcome": "OK",
+        "shape": "object{baseFeePerGas,blobGasUsed,difficulty,excessBlobGas,extraData,gasLimit,gasUsed,hash,logsBloom,miner,mixHash,nonce,number,parentBeaconBlockRoot,parentHash,receiptsRoot,requestsHash,sha3Uncles,size,stateRoot,timestamp,transactions,transactionsRoot,uncles,withdrawals,withdrawalsRoot}"
+      },
+      "eth_getLogs(blockHash=pendingHash)": {
+        "outcome": "OK",
+        "shape": "array[65] of object{address,blockHash,blockNumber,blockTimestamp,data,logIndex,removed,topics,transactionHash,transactionIndex}"
+      },
+      "eth_getLogs(number=pendingNumber)": {
+        "outcome": "OK",
+        "shape": "array[65] of object{address,blockHash,blockNumber,blockTimestamp,data,logIndex,removed,topics,transactionHash,transactionIndex}"
+      },
+      "eth_getBlockReceipts(pendingHash)": {
+        "outcome": "OK",
+        "shape": "array[33] of object{blobGasUsed,blockHash,blockNumber,contractAddress,cumulativeGasUsed,daFootprintGasScalar,depositNonce,depositReceiptVersion,effectiveGasPrice,from,gasUsed,l1BaseFeeScalar,l1BlobBaseFee,l1BlobBaseFeeScalar,l1Fee,l1GasPrice,l1GasUsed,logs,logsBloom,status,to,transactionHash,transactionIndex,type}"
+      },
+      "eth_getBlockReceipts(pending)": {
+        "outcome": "OK",
+        "shape": "array[42] of object{blobGasUsed,blockHash,blockNumber,contractAddress,cumulativeGasUsed,daFootprintGasScalar,depositNonce,depositReceiptVersion,effectiveGasPrice,from,gasUsed,l1BaseFeeScalar,l1BlobBaseFee,l1BlobBaseFeeScalar,l1Fee,l1GasPrice,l1GasUsed,logs,logsBloom,status,to,transactionHash,transactionIndex,type}"
+      },
+      "eth_call(at pendingHash)": {
+        "outcome": "OK",
+        "shape": "string 0x"
+      },
+      "eth_call(at pendingTag)": {
+        "outcome": "OK",
+        "shape": "string 0x"
+      },
+      "eth_getBalance(at pendingHash)": {
+        "outcome": "OK",
+        "shape": "string 0x1bd9687e270566a1"
+      },
+      "eth_getStorageAt(at pendingHash)": {
+        "outcome": "OK",
+        "shape": "string 0x00000000000000000000000000000000000000"
+      },
+      "eth_getTransactionReceipt(pending tx)": {
+        "note": "needs a tx hash from the pending block",
+        "skipped": true
+      }
+    },
+    "pendingTx": {
+      "hash": "0xbe97367cdbf9a688663ea724ee44972b97f6cf0ffb24359ceecfa1e9ad03390b",
+      "in_pending_block": true,
+      "eth_getTransactionByHash": {
+        "outcome": "OK",
+        "shape": "object{blockHash,blockNumber,blockTimestamp,depositReceiptVersion,from,gas,gasPrice,hash,input,mint,nonce,r,s,sourceHash,to,transactionIndex,type,v,value,yParity}"
+      },
+      "eth_getTransactionReceipt": {
+        "outcome": "OK",
+        "shape": "object{blobGasUsed,blockHash,blockNumber,contractAddress,cumulativeGasUsed,daFootprintGasScalar,depositNonce,depositReceiptVersion,effectiveGasPrice,from,gasUsed,l1BaseFeeScalar,l1BlobBaseFee,l1BlobBaseFeeScalar,l1Fee,l1GasPrice,l1GasUsed,logs,logsBloom,status,to,transactionHash,transactionIndex,type}"
+      }
+    }
+  }
+]

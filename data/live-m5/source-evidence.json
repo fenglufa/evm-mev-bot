@@ -1,0 +1,264 @@
+{
+  "milestone": "M5",
+  "generated_at_utc": "2026-09-30T23:54:33Z",
+  "generated_by": "probes in data/evidence/m5/, run by the M5 coding agent against the live endpoints",
+  "purpose": "config source for the live pipeline and its tests (\u00a744: no endpoint literal in business code) and the capability record (\u00a773, supplement: probe before implementing)",
+  "chain": {
+    "name": "GIWA Testnet (sepolia, op-reth)",
+    "chain_id": 91342,
+    "canonical_block_cadence_ms": 1000,
+    "cadence_evidence": "probe-filters-cadence-*.txt: 12 consecutive canonical blocks, timestamp gaps all 1s"
+  },
+  "endpoints": {
+    "rpc_http": "https://sepolia-rpc.giwa.io",
+    "ws": "wss://sepolia-rpc.giwa.io/ws",
+    "flashblocks_rpc_http": "https://sepolia-rpc-flashblocks.giwa.io",
+    "flashblocks_ws": "wss://sepolia-rpc-flashblocks.giwa.io/ws",
+    "url_shape_note": "the WebSocket upgrade answers 101 only at path /ws; /, /rpc, /websocket answer 405 and /v2/ws answers 404 (probe-ws-raw-handshake.json)"
+  },
+  "environment_variables": [
+    "GIWA_RPC_URL",
+    "GIWA_WS_URL",
+    "GIWA_FLASHBLOCKS_URL"
+  ],
+  "transport_capabilities": {
+    "http_json_rpc": "available",
+    "websocket": "available at /ws only",
+    "eth_subscribe": {
+      "status": "BLOCKED",
+      "observed_error": "-32603 Internal error for every kind, on both hosts, over HTTP and over wss /ws",
+      "not_a_whitelist_artifact": "-32601 'rpc method is not whitelisted' is what a blocked method gets; eth_subscribe is past the whitelist and fails downstream",
+      "kinds_tried": [
+        "newHeads",
+        "newBlockHeaders",
+        "logs",
+        "syncing",
+        "giwa_flashblocks",
+        "flashblocks",
+        "pendingTransactions",
+        "eth_subscribe"
+      ],
+      "notifications_observed_in_40s": 0,
+      "evidence": [
+        "probe-ws-raw-handshake.json",
+        "ws-probe-raw.json",
+        "method-matrix.json"
+      ]
+    },
+    "stateful_filters": {
+      "status": "UNRELIABLE",
+      "detail": "eth_newBlockFilter/eth_newFilter/eth_newPendingTransactionFilter return ids but eth_getFilterChanges answers -32602 'filter not found' for most of them: the load balancer is not sticky (probe-filters-cadence-*.txt)"
+    },
+    "single_connection_consistency": {
+      "detail": "one WebSocket connection pins one backend; HTTPS calls under the same host name do not",
+      "evidence": "probe-ws-pending-single-connection.json"
+    }
+  },
+  "flashblocks": {
+    "endpoint": "https://sepolia-rpc-flashblocks.giwa.io",
+    "mechanism_observed": "the pending tag, re-delivered roughly every 320 ms with growing content",
+    "refresh_interval_ms": {
+      "n": 68,
+      "min": 318,
+      "p50": 324,
+      "p95": 410,
+      "max": 450
+    },
+    "same_number_repeats": {
+      "flashblocks_host": {
+        "pending_numbers": 40,
+        "distinct_pending_hashes": 108,
+        "examples": [
+          {
+            "pending_number": 37465941,
+            "samples": 2,
+            "distinct_hashes": 2,
+            "tx_counts": [
+              20,
+              41
+            ],
+            "gas_used": [
+              1898807,
+              3328067
+            ],
+            "span_ms": 629,
+            "monotonic_growth": true
+          },
+          {
+            "pending_number": 37465942,
+            "samples": 2,
+            "distinct_hashes": 2,
+            "tx_counts": [
+              32,
+              61
+            ],
+            "gas_used": [
+              2534912,
+              7697091
+            ],
+            "span_ms": 614,
+            "monotonic_growth": true
+          },
+          {
+            "pending_number": 37465944,
+            "samples": 2,
+            "distinct_hashes": 2,
+            "tx_counts": [
+              20,
+              48
+            ],
+            "gas_used": [
+              1649274,
+              10409988
+            ],
+            "span_ms": 613,
+            "monotonic_growth": true
+          },
+          {
+            "pending_number": 37465946,
+            "samples": 2,
+            "distinct_hashes": 2,
+            "tx_counts": [
+              31,
+              67
+            ],
+            "gas_used": [
+              2107606,
+              4343745
+            ],
+            "span_ms": 618,
+            "monotonic_growth": true
+          }
+        ]
+      },
+      "normal_host_control": {
+        "pending_numbers": 40,
+        "distinct_pending_hashes": 40,
+        "examples": [
+          {
+            "pending_number": 37465910,
+            "samples": 2,
+            "distinct_hashes": 1,
+            "tx_counts": [
+              47,
+              47
+            ],
+            "gas_used": [
+              5261091,
+              5261091
+            ],
+            "span_ms": 646,
+            "monotonic_growth": true
+          },
+          {
+            "pending_number": 37465912,
+            "samples": 2,
+            "distinct_hashes": 1,
+            "tx_counts": [
+              45,
+              45
+            ],
+            "gas_used": [
+              3354081,
+              3354081
+            ],
+            "span_ms": 644,
+            "monotonic_growth": true
+          }
+        ]
+      },
+      "conclusion": "not load-balancer skew: the repeats above were measured inside one connection, and on the flashblocks host a repeated pending number carries a different hash with monotonically growing transaction count and gasUsed, while on the normal host the same number always carries the same hash"
+    },
+    "reads_on_a_flashblock_hash": {
+      "eth_getBlockByHash": "null",
+      "eth_getLogs_by_blockHash": "error -32001 block not found: hash <pending hash>",
+      "eth_getLogs_at_pending_number": "[] (empty, although the same pending block reports transactions)",
+      "eth_getBlockReceipts_by_hash": "null",
+      "eth_call_at_blockHash": "error -32001 block not found",
+      "eth_getBalance_at_blockHash": "error -32001 block not found",
+      "eth_getStorageAt_at_blockHash": "error -32001 block not found",
+      "consequence": "a flashblock carries no logs, no receipts and no state root access, so it cannot produce a StateUpdate; FlashblockSource can only observe candidate blocks and reconcile them against canonical ones (\u00a727-31, \u00a773)"
+    },
+    "supported_methods_per_giwa_docs": [
+      "eth_call",
+      "eth_estimateGas",
+      "eth_getBalance",
+      "eth_getBlockByNumber",
+      "eth_getLogs",
+      "eth_getTransactionCount",
+      "eth_getTransactionByHash",
+      "eth_getTransactionReceipt",
+      "eth_simulateV1"
+    ]
+  },
+  "polling_ingestion": {
+    "serial_four_call_loop": {
+      "ms_per_iteration": 1276.7,
+      "unique_blocks": 60,
+      "block_range": [
+        37466533,
+        37466610
+      ],
+      "detail": "4 serial round-trips take longer than the 1 s cadence, so a live source must walk block numbers rather than only reading the head"
+    },
+    "per_call_ms": {
+      "blockNumber": {
+        "p50": 226,
+        "p95": 368,
+        "max": 745
+      },
+      "block": {
+        "p50": 230,
+        "p95": 340,
+        "max": 553
+      },
+      "receipts": {
+        "p50": 259,
+        "p95": 953,
+        "max": 1169
+      },
+      "getLogs": {
+        "p50": 244,
+        "p95": 366,
+        "max": 435
+      }
+    },
+    "detection_lag_ms": {
+      "min": 2349,
+      "p50": 2958,
+      "p95": 3994,
+      "max": 4178
+    },
+    "detection_lag_note": "wall clock at read minus block.timestamp, so it contains both the provider's propagation delay and this loop's own serial work",
+    "anomalies": {
+      "head_regressions": 0,
+      "announced_block_missing": 0,
+      "log_count_disagreements": 0,
+      "skipped_blocks_because_of_serial_loop": 17,
+      "parent_mismatches_only_where_blocks_were_skipped": true
+    },
+    "evidence": "probe-polling-ingestion-timing.json"
+  },
+  "log_source_equivalence": {
+    "blocks_compared": 12,
+    "count_equal_every_block": true,
+    "receipt_logs_field_identical_to_getLogs": true,
+    "receipt_logs_already_in_global_log_index_order": true,
+    "receipt_position_matches_transactionIndex": true,
+    "log_fields": [
+      "address",
+      "blockHash",
+      "blockNumber",
+      "blockTimestamp",
+      "data",
+      "logIndex",
+      "removed",
+      "topics",
+      "transactionHash",
+      "transactionIndex"
+    ],
+    "consequence": "live ingestion can build the same ChainLog/BlockData the M1 fixtures contain from eth_getBlockReceipts alone, which is what lets Replay and Live share one decode path",
+    "evidence": "probe-log-shape-parity.json"
+  },
+  "safety_note": "eth_sendRawTransaction IS whitelisted on this public endpoint (it reached the node and answered -32602 typed transaction too short). M5 must therefore prove by test, not by assertion, that this codebase never calls it (\u00a726, \u00a771)."
+}

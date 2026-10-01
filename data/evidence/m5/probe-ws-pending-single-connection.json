@@ -1,0 +1,626 @@
+[
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "connect": "OPEN",
+    "window_ms": 25869,
+    "latest_range": [
+      37465908,
+      37465934
+    ],
+    "latest_advances": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "pending_numbers_seen": [
+      37465910,
+      37465911,
+      37465912,
+      37465913,
+      37465914,
+      37465915,
+      37465916,
+      37465917,
+      37465918,
+      37465919,
+      37465920,
+      37465921,
+      37465922,
+      37465923,
+      37465924,
+      37465925,
+      37465926,
+      37465927,
+      37465928,
+      37465929,
+      37465930,
+      37465931,
+      37465932,
+      37465933,
+      37465934,
+      37465935,
+      37465936
+    ],
+    "pending_number_steps": [
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1
+    ],
+    "same_number_seen_twice": [
+      {
+        "pending_number": 37465910,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          47,
+          47
+        ],
+        "gas_used": [
+          5261091,
+          5261091
+        ],
+        "span_ms": 646,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465912,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          45,
+          45
+        ],
+        "gas_used": [
+          3354081,
+          3354081
+        ],
+        "span_ms": 644,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465914,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          55,
+          55
+        ],
+        "gas_used": [
+          17395811,
+          17395811
+        ],
+        "span_ms": 640,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465915,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          53,
+          53
+        ],
+        "gas_used": [
+          7303995,
+          7303995
+        ],
+        "span_ms": 643,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465917,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          56,
+          56
+        ],
+        "gas_used": [
+          5650404,
+          5650404
+        ],
+        "span_ms": 634,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465919,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          38,
+          38
+        ],
+        "gas_used": [
+          3764603,
+          3764603
+        ],
+        "span_ms": 650,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465922,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          43,
+          43
+        ],
+        "gas_used": [
+          8460516,
+          8460516
+        ],
+        "span_ms": 642,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465924,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          56,
+          56
+        ],
+        "gas_used": [
+          6155165,
+          6155165
+        ],
+        "span_ms": 642,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465926,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          70,
+          70
+        ],
+        "gas_used": [
+          9146566,
+          9146566
+        ],
+        "span_ms": 660,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465927,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          47,
+          47
+        ],
+        "gas_used": [
+          4409082,
+          4409082
+        ],
+        "span_ms": 672,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465929,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          53,
+          53
+        ],
+        "gas_used": [
+          11979696,
+          11979696
+        ],
+        "span_ms": 672,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465931,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          48,
+          48
+        ],
+        "gas_used": [
+          4237984,
+          4237984
+        ],
+        "span_ms": 689,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465933,
+        "samples": 2,
+        "distinct_hashes": 1,
+        "tx_counts": [
+          53,
+          53
+        ],
+        "gas_used": [
+          11676459,
+          11676459
+        ],
+        "span_ms": 633,
+        "monotonic_growth": true
+      }
+    ],
+    "errors": []
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "connect": "OPEN",
+    "window_ms": 24701,
+    "latest_range": [
+      37465936,
+      37465960
+    ],
+    "latest_advances": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "pending_numbers_seen": [
+      37465938,
+      37465939,
+      37465940,
+      37465941,
+      37465942,
+      37465943,
+      37465944,
+      37465945,
+      37465946,
+      37465947,
+      37465948,
+      37465949,
+      37465950,
+      37465951,
+      37465952,
+      37465953,
+      37465954,
+      37465955,
+      37465956,
+      37465957,
+      37465958,
+      37465961,
+      37465962,
+      37465963
+    ],
+    "pending_number_steps": [
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      3,
+      0,
+      1,
+      0,
+      1
+    ],
+    "same_number_seen_twice": [
+      {
+        "pending_number": 37465941,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          20,
+          41
+        ],
+        "gas_used": [
+          1898807,
+          3328067
+        ],
+        "span_ms": 629,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465942,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          32,
+          61
+        ],
+        "gas_used": [
+          2534912,
+          7697091
+        ],
+        "span_ms": 614,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465944,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          20,
+          48
+        ],
+        "gas_used": [
+          1649274,
+          10409988
+        ],
+        "span_ms": 613,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465946,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          31,
+          67
+        ],
+        "gas_used": [
+          2107606,
+          4343745
+        ],
+        "span_ms": 618,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465947,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          44,
+          79
+        ],
+        "gas_used": [
+          2889974,
+          5473673
+        ],
+        "span_ms": 616,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465949,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          17,
+          45
+        ],
+        "gas_used": [
+          1071256,
+          4087953
+        ],
+        "span_ms": 607,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465951,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          26,
+          46
+        ],
+        "gas_used": [
+          7573667,
+          15307529
+        ],
+        "span_ms": 652,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465952,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          37,
+          56
+        ],
+        "gas_used": [
+          3805189,
+          5846714
+        ],
+        "span_ms": 613,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465954,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          25,
+          35
+        ],
+        "gas_used": [
+          3535506,
+          5037354
+        ],
+        "span_ms": 621,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465956,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          11,
+          43
+        ],
+        "gas_used": [
+          676725,
+          9833699
+        ],
+        "span_ms": 606,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465957,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          24,
+          42
+        ],
+        "gas_used": [
+          2151692,
+          3099017
+        ],
+        "span_ms": 616,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465958,
+        "samples": 4,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          43,
+          56,
+          56,
+          56
+        ],
+        "gas_used": [
+          3523932,
+          5062871,
+          5062871,
+          5062871
+        ],
+        "span_ms": 1864,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465961,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          25,
+          57
+        ],
+        "gas_used": [
+          2092332,
+          6472098
+        ],
+        "span_ms": 614,
+        "monotonic_growth": true
+      },
+      {
+        "pending_number": 37465962,
+        "samples": 2,
+        "distinct_hashes": 2,
+        "tx_counts": [
+          26,
+          47
+        ],
+        "gas_used": [
+          1380682,
+          2641600
+        ],
+        "span_ms": 613,
+        "monotonic_growth": true
+      }
+    ],
+    "errors": []
+  }
+]

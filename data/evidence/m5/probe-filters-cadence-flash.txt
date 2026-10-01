@@ -1,0 +1,33 @@
+eth_newBlockFilter                 -> "0x46efad3293a4a1efa90a3474a5fd9f7"
+eth_newPendingTransactionFilter    -> "0xb47c8a7319ed41ed65a51ad6062ce3e6"
+eth_newFilter                      -> "0x80bc48f55a2ba9f5ef3a9b2995e40e83"
+getFilterChanges #0 -> {"code":-32602,"message":"filter not found"}
+getFilterChanges #1 -> ["0x8837fffb237cc35e827c595292485570d2b5ae8973c585e71e8131ab4d81e703","0xd78447357581e0275fa5f2209a2
+getFilterChanges #2 -> {"code":-32602,"message":"filter not found"}
+getFilterChanges #3 -> {"code":-32602,"message":"filter not found"}
+getFilterChanges #4 -> {"code":-32602,"message":"filter not found"}
+getFilterChanges #5 -> ["0x06c6fa396a9dd33bf46e92a9e218b2052b715739ecc35fe3d867b00f941cb704","0xe7b6de0acb978a82120f9e021b1
+getFilterChanges #6 -> {"code":-32602,"message":"filter not found"}
+getFilterChanges #7 -> ["0xda6ce7824e5fd89d5445810358ca704912daf7b819f51b9a531a0966dedd7055","0xf68f0a824233c87c8abb2fb2b98
+getFilterChanges #8 -> {"code":-32602,"message":"filter not found"}
+getFilterChanges #9 -> {"code":-32602,"message":"filter not found"}
+eth_uninstallFilter -> false
+{
+ "from": 37465608,
+ "to": 37465619,
+ "gaps": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "ts_span": 11
+}
+=== header field names as actually returned: ["baseFeePerGas","blobGasUsed","difficulty","excessBlobGas","extraData","gasLimit","gasUsed","hash","logsBloom","miner","mixHash","nonce","number","parentBeaconBlockRoot","parentHash","receiptsRoot","requestsHash","sha3Uncles","size","stateRoot","timestamp","transactions","transactionsRoot","uncles","withdrawals","withdrawalsRoot"]

@@ -1,0 +1,50 @@
+[
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/",
+    "result": "TLS/TCP error",
+    "detail": ""
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/ws",
+    "result": "TLS/TCP error",
+    "detail": ""
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/websocket",
+    "result": "TLS/TCP error",
+    "detail": ""
+  },
+  {
+    "host": "sepolia-rpc.giwa.io",
+    "path": "/v2/ws",
+    "result": "TLS/TCP error",
+    "detail": ""
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/",
+    "result": "TLS/TCP error",
+    "detail": ""
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/ws",
+    "result": "TLS/TCP error",
+    "detail": ""
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/websocket",
+    "result": "TLS/TCP error",
+    "detail": ""
+  },
+  {
+    "host": "sepolia-rpc-flashblocks.giwa.io",
+    "path": "/v2/ws",
+    "result": "TLS/TCP error",
+    "detail": ""
+  }
+]

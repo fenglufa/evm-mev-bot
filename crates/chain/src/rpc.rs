@@ -15,6 +15,11 @@ use crate::types::{
 
 /// JSON-RPC over HTTP. The only place in the codebase that knows the wire
 /// format of a provider response.
+///
+/// `Clone` shares the [`reqwest::Client`], and with it the connection pool: a
+/// caller that needs this adapter both as a [`ChainAdapter`] and as a reader in
+/// another task gets two handles to one endpoint, not two endpoints (§62).
+#[derive(Clone)]
 pub struct HttpChainAdapter {
     http: reqwest::Client,
     url: String,
@@ -38,6 +43,17 @@ impl HttpChainAdapter {
 
     async fn request(&self, method: &str, params: Value) -> Result<Value> {
         Self::request_with(&self.http, &self.url, method, params).await
+    }
+
+    /// The same request, for a caller that needs the raw provider JSON rather
+    /// than a normalized type. Only used to keep one header-parsing path between
+    /// the HTTP adapter and any other transport (see [`crate::head`]).
+    pub async fn request_raw(&self, method: &str, params: Value) -> Result<Value> {
+        Self::request_with(&self.http, &self.url, method, params).await
+    }
+
+    pub fn url(&self) -> &str {
+        &self.url
     }
 
     async fn request_with(
@@ -128,6 +144,30 @@ fn parse_u256(value: &Value, context: &str) -> Result<U256> {
 
 fn block_param(number: BlockNumber) -> String {
     format!("{:#x}", number.0)
+}
+
+/// A block header from a provider's own JSON.
+///
+/// One function rather than two copies, so a header read over HTTP, a header read
+/// over one pinned WebSocket connection, and a header read out of a recording
+/// normalize identically — which is the §9 requirement that Live and Replay share
+/// one state semantics, applied one layer below state.
+pub fn chain_block_from_value(chain_id: ChainId, raw: &Value) -> Result<ChainBlock> {
+    let get = |key: &str| -> Result<&Value> {
+        raw.get(key)
+            .ok_or_else(|| ChainError::Decode(format!("block is missing `{key}`")))
+    };
+    Ok(ChainBlock {
+        chain_id,
+        number: BlockNumber(parse_u64(get("number")?, "block.number")?),
+        hash: parse_b256(get("hash")?, "block.hash")?,
+        parent_hash: parse_b256(get("parentHash")?, "block.parentHash")?,
+        timestamp: parse_u64(get("timestamp")?, "block.timestamp")?,
+        transaction_count: get("transactions")?
+            .as_array()
+            .ok_or_else(|| ChainError::Decode("block.transactions is not an array".to_string()))?
+            .len(),
+    })
 }
 
 fn normalize_log(chain_id: ChainId, raw: &Value) -> Result<ChainLog> {
@@ -248,23 +288,7 @@ impl ChainAdapter for HttpChainAdapter {
                 number.0
             )));
         }
-        let get = |key: &str| -> Result<&Value> {
-            raw.get(key)
-                .ok_or_else(|| ChainError::Decode(format!("block is missing `{key}`")))
-        };
-        Ok(ChainBlock {
-            chain_id: self.chain_id,
-            number: BlockNumber(parse_u64(get("number")?, "block.number")?),
-            hash: parse_b256(get("hash")?, "block.hash")?,
-            parent_hash: parse_b256(get("parentHash")?, "block.parentHash")?,
-            timestamp: parse_u64(get("timestamp")?, "block.timestamp")?,
-            transaction_count: get("transactions")?
-                .as_array()
-                .ok_or_else(|| {
-                    ChainError::Decode("block.transactions is not an array".to_string())
-                })?
-                .len(),
-        })
+        chain_block_from_value(self.chain_id, &raw)
     }
 
     async fn get_block_context(&self, number: BlockNumber) -> Result<BlockContext> {

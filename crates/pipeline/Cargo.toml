@@ -1,0 +1,24 @@
+[package]
+name = "evm-pipeline"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+evm-core.workspace = true
+evm-chain.workspace = true
+evm-protocol.workspace = true
+evm-state.workspace = true
+evm-graph.workspace = true
+evm-opportunity.workspace = true
+evm-replay.workspace = true
+evm-simulation.workspace = true
+evm-risk.workspace = true
+evm-live.workspace = true
+evm-metrics.workspace = true
+alloy-primitives.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true

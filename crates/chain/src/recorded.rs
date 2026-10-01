@@ -21,6 +21,37 @@ pub struct RecordedChainAdapter {
 }
 
 impl RecordedChainAdapter {
+    /// The chain id a recorded directory belongs to, read from its own lowest
+    /// block file.
+    ///
+    /// A replay run has no endpoint to ask `eth_chainId` of, and §45 forbids
+    /// carrying a chain number in business code — so the directory's own contents
+    /// are the authority, and [`Self::load`] then refuses any block that disagrees
+    /// with the number it was read under.
+    pub fn chain_id_of(dir: &Path) -> Result<ChainId> {
+        let mut paths: Vec<PathBuf> = std::fs::read_dir(dir)
+            .map_err(|e| ChainError::Io(format!("{}: {e}", dir.display())))?
+            .filter_map(|entry| entry.ok().map(|entry| entry.path()))
+            .filter(|path| {
+                path.file_name()
+                    .and_then(|name| name.to_str())
+                    .is_some_and(|name| name.starts_with("block-") && name.ends_with(".json"))
+            })
+            .collect();
+        paths.sort();
+        let first = paths.first().ok_or_else(|| {
+            ChainError::Io(format!(
+                "{} holds no block-*.json to read a chain id from",
+                dir.display()
+            ))
+        })?;
+        let text = std::fs::read_to_string(first)
+            .map_err(|e| ChainError::Io(format!("{}: {e}", first.display())))?;
+        let data: BlockData = serde_json::from_str(&text)
+            .map_err(|e| ChainError::Decode(format!("{}: {e}", first.display())))?;
+        Ok(data.block.chain_id)
+    }
+
     pub fn load(dir: &Path, chain_id: ChainId) -> Result<Self> {
         let mut blocks = BTreeMap::new();
         let mut entries: Vec<PathBuf> = Vec::new();
@@ -131,6 +162,16 @@ impl RecordedChainAdapter {
 
     pub fn available_blocks(&self) -> Vec<BlockNumber> {
         self.blocks.keys().copied().collect()
+    }
+
+    /// The lowest number the directory holds.
+    ///
+    /// A live bootstrap asks for the head and moves forward from it (§7); a
+    /// recorded corpus has no head to chase, and a parity run has to start at the
+    /// first block the directory actually has — otherwise the earliest recorded
+    /// block is skipped because it is below "the head".
+    pub fn first_block(&self) -> Option<BlockNumber> {
+        self.blocks.keys().next().copied()
     }
 }
 

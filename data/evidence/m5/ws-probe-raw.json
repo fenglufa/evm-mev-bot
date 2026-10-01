@@ -1,0 +1,186 @@
+[
+  {
+    "host": "wss://sepolia-rpc.giwa.io/ws",
+    "started_at": "2026-09-30T23:19:12.428Z",
+    "steps": [
+      {
+        "method": "web3_clientVersion",
+        "params": [],
+        "answer": {
+          "jsonrpc": "2.0",
+          "result": "reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu",
+          "id": 1
+        }
+      },
+      {
+        "method": "eth_chainId",
+        "params": [],
+        "answer": {
+          "jsonrpc": "2.0",
+          "result": "0x164ce",
+          "id": 2
+        }
+      },
+      {
+        "method": "eth_blockNumber",
+        "params": [],
+        "answer": {
+          "jsonrpc": "2.0",
+          "result": "0x23bac94",
+          "id": 3
+        }
+      },
+      {
+        "method": "rpc_methods",
+        "params": [],
+        "answer": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32601,
+            "message": "rpc method is not whitelisted"
+          },
+          "id": 4
+        }
+      },
+      {
+        "method": "eth_subscribe",
+        "params": [
+          "newHeads"
+        ],
+        "answer": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32603,
+            "message": "Internal error"
+          },
+          "id": 5
+        }
+      },
+      {
+        "method": "eth_subscribe",
+        "params": [
+          "logs",
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578"
+          }
+        ],
+        "answer": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32603,
+            "message": "Internal error"
+          },
+          "id": 6
+        }
+      },
+      {
+        "method": "eth_subscribe",
+        "params": [
+          "newPendingTransactions"
+        ],
+        "answer": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32603,
+            "message": "Internal error"
+          },
+          "id": 7
+        }
+      }
+    ],
+    "notifications": [],
+    "connect": "OPEN"
+  },
+  {
+    "host": "wss://sepolia-rpc-flashblocks.giwa.io/ws",
+    "started_at": "2026-09-30T23:19:54.884Z",
+    "steps": [
+      {
+        "method": "web3_clientVersion",
+        "params": [],
+        "answer": {
+          "jsonrpc": "2.0",
+          "result": "reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu",
+          "id": 1
+        }
+      },
+      {
+        "method": "eth_chainId",
+        "params": [],
+        "answer": {
+          "jsonrpc": "2.0",
+          "result": "0x164ce",
+          "id": 2
+        }
+      },
+      {
+        "method": "eth_blockNumber",
+        "params": [],
+        "answer": {
+          "jsonrpc": "2.0",
+          "result": "0x23bacbf",
+          "id": 3
+        }
+      },
+      {
+        "method": "rpc_methods",
+        "params": [],
+        "answer": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32601,
+            "message": "rpc method is not whitelisted"
+          },
+          "id": 4
+        }
+      },
+      {
+        "method": "eth_subscribe",
+        "params": [
+          "newHeads"
+        ],
+        "answer": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32603,
+            "message": "Internal error"
+          },
+          "id": 5
+        }
+      },
+      {
+        "method": "eth_subscribe",
+        "params": [
+          "logs",
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578"
+          }
+        ],
+        "answer": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32603,
+            "message": "Internal error"
+          },
+          "id": 6
+        }
+      },
+      {
+        "method": "eth_subscribe",
+        "params": [
+          "newPendingTransactions"
+        ],
+        "answer": {
+          "jsonrpc": "2.0",
+          "error": {
+            "code": -32603,
+            "message": "Internal error"
+          },
+          "id": 7
+        }
+      }
+    ],
+    "notifications": [],
+    "connect": "OPEN"
+  }
+]
