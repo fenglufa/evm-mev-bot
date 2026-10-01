@@ -175,11 +175,11 @@ impl BlockTracker {
         }
         // The gap is the range the head claimed in one step, clipped to what is
         // still owed: a head that arrives one block at a time is a chain running
-        // at its own cadence, not a hole in our ingestion. The clip is a no-op in
-        // practice — `next_expected` can never pass `last_head + 1`, since no number
-        // is read ahead of the head that offered it — but it is what lets a test
-        // that reads slower than the chain (§57) assert that no hole was claimed, and
-        // it keeps `GapDetected` naming the range that still has to be recovered.
+        // at its own cadence, not a hole in our ingestion. The clip cannot bind —
+        // `next_expected` never passes `last_head + 1`, because no number is read
+        // ahead of the head that offered it — so what keeps a lagging reader out of
+        // `GapDetected` is the comparison against the head's own step, which
+        // `a_head_that_advances_one_at_a_time_is_lag_and_not_a_gap` pins.
         let from = jumped_from.max(self.next_expected.0);
         if head.0 > from {
             match self.open_hole {
