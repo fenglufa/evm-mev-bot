@@ -1,0 +1,125 @@
+{
+  "blocks": 50,
+  "capability": {
+    "http-poll": {
+      "probed": true,
+      "transport": "http"
+    }
+  },
+  "chain_id": 91342,
+  "end_block": 37191199,
+  "ended_at_unix_ms": 1790827871179,
+  "ended_by": "max blocks reached",
+  "endpoints": {
+    "flashblocks_url": null,
+    "rpc_url": "https://sepolia-rpc.giwa.io",
+    "ws_url": null
+  },
+  "events": 51,
+  "findings_settled": 2,
+  "ledger": {
+    "duplicates": 0,
+    "evicted_for_space": 0,
+    "highest_active": 2,
+    "invalidated_by_pool": 0,
+    "registered": 2
+  },
+  "milestone": "M5",
+  "milestone_note": "M5 stops at a risk decision: nothing here broadcasts, signs, deploys, or bids gas (§26).",
+  "no_execution": "no broadcast: M4 simulates. An Accept here means the simulation satisfied the stated thresholds, not that a transaction was or may be sent.",
+  "opportunities": 2,
+  "pools": {
+    "known": 4,
+    "registry": 6,
+    "synced": 4
+  },
+  "queues": {
+    "event_queue": {
+      "bounded": true,
+      "capacity": 32,
+      "on_full": "block the source; market events are never dropped (§51)"
+    },
+    "outcome_queue": {
+      "bounded": true,
+      "capacity": 32,
+      "on_full": "block the worker, not the pipeline"
+    },
+    "simulation_queue": {
+      "bounded": true,
+      "capacity": 16,
+      "on_full": "decline the job, count it, keep the finding in the ledger; ingestion never waits on a simulation (§23)"
+    },
+    "simulation_workers": 2
+  },
+  "registry_dirs": [
+    "data/protocols",
+    "data/protocols-m3"
+  ],
+  "risk_decisions": {
+    "accept": 0,
+    "reject": 1,
+    "unknown": 0
+  },
+  "risk_thresholds": {
+    "detail": "an unset maximum_gas is answered per block by that block's own gas limit",
+    "maximum_gas": null,
+    "minimum_net_profit_wei": "0"
+  },
+  "session_id": "http-poll-91342-1790827809140",
+  "simulation_workers": [
+    {
+      "idle_polls": 282,
+      "jobs_abandoned": 0,
+      "jobs_refused": 0,
+      "jobs_run": 0,
+      "span_ms": 61423,
+      "worker": 0
+    },
+    {
+      "idle_polls": 120,
+      "jobs_abandoned": 0,
+      "jobs_refused": 0,
+      "jobs_run": 1,
+      "span_ms": 61423,
+      "worker": 1
+    }
+  ],
+  "simulations": 1,
+  "source": "http-poll",
+  "sources": [
+    {
+      "capability": {
+        "probed": true,
+        "transport": "http"
+      },
+      "error": null,
+      "report": {
+        "cycles": 11,
+        "detail": null,
+        "ended_by": "StopRequested",
+        "events_sent": 84,
+        "read_failures": 0,
+        "source": "HttpPoll",
+        "tracker": {
+          "announced": 83,
+          "blocks_skipped": 0,
+          "conflicts": 0,
+          "duplicates": 0,
+          "emitted": 83,
+          "gaps_detected": 1,
+          "gaps_recovered": 0,
+          "gaps_unrecovered": 0,
+          "highest_announced": 37191232,
+          "next_expected": 37191233,
+          "stale": 0
+        }
+      },
+      "source": "http-poll"
+    }
+  ],
+  "start_block": 37191149,
+  "started_at_unix_ms": 1790827809140,
+  "state_changes": 9,
+  "state_source": "chain: the source this run reads its blocks from",
+  "wrapped_native": "0x4200000000000000000000000000000000000006"
+}

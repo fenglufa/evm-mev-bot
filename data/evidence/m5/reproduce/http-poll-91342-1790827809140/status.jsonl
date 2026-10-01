@@ -1,0 +1,4 @@
+{"gap_detected":{"from":37191150,"to":37482692},"session_id":"http-poll-91342-1790827809140"}
+{"session_id":"http-poll-91342-1790827809140","source_run_ended":{"error":null,"report":{"cycles":11,"detail":null,"ended_by":"StopRequested","events_sent":84,"read_failures":0,"source":"HttpPoll","tracker":{"announced":83,"blocks_skipped":0,"conflicts":0,"duplicates":0,"emitted":83,"gaps_detected":1,"gaps_recovered":0,"gaps_unrecovered":0,"highest_announced":37191232,"next_expected":37191233,"stale":0}},"source":"http-poll"}}
+{"session_id":"http-poll-91342-1790827809140","simulation_worker":{"idle_polls":282,"jobs_abandoned":0,"jobs_refused":0,"jobs_run":0,"span_ms":61423,"worker":0}}
+{"session_id":"http-poll-91342-1790827809140","simulation_worker":{"idle_polls":120,"jobs_abandoned":0,"jobs_refused":0,"jobs_run":1,"span_ms":61423,"worker":1}}

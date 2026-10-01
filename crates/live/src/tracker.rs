@@ -175,7 +175,11 @@ impl BlockTracker {
         }
         // The gap is the range the head claimed in one step, clipped to what is
         // still owed: a head that arrives one block at a time is a chain running
-        // at its own cadence, not a hole in our ingestion.
+        // at its own cadence, not a hole in our ingestion. The clip is a no-op in
+        // practice — `next_expected` can never pass `last_head + 1`, since no number
+        // is read ahead of the head that offered it — but it is what lets a test
+        // that reads slower than the chain (§57) assert that no hole was claimed, and
+        // it keeps `GapDetected` naming the range that still has to be recovered.
         let from = jumped_from.max(self.next_expected.0);
         if head.0 > from {
             match self.open_hole {
@@ -499,6 +503,51 @@ mod tests {
         assert_eq!(canonicals(&last), vec![14]);
         assert_eq!(tracker.stats().gaps_detected, 1);
         assert_eq!(tracker.stats().gaps_recovered, 1);
+    }
+
+    #[test]
+    fn a_head_that_advances_one_at_a_time_is_lag_and_not_a_gap() {
+        // §57's "no misjudged gap" from the other side of §5: a hole is the head
+        // passing a number it never offered, not the reader being behind. Here the
+        // head advances exactly one number per poll while two numbers are owed — a
+        // queue — and a tracker that called that a gap would report every continuous
+        // live run as broken.
+        let mut tracker = BlockTracker::new(CHAIN, BlockNumber(9), TrackerPolicy::default());
+        assert!(tracker.note_head(BlockNumber(10)).is_empty());
+        // The reader is slower than the chain: 10 has not been read when the head
+        // says 11, and 11 has not been read when the head says 12. Two numbers owed
+        // at once is a queue.
+        assert_eq!(
+            tracker.owed(BlockNumber(11), 8),
+            vec![BlockNumber(10), BlockNumber(11)]
+        );
+        assert!(
+            tracker.note_head(BlockNumber(11)).is_empty(),
+            "the head stepped one block at a time; nothing was jumped over"
+        );
+        assert_eq!(
+            canonicals(&tracker.observe(block(10, 10, SourceKind::HttpPoll))),
+            vec![10]
+        );
+        assert!(tracker.note_head(BlockNumber(12)).is_empty());
+        assert_eq!(
+            tracker.owed(BlockNumber(12), 8),
+            vec![BlockNumber(11), BlockNumber(12)]
+        );
+        for number in [11u64, 12] {
+            tracker.observe(block(number, number as u8, SourceKind::HttpPoll));
+        }
+        assert_eq!(tracker.next_expected(), BlockNumber(13));
+        let stats = tracker.stats();
+        assert_eq!(
+            (
+                stats.gaps_detected,
+                stats.gaps_recovered,
+                stats.blocks_skipped
+            ),
+            (0, 0, 0),
+            "a lagging reader must not be reported as a broken chain"
+        );
     }
 
     #[test]
