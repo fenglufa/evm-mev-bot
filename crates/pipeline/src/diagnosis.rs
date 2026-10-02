@@ -37,10 +37,11 @@ use std::fs::{File, OpenOptions};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use evm_chain::{RpcCallEvent, RpcTraceSource};
+use evm_chain::{RpcAttempt, RpcCallEvent, RpcTraceSource};
 use evm_metrics::baseline::stats;
 use evm_metrics::unix_ms;
 use evm_simulation::StateReadStats;
+use serde::Deserialize;
 use serde_json::{json, Value};
 
 use crate::error::{PipelineError, Result};
@@ -523,6 +524,50 @@ impl SimulationDiagnosis {
         }
     }
 
+    /// Rebuild one simulation from the trace line [`Self::to_trace_line`] wrote for it.
+    ///
+    /// The line is a complete account of its simulation — window, calls, boundary tally,
+    /// endpoint digest — so the four figures this module derives ([`Self::new`]'s timeline,
+    /// the duplicate tally, the method rows and the storage and account lists) come back out
+    /// of the calls rather than being copied in. That is the point of the decoder: §19's
+    /// merged directory is assembled by replaying runs' lines through the same writer that
+    /// produced them, and a round trip that returns the same bytes is the evidence that the
+    /// replay adds no second account of anything.
+    ///
+    /// Refusals are not part of `Self` — [`Self::to_trace_line`] takes them as an argument —
+    /// so [`trace_line_refusals`] reads the line's own list and a caller passes the pair on
+    /// together.
+    ///
+    /// A line this build cannot read is refused with the reason, never guessed at: silently
+    /// dropping a field would put a wrong figure in an evidence file, and a wrong figure in
+    /// evidence is the one failure mode this milestone cannot report afterwards.
+    pub fn from_trace_line(line: &Value) -> std::result::Result<Self, String> {
+        let schema = required_u64(line, "diagnosis_schema")?;
+        if schema != DIAGNOSIS_SCHEMA {
+            return Err(format!(
+                "this line was written by schema {schema} and this build reads \
+                 {DIAGNOSIS_SCHEMA}, so the fields a replay depends on are not the ones this \
+                 code names"
+            ));
+        }
+        let source = source_from_str(required_str(line, "source")?)?;
+        let window = SimulationWindow {
+            simulation_id: required_str(line, "simulation_id")?.to_string(),
+            source,
+            chain_id: optional_u64(line, "chain_id")?,
+            block_number: optional_u64(line, "block_number")?,
+            state_source: optional_str(line, "state_source")?,
+            started_ns: required_u64(line, "started_ns")?,
+            finished_ns: required_u64(line, "finished_ns")?,
+        };
+        let events = trace_calls(line)?;
+        let state_reads = trace_state_reads(line)?;
+        let endpoint_id = optional_str(line, "endpoint_id")?;
+        Ok(Self::new(window, events)
+            .with_state_reads(state_reads)
+            .with_endpoint(endpoint_id))
+    }
+
     /// Attach the sink's endpoint identity. The third of the three `with_*` attachers, for
     /// the same reason: it is a fact read off the sink after the calls, not a function of
     /// the calls themselves.
@@ -747,6 +792,212 @@ impl SimulationDiagnosis {
 /// The three account legs §9 counts, by the method each one uses on the wire.
 const ACCOUNT_READ_METHODS: [&str; 3] =
     ["eth_getCode", "eth_getBalance", "eth_getTransactionCount"];
+
+/// One HTTP attempt, read back off a trace line.
+///
+/// A mirror of [`evm_chain::RpcAttempt`] rather than that type with `Deserialize` on it:
+/// the recorded type is what the wire path builds, and deriving a decoder for it would put
+/// a parse step on the object a call writes at the moment the call finishes. The two are
+/// kept in agreement by the round trip — a line decoded and re-emitted comes back with the
+/// same attempt list it went in with — not by a comment saying they match.
+#[derive(Deserialize)]
+struct TraceAttempt {
+    started_ns: u64,
+    finished_ns: u64,
+    duration_ns: u64,
+    outcome: String,
+}
+
+/// One recorded call, read back off a trace line. Same mirror, same reason.
+#[derive(Deserialize)]
+struct TraceCall {
+    trace_schema: u64,
+    rpc_id: u64,
+    method: String,
+    #[serde(default)]
+    block: Option<String>,
+    #[serde(default)]
+    target: Option<String>,
+    #[serde(default)]
+    slot: Option<String>,
+    started_ns: u64,
+    finished_ns: u64,
+    duration_ns: u64,
+    success: bool,
+    #[serde(default)]
+    error_class: Option<String>,
+    #[serde(default)]
+    error_detail: Option<String>,
+    attempts: Vec<TraceAttempt>,
+    #[serde(default)]
+    dedup_key: Option<String>,
+    #[serde(default)]
+    key_note: Option<String>,
+}
+
+/// [`RpcTraceSource`]'s own word back into the variant, for a line read from disk.
+fn source_from_str(word: &str) -> std::result::Result<RpcTraceSource, String> {
+    [
+        RpcTraceSource::Live,
+        RpcTraceSource::Replay,
+        RpcTraceSource::Fixture,
+    ]
+    .into_iter()
+    .find(|source| source.as_str() == word)
+    .ok_or_else(|| format!("`{word}` is not one of the three sources this build writes"))
+}
+
+/// The closed set of failure classes, as the strings the record carries.
+const ERROR_CLASSES: [&str; 5] = [
+    evm_chain::CLASS_SEND_FAILED,
+    evm_chain::CLASS_NON_JSON,
+    evm_chain::CLASS_HTTP_STATUS,
+    evm_chain::CLASS_NODE_REJECTED,
+    evm_chain::CLASS_DECODE_FAILED,
+];
+
+/// One class word back into the `&'static str` the recorded type holds.
+fn class_from_str(word: &str) -> std::result::Result<&'static str, String> {
+    ERROR_CLASSES
+        .into_iter()
+        .find(|known| *known == word)
+        .ok_or_else(|| format!("`{word}` is not one of the five failure classes this build emits"))
+}
+
+/// One `key_note` word back into the constant, plus [`evm_chain::CLASS_OK`] for an attempt
+/// that did not fail — the two sets an event's `error_class` and an attempt's `outcome`
+/// share.
+fn note_from_str(word: &str) -> std::result::Result<&'static str, String> {
+    [
+        evm_chain::DEDUP_KEY_UNAVAILABLE_FOR_METHOD,
+        evm_chain::DEDUP_KEY_PARAMS_UNREADABLE,
+    ]
+    .into_iter()
+    .find(|known| *known == word)
+    .ok_or_else(|| format!("`{word}` is not one of the two `key_note` reasons this build emits"))
+}
+
+/// The calls one trace line holds, as the recorded type.
+fn trace_calls(line: &Value) -> std::result::Result<Vec<RpcCallEvent>, String> {
+    let list: Vec<TraceCall> =
+        serde_json::from_value(line["calls"].clone()).map_err(|error| format!("calls: {error}"))?;
+    list.into_iter().map(trace_call).collect()
+}
+
+fn trace_call(call: TraceCall) -> std::result::Result<RpcCallEvent, String> {
+    if call.trace_schema != evm_chain::RPC_TRACE_SCHEMA {
+        return Err(format!(
+            "call {} was written by RPC trace schema {} and this build reads {}",
+            call.rpc_id,
+            call.trace_schema,
+            evm_chain::RPC_TRACE_SCHEMA
+        ));
+    }
+    let error_class = match &call.error_class {
+        Some(word) => Some(class_from_str(word)?),
+        None => None,
+    };
+    let key_note = match &call.key_note {
+        Some(word) => Some(note_from_str(word)?),
+        None => None,
+    };
+    let mut attempts = Vec::with_capacity(call.attempts.len());
+    for attempt in call.attempts {
+        let outcome = if attempt.outcome == evm_chain::CLASS_OK {
+            evm_chain::CLASS_OK
+        } else {
+            class_from_str(&attempt.outcome)?
+        };
+        attempts.push(RpcAttempt {
+            started_ns: attempt.started_ns,
+            finished_ns: attempt.finished_ns,
+            duration_ns: attempt.duration_ns,
+            outcome,
+        });
+    }
+    Ok(RpcCallEvent {
+        trace_schema: call.trace_schema,
+        rpc_id: call.rpc_id,
+        method: call.method,
+        block: call.block,
+        target: call.target,
+        slot: call.slot,
+        started_ns: call.started_ns,
+        finished_ns: call.finished_ns,
+        duration_ns: call.duration_ns,
+        success: call.success,
+        error_class,
+        error_detail: call.error_detail,
+        attempts,
+        dedup_key: call.dedup_key,
+        key_note,
+    })
+}
+
+/// §12's tally as the line holds it: the boundary's counts, or the reason it had none.
+fn trace_state_reads(line: &Value) -> std::result::Result<Option<StateReadStats>, String> {
+    let cache = &line["state_read_cache"];
+    if cache["reuse"].is_boolean() {
+        let stats: StateReadStats = serde_json::from_value(cache.clone())
+            .map_err(|error| format!("state_read_cache: {error}"))?;
+        return Ok(Some(stats));
+    }
+    if cache["reason"].is_string() {
+        return Ok(None);
+    }
+    Err("state_read_cache carries neither a reuse flag nor a reason for having none".to_string())
+}
+
+/// A line's own refusals, as the argument to [`SimulationDiagnosis::to_trace_line`] wants
+/// them. A replay that dropped them would re-emit a line claiming nothing was refused.
+pub fn trace_line_refusals(line: &Value) -> Vec<String> {
+    line["diagnosis_refusals"]
+        .as_array()
+        .map(|list| {
+            list.iter()
+                .filter_map(Value::as_str)
+                .map(str::to_string)
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+/// A field a line has to name, as text.
+fn required_str<'a>(line: &'a Value, key: &str) -> std::result::Result<&'a str, String> {
+    line[key]
+        .as_str()
+        .ok_or_else(|| format!("`{key}` is missing or is not a string"))
+}
+
+/// A field a line has to name, as an integer.
+fn required_u64(line: &Value, key: &str) -> std::result::Result<u64, String> {
+    line[key]
+        .as_u64()
+        .ok_or_else(|| format!("`{key}` is missing or is not a non-negative integer"))
+}
+
+/// A field a line may leave `null`, as text.
+fn optional_str(line: &Value, key: &str) -> std::result::Result<Option<String>, String> {
+    match &line[key] {
+        Value::Null => Ok(None),
+        value => value
+            .as_str()
+            .map(str::to_string)
+            .map(Some)
+            .ok_or_else(|| format!("`{key}` is neither a string nor null")),
+    }
+}
+
+/// A field a line may leave `null`, as an integer.
+fn optional_u64(line: &Value, key: &str) -> std::result::Result<Option<u64>, String> {
+    match &line[key] {
+        Value::Null => Ok(None),
+        value => value
+            .as_u64()
+            .map(Some)
+            .ok_or_else(|| format!("`{key}` is neither an integer nor null")),
+    }
+}
 
 /// §7's answer for a slot this build has no mapping for, and the reason it is the answer.
 pub const SEMANTIC_UNKNOWN: &str = "unknown";
@@ -1253,6 +1504,70 @@ pub fn outside_simulation_table(
     endpoint_id: Option<&str>,
     simulation_calls: u64,
 ) -> Value {
+    let mut table = outside_table(rows, endpoint_id, simulation_calls);
+    if let Some(object) = table.as_object_mut() {
+        object.insert(
+            "stage_spans".to_string(),
+            Value::Array(spans.iter().map(StageSpan::to_json).collect()),
+        );
+    }
+    table
+}
+
+/// §19's `outside-simulation-rpc.json` for a directory assembled from runs that already
+/// exist — the same grouping ([`outside_table`]) over the pooled rows, so merging three runs
+/// calls the code that wrote one rather than a second implementation to keep in agreement.
+///
+/// What cannot pool is the stage spans: a `started_ns` is nanoseconds since *its own* run's
+/// monotonic origin, so three runs' spans on one list would be three clocks pretending to be
+/// one. They stay with the run they were stamped on, under `assembled_from`, beside that
+/// run's endpoint digest and its own call count — and every pooled row names the run it was
+/// measured in, so a class in the merged table can be traced back to one `class_basis`.
+///
+/// `endpoint_id` is stated only when every run agrees on it; two digests is a finding about
+/// two providers, not one identity to print.
+pub fn outside_simulation_table_assembled(runs: &[Value], simulation_calls: u64) -> Value {
+    let mut rows: Vec<Value> = Vec::new();
+    let mut provenance: Vec<Value> = Vec::new();
+    let mut endpoints: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
+    for run in runs {
+        let name = run["run"].as_str().unwrap_or("?");
+        if let Some(list) = run["rows"].as_array() {
+            for row in list {
+                let mut row = row.clone();
+                if let Some(object) = row.as_object_mut() {
+                    object.insert("assembled_from_run".to_string(), json!(name));
+                }
+                rows.push(row);
+            }
+        }
+        if let Some(endpoint) = run["endpoint_id"].as_str() {
+            endpoints.insert(endpoint);
+        }
+        provenance.push(json!({
+            "run": name,
+            "endpoint_id": run["endpoint_id"].clone(),
+            "generated_at_unix_ms": run["generated_at_unix_ms"].clone(),
+            "calls": run["calls"].clone(),
+            "stage_spans": run["stage_spans"].clone(),
+        }));
+    }
+    let endpoint_id = if endpoints.len() == 1 {
+        endpoints.iter().next().copied()
+    } else {
+        None
+    };
+    let mut table = outside_table(&rows, endpoint_id, simulation_calls);
+    if let Some(object) = table.as_object_mut() {
+        object.insert("assembled_from".to_string(), Value::Array(provenance));
+    }
+    table
+}
+
+/// The grouping both paths above share: per-class and per-method aggregates over the rows,
+/// the duration distribution over them, and the two statements §14 requires beside any
+/// count of the lifecycle's other reads.
+fn outside_table(rows: &[Value], endpoint_id: Option<&str>, simulation_calls: u64) -> Value {
     let mut by_class: BTreeMap<&str, Vec<&Value>> = BTreeMap::new();
     for row in rows {
         let class = row["class"].as_str().unwrap_or(LIFECYCLE_UNKNOWN);
@@ -1317,7 +1632,6 @@ pub fn outside_simulation_table(
         "calls": total,
         "duration_total_ns": durations.iter().fold(0u64, |sum, d| sum.saturating_add(*d)),
         "duration_distribution_ns": stats(&durations),
-        "stage_spans": Value::Array(spans.iter().map(StageSpan::to_json).collect()),
         "per_class": Value::Array(per_class),
         "per_method": Value::Array(per_method),
         "rows": Value::Array(rows.to_vec()),
@@ -2630,6 +2944,9 @@ pub struct DiagnosisEvidence {
     /// missing a §19 name: the switch is what asks for this half, so a directory written by a
     /// build or a command line that never asked for it is not holding a §14 answer yet.
     lifecycle: Option<LifecycleHalf>,
+    /// §19's assembly provenance: the runs this directory was folded together from, when it
+    /// was not one run. `None` for a directory a single run wrote.
+    assembled_from: Option<Value>,
     /// §17's switch, kept so `finish` knows whether §19's acquisition tables were asked for.
     ///
     /// The four files it gates are regroupings of the trace lines every run already writes, so
@@ -2645,11 +2962,20 @@ pub struct DiagnosisEvidence {
     account_rows: Vec<Value>,
 }
 
-/// What §14's sweep found in one run, kept until `finish` turns it into a file.
-struct LifecycleHalf {
-    rows: Vec<Value>,
-    spans: Vec<StageSpan>,
-    endpoint_id: Option<String>,
+/// What §14's sweep found, kept until `finish` turns it into a file.
+enum LifecycleHalf {
+    /// One run's own rows, classified against that run's stage spans. The table is built at
+    /// `finish` rather than at `record_lifecycle` because it also names how many calls the
+    /// simulations recorded *elsewhere*, and that total is only known once they are all in.
+    Run {
+        rows: Vec<Value>,
+        spans: Vec<StageSpan>,
+        endpoint_id: Option<String>,
+    },
+    /// A table over several runs' rows — [`DiagnosisEvidence::attach_outside`]'s path, for an
+    /// assembled directory. Already aggregated, so `finish` only puts the directory's header
+    /// on it.
+    Assembled(Value),
 }
 
 /// One source's running aggregation.
@@ -3029,6 +3355,7 @@ impl DiagnosisEvidence {
             simulations: 0,
             refusals: Vec::new(),
             lifecycle: None,
+            assembled_from: None,
             state_acquisition,
             duration_rows: Vec::new(),
             storage_rows: Vec::new(),
@@ -3099,17 +3426,63 @@ impl DiagnosisEvidence {
         spans: &[StageSpan],
         endpoint_id: Option<&str>,
     ) {
-        self.lifecycle = Some(LifecycleHalf {
+        self.lifecycle = Some(LifecycleHalf::Run {
             rows: lifecycle_rows(events, spans, endpoint_id),
             spans: spans.to_vec(),
             endpoint_id: endpoint_id.map(str::to_string),
         });
     }
 
+    /// §14's other half for a directory assembled from several runs: the table is already
+    /// built ([`outside_simulation_table_assembled`] pooled them), so this only hands it to
+    /// `finish`, which puts the directory's header on it like every other file here.
+    ///
+    /// The single-run path classifies events against spans of its own; an assembly cannot do
+    /// that across runs, because each run stamps against its own monotonic origin. Pooling
+    /// the *rows* is sound precisely because the classification was already done per run, on
+    /// that run's clock, before anything was merged.
+    pub fn attach_outside(&mut self, table: Value) {
+        self.lifecycle = Some(LifecycleHalf::Assembled(table));
+    }
+
+    /// Describe this directory as a folding together of runs that already exist.
+    ///
+    /// Two things follow, and both are what makes §19's merged directory a gate rather than
+    /// a convenience: every file here carries the header naming its source runs, so a figure
+    /// in a merged table is traceable to the run that measured it; and the one wall-clock
+    /// stamp is the sources' rather than the moment of assembly, so assembling the same runs
+    /// twice writes byte-identical files. An assembly-time timestamp would make that gate
+    /// unrunnable, and no duration in these files is computed from the stamp anyway (§7).
+    pub fn assemble_from(&mut self, generated_at_unix_ms: u64, runs: Vec<Value>) {
+        self.generated_at_unix_ms = generated_at_unix_ms;
+        self.assembled_from = Some(Value::Array(runs));
+    }
+
+    /// Fold one already-written trace line into this directory.
+    ///
+    /// §19's merged evidence is assembled this way: each run's lines are replayed through the
+    /// same writer that produced them, so every table in the merged directory is the same
+    /// function of the same recorded calls as the tables in the per-run ones. The alternative
+    /// is a second set of aggregations, correct only while nobody changes the first.
+    ///
+    /// A line this build cannot read fails the assembly rather than skipping it: a directory
+    /// missing a simulation would report a smaller run than happened, and the missing line is
+    /// the one thing a reader could not see.
+    pub fn replay(&mut self, line: &Value) -> Result<()> {
+        let diagnosis = SimulationDiagnosis::from_trace_line(line).map_err(|reason| {
+            PipelineError::Evidence {
+                path: self.dir.join(TRACES_FILE),
+                detail: format!("the trace line could not be replayed: {reason}"),
+            }
+        })?;
+        let refusals = trace_line_refusals(line);
+        self.record(diagnosis, &refusals)
+    }
+
     /// Write the summaries and the README. Returns the directory, which is what the
     /// run's own record names so a reader can find the traces.
     pub fn finish(&mut self) -> Result<PathBuf> {
-        let metadata = json!({
+        let mut metadata = json!({
             "diagnosis_schema": DIAGNOSIS_SCHEMA,
             "git_revision": self.git_revision,
             "execution_mode": self.execution_mode,
@@ -3128,6 +3501,14 @@ impl DiagnosisEvidence {
             "instrumentation_issues_no_requests": true,
             "provider_duration_field": PROVIDER_BREAKDOWN,
         });
+        // §19's assembly provenance, in the header every file here carries rather than in one
+        // file a reader has to know to open: a merged directory has to say which runs its
+        // figures came from before any figure in it can be checked against a run.
+        if let Some(runs) = self.assembled_from.clone() {
+            if let Some(object) = metadata.as_object_mut() {
+                object.insert("assembled_from".to_string(), runs);
+            }
+        }
         let sources: Vec<Value> = self
             .buckets
             .values()
@@ -3190,15 +3571,22 @@ impl DiagnosisEvidence {
         // command line without §17's switch keeps M8.2's five names rather than growing a
         // sixth that holds an empty table nobody asked for.
         let lifecycle = self.lifecycle.take();
-        let outside = lifecycle.map(|half| {
-            let simulation_calls: u64 = self.buckets.values().map(|bucket| bucket.calls).sum();
-            let table = outside_simulation_table(
-                &half.rows,
-                &half.spans,
-                half.endpoint_id.as_deref(),
-                simulation_calls,
-            );
-            with_metadata(table, &metadata)
+        let outside = lifecycle.map(|half| match half {
+            LifecycleHalf::Run {
+                rows,
+                spans,
+                endpoint_id,
+            } => {
+                let simulation_calls: u64 = self.buckets.values().map(|bucket| bucket.calls).sum();
+                let table = outside_simulation_table(
+                    &rows,
+                    &spans,
+                    endpoint_id.as_deref(),
+                    simulation_calls,
+                );
+                with_metadata(table, &metadata)
+            }
+            LifecycleHalf::Assembled(table) => with_metadata(table, &metadata),
         });
         if let Some(table) = outside.as_ref() {
             self.write_whole(OUTSIDE_FILE, table)?;
@@ -3280,11 +3668,59 @@ fn source_key(source: RpcTraceSource) -> &'static str {
 /// variation to preserve.
 fn with_metadata(mut table: Value, metadata: &Value) -> Value {
     if let (Some(object), Some(header)) = (table.as_object_mut(), metadata.as_object()) {
+        // §19's run list is the one header key a table can also carry, and the two copies say
+        // different things: the directory's names each run and what it contributed, while
+        // §14's pooled table additionally keeps each run's own stage spans, which nothing else
+        // in the directory can hold. Neither list is a duplicate of the other to overwrite, so
+        // they are merged per run — a reader of the lifecycle file gets both halves of the
+        // provenance in one place.
+        let merged =
+            merge_assembled_from(object.get("assembled_from"), header.get("assembled_from"));
         for (key, value) in header {
             object.insert(key.clone(), value.clone());
         }
+        if let Some(merged) = merged {
+            object.insert("assembled_from".to_string(), merged);
+        }
     }
     table
+}
+
+/// Union of the directory's run list and a table's own, matched on `run`, keeping the fields of
+/// both. Returns `None` when the table carries no list of its own, which leaves the header's.
+fn merge_assembled_from(table_runs: Option<&Value>, header_runs: Option<&Value>) -> Option<Value> {
+    let own = table_runs?.as_array()?.clone();
+    let header = header_runs
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    let mut merged: Vec<Value> = Vec::new();
+    for entry in &own {
+        let name = entry.get("run").cloned();
+        let mut row = header
+            .iter()
+            .find(|row| name.is_some() && row.get("run") == name.as_ref())
+            .cloned()
+            .unwrap_or_else(|| json!({}));
+        if let (Some(object), Some(own_object)) = (row.as_object_mut(), entry.as_object()) {
+            for (key, value) in own_object {
+                object.insert(key.clone(), value.clone());
+            }
+        }
+        merged.push(row);
+    }
+    // A run the directory lists but this table has nothing for is still a run this file came
+    // from, so it keeps its row rather than quietly disappearing from one file's provenance.
+    for row in header {
+        let name = row.get("run").cloned();
+        if !merged
+            .iter()
+            .any(|entry| name.is_some() && entry.get("run") == name.as_ref())
+        {
+            merged.push(row);
+        }
+    }
+    Some(Value::Array(merged))
 }
 
 /// §23's README: what the numbers are, how they were taken, and what they cannot say.
@@ -3518,6 +3954,50 @@ fn readme(
              file does — the directions it makes possible are written in the completion report as \
              candidates and none of them is implemented here.\n",
             per_source.join("; ")
+        ));
+    }
+    if let Some(runs) = summary.get("assembled_from").filter(|runs| runs.is_array()) {
+        let names: Vec<String> = runs
+            .as_array()
+            .map(|list| {
+                list.iter()
+                    .map(|run| {
+                        format!(
+                            "{} ({} simulation(s), {} call(s))",
+                            run["run"].as_str().unwrap_or("?"),
+                            run["simulations"].as_u64().unwrap_or(0),
+                            run["simulation_calls"]
+                                .as_u64()
+                                .unwrap_or_else(|| run["calls"].as_u64().unwrap_or(0)),
+                        )
+                    })
+                    .collect()
+            })
+            .unwrap_or_default();
+        let list = names
+            .iter()
+            .map(|name| format!("- {name}"))
+            .collect::<Vec<_>>()
+            .join("\n");
+        lines.push(format!(
+            "## How this directory was assembled\n\n\
+             This is not one run's directory. It is {} folded together by replaying each source\n\
+             run's `{TRACES_FILE}` lines through the writer that produced them, so every table\n\
+             here is the same function of the same recorded calls as the tables in the per-run\n\
+             directories — the runs' own figures are not re-typed, averaged or re-derived from a\n\
+             second implementation.\n\n\
+             {list}\n\n\
+             Pooling simulations is sound because every timeline figure is measured *inside one\n\
+             simulation's own window*: a gap, a serial wait and an overlap are differences of\n\
+             stamps that share that simulation's origin, so a run contributes whole simulations\n\
+             and never half a clock. What is not poolable is a figure that spans two runs' clocks,\n\
+             and there is one such figure here: `{OUTSIDE_FILE}` keeps each run's stage spans with\n\
+             that run, under `assembled_from`, and tags each pooled row with the run it was\n\
+             measured in.\n\n\
+             `generated_at_unix_ms` is the source runs' stamp rather than the moment of assembly,\n\
+             so re-assembling the same runs writes byte-identical files. No duration is computed\n\
+             from it (§7).\n",
+            names.len()
         ));
     }
     lines.push(String::from(
@@ -5739,6 +6219,314 @@ mod tests {
             absent["sink_disjointness_check"]["simulation_state_calls"],
             Value::Null
         );
+    }
+
+    /// §14's per-class row for one lifecycle class. `category` reads the bottleneck table;
+    /// this reads the outside table's own six rows.
+    fn class_row(table: &Value, class: &str) -> Value {
+        table["per_class"]
+            .as_array()
+            .and_then(|rows| {
+                rows.iter()
+                    .find(|row| row["class"] == json!(class))
+                    .cloned()
+            })
+            .unwrap_or_else(|| panic!("no `{class}` row in the per-class list"))
+    }
+
+    /// The three calls, on a node's window, with a tally and an endpoint — the whole of what
+    /// a line has to carry for a replay to rebuild it.
+    fn replayable_diagnosis() -> SimulationDiagnosis {
+        SimulationDiagnosis::new(
+            node_window(0, 1_000),
+            vec![
+                storage_call(1, "0xAA11", "0x01", 0, 300),
+                storage_call(2, "0xBB22", "0x02", 300, 500),
+                account_call(3, "eth_getCode", "0xAA11", 600, 900),
+            ],
+        )
+        .with_state_reads(Some(named_arm(true)))
+        .with_endpoint(Some("rpc-0123456789abcdef".to_string()))
+    }
+
+    /// The lines a directory wrote, as the values they were written from.
+    fn lines_of(dir: &Path) -> Vec<Value> {
+        let text = std::fs::read_to_string(dir.join(TRACES_FILE))
+            .expect("the traces a directory just wrote are readable");
+        text.lines()
+            .filter(|line| !line.trim().is_empty())
+            .map(|line| serde_json::from_str(line).expect("every line is JSON"))
+            .collect()
+    }
+
+    /// §19's assembly is built on one claim: a trace line is a complete account of the
+    /// simulation it describes. Decoding a line and emitting it again therefore has to give
+    /// the same bytes back — timeline, duplicate tally, method rows and both acquisition
+    /// lists rebuilt from the calls, not carried across. If any figure were only a copy, the
+    /// re-emit would lose it; if any were re-derived twice over differently, the bytes would
+    /// move.
+    #[test]
+    fn a_trace_line_decodes_and_re_emits_the_same_bytes() {
+        let refusals = vec!["the sink could not be derived for one call".to_string()];
+        let line = replayable_diagnosis().to_trace_line(&refusals);
+        let replayed = SimulationDiagnosis::from_trace_line(&line)
+            .expect("a line this build wrote is a line this build can read");
+        assert_eq!(replayed.events.len(), 3);
+        assert_eq!(replayed.timeline.total_calls, 3);
+        assert_eq!(replayed.duplicates.duplicate_state_reads, 0);
+        assert_eq!(
+            replayed.state_reads.as_ref().map(|stats| stats.reuse),
+            Some(true)
+        );
+        assert_eq!(
+            replayed.endpoint_id.as_deref(),
+            Some("rpc-0123456789abcdef")
+        );
+        assert_eq!(
+            serde_json::to_string(&line).expect("the original serializes"),
+            serde_json::to_string(&replayed.to_trace_line(&trace_line_refusals(&line)))
+                .expect("the replay serializes")
+        );
+    }
+
+    /// What a replay refuses, and why: a field this build does not name would otherwise
+    /// become a missing call or a zero, and a wrong figure in an evidence file is a finding
+    /// nobody can retract afterwards.
+    #[test]
+    fn a_line_this_build_cannot_read_is_refused_rather_than_guessed() {
+        let line = replayable_diagnosis().to_trace_line(&[]);
+
+        let mut schema = line.clone();
+        schema["diagnosis_schema"] = json!(DIAGNOSIS_SCHEMA + 1);
+        let error = SimulationDiagnosis::from_trace_line(&schema)
+            .expect_err("a schema this build has never seen is not decoded by guessing");
+        assert!(error.contains("schema"), "{error}");
+
+        let mut trace_schema = line.clone();
+        trace_schema["calls"][0]["trace_schema"] = json!(evm_chain::RPC_TRACE_SCHEMA + 1);
+        assert!(SimulationDiagnosis::from_trace_line(&trace_schema).is_err());
+
+        let mut class = line.clone();
+        class["calls"][0]["error_class"] = json!("mystery_failure");
+        let error = SimulationDiagnosis::from_trace_line(&class).expect_err(
+            "an error class outside the closed set is not a class this summary can group",
+        );
+        assert!(error.contains("mystery_failure"), "{error}");
+
+        let mut note = line.clone();
+        note["calls"][0]["key_note"] = json!("borrowed_from_somewhere_else");
+        assert!(SimulationDiagnosis::from_trace_line(&note).is_err());
+
+        let mut window_end = line.clone();
+        window_end["finished_ns"] = json!(null);
+        assert!(
+            SimulationDiagnosis::from_trace_line(&window_end).is_err(),
+            "a window with no end has no duration, and `null` is not a substitute for one"
+        );
+
+        let mut source = line.clone();
+        source["source"] = json!("production");
+        assert!(SimulationDiagnosis::from_trace_line(&source).is_err());
+
+        let mut cache = line.clone();
+        cache["state_read_cache"] = json!({ "reason": STATE_READS_UNAVAILABLE });
+        let replayed = SimulationDiagnosis::from_trace_line(&cache)
+            .expect("a line that refused the tally is readable, with the tally absent");
+        assert_eq!(replayed.state_reads, None);
+    }
+
+    /// The assembly's own gate, on a scratch pair: a directory written by replaying another
+    /// directory's lines is byte-for-byte the directory it replayed. Every table in §19 is
+    /// then shown to be a function of the calls, not of the run that happened to be live when
+    /// they were made.
+    #[test]
+    fn replaying_a_directorys_lines_reproduces_the_directory() {
+        let source = temp_dir("replay-source");
+        write_a_directory(&source, true);
+        let target = temp_dir("replay-target");
+        let mut evidence = DiagnosisEvidence::open(&target, "revision", "build-only", true)
+            .expect("the replay directory opens");
+        evidence.generated_at_unix_ms = 1_700_000_000_000;
+        for line in lines_of(&source) {
+            evidence
+                .replay(&line)
+                .expect("a line of the source replays");
+        }
+        evidence.finish().expect("the replay writes");
+        for name in [
+            TRACES_FILE,
+            SIMULATION_SUMMARY_FILE,
+            RPC_SUMMARY_FILE,
+            DUPLICATES_FILE,
+            STORAGE_BREAKDOWN_FILE,
+            ACCOUNT_MATRIX_FILE,
+            RPC_GAPS_FILE,
+            BOTTLENECK_FILE,
+            README_FILE,
+        ] {
+            assert_eq!(
+                std::fs::read(source.join(name)).expect("the source file is readable"),
+                std::fs::read(target.join(name)).expect("the replayed file is readable"),
+                "{name} is not what the run that recorded these calls wrote"
+            );
+        }
+    }
+
+    /// §14's rows for one run, as an assembly receives them: a method, a duration and the
+    /// class that run's own stage spans decided.
+    fn lifecycle_row(method: &str, duration_ns: u64, class: &str) -> Value {
+        json!({
+            "method": method,
+            "duration_ns": duration_ns,
+            "class": class,
+            "stage": "observation",
+            "started_ns": 0,
+        })
+    }
+
+    /// One source run's §14 material, as its file holds it.
+    fn source_run(name: &str, endpoint: &str, rows: Vec<Value>) -> Value {
+        json!({
+            "run": name,
+            "endpoint_id": endpoint,
+            "generated_at_unix_ms": 1_700_000_000_000_u64,
+            "calls": rows.len(),
+            "stage_spans": [
+                { "stage": "observation", "started_ns": 0, "ended_ns": 1_000 }
+            ],
+            "rows": rows,
+        })
+    }
+
+    /// §19's merged `outside-simulation-rpc.json`: the same grouping over pooled rows, and
+    /// each run's clock kept with its own run. Two runs' `started_ns` are offsets of two
+    /// different monotonic origins, so the spans cannot be laid on one list — and a reader
+    /// has to be able to tell which run's `class_basis` any pooled row was decided by.
+    #[test]
+    fn an_assembled_outside_table_pools_rows_and_keeps_each_run_on_its_own_clock() {
+        let first = source_run(
+            "run-001",
+            "rpc-aaaa",
+            vec![
+                lifecycle_row("eth_blockNumber", 100, LIFECYCLE_SIMULATION_CONTEXT),
+                lifecycle_row("eth_getBalance", 200, LIFECYCLE_DETECTION),
+            ],
+        );
+        let second = source_run(
+            "run-002",
+            "rpc-aaaa",
+            vec![lifecycle_row("eth_getBalance", 300, LIFECYCLE_DETECTION)],
+        );
+        let table = outside_simulation_table_assembled(&[first, second], 117);
+        assert_eq!(table["calls"], json!(3));
+        assert_eq!(table["duration_total_ns"], json!(600));
+        assert_eq!(class_row(&table, LIFECYCLE_DETECTION)["calls"], json!(2));
+        assert_eq!(
+            class_row(&table, LIFECYCLE_DETECTION)["duration_total_ns"],
+            json!(500),
+            "the two runs' detection reads are one class and their durations add"
+        );
+        assert_eq!(
+            class_row(&table, LIFECYCLE_SIMULATION_CONTEXT)["calls"],
+            json!(1)
+        );
+        assert_eq!(
+            class_row(&table, LIFECYCLE_SIMULATION_STATE)["calls"],
+            json!(0),
+            "an absent class still gets its row, so §14's six are all answerable"
+        );
+        assert_eq!(
+            table["core_state_reads_not_included"]["simulation_calls_recorded_elsewhere"],
+            json!(117)
+        );
+        assert_eq!(
+            table["assembled_from"].as_array().map(|list| list
+                .iter()
+                .filter(|run| run["run"] == json!("run-001"))
+                .count()),
+            Some(1)
+        );
+        assert_eq!(
+            table["assembled_from"][0]["stage_spans"]
+                .as_array()
+                .map(Vec::len),
+            Some(1),
+            "each run carries its own spans rather than a pooled set"
+        );
+        assert!(table.get("stage_spans").is_none());
+        let runs: Vec<&str> = table["rows"]
+            .as_array()
+            .map(|list| {
+                list.iter()
+                    .map(|row| row["assembled_from_run"].as_str().unwrap_or("?"))
+                    .collect()
+            })
+            .unwrap_or_default();
+        assert_eq!(runs, vec!["run-001", "run-001", "run-002"]);
+
+        let two_endpoints = outside_simulation_table_assembled(
+            &[
+                source_run("run-001", "rpc-aaaa", vec![]),
+                source_run("run-002", "rpc-bbbb", vec![]),
+            ],
+            0,
+        );
+        assert_eq!(
+            two_endpoints["endpoint_id"],
+            Value::Null,
+            "two digests is a finding about two providers, not one identity to print"
+        );
+    }
+
+    /// §19's assembly provenance has to be in the header every file carries, not in one file
+    /// a reader has to know to open — and the directory's one wall-clock stamp is its
+    /// sources', which is what lets the same runs be assembled twice to the same bytes.
+    #[test]
+    fn an_assembled_directory_names_its_runs_in_every_file() {
+        let source = temp_dir("assembly-source");
+        write_a_directory(&source, true);
+        let runs = vec![json!({
+            "run": "run-001",
+            "simulations": 2,
+            "calls": 6,
+            "git_revision": "revision",
+            "generated_at_unix_ms": 1_700_000_000_000_u64,
+        })];
+        let dir = temp_dir("assembly-header");
+        let mut evidence =
+            DiagnosisEvidence::open(&dir, "revision", "build-only", true).expect("opens");
+        evidence.assemble_from(1_700_000_000_000, runs);
+        for line in lines_of(&source) {
+            evidence.replay(&line).expect("a line replays");
+        }
+        evidence.finish().expect("writes");
+        for name in [
+            SIMULATION_SUMMARY_FILE,
+            RPC_SUMMARY_FILE,
+            DUPLICATES_FILE,
+            STORAGE_BREAKDOWN_FILE,
+            ACCOUNT_MATRIX_FILE,
+            RPC_GAPS_FILE,
+            BOTTLENECK_FILE,
+        ] {
+            let table: Value = serde_json::from_str(
+                &std::fs::read_to_string(dir.join(name)).expect("the table is readable"),
+            )
+            .expect("the table is JSON");
+            assert_eq!(table["generated_at_unix_ms"], json!(1_700_000_000_000_u64));
+            assert_eq!(
+                table["assembled_from"][0]["run"],
+                json!("run-001"),
+                "{name}"
+            );
+        }
+        let readme =
+            std::fs::read_to_string(dir.join(README_FILE)).expect("the README is readable");
+        assert!(
+            readme.contains("## How this directory was assembled"),
+            "the README has to say the directory is not one run's"
+        );
+        assert!(readme.contains("run-001 (2 simulation(s), 6 call(s))"));
     }
 
     /// A directory with a distinct name per test, because these run in one process and
