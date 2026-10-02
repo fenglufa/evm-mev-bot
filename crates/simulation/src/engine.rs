@@ -447,8 +447,23 @@ pub async fn run(
 
     // ---- 2. ask the contracts ----------------------------------------------
     // §60: an empty `eth_getCode` is a refusal, not a bytecode to be filled in.
-    for address in request.route.touched_contracts() {
-        let code = provider.code(address).await.map_err(state_error)?;
+    //
+    // One call, not a loop of them: these are the route's own contracts, named before
+    // any of them is read, and no read's parameters wait on another's answer — M8.3.3
+    // §5's second proved-independent set. `codes` runs them one at a time when the run
+    // configured concurrency 1, which is the default and is what the §10 baseline
+    // checks; the refusal below is still the first empty bytecode in route order.
+    //
+    // What does differ from the loop this replaces, and is a fact rather than a bug:
+    // the batch asks for all of its members before any answer is looked at, so a route
+    // whose second contract were empty would now also have asked for the third and
+    // fourth, where the loop stopped at the second. Only the failing path moves — the
+    // happy path asks for the same four either way — so §10's 39-call baseline is
+    // unaffected, and §24's rule that the run's semantics not change is kept by the
+    // error being the same `MissingCode` for the same address in route order.
+    let touched = request.route.touched_contracts();
+    let codes = provider.codes(&touched).await.map_err(state_error)?;
+    for (address, code) in touched.into_iter().zip(codes) {
         if code.is_empty() {
             return Err(SimulationError::MissingCode {
                 address,

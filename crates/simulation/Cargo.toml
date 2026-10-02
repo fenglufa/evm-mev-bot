@@ -10,6 +10,7 @@ evm-chain.workspace = true
 evm-protocol.workspace = true
 alloy-primitives.workspace = true
 async-trait.workspace = true
+futures-util.workspace = true
 hex.workspace = true
 revm.workspace = true
 serde.workspace = true
@@ -21,6 +22,13 @@ evm-execution.workspace = true
 evm-graph.workspace = true
 evm-metrics.workspace = true
 evm-opportunity.workspace = true
+# The interval analyzer the concurrency fixture reads its overlap figures from lives in
+# the layer above this crate. A dev-dependency cycle is legal here — building
+# `evm-pipeline` needs this crate's library, never its tests — and it is what keeps M8.3.3
+# §14's rule honest: the fixture computes `rpc_union_duration_ns` and `max_concurrency`
+# with the same function that produced M8.3.2's committed tables, so a difference between
+# a fixture and a live run cannot be an arithmetic difference.
+evm-pipeline.workspace = true
 evm-replay.workspace = true
 evm-risk.workspace = true
 evm-state.workspace = true

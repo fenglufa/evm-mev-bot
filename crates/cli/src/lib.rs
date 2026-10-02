@@ -759,6 +759,48 @@ fn latency_dir(trace: bool, output: Option<PathBuf>) -> Option<PathBuf> {
 /// and it must not be able to rewrite what that milestone wrote.
 pub const DEFAULT_DIAGNOSIS_DIR: &str = "data/evidence/m8/diagnosis";
 
+/// M8.3.3 §28's default: a run that names no bound reads state the way M8.3.2 did, one
+/// request outstanding at a time. This is not a convenience — §10 makes concurrency 1 the
+/// arm that has to reproduce the previous milestone's 39-call run, so the flag's absence
+/// must mean that arm rather than anything the caller forgot to type.
+pub const DEFAULT_STATE_READ_CONCURRENCY: u64 = 1;
+
+/// The largest bound this command line accepts, which is §2's C8 — the four arms the
+/// experiment names are 1, 2, 4 and 8, and a bound above the largest of them is a
+/// measurement no milestone asked for. Refusing it at the command line costs the caller
+/// nothing; discovering it at the node costs a live run.
+pub const MAX_STATE_READ_CONCURRENCY: u64 = 8;
+
+/// §27's three rejections, each in words the caller can act on: `0` (a bound under which no
+/// read could ever be outstanding, so it is not a bound at all), a value above §2's largest
+/// arm, and one too large for this platform. A negative number never reaches here — the flag
+/// parses `u64`, so the command line itself refuses `-1` and prints the value it was given.
+///
+/// Absent is not one of the invalid cases: it is §28's default, and the default is the
+/// baseline arm the experiment measures itself against.
+fn state_read_concurrency(typed: Option<u64>) -> std::result::Result<usize, String> {
+    let typed = match typed {
+        Some(typed) => typed,
+        None => DEFAULT_STATE_READ_CONCURRENCY,
+    };
+    if typed == 0 {
+        return Err(
+            "--state-read-concurrency 0 is not a bound: under it no read could be \
+             outstanding, so nothing could run. The serial arm is 1, which is also what a \
+             run that names no flag gets (§28)"
+                .to_string(),
+        );
+    }
+    if typed > MAX_STATE_READ_CONCURRENCY {
+        return Err(format!(
+            "--state-read-concurrency {typed} is above the {MAX_STATE_READ_CONCURRENCY} this \
+             milestone measures: §2's four arms are 1, 2, 4 and 8"
+        ));
+    }
+    usize::try_from(typed)
+        .map_err(|_| format!("--state-read-concurrency {typed} does not fit this platform"))
+}
+
 /// §41's rule, reused for the second instrumentation: either flag alone turns it on. A
 /// caller who typed `--rpc-output` asked for files, and a run that printed a summary and
 /// wrote none would be the one outcome they cannot want. With neither flag the sink is
@@ -940,6 +982,31 @@ pub struct ArbitrageArgs {
     #[arg(long)]
     diagnose_state_acquisition: bool,
 
+    /// M8.3.3 §9's bound on how many of one simulation's state reads may be waiting on the
+    /// node at the same instant. Absent, the run is serial at that boundary exactly as
+    /// M8.3.2's were (§28), and §10's baseline comparison depends on that.
+    ///
+    /// It is a bound on *how* the reads the simulation already decides to make are sent,
+    /// not a knob on what is sent: no read is added, dropped, merged into a batch request,
+    /// prefetched or speculatively made because of it (§3), and the block each read pins is
+    /// the block it was pinned to either way (§8). Two runs that differ only here should
+    /// therefore reach the same verdict on the same block, and that is the experiment's
+    /// pass condition (§5/§6), not an assumption behind it.
+    ///
+    /// The number this flag types is only half of what the evidence reports: the trace line
+    /// beside it carries the peak the run actually reached (§15), because a bound is a
+    /// request to the scheduler and a peak is what the node saw.
+    ///
+    /// What is accepted is `1` through [`MAX_STATE_READ_CONCURRENCY`] inclusive — the four
+    /// arms §2 names (1, 2, 4, 8) and any bound between them, since a bound of 5 is a smaller
+    /// version of the same experiment and nothing about the measurement needs the value to be
+    /// a power of two. What is refused, with the flag named in the refusal rather than
+    /// rounded into a value nobody typed, is `0` (under it no read could be outstanding), a
+    /// bound above that maximum, and a number too large for this platform. A negative never
+    /// reaches the checker: this option parses `u64`, so the command line refuses it first.
+    #[arg(long, value_name = "N")]
+    state_read_concurrency: Option<u64>,
+
     /// Print the run's §57 record as JSON instead of the summary lines.
     #[arg(long)]
     json: bool,
@@ -1088,6 +1155,7 @@ impl ArbitrageArgs {
             latency_dir: latency_dir(self.latency_trace, self.latency_output.clone()),
             diagnosis_dir: diagnosis_home,
             state_read_reuse: !self.no_state_read_reuse,
+            state_read_concurrency: state_read_concurrency(self.state_read_concurrency)?,
             state_acquisition_diagnosis: self.diagnose_state_acquisition,
         })
     }

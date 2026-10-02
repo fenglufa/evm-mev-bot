@@ -150,10 +150,24 @@ pub struct ArbitrageConfig {
     /// `false` is arm A (every balance, nonce and bytecode costs a request again, which
     /// is M8.2's HEAD exactly).
     ///
-    /// It is the milestone's only variable, so nothing else may read it to decide
-    /// anything: the route, the prices, the risk thresholds and the EVM configuration are
-    /// built without consulting it, and §5's result equality is the proof that they are.
+    /// It decides one thing — whether a second read of the same key asks the node again —
+    /// and nothing else reads it to decide anything: the route, the prices, the risk
+    /// thresholds and the EVM configuration are built without consulting it, and §5's
+    /// result equality is the proof that they are.
     pub state_read_reuse: bool,
+    /// M8.3.3 §9's bound on how many of one simulation's pinned state reads may be
+    /// outstanding at the node at one instant. `1` is M8.3.2's baseline, not an
+    /// approximation of it: the dispatch runs its members one at a time in input order,
+    /// so a run that does not name this flag reads the chain the way the previous
+    /// milestone did (§10).
+    ///
+    /// Like [`Self::state_read_reuse`] it is a knob on how a read is *asked for*, never on
+    /// what is asked: which reads exist is the dependency map's answer in
+    /// `crates/simulation/src/state.rs`, and this field cannot add one, merge two into a
+    /// batch, or move a read earlier. The evidence reports the number the run was
+    /// configured with beside the peak it actually reached — a bound is not a measurement
+    /// (§15).
+    pub state_read_concurrency: usize,
     /// M8.3.2 §17's diagnosis-only switch: it adds the lifecycle half of the RPC sweep
     /// (§14) and the tables that read it (§6, §9, §12, §13), and nothing else.
     ///
@@ -278,6 +292,13 @@ pub struct ArbitrageRun {
     /// `baseline` or `cached`, and the only honest way to say it is to carry the flag the
     /// run was built from.
     pub state_read_reuse: bool,
+    /// M8.3.3 §30's provenance, for the same reason the arm above is carried rather than
+    /// inferred: a concurrency experiment's runs are only groupable by the bound each was
+    /// configured with, and the bound a record does not name is a bound a later reader can
+    /// only guess at. What actually happened is a different field of a different file — the
+    /// diagnosis trace line's `state_read_concurrency`, which reports the peak the run
+    /// reached next to this number (§15).
+    pub state_read_concurrency: usize,
 }
 
 /// Run one [`RouteCandidate`] against the live chain and, if the configured mode allows it,
@@ -430,10 +451,16 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     // REVM (§2). With no `--rpc-trace`, `observe` hands back the very handle it was given.
     let chain: Arc<dyn ChainAdapter> = Arc::new(adapter.clone());
     let chain: Arc<dyn ChainAdapter> = diagnosis.observe(&chain, &opportunity_id);
-    let provider = Arc::new(RpcStateProvider::with_state_read_reuse(
+    // M8.3.3 §9: the bound is handed to the provider this simulation reads through and to
+    // no one else, so it is the same object the reuse cache lives on — one simulation, one
+    // dispatch, no second scheduler for a later run to find. It changes how many of the
+    // provider's own already-decided reads may be outstanding, not which reads it decides
+    // to make; that question is the dependency map's, in `crates/simulation/src/state.rs`.
+    let provider = Arc::new(RpcStateProvider::with_state_read_concurrency(
         chain,
         BlockPin::new(head, header.hash),
         config.state_read_reuse,
+        config.state_read_concurrency,
     ));
     // The boundary's own tally, handed to the diagnosis before the run: §12 asks cache
     // hits and misses to be comparable with the request counter, and the two are only
@@ -1104,6 +1131,10 @@ impl RunDiagnosis {
                 .state_reads
                 .as_ref()
                 .map(|provider| provider.state_read_stats());
+            let concurrency = self
+                .state_reads
+                .as_ref()
+                .map(|provider| provider.state_read_concurrency());
             let diagnosis = SimulationDiagnosis::new(
                 SimulationWindow {
                     simulation_id: sink.simulation_id().to_string(),
@@ -1117,6 +1148,7 @@ impl RunDiagnosis {
                 sink.events(),
             )
             .with_state_reads(state_reads)
+            .with_concurrency(concurrency)
             .with_endpoint(sink.endpoint_id().map(str::to_string));
             evidence.record(diagnosis, &refusals)?;
         }
@@ -1182,6 +1214,7 @@ impl ArbitrageRun {
             latency_ms: Value::Null,
             evidence_dir,
             state_read_reuse: config.state_read_reuse,
+            state_read_concurrency: config.state_read_concurrency,
         }
     }
 
@@ -1252,6 +1285,7 @@ impl ArbitrageRun {
             "pinned_block_hash": format!("{:?}", self.header.hash),
             "mode": self.mode.name(),
             "state_read_reuse": self.state_read_reuse,
+            "state_read_concurrency": self.state_read_concurrency,
             "market": self.market.to_json(),
             "sender": format!("{:#x}", self.sender),
             "candidate": {
@@ -1741,6 +1775,7 @@ mod tests {
             latency_dir,
             diagnosis_dir: None,
             state_read_reuse: true,
+            state_read_concurrency: 1,
             state_acquisition_diagnosis: false,
         }
     }

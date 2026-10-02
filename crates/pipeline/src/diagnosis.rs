@@ -32,7 +32,7 @@
 //! instant", which is a different fact. `None` becomes `null` in the evidence, with a
 //! reason beside it.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs::{File, OpenOptions};
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -40,6 +40,7 @@ use std::path::{Path, PathBuf};
 use evm_chain::{RpcAttempt, RpcCallEvent, RpcTraceSource};
 use evm_metrics::baseline::stats;
 use evm_metrics::unix_ms;
+use evm_simulation::acquisition::{BatchDispatch, ConcurrencyReport, StateReadDescriptor};
 use evm_simulation::StateReadStats;
 use serde::Deserialize;
 use serde_json::{json, Value};
@@ -374,6 +375,44 @@ fn cache_json(stats: &StateReadStats) -> Value {
     })
 }
 
+/// §15's dispatch report, with the seven keys [`trace_concurrency`] reads back off it.
+///
+/// Hand-rolled rather than derived for the same reason as [`cache_json`] above: the line's
+/// key list and the decoder's are then one list, and a report is five integers, a bool, a
+/// batch list and the sentence that qualifies them — there is no serialization failure to
+/// write a fallback for, and a fallback here would be a `state_read_concurrency: null` that
+/// the decoder reads as "this run configured nothing".
+fn concurrency_json(report: &ConcurrencyReport) -> Value {
+    let batches: Vec<Value> = report
+        .batch_dispatches
+        .iter()
+        .map(|batch| {
+            let reads: Vec<Value> = batch
+                .reads
+                .iter()
+                .map(|read| {
+                    json!({
+                        "kind": read.kind,
+                        "chain_id": read.chain_id,
+                        "block": read.block,
+                        "address": read.address,
+                    })
+                })
+                .collect();
+            json!({ "site": batch.site, "limit": batch.limit, "reads": reads })
+        })
+        .collect();
+    json!({
+        "configured": report.configured,
+        "serial": report.serial,
+        "batches": report.batches,
+        "batched_reads": report.batched_reads,
+        "observed_peak": report.observed_peak,
+        "batch_dispatches": batches,
+        "note": report.note,
+    })
+}
+
 /// §12's tally folded over the simulations one source recorded, kept per kind.
 ///
 /// The fold is a sum of integers and nothing else: no ratio, no mean, no per-kind
@@ -501,6 +540,13 @@ pub struct SimulationDiagnosis {
     /// issues no state requests, so a cache would have nothing to have answered — and the
     /// trace line says which rather than writing a row of zeros.
     pub state_reads: Option<StateReadStats>,
+    /// M8.3.3 §15's two numbers, from the scheduler the simulation read through: the
+    /// bound that was configured and the peak that was reached. `None` for a run with
+    /// no bounded dispatch attached — a dump-backed replay, or any run this module
+    /// diagnosed before M8.3.3 existed — and its line then simply carries no
+    /// `state_read_concurrency` key rather than a row of zeroes for a thing that was
+    /// never configured.
+    pub concurrency: Option<ConcurrencyReport>,
     /// §8's endpoint identity: an opaque digest of the URL this simulation's sink was
     /// built with, never the URL itself. `None` when the sink had no endpoint named,
     /// which is reported as a null rather than as a share or a difference.
@@ -520,6 +566,7 @@ impl SimulationDiagnosis {
             methods,
             events,
             state_reads: None,
+            concurrency: None,
             endpoint_id: None,
         }
     }
@@ -565,6 +612,7 @@ impl SimulationDiagnosis {
         let endpoint_id = optional_str(line, "endpoint_id")?;
         Ok(Self::new(window, events)
             .with_state_reads(state_reads)
+            .with_concurrency(trace_concurrency(line)?)
             .with_endpoint(endpoint_id))
     }
 
@@ -582,6 +630,15 @@ impl SimulationDiagnosis {
     /// one computation.
     pub fn with_state_reads(mut self, state_reads: Option<StateReadStats>) -> Self {
         self.state_reads = state_reads;
+        self
+    }
+
+    /// Attach the dispatch report, the fourth fact read off a finished run rather than
+    /// a function of its calls. §15's two numbers travel together: a bound and a peak
+    /// from one simulation, because "configured 4" on its own is a sentence about a
+    /// command line.
+    pub fn with_concurrency(mut self, concurrency: Option<ConcurrencyReport>) -> Self {
+        self.concurrency = concurrency;
         self
     }
 
@@ -624,6 +681,17 @@ impl SimulationDiagnosis {
                 },
             );
             object.insert("diagnosis_refusals".to_string(), json!(refusals));
+            // M8.3.3 §15's dispatch report, and only when this run had a bounded
+            // dispatch to report: a line written before M8.3.3, or by a run that read a
+            // recorded dump, is replayed with this key absent rather than with a `null`
+            // that would make the replayed bytes disagree with the committed ones for a
+            // reason that is not a measurement.
+            if let Some(report) = &self.concurrency {
+                object.insert(
+                    "state_read_concurrency".to_string(),
+                    concurrency_json(report),
+                );
+            }
         }
         line
     }
@@ -946,6 +1014,103 @@ fn trace_state_reads(line: &Value) -> std::result::Result<Option<StateReadStats>
         return Ok(None);
     }
     Err("state_read_cache carries neither a reuse flag nor a reason for having none".to_string())
+}
+
+/// The read sites M8.3.3's dependency map hands batches from, and the kinds of read a
+/// batch member can be. Two closed sets, for the reason §13 names for every other set in
+/// this file: a line naming a third site describes a dispatch this build cannot have run,
+/// and decoding it anyway would put a batch in the evidence that no code opened.
+const BATCH_SITES: [&str; 2] = ["account_triple", "touched_contracts"];
+const BATCH_READ_KINDS: [&str; 3] = ["balance", "nonce", "code"];
+
+/// One word back into the constant it names, or a refusal that quotes both the word and
+/// the set it fell outside — so the message says what to look at, not only that something
+/// was wrong.
+fn named<'a>(
+    candidates: &'static [&'static str],
+    word: &str,
+    what: &str,
+) -> std::result::Result<&'a str, String> {
+    candidates
+        .iter()
+        .find(|known| **known == word)
+        .copied()
+        .ok_or_else(|| {
+            format!("the {what} `{word}` is outside the set this build names ({candidates:?})")
+        })
+}
+
+/// §15's dispatch report as the line holds it: absent for a run with no bounded dispatch,
+/// otherwise the bound, the peak, and the batches between them.
+///
+/// The four scalars are read field by field rather than deserialized wholesale for the
+/// reason the rest of this decoder refuses: a missing `observed_peak` would otherwise come
+/// back as a zero, and a zero here is a positive claim that the run never ran two reads at
+/// once. The `note` is checked against the constant rather than carried through, because a
+/// line whose note differs comes from a build with a different rule about what the peak
+/// counts — and the two numbers are only comparable under one rule.
+fn trace_concurrency(line: &Value) -> std::result::Result<Option<ConcurrencyReport>, String> {
+    let report = &line["state_read_concurrency"];
+    if report.is_null() {
+        return Ok(None);
+    }
+    if !report.is_object() {
+        return Err("state_read_concurrency is set but is not an object".to_string());
+    }
+    let note = required_str(report, "note")?;
+    if note != evm_simulation::CONCURRENCY_NOTE {
+        return Err(
+            "state_read_concurrency.note is not the note this build emits, so its peak and \
+             bound mean something other than what this summary compares"
+                .to_string(),
+        );
+    }
+    let list = report["batch_dispatches"]
+        .as_array()
+        .ok_or_else(|| "batch_dispatches is missing or is not an array".to_string())?;
+    let mut batch_dispatches = Vec::with_capacity(list.len());
+    for dispatch in list {
+        let site = named(&BATCH_SITES, required_str(dispatch, "site")?, "batch site")?;
+        let limit = required_u64(dispatch, "limit")?;
+        let reads = dispatch["reads"]
+            .as_array()
+            .ok_or_else(|| format!("batch {site} carries no reads list"))?;
+        let mut members = Vec::with_capacity(reads.len());
+        for read in reads {
+            members.push(StateReadDescriptor {
+                kind: named(
+                    &BATCH_READ_KINDS,
+                    required_str(read, "kind")?,
+                    "batch member kind",
+                )?,
+                chain_id: required_u64(read, "chain_id")?,
+                block: required_u64(read, "block")?,
+                address: required_str(read, "address")?.to_string(),
+            });
+        }
+        let limit: usize = usize::try_from(limit)
+            .map_err(|_| format!("batch {site} has a limit that does not fit this platform"))?;
+        batch_dispatches.push(BatchDispatch {
+            site,
+            limit,
+            reads: members,
+        });
+    }
+    let as_usize = |key: &str| -> std::result::Result<usize, String> {
+        usize::try_from(required_u64(report, key)?)
+            .map_err(|_| format!("`{key}` does not fit this platform"))
+    };
+    Ok(Some(ConcurrencyReport {
+        configured: as_usize("configured")?,
+        serial: report["serial"]
+            .as_bool()
+            .ok_or_else(|| "`serial` is missing or is not a boolean".to_string())?,
+        batches: as_usize("batches")?,
+        batched_reads: as_usize("batched_reads")?,
+        observed_peak: as_usize("observed_peak")?,
+        batch_dispatches,
+        note: evm_simulation::CONCURRENCY_NOTE,
+    }))
 }
 
 /// A line's own refusals, as the argument to [`SimulationDiagnosis::to_trace_line`] wants
@@ -1912,6 +2077,464 @@ fn rank_of(distribution: &Value, key: &str) -> Value {
 /// A `u64` field of a row, `None` when it is absent or null.
 fn value_u64(row: &Value, key: &str) -> Option<u64> {
     row.get(key).and_then(Value::as_u64)
+}
+
+/// M8.3.3 §21's per-arm table, folded from the runs' own simulation rows.
+///
+/// Three rules set the shape, and each is one of this milestone's own prohibitions:
+///
+/// - **An arm is the bound a run was configured with, read off that run's own dispatch
+///   report.** A row whose line carries no report joins no arm and is counted in
+///   `simulations_without_a_dispatch_report`, because grouping a run that scheduled nothing
+///   with the serial ones would be §30's 「不同实验配置混入同一个 pooled record」.
+/// - **Every distribution is over samples, not over summaries.** [`stats`] is handed the list
+///   of per-simulation figures, so a rank three samples cannot support comes back `null` with
+///   its `insufficient_sample` reason rather than as an extrapolation (§21).
+/// - **Nothing is subtracted between arms here.** §20 lets these runs sit on different blocks,
+///   so one arm's median minus another's is as much a difference between blocks as between
+///   bounds. The arms publish their own integers and the report says what a difference
+///   between two of them is worth.
+///
+/// §15's two figures stay two fields the whole way down: `configured_concurrency` groups,
+/// `observed_max_concurrency` is what a run reached, and the wire's own `max_concurrency` and
+/// `serial_or_overlap` are published beside both, so a bound that changed nothing on the wire
+/// says so in the run's words rather than in this file's.
+pub fn concurrency_summary_assembled(runs: &[Value]) -> Value {
+    let mut per_run: Vec<Value> = Vec::new();
+    let mut provenance: Vec<Value> = Vec::new();
+    let mut arms: BTreeMap<u64, Vec<Value>> = BTreeMap::new();
+    let mut unreported = 0_u64;
+    for run in runs {
+        let name = run["run"].as_str().unwrap_or("?");
+        let rows: Vec<&Value> = run["rows"].as_array().into_iter().flatten().collect();
+        provenance.push(json!({
+            "run": name,
+            "git_revision": run["git_revision"].clone(),
+            "execution_mode": run["execution_mode"].clone(),
+            "endpoint_id": run["endpoint_id"].clone(),
+            "generated_at_unix_ms": run["generated_at_unix_ms"].clone(),
+            "simulations": rows.len(),
+        }));
+        for row in rows {
+            let report = &row["state_read_concurrency"];
+            let rpc = &row["rpc"];
+            let cache = &row["state_read_cache"];
+            let duplicates = &row["duplicates"];
+            let one = json!({
+                "run": name,
+                "simulation_id": row["simulation_id"],
+                "source": row["source"],
+                "block_number": row["block_number"],
+                "endpoint_id": row["endpoint_id"],
+                "configured_concurrency": report["configured"],
+                "observed_max_concurrency": report["observed_peak"],
+                "scheduler_ran_serially": report["serial"],
+                "batches": report["batches"],
+                "batched_reads": report["batched_reads"],
+                "wire_max_concurrency": rpc["max_concurrency"],
+                "serial_or_overlap_on_the_wire": rpc["serial_or_overlap"],
+                "simulation_duration_ns": rpc["simulation_duration_ns"],
+                "rpc_wall_duration_ns": rpc["rpc_wall_duration_ns"],
+                "rpc_union_duration_ns": rpc["rpc_union_duration_ns"],
+                "rpc_sum_duration_ns": rpc["rpc_sum_duration_ns"],
+                "rpc_overlap_duration_ns": rpc["rpc_overlap_duration_ns"],
+                "serial_wait_duration_ns": rpc["serial_wait_duration_ns"],
+                "rpc_gap_duration_ns": rpc["rpc_gap_duration_ns"],
+                "rpc_gap_count": rpc["rpc_gap_count"],
+                "calls": rpc["total_calls"],
+                "successful_calls": rpc["successful_calls"],
+                "failed_calls": rpc["failed_calls"],
+                "attempts": rpc["total_attempts"],
+                "retried_calls": rpc["retried_calls"],
+                "duplicate_state_reads": duplicates["duplicate_state_reads"],
+                "total_state_reads": duplicates["total_state_reads"],
+                "state_read_reuse": cache["reuse"],
+                "cache_hits": cache["cache_hits"],
+                "cache_misses": cache["cache_misses"],
+            });
+            match value_u64(report, "configured") {
+                Some(bound) => arms.entry(bound).or_default().push(one.clone()),
+                None => unreported += 1,
+            }
+            per_run.push(one);
+        }
+    }
+    let samples = |rows: &[Value], key: &str| -> Vec<u64> {
+        rows.iter().filter_map(|row| value_u64(row, key)).collect()
+    };
+    /// The figures an arm adds up. A field absent from a row is counted in
+    /// `totals_fields_missing_from_a_row` rather than added as a zero: an absent
+    /// `duplicate_state_reads` and a measured `0` are different facts, and a total that folded
+    /// the first into the second would be the one number in this table that could flatter the
+    /// run it describes.
+    const TOTALED: [&str; 9] = [
+        "calls",
+        "attempts",
+        "failed_calls",
+        "retried_calls",
+        "duplicate_state_reads",
+        "cache_hits",
+        "cache_misses",
+        "batches",
+        "batched_reads",
+    ];
+    let distinct_numbers = |rows: &[Value], key: &str| -> Vec<u64> {
+        rows.iter()
+            .filter_map(|row| value_u64(row, key))
+            .collect::<BTreeSet<u64>>()
+            .into_iter()
+            .collect()
+    };
+    let per_arm: Vec<Value> = arms
+        .iter()
+        .map(|(bound, rows)| {
+            let peaks = samples(rows, "observed_max_concurrency");
+            let wire_peaks = samples(rows, "wire_max_concurrency");
+            let overlaps = samples(rows, "rpc_overlap_duration_ns");
+            let mut reuse_on = 0_u64;
+            let mut reuse_off = 0_u64;
+            let mut reuse_unreported = 0_u64;
+            let mut with_an_overlap = 0_u64;
+            for row in rows {
+                match row["state_read_reuse"].as_bool() {
+                    Some(true) => reuse_on += 1,
+                    Some(false) => reuse_off += 1,
+                    None => reuse_unreported += 1,
+                }
+                if row["serial_or_overlap_on_the_wire"].as_str() == Some("overlap") {
+                    with_an_overlap += 1;
+                }
+            }
+            let mut totals = serde_json::Map::new();
+            let mut totals_missing = 0_u64;
+            for key in TOTALED {
+                let mut sum = 0_u64;
+                for row in rows {
+                    match value_u64(row, key) {
+                        Some(value) => sum = sum.saturating_add(value),
+                        None => totals_missing += 1,
+                    }
+                }
+                totals.insert(key.to_string(), json!(sum));
+            }
+            json!({
+                "configured_concurrency": bound,
+                "runs": rows
+                    .iter()
+                    .filter_map(|row| row["run"].as_str())
+                    .collect::<BTreeSet<&str>>()
+                    .len(),
+                "simulations": rows.len(),
+                "blocks": distinct_numbers(rows, "block_number"),
+                "per_source": rows
+                    .iter()
+                    .filter_map(|row| row["source"].as_str())
+                    .collect::<BTreeSet<&str>>()
+                    .into_iter()
+                    .collect::<Vec<&str>>(),
+                "state_read_reuse": {
+                    "on": reuse_on,
+                    "off": reuse_off,
+                    "unreported": reuse_unreported,
+                },
+                "simulation_duration_ns": stats(&samples(rows, "simulation_duration_ns")),
+                "rpc_wall_duration_ns": stats(&samples(rows, "rpc_wall_duration_ns")),
+                "rpc_union_duration_ns": stats(&samples(rows, "rpc_union_duration_ns")),
+                "rpc_overlap_duration_ns": stats(&overlaps),
+                "serial_wait_duration_ns": stats(&samples(rows, "serial_wait_duration_ns")),
+                "rpc_gap_duration_ns": stats(&samples(rows, "rpc_gap_duration_ns")),
+                "observed_max_concurrency": {
+                    "per_simulation": peaks,
+                    "min": peaks.iter().min(),
+                    "max": peaks.iter().max(),
+                    "never_above_configured": peaks.iter().all(|peak| *peak <= *bound),
+                },
+                "wire_max_concurrency": {
+                    "per_simulation": wire_peaks,
+                    "min": wire_peaks.iter().min(),
+                    "max": wire_peaks.iter().max(),
+                },
+                "simulations_with_an_overlap_on_the_wire": with_an_overlap,
+                "totals": Value::Object(totals),
+                "totals_fields_missing_from_a_row": totals_missing,
+            })
+        })
+        .collect();
+    json!({
+        "unit": "ns",
+        "percentile_algorithm": "nearest_rank",
+        "minimum_samples_for_rank": {
+            "p50": evm_metrics::minimum_samples_for(50),
+            "p90": evm_metrics::minimum_samples_for(90),
+            "p95": evm_metrics::minimum_samples_for(95),
+            "p99": evm_metrics::minimum_samples_for(99),
+        },
+        "arms_are_never_blended": true,
+        "sources_are_never_blended": true,
+        "simulations": per_run.len(),
+        "simulations_without_a_dispatch_report": unreported,
+        "configured_is_never_observed": evm_simulation::CONCURRENCY_NOTE,
+        "arms_are_not_subtracted": "§20 lets these runs sit on different blocks, so a \
+             difference between two arms' published medians is a difference between two blocks \
+             as much as between two bounds. Each arm states its own integers and the reader is \
+             told which subtraction this evidence can carry",
+        "per_arm": per_arm,
+        "per_simulation": per_run,
+        "assembled_from": provenance,
+    })
+}
+
+/// §5–§8's dependency map, assembled: what the code proves about each state read, and what
+/// the runs did with each one.
+///
+/// §7's rule is the shape of this table. A read may be handed to a batch only where the code
+/// proves two of its reads independent of one another; what is not proved keeps the order the
+/// caller decided and is recorded here as `unknown` rather than assumed safe. The first fields
+/// per method are that claim and the reason for it; `measured` is what the runs' own dispatch
+/// reports and recorded call intervals say about the same method — so a claim that stopped
+/// matching the runs would show up as a number here instead of as a sentence nobody checked.
+///
+/// §8's block identity is measured in the same pass: a state read's `block` parameter and its
+/// dedup key both carry the chain and the block the params named, so
+/// `every_state_key_named_the_run_block` counts the simulations where every state call of one
+/// simulation named that simulation's own pinned block. A `latest` read could not pass it, and
+/// would not have to be a different program to fail.
+pub fn dependency_map_assembled(runs: &[Value]) -> Value {
+    /// The four methods §18 names, with the batch kind their reads carry, whether this build
+    /// ever hands one to the scheduler, and the reason that verdict holds.
+    const DEPENDENCY_ROWS: [(&str, &str, &str, bool, &str); 4] = [
+        (
+            "eth_getBalance",
+            "balance",
+            "independent",
+            true,
+            "a balance at a pinned block is a fact about that block and answers nothing about \
+             any other read: the caller's own order is what the account triple is asked in, \
+             and no leg's params are built from another leg's answer (§5's analysis of \
+             `RpcStateProvider::account_triple`)",
+        ),
+        (
+            "eth_getTransactionCount",
+            "nonce",
+            "independent",
+            true,
+            "as the balance: the nonce of an address at a pinned number does not depend on what \
+             its code or its balance is, and both are asked for the same address in one hand",
+        ),
+        (
+            "eth_getCode",
+            "code",
+            "independent",
+            true,
+            "one bytecode per address, and the address set is decided by the plan before any of \
+             them is read (§6: `touched_contracts` is a second proved-independent hand)",
+        ),
+        (
+            "eth_getStorageAt",
+            "storage",
+            "unknown",
+            false,
+            "the EVM demands a slot one at a time: REVM's async fiber holds a single outstanding \
+             database request, so a second slot cannot be asked before the first has been \
+             answered. Which slot is next is a function of the value just returned, so nothing \
+             in this build proves two storage reads independent — §7's answer is `unknown`, and \
+             §3's is that prefetching one is forbidden. Storage therefore keeps the order the \
+             caller decided",
+        ),
+    ];
+    const STATE_METHODS: [&str; 4] = [
+        "eth_getBalance",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getTransactionCount",
+    ];
+    let mut batched: BTreeMap<String, u64> = BTreeMap::new();
+    let mut batch_sites: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    let mut descriptor_blocks: BTreeSet<u64> = BTreeSet::new();
+    let mut descriptor_chains: BTreeSet<u64> = BTreeSet::new();
+    let mut limits: BTreeSet<u64> = BTreeSet::new();
+    let mut calls_by_method: BTreeMap<String, u64> = BTreeMap::new();
+    let mut overlapped_by_method: BTreeMap<String, u64> = BTreeMap::new();
+    let mut simulations = 0_u64;
+    let mut lines_without_a_report = 0_u64;
+    let mut identity_checked = 0_u64;
+    let mut identity_matched = 0_u64;
+    let mut identity_state_calls = 0_u64;
+    let mut identity_named = 0_u64;
+    let mut wire_block_fields: BTreeSet<String> = BTreeSet::new();
+    let mut identity_mismatches: Vec<Value> = Vec::new();
+    for run in runs {
+        let name = run["run"].as_str().unwrap_or("?").to_string();
+        for line in run["lines"].as_array().into_iter().flatten() {
+            simulations += 1;
+            if line["state_read_concurrency"].is_null() {
+                lines_without_a_report += 1;
+            }
+            for batch in line["state_read_concurrency"]["batch_dispatches"]
+                .as_array()
+                .into_iter()
+                .flatten()
+            {
+                let site = batch["site"].as_str().unwrap_or("?").to_string();
+                if let Some(limit) = value_u64(batch, "limit") {
+                    limits.insert(limit);
+                }
+                for read in batch["reads"].as_array().into_iter().flatten() {
+                    if let Some(kind) = read["kind"].as_str() {
+                        *batched.entry(kind.to_string()).or_default() += 1;
+                        batch_sites
+                            .entry(kind.to_string())
+                            .or_default()
+                            .insert(site.clone());
+                    }
+                    if let Some(block) = value_u64(read, "block") {
+                        descriptor_blocks.insert(block);
+                    }
+                    if let Some(chain) = value_u64(read, "chain_id") {
+                        descriptor_chains.insert(chain);
+                    }
+                }
+            }
+            // §8: every state call of one simulation has to name that simulation's own block.
+            // Both facts are read off the call rather than inferred: `block` is what the params
+            // carried out on the wire, and `dedup_key` is the adapter's own
+            // `kind|chain|block|target[|slot]`.
+            let pinned_block = value_u64(line, "block_number");
+            let pinned_chain = value_u64(line, "chain_id");
+            let mut state_calls = 0_u64;
+            let mut named = 0_u64;
+            let mut mismatched: Vec<String> = Vec::new();
+            for call in line["calls"].as_array().into_iter().flatten() {
+                let method = call["method"].as_str().unwrap_or("?");
+                if !STATE_METHODS.contains(&method) {
+                    continue;
+                }
+                state_calls += 1;
+                *calls_by_method.entry(method.to_string()).or_default() += 1;
+                let wire_block = call["block"].as_str();
+                let key = call["dedup_key"].as_str();
+                if let Some(block) = wire_block {
+                    wire_block_fields.insert(block.to_string());
+                }
+                // A decimal number is the only form a pinned block takes here. `latest`,
+                // `pending`, `safe` and an absent field all fail to parse, so they land in
+                // `mismatched` instead of quietly counting as checked.
+                let key_parts: Vec<&str> = key.unwrap_or_default().split('|').collect();
+                let key_chain = key_parts.get(1).and_then(|raw| raw.parse::<u64>().ok());
+                let key_block = key_parts.get(2).and_then(|raw| raw.parse::<u64>().ok());
+                let parsed = wire_block.and_then(|raw| raw.parse::<u64>().ok());
+                if parsed.is_none() || key_chain.is_none() || key_block.is_none() {
+                    mismatched.push(format!(
+                        "{method} block={} key={}",
+                        wire_block.unwrap_or("<absent>"),
+                        key.unwrap_or("<absent>")
+                    ));
+                    continue;
+                }
+                named += 1;
+                if parsed != pinned_block || key_chain != pinned_chain || key_block != pinned_block
+                {
+                    mismatched.push(format!(
+                        "{method} block={} key={} (run is chain {} block {})",
+                        wire_block.unwrap_or("<absent>"),
+                        key.unwrap_or("<absent>"),
+                        pinned_chain.unwrap_or(0),
+                        pinned_block.unwrap_or(0)
+                    ));
+                }
+            }
+            if state_calls > 0 {
+                identity_checked += 1;
+                identity_state_calls += state_calls;
+                identity_named += named;
+                if mismatched.is_empty() && named == state_calls {
+                    identity_matched += 1;
+                } else {
+                    identity_mismatches.push(json!({
+                        "run": name,
+                        "simulation_id": line["simulation_id"],
+                        "state_calls": state_calls,
+                        "keys_read": named,
+                        "not_at_the_run_block": mismatched.len(),
+                        "examples": mismatched.into_iter().take(3).collect::<Vec<String>>(),
+                    }));
+                }
+            }
+            // Two calls of one method outstanding at once, from this simulation's own stamps.
+            for method in STATE_METHODS {
+                let spans: Vec<(u64, u64)> = line["calls"]
+                    .as_array()
+                    .into_iter()
+                    .flatten()
+                    .filter(|call| call["method"].as_str() == Some(method))
+                    .filter_map(|call| {
+                        Some((
+                            value_u64(call, "started_ns")?,
+                            value_u64(call, "finished_ns")?,
+                        ))
+                    })
+                    .collect();
+                if spans.iter().enumerate().any(|(index, first)| {
+                    spans[index + 1..]
+                        .iter()
+                        .any(|second| first.0 < second.1 && second.0 < first.1)
+                }) {
+                    *overlapped_by_method.entry(method.to_string()).or_default() += 1;
+                }
+            }
+        }
+    }
+    let per_method: Vec<Value> = DEPENDENCY_ROWS
+        .iter()
+        .map(|(method, kind, dependency, batchable, basis)| {
+            json!({
+                "method": method,
+                "batch_kind": kind,
+                "dependency": dependency,
+                "may_be_a_batch_member": batchable,
+                "basis": basis,
+                "measured": {
+                    "calls_in_the_runs": calls_by_method.get(*method).copied().unwrap_or(0),
+                    "batched_reads": batched.get(*kind).copied().unwrap_or(0),
+                    "batch_sites_seen": batch_sites
+                        .get(*kind)
+                        .map(|sites| sites.iter().map(String::as_str).collect::<Vec<&str>>())
+                        .unwrap_or_default(),
+                    "simulations_where_two_of_this_method_were_outstanding":
+                        overlapped_by_method.get(*method).copied().unwrap_or(0),
+                },
+            })
+        })
+        .collect();
+    json!({
+        "question": "§5–§7: which state reads may be outstanding together, and on what proof. \
+                     What is not proved keeps the caller's order and is recorded as `unknown`",
+        "dependency_states": ["independent", "unknown"],
+        "batch_limits_seen": limits.into_iter().collect::<Vec<u64>>(),
+        "batch_descriptor_blocks": descriptor_blocks.into_iter().collect::<Vec<u64>>(),
+        "batch_descriptor_chain_ids": descriptor_chains.into_iter().collect::<Vec<u64>>(),
+        "scheduler_bound_is_never_a_dependency_claim": "a batch member list says what was \
+             handed to the scheduler, not that two reads were independent; the `basis` beside \
+             each method is the proof, and the counts are the check that the code still matches \
+             it (§7)",
+        "per_method": per_method,
+        "block_identity": {
+            "simulations_with_state_calls": identity_checked,
+            "state_calls_in_those_simulations": identity_state_calls,
+            "calls_naming_a_pinned_chain_and_block": identity_named,
+            "every_state_key_named_the_run_block": identity_matched,
+            "simulations_that_did_not": identity_mismatches,
+            "wire_block_fields_seen": wire_block_fields.into_iter().collect::<Vec<String>>(),
+            "rule": "§8: a state read taken on a concurrent path must name the same pinned \
+                     block as the serial path it replaced. `latest`, `pending` and an absent \
+                     block are not states this table grades — a key that does not carry the \
+                     run's own number is listed, with the run and the key quoted. \
+                     `wire_block_fields_seen` is every form the outgoing block parameter ever \
+                     took, so a tag would appear here as text rather than be argued away",
+        },
+        "simulations": simulations,
+        "lines_without_a_dispatch_report": lines_without_a_report,
+    })
 }
 
 /// §25's seven categories, in §25's own order and §25's own words.
@@ -6333,6 +6956,558 @@ mod tests {
         let replayed = SimulationDiagnosis::from_trace_line(&cache)
             .expect("a line that refused the tally is readable, with the tally absent");
         assert_eq!(replayed.state_reads, None);
+    }
+
+    /// M8.3.3 §15's two numbers on one line, in the shape the task doc singles out: a
+    /// bound of 4 that reached a peak of 1. Both have to travel, because a reader shown
+    /// only the bound would be told by a command line that the run was parallel.
+    fn configured_four_observed_one() -> ConcurrencyReport {
+        let read = |kind: &'static str| StateReadDescriptor {
+            kind,
+            chain_id: 91_342,
+            block: 37_594_591,
+            address: "0xaa11".to_string(),
+        };
+        ConcurrencyReport {
+            configured: 4,
+            serial: false,
+            batches: 1,
+            batched_reads: 3,
+            observed_peak: 1,
+            batch_dispatches: vec![BatchDispatch {
+                site: "account_triple",
+                limit: 4,
+                // One account, three legs: the hand §5's dependency map proved
+                // independent, and the only one this build ever opens.
+                reads: vec![read("balance"), read("nonce"), read("code")],
+            }],
+            note: evm_simulation::CONCURRENCY_NOTE,
+        }
+    }
+
+    #[test]
+    fn a_bound_of_four_and_a_peak_of_one_are_published_as_two_numbers() {
+        let line = replayable_diagnosis()
+            .with_concurrency(Some(configured_four_observed_one()))
+            .to_trace_line(&[]);
+        let report = &line["state_read_concurrency"];
+        assert_eq!(report["configured"], json!(4));
+        assert_eq!(report["observed_peak"], json!(1));
+        assert_eq!(report["serial"], json!(false));
+        assert_eq!(report["batches"], json!(1));
+        assert_eq!(report["batched_reads"], json!(3));
+        assert_eq!(report["note"], json!(evm_simulation::CONCURRENCY_NOTE));
+        assert_eq!(
+            report["batch_dispatches"][0]["site"],
+            json!("account_triple")
+        );
+        assert_eq!(report["batch_dispatches"][0]["limit"], json!(4));
+        assert_eq!(
+            report["batch_dispatches"][0]["reads"]
+                .as_array()
+                .map(Vec::len),
+            Some(3),
+            "the plan travels with the tally: a reader who is given the peak but not the reads \
+             cannot tell a bound that nothing was offered from one that was offered three reads"
+        );
+
+        // The wire sweep never saw the bound. These three calls share no instant, so the
+        // line's own second account still says nothing overlapped — which is the pair of
+        // figures §15 insists on publishing together.
+        assert_eq!(line["rpc"]["max_concurrency"], json!(1));
+        assert_eq!(line["rpc"]["serial_or_overlap"], json!("serial"));
+
+        // §41's assemblies are replayed through this decoder, so the report has to survive
+        // the round trip both as a value and as bytes.
+        let replayed = SimulationDiagnosis::from_trace_line(&line)
+            .expect("a line carrying a dispatch report is readable by the build that wrote it");
+        assert_eq!(
+            replayed.concurrency.as_ref(),
+            Some(&configured_four_observed_one())
+        );
+        assert_eq!(
+            serde_json::to_string(&line).expect("the original serializes"),
+            serde_json::to_string(&replayed.to_trace_line(&trace_line_refusals(&line)))
+                .expect("the replay serializes")
+        );
+    }
+
+    /// The report's refusals, in the same style as the decoder's other closed sets: a
+    /// missing peak would come back as a zero, which is a positive claim that nothing ever
+    /// ran twice at once; a note from another build means another rule about what the peak
+    /// counts; and a site or kind outside the two sets describes a batch no code here opened.
+    #[test]
+    fn a_dispatch_report_this_build_cannot_have_written_is_refused() {
+        let line = replayable_diagnosis()
+            .with_concurrency(Some(configured_four_observed_one()))
+            .to_trace_line(&[]);
+
+        // A line with no report is M8.3.2's shape and stays readable, with the key absent
+        // rather than zero-filled — a run that configured nothing is not a run that
+        // configured one.
+        let plain = replayable_diagnosis().to_trace_line(&[]);
+        assert!(plain.get("state_read_concurrency").is_none());
+        assert_eq!(
+            SimulationDiagnosis::from_trace_line(&plain)
+                .expect("a line from before M8.3.3 still replays")
+                .concurrency,
+            None
+        );
+
+        let mut other_note = line.clone();
+        other_note["state_read_concurrency"]["note"] = json!("observed_peak counts attempts");
+        let error = SimulationDiagnosis::from_trace_line(&other_note).expect_err(
+            "two peaks measured under two rules are not one series for a summary to compare",
+        );
+        assert!(error.contains("note"), "{error}");
+
+        let mut no_peak = line.clone();
+        no_peak["state_read_concurrency"]["observed_peak"] = json!(null);
+        let error = SimulationDiagnosis::from_trace_line(&no_peak)
+            .expect_err("a missing peak is not a peak of zero");
+        assert!(error.contains("observed_peak"), "{error}");
+
+        let mut other_site = line.clone();
+        other_site["state_read_concurrency"]["batch_dispatches"][0]["site"] =
+            json!("whole_simulation");
+        let error = SimulationDiagnosis::from_trace_line(&other_site)
+            .expect_err("§9 forbids a batch over a whole simulation, so no line may name one");
+        assert!(error.contains("whole_simulation"), "{error}");
+
+        let mut storage_member = line.clone();
+        storage_member["state_read_concurrency"]["batch_dispatches"][0]["reads"][0]["kind"] =
+            json!("storage");
+        let error = SimulationDiagnosis::from_trace_line(&storage_member).expect_err(
+            "a slot is demanded by the EVM one at a time (§7), so it is not a batch member, and \
+             a line saying it was is not decoded into a table that would treat it as one",
+        );
+        assert!(error.contains("storage"), "{error}");
+
+        let mut scalar = line.clone();
+        scalar["state_read_concurrency"] = json!(4);
+        assert!(
+            SimulationDiagnosis::from_trace_line(&scalar).is_err(),
+            "a bare bound is not a report — it says what was asked for and nothing about what \
+             happened"
+        );
+
+        let mut no_batches = line.clone();
+        no_batches["state_read_concurrency"]["batch_dispatches"] = json!(null);
+        assert!(
+            SimulationDiagnosis::from_trace_line(&no_batches).is_err(),
+            "the batch list is read field by field, so an absent one is refused rather than \
+             decoded as an empty plan beside a `batches` figure of 1"
+        );
+    }
+
+    /// §36's "real concurrency needs an overlap on the wire", enforced where the verdict is
+    /// written: the classification reads the sweep's `max_concurrency`, never the bound a run
+    /// was configured with. Two accounts of one set of calls therefore agree on every figure,
+    /// and a `dominant` C — the serial wait that a bound of 4 did not remove — survives the
+    /// flag that was meant to fix it. Were the verdict to read `configured`, this run's C
+    /// would flip to `ruled_out` on the strength of a command line.
+    #[test]
+    fn a_configured_bound_moves_no_bottleneck_figure() {
+        let unconfigured = source_block(
+            &bottleneck_classification(&[acquisition_row(&replayable_diagnosis())], None),
+            "live",
+        );
+        let configured = source_block(
+            &bottleneck_classification(
+                &[acquisition_row(
+                    &replayable_diagnosis().with_concurrency(Some(configured_four_observed_one())),
+                )],
+                None,
+            ),
+            "live",
+        );
+        assert_eq!(
+            configured["aggregated_figures"], unconfigured["aggregated_figures"],
+            "the dispatch report is a second account of the same run, not a re-measurement"
+        );
+        assert_eq!(
+            configured["aggregated_figures"]["max_concurrency"],
+            json!(1)
+        );
+        assert_eq!(
+            category(&configured, "C")["verdict"],
+            json!(DOMINANT),
+            "800 of this 1 000 ns span had exactly one call in flight, and no bound changes that"
+        );
+        for class in ["A", "B", "C", "D", "E", "F", "G"] {
+            assert_eq!(
+                category(&configured, class)["verdict"],
+                category(&unconfigured, class)["verdict"],
+                "{class}"
+            );
+        }
+    }
+
+    /// One live run's material, as §29's per-run files hold it: the simulation lines the run
+    /// recorded, plus the provenance §30 asks a run to carry with them.
+    fn concurrency_run(name: &str, rows: Vec<Value>) -> Value {
+        json!({
+            "run": name,
+            "git_revision": "revision-under-test",
+            "execution_mode": "build-only",
+            "endpoint_id": "rpc-0123456789abcdef",
+            "generated_at_unix_ms": 1_700_000_000_000_u64,
+            "rows": rows,
+        })
+    }
+
+    /// A line of one arm: the same three calls, with the bound and the peak the arm reached
+    /// set to the pair under test.
+    fn arm_line(configured: usize, observed_peak: usize) -> Value {
+        let mut report = configured_four_observed_one();
+        report.configured = configured;
+        report.observed_peak = observed_peak;
+        report.serial = configured == 1;
+        replayable_diagnosis()
+            .with_concurrency(Some(report))
+            .to_trace_line(&[])
+    }
+
+    /// §21's rule at the sample count this milestone actually has: three simulations to an
+    /// arm is a min, a max and a median, and nothing above the median. A p99 computed from
+    /// three samples would be the single most expensive-looking number in the table and the
+    /// least supported, so it comes back `null` with the count a rank of that name needs.
+    #[test]
+    fn three_simulations_to_an_arm_publish_a_median_and_refuse_a_p99() {
+        let table = concurrency_summary_assembled(&[
+            concurrency_run("c4-01", vec![arm_line(4, 1)]),
+            concurrency_run("c4-02", vec![arm_line(4, 2)]),
+            concurrency_run("c4-03", vec![arm_line(4, 2)]),
+        ]);
+        assert_eq!(table["per_arm"].as_array().map(Vec::len), Some(1));
+        let arm = &table["per_arm"][0];
+        assert_eq!(arm["configured_concurrency"], json!(4));
+        assert_eq!(arm["runs"], json!(3));
+        assert_eq!(arm["simulations"], json!(3));
+        let durations = &arm["simulation_duration_ns"];
+        assert_eq!(durations["samples"], json!(3));
+        assert_eq!(durations["measured"], json!(true));
+        assert_eq!(durations["min_ns"], json!(1_000));
+        assert_ne!(
+            durations["p50_ns"],
+            Value::Null,
+            "three samples carry the rank §21 allows, and `minimum_samples_for(50)` is 2"
+        );
+        for rank in ["p90", "p95", "p99"] {
+            assert_eq!(durations[format!("{rank}_ns")], Value::Null, "{rank}");
+            assert_eq!(
+                durations[format!("{rank}_reason")]["reason"],
+                json!("insufficient_sample"),
+                "{rank}"
+            );
+            assert_eq!(
+                durations[format!("{rank}_reason")]["minimum_samples"],
+                json!(evm_metrics::minimum_samples_for(
+                    rank[1..].parse::<u64>().expect("the rank is in the name")
+                )),
+                "{rank} names the count it needs, rather than the samples it did not get"
+            );
+        }
+        assert_eq!(
+            arm["observed_max_concurrency"]["per_simulation"],
+            json!([1, 2, 2])
+        );
+        assert_eq!(arm["observed_max_concurrency"]["min"], json!(Some(1_u64)));
+        assert_eq!(arm["observed_max_concurrency"]["max"], json!(Some(2_u64)));
+        assert_eq!(
+            arm["observed_max_concurrency"]["never_above_configured"],
+            json!(true)
+        );
+        assert_eq!(
+            arm["wire_max_concurrency"]["max"],
+            json!(Some(1_u64)),
+            "the wire swept these same calls and saw one in flight throughout — the bound \
+             reached 2 inside the scheduler and the endpoint never knew"
+        );
+        assert_eq!(
+            arm["totals"]["calls"],
+            json!(9),
+            "three simulations, three calls each"
+        );
+        assert_eq!(arm["totals"]["duplicate_state_reads"], json!(0));
+        assert_eq!(
+            arm["totals_fields_missing_from_a_row"],
+            json!(0),
+            "an absent field is tallied here rather than added to a total as a zero"
+        );
+        assert_eq!(arm["state_read_reuse"]["on"], json!(3));
+        assert_eq!(table["simulations"], json!(3));
+        assert_eq!(table["simulations_without_a_dispatch_report"], json!(0));
+    }
+
+    /// §30's rule that no two configurations share a row, and §10's that a run which named no
+    /// bound is not silently counted as one that named 1: a line with no dispatch report joins
+    /// no arm at all and is tallied where a reader can see it.
+    #[test]
+    fn arms_are_grouped_by_the_bound_a_run_was_given_and_an_unconfigured_run_joins_none() {
+        let table = concurrency_summary_assembled(&[
+            concurrency_run("c1-01", vec![arm_line(1, 1)]),
+            concurrency_run("c1-02", vec![arm_line(1, 1)]),
+            concurrency_run("c2-01", vec![arm_line(2, 2)]),
+            concurrency_run("c4-01", vec![replayable_diagnosis().to_trace_line(&[])]),
+        ]);
+        assert_eq!(table["simulations"], json!(4));
+        assert_eq!(table["simulations_without_a_dispatch_report"], json!(1));
+        let arms: Vec<u64> = table["per_arm"]
+            .as_array()
+            .map(|list| {
+                list.iter()
+                    .filter_map(|arm| arm["configured_concurrency"].as_u64())
+                    .collect()
+            })
+            .unwrap_or_default();
+        assert_eq!(
+            arms,
+            vec![1, 2],
+            "two arms, ascending, and no arm for the run that named none"
+        );
+        let arm = |bound: u64| -> Value {
+            table["per_arm"]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .find(|row| row["configured_concurrency"] == json!(bound))
+                .cloned()
+                .unwrap_or_else(|| panic!("no arm configured {bound}"))
+        };
+        assert_eq!(arm(1)["simulations"], json!(2));
+        assert_eq!(arm(2)["simulations"], json!(1));
+        let calls_in = |bound: u64| arm(bound)["totals"]["calls"].as_u64().unwrap_or(0);
+        assert_eq!(
+            (calls_in(1), calls_in(2)),
+            (6, 3),
+            "each arm holds its own runs' calls, and the run that named no bound adds to \
+             neither of them — it is still in `per_simulation`, where a reader can find it"
+        );
+        assert_eq!(
+            arm(1)["observed_max_concurrency"]["never_above_configured"],
+            json!(true)
+        );
+        assert_eq!(
+            arm(2)["observed_max_concurrency"]["never_above_configured"],
+            json!(true)
+        );
+        // §30's provenance: the table says which commit, mode and endpoint every run it folded
+        // came from, per run rather than pooled.
+        let provenance = table["assembled_from"]
+            .as_array()
+            .map(Vec::len)
+            .unwrap_or_default();
+        assert_eq!(provenance, 4);
+        assert_eq!(
+            table["assembled_from"][0]["execution_mode"],
+            json!("build-only")
+        );
+        assert_eq!(
+            table["assembled_from"][0]["git_revision"],
+            json!("revision-under-test")
+        );
+
+        // The control that makes a totals zero mean something: a row whose duplicate tally is
+        // absent rather than measured at none. Folded as a zero it would read exactly like a
+        // clean run, so the arm also says how many of its fields it added as nothing.
+        let mut hole = arm_line(1, 1);
+        if let Some(object) = hole["duplicates"].as_object_mut() {
+            object.remove("duplicate_state_reads");
+        }
+        let holed = concurrency_summary_assembled(&[concurrency_run("c1-03", vec![hole])]);
+        assert_eq!(
+            holed["per_arm"][0]["totals_fields_missing_from_a_row"],
+            json!(1)
+        );
+        assert_eq!(
+            holed["per_arm"][0]["totals"]["duplicate_state_reads"],
+            json!(0),
+            "the sum is what the rows that named a number said, and the gap is published \
+             beside it rather than hidden inside it"
+        );
+    }
+
+    /// §15's exposure of the size: the arm is named by the bound, so a peak that went over its
+    /// own bound cannot be filed away as that bound. It sits in the same arm and is reported as
+    /// `never_above_configured: false`, which is the field §11/§12's gate reads.
+    #[test]
+    fn a_peak_above_the_bound_it_was_given_is_published_as_the_split_it_is() {
+        let table = concurrency_summary_assembled(&[
+            concurrency_run("c2-01", vec![arm_line(2, 1)]),
+            concurrency_run("c2-02", vec![arm_line(2, 3)]),
+        ]);
+        assert_eq!(table["per_arm"].as_array().map(Vec::len), Some(1));
+        let arm = &table["per_arm"][0];
+        assert_eq!(arm["configured_concurrency"], json!(2));
+        assert_eq!(
+            arm["observed_max_concurrency"]["per_simulation"],
+            json!([1, 3])
+        );
+        assert_eq!(arm["observed_max_concurrency"]["max"], json!(Some(3_u64)));
+        assert_eq!(
+            arm["observed_max_concurrency"]["never_above_configured"],
+            json!(false),
+            "a scheduler that went over its bound is a finding, not a rounding of the arm's name"
+        );
+        assert_eq!(
+            table["configured_is_never_observed"],
+            json!(evm_simulation::CONCURRENCY_NOTE)
+        );
+    }
+
+    /// One source run's §5–§8 material, as its file holds it: whole trace lines, calls and all.
+    fn dependency_run(name: &str, lines: Vec<Value>) -> Value {
+        json!({ "run": name, "lines": lines })
+    }
+
+    /// The row of the map for one method.
+    fn method_row(table: &Value, method: &str) -> Value {
+        table["per_method"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .find(|row| row["method"] == json!(method))
+            .cloned()
+            .unwrap_or_else(|| panic!("no row for {method} in the dependency map"))
+    }
+
+    /// §5–§7's table, measured against a run: what the code claims per method, the reads each
+    /// arm was actually handed, and — the part a claim cannot be graded without — that two
+    /// storage reads of this run never shared an instant. The last is §36's rule applied to the
+    /// map: a method the build refuses to batch is also a method with no overlap to report, and
+    /// if the sweep had invented one, `dependency = unknown` would have been the row's lie.
+    #[test]
+    fn the_map_records_what_the_code_proved_and_what_the_runs_did() {
+        let line = replayable_diagnosis()
+            .with_concurrency(Some(configured_four_observed_one()))
+            .to_trace_line(&[]);
+        let table = dependency_map_assembled(&[dependency_run("c4-01", vec![line.clone()])]);
+        assert_eq!(table["simulations"], json!(1));
+        assert_eq!(table["lines_without_a_dispatch_report"], json!(0));
+
+        let storage = method_row(&table, "eth_getStorageAt");
+        assert_eq!(storage["dependency"], json!("unknown"));
+        assert_eq!(storage["may_be_a_batch_member"], json!(false));
+        assert_eq!(storage["measured"]["calls_in_the_runs"], json!(2));
+        assert_eq!(
+            storage["measured"]["batched_reads"],
+            json!(0),
+            "the dispatch plan never opened a hand that included a slot"
+        );
+        assert_eq!(
+            storage["measured"]["simulations_where_two_of_this_method_were_outstanding"],
+            json!(0),
+            "0→300 and 300→500 touch at an edge and do not overlap; the map says so rather \
+             than rounding a shared instant into existence"
+        );
+
+        let code = method_row(&table, "eth_getCode");
+        assert_eq!(code["dependency"], json!("independent"));
+        assert_eq!(code["may_be_a_batch_member"], json!(true));
+        assert_eq!(code["measured"]["calls_in_the_runs"], json!(1));
+        assert_eq!(code["measured"]["batched_reads"], json!(1));
+        assert_eq!(
+            code["measured"]["batch_sites_seen"],
+            json!(["account_triple"])
+        );
+        for kind in ["eth_getBalance", "eth_getTransactionCount"] {
+            assert_eq!(
+                method_row(&table, kind)["measured"]["batched_reads"],
+                json!(1),
+                "{kind} was offered to the scheduler and answered from the reuse boundary, so \
+                 it has a planned read and no wire call — the two counts are kept apart on purpose"
+            );
+            assert_eq!(
+                method_row(&table, kind)["measured"]["calls_in_the_runs"],
+                json!(0)
+            );
+        }
+        assert_eq!(table["batch_limits_seen"], json!([4]));
+        assert_eq!(table["batch_descriptor_blocks"], json!([37_594_591_u64]));
+        assert_eq!(table["batch_descriptor_chain_ids"], json!([91_342_u64]));
+        let identity = &table["block_identity"];
+        assert_eq!(identity["simulations_with_state_calls"], json!(1));
+        assert_eq!(identity["state_calls_in_those_simulations"], json!(3));
+        assert_eq!(identity["calls_naming_a_pinned_chain_and_block"], json!(3));
+        assert_eq!(identity["every_state_key_named_the_run_block"], json!(1));
+        assert_eq!(identity["simulations_that_did_not"], json!([]));
+        assert_eq!(identity["wire_block_fields_seen"], json!(["37594591"]));
+    }
+
+    /// §8 and §18's hard part: a read taken at `latest` has to be named by this table, not
+    /// counted as one of the checks it passed. Two ways in, both refused — the block the params
+    /// carried, and the block the dedup key claims — because a run could be inconsistent
+    /// between them, and either one alone is what a concurrent path could get wrong.
+    #[test]
+    fn a_state_read_at_latest_is_named_by_the_map_rather_than_counted() {
+        let line = replayable_diagnosis().to_trace_line(&[]);
+
+        let mut wire_tag = line.clone();
+        wire_tag["calls"][0]["block"] = json!("latest");
+        let table = dependency_map_assembled(&[dependency_run("c2-01", vec![wire_tag])]);
+        let identity = &table["block_identity"];
+        assert_eq!(identity["simulations_with_state_calls"], json!(1));
+        assert_eq!(identity["every_state_key_named_the_run_block"], json!(0));
+        assert_eq!(identity["calls_naming_a_pinned_chain_and_block"], json!(2));
+        let listed = identity["simulations_that_did_not"]
+            .as_array()
+            .map(|list| list.len())
+            .unwrap_or_default();
+        assert_eq!(listed, 1);
+        assert_eq!(
+            identity["simulations_that_did_not"][0]["examples"]
+                .as_array()
+                .map(|list| list.len())
+                .unwrap_or_default(),
+            1,
+            "the offending call is quoted, not summarised away"
+        );
+        assert!(
+            identity["simulations_that_did_not"][0]["examples"][0]
+                .as_str()
+                .unwrap_or("")
+                .contains("latest"),
+            "the example names the field it refused"
+        );
+        assert_eq!(
+            identity["wire_block_fields_seen"],
+            json!(["37594591", "latest"]),
+            "a tag shows up as text in the list of forms the outgoing parameter took"
+        );
+
+        let mut keyed_tag = line.clone();
+        let address = keyed_tag["calls"][1]["dedup_key"]
+            .as_str()
+            .unwrap_or_default()
+            .split('|')
+            .nth(3)
+            .unwrap_or_default()
+            .to_string();
+        keyed_tag["calls"][1]["dedup_key"] = json!(format!("storage|91342|latest|{address}|0x02"));
+        let table = dependency_map_assembled(&[dependency_run("c2-02", vec![keyed_tag])]);
+        assert_eq!(
+            table["block_identity"]["every_state_key_named_the_run_block"],
+            json!(0),
+            "the key this build would deduplicate on says a different block than the run pinned"
+        );
+        assert_eq!(
+            table["block_identity"]["simulations_that_did_not"][0]["keys_read"],
+            json!(2)
+        );
+
+        let mut absent = line;
+        absent["calls"][0]["dedup_key"] = Value::Null;
+        let table = dependency_map_assembled(&[dependency_run("c2-03", vec![absent])]);
+        assert_eq!(
+            table["block_identity"]["calls_naming_a_pinned_chain_and_block"],
+            json!(2),
+            "a call with no key names nothing, so it is counted and refused rather than skipped"
+        );
+        assert_eq!(
+            table["block_identity"]["every_state_key_named_the_run_block"],
+            json!(0)
+        );
     }
 
     /// The assembly's own gate, on a scratch pair: a directory written by replaying another

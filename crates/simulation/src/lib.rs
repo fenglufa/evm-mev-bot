@@ -41,6 +41,7 @@
 //! profit. See §11, §44, §47 and §49 of the task, and the Limitations section of
 //! the completion report, which repeats all of it in the same words.
 
+pub mod acquisition;
 pub mod engine;
 pub mod error;
 pub mod gas;
@@ -50,6 +51,9 @@ pub mod result;
 pub mod route;
 pub mod state;
 
+pub use acquisition::{
+    BatchDispatch, BoundedDispatch, ConcurrencyReport, StateReadDescriptor, CONCURRENCY_NOTE,
+};
 pub use engine::{dump_provider, rpc_provider, DumpSimulator, ProviderDb, RpcSimulator, Simulator};
 pub use error::{Result, SimulationError};
 pub use gas::{GasBudget, GasCharge, GasPricing};

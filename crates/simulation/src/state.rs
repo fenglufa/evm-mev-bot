@@ -26,11 +26,14 @@ use std::sync::{Arc, Mutex};
 
 use alloy_primitives::{keccak256, Address, Bytes, B256, U256};
 use async_trait::async_trait;
+use futures_util::future::BoxFuture;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-use evm_chain::{BlockContext, ChainAdapter};
+use evm_chain::{normalize_address, BlockContext, ChainAdapter};
 use evm_core::{BlockNumber, ChainId};
+
+use crate::acquisition::{BoundedDispatch, ConcurrencyReport, StateReadDescriptor};
 
 /// The block a simulation is pinned to, and the header hash it must have.
 ///
@@ -136,6 +139,23 @@ pub trait StateProvider: Send + Sync {
     async fn storage(&self, address: Address, slot: U256) -> ProviderResult<U256>;
 
     async fn code(&self, address: Address) -> ProviderResult<Bytes>;
+
+    /// Several bytecodes the caller already knows it needs, as one dispatch.
+    ///
+    /// The default is the loop every provider has always been: one read after
+    /// another, stopping at the first that fails. Only [`RpcStateProvider`] overrides
+    /// it, and only to bound how many of the *same* independent reads are outstanding
+    /// at once — M8.3.3 §5's dependency map is what makes a caller allowed to ask for
+    /// a list at all, and §9's scheduler is what keeps the list from becoming an
+    /// unbounded fan-out. Answers come back in input order, so a caller that names
+    /// the address it wants in the same position it always did reads the same words.
+    async fn codes(&self, addresses: &[Address]) -> ProviderResult<Vec<Bytes>> {
+        let mut out = Vec::with_capacity(addresses.len());
+        for address in addresses {
+            out.push(self.code(*address).await?);
+        }
+        Ok(out)
+    }
 
     /// The header this source is serving state *at*.
     ///
@@ -761,6 +781,22 @@ pub struct RpcStateProvider {
     cache: Arc<Mutex<StateReadCache>>,
     recorded: Arc<Mutex<StateDump>>,
     reuse: bool,
+    dispatch: Arc<BoundedDispatch>,
+}
+
+/// One member of an account read, as a batch carries it.
+///
+/// A triple answers in three different types, so the three tasks that read them
+/// need one type to be run together in; the tag is the kind, which is also the
+/// [`StateReadDescriptor::kind`] this member's descriptor carries. The `bool` is the
+/// one every single read has always returned: whether this member cost the node a
+/// request (M8.3.1 §12).
+///
+/// Private to this module because nothing else hands a member to this batch.
+enum AccountRead {
+    Balance(U256, bool),
+    Nonce(u64, bool),
+    Code(Bytes, bool),
 }
 
 impl RpcStateProvider {
@@ -775,7 +811,26 @@ impl RpcStateProvider {
     /// order and the recording are the same code either way. It is not "no caching
     /// at all" — the bytecode and storage lookups that already existed at HEAD stay
     /// as they were, because they are not this milestone's variable.
+    ///
+    /// Concurrency 1, which is M8.3.2's HEAD and this build's default (§28).
     pub fn with_state_read_reuse(chain: Arc<dyn ChainAdapter>, pin: BlockPin, reuse: bool) -> Self {
+        Self::with_state_read_concurrency(chain, pin, reuse, 1)
+    }
+
+    /// The same provider with a bound on how many of its independent reads may be
+    /// outstanding at the node at once (M8.3.3 §9).
+    ///
+    /// `1` is the whole of the previous behaviour, and not a special case of the new
+    /// code: the scheduler awaits its tasks one at a time and stops at the first
+    /// failure exactly where the sequential statements it replaced did. §10 makes
+    /// that a test rather than a reading of the source. A bound of `0` is read as
+    /// `1` — a batch that can run nothing is a stalled run, not a setting.
+    pub fn with_state_read_concurrency(
+        chain: Arc<dyn ChainAdapter>,
+        pin: BlockPin,
+        reuse: bool,
+        concurrency: usize,
+    ) -> Self {
         let chain_id = chain.chain_id();
         Self {
             recorded: Arc::new(Mutex::new(StateDump::empty(chain_id, pin))),
@@ -785,6 +840,7 @@ impl RpcStateProvider {
             overrides: Vec::new(),
             cache: Arc::new(Mutex::new(StateReadCache::new(reuse))),
             reuse,
+            dispatch: Arc::new(BoundedDispatch::new(concurrency)),
         }
     }
 
@@ -793,9 +849,20 @@ impl RpcStateProvider {
         self
     }
 
+    /// What this simulation's dispatch did, as §15 wants it reported: the bound that
+    /// was configured, the high-water mark that was actually reached at the node, and
+    /// every batch the scheduler was handed.
+    ///
+    /// Read after the run, like [`Self::state_read_stats`], and for the same reason:
+    /// `configured` and `observed` have to describe one finished simulation, and a
+    /// run that configured 4 while peaking at 1 is a run that never ran 4 at all.
+    pub fn state_read_concurrency(&self) -> ConcurrencyReport {
+        self.dispatch.report()
+    }
+
     /// The reads made so far, in call order — what a fixture is written from.
     pub fn dump(&self) -> StateDump {
-        self.recorded.lock().expect("dump lock").clone()
+        self.recorded().clone()
     }
 
     /// What this simulation's reuse boundary has done, for the evidence (§12).
@@ -824,6 +891,33 @@ impl RpcStateProvider {
         }
     }
 
+    /// The recorded dump, poison-resistant for the same reason [`Self::cache`] is: a
+    /// panic somewhere else in the process must not turn a read this simulation already
+    /// made into a panic here, and a dump that lost a marker would report fewer requests
+    /// than the wire carried. Every lock of this field in this type goes through here, so
+    /// no read path can regain a panicking acquire (M8.3.3 §40).
+    fn recorded(&self) -> std::sync::MutexGuard<'_, StateDump> {
+        self.recorded
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+    }
+
+    /// A batch member's identity, in the four fields the RPC trace already publishes
+    /// for the call it becomes — chain, height, address, and the method `kind` names.
+    ///
+    /// Deliberately not the trace's own `dedup_key` string: that format is
+    /// `evm-chain`'s, and copying it here would give one key two authors. A reader
+    /// joins a batch to its calls on these fields instead, which is the same
+    /// identity and cannot go out of date.
+    fn descriptor(&self, kind: &'static str, address: Address) -> StateReadDescriptor {
+        StateReadDescriptor {
+            kind,
+            chain_id: self.chain_id.0,
+            block: self.pin.number.0,
+            address: normalize_address(&address.to_string()),
+        }
+    }
+
     /// One `eth_getBalance`, asked of the reuse boundary first when `ask` says to.
     ///
     /// The second half of the returned pair is whether this call cost the node a
@@ -841,6 +935,11 @@ impl RpcStateProvider {
         if let Some(value) = cached {
             return Ok((value, false));
         }
+        // M8.3.3's high-water mark brackets a read that is outstanding at the node:
+        // taken just before the request, released once the answer is in. A hit
+        // returned above never had a request to have outstanding, and counting one
+        // would put an overlap in the evidence that the wire did not have (§16).
+        let _outstanding = self.dispatch.enter();
         let value = self
             .chain
             .get_balance(key.block, key.address)
@@ -866,6 +965,7 @@ impl RpcStateProvider {
         if let Some(value) = cached {
             return Ok((value, false));
         }
+        let _outstanding = self.dispatch.enter();
         let value = self
             .chain
             .get_nonce(key.block, key.address)
@@ -889,6 +989,7 @@ impl RpcStateProvider {
         if let Some(code) = cached {
             return Ok((code, false));
         }
+        let _outstanding = self.dispatch.enter();
         let code = self
             .chain
             .get_code(key.block, key.address)
@@ -896,6 +997,24 @@ impl RpcStateProvider {
             .map_err(|error| self.unavailable(error.to_string()))?;
         self.cache().put_code(key, &code, ask);
         Ok((code, true))
+    }
+
+    /// One bytecode read as both [`StateProvider::code`] and the batched
+    /// [`StateProvider::codes`] do it: this run's override first, then the reuse
+    /// boundary, then whether the answer cost the node a request.
+    ///
+    /// Shared rather than duplicated because the two paths must not be able to
+    /// disagree about an override (§24): a setup value that one of them answered and
+    /// the other sent to the node would make a fixture and a live run two accounts
+    /// of the same read.
+    async fn code_one(&self, address: Address) -> ProviderResult<(Bytes, bool)> {
+        if let Some(over) = header_override(&self.overrides, address) {
+            if let Some(code) = &over.code {
+                return Ok((code.clone(), false));
+            }
+        }
+        let key = StateReadKey::new(self.chain_id, self.pin.number, address);
+        self.code_at(key, true).await
     }
 }
 
@@ -915,19 +1034,81 @@ impl StateProvider for RpcStateProvider {
 
     async fn account(&self, address: Address) -> ProviderResult<Option<AccountState>> {
         let key = StateReadKey::new(self.chain_id, self.pin.number, address);
-        // Sequential, not `join!`: §61 puts correctness above latency, the
-        // recorded dump has to list reads in the order they were made or a
-        // fixture's bytes would move between runs, and M8.3.1 §13 keeps
-        // concurrency out of this milestone.
-        let (balance, balance_read) = self.balance_at(key, self.reuse).await?;
-        let (nonce, nonce_read) = self.nonce_at(key, self.reuse).await?;
-        let (code, code_read) = self.code_at(key, self.reuse).await?;
+        // M8.3.3 §5's dependency map, resolved in this function rather than assumed by
+        // it: the three reads of one account are asked of the same key computed once
+        // above — chain, this provider's pinned height, this address — and no member's
+        // request parameters are a function of another member's answer. That is what
+        // makes them one hand. Whether more than one of them may be outstanding at the
+        // node is the run's bound (§27), and `1` awaits them here in the order the
+        // three sequential statements of M8.3.2's HEAD used: §10 makes that equality a
+        // measurement, not a reading of this comment.
+        let parts = self
+            .dispatch
+            .run(
+                "account_triple",
+                vec![
+                    self.descriptor("balance", address),
+                    self.descriptor("nonce", address),
+                    self.descriptor("code", address),
+                ],
+                vec![
+                    Box::pin(async move {
+                        self.balance_at(key, self.reuse)
+                            .await
+                            .map(|(value, read)| AccountRead::Balance(value, read))
+                    }),
+                    Box::pin(async move {
+                        self.nonce_at(key, self.reuse)
+                            .await
+                            .map(|(value, read)| AccountRead::Nonce(value, read))
+                    }),
+                    Box::pin(async move {
+                        self.code_at(key, self.reuse)
+                            .await
+                            .map(|(value, read)| AccountRead::Code(value, read))
+                    }),
+                ],
+            )
+            .await;
+        let mut balance = None;
+        let mut nonce = None;
+        let mut code = None;
+        let mut failure = None;
+        for part in parts {
+            match part {
+                Ok(AccountRead::Balance(value, read)) => balance = Some((value, read)),
+                Ok(AccountRead::Nonce(value, read)) => nonce = Some((value, read)),
+                Ok(AccountRead::Code(value, read)) => code = Some((value, read)),
+                // Results come back in input order, so the first failure seen here is
+                // the first one the sequential path would have stopped at — and, as
+                // there, it ends the run rather than being smoothed over with a default
+                // or a stale answer (§24).
+                Err(error) => {
+                    if failure.is_none() {
+                        failure = Some(error);
+                    }
+                }
+            }
+        }
+        if let Some(error) = failure {
+            return Err(error);
+        }
+        let (Some(balance), Some(nonce), Some(code)) = (balance, nonce, code) else {
+            return Err(self.unavailable(
+                "the account dispatch answered fewer of its three members than it was \
+                 given"
+                    .to_string(),
+            ));
+        };
+        let (balance, balance_read) = balance;
+        let (nonce, nonce_read) = nonce;
+        let (code, code_read) = code;
         if balance_read || nonce_read || code_read {
             // One marker per account read that cost the node something, which is
             // what `reads` has always counted: an answer reused from this
             // simulation's own earlier read asks the node nothing, and a dump that
             // claimed otherwise would record a request that never happened.
-            let mut dump = self.recorded.lock().expect("dump lock");
+            let mut dump = self.recorded();
             dump.insert_account(address, balance, nonce, &code);
             dump.reads.push(format!("account {address}"));
         }
@@ -958,7 +1139,7 @@ impl StateProvider for RpcStateProvider {
             .map_err(|error| self.unavailable(error.to_string()))?;
         self.cache().put_storage(key, value);
         {
-            let mut dump = self.recorded.lock().expect("dump lock");
+            let mut dump = self.recorded();
             dump.insert_storage(address, slot, value);
             dump.reads.push(format!("storage {address} {slot}"));
         }
@@ -966,21 +1147,63 @@ impl StateProvider for RpcStateProvider {
     }
 
     async fn code(&self, address: Address) -> ProviderResult<Bytes> {
-        if let Some(over) = header_override(&self.overrides, address) {
-            if let Some(code) = &over.code {
-                return Ok(code.clone());
-            }
-        }
-        let key = StateReadKey::new(self.chain_id, self.pin.number, address);
-        let (code, read) = self.code_at(key, true).await?;
+        let (code, read) = self.code_one(address).await?;
         if read {
-            self.recorded
-                .lock()
-                .expect("dump lock")
-                .reads
-                .push(format!("code {address}"));
+            self.recorded().reads.push(format!("code {address}"));
         }
         Ok(code)
+    }
+
+    /// The route's bytecodes as one bounded hand (M8.3.3 §5, §9).
+    ///
+    /// Four reads the caller has already named, none of whose parameters depends on
+    /// another's answer, and no answer of any of them is read before the batch is
+    /// handed over — which is why this is the second and last site the scheduler is
+    /// given a batch at. §7's rule that a dependency nobody proved keeps its order is
+    /// why the storage reads the EVM demands one word at a time are not a third.
+    ///
+    /// Answers come back in input order and the dump's markers are pushed in input
+    /// order once the hand has finished, so a fixture's bytes do not depend on which
+    /// read answered first.
+    async fn codes(&self, addresses: &[Address]) -> ProviderResult<Vec<Bytes>> {
+        let reads = addresses
+            .iter()
+            .map(|address| self.descriptor("code", *address))
+            .collect();
+        let tasks = addresses
+            .iter()
+            .map(|address| {
+                let address = *address;
+                Box::pin(async move { self.code_one(address).await })
+                    as BoxFuture<'_, ProviderResult<(Bytes, bool)>>
+            })
+            .collect();
+        let answers = self.dispatch.run("touched_contracts", reads, tasks).await;
+        let mut codes = Vec::with_capacity(addresses.len());
+        let mut markers = Vec::new();
+        let mut failure = None;
+        for (address, answer) in addresses.iter().zip(answers) {
+            match answer {
+                Ok((code, read)) => {
+                    if read {
+                        markers.push(format!("code {address}"));
+                    }
+                    codes.push(code);
+                }
+                Err(error) => {
+                    if failure.is_none() {
+                        failure = Some(error);
+                    }
+                }
+            }
+        }
+        if !markers.is_empty() {
+            self.recorded().reads.extend(markers);
+        }
+        if let Some(error) = failure {
+            return Err(error);
+        }
+        Ok(codes)
     }
 
     async fn header(&self) -> ProviderResult<BlockContext> {
@@ -990,7 +1213,7 @@ impl StateProvider for RpcStateProvider {
             .await
             .map_err(|error| self.unavailable(error.to_string()))?;
         {
-            let mut dump = self.recorded.lock().expect("dump lock");
+            let mut dump = self.recorded();
             dump.header = Some(RecordedHeader::of_block(&block));
             dump.reads.push(format!("header {}", block.number.0));
         }
@@ -1004,9 +1227,7 @@ impl StateProvider for RpcStateProvider {
             .await
             .map_err(|error| self.unavailable(error.to_string()))?;
         let hash = block.hash;
-        self.recorded
-            .lock()
-            .expect("dump lock")
+        self.recorded()
             .block_hashes
             .insert(number.0.to_string(), format!("{:?}", hash));
         Ok(Some(hash))
@@ -1025,6 +1246,10 @@ impl StateProvider for RpcStateProvider {
             cache: Arc::clone(&self.cache),
             recorded: Arc::clone(&self.recorded),
             reuse: self.reuse,
+            // The same scheduler, not a fresh one: the bound is this simulation's, and
+            // so is the high-water mark §15 reports. A derived source that restarted
+            // the count would let one run report two peaks.
+            dispatch: Arc::clone(&self.dispatch),
         })
     }
 }
@@ -1171,13 +1396,14 @@ mod tests {
     use std::collections::{BTreeMap, BTreeSet};
     use std::sync::atomic::{AtomicUsize, Ordering};
     use std::sync::{Arc, Mutex};
+    use std::time::Duration;
 
     use alloy_primitives::{address, Address, Bytes, B256, U256};
 
     use super::{
         hex_address, override_slot, AccountState, BlockPin, DumpStateProvider, ProviderError,
         ReuseTally, RpcStateProvider, StateDump, StateOverride, StateProvider, StateReadKey,
-        StorageCacheKey, KECCAK_EMPTY,
+        StateReadStats, StorageCacheKey, KECCAK_EMPTY,
     };
     use evm_chain::{
         BlockContext, BlockData, CallRequest, ChainAdapter, ChainBlock, ChainError, ChainLog,
@@ -1617,6 +1843,14 @@ mod tests {
         seen: Mutex<Vec<u64>>,
         calls: Mutex<Vec<SpyCall>>,
         chain_id: u64,
+        /// Methods this spy refuses, empty unless a test asked for one. A read that
+        /// failed still reached the transport, so it is recorded before it is refused.
+        failing: Mutex<Vec<&'static str>>,
+        /// How long a request waits before the spy answers it. Zero keeps a spy that
+        /// answers the moment it is polled, which is what most of the tests above want;
+        /// M8.3.3's overlap tests set it, because a transport that never yields makes
+        /// `observed_peak` a statement about the spy rather than about the run.
+        delay: Duration,
     }
 
     impl Default for SpyChain {
@@ -1626,6 +1860,8 @@ mod tests {
                 seen: Mutex::new(Vec::new()),
                 calls: Mutex::new(Vec::new()),
                 chain_id: CHAIN.0,
+                failing: Mutex::new(Vec::new()),
+                delay: Duration::ZERO,
             }
         }
     }
@@ -1637,6 +1873,40 @@ mod tests {
             Self {
                 chain_id: chain_id.0,
                 ..Default::default()
+            }
+        }
+
+        /// A spy that holds every request for `delay` before answering, so several of
+        /// them are genuinely outstanding at once and the dispatch can be observed
+        /// overlapping.
+        fn slowing(delay: Duration) -> Self {
+            Self {
+                delay,
+                ..Default::default()
+            }
+        }
+
+        /// A spy that answers, except that the named methods refuse every request with
+        /// a reason carrying the method's own name. That is what lets a test ask which
+        /// failure a batch reported when two of its members fail in different places.
+        fn refusing(methods: &[&'static str]) -> Self {
+            Self {
+                failing: Mutex::new(methods.to_vec()),
+                ..Default::default()
+            }
+        }
+
+        /// Hold the request for this spy's own delay, then refuse it if this method was
+        /// named when the spy was built.
+        async fn answering(&self, method: &'static str) -> Result<(), ChainError> {
+            if !self.delay.is_zero() {
+                tokio::time::sleep(self.delay).await;
+            }
+            let refuses = self.failing.lock().expect("spy lock").contains(&method);
+            if refuses {
+                Err(ChainError::Rpc(format!("{method} refused")))
+            } else {
+                Ok(())
             }
         }
 
@@ -1730,6 +2000,7 @@ mod tests {
         /// read is proven by the request count, not by a differing value.
         async fn get_code(&self, at: BlockNumber, address: Address) -> Result<Bytes, ChainError> {
             self.record("eth_getCode", at, address);
+            self.answering("eth_getCode").await?;
             Ok(Bytes::from(if address == POOL {
                 vec![0xfe, 0x00]
             } else {
@@ -1739,6 +2010,7 @@ mod tests {
 
         async fn get_balance(&self, at: BlockNumber, address: Address) -> Result<U256, ChainError> {
             self.record("eth_getBalance", at, address);
+            self.answering("eth_getBalance").await?;
             Ok(U256::from(42u64 + at.0.saturating_sub(PIN)))
         }
 
@@ -1750,11 +2022,13 @@ mod tests {
         ) -> Result<U256, ChainError> {
             self.storage_calls.fetch_add(1, Ordering::SeqCst);
             self.record("eth_getStorageAt", at, address);
+            self.answering("eth_getStorageAt").await?;
             Ok(slot + U256::from(1u64 + at.0.saturating_sub(PIN)))
         }
 
         async fn get_nonce(&self, at: BlockNumber, address: Address) -> Result<u64, ChainError> {
             self.record("eth_getTransactionCount", at, address);
+            self.answering("eth_getTransactionCount").await?;
             Ok(at.0.saturating_sub(PIN))
         }
     }
@@ -1771,6 +2045,17 @@ mod tests {
             Arc::clone(chain) as Arc<dyn ChainAdapter>,
             pin,
             reuse,
+        )
+    }
+
+    /// The same provider with a bound on its dispatch (M8.3.3 §27). `1` is exactly
+    /// [`provider_on`], and §10's baseline claim is that the two are the same run.
+    fn provider_at(chain: &Arc<SpyChain>, bound: usize) -> RpcStateProvider {
+        RpcStateProvider::with_state_read_concurrency(
+            Arc::clone(chain) as Arc<dyn ChainAdapter>,
+            pin(),
+            true,
+            bound,
         )
     }
 
@@ -2107,6 +2392,356 @@ mod tests {
             vec![PIN + 5, PIN + 5, PIN + 5],
             "three reads out, at the height this provider was pinned to, and nothing after"
         );
+    }
+
+    // ---- M8.3.3 §37: the same claims at a bound above one -------------------------
+    //
+    // M8.3.1 proved these five things — order, pin, cache locality, nothing cached on
+    // failure, the tally reconciled against the transport — for a build that could only
+    // run one read at a time. The rows below repeat them with the dispatch bound turned
+    // up, because the milestone's claim is that the bound is the only variable. Each test
+    // differs from its M8.3.1 neighbour in `provider_at`'s fourth argument and nothing
+    // else.
+
+    /// One mixed pass: an account's triple, a slot the EVM demands after it has the
+    /// account, and two bytecodes the route has already named. This is the shape §5's
+    /// dependency map found — two hands whose members do not depend on one another, and
+    /// one read that is never in a hand — so the tests below compare a sequence a
+    /// simulation actually runs rather than one invented for a scheduler.
+    async fn mixed_pass(provider: &RpcStateProvider) {
+        account_of(provider, CALLER).await;
+        provider
+            .storage(POOL, U256::from(6u64))
+            .await
+            .expect("the spy answers the pool's slot");
+        provider
+            .codes(&[WETH, POOL])
+            .await
+            .expect("the spy answers both bytecodes");
+    }
+
+    /// §37's Dependency row, the ordered half, on a transport that holds every request
+    /// long enough for a bound above one to mean something. Six requests in six named
+    /// methods, at every bound, in the same order: the storage read still arrives after
+    /// the triple it depends on, and the two bytecodes the route named still arrive after
+    /// both. What changed is how many were outstanding at once, which is the next test's
+    /// business, not this one's.
+    #[tokio::test]
+    async fn a_bound_reorders_no_request_the_caller_had_decided() {
+        const HOLD: Duration = Duration::from_millis(1);
+        let expected = [
+            "eth_getBalance",
+            "eth_getTransactionCount",
+            "eth_getCode",
+            "eth_getStorageAt",
+            "eth_getCode",
+            "eth_getCode",
+        ];
+        let mut logs = Vec::new();
+        for bound in [1usize, 2, 4] {
+            let chain = Arc::new(SpyChain::slowing(HOLD));
+            let provider = provider_at(&chain, bound);
+            mixed_pass(&provider).await;
+            assert_eq!(
+                chain.methods(),
+                expected,
+                "bound {bound} sent the reads in another order"
+            );
+            assert_eq!(chain.log().len(), 6, "bound {bound}");
+            logs.push(chain.log());
+        }
+        assert_eq!(
+            logs[0], logs[2],
+            "a request the serial arm made is missing from, or different in, the arm that \
+             configured four"
+        );
+    }
+
+    /// §37's Dependency row, the overlapping half, and the one place the provider's own
+    /// instrument is checked rather than the raw scheduler's: the triple of one account
+    /// really does have more than one member outstanding at the node once the bound
+    /// allows it, and the number never exceeds the bound.
+    ///
+    /// The bound of four peaks at three and not at four because this hand has three
+    /// members — the instrument reports the widest instant reached, which is the point of
+    /// §15 publishing it beside the configured value.
+    #[tokio::test]
+    async fn a_providers_independent_reads_overlap_up_to_the_bound() {
+        const HOLD: Duration = Duration::from_millis(1);
+        for bound in [1usize, 2, 4] {
+            let chain = Arc::new(SpyChain::slowing(HOLD));
+            let provider = provider_at(&chain, bound);
+            account_of(&provider, CALLER).await;
+
+            let report = provider.state_read_concurrency();
+            assert_eq!(
+                report.observed_peak,
+                bound.min(3),
+                "three reads were handed over at the bound of {bound}"
+            );
+            assert_eq!(
+                report.configured, bound,
+                "and the report still says what was asked for, separately"
+            );
+            assert_eq!(report.serial, bound == 1);
+            assert_eq!(
+                chain.log().len(),
+                3,
+                "overlapping is not batching: three reads are still three requests at any \
+                 bound, which is §3's ban on a JSON-RPC batch measured at the transport"
+            );
+        }
+    }
+
+    /// §7's other half, read out of the scheduler's own log: only the two hands the
+    /// dependency analysis proved are ever opened, no batch ever carries a storage read,
+    /// and every descriptor names this provider's pinned height.
+    #[tokio::test]
+    async fn only_the_two_proved_hands_are_ever_opened() {
+        for bound in [1usize, 2, 4] {
+            let chain = Arc::new(SpyChain::default());
+            let provider = provider_at(&chain, bound);
+            mixed_pass(&provider).await;
+
+            let report = provider.state_read_concurrency();
+            let sites: Vec<&str> = report
+                .batch_dispatches
+                .iter()
+                .map(|batch| batch.site)
+                .collect();
+            assert_eq!(
+                sites,
+                vec!["account_triple", "touched_contracts"],
+                "bound {bound} opened a batch the dependency map does not name"
+            );
+            assert_eq!(
+                report.batched_reads, 5,
+                "three of the triple plus two bytecodes"
+            );
+            for batch in &report.batch_dispatches {
+                assert_eq!(
+                    batch.limit, bound,
+                    "the log records the bound that was in force, per hand"
+                );
+                for read in &batch.reads {
+                    assert_ne!(
+                        read.kind, "storage",
+                        "a slot the EVM demands one at a time was handed to the scheduler, \
+                         which would be §7's unproved dependency run concurrently"
+                    );
+                    assert_eq!(read.block, PIN, "§8: a descriptor names this pin");
+                    assert_eq!(read.chain_id, CHAIN.0);
+                }
+            }
+        }
+    }
+
+    /// §37's Historical block row: with the bound at two and at four as much as at one,
+    /// every request the transport received named this provider's height, and nothing
+    /// asked for a later one. §8 calls this the highest-priority rule, so it is checked at
+    /// every arm rather than once.
+    #[tokio::test]
+    async fn every_request_at_every_bound_names_the_pin() {
+        for bound in [1usize, 2, 4] {
+            let chain = Arc::new(SpyChain::default());
+            let provider = provider_at(&chain, bound);
+            mixed_pass(&provider).await;
+            // One more read at a deliberately different height, through a provider built
+            // for it: the bound must not be able to borrow an answer across heights.
+            let next = provider_on(&chain, pin_at(PIN + 1), true);
+            account_of(&next, CALLER).await;
+
+            let seen = chain.seen_blocks();
+            assert_eq!(seen.len(), 9, "bound {bound}");
+            let at_the_pin = seen.iter().filter(|height| **height == PIN).count();
+            assert_eq!(at_the_pin, 6, "six of the nine reads were this provider's");
+            assert!(
+                seen.iter()
+                    .all(|height| *height == PIN || *height == PIN + 1),
+                "a request named a height that is neither provider's pin: {seen:?}"
+            );
+        }
+    }
+
+    /// §37's Cache row: `C1`, `C2` and `C4` change nothing about what the reuse boundary
+    /// remembers. The same mixed pass run twice at each bound gives the same tally, the
+    /// same recorded state and the same number of requests, for both values of `reuse` —
+    /// the two switches stay orthogonal instead of one quietly turning the other off.
+    #[tokio::test]
+    async fn a_bound_changes_nothing_the_cache_remembers() {
+        let pass = |bound: usize, reuse: bool| async move {
+            let chain = Arc::new(SpyChain::default());
+            let provider = RpcStateProvider::with_state_read_concurrency(
+                Arc::clone(&chain) as Arc<dyn ChainAdapter>,
+                pin(),
+                reuse,
+                bound,
+            );
+            mixed_pass(&provider).await;
+            // The second pass is where a bound could smuggle in a difference: by then the
+            // triple is entirely cache, so its hand has nothing left to overlap.
+            mixed_pass(&provider).await;
+            (
+                chain.log().len(),
+                provider.state_read_stats(),
+                provider.dump(),
+            )
+        };
+
+        let mut baseline: Option<(usize, StateReadStats, StateDump)> = None;
+        let mut baseline_a: Option<(usize, StateReadStats, StateDump)> = None;
+        for bound in [1usize, 2, 4] {
+            let cached = pass(bound, true).await;
+            assert_eq!(
+                cached.0, 6,
+                "bound {bound}: six reads the first time, none again"
+            );
+            assert_eq!(
+                (cached.1.total_hits(), cached.1.total_misses()),
+                (6, 6),
+                "bound {bound} remembered a different number of reads than the serial arm"
+            );
+            if let Some((requests, stats, dump)) = baseline.clone() {
+                assert_eq!(
+                    cached.1, stats,
+                    "the arm that configured {bound} hit and missed differently"
+                );
+                assert_eq!(cached.0, requests);
+                assert_eq!(cached.2.accounts, dump.accounts);
+                assert_eq!(cached.2.storage, dump.storage);
+            }
+            baseline = Some(cached);
+
+            // Arm A at a raised bound: nine requests, and the balance and the nonce are
+            // neither hit nor missed, because that switch is the one `reuse` controls.
+            // Nine, not twelve — the bytecode hand and the slot keep the lookups M8.2's
+            // HEAD already had, which [`RpcStateProvider::with_state_read_reuse`] spells
+            // out and this line is the measurement of.
+            let (requests, stats, dump) = pass(bound, false).await;
+            assert_eq!(requests, 9, "bound {bound}");
+            assert_eq!(
+                (stats.balance.hits, stats.balance.misses),
+                (0, 0),
+                "arm A asks the boundary nothing about balances, so it reports nothing \
+                 about them — §12's not-measured, at a bound of {bound}"
+            );
+            assert_eq!((stats.nonce.hits, stats.nonce.misses), (0, 0));
+            assert!(
+                !stats.reuse,
+                "and the arm is labelled by what it was told, not by what it peaked at"
+            );
+            // The state is the same state either way, which is §17 at the transport level.
+            if let Some(serial_a) = baseline_a.clone() {
+                assert_eq!(
+                    (requests, stats),
+                    (serial_a.0, serial_a.1),
+                    "arm A differed between bounds, so the bound moved something besides \
+                     how many reads were outstanding"
+                );
+                assert_eq!(dump.accounts, serial_a.2.accounts);
+                assert_eq!(dump.storage, serial_a.2.storage);
+            }
+            baseline_a = Some((requests, stats, dump));
+        }
+
+        // And the cache stays one simulation's at a raised bound: two providers, one
+        // block, twelve requests between them because neither may answer from the other.
+        let chain = Arc::new(SpyChain::default());
+        let first = provider_at(&chain, 4);
+        let second = provider_at(&chain, 4);
+        mixed_pass(&first).await;
+        mixed_pass(&second).await;
+        assert_eq!(
+            chain.log().len(),
+            12,
+            "M8.3.1 §11 held at the bound of four: a second simulation pays for its own \
+             reads"
+        );
+        assert_eq!(first.state_read_stats().total_hits(), 0);
+        assert_eq!(second.state_read_stats().total_hits(), 0);
+    }
+
+    /// §37's Errors row, first half: a node that is down is down at the bound of four too.
+    /// Both accounts fail, nothing is stored from either attempt, and the tally stays at
+    /// zero in both directions — a failure is neither a hit nor a read that succeeded.
+    #[tokio::test]
+    async fn a_failed_read_caches_nothing_at_a_bound_of_four() {
+        let provider = RpcStateProvider::with_state_read_concurrency(
+            Arc::new(FailingChain) as Arc<dyn ChainAdapter>,
+            pin(),
+            true,
+            4,
+        );
+        for attempt in 1..=2 {
+            let error = provider
+                .account(CALLER)
+                .await
+                .expect_err("the node is down at any bound");
+            assert!(
+                matches!(error, ProviderError::Unavailable { .. }),
+                "attempt {attempt}"
+            );
+        }
+        let stats = provider.state_read_stats();
+        assert_eq!(
+            (stats.balance.hits, stats.nonce.hits, stats.code.hits),
+            (0, 0, 0),
+            "a failure cannot be a hit"
+        );
+        assert_eq!(
+            (stats.balance.misses, stats.nonce.misses, stats.code.misses),
+            (0, 0, 0),
+            "and a failure is not a read that succeeded and got remembered either"
+        );
+        assert_eq!(
+            provider.state_read_concurrency().batches,
+            2,
+            "§24's rule that an error ends the run did not stop the scheduler from being \
+             asked again by the caller's second read"
+        );
+    }
+
+    /// §37's Errors row, second half: one failed task propagates, and it propagates as
+    /// the failure the sequential code would have reported. Two members of the same hand
+    /// refuse, with reasons naming which one; the run answers with the earlier one in
+    /// input order at both bounds, and §24's no-default, no-stale rule holds because the
+    /// account simply is not returned.
+    ///
+    /// The two bounds differ in one way and the difference is stated rather than
+    /// smoothed over: at one, the run stops after the balance request; at four, the whole
+    /// first chunk has already left, so the nonce and code reads the serial arm never made
+    /// are counted here. M8.3.3 §10's extra-read allowance is exactly this, and a failing
+    /// batch that hid it would put calls on the wire with no trace event behind them.
+    #[tokio::test]
+    async fn the_earliest_failure_of_a_hand_is_the_one_the_run_reports() {
+        for (bound, reads) in [(1usize, 1usize), (4, 3)] {
+            let chain = Arc::new(SpyChain::refusing(&["eth_getBalance", "eth_getCode"]));
+            let provider = provider_at(&chain, bound);
+            let error = provider
+                .account(CALLER)
+                .await
+                .expect_err("two members of the hand refuse");
+            assert!(
+                matches!(error, ProviderError::Unavailable { .. }),
+                "{error}"
+            );
+            assert!(
+                error.to_string().contains("eth_getBalance"),
+                "bound {bound} reported the wrong failure: {error}"
+            );
+            assert_eq!(
+                chain.log().len(),
+                reads,
+                "bound {bound} should have asked the node for {reads} of the hand's three \
+                 reads before stopping"
+            );
+            let stats = provider.state_read_stats();
+            assert_eq!(
+                (stats.balance.hits, stats.balance.misses),
+                (0, 0),
+                "and the failed read left nothing behind"
+            );
+        }
     }
 
     /// The same, but every read fails: a node that is down, not a state that is
