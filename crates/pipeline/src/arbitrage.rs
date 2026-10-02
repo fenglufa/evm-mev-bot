@@ -54,7 +54,7 @@ use std::sync::Arc;
 use alloy_primitives::{Address, U256};
 use serde_json::{json, Value};
 
-use evm_chain::{BlockContext, ChainAdapter, HttpChainAdapter};
+use evm_chain::{BlockContext, ChainAdapter, HttpChainAdapter, RpcTraceSink, RpcTraceSource};
 use evm_core::{BlockNumber, ChainId, Fee, PoolId, TokenId};
 use evm_execution::giwa::{read_pool, LivePreflightReads};
 use evm_execution::{
@@ -72,6 +72,7 @@ use evm_simulation::{
 };
 
 use crate::config::RiskConfig;
+use crate::diagnosis::{DiagnosisEvidence, SimulationDiagnosis, SimulationWindow};
 use crate::error::{PipelineError, Result};
 use crate::evidence::{EvidenceFile, EvidenceWriter};
 use crate::latency::{git_revision, record_ladder, LatencyEvidence, TraceRecorder};
@@ -134,6 +135,16 @@ pub struct ArbitrageConfig {
     /// `route-run.json` (§41's backward-compatibility requirement, which the M7 evidence
     /// files are the proof of).
     pub latency_dir: Option<PathBuf>,
+    /// M8.2 §22: the base directory this run also writes its simulation-state diagnosis
+    /// to, or `None` for a run that observes nothing. The run makes its own subdirectory
+    /// of this one, named after the session, for the same reason §44 gives the latency
+    /// files theirs: a directory already on disk is never rewritten.
+    ///
+    /// The same non-interference rule applies as to [`Self::latency_dir`], and the
+    /// instrumented path is thinner still: with this field `None` the sink is never made,
+    /// so the adapter this run reads through is the adapter it always had, and every
+    /// recording call in `crates/chain/src/rpc.rs` sits behind a `None` test (§19).
+    pub diagnosis_dir: Option<PathBuf>,
 }
 
 /// One venue, as the node described it at the block the run pinned.
@@ -296,6 +307,12 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     let mut metrics = Metrics::default();
     let mut latencies = serde_json::Map::new();
     let mut trace = RunTrace::open(config, clock, chain_id, head.0, run.session_id.clone())?;
+    // M8.2 §22's own directory, opened beside the run's evidence and the latency trace
+    // rather than inside either: a run with `--rpc-trace` gets one subdirectory named for
+    // its session, and a run without it gets no directory at all. What it measures is the
+    // simulation stage, and the sink that captures it is attached at §B below — this line
+    // only decides whether there is anywhere to write.
+    let mut diagnosis = RunDiagnosis::open(config, clock, chain_id, head, &run.session_id)?;
     trace.recorder.begin_at(Stage::Observation, detected_ns);
     trace.recorder.end_at(Stage::Observation, observed_ns);
     // §42.3's mapping, stated in the evidence rather than only in prose: a single-route run
@@ -330,6 +347,7 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
                 metrics,
                 Value::Object(latencies),
                 &mut trace,
+                &mut diagnosis,
             ));
         }
     };
@@ -353,12 +371,17 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     )?;
 
     // ---- §B: the six steps, in REVM, against the node's state at that pin ---------------
+    // M8.2: this is the adapter the simulation reads through, so it is the one place a
+    // per-simulation sink can be attached without touching the simulation, the provider or
+    // REVM (§2). With no `--rpc-trace`, `observe` hands back the very handle it was given.
     let chain: Arc<dyn ChainAdapter> = Arc::new(adapter.clone());
+    let chain: Arc<dyn ChainAdapter> = diagnosis.observe(&chain, &opportunity_id);
     let provider = Arc::new(RpcStateProvider::new(
         chain,
         BlockPin::new(head, header.hash),
     ));
     let state_source = provider.source();
+    diagnosis.set_state_source(&state_source);
     let request = match simulation_request(&header, &legs, config, &state_source) {
         Ok(request) => request,
         Err(detail) => {
@@ -371,6 +394,7 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
                 metrics,
                 Value::Object(latencies),
                 &mut trace,
+                &mut diagnosis,
             ));
         }
     };
@@ -390,6 +414,7 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
                 metrics,
                 Value::Object(latencies),
                 &mut trace,
+                &mut diagnosis,
             ));
         }
     };
@@ -416,11 +441,13 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
             metrics,
             Value::Object(latencies),
             &mut trace,
+            &mut diagnosis,
         ));
     }
 
     let simulated_at = clock.now_ms();
     trace.recorder.begin(Stage::Simulation);
+    diagnosis.begin();
     let provider: Arc<dyn StateProvider> = provider;
     let simulation = match simulate(provider, &request).await {
         Ok(simulation) => simulation,
@@ -431,6 +458,10 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
             // A revert is not this branch — the EVM answered with a failure there, so that
             // run completes Simulation and lets Risk say no.
             trace.failed(Stage::Simulation, &detail);
+            // The span closes here too: a simulation that failed mid-way made its calls,
+            // and §22's timeline is about what those calls cost — a run that stopped at
+            // this branch would otherwise leave its diagnosis unsaid.
+            diagnosis.end();
             run.refuse("simulation", detail);
             return Ok(finish(
                 run,
@@ -438,10 +469,12 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
                 metrics,
                 Value::Object(latencies),
                 &mut trace,
+                &mut diagnosis,
             ));
         }
     };
     trace.recorder.end(Stage::Simulation);
+    diagnosis.end();
     // §11: this span asked a node for the state it computed on — `state_source` is the
     // provider's own name for itself, the same string that goes into the run's
     // simulation evidence — so the row says which cost class its time belongs to rather
@@ -504,6 +537,7 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
             metrics,
             Value::Object(latencies),
             &mut trace,
+            &mut diagnosis,
         ));
     }
 
@@ -544,6 +578,7 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
                 metrics,
                 Value::Object(latencies),
                 &mut trace,
+                &mut diagnosis,
             ));
         }
     };
@@ -556,7 +591,9 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     // The two failures below end the run with an error rather than with a recorded verdict,
     // and §49 still asks for the session's evidence: `execution_failed` closes and writes the
     // trace on the way out, so a lane that could not be opened leaves a trace saying so instead
-    // of a directory with nothing in it.
+    // of a directory with nothing in it. M8.2 §22's diagnosis is by then a finished
+    // simulation's worth of calls, so it gets the same treatment — a run that failed at its
+    // gate still has an answer to §24's questions.
     let mut stage = match SequenceStage::connect(
         &config.rpc_url,
         chain_id,
@@ -567,7 +604,10 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     .await
     {
         Ok(stage) => stage,
-        Err(error) => return Err(trace.execution_failed(&run.session_id, Stage::Preflight, error)),
+        Err(error) => {
+            let error = trace.execution_failed(&run.session_id, Stage::Preflight, error);
+            return Err(diagnosis.absorb(error));
+        }
     };
     let gathered = match (LivePreflightReads {
         market: &adapter,
@@ -584,7 +624,10 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     .await
     {
         Ok(gathered) => gathered,
-        Err(error) => return Err(trace.execution_failed(&run.session_id, Stage::Preflight, error)),
+        Err(error) => {
+            let error = trace.execution_failed(&run.session_id, Stage::Preflight, error);
+            return Err(diagnosis.absorb(error));
+        }
     };
     trace.recorder.end(Stage::Preflight);
     // §21 also asks for the gate's *verdict* beside its duration. That verdict is already
@@ -647,6 +690,7 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         metrics,
         Value::Object(latencies),
         &mut trace,
+        &mut diagnosis,
     ))
 }
 
@@ -772,6 +816,181 @@ impl RunTrace {
         evidence.record(recorded)?;
         evidence.finish()?;
         Ok(())
+    }
+}
+
+/// M8.2 §22's diagnosis of one simulation, opened where the simulation is.
+///
+/// Three things decide its shape, and all three are the spec's:
+///
+/// - **§18**: this type never makes a request. It hands a *sink* to a derived clone of
+///   the adapter the simulation was already going to read through, and reads that sink
+///   back afterwards. The calls it records are the calls `RpcStateProvider` asked for.
+/// - **§6**: one sink belongs to one simulation, so the sink is made here, named with the
+///   finding's own stable id, and never shared. No global recorder, no lock two
+///   simulations contend for (§31).
+/// - **§19**: with `--rpc-trace` absent, `evidence` is `None`, `observe` returns the
+///   plain adapter clone the run has always built, `begin`/`end` take no stamps, and
+///   `close` writes nothing. The route's decisions, prices and EVM work are then
+///   byte-for-byte the run M7 did.
+///
+/// It is opened where the run's other instrumentation is opened, so the directory exists
+/// exactly when `--rpc-trace` was asked for — including for a run that never reached a
+/// simulation, whose README then reports zero simulations. What is attached at §B is the
+/// sink, and only to the adapter the simulation reads through: a run's detection-stage
+/// reads are made by a different handle on purpose, so §11's simulation attribution is
+/// not diluted by calls that belong to the price discovery that preceded it.
+struct RunDiagnosis {
+    evidence: Option<DiagnosisEvidence>,
+    /// The sink this run's simulation adapter writes into. `None` means either nothing is
+    /// being measured or the adapter refused to be observed — and the second of those is
+    /// written into the evidence as a refusal rather than left to read as zero calls.
+    sink: Option<RpcTraceSink>,
+    clock: Clock,
+    chain_id: u64,
+    head: u64,
+    state_source: Option<String>,
+    started_ns: Option<u64>,
+    finished_ns: Option<u64>,
+}
+
+impl RunDiagnosis {
+    /// `off` unless the run named a diagnosis directory.
+    fn open(
+        config: &ArbitrageConfig,
+        clock: Clock,
+        chain_id: u64,
+        head: BlockNumber,
+        session_id: &str,
+    ) -> Result<Self> {
+        let evidence = match config.diagnosis_dir.as_ref() {
+            None => None,
+            Some(base) => Some(DiagnosisEvidence::open(
+                &base.join(session_id),
+                git_revision(),
+                config.setup.mode.name(),
+            )?),
+        };
+        Ok(Self {
+            evidence,
+            sink: None,
+            clock,
+            chain_id,
+            head: head.0,
+            state_source: None,
+            started_ns: None,
+            finished_ns: None,
+        })
+    }
+
+    /// The adapter the simulation reads through — the same handle it would have had, plus
+    /// an observation sink when this run measures something.
+    ///
+    /// It takes and returns `Arc<dyn ChainAdapter>` rather than the concrete HTTP type for
+    /// one reason: [`ChainAdapter::with_rpc_trace`]'s `None` is a real answer about a real
+    /// source — a recorded directory issues no requests, so there is nothing to record —
+    /// and this function has to be able to say so in the evidence. A `Live` label on the
+    /// sink cannot be wrong here, because the sink only ever exists on the branch where a
+    /// node answered for this run: an unobservable source produces a refusal and no line.
+    fn observe(
+        &mut self,
+        adapter: &Arc<dyn ChainAdapter>,
+        simulation_id: &str,
+    ) -> Arc<dyn ChainAdapter> {
+        if self.evidence.is_none() {
+            return Arc::clone(adapter);
+        }
+        let sink = RpcTraceSink::new(
+            self.clock.origin_instant(),
+            simulation_id,
+            RpcTraceSource::Live,
+            Some(self.chain_id),
+        );
+        match ChainAdapter::with_rpc_trace(&**adapter, sink.clone()) {
+            Some(observed) => {
+                self.sink = Some(sink);
+                observed
+            }
+            None => {
+                if let Some(evidence) = self.evidence.as_mut() {
+                    evidence.refuse(format!(
+                        "simulation {simulation_id} was not observed: this chain source offers \
+                         no hook to record its calls, so the directory reports no calls for it \
+                         — which is a source that could not be watched, not a simulation that \
+                         asked the node for nothing"
+                    ));
+                }
+                Arc::clone(adapter)
+            }
+        }
+    }
+
+    /// The provider's own name for what it read, which §11 asks the window to carry:
+    /// state from a node and state from a dump are not two samples of one quantity.
+    fn set_state_source(&mut self, state_source: &str) {
+        self.state_source = Some(state_source.to_string());
+    }
+
+    /// Open the span. `Clock::now_ns` is the run's monotonic origin, so these two stamps
+    /// and every event's `started_ns`/`finished_ns` are readings of the same clock (§7) —
+    /// which is what lets §11's `non_rpc` be a subtraction rather than an estimate.
+    fn begin(&mut self) {
+        if self.evidence.is_some() {
+            self.started_ns = Some(self.clock.now_ns());
+        }
+    }
+
+    fn end(&mut self) {
+        if self.started_ns.is_some() {
+            self.finished_ns = Some(self.clock.now_ns());
+        }
+    }
+
+    /// Persist this simulation's calls as one trace line, then write the summaries.
+    ///
+    /// A simulation that never began leaves the directory holding zero lines and a
+    /// README that says so — the alternative, no directory at all, would make a run that
+    /// was asked to measure and stopped early indistinguishable from one that was never
+    /// asked, which is the confusion §23's Missing-data section exists to prevent.
+    fn close(&mut self) -> Result<()> {
+        let Some(evidence) = self.evidence.as_mut() else {
+            return Ok(());
+        };
+        if let (Some(started_ns), Some(finished_ns), Some(sink)) =
+            (self.started_ns, self.finished_ns, self.sink.as_ref())
+        {
+            let refusals = sink.refusals();
+            let diagnosis = SimulationDiagnosis::new(
+                SimulationWindow {
+                    simulation_id: sink.simulation_id().to_string(),
+                    source: sink.source(),
+                    chain_id: Some(self.chain_id),
+                    block_number: Some(self.head),
+                    state_source: self.state_source.clone(),
+                    started_ns,
+                    finished_ns,
+                },
+                sink.events(),
+            );
+            evidence.record(diagnosis, &refusals)?;
+        }
+        evidence.finish()?;
+        Ok(())
+    }
+
+    /// Write what this run learned and let an error that was already leaving leave anyway.
+    ///
+    /// [`RunTrace::execution_failed`] does the same for the latency trace: the run's own
+    /// failure is the headline, and a diagnosis file that could not be written is a second
+    /// sentence about it rather than a replacement for it. The error's text is preserved;
+    /// its variant becomes `Execution`, which is the trade the trace's version already makes.
+    fn absorb<E: std::fmt::Display>(&mut self, error: E) -> PipelineError {
+        match self.close() {
+            Ok(()) => PipelineError::Execution(error.to_string()),
+            Err(write) => PipelineError::Execution(format!(
+                "{error} | the simulation diagnosis could not be written either: {write}"
+            )),
+        }
     }
 }
 
@@ -1212,6 +1431,7 @@ fn finish(
     metrics: Metrics,
     latency_ms: Value,
     trace: &mut RunTrace,
+    diagnosis: &mut RunDiagnosis,
 ) -> ArbitrageRun {
     run.metrics = metrics.to_json();
     run.latency_ms = latency_ms;
@@ -1222,6 +1442,12 @@ fn finish(
     // failure is folded into the run's refusal and the last file a reader opens still says
     // so. The reverse order would leave the trace's own error unrecorded anywhere.
     if let Err(error) = trace.finish(&run.session_id) {
+        run.absorb(error);
+    }
+    // Same rule for the M8.2 diagnosis: it is a second set of files about the same
+    // lifecycle, and a failure to write them belongs in the run's account rather than
+    // replacing the verdict the run reached (§2.1's requirement, which M8.1 §35 restates).
+    if let Err(error) = diagnosis.close() {
         run.absorb(error);
     }
     match evidence.write_whole(RECORD_FILE, &run.record()) {
@@ -1318,6 +1544,7 @@ fn simulation_row(run: &SimulationResult, session_id: &str) -> Value {
 mod tests {
     use super::*;
     use crate::latency::{README_FILE, SUMMARY_FILE, TRACES_FILE};
+    use evm_chain::RecordedChainAdapter;
     use evm_metrics::{StageOutcome, StageRecord};
     use std::path::Path;
 
@@ -1355,6 +1582,7 @@ mod tests {
             },
             evidence_dir: PathBuf::from("unused-by-these-tests"),
             latency_dir,
+            diagnosis_dir: None,
         }
     }
 
@@ -1648,5 +1876,217 @@ mod tests {
             again.recorder.trace().expect("a trace").trace_id(),
             held.trace_id()
         );
+    }
+
+    /// §19's flag-off case, which is the whole safety argument for M8.2's wiring: with no
+    /// directory named, no sink is built, no stamps are taken, nothing is written, and the
+    /// adapter handed back is the handle that was passed in.
+    #[test]
+    fn a_run_that_did_not_ask_for_a_diagnosis_writes_no_directory() {
+        let base =
+            std::env::temp_dir().join(format!("evm-m8-diagnosis-off-{}", std::process::id()));
+        std::fs::create_dir_all(&base).expect("a directory to read nothing from");
+        let clock = Clock::new();
+        let mut diagnosis = RunDiagnosis::open(
+            &config(None),
+            clock,
+            CHAIN,
+            BlockNumber(HEAD),
+            &format!("{SESSION}-diagnosis"),
+        )
+        .expect("a run that measures nothing creates nothing");
+        let plain: Arc<dyn ChainAdapter> = Arc::new(
+            RecordedChainAdapter::load(&base, ChainId(CHAIN)).expect("an empty directory loads"),
+        );
+        let observed = diagnosis.observe(&plain, ID);
+        assert!(
+            Arc::ptr_eq(&plain, &observed),
+            "untraced, the simulation gets the very handle it was handed"
+        );
+        diagnosis.begin();
+        diagnosis.end();
+        assert!(
+            diagnosis.started_ns.is_none() && diagnosis.finished_ns.is_none(),
+            "a run that measures nothing even declines the clock read"
+        );
+        diagnosis.close().expect("closing writes nothing");
+        assert!(
+            !base.join(format!("{SESSION}-diagnosis")).exists(),
+            "no directory for a run that asked for none"
+        );
+    }
+
+    /// §22's rebuild test, at the run's end of the wire: one simulation's calls arrive as
+    /// one line, in call order, with its own id, and the duplicate it made is counted.
+    #[test]
+    fn one_simulation_becomes_one_line_of_its_own_calls() {
+        let base =
+            std::env::temp_dir().join(format!("evm-m8-diagnosis-line-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&base);
+        let clock = Clock::new();
+        let mut measured = config(None);
+        measured.diagnosis_dir = Some(base.clone());
+        let mut diagnosis = RunDiagnosis::open(&measured, clock, CHAIN, BlockNumber(HEAD), SESSION)
+            .expect("the directory opens");
+        diagnosis.set_state_source("chain: the source this run reads its blocks from");
+        diagnosis.begin();
+        let started = diagnosis
+            .started_ns
+            .expect("a measuring run stamps its span");
+        let sink = RpcTraceSink::new(
+            clock.origin_instant(),
+            ID,
+            RpcTraceSource::Live,
+            Some(CHAIN),
+        );
+        // The same slot asked for twice, serially: the two figures §24 asks for — call
+        // count and duplicate reads — come out of one pair of events.
+        sink.record(crate::diagnosis::call(
+            1,
+            "eth_getStorageAt",
+            started + 10,
+            started + 400,
+            Some("storage|91342|37503978|0xabc|0x0"),
+        ));
+        sink.record(crate::diagnosis::call(
+            2,
+            "eth_getStorageAt",
+            started + 400,
+            started + 700,
+            Some("storage|91342|37503978|0xabc|0x0"),
+        ));
+        diagnosis.sink = Some(sink);
+        diagnosis.end();
+        diagnosis.close().expect("the diagnosis writes");
+
+        let dir = base.join(SESSION);
+        let text = std::fs::read_to_string(dir.join(crate::diagnosis::TRACES_FILE))
+            .expect("simulation-traces.jsonl");
+        let lines: Vec<&str> = text.lines().collect();
+        assert_eq!(lines.len(), 1, "one simulation, one line");
+        let line: Value = serde_json::from_str(lines[0]).expect("one JSON object");
+        assert_eq!(line["simulation_id"], json!(ID));
+        assert_eq!(line["source"], json!("live"));
+        assert_eq!(line["chain_id"], json!(CHAIN));
+        assert_eq!(line["block_number"], json!(HEAD));
+        assert_eq!(line["call_count"], json!(2));
+        assert_eq!(line["duplicates"]["duplicate_state_reads"], json!(1));
+        assert_eq!(line["rpc"]["total_calls"], json!(2));
+        // §8's requirement, in the direction a reader actually uses it: the calls are in
+        // the line itself, in the order the sink took them.
+        let calls = line["calls"].as_array().expect("the call list");
+        assert_eq!(calls.len(), 2);
+        assert_eq!(calls[0]["rpc_id"], json!(1));
+        assert_eq!(calls[1]["rpc_id"], json!(2));
+        assert_eq!(calls[0]["method"], json!("eth_getStorageAt"));
+        assert!(dir.join(crate::diagnosis::RPC_SUMMARY_FILE).is_file());
+        assert!(dir.join(crate::diagnosis::README_FILE).is_file());
+        let _ = std::fs::remove_dir_all(&base);
+    }
+
+    /// §9's and §6's shared trap: a source this build cannot watch must not become "this
+    /// simulation asked the node for nothing". A recorded directory answers the trait with
+    /// `None`, and that answer has to reach the file as words.
+    #[test]
+    fn a_source_that_cannot_be_observed_says_so_instead_of_reporting_no_calls() {
+        let base =
+            std::env::temp_dir().join(format!("evm-m8-diagnosis-refused-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&base);
+        let blocks = base.join("recorded");
+        std::fs::create_dir_all(&blocks).expect("recorded directory");
+        let clock = Clock::new();
+        let mut measured = config(None);
+        measured.diagnosis_dir = Some(base.clone());
+        let mut diagnosis = RunDiagnosis::open(&measured, clock, CHAIN, BlockNumber(HEAD), SESSION)
+            .expect("the directory opens");
+        let recorded: Arc<dyn ChainAdapter> = Arc::new(
+            RecordedChainAdapter::load(&blocks, ChainId(CHAIN)).expect("an empty directory loads"),
+        );
+        let observed = diagnosis.observe(&recorded, ID);
+        assert!(
+            Arc::ptr_eq(&recorded, &observed),
+            "a source with no hook is handed back unchanged rather than replaced"
+        );
+        diagnosis.begin();
+        diagnosis.end();
+        diagnosis.close().expect("the diagnosis writes");
+
+        let dir = base.join(SESSION);
+        assert_eq!(
+            std::fs::read_to_string(dir.join(crate::diagnosis::TRACES_FILE))
+                .expect("traces")
+                .lines()
+                .count(),
+            0,
+            "no simulation line was invented for a source that could not be watched"
+        );
+        let summary: Value = serde_json::from_str(
+            &std::fs::read_to_string(dir.join(crate::diagnosis::SIMULATION_SUMMARY_FILE))
+                .expect("summary"),
+        )
+        .expect("valid JSON");
+        assert_eq!(summary["simulations"], json!(0));
+        let refusals = summary["diagnosis_refusals"].as_array().expect("a list");
+        assert_eq!(refusals.len(), 1, "{refusals:?}");
+        assert!(refusals[0]
+            .as_str()
+            .is_some_and(|text| text.contains("could not be watched")));
+        let _ = std::fs::remove_dir_all(&base);
+    }
+
+    /// §49's rule, reused for the second set of files: an error that is already leaving the
+    /// run still gets its diagnosis written, and a diagnosis that wrote fine does not change
+    /// the error's words.
+    #[test]
+    fn an_error_leaving_the_run_still_writes_what_it_learned() {
+        let base =
+            std::env::temp_dir().join(format!("evm-m8-diagnosis-absorb-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&base);
+        let clock = Clock::new();
+        let mut measured = config(None);
+        measured.diagnosis_dir = Some(base.clone());
+        let mut diagnosis = RunDiagnosis::open(&measured, clock, CHAIN, BlockNumber(HEAD), SESSION)
+            .expect("the directory opens");
+        diagnosis.begin();
+        let started = diagnosis
+            .started_ns
+            .expect("a measuring run stamps its span");
+        let sink = RpcTraceSink::new(
+            clock.origin_instant(),
+            ID,
+            RpcTraceSource::Live,
+            Some(CHAIN),
+        );
+        sink.record(crate::diagnosis::call(
+            1,
+            "eth_getCode",
+            started,
+            started + 50,
+            Some("code|91342|37503978|0xabc"),
+        ));
+        diagnosis.sink = Some(sink);
+        diagnosis.end();
+        let leaving = PipelineError::Execution("the lane could not be opened".to_string());
+        let returned = diagnosis.absorb(leaving);
+        assert!(
+            returned
+                .to_string()
+                .contains("the lane could not be opened"),
+            "the run's own failure stays the headline: {returned}"
+        );
+        assert!(
+            !returned.to_string().contains("could not be written"),
+            "a diagnosis that wrote has nothing to add: {returned}"
+        );
+        let dir = base.join(SESSION);
+        assert_eq!(
+            std::fs::read_to_string(dir.join(crate::diagnosis::TRACES_FILE))
+                .expect("traces")
+                .lines()
+                .count(),
+            1,
+            "the run errored and its simulation's calls are still on disk"
+        );
+        let _ = std::fs::remove_dir_all(&base);
     }
 }

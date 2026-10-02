@@ -23,7 +23,7 @@ use std::process::Output;
 use alloy_primitives::Address;
 use evm_cli::{
     default_registry_dirs, parse_arbitrage, parse_live, parse_validate, ArbitrageArgs,
-    DEFAULT_LATENCY_DIR,
+    DEFAULT_DIAGNOSIS_DIR, DEFAULT_LATENCY_DIR,
 };
 use evm_execution::{ExecutionMode, MarketKind};
 use evm_pipeline::ArbitrageConfig;
@@ -471,6 +471,82 @@ fn the_latency_switch_adds_a_directory_and_moves_no_decision() {
         named.latency_dir,
         Some(PathBuf::from("target/latency-route")),
         "a path typed by a caller is never silently ignored"
+    );
+}
+
+/// M8.2's RPC switch, on the same route and under the same rule as M8.1's §40: it names a
+/// place for traces and changes nothing the run decides. The last assertion is the one §21
+/// cares about — a caller who asks to see the calls must not thereby get a run that signs or
+/// submits, so the mode is compared against the untraced command line rather than trusted.
+#[test]
+fn the_rpc_trace_switch_adds_a_diagnosis_directory_and_moves_no_decision() {
+    let plain = build(&complete()).expect("M7's cheap route");
+    assert_eq!(
+        plain.diagnosis_dir, None,
+        "without the flag this is the command line that produced M7's and M8.1's evidence"
+    );
+
+    let mut flags = complete();
+    flags.push("--rpc-trace");
+    let traced = build(&flags).expect("the same route, its calls recorded");
+    assert_eq!(
+        traced.diagnosis_dir,
+        Some(PathBuf::from(DEFAULT_DIAGNOSIS_DIR)),
+        "§22: the diagnosis files get a home of their own under M8"
+    );
+    assert_ne!(
+        traced.evidence_dir,
+        traced.diagnosis_dir.expect("a directory"),
+        "a diagnosis line never shares a path with an evidence file"
+    );
+    assert_ne!(
+        DEFAULT_LATENCY_DIR, DEFAULT_DIAGNOSIS_DIR,
+        "M8.1's stage timings and M8.2's call records are different populations (§44), so \
+         they must not be written to the same directory"
+    );
+
+    let mut flags = complete();
+    flags.extend(["--rpc-trace", "--rpc-output", "target/diagnosis-route"]);
+    let named = build(&flags).expect("the same route, recorded elsewhere");
+    assert_eq!(
+        named.diagnosis_dir,
+        Some(PathBuf::from("target/diagnosis-route")),
+        "a path typed by a caller is never silently ignored"
+    );
+
+    // And the two switches are independent: the latency flag alone leaves no diagnosis
+    // directory, and the RPC flag alone leaves no latency directory.
+    let mut flags = complete();
+    flags.push("--latency-trace");
+    let stage_only = build(&flags).expect("a stage-timed run");
+    assert_eq!(
+        stage_only.latency_dir,
+        Some(PathBuf::from(DEFAULT_LATENCY_DIR))
+    );
+    assert_eq!(
+        stage_only.diagnosis_dir, None,
+        "timing a lifecycle does not record its calls"
+    );
+    assert_eq!(
+        traced.latency_dir, None,
+        "recording calls does not time a lifecycle"
+    );
+
+    // Everything the run decides is unchanged, including the rung it stops at (§21).
+    assert_eq!(traced.rpc_url, plain.rpc_url);
+    assert_eq!(traced.sender, plain.sender);
+    assert_eq!(traced.market, plain.market);
+    assert_eq!(traced.setup.mode, plain.setup.mode);
+    assert_eq!(traced.setup.mode, ExecutionMode::BuildOnly);
+    assert_eq!(traced.evidence_dir, plain.evidence_dir);
+    assert_eq!(
+        traced.risk.minimum_net_profit_wei,
+        plain.risk.minimum_net_profit_wei
+    );
+    assert_eq!(traced.candidate.input_amount, plain.candidate.input_amount);
+    assert_eq!(
+        traced.candidate.fee_evidence, plain.candidate.fee_evidence,
+        "the fee the run was told to honour is the same text"
     );
 }
 

@@ -1,9 +1,12 @@
+use std::sync::Arc;
+
 use alloy_primitives::{Address, U256};
 use async_trait::async_trait;
 
 use evm_core::{BlockNumber, ChainId};
 
 use crate::error::Result;
+use crate::rpc_trace::RpcTraceSink;
 use crate::types::{BlockContext, BlockData, CallRequest, ChainBlock, ChainLog, LogFilter};
 
 /// Chain-facing interface the rest of the system is allowed to see.
@@ -13,6 +16,21 @@ use crate::types::{BlockContext, BlockData, CallRequest, ChainBlock, ChainLog, L
 #[async_trait]
 pub trait ChainAdapter: Send + Sync {
     fn chain_id(&self) -> ChainId;
+
+    /// This adapter again, with every provider call it makes recorded into `sink`,
+    /// or `None` when the source has no calls to record.
+    ///
+    /// M8.2 §6 needs each call attributable to one simulation and §31 forbids a global
+    /// collector, so the handle is handed down from whoever starts the simulation
+    /// rather than installed once per process. The default is `None` — which is not a
+    /// failure to instrument but a statement about the source: a recorded directory
+    /// answers from memory and issues no requests at all, so its RPC timeline is empty
+    /// by fact, and §9 requires that to be reported as nothing measured rather than as
+    /// zero milliseconds. A caller that gets `None` back says so in the evidence
+    /// instead of reporting a count it never observed.
+    fn with_rpc_trace(&self, _sink: RpcTraceSink) -> Option<Arc<dyn ChainAdapter>> {
+        None
+    }
 
     async fn latest_block(&self) -> Result<BlockNumber>;
 
@@ -58,6 +76,10 @@ pub trait ChainAdapter: Send + Sync {
 impl<T: ChainAdapter + ?Sized> ChainAdapter for std::sync::Arc<T> {
     fn chain_id(&self) -> ChainId {
         (**self).chain_id()
+    }
+
+    fn with_rpc_trace(&self, sink: RpcTraceSink) -> Option<Arc<dyn ChainAdapter>> {
+        (**self).with_rpc_trace(sink)
     }
 
     async fn latest_block(&self) -> Result<BlockNumber> {

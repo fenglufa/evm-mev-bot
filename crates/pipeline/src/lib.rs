@@ -52,6 +52,7 @@
 
 pub mod arbitrage;
 pub mod config;
+pub mod diagnosis;
 pub mod engine;
 pub mod error;
 pub mod evidence;
@@ -64,6 +65,10 @@ pub use arbitrage::{
     run_once, ArbitrageConfig, ArbitrageRun, PricedLegs, Refusal, RouteCandidate, Venue,
 };
 pub use config::{CanonicalSource, PipelineConfig, QueueConfig, RiskConfig};
+pub use diagnosis::{
+    duplicates, methods, timeline, DiagnosisEvidence, DuplicateReads, MethodAggregate, RpcTimeline,
+    SimulationDiagnosis, SimulationWindow, DIAGNOSIS_SCHEMA, NOTHING_MEASURED, PROVIDER_BREAKDOWN,
+};
 pub use engine::{BlockOutcome, ChainPool, MarketEngine};
 pub use error::{PipelineError, Result};
 pub use evidence::{EvidenceFile, EvidenceWriter};

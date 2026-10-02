@@ -1,4 +1,6 @@
 use std::str::FromStr;
+use std::sync::Arc;
+use std::time::Instant;
 
 use alloy_primitives::{Address, Bytes, B256, U256};
 use async_trait::async_trait;
@@ -8,6 +10,11 @@ use evm_core::{BlockNumber, ChainId, LogIndex, TxHash, TxIndex};
 
 use crate::adapter::ChainAdapter;
 use crate::error::{ChainError, Result};
+use crate::rpc_trace::{
+    bounded_detail, describe_call, RpcAttempt, RpcCallEvent, RpcTraceSink, CLASS_DECODE_FAILED,
+    CLASS_HTTP_STATUS, CLASS_NODE_REJECTED, CLASS_NON_JSON, CLASS_OK, CLASS_SEND_FAILED,
+    RPC_TRACE_SCHEMA,
+};
 use crate::types::{
     BlockContext, BlockData, CallRequest, ChainBlock, ChainLog, ChainReceipt, ChainTransaction,
     LogFilter,
@@ -19,11 +26,51 @@ use crate::types::{
 /// `Clone` shares the [`reqwest::Client`], and with it the connection pool: a
 /// caller that needs this adapter both as a [`ChainAdapter`] and as a reader in
 /// another task gets two handles to one endpoint, not two endpoints (§62).
+///
+/// `trace` is M8.2's observation handle and nothing else. Every adapter built by
+/// [`HttpChainAdapter::connect`] holds `None`, and every recording branch below sits
+/// behind that `None`, so an untraced run makes the same requests, in the same order,
+/// with the same single retry, as it did before the field existed (§19).
 #[derive(Clone)]
 pub struct HttpChainAdapter {
     http: reqwest::Client,
     url: String,
     chain_id: ChainId,
+    trace: Option<RpcTraceSink>,
+}
+
+/// What one HTTP attempt ended with.
+///
+/// A logical call can hold two of these, because the retry loop below holds two
+/// tries. The split matters for §25: a 20 s call that was one slow answer and a 20 s
+/// call that was a timed-out connection plus a second request are different
+/// bottlenecks, and only the attempt list can tell them apart.
+enum Attempt {
+    /// The node answered — including the case of answering with a JSON-RPC error,
+    /// which is a response and not a transport failure.
+    Answered(Value),
+    /// The attempt did not produce a result. `terminal` marks the two failures the
+    /// loop has always returned on immediately (a node rejection, a payload with no
+    /// result) as distinct from the three it retries, so wrapping the loop in a
+    /// recorder cannot change when a second try happens.
+    Failed {
+        class: &'static str,
+        detail: String,
+        terminal: bool,
+    },
+}
+
+/// Turn a failed attempt back into the error this module has always returned.
+///
+/// Keyed on the class rather than carried alongside it because the class *is* the
+/// distinction the error types already draw: `Rpc` for what never answered,
+/// `RpcRejected` for what answered "no", `Decode` for an answer with no value in it.
+fn wire_error(class: &'static str, detail: String) -> ChainError {
+    match class {
+        CLASS_NODE_REJECTED => ChainError::RpcRejected(detail),
+        CLASS_DECODE_FAILED => ChainError::Decode(detail),
+        _ => ChainError::Rpc(detail),
+    }
 }
 
 impl HttpChainAdapter {
@@ -32,76 +79,226 @@ impl HttpChainAdapter {
             .timeout(std::time::Duration::from_secs(20))
             .build()
             .map_err(|e| ChainError::Rpc(e.to_string()))?;
-        let raw = Self::request_with(&http, url, "eth_chainId", json!([])).await?;
+        // This call is what *learns* the chain id, so it cannot be described with one:
+        // it is recorded, when traced, against `chain-unknown` rather than a number
+        // this adapter does not hold yet.
+        let raw = Self::request_with(&http, url, "eth_chainId", json!([]), None, None).await?;
         let chain_id = ChainId(parse_u64(&raw, "eth_chainId")?);
         Ok(Self {
             http,
             url: url.to_owned(),
             chain_id,
+            trace: None,
         })
     }
 
+    /// This adapter again, with its calls recorded into `sink`.
+    ///
+    /// The clone keeps `self.http`, so a traced run talks to the same endpoint through
+    /// the same connection pool as the untraced run it was derived from — this adds a
+    /// listener, not a second client (§62). The sink learns the endpoint here so a
+    /// transport error, which quotes the URL it was given, can be scrubbed before it
+    /// is stored.
+    pub fn with_rpc_trace(&self, sink: RpcTraceSink) -> Self {
+        let mut traced = self.clone();
+        traced.trace = Some(sink.with_endpoint(&self.url));
+        traced
+    }
+
+    /// Whether this adapter's calls are being recorded.
+    ///
+    /// A caller that wants to report "this source cannot be traced" — which is not the
+    /// same statement as "this source made no calls" — asks this rather than inferring
+    /// it from an empty event list.
+    pub fn is_rpc_traced(&self) -> bool {
+        self.trace.is_some()
+    }
+
     async fn request(&self, method: &str, params: Value) -> Result<Value> {
-        Self::request_with(&self.http, &self.url, method, params).await
+        self.request_traced(method, params).await
     }
 
     /// The same request, for a caller that needs the raw provider JSON rather
     /// than a normalized type. Only used to keep one header-parsing path between
     /// the HTTP adapter and any other transport (see [`crate::head`]).
     pub async fn request_raw(&self, method: &str, params: Value) -> Result<Value> {
-        Self::request_with(&self.http, &self.url, method, params).await
+        self.request_traced(method, params).await
+    }
+
+    /// One call, recorded into this adapter's sink when it has one.
+    ///
+    /// Every state read in the repository reaches the wire through here, which is
+    /// why the instrumentation sits at this layer rather than in a provider: a caller
+    /// above the adapter asks for a `U256` and never says which method that costs, so
+    /// a record taken there would be a guess about the wire in exactly the direction
+    /// §5 forbids. §18 falls out of the same shape — this function already holds the
+    /// method and the params, and asks the node for nothing further.
+    async fn request_traced(&self, method: &str, params: Value) -> Result<Value> {
+        let chain_id = self.chain_id.0;
+        Self::request_with(
+            &self.http,
+            &self.url,
+            method,
+            params,
+            Some(chain_id),
+            self.trace.as_ref(),
+        )
+        .await
     }
 
     pub fn url(&self) -> &str {
         &self.url
     }
 
+    /// Send one JSON-RPC request, optionally recording it.
+    ///
+    /// The last two arguments are the whole of M8.2's hook-up; with both `None` this
+    /// is the function this repository had before it, request for request.
     async fn request_with(
         http: &reqwest::Client,
         url: &str,
         method: &str,
         params: Value,
+        chain_id: Option<u64>,
+        trace: Option<&RpcTraceSink>,
     ) -> Result<Value> {
         let body = json!({"jsonrpc": "2.0", "id": 1, "method": method, "params": params});
-        let mut last = None;
+        // Read off the params that are about to go out, so §12's key describes what the
+        // node is actually asked for rather than what a caller says it asked for.
+        let description = trace.map(|_| describe_call(method, &body["params"], chain_id));
+        let rpc_id = trace.map(|sink| sink.next_rpc_id());
+        let started_ns = trace.map(|sink| sink.mark(Instant::now()));
+        let mut attempts: Vec<RpcAttempt> = Vec::new();
+        let mut answer: Option<Value> = None;
+        let mut failure: Option<(&'static str, String)> = None;
         // A single retry: transient 5xx / connection resets are common on public nodes.
         for _ in 0..2 {
-            let response = http
-                .post(url)
-                .json(&body)
-                .send()
-                .await
-                .map_err(|e| ChainError::Rpc(e.to_string()));
-            let response = match response {
-                Ok(r) => r,
-                Err(e) => {
-                    last = Some(e);
-                    continue;
-                }
-            };
-            let status = response.status();
-            let parsed: Value = match response.json().await {
-                Ok(v) => v,
-                Err(e) => {
-                    last = Some(ChainError::Rpc(format!(
-                        "non-json response (status {status}): {e}"
-                    )));
-                    continue;
-                }
-            };
-            if !status.is_success() {
-                last = Some(ChainError::Rpc(format!("http status {status}: {parsed}")));
-                continue;
+            let attempt_started_ns = trace.map(|sink| sink.mark(Instant::now()));
+            let outcome = Self::one_attempt(http, url, &body).await;
+            if let (Some(sink), Some(attempt_started)) = (trace, attempt_started_ns) {
+                let attempt_finished_ns = sink.mark(Instant::now());
+                attempts.push(RpcAttempt {
+                    started_ns: attempt_started,
+                    finished_ns: attempt_finished_ns,
+                    duration_ns: attempt_finished_ns.saturating_sub(attempt_started),
+                    outcome: match &outcome {
+                        Attempt::Answered(_) => CLASS_OK,
+                        Attempt::Failed { class, .. } => class,
+                    },
+                });
             }
-            if let Some(error) = parsed.get("error") {
-                return Err(ChainError::RpcRejected(error.to_string()));
+            match outcome {
+                Attempt::Answered(value) => {
+                    answer = Some(value);
+                    break;
+                }
+                Attempt::Failed {
+                    class,
+                    detail,
+                    terminal,
+                } => {
+                    failure = Some((class, detail));
+                    if terminal {
+                        break;
+                    }
+                }
             }
-            return parsed
-                .get("result")
-                .cloned()
-                .ok_or_else(|| ChainError::Decode("response has no result".to_string()));
         }
-        Err(last.unwrap_or_else(|| ChainError::Rpc("request failed".to_string())))
+
+        // The call as a whole, in the two forms the rest of this function needs: an
+        // error to return and a class plus message to record. Derived from `answer`
+        // first, because a retry that lands after a failure is a success.
+        let (error_class, error_detail) = match (&answer, &failure) {
+            (Some(_), _) => (None, None),
+            (None, Some((class, detail))) => (Some(*class), Some(bounded_detail(detail))),
+            // The loop's own floor, kept from the code before this function could
+            // record: two tries ran and neither reported a class. It says so as a
+            // send failure, which is the only thing it can honestly mean.
+            (None, None) => (Some(CLASS_SEND_FAILED), Some("request failed".to_string())),
+        };
+
+        if let (Some(sink), Some(rpc_id), Some(started_ns)) = (trace, rpc_id, started_ns) {
+            let finished_ns = sink.mark(Instant::now());
+            let (block, target, dedup_key, key_note) = match description {
+                Some(seen) => (seen.block, seen.target, seen.dedup_key, seen.key_note),
+                None => (None, None, None, None),
+            };
+            sink.record(RpcCallEvent {
+                trace_schema: RPC_TRACE_SCHEMA,
+                rpc_id,
+                method: method.to_owned(),
+                block,
+                target,
+                started_ns,
+                finished_ns,
+                duration_ns: finished_ns.saturating_sub(started_ns),
+                success: answer.is_some(),
+                error_class,
+                error_detail,
+                attempts,
+                dedup_key,
+                key_note,
+            });
+        }
+
+        match answer {
+            Some(value) => Ok(value),
+            None => Err(match failure {
+                Some((class, detail)) => wire_error(class, detail),
+                None => ChainError::Rpc("request failed".to_string()),
+            }),
+        }
+    }
+
+    /// One POST and its reading: the attempt-level half of
+    /// [`HttpChainAdapter::request_with`], so the loop above only has to decide what to
+    /// do with a class, not how to obtain one.
+    async fn one_attempt(http: &reqwest::Client, url: &str, body: &Value) -> Attempt {
+        let response = match http.post(url).json(body).send().await {
+            Ok(response) => response,
+            Err(error) => {
+                return Attempt::Failed {
+                    class: CLASS_SEND_FAILED,
+                    detail: error.to_string(),
+                    terminal: false,
+                }
+            }
+        };
+        let status = response.status();
+        let parsed: Value = match response.json().await {
+            Ok(value) => value,
+            Err(error) => {
+                return Attempt::Failed {
+                    class: CLASS_NON_JSON,
+                    detail: format!("non-json response (status {status}): {error}"),
+                    terminal: false,
+                }
+            }
+        };
+        if !status.is_success() {
+            return Attempt::Failed {
+                class: CLASS_HTTP_STATUS,
+                detail: format!("http status {status}: {parsed}"),
+                terminal: false,
+            };
+        }
+        // A JSON-RPC error payload is the node answering, so it ends the call the way
+        // it always did — returned, not retried.
+        if let Some(error) = parsed.get("error") {
+            return Attempt::Failed {
+                class: CLASS_NODE_REJECTED,
+                detail: error.to_string(),
+                terminal: true,
+            };
+        }
+        match parsed.get("result") {
+            Some(result) => Attempt::Answered(result.clone()),
+            None => Attempt::Failed {
+                class: CLASS_DECODE_FAILED,
+                detail: "response has no result".to_string(),
+                terminal: true,
+            },
+        }
     }
 }
 
@@ -283,6 +480,10 @@ fn normalize_transaction(chain_id: ChainId, raw: &Value) -> Result<ChainTransact
 impl ChainAdapter for HttpChainAdapter {
     fn chain_id(&self) -> ChainId {
         self.chain_id
+    }
+
+    fn with_rpc_trace(&self, sink: RpcTraceSink) -> Option<Arc<dyn ChainAdapter>> {
+        Some(Arc::new(Self::with_rpc_trace(self, sink)))
     }
 
     async fn latest_block(&self) -> Result<BlockNumber> {

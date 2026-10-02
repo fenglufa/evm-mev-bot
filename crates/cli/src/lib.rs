@@ -754,6 +754,20 @@ fn latency_dir(trace: bool, output: Option<PathBuf>) -> Option<PathBuf> {
     output.or_else(|| trace.then(|| PathBuf::from(DEFAULT_LATENCY_DIR)))
 }
 
+/// M8.2 §22's default home for the simulation diagnosis. Its own directory for the same
+/// §44 reason the latency files have one: this milestone measures the run M8.1 measured,
+/// and it must not be able to rewrite what that milestone wrote.
+pub const DEFAULT_DIAGNOSIS_DIR: &str = "data/evidence/m8/diagnosis";
+
+/// §41's rule, reused for the second instrumentation: either flag alone turns it on. A
+/// caller who typed `--rpc-output` asked for files, and a run that printed a summary and
+/// wrote none would be the one outcome they cannot want. With neither flag the sink is
+/// never built, so the adapter the simulation reads through is the adapter every earlier
+/// milestone read through (§19's "M8.1 behaviour equals M8.2 behaviour").
+fn diagnosis_dir(trace: bool, output: Option<PathBuf>) -> Option<PathBuf> {
+    output.or_else(|| trace.then(|| PathBuf::from(DEFAULT_DIAGNOSIS_DIR)))
+}
+
 /// M7 §57's one route, asked for by name.
 ///
 /// The candidate is *input*, not a discovery, and that is the §27 rule pushed as far
@@ -876,6 +890,24 @@ pub struct ArbitrageArgs {
     /// tracing on by itself (§41).
     #[arg(long)]
     latency_output: Option<PathBuf>,
+
+    /// M8.2 §22: record every provider call this run's simulation makes — how many, how
+    /// long each one took, whether they queued or overlapped, which ones asked for state
+    /// this run had already asked for — into a directory of its own. Off by default, and
+    /// "off" is this run exactly as M8.1 left it: no sink is built, so the chain-side
+    /// recording calls all sit behind a `None` test.
+    ///
+    /// The observation is attached to requests this run was already going to make. No
+    /// call is added, removed, reordered, batched, cached or retried differently because
+    /// of this flag (§18, §19), and the run's decisions are not consulted by it.
+    #[arg(long)]
+    rpc_trace: bool,
+
+    /// The base directory `--rpc-trace` writes into. The run makes its own subdirectory of
+    /// it, named after the session, so a diagnosis already on disk is never rewritten.
+    /// Naming it turns tracing on by itself.
+    #[arg(long)]
+    rpc_output: Option<PathBuf>,
 
     /// Print the run's §57 record as JSON instead of the summary lines.
     #[arg(long)]
@@ -1010,6 +1042,7 @@ impl ArbitrageArgs {
             },
             evidence_dir: self.evidence_dir.clone(),
             latency_dir: latency_dir(self.latency_trace, self.latency_output.clone()),
+            diagnosis_dir: diagnosis_dir(self.rpc_trace, self.rpc_output.clone()),
         })
     }
 }
