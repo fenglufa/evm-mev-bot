@@ -1030,7 +1030,10 @@ fn integer_mean(total: u64, count: usize) -> Option<u64> {
 /// are not 41 nanoseconds: a reader who summed that column into the duration table beside
 /// it would get a number that means nothing. The suffix is stripped and the unit corrected
 /// here, in the one place both series are built.
-fn count_stats(samples: &[u64]) -> Value {
+/// Made public because §19's assembler (`crates/pipeline/tests/reuse_ab_evidence.rs`) counts
+/// the same populations over the recorded runs: a second relabelling of `stats` would be a
+/// second rule about what a count is not.
+pub fn count_stats(samples: &[u64]) -> Value {
     let mut row = serde_json::Map::new();
     for (key, value) in stats(samples).as_object().into_iter().flatten() {
         if key == "unit" {
