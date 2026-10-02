@@ -519,3 +519,70 @@ async fn the_stub_hears_every_request_it_is_given() {
         vec!["eth_chainId".to_string(), "eth_blockNumber".to_string()],
     );
 }
+
+/// M8.3.2 §14's no-double-counting proof, at the one place it can actually break. The
+/// lifecycle's sink sits on the handle the run's non-simulation stages read through, and the
+/// *simulation's* sink is attached to a clone derived from that same handle — so if
+/// `with_rpc_trace` stacked observers instead of replacing the one it inherited, every
+/// simulation call would land in both lists and the 39-call state-read baseline would silently
+/// grow by whatever the run had asked for outside the simulation. The two lists are asserted
+/// disjoint *and* jointly complete against the endpoint's own tally, which is the only form of
+/// this claim a test can check.
+#[tokio::test]
+async fn a_simulation_sink_replaces_the_lifecycle_sink_it_inherits() {
+    let (stub, base) = connected(Behaviour::Answer).await;
+    let lifecycle = sink_named("lifecycle");
+    let run: std::sync::Arc<dyn ChainAdapter> =
+        ChainAdapter::with_rpc_trace(&base, lifecycle.clone()).expect("an http source has calls");
+    run.get_code(BlockNumber(1), POOL)
+        .await
+        .expect("the read the lifecycle makes before any simulation exists");
+
+    let simulation = sink_named("simulation");
+    let provider = run
+        .with_rpc_trace(simulation.clone())
+        .expect("the run's handle is still an http source");
+    provider
+        .get_balance(BlockNumber(1), POOL)
+        .await
+        .expect("first simulation read");
+    provider
+        .get_nonce(BlockNumber(1), POOL)
+        .await
+        .expect("second simulation read");
+
+    let methods = |sink: &RpcTraceSink| -> Vec<String> {
+        sink.events()
+            .iter()
+            .map(|event| event.method.clone())
+            .collect()
+    };
+    assert_eq!(
+        methods(&lifecycle),
+        vec!["eth_getCode".to_string()],
+        "the lifecycle holds the read made before the simulation, and none of the reads after it"
+    );
+    assert_eq!(
+        methods(&simulation),
+        vec![
+            "eth_getBalance".to_string(),
+            "eth_getTransactionCount".to_string()
+        ],
+        "the simulation holds its own two reads, in its own order"
+    );
+    assert_eq!(
+        lifecycle.events().len() + simulation.events().len(),
+        stub.received().len() - 1,
+        "disjoint and complete: every request the endpoint saw after the connect is in exactly \
+         one of the two lists, so no call is counted twice and none is lost"
+    );
+    assert_eq!(
+        stub.received().len(),
+        4,
+        "connect plus three reads — attaching a second sink asked the node for nothing"
+    );
+    assert_eq!(lifecycle.dropped_events(), 0);
+    assert_eq!(simulation.dropped_events(), 0);
+    assert_eq!(lifecycle.simulation_id(), "lifecycle");
+    assert_eq!(simulation.simulation_id(), "simulation");
+}

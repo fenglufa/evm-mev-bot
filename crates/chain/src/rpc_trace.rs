@@ -53,7 +53,13 @@ use serde_json::Value;
 
 /// The schema version of one recorded event, so a later reader of
 /// `simulation-traces.jsonl` knows which fields were promised when it was written.
-pub const RPC_TRACE_SCHEMA: u64 = 1;
+///
+/// Version 2 adds [`RpcCallEvent::slot`]: M8.3.2 §6 asks what each of a simulation's
+/// storage reads reads, and until now the slot existed only inside `dedup_key`, as one
+/// of that key's five terms. A reader that wanted it had to take apart a string another
+/// module builds — so the field is stated rather than re-derived. Nothing else moved: a
+/// version-1 line and a version-2 line describe the same call.
+pub const RPC_TRACE_SCHEMA: u64 = 2;
 
 /// The largest event list one sink will hold.
 ///
@@ -106,6 +112,12 @@ pub struct RpcCallEvent {
     pub block: Option<String>,
     /// The account, contract or hash the call is about, when the params name one.
     pub target: Option<String>,
+    /// The storage word an `eth_getStorageAt` asked for, zero-padded to 64 hex digits —
+    /// the same normalized text [`describe_call`] puts into that method's `dedup_key`, and
+    /// read off the same params element. `None` for every other method, which is why this
+    /// is a field rather than a rule a reader applies to the key: M8.3.2 §6 wants the 20
+    /// storage reads of a simulation listed one per word, and no other method has a slot.
+    pub slot: Option<String>,
     pub started_ns: u64,
     pub finished_ns: u64,
     /// `finished_ns - started_ns`, floored at zero: the whole logical call, its retries
@@ -203,6 +215,12 @@ struct Inner {
     /// silently skip the setting whenever a clone already existed, and a skipped
     /// setting here means an endpoint can travel into an evidence file.
     endpoint: OnceLock<String>,
+    /// A one-way digest of [`Self::endpoint`], set in the same call: M8.3.2 §8 asks whether
+    /// one simulation's storage reads and M8.3.2 §14's reads outside it went to the *same*
+    /// provider. That is a question about identity, and an identity can be stated as a
+    /// digest — the URL itself stays out of the evidence file, because a transport error
+    /// quotes the URL it was given and an endpoint may carry a credential in its path.
+    endpoint_id: OnceLock<String>,
     events: Mutex<Vec<RpcCallEvent>>,
     /// What this instrumentation refused to do, in the order it refused it. A refusal
     /// is a fact about the observer and is reported as one — never dropped, never a
@@ -231,6 +249,7 @@ impl RpcTraceSink {
                 source,
                 chain_id,
                 endpoint: OnceLock::new(),
+                endpoint_id: OnceLock::new(),
                 events: Mutex::new(Vec::new()),
                 refusals: Mutex::new(Vec::new()),
                 next_id: AtomicU64::new(1),
@@ -260,7 +279,15 @@ impl RpcTraceSink {
     /// leak with a timing to it.
     pub fn with_endpoint(self, endpoint: &str) -> Self {
         let _ = self.inner.endpoint.set(endpoint.to_owned());
+        let _ = self.inner.endpoint_id.set(endpoint_id(endpoint));
         self
+    }
+
+    /// The digest identity of this sink's endpoint, or `None` when nobody told the sink
+    /// where its calls went. Emitted in place of the URL (§8's question, answered without
+    /// answering it by printing a credential).
+    pub fn endpoint_id(&self) -> Option<&str> {
+        self.inner.endpoint_id.get().map(String::as_str)
     }
 
     /// Nanoseconds since this sink's origin, floored rather than wrapped: a stamp, not
@@ -365,6 +392,9 @@ fn into_refusals<'a>(
 pub struct RpcCallDescription {
     pub block: Option<String>,
     pub target: Option<String>,
+    /// The normalized storage word, for `eth_getStorageAt` only. See
+    /// [`RpcCallEvent::slot`].
+    pub slot: Option<String>,
     pub dedup_key: Option<String>,
     pub key_note: Option<&'static str>,
 }
@@ -436,14 +466,23 @@ pub fn describe_call(method: &str, params: &Value, chain_id: Option<u64>) -> Rpc
         _ => None,
     };
 
+    // §6's storage word. Read from the same params element the key is built from and
+    // normalized by the same function, so the field and the key cannot name two different
+    // words for one call — which is the only way a per-slot list can be checked against
+    // the duplicate tally beside it.
+    let slot = if method == "eth_getStorageAt" {
+        text(1).as_deref().map(normalize_slot)
+    } else {
+        None
+    };
+
     // Keyed per §12. `None` from a builder below means the params were not the shape
     // that rule assumes — which is reported, not patched over.
     let dedup_key = match method {
-        "eth_getStorageAt" => match (text(0).as_deref(), text(1).as_deref(), block.as_deref()) {
-            (Some(address), Some(slot), Some(height)) => Some(format!(
-                "storage|{chain}|{height}|{}|{}",
-                normalize_address(address),
-                normalize_slot(slot)
+        "eth_getStorageAt" => match (text(0).as_deref(), slot.as_deref(), block.as_deref()) {
+            (Some(address), Some(word), Some(height)) => Some(format!(
+                "storage|{chain}|{height}|{}|{word}",
+                normalize_address(address)
             )),
             _ => None,
         },
@@ -523,6 +562,7 @@ pub fn describe_call(method: &str, params: &Value, chain_id: Option<u64>) -> Rpc
     RpcCallDescription {
         block,
         target,
+        slot,
         dedup_key,
         key_note,
     }
@@ -551,7 +591,12 @@ fn normalize_block_param(raw: &str) -> String {
 
 /// An address, lowercased and `0x`-prefixed, so one account written in two checksum
 /// cases is one key rather than two.
-fn normalize_address(raw: &str) -> String {
+///
+/// Public because M8.3.2 §6 and §9 group the evidence by address, and a group built by
+/// lowercasing the text a call carried would be a *second* normalization of the same
+/// field — one that could disagree with the dedup key beside it. The rows and the key
+/// are meant to be the same string produced by this function.
+pub fn normalize_address(raw: &str) -> String {
     let stripped = raw.strip_prefix("0x").unwrap_or(raw);
     format!("0x{}", stripped.to_lowercase())
 }
@@ -582,6 +627,16 @@ pub fn bounded_detail(text: &str) -> String {
         Some((index, _)) => format!("{}…[cut]", &text[..index]),
         None => text.to_owned(),
     }
+}
+
+/// An endpoint's identity as a digest prefix, in the shape M8.1's trace ids already use
+/// (`derive_trace_id` in `crates/metrics/src/trace.rs`): two sinks that name the same
+/// endpoint name the same id, and no evidence file ever holds the URL. §8 asks a question
+/// about whether reads share a provider; that is answerable by comparison, and comparison
+/// does not require publication.
+fn endpoint_id(url: &str) -> String {
+    let hash = alloy_primitives::keccak256(url.as_bytes());
+    format!("rpc-{}", &hash.to_string()[2..18])
 }
 
 #[cfg(test)]
@@ -638,6 +693,85 @@ mod tests {
             Some(1),
         );
         assert_ne!(other_chain.dedup_key, base.dedup_key, "a different chain");
+    }
+
+    /// §6's own field, and the one way it could be wrong: if the slot the event names and
+    /// the slot inside the dedup key came from different normalizations, a per-slot list
+    /// and the duplicate tally beside it would be two accounts of the same call.
+    #[test]
+    fn the_slot_field_is_the_same_word_the_dedup_key_carries() {
+        let short = description("eth_getStorageAt", json!(["0xAbC", "0x8", "0x23da5df"]));
+        let padded = description(
+            "eth_getStorageAt",
+            json!([
+                "0xabc",
+                "0x0000000000000000000000000000000000000000000000000000000000000008",
+                "0x23da5df"
+            ]),
+        );
+        let word = "0x0000000000000000000000000000000000000000000000000000000000000008";
+        assert_eq!(short.slot.as_deref(), Some(word));
+        assert_eq!(
+            padded.slot, short.slot,
+            "one word, two spellings, one slot text"
+        );
+        for description_row in [&short, &padded] {
+            assert!(
+                description_row
+                    .dedup_key
+                    .as_deref()
+                    .unwrap_or_default()
+                    .ends_with(word),
+                "the key and the field must name one word: {:?}",
+                description_row.dedup_key
+            );
+        }
+
+        // A params array the key rule cannot read gives no slot either — the field is not
+        // a second chance to guess what the key refused to build.
+        let unreadable = description("eth_getStorageAt", json!(["0xabc"]));
+        assert_eq!(unreadable.slot, None);
+
+        for (method, params) in [
+            ("eth_getCode", json!(["0xabc", "0x1"])),
+            ("eth_getBalance", json!(["0xabc", "0x1"])),
+            ("eth_call", json!([{"to": "0xabc", "data": "0x01"}, "0x1"])),
+        ] {
+            assert_eq!(description(method, params).slot, None, "{method}");
+        }
+    }
+
+    /// §8's question is whether two sets of calls share a provider, and the answer has to
+    /// be comparable without printing the endpoint. An id every URL maps onto would answer
+    /// it falsely, so the second half of this test is the control: a different endpoint has
+    /// to produce a different id.
+    #[test]
+    fn an_endpoint_has_an_identity_that_compares_without_being_published() {
+        let first = RpcTraceSink::new(Instant::now(), "sim-a", RpcTraceSource::Live, Some(1))
+            .with_endpoint("https://rpc.invalid/token/abc123");
+        let same_again = RpcTraceSink::new(Instant::now(), "sim-b", RpcTraceSource::Live, Some(1))
+            .with_endpoint("https://rpc.invalid/token/abc123");
+        let other = RpcTraceSink::new(Instant::now(), "sim-c", RpcTraceSource::Live, Some(1))
+            .with_endpoint("https://rpc.invalid/token/dead456");
+
+        let id = first.endpoint_id().unwrap_or_default();
+        assert_eq!(id, same_again.endpoint_id().unwrap_or_default());
+        assert_ne!(
+            id,
+            other.endpoint_id().unwrap_or_default(),
+            "one id per endpoint"
+        );
+        assert!(id.starts_with("rpc-") && id.len() == 20, "{id}");
+        for text in [id, first.simulation_id()] {
+            assert!(
+                !text.contains("abc123") && !text.contains("rpc.invalid"),
+                "the endpoint travelled into an id: {text}"
+            );
+        }
+
+        // A sink nobody told where its calls went says so rather than inventing an id.
+        let unlabelled = RpcTraceSink::new(Instant::now(), "sim-d", RpcTraceSource::Live, Some(1));
+        assert_eq!(unlabelled.endpoint_id(), None);
     }
 
     /// A tag is not a height, and a key that equated them would call two reads of two
@@ -752,6 +886,7 @@ mod tests {
                 method: "eth_getCode".to_string(),
                 block: Some("1".to_string()),
                 target: Some(format!("0x{index}")),
+                slot: None,
                 started_ns: sink.mark(at),
                 finished_ns: sink.mark(at),
                 duration_ns: 0,
@@ -796,6 +931,7 @@ mod tests {
             method: "eth_chainId".to_string(),
             block: None,
             target: None,
+            slot: None,
             started_ns: late,
             finished_ns: early,
             duration_ns: early.saturating_sub(late),
@@ -821,6 +957,7 @@ mod tests {
             method: "eth_getBlockByNumber".to_string(),
             block: Some("1".to_string()),
             target: Some("1".to_string()),
+            slot: None,
             started_ns: 0,
             finished_ns: 1,
             duration_ns: 1,
@@ -872,6 +1009,7 @@ mod tests {
             method: "eth_chainId".to_string(),
             block: None,
             target: None,
+            slot: None,
             started_ns: 0,
             finished_ns: 0,
             duration_ns: 0,

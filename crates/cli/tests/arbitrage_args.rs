@@ -623,6 +623,82 @@ fn the_state_read_reuse_switch_moves_one_field_and_nothing_else() {
     );
 }
 
+/// M8.3.2 §17's switch, tested as the observer it claims to be. One field of the config moves,
+/// and the `Debug` comparison is the load-bearing assertion: a flag that also touched the cache,
+/// the execution rung or the pinned block would make §14's file a description of a run nobody
+/// asked for.
+///
+/// The second half is §18's prohibition on the diagnosis becoming an optimization by the back
+/// door, and it is a refusal rather than an ignore: the switch has nowhere to write unless
+/// `--rpc-trace` (or an `--rpc-output` path) opens the diagnosis directory, and a quietly-no-op
+/// flag would let a caller read a run's summary as though it held a lifecycle sweep.
+#[test]
+fn the_state_acquisition_diagnosis_moves_one_field_and_refuses_a_missing_home() {
+    let mut traced_flags = complete();
+    traced_flags.push("--rpc-trace");
+    let plain = build(&traced_flags).expect("a traced run");
+    assert!(
+        !plain.state_acquisition_diagnosis,
+        "§17: the lifecycle sweep is opt-in, so the default command line is still M8.3.1's"
+    );
+
+    let mut flags = traced_flags.clone();
+    flags.push("--diagnose-state-acquisition");
+    let diagnosed = build(&flags).expect("the same route, its lifecycle watched too");
+    assert!(diagnosed.state_acquisition_diagnosis);
+
+    let trimmed = |config: &ArbitrageConfig, arm: &str| {
+        format!("{config:?}").replace(&format!("state_acquisition_diagnosis: {arm}"), "")
+    };
+    assert_eq!(
+        trimmed(&plain, "false"),
+        trimmed(&diagnosed, "true"),
+        "the diagnosis switch changed exactly one field of the config"
+    );
+    assert_eq!(
+        diagnosed.diagnosis_dir, plain.diagnosis_dir,
+        "it writes into the directory `--rpc-trace` opened and opens none of its own"
+    );
+    assert_eq!(
+        diagnosed.state_read_reuse, plain.state_read_reuse,
+        "the switch is not a way to change the cache arm (§18)"
+    );
+    assert_eq!(
+        diagnosed.setup.mode,
+        ExecutionMode::BuildOnly,
+        "watching a lifecycle signs nothing and broadcasts nothing (§16)"
+    );
+    assert_eq!(diagnosed.rpc_url, plain.rpc_url);
+    assert_eq!(diagnosed.sender, plain.sender);
+    assert_eq!(diagnosed.market, plain.market);
+    assert_eq!(diagnosed.tolerance, plain.tolerance);
+    assert_eq!(diagnosed.latency_dir, plain.latency_dir);
+    assert_eq!(diagnosed.evidence_dir, plain.evidence_dir);
+
+    // Refused, not ignored: the flag names files and the directory is what says where.
+    let mut flags = complete();
+    flags.push("--diagnose-state-acquisition");
+    let refused = build(&flags).expect_err("a diagnosis with nowhere to write is refused");
+    assert!(
+        refused.contains("--diagnose-state-acquisition"),
+        "the refusal has to name the flag the caller typed: {refused}"
+    );
+
+    // Either half of §41's rule opens the directory, so a named path alone is a home too.
+    let mut flags = complete();
+    flags.extend([
+        "--diagnose-state-acquisition",
+        "--rpc-output",
+        "target/diagnosis-lifecycle",
+    ]);
+    let named = build(&flags).expect("a named diagnosis directory is enough");
+    assert_eq!(
+        named.diagnosis_dir,
+        Some(PathBuf::from("target/diagnosis-lifecycle"))
+    );
+    assert!(named.state_acquisition_diagnosis);
+}
+
 /// The built binary, run with these arguments — which start at the subcommand, because argv's
 /// first element is the program name the shell already gave it.
 fn binary(args: &[&str]) -> Output {

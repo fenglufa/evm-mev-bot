@@ -921,6 +921,25 @@ pub struct ArbitrageArgs {
     #[arg(long)]
     no_state_read_reuse: bool,
 
+    /// M8.3.2 §17's diagnosis-only switch. Given, the run watches not only the state reads
+    /// its simulation makes but the reads its *lifecycle* makes — the head and the header
+    /// that fix the pin, the reserves detection prices, the gate's balances and fee facts —
+    /// and writes them, classified by the stage that held each one, to the same directory's
+    /// `outside-simulation-rpc.json`.
+    ///
+    /// This is an observer and the whole of what §17 asks for. It adds no request: the sink
+    /// it attaches listens at the same choke point `--rpc-trace` already opened, and M8.2 §18
+    /// proved that a listened-to call is the same call. It changes no behaviour: §18 forbids
+    /// turning it into a cache change, a batch, a concurrency change or a prefetch, and it
+    /// cannot — no code that decides anything reads this field.
+    ///
+    /// It requires the diagnosis directory — `--rpc-trace`, or an `--rpc-output` path, either
+    /// of which opens it (the same §41 rule that turns tracing on by itself). Refusing here
+    /// rather than ignoring the flag is the point: a switch that quietly did nothing would
+    /// let a caller believe they had measured something.
+    #[arg(long)]
+    diagnose_state_acquisition: bool,
+
     /// Print the run's §57 record as JSON instead of the summary lines.
     #[arg(long)]
     json: bool,
@@ -1024,6 +1043,19 @@ impl ArbitrageArgs {
             );
         }
 
+        // §17's switch is a second half of the measurement `--rpc-trace` opens, and it has
+        // nowhere to write without that directory. An ignored flag would be the worse
+        // failure: the caller would read a run's summary as if it held a lifecycle sweep.
+        let diagnosis_home = diagnosis_dir(self.rpc_trace, self.rpc_output.clone());
+        if self.diagnose_state_acquisition && diagnosis_home.is_none() {
+            return Err(
+                "--diagnose-state-acquisition asks for files, and `--rpc-trace` (or \
+                        --rpc-output <dir>) is what says where they go: given this flag alone \
+                        the run would measure nothing and look as though it had"
+                    .to_string(),
+            );
+        }
+
         Ok(ArbitrageConfig {
             rpc_url,
             registry_dirs: if self.registry_dir.is_empty() {
@@ -1054,8 +1086,9 @@ impl ArbitrageArgs {
             },
             evidence_dir: self.evidence_dir.clone(),
             latency_dir: latency_dir(self.latency_trace, self.latency_output.clone()),
-            diagnosis_dir: diagnosis_dir(self.rpc_trace, self.rpc_output.clone()),
+            diagnosis_dir: diagnosis_home,
             state_read_reuse: !self.no_state_read_reuse,
+            state_acquisition_diagnosis: self.diagnose_state_acquisition,
         })
     }
 }

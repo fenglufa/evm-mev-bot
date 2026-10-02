@@ -219,9 +219,15 @@ impl HttpChainAdapter {
 
         if let (Some(sink), Some(rpc_id), Some(started_ns)) = (trace, rpc_id, started_ns) {
             let finished_ns = sink.mark(Instant::now());
-            let (block, target, dedup_key, key_note) = match description {
-                Some(seen) => (seen.block, seen.target, seen.dedup_key, seen.key_note),
-                None => (None, None, None, None),
+            let (block, target, slot, dedup_key, key_note) = match description {
+                Some(seen) => (
+                    seen.block,
+                    seen.target,
+                    seen.slot,
+                    seen.dedup_key,
+                    seen.key_note,
+                ),
+                None => (None, None, None, None, None),
             };
             sink.record(RpcCallEvent {
                 trace_schema: RPC_TRACE_SCHEMA,
@@ -229,6 +235,7 @@ impl HttpChainAdapter {
                 method: method.to_owned(),
                 block,
                 target,
+                slot,
                 started_ns,
                 finished_ns,
                 duration_ns: finished_ns.saturating_sub(started_ns),

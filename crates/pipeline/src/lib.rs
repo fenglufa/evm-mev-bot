@@ -66,8 +66,15 @@ pub use arbitrage::{
 };
 pub use config::{CanonicalSource, PipelineConfig, QueueConfig, RiskConfig};
 pub use diagnosis::{
-    duplicates, methods, timeline, DiagnosisEvidence, DuplicateReads, MethodAggregate, RpcTimeline,
-    SimulationDiagnosis, SimulationWindow, DIAGNOSIS_SCHEMA, NOTHING_MEASURED, PROVIDER_BREAKDOWN,
+    account_matrix, bottleneck_classification, count_stats, duplicates, duration_row,
+    lifecycle_rows, methods, outside_simulation_table, rpc_gaps, storage_breakdown, timeline,
+    DiagnosisEvidence, DuplicateReads, MethodAggregate, RpcTimeline, SimulationDiagnosis,
+    SimulationWindow, StageSpan, ACCOUNT_MATRIX_FILE, BOTTLENECK_CATEGORIES, BOTTLENECK_FILE,
+    DIAGNOSIS_SCHEMA, DOMINANT, LIFECYCLE_DETECTION, LIFECYCLE_ORCHESTRATION, LIFECYCLE_PREFLIGHT,
+    LIFECYCLE_SIMULATION_CONTEXT, LIFECYCLE_SIMULATION_STATE, LIFECYCLE_UNKNOWN, MATERIAL,
+    NOTHING_MEASURED, NOT_MEASURED, OUTSIDE_FILE, PROVIDER_BREAKDOWN, REQUIRED_BY_ORCHESTRATION,
+    REQUIRED_BY_SIMULATION, REQUIRED_BY_UNKNOWN, RPC_GAPS_FILE, RULED_OUT, SEMANTIC_UNKNOWN,
+    STATE_READS_TALLY_SCOPE, STORAGE_BREAKDOWN_FILE, STORAGE_SEMANTIC_REASON,
 };
 pub use engine::{BlockOutcome, ChainPool, MarketEngine};
 pub use error::{PipelineError, Result};

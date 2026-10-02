@@ -72,7 +72,7 @@ use evm_simulation::{
 };
 
 use crate::config::RiskConfig;
-use crate::diagnosis::{DiagnosisEvidence, SimulationDiagnosis, SimulationWindow};
+use crate::diagnosis::{DiagnosisEvidence, SimulationDiagnosis, SimulationWindow, StageSpan};
 use crate::error::{PipelineError, Result};
 use crate::evidence::{EvidenceFile, EvidenceWriter};
 use crate::latency::{git_revision, record_ladder, LatencyEvidence, TraceRecorder};
@@ -154,6 +154,17 @@ pub struct ArbitrageConfig {
     /// anything: the route, the prices, the risk thresholds and the EVM configuration are
     /// built without consulting it, and §5's result equality is the proof that they are.
     pub state_read_reuse: bool,
+    /// M8.3.2 §17's diagnosis-only switch: it adds the lifecycle half of the RPC sweep
+    /// (§14) and the tables that read it (§6, §9, §12, §13), and nothing else.
+    ///
+    /// What it is allowed to touch is the observer. With it off, no second sink is built,
+    /// so the adapter the run reads through is the adapter M8.3.1 ran; with it on, the
+    /// sink is attached to the same handle through the same
+    /// [`with_rpc_trace`][evm_chain::ChainAdapter::with_rpc_trace] call the simulation
+    /// sink already uses, which records a call and asks the node for nothing. It cannot
+    /// disable the cache, enable a batch, or add concurrency — those are the three things
+    /// §18 forbids, and none of them is reachable from a field this module reads.
+    pub state_acquisition_diagnosis: bool,
 }
 
 /// One venue, as the node described it at the block the run pinned.
@@ -298,6 +309,31 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         )));
     }
 
+    // M8.3.2 §14's other half of the same instrumentation, attached here rather than at §B
+    // because the two calls that fix the pin happen two lines below: a sink added after them
+    // would report the observation reads as absent rather than as measured. This is the
+    // handle the run's *non*-simulation reads go through — head and header, the reserves
+    // priced in detection, the gate's balances and fee facts — and §B's sink goes on a clone
+    // derived from it, which replaces rather than stacks, so a call lands in one list or the
+    // other. §17's switch is the whole of it: with the flag off, `adapter` is the adapter
+    // M8.3.1 ran with, and no second sink is built.
+    let lifecycle = if config.diagnosis_dir.is_some() && config.state_acquisition_diagnosis {
+        let sink = RpcTraceSink::new(
+            clock.origin_instant(),
+            "lifecycle",
+            RpcTraceSource::Live,
+            Some(chain_id),
+        )
+        .with_endpoint(&config.rpc_url);
+        Some(sink)
+    } else {
+        None
+    };
+    let adapter = match &lifecycle {
+        Some(sink) => adapter.with_rpc_trace(sink.clone()),
+        None => adapter,
+    };
+
     // §8's protection is structural rather than a rule to remember: one head read, turned
     // into a pin, and every state read below names that height. Nothing asks the node what
     // "latest" is a second time.
@@ -327,6 +363,10 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     // simulation stage, and the sink that captures it is attached at §B below — this line
     // only decides whether there is anywhere to write.
     let mut diagnosis = RunDiagnosis::open(config, clock, chain_id, head, &run.session_id)?;
+    // The sink above already holds the two calls that fixed this pin, because it went onto
+    // the adapter before them; handing it over here is what gives §14's file its first two
+    // rows. With the switch off, `lifecycle` is `None` and nothing downstream changes.
+    diagnosis.attach_lifecycle(lifecycle);
     trace.recorder.begin_at(Stage::Observation, detected_ns);
     trace.recorder.end_at(Stage::Observation, observed_ns);
     // §42.3's mapping, stated in the evidence rather than only in prose: a single-route run
@@ -626,6 +666,7 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         Ok(stage) => stage,
         Err(error) => {
             let error = trace.execution_failed(&run.session_id, Stage::Preflight, error);
+            diagnosis.note_stages(trace.stage_spans());
             return Err(diagnosis.absorb(error));
         }
     };
@@ -646,6 +687,7 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         Ok(gathered) => gathered,
         Err(error) => {
             let error = trace.execution_failed(&run.session_id, Stage::Preflight, error);
+            diagnosis.note_stages(trace.stage_spans());
             return Err(diagnosis.absorb(error));
         }
     };
@@ -738,6 +780,14 @@ struct RunTrace {
     /// end: `TraceRecorder::finish` consumes its recorder, and a replacement needs a clock.
     clock: Clock,
     evidence: Option<LatencyEvidence>,
+    /// §14's stage windows, taken off the trace at [`Self::finish`] — the last moment they
+    /// are all closed and still readable.
+    ///
+    /// They are copied out rather than read back later because `finish` hands the trace to
+    /// the latency writer and the recorder keeps nothing: a diagnosis that closes after the
+    /// trace would otherwise find no spans to classify against and would report every
+    /// lifecycle call as `unknown`, which is a failure of the observer, not of the run.
+    spans: Vec<StageSpan>,
 }
 
 impl RunTrace {
@@ -753,26 +803,35 @@ impl RunTrace {
         head: u64,
         session_id: String,
     ) -> Result<Self> {
-        let Some(base) = config.latency_dir.clone() else {
-            return Ok(Self {
-                recorder: TraceRecorder::off(clock),
-                clock,
-                evidence: None,
-            });
-        };
+        let trace = LatencyTrace::new(TraceSource::Live, chain_id, Some(head), None);
         // One subdirectory per session: §44 forbids rewriting a baseline that is already on
         // disk, and a name that carries the session id is also how a trace line is traced
         // back to the `route-run.json` that holds its verdict.
-        let evidence = LatencyEvidence::open(
-            &base.join(&session_id),
-            git_revision(),
-            config.setup.mode.name(),
-        )?;
-        let trace = LatencyTrace::new(TraceSource::Live, chain_id, Some(head), None);
+        let evidence = match config.latency_dir.as_ref() {
+            None => None,
+            Some(base) => Some(LatencyEvidence::open(
+                &base.join(&session_id),
+                git_revision(),
+                config.setup.mode.name(),
+            )?),
+        };
+        // M8.3.2 §14 classifies a lifecycle call by the stage span that held it, and those
+        // spans are M8.1's stamps — the same records, the same two clock readings per stage
+        // boundary, not a second set taken for the diagnosis. So a run that asked for the
+        // state-acquisition diagnosis but not for `traces.jsonl` still runs the recorder, and
+        // the recorder's output goes to §14's file and nowhere else. With neither switch the
+        // recorder is `off` and every boundary below declines the clock read, exactly as it
+        // did before this type grew a second reason to exist (§40's compatibility rule).
+        let measuring = evidence.is_some() || config.state_acquisition_diagnosis;
         Ok(Self {
-            recorder: TraceRecorder::on(clock, trace),
+            recorder: if measuring {
+                TraceRecorder::on(clock, trace)
+            } else {
+                TraceRecorder::off(clock)
+            },
             clock,
-            evidence: Some(evidence),
+            evidence,
+            spans: Vec::new(),
         })
     }
 
@@ -825,14 +884,30 @@ impl RunTrace {
         }
     }
 
+    /// The §14 stage windows. Empty for a run that never reached [`Self::finish`], which is
+    /// what a diagnosis reports as `unknown` with the spans it did have named beside it.
+    fn stage_spans(&self) -> &[StageSpan] {
+        &self.spans
+    }
+
     /// Close the lifecycle and write its line, tables and README. Idempotent: a recorder
     /// already handed over holds nothing.
     fn finish(&mut self, session_id: &str) -> Result<()> {
+        // The spans are read before anything else, so a run whose trace directory could not
+        // be written still classifies the calls its diagnosis did record.
+        self.spans = self.recorder.trace().map(StageSpan::of).unwrap_or_default();
         let Some(evidence) = self.evidence.as_mut() else {
             return Ok(());
         };
         let recorder = std::mem::replace(&mut self.recorder, TraceRecorder::off(self.clock));
         let recorded = recorder.finish().with_session(session_id);
+        // `TraceRecorder::finish` is what closes the lifecycle: it stamps the far end, and a
+        // stage still open at that instant becomes `Cancelled`. Read the windows again from
+        // the trace about to be written, so §14 classifies against the same spans the
+        // latency file publishes rather than the set as they stood a moment earlier.
+        if let Some(trace) = &recorded.trace {
+            self.spans = StageSpan::of(trace);
+        }
         evidence.record(recorded)?;
         evidence.finish()?;
         Ok(())
@@ -872,6 +947,15 @@ struct RunDiagnosis {
     /// provider the run already built — this holds a handle, it does not make a second one,
     /// so it cannot give a simulation a cache of its own (§2).
     state_reads: Option<Arc<RpcStateProvider>>,
+    /// §14's other half: the sink on the handle the *lifecycle's* own reads went through —
+    /// observation, detection, preflight — as opposed to the simulation sink above. Present
+    /// only when §17's diagnosis switch was on, because attaching it is the whole of what
+    /// that switch does, and a run without it must issue exactly the requests it used to.
+    lifecycle: Option<RpcTraceSink>,
+    /// Every stage window this run wrote, copied out of the latency trace before the trace
+    /// was handed to the latency writer and closed. §14 places each lifecycle call in the
+    /// stage that held it, and by the time [`Self::close`] runs the trace itself is gone.
+    spans: Vec<StageSpan>,
     clock: Clock,
     chain_id: u64,
     head: u64,
@@ -879,7 +963,6 @@ struct RunDiagnosis {
     started_ns: Option<u64>,
     finished_ns: Option<u64>,
 }
-
 impl RunDiagnosis {
     /// `off` unless the run named a diagnosis directory.
     fn open(
@@ -895,12 +978,15 @@ impl RunDiagnosis {
                 &base.join(session_id),
                 git_revision(),
                 config.setup.mode.name(),
+                config.state_acquisition_diagnosis,
             )?),
         };
         Ok(Self {
             evidence,
             sink: None,
             state_reads: None,
+            lifecycle: None,
+            spans: Vec::new(),
             clock,
             chain_id,
             head: head.0,
@@ -969,6 +1055,22 @@ impl RunDiagnosis {
         }
     }
 
+    /// Hold the lifecycle sink §14 reports from, when §17's switch made one.
+    ///
+    /// The caller has already attached it to the adapter the lifecycle reads through; this
+    /// only keeps the handle so the sweep at `close` can empty it. `None` is a normal value:
+    /// a run without the switch records no lifecycle calls at all, and `outside-simulation-rpc.json`
+    /// is then simply not written — which is a measurement that was not asked for, not a
+    /// lifecycle that made no requests.
+    fn attach_lifecycle(&mut self, sink: Option<RpcTraceSink>) {
+        self.lifecycle = sink;
+    }
+
+    /// Copy this run's stage windows in, before the trace that held them is consumed.
+    fn note_stages(&mut self, spans: &[StageSpan]) {
+        self.spans = spans.to_vec();
+    }
+
     /// Open the span. `Clock::now_ns` is the run's monotonic origin, so these two stamps
     /// and every event's `started_ns`/`finished_ns` are readings of the same clock (§7) —
     /// which is what lets §11's `non_rpc` be a subtraction rather than an estimate.
@@ -1014,8 +1116,13 @@ impl RunDiagnosis {
                 },
                 sink.events(),
             )
-            .with_state_reads(state_reads);
+            .with_state_reads(state_reads)
+            .with_endpoint(sink.endpoint_id().map(str::to_string));
             evidence.record(diagnosis, &refusals)?;
+        }
+        if let Some(sink) = self.lifecycle.as_ref() {
+            let events = sink.events();
+            evidence.record_lifecycle(&events, &self.spans, sink.endpoint_id());
         }
         evidence.finish()?;
         Ok(())
@@ -1489,6 +1596,11 @@ fn finish(
     if let Err(error) = trace.finish(&run.session_id) {
         run.absorb(error);
     }
+    // §14 classifies a lifecycle call by the stage window that held it, and those windows
+    // live in the trace that `RunTrace::finish` just consumed. Handing the copy over here is
+    // the only way the diagnosis can still see them; the spans are read off the closed trace,
+    // so they are the same numbers `traces.jsonl` publishes rather than a second account.
+    diagnosis.note_stages(trace.stage_spans());
     // Same rule for the M8.2 diagnosis: it is a second set of files about the same
     // lifecycle, and a failure to write them belongs in the run's account rather than
     // replacing the verdict the run reached (§2.1's requirement, which M8.1 §35 restates).
@@ -1629,6 +1741,7 @@ mod tests {
             latency_dir,
             diagnosis_dir: None,
             state_read_reuse: true,
+            state_acquisition_diagnosis: false,
         }
     }
 
@@ -1665,6 +1778,7 @@ mod tests {
             recorder,
             clock,
             evidence: None,
+            spans: Vec::new(),
         })
     }
 
@@ -2134,5 +2248,204 @@ mod tests {
             "the run errored and its simulation's calls are still on disk"
         );
         let _ = std::fs::remove_dir_all(&base);
+    }
+
+    /// §14's file exists for the run that asked for it and for no other. Without the
+    /// lifecycle sink the diagnosis directory is M8.2's set and nothing else — a seventh
+    /// name must not appear, because §21 counts the files a run publishes. With it, the
+    /// lifecycle's reads are in `outside-simulation-rpc.json` and the simulation's reads are
+    /// still only in `simulation-traces.jsonl`: one call in one list, which is the claim
+    /// `with_rpc_trace`'s replacement semantics exist to make true.
+    #[test]
+    fn the_lifecycle_sweep_writes_one_more_file_and_never_a_call_twice() {
+        let clock = Clock::new();
+
+        // Without the switch: the directory is the one M8.2 wrote.
+        let quiet = std::env::temp_dir().join(format!("evm-m8-outside-off-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&quiet);
+        let mut measured = config(None);
+        measured.diagnosis_dir = Some(quiet.clone());
+        let mut diagnosis = RunDiagnosis::open(&measured, clock, CHAIN, BlockNumber(HEAD), SESSION)
+            .expect("the directory opens");
+        diagnosis.begin();
+        let started = diagnosis.started_ns.expect("a measuring run stamps");
+        let simulation_sink = RpcTraceSink::new(
+            clock.origin_instant(),
+            ID,
+            RpcTraceSource::Live,
+            Some(CHAIN),
+        );
+        simulation_sink.record(crate::diagnosis::call(
+            1,
+            "eth_getStorageAt",
+            started + 10,
+            started + 400,
+            Some("storage|91342|37503978|0xabc|0x0"),
+        ));
+        diagnosis.sink = Some(simulation_sink);
+        diagnosis.end();
+        diagnosis.close().expect("the diagnosis writes");
+        let dir = quiet.join(SESSION);
+        assert!(
+            !dir.join(crate::diagnosis::OUTSIDE_FILE).exists(),
+            "the switch off means no lifecycle sweep was asked for, so no file about it"
+        );
+        assert!(dir.join(crate::diagnosis::TRACES_FILE).is_file());
+
+        // With it: the lifecycle's two reads land in their own file, classified by stage.
+        let loud = std::env::temp_dir().join(format!("evm-m8-outside-on-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&loud);
+        let mut switching = config(None);
+        switching.diagnosis_dir = Some(loud.clone());
+        switching.state_acquisition_diagnosis = true;
+        let mut diagnosis =
+            RunDiagnosis::open(&switching, clock, CHAIN, BlockNumber(HEAD), SESSION)
+                .expect("the directory opens");
+        let mut stages = LatencyTrace::new(TraceSource::Live, CHAIN, Some(HEAD), None);
+        stages
+            .begin(Stage::Observation, started)
+            .expect("open observation");
+        stages
+            .complete(Stage::Observation, started + 1_000)
+            .expect("close observation");
+        stages
+            .begin(Stage::Preflight, started + 2_000)
+            .expect("open preflight");
+        stages
+            .complete(Stage::Preflight, started + 3_000)
+            .expect("close preflight");
+        diagnosis.note_stages(&StageSpan::of(&stages));
+
+        let lifecycle_sink = RpcTraceSink::new(
+            clock.origin_instant(),
+            "lifecycle",
+            RpcTraceSource::Live,
+            Some(CHAIN),
+        );
+        lifecycle_sink.record(crate::diagnosis::call(
+            1,
+            "eth_blockNumber",
+            started + 100,
+            started + 600,
+            None,
+        ));
+        lifecycle_sink.record(crate::diagnosis::call(
+            2,
+            "eth_getBalance",
+            started + 2_500,
+            started + 2_900,
+            Some("balance|91342|37503978|0xabc"),
+        ));
+        diagnosis.attach_lifecycle(Some(lifecycle_sink));
+
+        diagnosis.begin();
+        let simulation_sink = RpcTraceSink::new(
+            clock.origin_instant(),
+            ID,
+            RpcTraceSource::Live,
+            Some(CHAIN),
+        );
+        simulation_sink.record(crate::diagnosis::call(
+            1,
+            "eth_getStorageAt",
+            started + 10,
+            started + 400,
+            Some("storage|91342|37503978|0xabc|0x0"),
+        ));
+        diagnosis.sink = Some(simulation_sink);
+        diagnosis.end();
+        diagnosis.close().expect("both halves write");
+
+        let dir = loud.join(SESSION);
+        let table: Value = serde_json::from_str(
+            &std::fs::read_to_string(dir.join(crate::diagnosis::OUTSIDE_FILE))
+                .expect("outside-simulation-rpc.json"),
+        )
+        .expect("valid JSON");
+        assert_eq!(table["calls"], json!(2), "the lifecycle made two reads");
+        assert_eq!(
+            table["diagnosis_schema"],
+            json!(crate::diagnosis::DIAGNOSIS_SCHEMA)
+        );
+        let rows = table["rows"].as_array().expect("one row per read");
+        assert_eq!(rows.len(), 2);
+        assert_eq!(rows[0]["stage"], json!("observation"));
+        assert_eq!(
+            rows[0]["class"],
+            json!(crate::diagnosis::LIFECYCLE_SIMULATION_CONTEXT)
+        );
+        assert_eq!(
+            rows[1]["class"],
+            json!(crate::diagnosis::LIFECYCLE_PREFLIGHT)
+        );
+        // The simulation's own half is counted as *not here*, by number and by name.
+        assert_eq!(
+            table["core_state_reads_not_included"]["simulation_calls_recorded_elsewhere"],
+            json!(1)
+        );
+        let text = std::fs::read_to_string(dir.join(crate::diagnosis::TRACES_FILE))
+            .expect("simulation-traces.jsonl");
+        let line: Value =
+            serde_json::from_str(text.lines().next().expect("one simulation line")).expect("JSON");
+        assert_eq!(
+            line["call_count"],
+            json!(1),
+            "the simulation's line holds its own call, and the lifecycle's two did not join it"
+        );
+        let readme = std::fs::read_to_string(dir.join(crate::diagnosis::README_FILE))
+            .expect("the README writes");
+        assert!(
+            readme.contains(crate::diagnosis::OUTSIDE_FILE),
+            "the README points at the file it wrote: {readme}"
+        );
+        let _ = std::fs::remove_dir_all(&quiet);
+        let _ = std::fs::remove_dir_all(&loud);
+    }
+
+    /// §17's switch is the recorder's second reason to exist. A run that asked for the
+    /// state-acquisition diagnosis but not for `traces.jsonl` still has stage windows to
+    /// classify against — and a run that asked for neither takes no clock reading at all,
+    /// which is §19's compatibility claim restated for this milestone's new caller.
+    #[test]
+    fn the_diagnosis_switch_runs_the_recorder_without_writing_a_latency_file() {
+        let mut plain = config(None);
+        let off = RunTrace::open(&plain, Clock::new(), CHAIN, HEAD, SESSION.to_string())
+            .expect("a run that measures nothing opens");
+        assert!(
+            off.recorder.trace().is_none(),
+            "no recorder, so no stage stamps"
+        );
+        assert!(off.stage_spans().is_empty());
+
+        plain.state_acquisition_diagnosis = true;
+        let mut trace = RunTrace::open(&plain, Clock::new(), CHAIN, HEAD, SESSION.to_string())
+            .expect("the switch opens the recorder");
+        assert!(
+            trace.recorder.trace().is_some(),
+            "§14 classifies by these windows, so they are taken even with no latency file \
+             to write"
+        );
+        assert!(
+            trace.stage_spans().is_empty(),
+            "the windows are copied out at the run's end, not before"
+        );
+
+        let at = trace.recorder.now_ns();
+        trace.recorder.begin_at(Stage::Observation, at);
+        trace.recorder.end_at(Stage::Observation, at + 1_000);
+        trace
+            .finish(SESSION)
+            .expect("a run with no latency directory writes no file");
+        let spans = trace.stage_spans();
+        let observation = spans
+            .iter()
+            .find(|span| span.stage == "observation")
+            .expect("the span §14 classifies against");
+        assert_eq!(observation.outcome, "completed");
+        assert_eq!(
+            observation.window_ns,
+            Some((at, at + 1_000)),
+            "both ends are this run's own nanosecond instants, so the window is usable"
+        );
     }
 }

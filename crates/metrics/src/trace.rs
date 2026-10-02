@@ -660,6 +660,18 @@ impl LatencyTrace {
         self.stages.get(&stage)
     }
 
+    /// Every record this lifecycle wrote, in stage order.
+    ///
+    /// [`Self::stage`] answers a question about one named stage; M8.3.2 §14 asks the
+    /// opposite one — a call is already stamped, and which stage held it is what has to be
+    /// found out. That needs the set at once, and the map is keyed by [`Stage`], which
+    /// derives `Ord` in the order the lifecycle enters them, so this yields the stages in
+    /// the order a reader expects rather than the order they happened to be written in.
+    /// Read-only: a span a caller could edit from here would not be a measurement.
+    pub fn stage_records(&self) -> impl Iterator<Item = &StageRecord> {
+        self.stages.values()
+    }
+
     /// Open a stage at a nanosecond reading of the run's clock.
     ///
     /// The first writing call on most traces: the caller stamps from the clock it
