@@ -42,7 +42,7 @@ use evm_live::{
     now_unix_ms, BlockAnnouncement, FlashblockSource, MarketDataSource, MarketEvent, PollingSource,
     SourceKind, SourceStatus, WebSocketSource,
 };
-use evm_metrics::Clock;
+use evm_metrics::{Clock, LatencyTrace, PipelineTiming, TraceSource};
 use evm_opportunity::Opportunity;
 use evm_protocol::Registry;
 use evm_replay::StateChange;
@@ -54,6 +54,7 @@ use crate::config::{CanonicalSource, PipelineConfig};
 use crate::engine::{BlockOutcome, MarketEngine};
 use crate::error::{PipelineError, Result};
 use crate::evidence::{session_record, EvidenceFile, EvidenceWriter};
+use crate::latency::{git_revision, record_lifecycle, LatencyEvidence, TraceRecorder};
 use crate::sim::{
     decline_line, plan_job, Decline, JobPlan, SimOutcome, SimRun, SimulationJob, SimulationPool,
     WorkerReport,
@@ -119,6 +120,11 @@ struct Session<'a> {
     /// sent nothing.
     executions: u64,
     sent: u64,
+    /// M8.1's latency traces, when the run was asked for them: one `traces.jsonl` line
+    /// per finding's lifecycle, assembled from stamps this run already took (§15).
+    /// `None` is M5–M7's run, and the difference between the two is one extra file —
+    /// no stage moves, waits, or re-reads anything.
+    latency: Option<LatencyEvidence>,
     /// §8: the reason a run must be reported as failed rather than as finished.
     fatal: Option<PipelineError>,
 }
@@ -129,6 +135,7 @@ impl<'a> Session<'a> {
         engine: MarketEngine,
         evidence: EvidenceWriter,
         execution: Option<ExecutionStage>,
+        latency: Option<LatencyEvidence>,
     ) -> Self {
         Self {
             config,
@@ -145,6 +152,7 @@ impl<'a> Session<'a> {
             execution,
             executions: 0,
             sent: 0,
+            latency,
             fatal: None,
         }
     }
@@ -507,6 +515,58 @@ impl<'a> Session<'a> {
         Ok(())
     }
 
+    /// §32's latency trace for one finding's lifecycle, written beside the run's own
+    /// evidence when the run asked for it.
+    ///
+    /// Nothing here measures. Every figure [`crate::latency::record_lifecycle`] puts in
+    /// the trace is a reading of an instant `PipelineTiming` already took — M5's stamps,
+    /// carried on the block and then handed to the worker on the job — so a lifecycle's
+    /// trace costs one map per stage and one line per finding, and asks the node nothing
+    /// it was not already asked (§15). `detail` is this run's own sentence for why the
+    /// stages below the stop are empty, and it lands beside each skipped row (§9).
+    ///
+    /// The source is the run's, not a label someone configured: a replay of recorded
+    /// blocks produces `Replay` rows and an endpoint produces `Live` ones, so §45's rule
+    /// that the two never blend into one percentile is a consequence of which producer
+    /// answered rather than of a flag that could be set wrong.
+    fn note_lifecycle(
+        &mut self,
+        timing: &PipelineTiming,
+        opportunity_id: &str,
+        observed_block: BlockNumber,
+        execution_id: Option<&str>,
+        detail: &str,
+    ) -> Result<()> {
+        let Some(evidence) = self.latency.as_mut() else {
+            return Ok(());
+        };
+        let trace = LatencyTrace::new(
+            match self.config.canonical_source {
+                CanonicalSource::Replay { .. } => TraceSource::Replay,
+                _ => TraceSource::Live,
+            },
+            self.engine.chain_id().0,
+            Some(observed_block.0),
+            Some(opportunity_id),
+        );
+        let mut recorder = TraceRecorder::on(self.engine.clock(), trace);
+        let ladder = execution_id.and_then(|id| {
+            self.execution
+                .as_ref()
+                .and_then(|stage| stage.ledger().get(id))
+        });
+        // With no lane there is no record either, so the default here is never read: the
+        // ladder is empty and every stage below the decision is a `never reached` skip.
+        let mode = self
+            .execution
+            .as_ref()
+            .map(|stage| stage.mode())
+            .unwrap_or_default();
+        record_lifecycle(&mut recorder, timing, ladder, mode, detail);
+        let session_id = self.evidence.session_id().to_string();
+        evidence.record(recorder.finish().with_session(session_id))
+    }
+
     /// A finished run, and the only place a simulation result may become a risk
     /// decision (§24).
     async fn on_outcome(&mut self, outcome: SimOutcome) -> Result<()> {
@@ -527,6 +587,17 @@ impl<'a> Session<'a> {
                     "simulation=refused opportunity={} detail={reason}",
                     outcome.id
                 ));
+                // §32's trace for a lifecycle that ended at the EVM's door: the stages
+                // with both of M5's stamps are timed, and every stage after them is a
+                // skip carrying this refusal as its reason (§9).
+                let detail = format!("the simulation produced no answer: {reason}");
+                self.note_lifecycle(
+                    &outcome.timing,
+                    &outcome.id.to_string(),
+                    outcome.observed_block,
+                    None,
+                    &detail,
+                )?;
                 return Ok(());
             }
         };
@@ -548,6 +619,17 @@ impl<'a> Session<'a> {
                  never reached the risk layer (§24)",
                 outcome.id,
             ));
+            // The simulation answered; the market moved on. §13's end-to-end figures
+            // for this finding are therefore N/A rather than zero, and the trace says
+            // which stages ran and which were never reached, in this run's own words.
+            self.note_lifecycle(
+                &outcome.timing,
+                &outcome.id.to_string(),
+                outcome.observed_block,
+                None,
+                "the finding was invalidated while its own run was in flight, so it never \
+                 reached the risk layer (§24)",
+            )?;
             return Ok(());
         }
         let decision = match result {
@@ -616,8 +698,30 @@ impl<'a> Session<'a> {
             hop("block_to_risk"),
             outcome.queue_wait_ms,
         ));
-        self.on_execution(&outcome, &decision, result.map(|run| run.as_ref()))
-            .await
+        let execution_id = self
+            .on_execution(&outcome, &decision, result.map(|run| run.as_ref()))
+            .await?;
+        // §32's trace for a lifecycle that reached the risk layer. Why the stages below
+        // the decision are empty is this run's own sentence, and the three cases say
+        // different things: a declined finding never asked for a lane, an accepted
+        // finding in a lane-less run had no lane to ask for, and an attempt that did
+        // reach one is described by the ladder's stamps rather than by this string.
+        let detail = match (decision.accepted(), self.execution.is_some()) {
+            (true, true) => "the lane took this finding, and every stage of the ladder it \
+                             never reached has no stamp to read"
+                .to_string(),
+            (true, false) => "this run has no execution lane, so the risk decision is where \
+                              the lifecycle ends (§31)"
+                .to_string(),
+            (false, _) => format!("the risk layer declined this finding ({label})"),
+        };
+        self.note_lifecycle(
+            &timing,
+            &outcome.id.to_string(),
+            outcome.observed_block,
+            execution_id.as_deref(),
+            &detail,
+        )
     }
 
     /// M6's lane, and the only place in this crate that reaches past a risk
@@ -639,20 +743,26 @@ impl<'a> Session<'a> {
     /// What the lane answers is written to three files and printed as one line:
     /// the attempt with its §29 lifecycle record, the signed envelope (§52) when
     /// bytes were made, and what the endpoint said (§53) when it was asked.
+    ///
+    /// The answer also carries the one thing M8.1 needs and cannot invent: the id of the
+    /// ladder record this attempt made, if it made one. `None` is a fact about the
+    /// attempt — no record, so no execution-lifecycle stamps to read — and the caller
+    /// records the execution half as the skips it was rather than as spans this build
+    /// never measured (§15).
     async fn on_execution(
         &mut self,
         outcome: &SimOutcome,
         decision: &evm_risk::RiskDecision,
         run: Option<&evm_simulation::SimulationResult>,
-    ) -> Result<()> {
+    ) -> Result<Option<String>> {
         let Some(stage) = self.execution.as_mut() else {
-            return Ok(());
+            return Ok(None);
         };
         if !decision.accepted() {
             self.engine
                 .metrics_mut()
                 .bump("execution_skipped_not_accepted");
-            return Ok(());
+            return Ok(None);
         }
         let Some(run) = run else {
             // The refused path wrote its own line and returned before the risk
@@ -700,7 +810,7 @@ impl<'a> Session<'a> {
             )?;
         }
         self.say(report.line());
-        Ok(())
+        Ok(report.execution_id)
     }
 }
 
@@ -1072,7 +1182,25 @@ pub async fn run(config: &PipelineConfig) -> Result<SessionReport> {
         &session_id,
         config.execution.is_some(),
     )?;
-    let mut session = Session::new(config, engine, evidence, execution);
+    // M8.1's traces get their own directory tree for the same §48 reason and the same
+    // one-directory-per-session rule, and beside rather than inside: a baseline file
+    // never joins the files a run's decisions were read from, so adding telemetry
+    // cannot be blamed for what a market record says (§2.1, §44).
+    let latency = match &config.latency_dir {
+        None => None,
+        Some(dir) => {
+            let mode = config
+                .execution
+                .as_ref()
+                .map_or("no-lane", |setup| setup.mode.name());
+            Some(LatencyEvidence::open(
+                &dir.join(&session_id),
+                git_revision(),
+                mode,
+            )?)
+        }
+    };
+    let mut session = Session::new(config, engine, evidence, execution, latency);
 
     let (sink, mut events) = mpsc::channel::<MarketEvent>(config.queues.event_capacity.max(1));
     let stop = Arc::new(AtomicBool::new(false));
@@ -1309,6 +1437,17 @@ impl Session<'_> {
                 .map(|completion| (completion.source.to_string(), completion.capability.clone()))
                 .collect(),
         );
+        // M8.1's tables and README, written last so `summary.json` covers every lifecycle
+        // this session recorded — including the ones that ended at a refusal. An error here
+        // ends the run: a baseline that stops mid-table is not evidence of a baseline, and
+        // §46's files are never quietly half-written.
+        let traces = match self.latency.as_mut() {
+            None => None,
+            Some(evidence) => Some((
+                evidence.finish()?,
+                u64::try_from(evidence.traces_recorded()).unwrap_or(u64::MAX),
+            )),
+        };
         let counters = self.engine.metrics();
         let record = json!({
             "session_id": session_id,
@@ -1361,6 +1500,13 @@ impl Session<'_> {
             "sources": sources,
             "simulation_workers": workers,
             "execution": self.execution_summary(),
+            // Both fields are absent-or-a-number rather than zero-or-nothing: a reader
+            // has to be able to tell "this run measured no latency" from "it measured
+            // and no finding ever reached the risk layer".
+            "latency_traces": traces.as_ref().map(|(dir, count)| json!({
+                "directory": dir.display().to_string(),
+                "traces": count,
+            })),
             "milestone": "M6",
         });
         let session = session_record(&record);

@@ -16,7 +16,9 @@
 //!                  ├─ runner    bootstrap, one stream, graceful shutdown      (§7–8, §49)
 //!                  ├─ arbitrage M7's one route: pin → price → REVM → risk →
 //!                  │            preflight → the six steps on chain            (§57 A–Q)
-//!                  └─ evidence  metrics.json, live-session.json, one .jsonl per stage
+//!                  ├─ evidence  metrics.json, live-session.json, one .jsonl per stage
+//!                  └─ latency   M8.1's bypass: one trace per lifecycle, written beside
+//!                               a run's evidence and never inside its decisions (§2.1)
 //!                                                                     (§41, §48, §52–53)
 //! ```
 //!
@@ -53,6 +55,8 @@ pub mod config;
 pub mod engine;
 pub mod error;
 pub mod evidence;
+pub mod history;
+pub mod latency;
 pub mod runner;
 pub mod sim;
 
@@ -63,6 +67,12 @@ pub use config::{CanonicalSource, PipelineConfig, QueueConfig, RiskConfig};
 pub use engine::{BlockOutcome, ChainPool, MarketEngine};
 pub use error::{PipelineError, Result};
 pub use evidence::{EvidenceFile, EvidenceWriter};
+pub use history::{baseline as history_baseline, BaselineRun, M7Run, RUN_FILE as M7_RUN_FILE};
+pub use latency::{
+    git_revision, record_discovery, record_ladder, record_lifecycle, LatencyEvidence,
+    RecordedTrace, TraceRecorder, DECODE_AND_APPLY_STAMP, NO_GATE_ON_LIVE, README_FILE,
+    RECEIPT_NOT_SEPARABLE, REVERTED_INCLUSION, SUMMARY_FILE, TRACES_FILE,
+};
 pub use runner::{attested_chain_ids, run, SessionReport, SourceCompletion};
 pub use sim::{
     decline_line, plan_job, priced_route, Decline, JobPlan, SimOutcome, SimRun, SimulationJob,

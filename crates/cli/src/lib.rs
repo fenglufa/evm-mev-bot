@@ -116,7 +116,10 @@ enum SourceArg {
                   receipt on the real chain; it trades nothing. `arbitrage` runs M7's §57: one \
                   named route (two venues, one mid token, one measured fee, all cited) priced \
                   at the live head, simulated in REVM against the node's own state, gated by \
-                  §26's preflight, and then taken as far as --execution-mode allows."
+                  §26's preflight, and then taken as far as --execution-mode allows. `baseline` \
+                  reads M7's own run records and turns the latencies they already hold into a \
+                  latency baseline: it contacts no endpoint, spends nothing, and writes no \
+                  figure that is not a number in the file it read."
 )]
 pub struct Cli {
     #[command(subcommand)]
@@ -134,6 +137,8 @@ pub enum Command {
     /// M7 §57: one named route, priced on the live chain, decided, and sent only if the
     /// mode says so.
     Arbitrage(Box<ArbitrageArgs>),
+    /// M8.1 §30: build a latency baseline from M7's recorded route runs.
+    Baseline(BaselineArgs),
 }
 
 /// §47's flags, plus the knobs §50's queues and §25's thresholds need in order to
@@ -240,6 +245,22 @@ pub struct LiveArgs {
     #[arg(long)]
     maximum_gas: Option<u64>,
 
+    /// M8.1 §31: record one fourteen-stage latency trace per finding this run reads,
+    /// in a directory of its own beside the run's evidence. Off by default, and "off"
+    /// is the M5–M7 run exactly as it was: the recorder then holds no trace and reads
+    /// no clock, so every instrumentation call becomes nothing. The traces are read off
+    /// the stamps the pipeline already takes for its own reasons (§15) — no extra
+    /// request, no new wait, and no change to what the run decided (§2.1).
+    #[arg(long)]
+    latency_trace: bool,
+
+    /// The base directory `--latency-trace` writes into. The run makes its own
+    /// subdirectory of it, named after the session, so an existing baseline is never
+    /// rewritten (§44) and no latency file shares a path with an evidence file. Naming
+    /// it turns tracing on by itself (§41).
+    #[arg(long)]
+    latency_output: Option<PathBuf>,
+
     /// Do not print the per-block progress lines (§75).
     #[arg(long)]
     quiet: bool,
@@ -329,6 +350,7 @@ impl LiveArgs {
         config.wrapped_native = wrapped_native;
         config.state_dump = self.state_dump.clone();
         config.execution = execution;
+        config.latency_dir = latency_dir(self.latency_trace, self.latency_output.clone());
         config.progress = !self.quiet;
         let defaults = QueueConfig::default();
         config.queues = QueueConfig {
@@ -712,6 +734,26 @@ pub const ARBITRAGE_SENDER_LABEL: &str =
 const DEFAULT_TOLERANCE_NUM: u64 = 1;
 const DEFAULT_TOLERANCE_DEN: u64 = 100;
 
+/// §30's history baseline gets a directory of its own inside §25's home, not a run's
+/// session subdirectory: its traces come from several runs, and §45's rule that one table
+/// holds one population is what makes a `null` percentile mean something.
+pub const DEFAULT_HISTORY_DIR: &str = "data/evidence/m8/latency/m7-history";
+
+/// M8.1 §25's default home for the latency files. A directory of its own rather than a
+/// subdirectory of M7's evidence tree, because §44 forbids this milestone touching the
+/// evidence that milestone already earned — and a reader who wants the M7 run and its trace
+/// side by side has the session id, which both name.
+pub const DEFAULT_LATENCY_DIR: &str = "data/evidence/m8/latency";
+
+/// §41's two flags read as the one question they ask: is this lifecycle traced, and where
+/// do the traces go? Either flag alone answers "yes" — a run that names a directory but not
+/// the switch would otherwise print a summary and leave no traces to read, which is the one
+/// outcome a caller who typed a path cannot want. With neither, the answer is "no", and the
+/// run takes the code path it took before this milestone existed (§40).
+fn latency_dir(trace: bool, output: Option<PathBuf>) -> Option<PathBuf> {
+    output.or_else(|| trace.then(|| PathBuf::from(DEFAULT_LATENCY_DIR)))
+}
+
 /// M7 §57's one route, asked for by name.
 ///
 /// The candidate is *input*, not a discovery, and that is the §27 rule pushed as far
@@ -820,6 +862,20 @@ pub struct ArbitrageArgs {
     /// sharing a path would be one ambiguous pile of receipts.
     #[arg(long, default_value = "data/evidence/m7/route")]
     evidence_dir: PathBuf,
+
+    /// M8.1 §40: record this lifecycle's fourteen-stage latency trace beside the run's own
+    /// evidence. Off by default, and "off" is the whole run as it was before the flag
+    /// existed — the recorder holds no trace, so each of its calls becomes nothing, clock
+    /// reading included. It cannot change what the run decided (§2.1).
+    #[arg(long)]
+    latency_trace: bool,
+
+    /// The base directory `--latency-trace` writes into. The run makes its own
+    /// subdirectory of it, named after the session, so a baseline already on disk is never
+    /// rewritten (§44) and no latency file shares a path with an M7 one. Naming it turns
+    /// tracing on by itself (§41).
+    #[arg(long)]
+    latency_output: Option<PathBuf>,
 
     /// Print the run's §57 record as JSON instead of the summary lines.
     #[arg(long)]
@@ -953,8 +1009,34 @@ impl ArbitrageArgs {
                 maximum_gas: self.maximum_gas,
             },
             evidence_dir: self.evidence_dir.clone(),
+            latency_dir: latency_dir(self.latency_trace, self.latency_output.clone()),
         })
     }
+}
+
+/// M8.1 §30's history baseline: which recorded runs to read, and where their traces go.
+///
+/// There is no endpoint, no key and no mode here because there is nothing to run: this
+/// command opens `route-run.json` in each named directory, takes the figures M7 wrote into
+/// it, and writes them out as traces. Every number in the output is either a number in one
+/// of those files or the difference of two of them, and the note beside each stage names
+/// which (§46: no estimate enters a baseline without saying it is one).
+#[derive(Parser)]
+pub struct BaselineArgs {
+    /// One M7 route run's evidence directory — the one holding its `route-run.json`.
+    /// Repeatable, and every directory named must hold that file.
+    #[arg(long = "evidence-dir")]
+    run_dirs: Vec<PathBuf>,
+
+    /// Where this baseline is written. It must not already hold a `traces.jsonl`: §44
+    /// forbids appending a second history onto a baseline that is already on disk, and a
+    /// percentile table nobody can say which runs went into it is not evidence.
+    #[arg(long, default_value = DEFAULT_HISTORY_DIR)]
+    output: PathBuf,
+
+    /// Print `summary.json` as JSON instead of the lines.
+    #[arg(long)]
+    json: bool,
 }
 
 /// An evidence string that a reader could actually open: present, and not whitespace.
@@ -1082,6 +1164,9 @@ pub fn parse_live(argv: &[&str]) -> std::result::Result<LiveArgs, String> {
         Command::Arbitrage(_) => {
             Err("this command line is an `arbitrage` run, not a `live` one".to_string())
         }
+        Command::Baseline(_) => {
+            Err("this command line is a `baseline` read, not a `live` one".to_string())
+        }
     }
 }
 
@@ -1095,6 +1180,9 @@ pub fn parse_validate(argv: &[&str]) -> std::result::Result<ValidateArgs, String
         }
         Command::Arbitrage(_) => {
             Err("this command line is an `arbitrage` run, not a `validate` one".to_string())
+        }
+        Command::Baseline(_) => {
+            Err("this command line is a `baseline` read, not a `validate` one".to_string())
         }
     }
 }
@@ -1110,6 +1198,26 @@ pub fn parse_arbitrage(argv: &[&str]) -> std::result::Result<ArbitrageArgs, Stri
         Command::Validate(_) => {
             Err("this command line is a `validate` run, not an `arbitrage` one".to_string())
         }
+        Command::Baseline(_) => {
+            Err("this command line is a `baseline` read, not an `arbitrage` one".to_string())
+        }
+    }
+}
+
+/// The `baseline` arguments a command line describes, or the reason it does not.
+pub fn parse_baseline(argv: &[&str]) -> std::result::Result<BaselineArgs, String> {
+    let cli = Cli::try_parse_from(argv).map_err(|error| error.to_string())?;
+    match cli.command {
+        Command::Baseline(args) => Ok(args),
+        Command::Live(_) => {
+            Err("this command line is a `live` run, not a `baseline` one".to_string())
+        }
+        Command::Validate(_) => {
+            Err("this command line is a `validate` run, not a `baseline` one".to_string())
+        }
+        Command::Arbitrage(_) => {
+            Err("this command line is an `arbitrage` run, not a `baseline` one".to_string())
+        }
     }
 }
 
@@ -1124,7 +1232,57 @@ pub fn cli_main(cli: Cli) -> i32 {
         Command::Live(args) => run_live(*args),
         Command::Validate(args) => run_validate(args),
         Command::Arbitrage(args) => run_arbitrage(*args),
+        Command::Baseline(args) => run_baseline(args),
     }
+}
+
+/// §30's history baseline, from the flags to the exit code. No runtime, no endpoint, no
+/// key: this reads files.
+fn run_baseline(args: BaselineArgs) -> i32 {
+    if args.run_dirs.is_empty() {
+        eprintln!(
+            "evm-mev-bot: --evidence-dir is required, once per M7 run to read: a baseline \
+             over no recorded runs would be a table of nulls wearing a sample count"
+        );
+        return 2;
+    }
+    match evm_pipeline::history_baseline(&args.run_dirs, &args.output) {
+        Ok(baseline) => {
+            if args.json {
+                let summary =
+                    std::fs::read_to_string(baseline.dir.join(evm_pipeline::SUMMARY_FILE))
+                        .unwrap_or_default();
+                println!("{summary}");
+            } else {
+                print_baseline(&baseline);
+            }
+            0
+        }
+        Err(error) => {
+            // A file that is not there, or a selection that is not one population: both
+            // are facts about the evidence, and §48's answer to one is a refusal, not an
+            // empty table.
+            eprintln!("evm-mev-bot: {error}");
+            1
+        }
+    }
+}
+
+/// What the history baseline says, in the same style as a run's own summary lines.
+pub fn print_baseline(baseline: &evm_pipeline::BaselineRun) {
+    println!(
+        "baseline: {} trace(s) read from M7's records, mode `{}`, into {}",
+        baseline.samples,
+        baseline.mode,
+        baseline.dir.display()
+    );
+    for session in &baseline.sessions {
+        println!("  run={session}");
+    }
+    println!(
+        "  (every figure is a number in a route-run.json or the difference of two of them; \
+         the note on each stage names which)"
+    );
 }
 
 /// §35's one attempt, from the flags to the exit code.
@@ -1265,6 +1423,13 @@ pub fn print_summary(report: &evm_pipeline::SessionReport) {
         report.executions, report.sent,
     );
     println!("evidence={}", report.evidence_dir.display());
+    if let Some(traces) = report.session.get("latency_traces") {
+        println!(
+            "latency traces={} in {}",
+            traces["traces"],
+            traces["directory"].as_str().unwrap_or_default()
+        );
+    }
 
     print_capability_table(report);
 

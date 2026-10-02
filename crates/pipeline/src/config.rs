@@ -163,6 +163,16 @@ pub struct PipelineConfig {
     pub registry_dirs: Vec<PathBuf>,
     /// Where this session's evidence files go. Created if missing.
     pub evidence_dir: PathBuf,
+    /// M8.1's latency traces: `None` is the run M5–M7 ran, and `Some(dir)` is that
+    /// same run plus one `traces.jsonl` line per finding's lifecycle in
+    /// `dir/<session-id>/`.
+    ///
+    /// Off by default on purpose. The traces read stamps this run already took
+    /// (§15), so turning them on costs a map write and a file, not a measurement —
+    /// but §40 still asks the default behaviour to be the one that was verified in
+    /// M5–M7, so a run has to be told to write baseline evidence rather than
+    /// producing it because a flag was left at a value nobody chose.
+    pub latency_dir: Option<PathBuf>,
     /// §7: `None` is "the head at connect time, then forward from it".
     pub start_block: Option<u64>,
     /// Stop after this many canonical blocks, for a run with a fixed sample.
@@ -228,6 +238,7 @@ impl PipelineConfig {
             },
             registry_dirs,
             evidence_dir,
+            latency_dir: None,
             start_block: None,
             max_blocks: None,
             duration: Duration::from_secs(60),

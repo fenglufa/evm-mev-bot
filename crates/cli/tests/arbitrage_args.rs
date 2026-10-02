@@ -21,7 +21,10 @@ use std::path::PathBuf;
 use std::process::Output;
 
 use alloy_primitives::Address;
-use evm_cli::{default_registry_dirs, parse_arbitrage, parse_live, parse_validate, ArbitrageArgs};
+use evm_cli::{
+    default_registry_dirs, parse_arbitrage, parse_live, parse_validate, ArbitrageArgs,
+    DEFAULT_LATENCY_DIR,
+};
 use evm_execution::{ExecutionMode, MarketKind};
 use evm_pipeline::ArbitrageConfig;
 
@@ -414,6 +417,60 @@ fn the_binary_refuses_a_route_it_cannot_describe_with_code_two() {
     assert!(
         !stderr.contains("GIWA_EXECUTION_PRIVATE_KEY"),
         "a refusal about flags must not point a reader at the key variable: {stderr}"
+    );
+}
+
+/// M8.1 §40 on the route path: the switch changes one field and nothing else. This is the
+/// command-line half of "the M7 evidence files are the proof" — a run asked for a trace must
+/// still be the same run, so the comparison here is between two configs the same flags
+/// describe, one of them traced.
+#[test]
+fn the_latency_switch_adds_a_directory_and_moves_no_decision() {
+    let plain = build(&complete()).expect("M7's cheap route");
+    assert_eq!(
+        plain.latency_dir, None,
+        "§40: without the flag this is the command line that produced M7's evidence"
+    );
+
+    let mut flags = complete();
+    flags.push("--latency-trace");
+    let traced = build(&flags).expect("the same route, traced");
+    assert_eq!(
+        traced.latency_dir,
+        Some(PathBuf::from(DEFAULT_LATENCY_DIR)),
+        "the traces go beside the run's evidence, not inside it"
+    );
+    assert_ne!(
+        traced.evidence_dir,
+        traced.latency_dir.expect("a directory"),
+        "§44: a latency file never shares a path with an evidence file"
+    );
+
+    // Everything the run decides is unchanged.
+    assert_eq!(traced.rpc_url, plain.rpc_url);
+    assert_eq!(traced.sender, plain.sender);
+    assert_eq!(traced.market, plain.market);
+    assert_eq!(traced.setup.mode, plain.setup.mode);
+    assert_eq!(traced.evidence_dir, plain.evidence_dir);
+    assert_eq!(
+        traced.risk.minimum_net_profit_wei,
+        plain.risk.minimum_net_profit_wei
+    );
+    assert_eq!(traced.candidate.input_amount, plain.candidate.input_amount);
+    assert_eq!(traced.candidate.venues.len(), plain.candidate.venues.len());
+    assert_eq!(
+        traced.candidate.fee_evidence, plain.candidate.fee_evidence,
+        "the fee the run was told to honour is the same text"
+    );
+
+    // And naming the directory without the switch is still a traced run (§41).
+    let mut flags = complete();
+    flags.extend(["--latency-output", "target/latency-route"]);
+    let named = build(&flags).expect("the same route, traced elsewhere");
+    assert_eq!(
+        named.latency_dir,
+        Some(PathBuf::from("target/latency-route")),
+        "a path typed by a caller is never silently ignored"
     );
 }
 

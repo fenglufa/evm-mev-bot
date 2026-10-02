@@ -13,9 +13,10 @@
 //! the help text — spawn the built binary, which is also the only way to read an
 //! environment variable without racing every other test in this file for it.
 
+use std::path::PathBuf;
 use std::process::{Command, Output};
 
-use evm_cli::{default_registry_dirs, parse_live};
+use evm_cli::{default_registry_dirs, parse_live, DEFAULT_LATENCY_DIR};
 use evm_execution::ExecutionMode;
 use evm_pipeline::config::{CanonicalSource, QueueConfig};
 
@@ -316,6 +317,58 @@ fn the_execution_lane_is_absent_unless_named_and_takes_no_key() {
     let stranded = live(&["--replay-dir", "some/dir", "--execution-mode", "sign-only"])
         .expect_err("a replay has no endpoint for the lane to send through");
     assert!(stranded.contains("--rpc-url"), "{stranded}");
+}
+
+/// M8.1 §40 and §41, in flag form. The default run must reach the pipeline with no
+/// latency directory at all — that absence is what makes the instrumented code path a
+/// no-op rather than a cheap path — and either flag alone must turn tracing on.
+#[test]
+fn latency_tracing_is_off_until_a_flag_names_it() {
+    // A replay: the traced and untraced runs are the same recording, so the only thing
+    // the flags can change is where this run's latencies go.
+    let traced_with = |extra: &[&str]| -> Option<PathBuf> {
+        let mut argv = vec!["--replay-dir", "fixtures/live-m5/arbitrage-window"];
+        argv.extend_from_slice(extra);
+        live(&argv).expect("a config").latency_dir
+    };
+
+    assert_eq!(
+        traced_with(&[]),
+        None,
+        "§40: no flag means the run exactly as M5–M7 wrote it, with no recorder to feed"
+    );
+    assert_eq!(
+        traced_with(&["--latency-trace"]),
+        Some(PathBuf::from(DEFAULT_LATENCY_DIR)),
+        "--latency-trace alone has to name a directory, since it is the flag that says \
+         this run measures something"
+    );
+    assert_eq!(
+        traced_with(&["--latency-output", "target/latency-live"]),
+        Some(PathBuf::from("target/latency-live")),
+        "§41: naming a directory is itself an instruction to trace — a run that traced \
+         nowhere would be a summary line and no evidence"
+    );
+    assert_eq!(
+        traced_with(&["--latency-trace", "--latency-output", "target/latency-live"]),
+        Some(PathBuf::from("target/latency-live")),
+        "the directory the caller spelled out wins over the default"
+    );
+
+    // The flag reaches that directory and nothing else: no decision a live run makes is
+    // a function of it (§2.1).
+    let plain = live(&["--replay-dir", "fixtures/live-m5/arbitrage-window"]).expect("a config");
+    let switched = live(&[
+        "--replay-dir",
+        "fixtures/live-m5/arbitrage-window",
+        "--latency-trace",
+    ])
+    .expect("a config");
+    assert_eq!(plain.max_blocks, switched.max_blocks);
+    assert_eq!(plain.duration, switched.duration);
+    assert_eq!(plain.queues, switched.queues);
+    assert_eq!(plain.canonical_source, switched.canonical_source);
+    assert!(switched.execution.is_none());
 }
 
 /// The built binary, with none of the endpoint variables inherited — the tests

@@ -58,11 +58,11 @@ use evm_chain::{BlockContext, ChainAdapter, HttpChainAdapter};
 use evm_core::{BlockNumber, ChainId, Fee, PoolId, TokenId};
 use evm_execution::giwa::{read_pool, LivePreflightReads};
 use evm_execution::{
-    ExecutionMode, ExecutionSetup, Freshness, GateAttempt, Ledger, MarketKind,
+    ExecutionMode, ExecutionRecord, ExecutionSetup, Freshness, GateAttempt, Ledger, MarketKind,
     ProfitVerificationStatus, SenderFunding, SequencePlan, SequenceReport, SequenceStage,
     Tolerance,
 };
-use evm_metrics::{Clock, Metrics};
+use evm_metrics::{Clock, LatencyTrace, Metrics, Stage, TraceSource};
 use evm_opportunity::swap_exact_in;
 use evm_risk::{RiskDecision, RiskPolicy, NO_BROADCAST};
 use evm_simulation::{
@@ -74,6 +74,7 @@ use evm_simulation::{
 use crate::config::RiskConfig;
 use crate::error::{PipelineError, Result};
 use crate::evidence::{EvidenceFile, EvidenceWriter};
+use crate::latency::{git_revision, record_ladder, LatencyEvidence, TraceRecorder};
 use crate::runner::attested_chain_ids;
 
 /// The finished run's own record, written whole through a temporary name (§49).
@@ -124,6 +125,15 @@ pub struct ArbitrageConfig {
     pub tolerance: Tolerance,
     pub risk: RiskConfig,
     pub evidence_dir: PathBuf,
+    /// M8.1 §40: the base directory this run also writes its latency traces to, or `None`
+    /// for a run that measures nothing. The run makes its own subdirectory of this one,
+    /// named after the session, so a baseline already on disk is never rewritten (§46).
+    ///
+    /// Nothing downstream consults it. A run with a value here and a run without one
+    /// price the same route, run the same EVM, take the same decisions and write the same
+    /// `route-run.json` (§41's backward-compatibility requirement, which the M7 evidence
+    /// files are the proof of).
+    pub latency_dir: Option<PathBuf>,
 }
 
 /// One venue, as the node described it at the block the run pinned.
@@ -266,29 +276,60 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     // §8's protection is structural rather than a rule to remember: one head read, turned
     // into a pin, and every state read below names that height. Nothing asks the node what
     // "latest" is a second time.
+    //
+    // M8.1's two nanosecond readings bracket exactly these two calls, and they are the only
+    // timestamps this module takes for measurement's sake: §16's Observation stage is "the
+    // run first confirmed that this block exists", which here is the head read and the
+    // header read it turns into a pin, and nothing else.
     let detected_at = clock.now_ms();
+    let detected_ns = clock.now_ns();
     let head = adapter.latest_block().await.map_err(PipelineError::Chain)?;
     let header = adapter
         .get_block_context(head)
         .await
         .map_err(PipelineError::Chain)?;
+    let observed_ns = clock.now_ns();
     let session_id = format!("route-{chain_id}-{}-{}", head.0, evm_metrics::unix_ms());
     let dir = config.evidence_dir.join(&session_id);
     let mut evidence = EvidenceWriter::route_run(&dir, &session_id)?;
     let mut run = ArbitrageRun::open(config, session_id, dir, chain_id, head, header.clone());
     let mut metrics = Metrics::default();
     let mut latencies = serde_json::Map::new();
+    let mut trace = RunTrace::open(config, clock, chain_id, head.0, run.session_id.clone())?;
+    trace.recorder.begin_at(Stage::Observation, detected_ns);
+    trace.recorder.end_at(Stage::Observation, observed_ns);
+    // §42.3's mapping, stated in the evidence rather than only in prose: a single-route run
+    // has no incremental state engine and no graph to rebuild. It reads the two venues from
+    // the node inside detection, so those two stages of the model are recorded as not
+    // reached here rather than borrowed from a pipeline that did not run.
+    trace.recorder.skip(
+        Stage::StateUpdate,
+        "a route run applies no state updates: it reads both venues from the node at the pin, \
+         inside detection",
+    );
+    trace.recorder.skip(
+        Stage::GraphUpdate,
+        "a route run builds no graph: the pair's orientation is decided from the reserves read \
+         at the pin, inside detection",
+    );
+    trace
+        .recorder
+        .begin_at(Stage::OpportunityDetection, observed_ns);
 
     // ---- §A: the route, from the chain's own state at the pin ----------------------------
     let legs = match price_legs(&adapter, ChainId(chain_id), head, config).await {
         Ok(legs) => legs,
         Err(detail) => {
+            // §34's shape, produced by a real run: the stage that stopped the lifecycle is
+            // recorded as having run and failed, and everything after it as never reached.
+            trace.failed(Stage::OpportunityDetection, &detail);
             run.refuse("opportunity", detail);
             return Ok(finish(
                 run,
                 &mut evidence,
                 metrics,
                 Value::Object(latencies),
+                &mut trace,
             ));
         }
     };
@@ -297,6 +338,13 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         "opportunity_detection_latency_ms".to_string(),
         json!(detected_ms),
     );
+    // §4's identity rule: the trace carries the finding's own stable id, the same string
+    // [`SequencePlan`] and `executions.jsonl` carry, instead of a second one to disagree
+    // with. It is computed here rather than at §C because it is a pure function of the
+    // legs, so naming the opportunity earlier changes no value anyone reads.
+    let opportunity_id = route_id(chain_id, head, &legs, config.candidate.input_amount);
+    trace.name_opportunity(&opportunity_id);
+    trace.recorder.end(Stage::OpportunityDetection);
     metrics.bump("opportunity_count");
     metrics.record_latency("opportunity_detection_latency", detected_ms);
     evidence.line(
@@ -315,12 +363,14 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         Ok(request) => request,
         Err(detail) => {
             run.legs = Some(legs);
+            trace.not_reached(Stage::Simulation, &detail);
             run.refuse("simulation", detail);
             return Ok(finish(
                 run,
                 &mut evidence,
                 metrics,
                 Value::Object(latencies),
+                &mut trace,
             ));
         }
     };
@@ -331,60 +381,67 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         Ok(setup) => setup,
         Err(error) => {
             run.legs = Some(legs);
-            run.refuse(
-                "simulation",
-                format!("the request refused itself before running: {error}"),
-            );
+            let detail = format!("the request refused itself before running: {error}");
+            trace.not_reached(Stage::Simulation, &detail);
+            run.refuse("simulation", detail);
             return Ok(finish(
                 run,
                 &mut evidence,
                 metrics,
                 Value::Object(latencies),
+                &mut trace,
             ));
         }
     };
     if !setup.is_empty() {
         run.legs = Some(legs);
-        run.refuse(
-            "simulation",
-            format!(
-                "this route would have needed {} manufactured state entr{} to execute at all \
-                 ({}); §1 forbids a profit that exists because the run arranged it",
-                setup.len(),
-                if setup.len() == 1 { "y" } else { "ies" },
-                setup
-                    .iter()
-                    .map(|entry| entry.reason.clone())
-                    .collect::<Vec<_>>()
-                    .join(" | ")
-            ),
+        let detail = format!(
+            "this route would have needed {} manufactured state entr{} to execute at all \
+             ({}); §1 forbids a profit that exists because the run arranged it",
+            setup.len(),
+            if setup.len() == 1 { "y" } else { "ies" },
+            setup
+                .iter()
+                .map(|entry| entry.reason.clone())
+                .collect::<Vec<_>>()
+                .join(" | ")
         );
+        // The EVM was never entered, so Simulation is a stage this lifecycle did not reach
+        // rather than one that ran slowly — §9's distinction, in the branch that earns it.
+        trace.not_reached(Stage::Simulation, &detail);
+        run.refuse("simulation", detail);
         return Ok(finish(
             run,
             &mut evidence,
             metrics,
             Value::Object(latencies),
+            &mut trace,
         ));
     }
 
     let simulated_at = clock.now_ms();
+    trace.recorder.begin(Stage::Simulation);
     let provider: Arc<dyn StateProvider> = provider;
     let simulation = match simulate(provider, &request).await {
         Ok(simulation) => simulation,
         Err(error) => {
             run.legs = Some(legs);
-            run.refuse(
-                "simulation",
-                format!("the simulation produced no answer: {error}"),
-            );
+            let detail = format!("the simulation produced no answer: {error}");
+            // §16: an error terminates the trace as a stage that ran and did not answer.
+            // A revert is not this branch — the EVM answered with a failure there, so that
+            // run completes Simulation and lets Risk say no.
+            trace.failed(Stage::Simulation, &detail);
+            run.refuse("simulation", detail);
             return Ok(finish(
                 run,
                 &mut evidence,
                 metrics,
                 Value::Object(latencies),
+                &mut trace,
             ));
         }
     };
+    trace.recorder.end(Stage::Simulation);
     let simulation_ms = clock.now_ms().saturating_sub(simulated_at);
     latencies.insert("simulation_latency_ms".to_string(), json!(simulation_ms));
     metrics.bump("simulation_count");
@@ -396,7 +453,12 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
 
     // ---- §C: risk decides, and its decision is not this module's to overrule ------------
     let thresholds = config.risk.thresholds(&header);
+    // §20: Risk is its own stage, never folded into the simulation's span. Its span is the
+    // decision alone; the rows written after it land in the hop toward Preflight, which is
+    // where that waiting actually is.
+    trace.recorder.begin(Stage::Risk);
     let decision = thresholds.evaluate(&simulation);
+    trace.recorder.end(Stage::Risk);
     metrics.bump(if decision.accepted() {
         "risk_accept_count"
     } else {
@@ -417,6 +479,10 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         run.legs = Some(legs);
         run.simulation = Some(simulation);
         run.decision = Some(decision);
+        // §34's Test 3, produced by a real decline rather than asserted about one:
+        // Simulation Completed, Risk Completed with its answer, and everything from
+        // Preflight onward recorded as never reached.
+        trace.declined(Stage::Risk, &risk_line);
         run.refuse(
             "risk",
             format!(
@@ -429,11 +495,11 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
             &mut evidence,
             metrics,
             Value::Object(latencies),
+            &mut trace,
         ));
     }
 
     // ---- §16's shape, taken out of the run rather than described to it ------------------
-    let opportunity_id = route_id(chain_id, head, &legs, config.candidate.input_amount);
     let state_fingerprint = format!("pinned-block-{}-{}", head.0, header.hash);
     // §18's expected side, read as the engine states it: what the route *credited* the
     // sender, in the input token — a difference of two balances, not a closing balance, so a
@@ -459,21 +525,31 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
             run.legs = Some(legs);
             run.simulation = Some(simulation);
             run.decision = Some(decision);
-            run.refuse(
-                "plan",
-                format!("the accepted run yielded no executable sequence: {error}"),
-            );
+            let detail = format!("the accepted run yielded no executable sequence: {error}");
+            // Risk accepted; the shape it accepted turned out not to be executable, so
+            // Preflight and everything after it were never reached.
+            trace.declined(Stage::Risk, &detail);
+            run.refuse("plan", detail);
             return Ok(finish(
                 run,
                 &mut evidence,
                 metrics,
                 Value::Object(latencies),
+                &mut trace,
             ));
         }
     };
 
     // ---- §D: §26's checks, read fresh over the endpoint that will send ------------------
-    let mut stage = SequenceStage::connect(
+    // §21's gate, measured as the interval the lane was actually asked to cover: connecting
+    // it and gathering its reads are one span here, because M7 meters no separate "open the
+    // lane" instant and §15 forbids inventing one to split them.
+    trace.recorder.begin(Stage::Preflight);
+    // The two failures below end the run with an error rather than with a recorded verdict,
+    // and §49 still asks for the session's evidence: `execution_failed` closes and writes the
+    // trace on the way out, so a lane that could not be opened leaves a trace saying so instead
+    // of a directory with nothing in it.
+    let mut stage = match SequenceStage::connect(
         &config.rpc_url,
         chain_id,
         config.setup.clone(),
@@ -481,8 +557,11 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         config.tolerance,
     )
     .await
-    .map_err(|error| PipelineError::Execution(error.to_string()))?;
-    let gathered = LivePreflightReads {
+    {
+        Ok(stage) => stage,
+        Err(error) => return Err(trace.execution_failed(&run.session_id, Stage::Preflight, error)),
+    };
+    let gathered = match (LivePreflightReads {
         market: &adapter,
         abilities: stage.abilities(),
         setup: stage.setup(),
@@ -492,10 +571,17 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         fee_evidence: config.candidate.fee_evidence.clone(),
         attempt: attempt.clone(),
         clock,
-    }
+    })
     .gather(&mut metrics)
     .await
-    .map_err(|error| PipelineError::Execution(error.to_string()))?;
+    {
+        Ok(gathered) => gathered,
+        Err(error) => return Err(trace.execution_failed(&run.session_id, Stage::Preflight, error)),
+    };
+    trace.recorder.end(Stage::Preflight);
+    // §21 also asks for the gate's *verdict* beside its duration. That verdict is already
+    // in `preflight.json` and in the report's refusal; the trace carries the duration, and no
+    // new check is run to fill a field (§21's rule, restated in M8.1).
     let preflight = gathered.to_json();
     evidence.write_whole("preflight.json", &preflight)?;
     // §53's `preflight_latency` under the name the task gives it, from the one span the
@@ -518,6 +604,16 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         )
         .await;
     route_latencies(stage.ledger(), &report, &mut metrics, &mut latencies);
+    // §21–§24's execution half, read off the rung stamps the lane wrote for its own reasons
+    // (§15: no second query, no second clock). Where the ladder stopped is part of what the
+    // reader gets — a run that built and never signed has a skipped Sign, not a missing one —
+    // so it is folded in here rather than at the first sign of a submission.
+    record_ladder(
+        &mut trace.recorder,
+        ladder_record(stage.ledger(), &report),
+        stage.mode(),
+        &report.detail,
+    );
     record_route_metrics(&report, &mut metrics);
     evidence.line(EvidenceFile::Executions, &report.to_json())?;
     // Two rows, two types: the signed envelope (§52) and the endpoint's answer (§53) are
@@ -542,7 +638,142 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         &mut evidence,
         metrics,
         Value::Object(latencies),
+        &mut trace,
     ))
+}
+
+/// M8.1's record of one route run's lifecycle, and the file it belongs in.
+///
+/// This is the whole of the instrumentation's footprint: a [`TraceRecorder`] that makes one
+/// map write per stage boundary the run already passes, and — only when `--latency-output`
+/// named a directory — an open `traces.jsonl` to write at the end. When no directory was
+/// named, the recorder holds no trace, every call below becomes a no-op *including the clock
+/// reading*, and the run takes the code path it took before this type existed (§40's backward
+/// compatibility, §38's "the cost is a timestamp and a store").
+///
+/// Two rules bind here that bind nowhere else in the file:
+///
+/// - **A stop is written down, not left blank.** Whichever way the run ends, the stages after
+///   it get a `skipped` record carrying the reason, so a reader of `traces.jsonl` can tell
+///   "not attempted" from "attempted and not measured" (§9). `declined` is the exception: the
+///   stage that answered is already closed, and only what follows is skipped.
+/// - **The trace must never be the reason a run's verdict is lost.** Every write is either
+///   folded into the run's own [`ArbitrageRun::refuse`] by [`finish`] or returned from
+///   [`RunTrace::execution_failed`] beside the error that was already leaving.
+struct RunTrace {
+    recorder: TraceRecorder,
+    /// The same clock the run meters with, kept so the recorder can be handed over at the
+    /// end: `TraceRecorder::finish` consumes its recorder, and a replacement needs a clock.
+    clock: Clock,
+    evidence: Option<LatencyEvidence>,
+}
+
+impl RunTrace {
+    /// Open the run's trace. `Live` because this lifecycle reads a node and, if it gets that
+    /// far, signs on chain — even a run whose market is labelled `CONTROLLED_FIXTURE` spends
+    /// real network time, and §45's separation is about which latencies get averaged together,
+    /// not about who was called. A fixture or replay trace is built by the code that replays
+    /// recorded evidence, not here.
+    fn open(
+        config: &ArbitrageConfig,
+        clock: Clock,
+        chain_id: u64,
+        head: u64,
+        session_id: String,
+    ) -> Result<Self> {
+        let Some(base) = config.latency_dir.clone() else {
+            return Ok(Self {
+                recorder: TraceRecorder::off(clock),
+                clock,
+                evidence: None,
+            });
+        };
+        // One subdirectory per session: §44 forbids rewriting a baseline that is already on
+        // disk, and a name that carries the session id is also how a trace line is traced
+        // back to the `route-run.json` that holds its verdict.
+        let evidence = LatencyEvidence::open(
+            &base.join(&session_id),
+            git_revision(),
+            config.setup.mode.name(),
+        )?;
+        let trace = LatencyTrace::new(TraceSource::Live, chain_id, Some(head), None);
+        Ok(Self {
+            recorder: TraceRecorder::on(clock, trace),
+            clock,
+            evidence: Some(evidence),
+        })
+    }
+
+    /// §4's identity rule: the trace carries the finding's own stable id rather than a
+    /// second one to disagree with, which also re-derives `trace_id` from it.
+    fn name_opportunity(&mut self, opportunity_id: &str) {
+        if let Some(trace) = self.recorder.trace_mut() {
+            trace.set_opportunity(opportunity_id);
+        }
+    }
+
+    /// A stage that ran and did not answer, and everything after it.
+    fn failed(&mut self, stage: Stage, detail: &str) {
+        let note = format!("never attempted: {detail}");
+        self.recorder.fail(stage, detail);
+        self.recorder.skip_after(stage, &note);
+    }
+
+    /// A stage the lifecycle never entered, and everything after it.
+    fn not_reached(&mut self, stage: Stage, detail: &str) {
+        let note = format!("never attempted: {detail}");
+        self.recorder.skip(stage, &note);
+        self.recorder.skip_after(stage, &note);
+    }
+
+    /// The lifecycle stopped *because a stage answered* — Risk declining, a plan that would
+    /// not build. That stage's record is already the answer, so only what follows it is a
+    /// skip; writing it again would be refused and would put a wiring bug in the trace file.
+    fn declined(&mut self, stage: Stage, detail: &str) {
+        let note = format!("never attempted: {detail}");
+        self.recorder.skip_after(stage, &note);
+    }
+
+    /// The lane failed in a way that ends the run with an error rather than with a refusal.
+    /// §49 still asks for this session's evidence, so the trace is closed and written on the
+    /// way out and the write's own failure is folded into the error rather than replacing it.
+    fn execution_failed<E: std::fmt::Display>(
+        &mut self,
+        session_id: &str,
+        stage: Stage,
+        error: E,
+    ) -> PipelineError {
+        let detail = error.to_string();
+        self.failed(stage, &detail);
+        match self.finish(session_id) {
+            Ok(()) => PipelineError::Execution(detail),
+            Err(write) => PipelineError::Execution(format!(
+                "{detail} | the latency trace could not be written either: {write}"
+            )),
+        }
+    }
+
+    /// Close the lifecycle and write its line, tables and README. Idempotent: a recorder
+    /// already handed over holds nothing.
+    fn finish(&mut self, session_id: &str) -> Result<()> {
+        let Some(evidence) = self.evidence.as_mut() else {
+            return Ok(());
+        };
+        let recorder = std::mem::replace(&mut self.recorder, TraceRecorder::off(self.clock));
+        let recorded = recorder.finish().with_session(session_id);
+        evidence.record(recorded)?;
+        evidence.finish()?;
+        Ok(())
+    }
+}
+
+/// The one ladder row this attempt climbed, if it became a record at all.
+///
+/// §55's binding already happened inside the lane — a record is in the ledger because its
+/// hash was read off the submission — so this is a lookup by the id the report names, not a
+/// second claim about which transaction was which.
+fn ladder_record<'a>(ledger: &'a Ledger, report: &SequenceReport) -> Option<&'a ExecutionRecord> {
+    report.execution_id.as_deref().and_then(|id| ledger.get(id))
 }
 
 impl ArbitrageRun {
@@ -972,10 +1203,17 @@ fn finish(
     evidence: &mut EvidenceWriter,
     metrics: Metrics,
     latency_ms: Value,
+    trace: &mut RunTrace,
 ) -> ArbitrageRun {
     run.metrics = metrics.to_json();
     run.latency_ms = latency_ms;
     if let Err(error) = evidence.write_whole("metrics.json", &run.metrics) {
+        run.absorb(error);
+    }
+    // The trace is written before `route-run.json` on purpose: if writing it fails, the
+    // failure is folded into the run's refusal and the last file a reader opens still says
+    // so. The reverse order would leave the trace's own error unrecorded anywhere.
+    if let Err(error) = trace.finish(&run.session_id) {
         run.absorb(error);
     }
     match evidence.write_whole(RECORD_FILE, &run.record()) {
@@ -1058,4 +1296,349 @@ fn simulation_row(run: &SimulationResult, session_id: &str) -> Value {
         "fingerprint": format!("{:x}", run.fingerprint()),
         "plan": run.plan_summary,
     })
+}
+
+/// §34's T2–T4 at the seam a route run actually uses: the same [`RunTrace`] methods
+/// [`run_once`] calls on its way out, driven to each stop without a node.
+///
+/// What this proves is the *shape* each refusal leaves in `traces.jsonl` — which stage
+/// holds a duration, which holds a reason, and that nothing a run never attempted is
+/// ever filed as an attempt that took no time. What it deliberately does not prove is
+/// that the live chain behaves this way: that is §31's observation run and its evidence
+/// directory, and no test here stands in for it.
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::latency::{README_FILE, SUMMARY_FILE, TRACES_FILE};
+    use evm_metrics::{StageOutcome, StageRecord};
+    use std::path::Path;
+
+    const CHAIN: u64 = 91_342;
+    const HEAD: u64 = 37_503_978;
+    const ID: &str = "m7-91342-37503978-buy-sell-1";
+    const SESSION: &str = "unit-session";
+
+    fn config(latency_dir: Option<PathBuf>) -> ArbitrageConfig {
+        ArbitrageConfig {
+            rpc_url: String::new(),
+            registry_dirs: Vec::new(),
+            sender: Address::from_slice(&[0x11u8; 20]),
+            sender_label: "the operator's funded test wallet",
+            candidate: RouteCandidate {
+                chain_id: CHAIN,
+                input_token: Address::from_slice(&[0x11u8; 20]),
+                mid_token: Address::from_slice(&[0x22u8; 20]),
+                venues: [
+                    Address::from_slice(&[0x33u8; 20]),
+                    Address::from_slice(&[0x44u8; 20]),
+                ],
+                input_amount: U256::from(1u64),
+                fee: Fee::new(3, 1000).expect("a fee of 3/1000 exists"),
+                fee_evidence: "fixtures/live-m5/arbitrage-window".to_string(),
+            },
+            market: MarketKind::ControlledFixture {
+                proves: "a test of the trace's shape".to_string(),
+            },
+            setup: ExecutionSetup::default(),
+            tolerance: Tolerance::new(1, 100),
+            risk: RiskConfig {
+                minimum_net_profit_wei: 0,
+                maximum_gas: None,
+            },
+            evidence_dir: PathBuf::from("unused-by-these-tests"),
+            latency_dir,
+        }
+    }
+
+    /// The three facts every run in this module starts from, in the order
+    /// [`run_once`] establishes them: the block was confirmed, a route run applies
+    /// no state updates and builds no graph, and the finding is priced.
+    fn bracketed(mut trace: RunTrace) -> RunTrace {
+        let at = trace.recorder.now_ns();
+        trace.recorder.begin_at(Stage::Observation, at);
+        trace.recorder.end_at(Stage::Observation, at + 1_000);
+        trace
+            .recorder
+            .skip(Stage::StateUpdate, "a route run applies no state updates");
+        trace
+            .recorder
+            .skip(Stage::GraphUpdate, "a route run builds no graph");
+        trace
+            .recorder
+            .begin_at(Stage::OpportunityDetection, at + 1_000);
+        trace.name_opportunity(ID);
+        trace
+    }
+
+    /// A trace that records in memory. These tests ask which stage a refusal leaves
+    /// timed; the file that shape lands in is `a_written_trace_...`'s question, and a
+    /// shape test that wrote to disk would leave a directory behind for no reason.
+    fn traced() -> RunTrace {
+        let clock = Clock::new();
+        let recorder = TraceRecorder::on(
+            clock,
+            LatencyTrace::new(TraceSource::Live, CHAIN, Some(HEAD), None),
+        );
+        bracketed(RunTrace {
+            recorder,
+            clock,
+            evidence: None,
+        })
+    }
+
+    /// The same trace opened the way a run with `--latency-trace` opens it: an
+    /// evidence writer exists, so `finish` has somewhere to write.
+    fn opened(dir: &Path) -> RunTrace {
+        let trace = RunTrace::open(
+            &config(Some(dir.to_path_buf())),
+            Clock::new(),
+            CHAIN,
+            HEAD,
+            SESSION.to_string(),
+        )
+        .expect("opening a trace creates its session directory");
+        bracketed(trace)
+    }
+
+    fn record_of(trace: &RunTrace, stage: Stage) -> StageRecord {
+        trace
+            .recorder
+            .trace()
+            .and_then(|held| held.stage(stage))
+            .unwrap_or_else(|| panic!("{} got no record at all", stage))
+            .clone()
+    }
+
+    /// The stages after `last`, as a list rather than through `Stage::ALL`, so a test
+    /// that means "the execution half" says exactly that.
+    fn after(last: Stage) -> Vec<Stage> {
+        Stage::ALL
+            .into_iter()
+            .filter(|stage| *stage > last)
+            .collect()
+    }
+
+    /// §34's T2, at the stage a route run can fail it at: the pair was read and priced
+    /// and the pricing said no, so detection ran and did not answer and nothing after it
+    /// was entered.
+    #[test]
+    fn a_route_that_yielded_nothing_fails_detection_and_skips_the_rest() {
+        let mut trace = traced();
+        trace.failed(Stage::OpportunityDetection, "the two venues agree on price");
+        let detection = record_of(&trace, Stage::OpportunityDetection);
+        assert_eq!(detection.outcome, StageOutcome::Failed);
+        assert!(
+            detection.duration_ns.is_some(),
+            "detection ran, so its span is a fact"
+        );
+        for stage in after(Stage::OpportunityDetection) {
+            let record = record_of(&trace, stage);
+            assert_eq!(record.outcome, StageOutcome::Skipped, "{stage}");
+            assert_eq!(record.duration_ns, None, "{stage} must not read as 0 ns");
+        }
+    }
+
+    /// §34's T2 as the document states it: the EVM ran and answered no. Simulation
+    /// keeps its duration and Risk onward is a skip — which is the difference §9 draws
+    /// between "it got there in no time" and "it never got there".
+    #[test]
+    fn a_simulated_revert_skips_risk_onward_without_a_duration() {
+        let mut trace = traced();
+        trace.recorder.end(Stage::OpportunityDetection);
+        trace.recorder.begin(Stage::Simulation);
+        trace.recorder.end(Stage::Simulation);
+        trace.declined(Stage::Simulation, "the six steps reverted");
+        let simulation = record_of(&trace, Stage::Simulation);
+        assert_eq!(simulation.outcome, StageOutcome::Completed);
+        assert!(simulation.duration_ns.is_some(), "the EVM was run");
+        for stage in after(Stage::Simulation) {
+            let record = record_of(&trace, stage);
+            assert_eq!(record.outcome, StageOutcome::Skipped, "{stage}");
+            assert_eq!(record.duration_ns, None, "{stage} must not read as 0 ns");
+        }
+    }
+
+    /// A stage the EVM was never asked about is `Skipped`, not `Failed`: §9 keeps those
+    /// two apart, and this is the branch that earns the difference.
+    #[test]
+    fn a_simulation_this_run_never_entered_is_skipped_not_failed() {
+        let mut trace = traced();
+        trace.recorder.end(Stage::OpportunityDetection);
+        trace.not_reached(
+            Stage::Simulation,
+            "the request refused itself before running",
+        );
+        assert_eq!(
+            record_of(&trace, Stage::OpportunityDetection).outcome,
+            StageOutcome::Completed
+        );
+        let simulation = record_of(&trace, Stage::Simulation);
+        assert_eq!(simulation.outcome, StageOutcome::Skipped);
+        assert_eq!(simulation.started_ns, None);
+        assert_eq!(
+            record_of(&trace, Stage::ProfitVerification).outcome,
+            StageOutcome::Skipped
+        );
+    }
+
+    /// §34's T3: Simulation and Risk both answered and Risk's answer was no. The two
+    /// stages that spoke stay timed; only what follows them is a skip.
+    #[test]
+    fn a_risk_decline_keeps_its_two_answers_and_skips_the_gate_onward() {
+        let mut trace = traced();
+        for stage in [Stage::OpportunityDetection, Stage::Simulation, Stage::Risk] {
+            if stage != Stage::OpportunityDetection {
+                trace.recorder.begin(stage);
+            }
+            trace.recorder.end(stage);
+        }
+        trace.declined(Stage::Risk, "the risk layer declined this route");
+        for stage in [
+            Stage::Observation,
+            Stage::OpportunityDetection,
+            Stage::Simulation,
+            Stage::Risk,
+        ] {
+            let record = record_of(&trace, stage);
+            assert_eq!(record.outcome, StageOutcome::Completed, "{stage}");
+            assert!(record.duration_ns.is_some(), "{stage} was timed");
+        }
+        for stage in after(Stage::Risk) {
+            let record = record_of(&trace, stage);
+            assert_eq!(record.outcome, StageOutcome::Skipped, "{stage}");
+            assert_eq!(record.duration_ns, None, "{stage} must not read as 0 ns");
+        }
+    }
+
+    /// §34's T4, from the gate itself: the attempt was declined there, so the execution
+    /// half never began — and each empty stage says why in its own row.
+    #[test]
+    fn a_declined_gate_skips_the_execution_half_with_a_reason_each() {
+        let mut trace = traced();
+        for stage in [Stage::OpportunityDetection, Stage::Simulation, Stage::Risk] {
+            if stage != Stage::OpportunityDetection {
+                trace.recorder.begin(stage);
+            }
+            trace.recorder.end(stage);
+        }
+        trace.recorder.begin(Stage::Preflight);
+        trace.declined(Stage::Preflight, "§26's checks did not pass");
+        assert_eq!(
+            record_of(&trace, Stage::Preflight).outcome,
+            StageOutcome::Started,
+            "the gate was opened and this is where the run ends"
+        );
+        for stage in after(Stage::Preflight) {
+            let record = record_of(&trace, stage);
+            assert_eq!(record.outcome, StageOutcome::Skipped, "{stage}");
+            assert!(record.note.is_some(), "{stage} must say why it is empty");
+        }
+    }
+
+    /// §40's compatibility claim at the level of the filesystem: a run that was never
+    /// asked to measure holds no trace, records nothing, and its end writes no
+    /// directory.
+    #[test]
+    fn a_run_that_measures_nothing_writes_nothing() {
+        let base = std::env::temp_dir().join(format!(
+            "evm-m8-latency-must-not-exist-{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&base);
+        let mut off = RunTrace::open(
+            &config(None),
+            Clock::new(),
+            CHAIN,
+            HEAD,
+            SESSION.to_string(),
+        )
+        .expect("a run that measures nothing opens nothing");
+        assert!(!off.recorder.is_on());
+        assert!(off.evidence.is_none());
+        assert!(off.recorder.trace().is_none());
+        off.recorder.begin(Stage::Observation);
+        off.recorder.end(Stage::Observation);
+        off.declined(Stage::Observation, "nothing");
+        off.finish(SESSION).expect("nothing to write");
+        assert!(
+            !base.join(SESSION).exists(),
+            "a disabled trace must not create a directory"
+        );
+    }
+
+    /// §46's guarantees, checked in the one file they land in: the line carries the
+    /// finding's identity rather than a second one, carries the session that wrote it,
+    /// and always holds fourteen stage rows whatever the run reached.
+    #[test]
+    fn a_written_trace_is_one_line_of_fourteen_stages_and_a_name() {
+        let base = std::env::temp_dir().join(format!("evm-m8-latency-line-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&base);
+        let mut trace = opened(&base);
+        let trace_id = trace
+            .recorder
+            .trace()
+            .map(|held| held.trace_id().to_string())
+            .expect("a trace");
+        trace.recorder.end(Stage::OpportunityDetection);
+        trace.declined(Stage::OpportunityDetection, "nothing to run");
+        trace.finish(SESSION).expect("the trace writes");
+        let dir = base.join(SESSION);
+        let text = std::fs::read_to_string(dir.join(TRACES_FILE)).expect("traces.jsonl");
+        let lines: Vec<&str> = text.lines().collect();
+        assert_eq!(lines.len(), 1);
+        let line: Value = serde_json::from_str(lines[0]).expect("one JSON line");
+        assert!(trace_id.starts_with("lat-"), "{trace_id}");
+        assert_eq!(line["trace_id"], json!(trace_id));
+        assert_eq!(line["source"], json!("live"));
+        assert_eq!(line["chain_id"], json!(CHAIN));
+        assert_eq!(line["opportunity_block"], json!(HEAD));
+        assert_eq!(line["opportunity_id"], json!(ID));
+        assert_eq!(line["session_id"], json!(SESSION));
+        assert_eq!(line["instrumentation_refusals"], json!([]));
+        assert_eq!(
+            line["stages"].as_array().map(Vec::len),
+            Some(Stage::ALL.len()),
+            "the shape must not depend on how far the run got"
+        );
+        // §25's other two files, and §44's metadata in the middle one.
+        assert!(dir.join(SUMMARY_FILE).is_file());
+        assert!(dir.join(README_FILE).is_file());
+        let summary: Value = serde_json::from_str(
+            &std::fs::read_to_string(dir.join(SUMMARY_FILE)).expect("summary.json"),
+        )
+        .expect("valid JSON");
+        assert_eq!(summary["sample_count"], json!(1));
+        assert_eq!(summary["sources"][0]["chain_id"], json!(CHAIN));
+        assert_eq!(
+            summary["execution_mode"],
+            json!(config(None).setup.mode.name())
+        );
+        assert_eq!(summary["git_revision"], json!(git_revision()));
+        let _ = std::fs::remove_dir_all(&base);
+    }
+
+    /// §4's identity rule, as a key: the trace is named for the opportunity it runs, so
+    /// two runs of the same route agree on `trace_id` and a run of a different one does
+    /// not.
+    #[test]
+    fn the_trace_is_keyed_on_the_opportunity_it_runs() {
+        let named = traced();
+        let held = named.recorder.trace().expect("a trace");
+        assert_eq!(held.opportunity_id(), Some(ID));
+        assert_eq!(
+            held.trace_id(),
+            traced().recorder.trace().expect("a trace").trace_id()
+        );
+        // A trace that never got a name keys on the block alone, and that is a different
+        // id: naming the finding must re-key, or the file would hold two lifecycles of
+        // two routes under one key.
+        let unnamed = LatencyTrace::new(TraceSource::Live, CHAIN, Some(HEAD), None);
+        assert_ne!(unnamed.trace_id(), held.trace_id());
+        let mut again = traced();
+        again.name_opportunity("a second finding");
+        assert_ne!(
+            again.recorder.trace().expect("a trace").trace_id(),
+            held.trace_id()
+        );
+    }
 }

@@ -37,6 +37,17 @@ impl Clock {
         self.elapsed_ms(Instant::now())
     }
 
+    /// Nanoseconds since this run began.
+    ///
+    /// M8.1 §8 asks for stage durations in nanoseconds, and a nanosecond reading
+    /// of the *same* origin as the millisecond one keeps the two clocks in this
+    /// file from ever becoming three: the finer unit is only a finer resolution
+    /// on the one monotonic timeline, so an ms stamp and an ns stamp can be
+    /// subtracted from each other without mixing in wall time.
+    pub fn now_ns(&self) -> u64 {
+        self.elapsed_ns(Instant::now())
+    }
+
     pub const fn origin_instant(&self) -> Instant {
         self.origin
     }
@@ -49,14 +60,31 @@ impl Clock {
         now.saturating_sub(earlier)
     }
 
+    /// The nanosecond form of [`Clock::since_ms`]: elapsed, measured, floored at
+    /// zero rather than wrapped (§8 forbids a negative duration, and a reading
+    /// that arrives out of order would produce one).
+    pub fn since_ns(&self, earlier: u64) -> u64 {
+        let now = self.now_ns();
+        now.saturating_sub(earlier)
+    }
+
     fn elapsed_ms(&self, at: Instant) -> u64 {
         at.duration_since(self.origin).as_millis() as u64
+    }
+
+    fn elapsed_ns(&self, at: Instant) -> u64 {
+        at.duration_since(self.origin).as_nanos() as u64
     }
 
     /// The monotonic stamp for `at`, so a timestamp taken outside this process's
     /// start still lands on this clock rather than on wall time.
     pub fn stamp(&self, at: Instant) -> u64 {
         self.elapsed_ms(at)
+    }
+
+    /// The nanosecond stamp for `at`.
+    pub fn stamp_ns(&self, at: Instant) -> u64 {
+        self.elapsed_ns(at)
     }
 }
 
