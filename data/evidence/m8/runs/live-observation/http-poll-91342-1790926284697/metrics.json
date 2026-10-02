@@ -1,0 +1,69 @@
+{
+  "counters": {
+    "blocks": 39,
+    "candidate_rejections": 0,
+    "candidates": 0,
+    "event.canonical": 39,
+    "event.gap_detected": 17,
+    "event.gap_recovered": 16,
+    "graph_edges": 76,
+    "graph_skipped_pools": 0,
+    "invalidated_by_pool": 0,
+    "logs": 2968,
+    "market_events_left_at_shutdown": 32,
+    "opportunities_found": 0,
+    "pool_created_events": 0,
+    "registrations": 1,
+    "rejected_syncs": 0,
+    "rejections": 0,
+    "swap_events": 13,
+    "sync_events": 27,
+    "syncs_applied": 27,
+    "unattested_syncs": 0,
+    "unclaimed_logs": 2928
+  },
+  "latency": [
+    {
+      "measured": true,
+      "name": "block_to_graph",
+      "stats": {
+        "count": 38,
+        "max_ms": 3204,
+        "min_ms": 898,
+        "name": "block_to_graph",
+        "p50_ms": 1394,
+        "p95_ms": 2926,
+        "p99_ms": 3204,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "block_to_opportunity",
+      "stats": {
+        "count": 22,
+        "max_ms": 2927,
+        "min_ms": 912,
+        "name": "block_to_opportunity",
+        "p50_ms": 1377,
+        "p95_ms": 2765,
+        "p99_ms": 2927,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "chain_to_received",
+      "stats": {
+        "count": 39,
+        "max_ms": 4509,
+        "min_ms": 1699,
+        "name": "chain_to_received",
+        "p50_ms": 2837,
+        "p95_ms": 3783,
+        "p99_ms": 4509,
+        "unit": "ms"
+      }
+    }
+  ]
+}

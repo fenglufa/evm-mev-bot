@@ -1,0 +1,19 @@
+{
+  "execution_mode": "no-lane",
+  "generated_at_unix_ms": 1790926286188,
+  "generated_at_used_for_durations": false,
+  "git_revision": "d4f61a912bdc1d8660d145f6e745dc9cbc60a0c1",
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "percentile_algorithm": "nearest_rank",
+  "percentile_rule": "a rank is reported only when its index is strictly below the largest index; otherwise it would reprint max",
+  "sample_count": 0,
+  "schema_version": 1,
+  "sources": [],
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}
