@@ -1,0 +1,36 @@
+{
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_refusals": [],
+  "diagnosis_schema": 1,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1790945028634,
+  "generated_at_used_for_durations": false,
+  "git_revision": "a00f2a55150e006e4813bfc48a653401b4a3ed41",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "per_source": [
+    {
+      "chain_ids": [
+        91342
+      ],
+      "simulation_ids": [
+        "m7-91342-37599910-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ],
+      "simulations": 1,
+      "simulations_without_calls": 0,
+      "source": "live",
+      "total_calls": 80,
+      "total_rpc_duration_ns": 32871300498
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "simulations": 1,
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}

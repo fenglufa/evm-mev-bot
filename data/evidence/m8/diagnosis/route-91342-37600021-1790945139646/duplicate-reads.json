@@ -1,0 +1,90 @@
+{
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_schema": 1,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1790945139647,
+  "generated_at_used_for_durations": false,
+  "git_revision": "a00f2a55150e006e4813bfc48a653401b4a3ed41",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "per_source": [
+    {
+      "duplicate_ratio": {
+        "denominator": 80,
+        "notation": "integer terms, no float (§13)",
+        "numerator": 41
+      },
+      "duplicate_state_reads": 41,
+      "per_simulation_duplicate_reads": {
+        "max": 41,
+        "measured": true,
+        "min": 41,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "per_simulation_unique_reads": {
+        "max": 39,
+        "measured": true,
+        "min": 39,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "simulations": 1,
+      "source": "live",
+      "total_state_reads": 80,
+      "unique_state_reads": 39,
+      "unkeyed_calls": 0
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}
