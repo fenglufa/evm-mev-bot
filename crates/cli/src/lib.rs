@@ -909,6 +909,18 @@ pub struct ArbitrageArgs {
     #[arg(long)]
     rpc_output: Option<PathBuf>,
 
+    /// M8.3.1 §6's arm switch. Given, this run's simulation asks the node for every
+    /// balance, nonce and account bytecode each time it wants one — M8.2's HEAD, arm A.
+    /// Absent, a simulation may reuse what it already read at its own pinned block, arm B.
+    ///
+    /// Nothing else reads it. The block, the sender, the calldata, the gas, the EVM
+    /// configuration, the state overrides, the risk thresholds and the decision are built
+    /// identically either way (§5's list of what the two arms must share), so two runs that
+    /// differ only here differ in one variable. The cache lives and dies with one
+    /// simulation either way: no run reuses another run's state (§2).
+    #[arg(long)]
+    no_state_read_reuse: bool,
+
     /// Print the run's §57 record as JSON instead of the summary lines.
     #[arg(long)]
     json: bool,
@@ -1043,6 +1055,7 @@ impl ArbitrageArgs {
             evidence_dir: self.evidence_dir.clone(),
             latency_dir: latency_dir(self.latency_trace, self.latency_output.clone()),
             diagnosis_dir: diagnosis_dir(self.rpc_trace, self.rpc_output.clone()),
+            state_read_reuse: !self.no_state_read_reuse,
         })
     }
 }

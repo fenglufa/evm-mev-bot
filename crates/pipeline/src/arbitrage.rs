@@ -145,6 +145,15 @@ pub struct ArbitrageConfig {
     /// so the adapter this run reads through is the adapter it always had, and every
     /// recording call in `crates/chain/src/rpc.rs` sits behind a `None` test (§19).
     pub diagnosis_dir: Option<PathBuf>,
+    /// M8.3.1 §6's two arms, chosen by the command line rather than by the code: `true`
+    /// is arm B (a simulation may reuse the state it already read at this same pin),
+    /// `false` is arm A (every balance, nonce and bytecode costs a request again, which
+    /// is M8.2's HEAD exactly).
+    ///
+    /// It is the milestone's only variable, so nothing else may read it to decide
+    /// anything: the route, the prices, the risk thresholds and the EVM configuration are
+    /// built without consulting it, and §5's result equality is the proof that they are.
+    pub state_read_reuse: bool,
 }
 
 /// One venue, as the node described it at the block the run pinned.
@@ -253,6 +262,11 @@ pub struct ArbitrageRun {
     pub metrics: Value,
     pub latency_ms: Value,
     pub evidence_dir: PathBuf,
+    /// Which of §6's arms this record describes, written into the record rather than left
+    /// for a reader to infer from the command line: §14 Test C asks each run to say
+    /// `baseline` or `cached`, and the only honest way to say it is to carry the flag the
+    /// run was built from.
+    pub state_read_reuse: bool,
 }
 
 /// Run one [`RouteCandidate`] against the live chain and, if the configured mode allows it,
@@ -376,10 +390,16 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     // REVM (§2). With no `--rpc-trace`, `observe` hands back the very handle it was given.
     let chain: Arc<dyn ChainAdapter> = Arc::new(adapter.clone());
     let chain: Arc<dyn ChainAdapter> = diagnosis.observe(&chain, &opportunity_id);
-    let provider = Arc::new(RpcStateProvider::new(
+    let provider = Arc::new(RpcStateProvider::with_state_read_reuse(
         chain,
         BlockPin::new(head, header.hash),
+        config.state_read_reuse,
     ));
+    // The boundary's own tally, handed to the diagnosis before the run: §12 asks cache
+    // hits and misses to be comparable with the request counter, and the two are only
+    // comparable if they describe one simulation. Nothing is read here — the handle is
+    // consulted when the span closes, after the simulation has done its reading.
+    diagnosis.track_state_reads(&provider);
     let state_source = provider.source();
     diagnosis.set_state_source(&state_source);
     let request = match simulation_request(&header, &legs, config, &state_source) {
@@ -846,6 +866,12 @@ struct RunDiagnosis {
     /// being measured or the adapter refused to be observed — and the second of those is
     /// written into the evidence as a refusal rather than left to read as zero calls.
     sink: Option<RpcTraceSink>,
+    /// The provider this run's simulation reads through, kept as the concrete type for one
+    /// reason: its cache tally (§12) is only readable from `RpcStateProvider`, and the
+    /// trace line wants that tally beside the call list the sink recorded. It is the same
+    /// provider the run already built — this holds a handle, it does not make a second one,
+    /// so it cannot give a simulation a cache of its own (§2).
+    state_reads: Option<Arc<RpcStateProvider>>,
     clock: Clock,
     chain_id: u64,
     head: u64,
@@ -874,6 +900,7 @@ impl RunDiagnosis {
         Ok(Self {
             evidence,
             sink: None,
+            state_reads: None,
             clock,
             chain_id,
             head: head.0,
@@ -931,6 +958,17 @@ impl RunDiagnosis {
         self.state_source = Some(state_source.to_string());
     }
 
+    /// Hold the handle §12's tally is read back from when the span closes.
+    ///
+    /// Only kept when this run measures something at all: with no directory, no cache
+    /// statistics get written, and the provider continues to be the one object the
+    /// simulation reads through.
+    fn track_state_reads(&mut self, provider: &Arc<RpcStateProvider>) {
+        if self.evidence.is_some() {
+            self.state_reads = Some(Arc::clone(provider));
+        }
+    }
+
     /// Open the span. `Clock::now_ns` is the run's monotonic origin, so these two stamps
     /// and every event's `started_ns`/`finished_ns` are readings of the same clock (§7) —
     /// which is what lets §11's `non_rpc` be a subtraction rather than an estimate.
@@ -960,6 +998,10 @@ impl RunDiagnosis {
             (self.started_ns, self.finished_ns, self.sink.as_ref())
         {
             let refusals = sink.refusals();
+            let state_reads = self
+                .state_reads
+                .as_ref()
+                .map(|provider| provider.state_read_stats());
             let diagnosis = SimulationDiagnosis::new(
                 SimulationWindow {
                     simulation_id: sink.simulation_id().to_string(),
@@ -971,7 +1013,8 @@ impl RunDiagnosis {
                     finished_ns,
                 },
                 sink.events(),
-            );
+            )
+            .with_state_reads(state_reads);
             evidence.record(diagnosis, &refusals)?;
         }
         evidence.finish()?;
@@ -1031,6 +1074,7 @@ impl ArbitrageRun {
             metrics: Value::Null,
             latency_ms: Value::Null,
             evidence_dir,
+            state_read_reuse: config.state_read_reuse,
         }
     }
 
@@ -1100,6 +1144,7 @@ impl ArbitrageRun {
             "pinned_block": self.head.0,
             "pinned_block_hash": format!("{:?}", self.header.hash),
             "mode": self.mode.name(),
+            "state_read_reuse": self.state_read_reuse,
             "market": self.market.to_json(),
             "sender": format!("{:#x}", self.sender),
             "candidate": {
@@ -1583,6 +1628,7 @@ mod tests {
             evidence_dir: PathBuf::from("unused-by-these-tests"),
             latency_dir,
             diagnosis_dir: None,
+            state_read_reuse: true,
         }
     }
 

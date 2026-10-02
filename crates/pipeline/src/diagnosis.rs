@@ -40,6 +40,7 @@ use std::path::{Path, PathBuf};
 use evm_chain::{RpcCallEvent, RpcTraceSource};
 use evm_metrics::baseline::stats;
 use evm_metrics::unix_ms;
+use evm_simulation::StateReadStats;
 use serde_json::{json, Value};
 
 use crate::error::{PipelineError, Result};
@@ -58,6 +59,28 @@ pub const PROVIDER_BREAKDOWN: &str = "provider_total_duration: this build record
      the point it becomes bytes on the wire, so request construction, the wait on the node, \
      response decoding and state conversion are not separable there (§17's \
      breakdown_unavailable) and are reported as one provider duration";
+
+/// M8.3.1 §12's tally, in the words a reader of one line needs: which lookups were
+/// consulted, and therefore what a hit and a miss each mean here.
+///
+/// The direction matters. A miss counts reads the boundary had to go and ask for; a hit
+/// counts answers it already held, which is the same read the sink would have shown as one
+/// more call had the boundary not existed. So the two series are comparable with the call
+/// list (§7), and neither one of them is a count of calls *plus* answers.
+pub const STATE_READS_TALLY_SCOPE: &str = "state_read_cache: a hit is a state read this \
+     simulation answered from what it had already read at its own pinned block, so it cost no \
+     request; a miss is a read it had to ask for. With reuse off, the account kinds (balance, \
+     nonce, and the bytecode an account asks for) are never looked up and so carry neither \
+     number — only the kinds this boundary reused before M8.3.1 (code on a direct read, \
+     storage) are tallied. Nothing here is derived from the call list; it is counted at the \
+     lookup that made it true.";
+
+/// What a simulation that reads a recorded dump has to say about a cache: nothing, because
+/// it never asked a node anything. `0` would read as "asked and reused nothing", which is a
+/// different fact (§9's rule, applied to §12's fields).
+pub const STATE_READS_UNAVAILABLE: &str = "no state-read boundary was attached to this \
+     simulation, so there is no cache tally: a recorded dump answers state without a request, \
+     and an unobserved source never reached the boundary this reads";
 
 /// One simulation's own span, on the run's monotonic clock.
 ///
@@ -236,6 +259,92 @@ impl DuplicateReads {
     }
 }
 
+/// One simulation's §12 tally, as the line that carries it wants it: the four kinds named,
+/// each with both of its integers, and the scope sentence that says what a hit cost.
+fn cache_json(stats: &StateReadStats) -> Value {
+    json!({
+        "reuse": stats.reuse,
+        "code": { "hits": stats.code.hits, "misses": stats.code.misses },
+        "balance": { "hits": stats.balance.hits, "misses": stats.balance.misses },
+        "nonce": { "hits": stats.nonce.hits, "misses": stats.nonce.misses },
+        "storage": { "hits": stats.storage.hits, "misses": stats.storage.misses },
+        "cache_hits": stats.total_hits(),
+        "cache_misses": stats.total_misses(),
+        "tally_scope": STATE_READS_TALLY_SCOPE,
+    })
+}
+
+/// §12's tally folded over the simulations one source recorded, kept per kind.
+///
+/// The fold is a sum of integers and nothing else: no ratio, no mean, no per-kind
+/// weighting. A source's cache figures are read beside its call counts, and the two are
+/// only worth comparing because both were counted over the same simulations.
+#[derive(Clone, Debug, Default)]
+pub struct CacheTotals {
+    /// Simulations whose boundary was allowed to reuse, and simulations whose boundary
+    /// was not — the two arms of §6, counted separately so an A/B run's tables cannot
+    /// silently merge them.
+    pub simulations_with_reuse: usize,
+    pub simulations_without_reuse: usize,
+    /// `(hits, misses)` per kind, summed over the simulations that carried a tally.
+    code: (usize, usize),
+    balance: (usize, usize),
+    nonce: (usize, usize),
+    storage: (usize, usize),
+    /// Simulations recorded with no tally at all (a dump-backed source), reported so the
+    /// sums above are known to be over fewer simulations than `simulations`.
+    pub simulations_without_tally: usize,
+}
+
+impl CacheTotals {
+    fn fold(&mut self, stats: &StateReadStats) {
+        if stats.reuse {
+            self.simulations_with_reuse += 1;
+        } else {
+            self.simulations_without_reuse += 1;
+        }
+        self.code = (
+            self.code.0 + stats.code.hits,
+            self.code.1 + stats.code.misses,
+        );
+        self.balance = (
+            self.balance.0 + stats.balance.hits,
+            self.balance.1 + stats.balance.misses,
+        );
+        self.nonce = (
+            self.nonce.0 + stats.nonce.hits,
+            self.nonce.1 + stats.nonce.misses,
+        );
+        self.storage = (
+            self.storage.0 + stats.storage.hits,
+            self.storage.1 + stats.storage.misses,
+        );
+    }
+
+    fn hits(&self) -> usize {
+        self.code.0 + self.balance.0 + self.nonce.0 + self.storage.0
+    }
+
+    fn misses(&self) -> usize {
+        self.code.1 + self.balance.1 + self.nonce.1 + self.storage.1
+    }
+
+    fn to_json(&self) -> Value {
+        json!({
+            "simulations_with_reuse": self.simulations_with_reuse,
+            "simulations_without_reuse": self.simulations_without_reuse,
+            "simulations_without_tally": self.simulations_without_tally,
+            "code": { "hits": self.code.0, "misses": self.code.1 },
+            "balance": { "hits": self.balance.0, "misses": self.balance.1 },
+            "nonce": { "hits": self.nonce.0, "misses": self.nonce.1 },
+            "storage": { "hits": self.storage.0, "misses": self.storage.1 },
+            "cache_hits": self.hits(),
+            "cache_misses": self.misses(),
+            "tally_scope": STATE_READS_TALLY_SCOPE,
+        })
+    }
+}
+
 /// §14's per-method row, percentiles and all.
 #[derive(Clone, Debug)]
 pub struct MethodAggregate {
@@ -287,6 +396,11 @@ pub struct SimulationDiagnosis {
     pub duplicates: DuplicateReads,
     pub methods: Vec<MethodAggregate>,
     pub events: Vec<RpcCallEvent>,
+    /// M8.3.1 §12's cache tally, read from the state-read boundary this simulation ran
+    /// through. `None` when the simulation read no boundary at all — a recorded dump
+    /// issues no state requests, so a cache would have nothing to have answered — and the
+    /// trace line says which rather than writing a row of zeros.
+    pub state_reads: Option<StateReadStats>,
 }
 
 impl SimulationDiagnosis {
@@ -301,7 +415,17 @@ impl SimulationDiagnosis {
             duplicates,
             methods,
             events,
+            state_reads: None,
         }
+    }
+
+    /// Attach the boundary's tally. Kept a separate call rather than a fifth argument to
+    /// [`Self::new`]: the analysis above is a pure function of the recorded calls, and this
+    /// is a fact read off a different object after the run — the two should not look like
+    /// one computation.
+    pub fn with_state_reads(mut self, state_reads: Option<StateReadStats>) -> Self {
+        self.state_reads = state_reads;
+        self
     }
 
     /// §15's per-simulation line, with §8's rebuildable call list attached to it: one
@@ -321,6 +445,15 @@ impl SimulationDiagnosis {
             object.insert("methods".to_string(), Value::Array(methods));
             object.insert("call_count".to_string(), json!(calls.len()));
             object.insert("calls".to_string(), Value::Array(calls));
+            object.insert(
+                "state_read_cache".to_string(),
+                match &self.state_reads {
+                    Some(stats) => cache_json(stats),
+                    None => {
+                        json!({ "measurements": Value::Null, "reason": STATE_READS_UNAVAILABLE })
+                    }
+                },
+            );
             object.insert("diagnosis_refusals".to_string(), json!(refusals));
         }
         line
@@ -639,6 +772,8 @@ struct SourceBucket {
     /// a distribution of anything.
     unique_per_simulation: Vec<u64>,
     duplicate_per_simulation: Vec<u64>,
+    /// M8.3.1 §12's cache tally, summed over this source's simulations.
+    state_reads: CacheTotals,
     method_rows: BTreeMap<String, MethodAggregate>,
     method_samples: BTreeMap<String, (Vec<u64>, bool)>,
 }
@@ -673,6 +808,7 @@ impl SourceBucket {
             unkeyed_calls: 0,
             unique_per_simulation: Vec::new(),
             duplicate_per_simulation: Vec::new(),
+            state_reads: CacheTotals::default(),
             method_rows: BTreeMap::new(),
             method_samples: BTreeMap::new(),
         }
@@ -735,6 +871,11 @@ impl SourceBucket {
             &mut self.duplicate_per_simulation,
             duplicates.duplicate_state_reads as u64,
         );
+
+        match &diagnosis.state_reads {
+            Some(stats) => self.state_reads.fold(stats),
+            None => self.state_reads.simulations_without_tally += 1,
+        }
 
         for row in &diagnosis.methods {
             let merged = self
@@ -866,6 +1007,9 @@ impl SourceBucket {
             },
             "per_simulation_unique_reads": count_stats(&self.unique_per_simulation),
             "per_simulation_duplicate_reads": count_stats(&self.duplicate_per_simulation),
+            // §12's own numbers, beside §13's: the duplicate tally says how many asks were
+            // repeats, this says how many of them the run did not make.
+            "state_read_cache": self.state_reads.to_json(),
         })
     }
 }
@@ -1097,10 +1241,16 @@ fn readme(sources: &[Value], summary: &Value, simulations: usize) -> String {
         "# M8.2 simulation state acquisition diagnosis\n\n\
          {simulations} simulation(s) are recorded here — one line of `{TRACES_FILE}` each, with the\n\
          per-method and per-source tables in `{RPC_SUMMARY_FILE}`, `{SIMULATION_SUMMARY_FILE}` and\n\
-         `{DUPLICATES_FILE}`. Nothing in this directory came out of an optimization, and nothing here\n\
-         changed what the run did: the only difference between this build and the M8.1 build is\n\
-         that a call which was already about to happen got two clock readings and one `Vec`\n\
-         push around it.\n"
+         `{DUPLICATES_FILE}`. Nothing here changed what the run decided: the difference between a\n\
+         traced run and an untraced one is that a call which was already about to happen got two\n\
+         clock readings and one `Vec` push around it.\n\n\
+         What the run was configured to do about the repeats it shows is a separate question, and\n\
+         it is answered per run rather than per directory: a build from M8.3.1 onward may reuse a\n\
+         state read it already made at the same pinned block, so the same line can describe either\n\
+         arm. Each line's `state_read_cache.reuse` field says which one it was. `{DUPLICATES_FILE}`\n\
+         counts how many simulations ran with reuse on and off, and sums the tallies over both — so\n\
+         an A/B comparison is two runs into two directories, never one directory with both arms in\n\
+         it.\n"
     ));
     lines.push(
         "## Data source\n\n\
@@ -1163,7 +1313,11 @@ fn readme(sources: &[Value], summary: &Value, simulations: usize) -> String {
          the rule, is counted as a call and reported under `unkeyed_calls` with the `key_note`\n\
          naming which of the two it was; it is not handed a borrowed key and not dropped.\n\n\
          `duplicate_state_reads` counts repeats, not asks: a read made three times adds 2, so\n\
-         the figure names the avoidable asks rather than the total ones.\n"
+         the figure names the avoidable asks rather than the total ones.\n\n\
+         `state_read_cache` is a second, independent account of the same subject, counted at the\n\
+         boundary the simulation reads through rather than at the wire: its hits are the asks\n\
+         that never became calls. The two are meant to be checked against each other (§7), which\n\
+         is why both are here and why neither is derived from the other.\n"
             .to_string(),
     );
     lines.push(
@@ -1217,11 +1371,15 @@ fn readme(sources: &[Value], summary: &Value, simulations: usize) -> String {
     lines.push(limitations);
     lines.push(String::from(
         "## What this directory is not\n\n\
-         It is not an optimization and not a result. §26's candidates — a state cache, RPC \
-         batching, reading the two venues concurrently — are named in the completion report \
-         as `NOT IMPLEMENTED`, and no code in this build does any of them. A 24 s simulation \
-         in these files took 24 s in this build too; what is new is that the 24 s now says \
-         where it went.\n",
+         It is not a result. It records calls, and records them the same way whichever arm the\n\
+         run was configured for.\n\n\
+         Two of §26's candidates were later built; the rest were not. State read reuse (M8.3.1)\n\
+         exists and is switched per run by `--no-state-read-reuse`, so a duplicate that still\n\
+         appears in a line here is a duplicate that arm was left in place to measure — read\n\
+         `state_read_cache.reuse` before concluding anything from a repeat. RPC batching, reading\n\
+         the two venues concurrently, request prefetch and connection tuning are still not\n\
+         implemented, and no code in this build does any of them: a simulation's calls stay one\n\
+         per state read, in the order the EVM asked for them.\n",
     ));
     lines.join("\n")
 }
@@ -1283,6 +1441,7 @@ pub(crate) fn window(started_ns: u64, finished_ns: u64) -> SimulationWindow {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use evm_simulation::ReuseTally;
 
     /// §9's four figures, on §11's own worked example: three calls over a 1000 ns span,
     /// two of them overlapping. The example's point is that `non_rpc` is 100 and *not*
@@ -1880,6 +2039,7 @@ mod tests {
                     call(3, "eth_getStorageAt", 700, 900, Some("storage|a")),
                 ],
             )
+            .with_state_reads(Some(spec_tally(true)))
         };
         for dir in [&first, &second] {
             let mut evidence = DiagnosisEvidence::open(dir, "revision", "disabled").expect("opens");
@@ -1905,6 +2065,140 @@ mod tests {
         }
         let _ = std::fs::remove_dir_all(&first);
         let _ = std::fs::remove_dir_all(&second);
+    }
+
+    /// §12's example tally, in the same numbers the spec quotes for one simulation:
+    /// `code 6 miss / 17 hit`, `balance 6/12`, `nonce 6/12`, `storage 20/0`.
+    fn spec_tally(reuse: bool) -> StateReadStats {
+        let mut stats = StateReadStats::new(reuse);
+        stats.code = ReuseTally {
+            hits: 17,
+            misses: 6,
+        };
+        stats.balance = ReuseTally {
+            hits: 12,
+            misses: 6,
+        };
+        stats.nonce = ReuseTally {
+            hits: 12,
+            misses: 6,
+        };
+        stats.storage = ReuseTally {
+            hits: 0,
+            misses: 20,
+        };
+        stats
+    }
+
+    /// M8.3.1 §12: the boundary's own hits and misses travel with the calls the wire
+    /// recorded, in the same line, so §7's "these should align with the request counter"
+    /// is checkable by a reader who has only this file. The last assertion is the one that
+    /// makes it a second account rather than a restatement: adding a tally to a line
+    /// changes nothing about the calls in it, because the tally was never computed from
+    /// them.
+    #[test]
+    fn a_traced_simulation_carries_its_cache_tally_beside_its_calls() {
+        let events = || {
+            vec![
+                call(1, "eth_getCode", 0, 300, Some("code|a")),
+                call(2, "eth_getCode", 300, 600, Some("code|a")),
+            ]
+        };
+        let line = SimulationDiagnosis::new(window(0, 1_000), events())
+            .with_state_reads(Some(spec_tally(true)))
+            .to_trace_line(&[]);
+        let cache = &line["state_read_cache"];
+        assert_eq!(cache["reuse"], true);
+        assert_eq!(cache["code"]["misses"], 6);
+        assert_eq!(cache["code"]["hits"], 17);
+        assert_eq!(cache["balance"]["hits"], 12);
+        assert_eq!(cache["nonce"]["hits"], 12);
+        assert_eq!(cache["storage"]["misses"], 20);
+        assert_eq!(cache["cache_misses"], 38);
+        assert_eq!(cache["cache_hits"], 41);
+        // §12 prints `miss = 39` under four kind lines that sum to 38 (6+6+6+20). The 39 is
+        // §7's `cached: 39 calls`, which counts the block header read the cache never
+        // touches. The sum here is the kinds' own, and it is not rounded up to agree with
+        // the spec's total (§7: explain the difference, do not edit the number).
+        assert!(
+            cache["tally_scope"]
+                .as_str()
+                .unwrap_or_default()
+                .contains("cost no request"),
+            "a hit has to say what it saved, or it reads as a call: {cache}"
+        );
+
+        // The same calls with no tally at all: `null` with a reason, never a row of zeros
+        // (§9's rule, applied to §12's fields).
+        let untracked = SimulationDiagnosis::new(window(0, 1_000), events()).to_trace_line(&[]);
+        assert_eq!(untracked["state_read_cache"]["reuse"], Value::Null);
+        assert_eq!(untracked["state_read_cache"]["measurements"], Value::Null);
+        assert!(
+            untracked["state_read_cache"]["reason"]
+                .as_str()
+                .unwrap_or_default()
+                .contains("no state-read boundary"),
+            "the reason names what is missing: {}",
+            untracked["state_read_cache"]
+        );
+
+        // And the two accounts stay two accounts: a tallied line and an untallied one hold
+        // the same calls, so nothing here was derived from the call list.
+        assert_eq!(line["call_count"], untracked["call_count"]);
+        assert_eq!(line["rpc"]["total_calls"], 2);
+        assert_eq!(line["calls"], untracked["calls"]);
+    }
+
+    /// §6's two arms in one directory are counted as two arms: the per-source cache table
+    /// says how many simulations reused, how many did not, and how many never reached a
+    /// boundary at all. Summing reuse-on and reuse-off hits into one figure would be the
+    /// blended table §13 forbids, so the split has to survive into the summary.
+    #[test]
+    fn the_per_source_cache_table_keeps_the_two_arms_apart() {
+        let dir = temp_dir("cache-arms");
+        let mut evidence = DiagnosisEvidence::open(&dir, "revision", "disabled").expect("opens");
+        evidence
+            .record(
+                SimulationDiagnosis::new(window(0, 1_000), Vec::new())
+                    .with_state_reads(Some(spec_tally(true))),
+                &[],
+            )
+            .expect("records the cached arm");
+        evidence
+            .record(
+                SimulationDiagnosis::new(window(2_000, 3_000), Vec::new())
+                    .with_state_reads(Some(spec_tally(false))),
+                &[],
+            )
+            .expect("records the baseline arm");
+        evidence
+            .record(
+                SimulationDiagnosis::new(window(4_000, 5_000), Vec::new()),
+                &[],
+            )
+            .expect("records a dump-backed simulation with no boundary");
+        let written = evidence.finish().expect("writes");
+
+        let duplicates: Value = serde_json::from_str(
+            &std::fs::read_to_string(written.join(DUPLICATES_FILE)).expect("reads"),
+        )
+        .expect("one object");
+        let cache = &duplicates["per_source"][0]["state_read_cache"];
+        assert_eq!(cache["simulations_with_reuse"], 1);
+        assert_eq!(cache["simulations_without_reuse"], 1);
+        assert_eq!(cache["simulations_without_tally"], 1);
+        // Both tallied arms carry §12's example numbers, so the sums are two of each — and
+        // the zero-hit storage kind of the reuse-off arm is still a measured zero, not a
+        // missing figure.
+        assert_eq!(cache["code"]["hits"], 34);
+        assert_eq!(cache["code"]["misses"], 12);
+        assert_eq!(cache["balance"]["hits"], 24);
+        assert_eq!(cache["nonce"]["hits"], 24);
+        assert_eq!(cache["storage"]["hits"], 0);
+        assert_eq!(cache["storage"]["misses"], 40);
+        assert_eq!(cache["cache_hits"], 82);
+        assert_eq!(cache["cache_misses"], 76);
+        let _ = std::fs::remove_dir_all(&dir);
     }
 
     /// A directory with a distinct name per test, because these run in one process and

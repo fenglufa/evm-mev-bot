@@ -69,6 +69,7 @@ pub use result::{
 };
 pub use route::{PricedRoute, RouteLeg, SlippagePolicy, SlippageRecord};
 pub use state::{
-    AccountState, BlockPin, CodeKey, DumpStateProvider, ProviderError, ProviderResult,
-    RpcStateProvider, StateDump, StateOverride, StateProvider, StorageCacheKey,
+    AccountState, BlockPin, DumpStateProvider, ProviderError, ProviderResult, ReuseTally,
+    RpcStateProvider, StateDump, StateOverride, StateProvider, StateReadKey, StateReadStats,
+    StorageCacheKey,
 };

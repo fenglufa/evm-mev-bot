@@ -171,11 +171,30 @@ pub trait StateProvider: Send + Sync {
 // Cache keys
 // ---------------------------------------------------------------------------
 
-/// Key of the bytecode cache: chain plus address, never address alone (§63).
+/// Key of every read that is identified by one account: chain, height, address.
+///
+/// Chain and address because a bare address is not an identity (§63); the height
+/// because bytecode and balances are facts *about a block*, and the two blocks of
+/// one reorg share an address while disagreeing about what sits behind it. Keeping
+/// the height in the key rather than inferring it from the provider's pin is what
+/// makes the isolation a property of the data and not of who holds it (M8.3.1 §3):
+/// a key that cannot name a second block is a key that cannot be tested against
+/// one.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct CodeKey {
+pub struct StateReadKey {
     pub chain_id: ChainId,
+    pub block: BlockNumber,
     pub address: Address,
+}
+
+impl StateReadKey {
+    pub const fn new(chain_id: ChainId, block: BlockNumber, address: Address) -> Self {
+        Self {
+            chain_id,
+            block,
+            address,
+        }
+    }
 }
 
 /// Key of the storage cache: chain, block, address, slot (§64). All four,
@@ -196,6 +215,164 @@ impl StorageCacheKey {
             address,
             slot,
         }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Reuse accounting
+// ---------------------------------------------------------------------------
+
+/// One kind's reuse, as the run reports it.
+///
+/// The two numbers mean one thing and one thing only: a **miss** is a read this
+/// boundary was asked about and had to send to the node, a **hit** is a read it
+/// answered from a value the same simulation already paid for. So on a run with
+/// reuse on, `misses` per kind equals that method's request count — which is what
+/// lets §12's instrument be checked against a counter that counts bytes on the
+/// wire rather than against itself.
+///
+/// A read that never came here is in neither number. With reuse off, an account
+/// triple goes straight to the node without being looked up, and `reuse: false` in
+/// the same row is what says so: absent measurements are reported as unmeasured,
+/// not as zeroes.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ReuseTally {
+    pub hits: usize,
+    pub misses: usize,
+}
+
+impl ReuseTally {
+    /// The requests this kind would have cost without the reuse.
+    pub const fn saved(&self) -> usize {
+        self.hits
+    }
+}
+
+/// Reuse per read kind, for the evidence a report quotes.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct StateReadStats {
+    /// Whether account reads were looked up before going out. `false` is M8.2's
+    /// HEAD: `code` and `storage` still pass through the boundary — they did
+    /// before this milestone existed — while a balance, a nonce and the bytecode
+    /// an account asks for each cost a request every time they are wanted.
+    pub reuse: bool,
+    pub code: ReuseTally,
+    pub balance: ReuseTally,
+    pub nonce: ReuseTally,
+    pub storage: ReuseTally,
+}
+
+impl StateReadStats {
+    pub const fn new(reuse: bool) -> Self {
+        Self {
+            reuse,
+            code: ReuseTally { hits: 0, misses: 0 },
+            balance: ReuseTally { hits: 0, misses: 0 },
+            nonce: ReuseTally { hits: 0, misses: 0 },
+            storage: ReuseTally { hits: 0, misses: 0 },
+        }
+    }
+
+    pub const fn total_hits(&self) -> usize {
+        self.code.hits + self.balance.hits + self.nonce.hits + self.storage.hits
+    }
+
+    pub const fn total_misses(&self) -> usize {
+        self.code.misses + self.balance.misses + self.nonce.misses + self.storage.misses
+    }
+
+    /// Reads a node would otherwise have been asked for, counted across kinds.
+    pub const fn requests_avoided(&self) -> usize {
+        self.total_hits()
+    }
+
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "reuse": self.reuse,
+            "code": { "hits": self.code.hits, "misses": self.code.misses },
+            "balance": { "hits": self.balance.hits, "misses": self.balance.misses },
+            "nonce": { "hits": self.nonce.hits, "misses": self.nonce.misses },
+            "storage": { "hits": self.storage.hits, "misses": self.storage.misses },
+            "total_hits": self.total_hits(),
+            "total_misses": self.total_misses(),
+        })
+    }
+}
+
+/// What one simulation has already read.
+///
+/// Owned by one [`RpcStateProvider`] and dropped with it, which is the whole of
+/// M8.3.1 §2: there is no process-wide map for a later run to find, and a height
+/// this run never read cannot be served from somewhere else's read.
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct StateReadCache {
+    code: BTreeMap<StateReadKey, Bytes>,
+    balance: BTreeMap<StateReadKey, U256>,
+    nonce: BTreeMap<StateReadKey, u64>,
+    storage: BTreeMap<StorageCacheKey, U256>,
+    stats: StateReadStats,
+}
+
+impl StateReadCache {
+    fn new(reuse: bool) -> Self {
+        Self {
+            code: BTreeMap::new(),
+            balance: BTreeMap::new(),
+            nonce: BTreeMap::new(),
+            storage: BTreeMap::new(),
+            stats: StateReadStats::new(reuse),
+        }
+    }
+
+    /// A hit is counted by the lookup that found it, never by the caller, so the
+    /// tally cannot drift from the map it describes.
+    fn take_balance(&mut self, key: StateReadKey) -> Option<U256> {
+        let value = self.balance.get(&key).copied()?;
+        self.stats.balance.hits += 1;
+        Some(value)
+    }
+
+    fn take_nonce(&mut self, key: StateReadKey) -> Option<u64> {
+        let value = self.nonce.get(&key).copied()?;
+        self.stats.nonce.hits += 1;
+        Some(value)
+    }
+
+    fn take_code(&mut self, key: StateReadKey) -> Option<Bytes> {
+        let value = self.code.get(&key).cloned()?;
+        self.stats.code.hits += 1;
+        Some(value)
+    }
+
+    fn take_storage(&mut self, key: StorageCacheKey) -> Option<U256> {
+        let value = self.storage.get(&key).copied()?;
+        self.stats.storage.hits += 1;
+        Some(value)
+    }
+
+    fn put_balance(&mut self, key: StateReadKey, value: U256) {
+        self.stats.balance.misses += 1;
+        self.balance.insert(key, value);
+    }
+
+    fn put_nonce(&mut self, key: StateReadKey, value: u64) {
+        self.stats.nonce.misses += 1;
+        self.nonce.insert(key, value);
+    }
+
+    /// `tracked` is whether the read was looked up first: the reuse-off account
+    /// path stores the bytecode it fetched exactly as M8.2's HEAD did, and a write
+    /// nobody asked about is not a miss.
+    fn put_code(&mut self, key: StateReadKey, value: &Bytes, tracked: bool) {
+        if tracked {
+            self.stats.code.misses += 1;
+        }
+        self.code.insert(key, value.clone());
+    }
+
+    fn put_storage(&mut self, key: StorageCacheKey, value: U256) {
+        self.stats.storage.misses += 1;
+        self.storage.insert(key, value);
     }
 }
 
@@ -571,18 +748,34 @@ impl StateProvider for DumpStateProvider {
 /// against a node can be committed as a fixture afterwards without re-reading
 /// anything — the file and the run cannot drift, because they are the same
 /// reads.
+///
+/// The reads that have already come back are kept in [`StateReadCache`] for as long
+/// as this provider is, which makes the cache's lifetime exactly one simulation's
+/// (M8.3.1 §2): nothing here is reachable from the next run, and nothing here
+/// outlives the block this provider was pinned to.
 pub struct RpcStateProvider {
     chain: Arc<dyn ChainAdapter>,
     chain_id: ChainId,
     pin: BlockPin,
     overrides: Vec<StateOverride>,
-    code_cache: Arc<Mutex<BTreeMap<CodeKey, Bytes>>>,
-    storage_cache: Arc<Mutex<BTreeMap<StorageCacheKey, U256>>>,
+    cache: Arc<Mutex<StateReadCache>>,
     recorded: Arc<Mutex<StateDump>>,
+    reuse: bool,
 }
 
 impl RpcStateProvider {
     pub fn new(chain: Arc<dyn ChainAdapter>, pin: BlockPin) -> Self {
+        Self::with_state_read_reuse(chain, pin, true)
+    }
+
+    /// The same provider with account reads either looked up or not.
+    ///
+    /// `false` is M8.2's HEAD kept addressable, so an A/B run changes this one
+    /// switch and nothing else (§6): the pin, the adapter, the overrides, the read
+    /// order and the recording are the same code either way. It is not "no caching
+    /// at all" — the bytecode and storage lookups that already existed at HEAD stay
+    /// as they were, because they are not this milestone's variable.
+    pub fn with_state_read_reuse(chain: Arc<dyn ChainAdapter>, pin: BlockPin, reuse: bool) -> Self {
         let chain_id = chain.chain_id();
         Self {
             recorded: Arc::new(Mutex::new(StateDump::empty(chain_id, pin))),
@@ -590,8 +783,8 @@ impl RpcStateProvider {
             chain_id,
             pin,
             overrides: Vec::new(),
-            code_cache: Arc::new(Mutex::new(BTreeMap::new())),
-            storage_cache: Arc::new(Mutex::new(BTreeMap::new())),
+            cache: Arc::new(Mutex::new(StateReadCache::new(reuse))),
+            reuse,
         }
     }
 
@@ -605,11 +798,104 @@ impl RpcStateProvider {
         self.recorded.lock().expect("dump lock").clone()
     }
 
+    /// What this simulation's reuse boundary has done, for the evidence (§12).
+    ///
+    /// A snapshot taken under the lock rather than a live handle: the numbers are
+    /// quoted beside a request count that counted the wire, and both have to
+    /// describe the same finished run.
+    pub fn state_read_stats(&self) -> StateReadStats {
+        self.cache().stats
+    }
+
+    /// The reuse map, poison-resistant: a poisoned lock still holds every read it
+    /// made, and M8.3.1 §4's rule is that a value this simulation already paid for
+    /// stays valid for it. So a panic somewhere else in the process must not turn a
+    /// state read into a panic here.
+    fn cache(&self) -> std::sync::MutexGuard<'_, StateReadCache> {
+        self.cache
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+    }
+
     fn unavailable(&self, reason: String) -> ProviderError {
         ProviderError::Unavailable {
             provider: StateProvider::source(self),
             reason,
         }
+    }
+
+    /// One `eth_getBalance`, asked of the reuse boundary first when `ask` says to.
+    ///
+    /// The second half of the returned pair is whether this call cost the node a
+    /// request — the dump's read markers are driven off it, so a fixture records the
+    /// requests that were made and not the answers that were re-remembered. A failed
+    /// read returns here before anything is stored (§4): a timeout is not a value,
+    /// and caching one would let a later step of the same simulation be answered from
+    /// a failure it never saw.
+    async fn balance_at(&self, key: StateReadKey, ask: bool) -> ProviderResult<(U256, bool)> {
+        let cached = if ask {
+            self.cache().take_balance(key)
+        } else {
+            None
+        };
+        if let Some(value) = cached {
+            return Ok((value, false));
+        }
+        let value = self
+            .chain
+            .get_balance(key.block, key.address)
+            .await
+            .map_err(|error| self.unavailable(error.to_string()))?;
+        if ask {
+            self.cache().put_balance(key, value);
+        }
+        Ok((value, true))
+    }
+
+    /// One `eth_getTransactionCount`. `ask` as in [`Self::balance_at`].
+    ///
+    /// The height is in the key, which is the only way this is safe: a nonce read at
+    /// a pinned block is a fact about that block, and the same address at the next
+    /// block is a different question (§10).
+    async fn nonce_at(&self, key: StateReadKey, ask: bool) -> ProviderResult<(u64, bool)> {
+        let cached = if ask {
+            self.cache().take_nonce(key)
+        } else {
+            None
+        };
+        if let Some(value) = cached {
+            return Ok((value, false));
+        }
+        let value = self
+            .chain
+            .get_nonce(key.block, key.address)
+            .await
+            .map_err(|error| self.unavailable(error.to_string()))?;
+        if ask {
+            self.cache().put_nonce(key, value);
+        }
+        Ok((value, true))
+    }
+
+    /// One `eth_getCode`. `ask` is the milestone's own variable: the account path
+    /// passes this provider's setting, while a direct bytecode read has always been
+    /// looked up and keeps being looked up.
+    async fn code_at(&self, key: StateReadKey, ask: bool) -> ProviderResult<(Bytes, bool)> {
+        let cached = if ask {
+            self.cache().take_code(key)
+        } else {
+            None
+        };
+        if let Some(code) = cached {
+            return Ok((code, false));
+        }
+        let code = self
+            .chain
+            .get_code(key.block, key.address)
+            .await
+            .map_err(|error| self.unavailable(error.to_string()))?;
+        self.cache().put_code(key, &code, ask);
+        Ok((code, true))
     }
 }
 
@@ -628,37 +914,23 @@ impl StateProvider for RpcStateProvider {
     }
 
     async fn account(&self, address: Address) -> ProviderResult<Option<AccountState>> {
-        let block = self.pin.number;
-        // Sequential, not `join!`: §61 puts correctness above latency, and the
+        let key = StateReadKey::new(self.chain_id, self.pin.number, address);
+        // Sequential, not `join!`: §61 puts correctness above latency, the
         // recorded dump has to list reads in the order they were made or a
-        // fixture's bytes would move between runs.
-        let balance = self
-            .chain
-            .get_balance(block, address)
-            .await
-            .map_err(|error| self.unavailable(error.to_string()))?;
-        let nonce = self
-            .chain
-            .get_nonce(block, address)
-            .await
-            .map_err(|error| self.unavailable(error.to_string()))?;
-        let code = self
-            .chain
-            .get_code(block, address)
-            .await
-            .map_err(|error| self.unavailable(error.to_string()))?;
-        {
+        // fixture's bytes would move between runs, and M8.3.1 §13 keeps
+        // concurrency out of this milestone.
+        let (balance, balance_read) = self.balance_at(key, self.reuse).await?;
+        let (nonce, nonce_read) = self.nonce_at(key, self.reuse).await?;
+        let (code, code_read) = self.code_at(key, self.reuse).await?;
+        if balance_read || nonce_read || code_read {
+            // One marker per account read that cost the node something, which is
+            // what `reads` has always counted: an answer reused from this
+            // simulation's own earlier read asks the node nothing, and a dump that
+            // claimed otherwise would record a request that never happened.
             let mut dump = self.recorded.lock().expect("dump lock");
             dump.insert_account(address, balance, nonce, &code);
             dump.reads.push(format!("account {address}"));
         }
-        self.code_cache.lock().expect("code cache lock").insert(
-            CodeKey {
-                chain_id: self.chain_id,
-                address,
-            },
-            code.clone(),
-        );
         let base = Some(AccountState {
             balance,
             nonce,
@@ -674,19 +946,9 @@ impl StateProvider for RpcStateProvider {
         if let Some(value) = override_slot(&self.overrides, address, slot) {
             return Ok(value);
         }
-        let key = StorageCacheKey {
-            chain_id: self.chain_id,
-            block: self.pin.number,
-            address,
-            slot,
-        };
-        if let Some(value) = self
-            .storage_cache
-            .lock()
-            .expect("storage cache lock")
-            .get(&key)
-            .copied()
-        {
+        let key = StorageCacheKey::new(self.chain_id, self.pin.number, address, slot);
+        let cached = self.cache().take_storage(key);
+        if let Some(value) = cached {
             return Ok(value);
         }
         let value = self
@@ -694,11 +956,12 @@ impl StateProvider for RpcStateProvider {
             .get_storage_at(self.pin.number, address, slot)
             .await
             .map_err(|error| self.unavailable(error.to_string()))?;
-        let mut cache = self.storage_cache.lock().expect("storage cache lock");
-        cache.insert(key, value);
-        let mut dump = self.recorded.lock().expect("dump lock");
-        dump.insert_storage(address, slot, value);
-        dump.reads.push(format!("storage {address} {slot}"));
+        self.cache().put_storage(key, value);
+        {
+            let mut dump = self.recorded.lock().expect("dump lock");
+            dump.insert_storage(address, slot, value);
+            dump.reads.push(format!("storage {address} {slot}"));
+        }
         Ok(value)
     }
 
@@ -708,33 +971,15 @@ impl StateProvider for RpcStateProvider {
                 return Ok(code.clone());
             }
         }
-        let key = CodeKey {
-            chain_id: self.chain_id,
-            address,
-        };
-        if let Some(code) = self
-            .code_cache
-            .lock()
-            .expect("code cache lock")
-            .get(&key)
-            .cloned()
-        {
-            return Ok(code);
+        let key = StateReadKey::new(self.chain_id, self.pin.number, address);
+        let (code, read) = self.code_at(key, true).await?;
+        if read {
+            self.recorded
+                .lock()
+                .expect("dump lock")
+                .reads
+                .push(format!("code {address}"));
         }
-        let code = self
-            .chain
-            .get_code(self.pin.number, address)
-            .await
-            .map_err(|error| self.unavailable(error.to_string()))?;
-        self.code_cache
-            .lock()
-            .expect("code cache lock")
-            .insert(key, code.clone());
-        self.recorded
-            .lock()
-            .expect("dump lock")
-            .reads
-            .push(format!("code {address}"));
         Ok(code)
     }
 
@@ -775,9 +1020,11 @@ impl StateProvider for RpcStateProvider {
             overrides: merge_setup(&self.overrides, overrides),
             // Shared, not copied: the derived source is the same reader, so its
             // reads land in the same dump and cost the same node no extra calls.
-            code_cache: Arc::clone(&self.code_cache),
-            storage_cache: Arc::clone(&self.storage_cache),
+            // One simulation, one cache — §2's lifetime rule survives this hop
+            // because nothing new is built here.
+            cache: Arc::clone(&self.cache),
             recorded: Arc::clone(&self.recorded),
+            reuse: self.reuse,
         })
     }
 }
@@ -928,8 +1175,9 @@ mod tests {
     use alloy_primitives::{address, Address, Bytes, B256, U256};
 
     use super::{
-        hex_address, override_slot, BlockPin, CodeKey, DumpStateProvider, ProviderError,
-        RpcStateProvider, StateDump, StateOverride, StateProvider, StorageCacheKey, KECCAK_EMPTY,
+        hex_address, override_slot, AccountState, BlockPin, DumpStateProvider, ProviderError,
+        ReuseTally, RpcStateProvider, StateDump, StateOverride, StateProvider, StateReadKey,
+        StorageCacheKey, KECCAK_EMPTY,
     };
     use evm_chain::{
         BlockContext, BlockData, CallRequest, ChainAdapter, ChainBlock, ChainError, ChainLog,
@@ -942,6 +1190,9 @@ mod tests {
     const PIN: u64 = 37_191_169;
     const POOL: Address = address!("0xf487d533cae6cddd0c7e7bbbac084dd04d876578");
     const WETH: Address = address!("0x4200000000000000000000000000000000000006");
+    /// A third account that is neither pool nor token: the sender's role in §8's
+    /// triple, and a distinct address is what makes a key collision visible.
+    const CALLER: Address = address!("0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e");
 
     fn pin() -> BlockPin {
         BlockPin::new(
@@ -961,24 +1212,37 @@ mod tests {
         dump
     }
 
-    /// §63: a bytecode cache keyed on the address alone would serve one chain's
-    /// bytecode for another chain's identical address. The key carries the chain.
+    /// §63 plus M8.3.1 §3: a key of (chain, height, address) is the smallest thing a
+    /// balance, a nonce or a bytecode read can be remembered under. Dropping the
+    /// chain serves one network's account for another's; dropping the height serves
+    /// one block's account for the next block's, which is exactly the read a
+    /// historical simulation must never answer from memory of a different height.
     #[test]
-    fn code_cache_key_carries_the_chain() {
+    fn state_read_key_carries_chain_block_and_address() {
         let addr = address!("0x0000000000000000000000000000000000000001");
-        let on_this_chain = CodeKey {
-            chain_id: CHAIN,
-            address: addr,
-        };
-        let on_another = CodeKey {
-            chain_id: OTHER_CHAIN,
-            address: addr,
-        };
-        assert_ne!(on_this_chain, on_another);
-        let mut cache: BTreeMap<CodeKey, Bytes> = BTreeMap::new();
-        cache.insert(on_this_chain, Bytes::from(vec![0x01]));
-        cache.insert(on_another, Bytes::from(vec![0x02]));
-        assert_eq!(cache.len(), 2, "two chains, two entries");
+        let keys = [
+            StateReadKey::new(CHAIN, BlockNumber(PIN), addr),
+            StateReadKey::new(OTHER_CHAIN, BlockNumber(PIN), addr),
+            StateReadKey::new(CHAIN, BlockNumber(PIN + 1), addr),
+            StateReadKey::new(
+                CHAIN,
+                BlockNumber(PIN),
+                address!("0x0000000000000000000000000000000000000002"),
+            ),
+        ];
+        let unique: BTreeSet<StateReadKey> = keys.iter().copied().collect();
+        assert_eq!(
+            unique.len(),
+            4,
+            "dropping any one of the three fields would collapse two different reads into one"
+        );
+        // One key type serves all three account reads, so the balance, nonce and
+        // bytecode caches cannot disagree about what identifies an account.
+        let mut cache: BTreeMap<StateReadKey, U256> = BTreeMap::new();
+        for (index, key) in keys.iter().copied().enumerate() {
+            cache.insert(key, U256::from(index));
+        }
+        assert_eq!(cache.len(), 4, "four identities, four entries");
     }
 
     /// §64: the same argument for storage, with the height in the key too, so
@@ -1332,29 +1596,89 @@ mod tests {
         );
     }
 
+    /// What one request the spy answered was, in the spy's own words.
+    #[derive(Clone, Debug, PartialEq, Eq)]
+    struct SpyCall {
+        method: &'static str,
+        address: String,
+        block: u64,
+    }
+
     /// A minimal [`ChainAdapter`] that counts reads and answers with fixed
     /// values. This is a transport double for tests, not the third state
     /// provider §62 warns about.
-    #[derive(Default)]
+    ///
+    /// The answers are keyed so that a read served from the wrong key is a wrong
+    /// *value*, not merely an extra row in a counter: balance and nonce both move
+    /// with the height, at `PIN` the number a caller would expect. That is what lets
+    /// the cross-block tests below fail loudly instead of quietly.
     struct SpyChain {
         storage_calls: AtomicUsize,
         seen: Mutex<Vec<u64>>,
+        calls: Mutex<Vec<SpyCall>>,
+        chain_id: u64,
+    }
+
+    impl Default for SpyChain {
+        fn default() -> Self {
+            Self {
+                storage_calls: AtomicUsize::new(0),
+                seen: Mutex::new(Vec::new()),
+                calls: Mutex::new(Vec::new()),
+                chain_id: CHAIN.0,
+            }
+        }
     }
 
     impl SpyChain {
+        /// The same spy naming a different chain, for §9's fourth column: one
+        /// address number on two networks must stay two reads.
+        fn on(chain_id: ChainId) -> Self {
+            Self {
+                chain_id: chain_id.0,
+                ..Default::default()
+            }
+        }
+
         fn seen_blocks(&self) -> Vec<u64> {
             self.seen.lock().expect("spy lock").clone()
         }
 
+        /// Every state request, in the order it arrived — the counter the reuse
+        /// boundary's own tally is checked against (§12).
+        fn log(&self) -> Vec<SpyCall> {
+            self.calls.lock().expect("spy lock").clone()
+        }
+
+        fn count(&self, method: &str) -> usize {
+            self.log()
+                .iter()
+                .filter(|call| call.method == method)
+                .count()
+        }
+
+        fn methods(&self) -> Vec<&'static str> {
+            self.log().iter().map(|call| call.method).collect()
+        }
+
         fn note(&self, at: BlockNumber) {
             self.seen.lock().expect("spy lock").push(at.0);
+        }
+
+        fn record(&self, method: &'static str, at: BlockNumber, address: Address) {
+            self.note(at);
+            self.calls.lock().expect("spy lock").push(SpyCall {
+                method,
+                address: hex_address(address),
+                block: at.0,
+            });
         }
     }
 
     #[async_trait::async_trait]
     impl ChainAdapter for SpyChain {
         fn chain_id(&self) -> ChainId {
-            CHAIN
+            ChainId(self.chain_id)
         }
 
         async fn latest_block(&self) -> Result<BlockNumber, ChainError> {
@@ -1402,8 +1726,10 @@ mod tests {
             Err(ChainError::MissingData("not used here".to_string()))
         }
 
+        /// Bytecode is keyed on the address in this spy, so a cross-block bytecode
+        /// read is proven by the request count, not by a differing value.
         async fn get_code(&self, at: BlockNumber, address: Address) -> Result<Bytes, ChainError> {
-            self.note(at);
+            self.record("eth_getCode", at, address);
             Ok(Bytes::from(if address == POOL {
                 vec![0xfe, 0x00]
             } else {
@@ -1411,30 +1737,376 @@ mod tests {
             }))
         }
 
-        async fn get_balance(
-            &self,
-            at: BlockNumber,
-            _address: Address,
-        ) -> Result<U256, ChainError> {
-            self.note(at);
-            Ok(U256::from(42u64))
+        async fn get_balance(&self, at: BlockNumber, address: Address) -> Result<U256, ChainError> {
+            self.record("eth_getBalance", at, address);
+            Ok(U256::from(42u64 + at.0.saturating_sub(PIN)))
         }
 
         async fn get_storage_at(
             &self,
             at: BlockNumber,
-            _address: Address,
-            _slot: U256,
+            address: Address,
+            slot: U256,
         ) -> Result<U256, ChainError> {
             self.storage_calls.fetch_add(1, Ordering::SeqCst);
-            self.note(at);
-            Ok(U256::from(7u64))
+            self.record("eth_getStorageAt", at, address);
+            Ok(slot + U256::from(1u64 + at.0.saturating_sub(PIN)))
         }
 
-        async fn get_nonce(&self, at: BlockNumber, _address: Address) -> Result<u64, ChainError> {
-            self.note(at);
-            Ok(0)
+        async fn get_nonce(&self, at: BlockNumber, address: Address) -> Result<u64, ChainError> {
+            self.record("eth_getTransactionCount", at, address);
+            Ok(at.0.saturating_sub(PIN))
         }
+    }
+
+    // ---- M8.3.1: state read reuse -------------------------------------------------
+    //
+    // One task, one variable (§13): every test below differs from another only in
+    // `with_state_read_reuse`, in the pin, or in which address and slot are asked
+    // for. The spy is the counter, so each assertion names requests a transport
+    // actually received rather than a number the boundary said about itself.
+
+    fn provider_on(chain: &Arc<SpyChain>, pin: BlockPin, reuse: bool) -> RpcStateProvider {
+        RpcStateProvider::with_state_read_reuse(
+            Arc::clone(chain) as Arc<dyn ChainAdapter>,
+            pin,
+            reuse,
+        )
+    }
+
+    fn pin_at(height: u64) -> BlockPin {
+        BlockPin::new(BlockNumber(height), pin().hash)
+    }
+
+    /// One `account` read, unwrapped: the spy always answers, and nine of the tests
+    /// below would otherwise spend their lines on the same two `expect`s.
+    async fn account_of(provider: &RpcStateProvider, address: Address) -> AccountState {
+        provider
+            .account(address)
+            .await
+            .expect("the spy answers")
+            .expect("the spy answers with a header")
+    }
+
+    /// §8: inside one simulation the sender's triple is paid for once. The first
+    /// read goes out, the second is answered from this simulation's own cache — and
+    /// the third line of the assertion is the part that matters: the values are the
+    /// ones the node gave at this pin, not defaults.
+    #[tokio::test]
+    async fn the_sender_triple_costs_three_reads_then_none() {
+        let chain = Arc::new(SpyChain::default());
+        let provider = provider_on(&chain, pin(), true);
+
+        let first = account_of(&provider, CALLER).await;
+        assert_eq!(
+            chain.methods(),
+            vec!["eth_getBalance", "eth_getTransactionCount", "eth_getCode"],
+            "the order the reads go out in is the order M8.2 measured"
+        );
+
+        let second = account_of(&provider, CALLER).await;
+        assert_eq!(chain.count("eth_getBalance"), 1, "the balance was reused");
+        assert_eq!(
+            chain.count("eth_getTransactionCount"),
+            1,
+            "the nonce was reused"
+        );
+        assert_eq!(chain.count("eth_getCode"), 1, "the bytecode was reused");
+        assert_eq!(first, second, "a reused answer is the same answer");
+
+        let stats = provider.state_read_stats();
+        assert!(stats.reuse);
+        assert_eq!(
+            (stats.balance.hits, stats.balance.misses),
+            (1, 1),
+            "one read remembered, one read paid for"
+        );
+        assert_eq!((stats.nonce.hits, stats.nonce.misses), (1, 1));
+        assert_eq!((stats.code.hits, stats.code.misses), (1, 1));
+    }
+
+    /// §6: arm A has to be the run M8.2 measured, or the A/B is comparing two
+    /// experiments instead of one variable. With reuse off the same sequence costs
+    /// six requests — the duplicate the task book counted 41 times over three runs.
+    #[tokio::test]
+    async fn the_same_triple_costs_six_reads_with_reuse_off() {
+        let chain = Arc::new(SpyChain::default());
+        let provider = provider_on(&chain, pin(), false);
+        let first = account_of(&provider, CALLER).await;
+        let second = account_of(&provider, CALLER).await;
+        assert_eq!(chain.log().len(), 6);
+        assert_eq!(first, second, "the answer never depended on caching");
+        let stats = provider.state_read_stats();
+        assert!(!stats.reuse);
+        assert_eq!(
+            (stats.balance.hits, stats.balance.misses),
+            (0, 0),
+            "arm A asks the boundary nothing, so it reports nothing — which §12 reads as \
+             not measured, not as zero hits on a cache that worked"
+        );
+    }
+
+    /// §16: one boundary, not two halves of one. The bytecode an account read
+    /// remembers is the bytecode a later direct `code()` call is served from, and
+    /// the other way round — otherwise the run would be part cached, part not, and
+    /// the reduction would be an artifact of which path the engine happened to take.
+    #[tokio::test]
+    async fn an_account_read_and_a_direct_code_read_share_one_boundary() {
+        let chain = Arc::new(SpyChain::default());
+        let provider = provider_on(&chain, pin(), true);
+        account_of(&provider, CALLER).await;
+        let from_account = provider.code(CALLER).await.expect("the read is remembered");
+        assert_eq!(
+            chain.count("eth_getCode"),
+            1,
+            "the account read already paid for this bytecode"
+        );
+
+        account_of(&provider, WETH).await;
+        assert_eq!(chain.count("eth_getCode"), 2, "a new account is a new read");
+        assert_eq!(
+            from_account,
+            Bytes::from(vec![0x60, 0x00]),
+            "the spy's answer for an address that is not the pool"
+        );
+        let stats = provider.state_read_stats();
+        assert_eq!((stats.code.hits, stats.code.misses), (1, 2));
+    }
+
+    /// §9, the negative half: storage has no duplicates in the live sample, so its
+    /// cache is only proven by the reads it must NOT serve. Each row below changes
+    /// exactly one field of the key and must therefore cost one more request.
+    #[tokio::test]
+    async fn storage_reuse_needs_every_field_of_its_key() {
+        let chain = Arc::new(SpyChain::default());
+        let provider = provider_on(&chain, pin(), true);
+        let slot = U256::from(6u64);
+        let other_slot = U256::from(7u64);
+        let other_pool = WETH;
+
+        for (what, address, asked) in [
+            ("same key twice", POOL, slot),
+            ("different slot", POOL, other_slot),
+            ("same slot, different address", other_pool, slot),
+        ] {
+            provider.storage(address, asked).await.expect(what);
+            provider.storage(address, asked).await.expect(what);
+        }
+        assert_eq!(
+            chain.count("eth_getStorageAt"),
+            3,
+            "one read per distinct key, never one per call"
+        );
+        assert_eq!(
+            provider.state_read_stats().storage,
+            ReuseTally { hits: 3, misses: 3 },
+        );
+
+        // Same slot, same address, one block later: a different fact about a
+        // different block, and the spy answers it with a different word.
+        let next = provider_on(&chain, pin_at(PIN + 1), true);
+        assert_eq!(
+            next.storage(POOL, slot).await.expect("the next block"),
+            slot + U256::from(2u64),
+            "the height is part of the answer, not just of the key"
+        );
+        assert_eq!(chain.count("eth_getStorageAt"), 4);
+
+        // Same everything but the chain.
+        let other_chain = Arc::new(SpyChain::on(OTHER_CHAIN));
+        let elsewhere = provider_on(&other_chain, pin(), true);
+        assert_eq!(
+            elsewhere
+                .storage(POOL, slot)
+                .await
+                .expect("the other chain"),
+            slot + U256::from(1u64)
+        );
+        assert_eq!(other_chain.count("eth_getStorageAt"), 1);
+    }
+
+    /// §10: the boundary a historical simulation most needs. Two heights, one
+    /// address — each provider asks for its own block's balance and nonce, and
+    /// neither is answered from the other's read.
+    #[tokio::test]
+    async fn a_read_at_one_block_is_not_the_read_at_the_next() {
+        let chain = Arc::new(SpyChain::default());
+        let here = provider_on(&chain, pin(), true);
+        let there = provider_on(&chain, pin_at(PIN + 1), true);
+
+        let here_account = account_of(&here, CALLER).await;
+        let there_account = account_of(&there, CALLER).await;
+        assert_eq!(chain.count("eth_getBalance"), 2);
+        assert_eq!(chain.count("eth_getTransactionCount"), 2);
+        assert_eq!(
+            here_account.balance,
+            U256::from(42u64),
+            "block {PIN} as the node answered it"
+        );
+        assert_eq!(
+            there_account.balance,
+            U256::from(43u64),
+            "the next block is a different balance, and no cache gets to say otherwise"
+        );
+        assert_eq!(there_account.nonce, 1);
+        assert_eq!(here_account.nonce, 0);
+        for stats in [here.state_read_stats(), there.state_read_stats()] {
+            assert_eq!(
+                (stats.balance.hits, stats.nonce.hits),
+                (0, 0),
+                "two heights, no reuse between them"
+            );
+        }
+    }
+
+    /// §11: two simulations of the same block still pay twice. The cache is the
+    /// provider's, and a provider is one simulation — there is no second one for it
+    /// to leak into, which is the property §2 asks for rather than a policy someone
+    /// remembers to follow.
+    #[tokio::test]
+    async fn two_simulations_never_share_a_read() {
+        let chain = Arc::new(SpyChain::default());
+        let first = provider_on(&chain, pin(), true);
+        let second = provider_on(&chain, pin(), true);
+        account_of(&first, CALLER).await;
+        account_of(&second, CALLER).await;
+        assert_eq!(
+            chain.log().len(),
+            6,
+            "one simulation's read cannot be the next simulation's answer"
+        );
+        assert_eq!(first.state_read_stats().balance.hits, 0);
+        assert_eq!(second.state_read_stats().balance.hits, 0);
+
+        // The same provider, asked twice, is the reuse case — and it is the only one.
+        account_of(&first, CALLER).await;
+        assert_eq!(chain.log().len(), 6);
+        assert_eq!(first.state_read_stats().balance.hits, 1);
+    }
+
+    /// §4: a read that failed is not a value. Nothing is stored on the error path,
+    /// so the next step of the same simulation asks again instead of inheriting a
+    /// timeout — which would change what the simulation does, and §13's one variable
+    /// ends there.
+    #[tokio::test]
+    async fn a_failed_read_leaves_nothing_to_reuse() {
+        let provider = RpcStateProvider::with_state_read_reuse(
+            Arc::new(FailingChain) as Arc<dyn ChainAdapter>,
+            pin(),
+            true,
+        );
+        for attempt in 1..=2 {
+            let error = provider
+                .account(CALLER)
+                .await
+                .expect_err("the node is down");
+            assert!(
+                matches!(error, ProviderError::Unavailable { .. }),
+                "attempt {attempt}"
+            );
+        }
+        let stats = provider.state_read_stats();
+        assert_eq!(
+            (stats.balance.hits, stats.nonce.hits, stats.code.hits),
+            (0, 0, 0),
+            "a failure cannot be a hit"
+        );
+        assert_eq!(
+            (stats.balance.misses, stats.nonce.misses, stats.code.misses),
+            (0, 0, 0),
+            "and a failure is not a read that succeeded and got remembered either"
+        );
+        assert!(provider
+            .storage(POOL, U256::from(6u64))
+            .await
+            .is_err_and(|error| matches!(error, ProviderError::Unavailable { .. })));
+        assert_eq!(provider.state_read_stats().storage.misses, 0);
+    }
+
+    /// §12: the tally is checked against the transport, not against itself. Every
+    /// miss is a request the spy counted, every hit is a request it did not get.
+    #[tokio::test]
+    async fn the_tally_reconciles_with_the_requests() {
+        let chain = Arc::new(SpyChain::default());
+        let provider = provider_on(&chain, pin(), true);
+        for address in [CALLER, WETH, POOL, CALLER, WETH] {
+            account_of(&provider, address).await;
+        }
+        provider.storage(POOL, U256::from(6u64)).await.expect("ok");
+        provider.storage(POOL, U256::from(6u64)).await.expect("ok");
+        provider.storage(WETH, U256::from(6u64)).await.expect("ok");
+
+        let stats = provider.state_read_stats();
+        for (tally, method) in [
+            (&stats.balance, "eth_getBalance"),
+            (&stats.nonce, "eth_getTransactionCount"),
+            (&stats.code, "eth_getCode"),
+            (&stats.storage, "eth_getStorageAt"),
+        ] {
+            assert_eq!(
+                tally.misses,
+                chain.count(method),
+                "{method}: a miss is exactly one request"
+            );
+        }
+        assert_eq!(
+            stats.total_misses(),
+            chain.log().len(),
+            "a miss is a request, and the spy is the authority on requests"
+        );
+        assert_eq!(
+            stats.total_hits(),
+            7,
+            "two repeated account reads x three kinds, plus the slot asked for twice"
+        );
+    }
+
+    /// §5, the state half: reuse changes how many requests a simulation makes and
+    /// nothing about what the node said. The recorded state — the part a fixture is
+    /// written from and the part the EVM executes on — is equal across arms; only
+    /// the log of requests differs, and it differs because fewer were made.
+    #[tokio::test]
+    async fn both_arms_record_the_same_state_and_different_requests() {
+        let sequence = |reuse: bool| async move {
+            let chain = Arc::new(SpyChain::default());
+            let provider = provider_on(&chain, pin(), reuse);
+            for address in [CALLER, POOL, CALLER] {
+                account_of(&provider, address).await;
+            }
+            provider.storage(POOL, U256::from(6u64)).await.expect("ok");
+            provider.storage(POOL, U256::from(6u64)).await.expect("ok");
+            (chain.log().len(), provider.dump())
+        };
+        let (uncached_reads, uncached) = sequence(false).await;
+        let (cached_reads, cached) = sequence(true).await;
+
+        // Ten, not eleven: HEAD already remembered that slot.
+        assert_eq!(uncached_reads, 10, "3 accounts x 3 reads + 1 storage");
+        assert_eq!(cached_reads, 7, "one whole account read remembered");
+        assert_eq!(uncached.accounts, cached.accounts, "same state recorded");
+        assert_eq!(uncached.storage, cached.storage, "same words recorded");
+        assert_eq!(uncached.block_number, cached.block_number);
+        assert_eq!(uncached.chain_id, cached.chain_id);
+        assert!(
+            cached.reads.len() < uncached.reads.len(),
+            "the cached arm made fewer requests, and its dump says so: {:?}",
+            (uncached.reads.len(), cached.reads.len())
+        );
+    }
+
+    /// The pin is not a suggestion: reuse happens at the height the provider was
+    /// built with, and this is the read that would notice if it drifted.
+    #[tokio::test]
+    async fn reuse_reads_at_the_pin_and_never_at_a_later_height() {
+        let chain = Arc::new(SpyChain::default());
+        let provider = provider_on(&chain, pin_at(PIN + 5), true);
+        account_of(&provider, CALLER).await;
+        account_of(&provider, CALLER).await;
+        assert_eq!(
+            chain.seen_blocks(),
+            vec![PIN + 5, PIN + 5, PIN + 5],
+            "three reads out, at the height this provider was pinned to, and nothing after"
+        );
     }
 
     /// The same, but every read fails: a node that is down, not a state that is

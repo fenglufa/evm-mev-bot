@@ -550,6 +550,79 @@ fn the_rpc_trace_switch_adds_a_diagnosis_directory_and_moves_no_decision() {
     );
 }
 
+/// M8.3.1 §6's arm switch, tested as the one-variable rule it exists to serve. The plain
+/// command line is arm B — reuse is what this milestone delivers, and an operator who
+/// types nothing gets the optimization rather than its measurement harness. Given the
+/// flag, the run is M8.2's HEAD.
+///
+/// The load-bearing assertion is the `Debug` comparison: the two configs differ in exactly
+/// one word. §5 lists nine things the two arms must share (block, transaction, sender,
+/// target, calldata, value, gas, EVM config, state overrides, chain context) and a command
+/// line that silently changed the fee, the tolerance or the execution rung alongside the
+/// cache would make the A/B a comparison of two programs.
+#[test]
+fn the_state_read_reuse_switch_moves_one_field_and_nothing_else() {
+    let plain = build(&complete()).expect("M8.3.1's default arm is the cached one");
+    assert!(
+        plain.state_read_reuse,
+        "§6: arm B is the delivered behaviour, so the flag that turns it off is the one \
+         that has to be typed"
+    );
+
+    let mut flags = complete();
+    flags.push("--no-state-read-reuse");
+    let baseline = build(&flags).expect("the same route with no reuse");
+    assert!(
+        !baseline.state_read_reuse,
+        "§14 Test C's arm A: every balance, nonce and bytecode asked again"
+    );
+
+    // One word apart, in the rendering that shows every field of the config.
+    let trimmed = |config: &ArbitrageConfig, arm: &str| {
+        format!("{config:?}").replace(&format!("state_read_reuse: {arm}"), "")
+    };
+    assert_eq!(
+        trimmed(&plain, "true"),
+        trimmed(&baseline, "false"),
+        "the arm switch changed exactly one field of the config"
+    );
+
+    // The fields §5 names, said again in their own terms rather than only through Debug.
+    assert_eq!(baseline.rpc_url, plain.rpc_url);
+    assert_eq!(baseline.sender, plain.sender);
+    assert_eq!(baseline.candidate.venues, plain.candidate.venues);
+    assert_eq!(
+        baseline.candidate.input_amount,
+        plain.candidate.input_amount
+    );
+    assert_eq!(baseline.candidate.fee, plain.candidate.fee);
+    assert_eq!(baseline.market, plain.market);
+    assert_eq!(baseline.setup.mode, plain.setup.mode);
+    assert_eq!(baseline.setup.mode, ExecutionMode::BuildOnly);
+    assert_eq!(baseline.tolerance, plain.tolerance);
+    assert_eq!(
+        baseline.risk.minimum_net_profit_wei,
+        plain.risk.minimum_net_profit_wei
+    );
+    assert_eq!(baseline.evidence_dir, plain.evidence_dir);
+    assert_eq!(baseline.latency_dir, plain.latency_dir);
+    assert_eq!(
+        baseline.diagnosis_dir, plain.diagnosis_dir,
+        "choosing an arm is not a way to turn tracing on or off"
+    );
+
+    // And the two switches compose: an arm-A run that also records its calls gets both,
+    // which is how §14 Test C's two directories are produced.
+    let mut flags = complete();
+    flags.extend(["--no-state-read-reuse", "--rpc-trace"]);
+    let traced_baseline = build(&flags).expect("arm A, recorded");
+    assert!(!traced_baseline.state_read_reuse);
+    assert_eq!(
+        traced_baseline.diagnosis_dir,
+        Some(PathBuf::from(DEFAULT_DIAGNOSIS_DIR))
+    );
+}
+
 /// The built binary, run with these arguments — which start at the subcommand, because argv's
 /// first element is the program name the shell already gave it.
 fn binary(args: &[&str]) -> Output {
