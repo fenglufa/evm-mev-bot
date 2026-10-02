@@ -1,0 +1,442 @@
+{
+  "assembled_from": [
+    {
+      "directory": "data/evidence/m8/post-reuse/raw/route-91342-37619758-1790964876815",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790964876818,
+      "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+      "outside_simulation_calls": 21,
+      "run": "route-91342-37619758-1790964876815",
+      "simulation_calls": 39,
+      "simulations": 1
+    },
+    {
+      "directory": "data/evidence/m8/post-reuse/raw/route-91342-37619794-1790964912619",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790964912619,
+      "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+      "outside_simulation_calls": 21,
+      "run": "route-91342-37619794-1790964912619",
+      "simulation_calls": 39,
+      "simulations": 1
+    },
+    {
+      "directory": "data/evidence/m8/post-reuse/raw/route-91342-37619820-1790964938013",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790964938015,
+      "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+      "outside_simulation_calls": 21,
+      "run": "route-91342-37619820-1790964938013",
+      "simulation_calls": 39,
+      "simulations": 1
+    }
+  ],
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_refusals": [],
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1790964938015,
+  "generated_at_used_for_durations": false,
+  "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "per_method": [
+    {
+      "count": 18,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 344289250,
+        "measured": true,
+        "min_ns": 235435334,
+        "p50_ns": 246005833,
+        "p90_ns": 275081708,
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 18,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 344289250,
+      "method": "eth_getBalance",
+      "min_duration_ns": 235435334,
+      "retried_calls": 0,
+      "source": "live",
+      "success_count": 18,
+      "total_attempts": 18,
+      "total_duration_ns": 4564390083
+    },
+    {
+      "count": 3,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 284564417,
+        "measured": true,
+        "min_ns": 240516750,
+        "p50_ns": 263255833,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 284564417,
+      "method": "eth_getBlockByNumber",
+      "min_duration_ns": 240516750,
+      "retried_calls": 0,
+      "source": "live",
+      "success_count": 3,
+      "total_attempts": 3,
+      "total_duration_ns": 788337000
+    },
+    {
+      "count": 18,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 452994666,
+        "measured": true,
+        "min_ns": 236928875,
+        "p50_ns": 260143417,
+        "p90_ns": 379847542,
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 18,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 452994666,
+      "method": "eth_getCode",
+      "min_duration_ns": 236928875,
+      "retried_calls": 0,
+      "source": "live",
+      "success_count": 18,
+      "total_attempts": 18,
+      "total_duration_ns": 5173399750
+    },
+    {
+      "count": 60,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 860362666,
+        "measured": true,
+        "min_ns": 229781708,
+        "p50_ns": 248597500,
+        "p90_ns": 293970375,
+        "p95_ns": 402917125,
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 60,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 860362666,
+      "method": "eth_getStorageAt",
+      "min_duration_ns": 229781708,
+      "retried_calls": 0,
+      "source": "live",
+      "success_count": 60,
+      "total_attempts": 60,
+      "total_duration_ns": 16170365252
+    },
+    {
+      "count": 18,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 304578917,
+        "measured": true,
+        "min_ns": 230778500,
+        "p50_ns": 243216291,
+        "p90_ns": 254231375,
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 18,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 304578917,
+      "method": "eth_getTransactionCount",
+      "min_duration_ns": 230778500,
+      "retried_calls": 0,
+      "source": "live",
+      "success_count": 18,
+      "total_attempts": 18,
+      "total_duration_ns": 4452299830
+    }
+  ],
+  "per_source": [
+    {
+      "calls_per_simulation": {
+        "distribution": {
+          "max": 39,
+          "measured": true,
+          "min": 39,
+          "p50": 39,
+          "p90": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "count"
+        },
+        "integer_mean": 39
+      },
+      "failed_calls": 0,
+      "gap_count_total": 114,
+      "gap_wide_simulations": 3,
+      "gap_width_distribution_ns": {
+        "max_ns": 4662542,
+        "measured": true,
+        "min_ns": 46625,
+        "p50_ns": 361667,
+        "p90_ns": 1471292,
+        "p95_ns": 2857666,
+        "p99_ns": 3691250,
+        "samples": 114,
+        "unit": "ns"
+      },
+      "overlap_simulations": 0,
+      "per_simulation_gap_ns": {
+        "max_ns": 27309293,
+        "measured": true,
+        "min_ns": 25777623,
+        "p50_ns": 26138251,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_simulation_non_rpc_ns": {
+        "max_ns": 30295040,
+        "measured": true,
+        "min_ns": 28159919,
+        "p50_ns": 29392794,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_simulation_overlap_ns": {
+        "max_ns": 0,
+        "measured": true,
+        "min_ns": 0,
+        "p50_ns": 0,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_simulation_serial_wait_ns": {
+        "max_ns": 10927660998,
+        "measured": true,
+        "min_ns": 9904413252,
+        "p50_ns": 10316717665,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_simulation_sum_ns": {
+        "max_ns": 10927660998,
+        "measured": true,
+        "min_ns": 9904413252,
+        "p50_ns": 10316717665,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_simulation_union_ns": {
+        "max_ns": 10927660998,
+        "measured": true,
+        "min_ns": 9904413252,
+        "p50_ns": 10316717665,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_simulation_wall_ns": {
+        "max_ns": 10954970291,
+        "measured": true,
+        "min_ns": 9930190875,
+        "p50_ns": 10342855916,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "retried_calls": 0,
+      "serial_simulations": 3,
+      "simulations": 3,
+      "simulations_without_calls": 0,
+      "source": "live",
+      "successful_calls": 117,
+      "total_attempts": 117,
+      "total_calls": 117
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "simulations": 3,
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}

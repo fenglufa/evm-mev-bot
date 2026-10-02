@@ -1,0 +1,437 @@
+{
+  "assembled_from": [
+    {
+      "directory": "data/evidence/m8/post-reuse/raw/route-91342-37619758-1790964876815",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790964876818,
+      "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+      "outside_simulation_calls": 21,
+      "run": "route-91342-37619758-1790964876815",
+      "simulation_calls": 39,
+      "simulations": 1
+    },
+    {
+      "directory": "data/evidence/m8/post-reuse/raw/route-91342-37619794-1790964912619",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790964912619,
+      "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+      "outside_simulation_calls": 21,
+      "run": "route-91342-37619794-1790964912619",
+      "simulation_calls": 39,
+      "simulations": 1
+    },
+    {
+      "directory": "data/evidence/m8/post-reuse/raw/route-91342-37619820-1790964938013",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790964938015,
+      "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+      "outside_simulation_calls": 21,
+      "run": "route-91342-37619820-1790964938013",
+      "simulation_calls": 39,
+      "simulations": 1
+    }
+  ],
+  "categories_are_the_seven": [
+    {
+      "id": "A",
+      "name": "RPC volume bound"
+    },
+    {
+      "id": "B",
+      "name": "RPC latency bound"
+    },
+    {
+      "id": "C",
+      "name": "Serial dependency bound"
+    },
+    {
+      "id": "D",
+      "name": "Duplicate state-read bound"
+    },
+    {
+      "id": "E",
+      "name": "Provider/connection bound"
+    },
+    {
+      "id": "F",
+      "name": "Local simulation compute bound"
+    },
+    {
+      "id": "G",
+      "name": "Mixed / insufficient evidence"
+    }
+  ],
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_only": "§18: this file names where the time went and proposes nothing. Batch RPC, concurrency, prefetch, connection tuning and any cache change are not implemented in this build — see the `candidate` fields in the completion report",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1790964938015,
+  "generated_at_used_for_durations": false,
+  "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "no_float": "every ratio in this file is per-mille integers over two measured figures",
+  "per_source": [
+    {
+      "aggregated_figures": {
+        "attempts": 117,
+        "cache_hits": 231,
+        "cache_misses": 114,
+        "calls": 117,
+        "failed_calls": 0,
+        "max_concurrency": 1,
+        "non_rpc_duration_ns": 87847753,
+        "non_rpc_measured": true,
+        "overlap_simulations": 0,
+        "retried_calls": 0,
+        "rpc_overlap_duration_ns": 0,
+        "rpc_sum_duration_ns": 31148791915,
+        "rpc_union_duration_ns": 31148791915,
+        "rpc_union_over_span_per_mille": {
+          "denominator": 31236639668,
+          "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+          "numerator": 31148791915,
+          "per_mille": 997
+        },
+        "serial_simulations": 3,
+        "serial_wait_duration_ns": 31148791915,
+        "simulation_span_ns": 31236639668,
+        "state_reads": {
+          "duplicate": 0,
+          "total": 117,
+          "unique": 117,
+          "unkeyed": 0
+        },
+        "successful_calls": 117
+      },
+      "categories": [
+        {
+          "denominator": "simulation_span_ns",
+          "figures": {
+            "calls": 117,
+            "fastest_call_ns": 229781708,
+            "measured_rpc_sum_ns": 31148791915,
+            "rpc_sum_over_span_per_mille": {
+              "denominator": 31236639668,
+              "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+              "numerator": 31148791915,
+              "per_mille": 997
+            },
+            "volume_floor_ns": 26884459836
+          },
+          "id": "A",
+          "name": "RPC volume bound",
+          "quantity": "calls × fastest single call",
+          "rule": "A is the part only removing calls can remove: 500‰ or more of the span is demanded by this many calls even priced at the cheapest single call this evidence holds. It is a lower bound, never an estimate of a saving",
+          "share_per_mille": {
+            "denominator": 31236639668,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 26884459836,
+            "per_mille": 860
+          },
+          "verdict": "dominant"
+        },
+        {
+          "denominator": "simulation_span_ns",
+          "figures": {
+            "fastest_call_ns": 229781708,
+            "latency_floor_ns": 100000000,
+            "mean_call_ns": 266228990,
+            "per_method_fastest_and_slowest": "in rpc-summary.json's per_method rows, which carry each method's own distribution",
+            "slowest_call_ns": 860362666,
+            "union_ns": 31148791915
+          },
+          "id": "B",
+          "name": "RPC latency bound",
+          "quantity": "rpc_union_duration_ns over the span, guarded by the per-call floor",
+          "rule": "B is ruled out when the fastest call in the evidence costs less than the declared floor of 100000000 ns (§15: slow is not the same as provider-slow, so a run whose every call is cheap is not latency-bound however long its span is). Otherwise B's position is its share of the span on the usual 500‰ / 50‰ lines",
+          "share_per_mille": {
+            "denominator": 31236639668,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 31148791915,
+            "per_mille": 997
+          },
+          "verdict": "dominant"
+        },
+        {
+          "denominator": "simulation_span_ns",
+          "figures": {
+            "max_concurrency": 1,
+            "overlap_ns": 0,
+            "overlap_simulations": 0,
+            "serial_ns": 31148791915,
+            "serial_simulations": 3,
+            "simulations_with_calls": 3
+          },
+          "id": "C",
+          "name": "Serial dependency bound",
+          "quantity": "serial_wait_duration_ns (exactly one call in flight) over the span",
+          "rule": "C is the part an overlap could have hidden and did not. It is ruled out where two or more calls were in flight for 500‰ or more of the span; elsewhere its share is read on the usual lines. A `dominant` C is not a separate cost — it is why A and B cannot be paid for in parallel",
+          "share_per_mille": {
+            "denominator": 31236639668,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 31148791915,
+            "per_mille": 997
+          },
+          "verdict": "dominant"
+        },
+        {
+          "denominator": "total_state_reads",
+          "figures": {
+            "cache_hits": 231,
+            "cache_misses": 114,
+            "duplicate_state_reads": 0,
+            "total_state_reads": 117,
+            "unique_state_reads": 117,
+            "unkeyed_calls": 0
+          },
+          "id": "D",
+          "m8_3_1_regression": false,
+          "name": "Duplicate state-read bound",
+          "quantity": "duplicate_state_reads over keyed state reads",
+          "rule": "D is the avoidable asks: one identity, same pinned block, asked again. §19 expects this to be ruled out since M8.3.1 — a non-zero count here is read as a regression in reuse, or as an arm that was left with reuse off, and the `state_read_reuse` field beside it says which",
+          "share_per_mille": {
+            "denominator": 117,
+            "notation": "per mille: part × 1000 ÷ whole, integer division",
+            "numerator": 0,
+            "per_mille": 0
+          },
+          "verdict": "ruled_out_by_measurement"
+        },
+        {
+          "denominator": "recorded_calls",
+          "figures": {
+            "attempts": 117,
+            "calls": 117,
+            "extra_attempts": 0,
+            "failed_calls": 0,
+            "retried_calls": 0
+          },
+          "id": "E",
+          "name": "Provider/connection bound",
+          "quantity": "failed calls plus attempts beyond one per call, over calls",
+          "rule": "E is ruled out by measurement when every call got one attempt and every attempt succeeded: that says the time was paid to a node answering, not to a connection failing. A non-zero figure here makes B's durations unreadable as node cost, because a timeout and a slow answer are one number at the wire",
+          "share_per_mille": {
+            "denominator": 117,
+            "notation": "per mille: part × 1000 ÷ whole, integer division",
+            "numerator": 0,
+            "per_mille": 0
+          },
+          "verdict": "ruled_out_by_measurement"
+        },
+        {
+          "denominator": "simulation_span_ns",
+          "figures": {
+            "gap_in_window_ns": "in rpc-gaps.json: the idle stretches *between* calls are inside the union's window and are not local compute",
+            "non_rpc_ns": 87847753,
+            "span_ns": 31236639668,
+            "union_ns": 31148791915
+          },
+          "id": "F",
+          "name": "Local simulation compute bound",
+          "quantity": "non_rpc_duration_ns (span minus the interval union) over the span",
+          "rule": "F is what the EVM and the state conversion cost. Its figure is span minus union, never span minus sum (§13), and it is ruled out when that comes back under 50‰ of the span",
+          "share_per_mille": {
+            "denominator": 31236639668,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 87847753,
+            "per_mille": 2
+          },
+          "verdict": "ruled_out_by_measurement"
+        },
+        {
+          "denominator": "simulation_span_ns",
+          "id": "G",
+          "name": "Mixed / insufficient evidence",
+          "quantity": "no figure of its own: it is the verdict the six above add up to",
+          "rule": "G is chosen when two or more categories are each dominant (mixed) or when none has a measured quantity at all (insufficient evidence). It is never a fallback for a rule nobody liked",
+          "share_per_mille": null,
+          "verdict": "dominant"
+        }
+      ],
+      "dominant_span_categories": [
+        "B",
+        "C",
+        "A"
+      ],
+      "method_ranking_by_summed_duration": [
+        {
+          "attempts": 60,
+          "calls": 60,
+          "failed_calls": 0,
+          "fastest_call_ns": 229781708,
+          "mean_call_ns": 269506087,
+          "method": "eth_getStorageAt",
+          "percentiles": "this method's own distribution is in rpc-summary.json's per_method rows, merged over every simulation of this source",
+          "retried_calls": 0,
+          "share_of_rpc_sum_per_mille": {
+            "denominator": 31148791915,
+            "notation": "per mille: part × 1000 ÷ whole, integer division",
+            "numerator": 16170365252,
+            "per_mille": 519
+          },
+          "share_of_span_per_mille": {
+            "denominator": 31236639668,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 16170365252,
+            "per_mille": 517
+          },
+          "slowest_call_ns": 860362666,
+          "total_duration_ns": 16170365252
+        },
+        {
+          "attempts": 18,
+          "calls": 18,
+          "failed_calls": 0,
+          "fastest_call_ns": 236928875,
+          "mean_call_ns": 287411097,
+          "method": "eth_getCode",
+          "percentiles": "this method's own distribution is in rpc-summary.json's per_method rows, merged over every simulation of this source",
+          "retried_calls": 0,
+          "share_of_rpc_sum_per_mille": {
+            "denominator": 31148791915,
+            "notation": "per mille: part × 1000 ÷ whole, integer division",
+            "numerator": 5173399750,
+            "per_mille": 166
+          },
+          "share_of_span_per_mille": {
+            "denominator": 31236639668,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 5173399750,
+            "per_mille": 165
+          },
+          "slowest_call_ns": 452994666,
+          "total_duration_ns": 5173399750
+        },
+        {
+          "attempts": 18,
+          "calls": 18,
+          "failed_calls": 0,
+          "fastest_call_ns": 235435334,
+          "mean_call_ns": 253577226,
+          "method": "eth_getBalance",
+          "percentiles": "this method's own distribution is in rpc-summary.json's per_method rows, merged over every simulation of this source",
+          "retried_calls": 0,
+          "share_of_rpc_sum_per_mille": {
+            "denominator": 31148791915,
+            "notation": "per mille: part × 1000 ÷ whole, integer division",
+            "numerator": 4564390083,
+            "per_mille": 146
+          },
+          "share_of_span_per_mille": {
+            "denominator": 31236639668,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 4564390083,
+            "per_mille": 146
+          },
+          "slowest_call_ns": 344289250,
+          "total_duration_ns": 4564390083
+        },
+        {
+          "attempts": 18,
+          "calls": 18,
+          "failed_calls": 0,
+          "fastest_call_ns": 230778500,
+          "mean_call_ns": 247349990,
+          "method": "eth_getTransactionCount",
+          "percentiles": "this method's own distribution is in rpc-summary.json's per_method rows, merged over every simulation of this source",
+          "retried_calls": 0,
+          "share_of_rpc_sum_per_mille": {
+            "denominator": 31148791915,
+            "notation": "per mille: part × 1000 ÷ whole, integer division",
+            "numerator": 4452299830,
+            "per_mille": 142
+          },
+          "share_of_span_per_mille": {
+            "denominator": 31236639668,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 4452299830,
+            "per_mille": 142
+          },
+          "slowest_call_ns": 304578917,
+          "total_duration_ns": 4452299830
+        },
+        {
+          "attempts": 3,
+          "calls": 3,
+          "failed_calls": 0,
+          "fastest_call_ns": 240516750,
+          "mean_call_ns": 262779000,
+          "method": "eth_getBlockByNumber",
+          "percentiles": "this method's own distribution is in rpc-summary.json's per_method rows, merged over every simulation of this source",
+          "retried_calls": 0,
+          "share_of_rpc_sum_per_mille": {
+            "denominator": 31148791915,
+            "notation": "per mille: part × 1000 ÷ whole, integer division",
+            "numerator": 788337000,
+            "per_mille": 25
+          },
+          "share_of_span_per_mille": {
+            "denominator": 31236639668,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 788337000,
+            "per_mille": 25
+          },
+          "slowest_call_ns": 284564417,
+          "total_duration_ns": 788337000
+        }
+      ],
+      "most_time_by_summed_call_duration": {
+        "calls": 60,
+        "field": "sum of this method's recorded call durations",
+        "method": "eth_getStorageAt",
+        "method_ranking_field": "same integers as this row's method, calls and total_duration_ns, in `method_ranking_by_summed_duration`",
+        "not_wall_time": "a sum double-counts an instant two calls shared, so this names the expensive method rather than a slice of the wall clock. Read `rpc_union_duration_ns` for the wall figure",
+        "total_duration_ns": 16170365252
+      },
+      "primary": "G",
+      "primary_name": "Mixed / insufficient evidence",
+      "primary_rationale": "3 span-denominated categories each reach 500‰ of the span, so no single one of them is where the time went; §25's G is the honest word for that and its components are listed as secondary",
+      "secondary": [
+        "A",
+        "B",
+        "C"
+      ],
+      "simulations": 3,
+      "simulations_with_calls": 3,
+      "source": "live"
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "shares_are_not_additive": "A, B and C are three measurements over overlapping intervals, not three slices of the span: when every call ran alone (max_concurrency 1) their quantities are the same nanoseconds seen three ways, so their per-mille figures do not sum to 1000 and adding them names no quantity at all. A category's share answers 「how much of the span does this explanation cover」, and more than one explanation can cover the same minute.",
+  "simulations": 3,
+  "sink_disjointness_check": {
+    "expected": 0,
+    "lifecycle_table_present": true,
+    "regression": false,
+    "rule": "a call recorded by the lifecycle sink is not recorded by the simulation's sink. If `simulation-state` ever holds a call, the two sinks agree about nothing and the 39-call baseline is not the number this file reports",
+    "simulation_state_calls": 0
+  },
+  "sources": [
+    "live"
+  ],
+  "sources_are_never_blended": true,
+  "state_read_reuse": {
+    "mixed_arms": false,
+    "rows_with_no_boundary_tally": 0,
+    "rows_with_reuse_off": 0,
+    "rows_with_reuse_on": 3,
+    "rule": "§16 asks for runs with reuse on. A directory holding both arms would be classifying two programs at once, and says so here rather than blending them"
+  },
+  "thresholds_are_declared": {
+    "dominant_per_mille": 500,
+    "latency_floor_ns": 100000000,
+    "material_per_mille": 50,
+    "note": "these three lines are this file's declarations, not measurements. Every category publishes the integers its rule read beside its verdict, so a reader who wants a different line can re-rank the same figures"
+  },
+  "unit": "ns"
+}

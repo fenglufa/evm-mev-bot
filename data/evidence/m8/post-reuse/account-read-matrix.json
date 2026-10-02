@@ -1,0 +1,641 @@
+{
+  "address_count": 6,
+  "addresses": [
+    {
+      "address": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "all_three_legs": true,
+      "balance": 3,
+      "blocks": [
+        "37619758",
+        "37619794",
+        "37619820"
+      ],
+      "code": 3,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 344289250,
+          "measured": true,
+          "min_ns": 235604750,
+          "p50_ns": 250719959,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 275018917,
+          "measured": true,
+          "min_ns": 241282000,
+          "p50_ns": 257256792,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 253486541,
+          "measured": true,
+          "min_ns": 237397583,
+          "p50_ns": 243216291,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 2338272083,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 3,
+      "reads": 9,
+      "simulations": [
+        "m7-91342-37619758-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619794-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619820-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "all_three_legs": true,
+      "balance": 3,
+      "blocks": [
+        "37619758",
+        "37619794",
+        "37619820"
+      ],
+      "code": 3,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 249969792,
+          "measured": true,
+          "min_ns": 235435334,
+          "p50_ns": 244277750,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 452994666,
+          "measured": true,
+          "min_ns": 366042458,
+          "p50_ns": 379847542,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 248543042,
+          "measured": true,
+          "min_ns": 230778500,
+          "p50_ns": 240750500,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 2648639584,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 3,
+      "reads": 9,
+      "simulations": [
+        "m7-91342-37619758-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619794-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619820-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "all_three_legs": true,
+      "balance": 3,
+      "blocks": [
+        "37619758",
+        "37619794",
+        "37619820"
+      ],
+      "code": 3,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 272808291,
+          "measured": true,
+          "min_ns": 243502000,
+          "p50_ns": 262642250,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 260305750,
+          "measured": true,
+          "min_ns": 241871542,
+          "p50_ns": 251069709,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 254218500,
+          "measured": true,
+          "min_ns": 241206166,
+          "p50_ns": 247025208,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 2274649416,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 3,
+      "reads": 9,
+      "simulations": [
+        "m7-91342-37619758-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619794-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619820-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000011",
+      "all_three_legs": true,
+      "balance": 3,
+      "blocks": [
+        "37619758",
+        "37619794",
+        "37619820"
+      ],
+      "code": 3,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 275081708,
+          "measured": true,
+          "min_ns": 243875083,
+          "p50_ns": 246300125,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 260143417,
+          "measured": true,
+          "min_ns": 249868541,
+          "p50_ns": 252054792,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 244796625,
+          "measured": true,
+          "min_ns": 236264291,
+          "p50_ns": 244148042,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 2252532624,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 3,
+      "reads": 9,
+      "simulations": [
+        "m7-91342-37619758-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619794-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619820-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "all_three_legs": true,
+      "balance": 3,
+      "blocks": [
+        "37619758",
+        "37619794",
+        "37619820"
+      ],
+      "code": 3,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 246005833,
+          "measured": true,
+          "min_ns": 236730834,
+          "p50_ns": 243742791,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 312576833,
+          "measured": true,
+          "min_ns": 300286416,
+          "p50_ns": 303034917,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 304578917,
+          "measured": true,
+          "min_ns": 242133625,
+          "p50_ns": 254231375,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 2443321541,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 3,
+      "reads": 9,
+      "simulations": [
+        "m7-91342-37619758-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619794-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619820-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "all_three_legs": true,
+      "balance": 3,
+      "blocks": [
+        "37619758",
+        "37619794",
+        "37619820"
+      ],
+      "code": 3,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 247465917,
+          "measured": true,
+          "min_ns": 238909458,
+          "p50_ns": 247028958,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 280366333,
+          "measured": true,
+          "min_ns": 236928875,
+          "p50_ns": 252450250,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 249368458,
+          "measured": true,
+          "min_ns": 239651125,
+          "p50_ns": 240505041,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 2232674415,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 3,
+      "reads": 9,
+      "simulations": [
+        "m7-91342-37619758-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619794-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "m7-91342-37619820-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    }
+  ],
+  "assembled_from": [
+    {
+      "directory": "data/evidence/m8/post-reuse/raw/route-91342-37619758-1790964876815",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790964876818,
+      "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+      "outside_simulation_calls": 21,
+      "run": "route-91342-37619758-1790964876815",
+      "simulation_calls": 39,
+      "simulations": 1
+    },
+    {
+      "directory": "data/evidence/m8/post-reuse/raw/route-91342-37619794-1790964912619",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790964912619,
+      "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+      "outside_simulation_calls": 21,
+      "run": "route-91342-37619794-1790964912619",
+      "simulation_calls": 39,
+      "simulations": 1
+    },
+    {
+      "directory": "data/evidence/m8/post-reuse/raw/route-91342-37619820-1790964938013",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790964938015,
+      "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+      "outside_simulation_calls": 21,
+      "run": "route-91342-37619820-1790964938013",
+      "simulation_calls": 39,
+      "simulations": 1
+    }
+  ],
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_only": "§9 says do not optimize; this table is the measurement, and no read in it was reordered, merged, or avoided to produce it",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1790964938015,
+  "generated_at_used_for_durations": false,
+  "git_revision": "67e718cebca2b59a91859367f5c2df655cee1822",
+  "grouping": "§9: by normalized address, one row per address, one column per leg (code / balance / nonce), over every simulation's rows merged",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "reads_total": 54,
+  "reads_without_address": 0,
+  "required_by": {
+    "simulation": 54
+  },
+  "same_account_all_three_legs": {
+    "addresses": 6,
+    "question": "§9: are these reads still mostly the same accounts asked three things each? A count of addresses holding all three legs, against the addresses that appear at all",
+    "with_all_three_legs": 6
+  },
+  "sources_are_never_blended": true,
+  "totals": {
+    "balance": {
+      "duration_ns": 4564390083,
+      "reads": 18
+    },
+    "code": {
+      "duration_ns": 5173399750,
+      "reads": 18
+    },
+    "nonce": {
+      "duration_ns": 4452299830,
+      "reads": 18
+    }
+  },
+  "unit": "ns"
+}
