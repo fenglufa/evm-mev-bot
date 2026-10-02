@@ -31,7 +31,7 @@ use std::path::{Path, PathBuf};
 use alloy_primitives::{address, Address};
 use serde_json::Value;
 
-use evm_pipeline::{run, PipelineConfig, SessionReport};
+use evm_pipeline::{latency::SAME_MILLISECOND, run, PipelineConfig, SessionReport};
 
 const WRAPPED_NATIVE: Address = address!("0x4200000000000000000000000000000000000006");
 const CHAIN: u64 = 91_342;
@@ -324,7 +324,12 @@ async fn two_runs_of_one_recording_agree_on_the_trace_structure() {
 /// Remove what a second run of the same input cannot reproduce: the instants, the spans
 /// taken from them, the totals computed from those, and the session that wrote the line.
 /// `trace_id`, `source`, `chain_id`, `opportunity_block`, `opportunity_id`, every stage
-/// name, outcome, note, half and domain stay — that is the whole structure §0 asks about.
+/// name, outcome, half and domain stay. So does each row's note, with one exception:
+/// [`SAME_MILLISECOND`] is written exactly when a stage's two stamps fall in one
+/// millisecond, which is a reading of how fast this machine ran rather than a statement
+/// about the lifecycle, so it is folded to the same absence a wider span carries. Every
+/// other note — a skip's reason, the decode-and-apply caveat, §11's class sentence — is
+/// structural and must match.
 fn strip(value: &mut Value) {
     match value {
         Value::Object(map) => {
@@ -337,7 +342,10 @@ fn strip(value: &mut Value) {
                     && key != "session_id"
                     && key != "closed"
             });
-            for (_, value) in map.iter_mut() {
+            for (key, value) in map.iter_mut() {
+                if key == "note" && value.as_str() == Some(SAME_MILLISECOND) {
+                    *value = Value::Null;
+                }
                 strip(value);
             }
         }

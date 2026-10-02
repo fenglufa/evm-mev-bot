@@ -104,6 +104,11 @@ pub struct M7Run {
     steps_planned: u64,
     /// Where the run's ladder stopped, in its own record's words.
     status: Option<String>,
+    /// What M7's run answered from when the EVM asked for state — `simulation.state_source`
+    /// in this same file. §11 reads it to decide whether the simulation span it is timing
+    /// contains a node: `rpc:chain-91342` says it does. Absent means the row is left with
+    /// the class its stage name gives it, which is the honest default and not a claim.
+    state_source: Option<String>,
     /// The `latency_ms` object, kept raw: every figure below names the key it was read
     /// out of, so a note in the trace file is checkable against the evidence.
     latency: Value,
@@ -168,6 +173,12 @@ impl M7Run {
             status: execution
                 .get("status")
                 .and_then(Value::as_str)
+                .map(str::to_string),
+            state_source: record
+                .get("simulation")
+                .and_then(|simulation| simulation.get("state_source"))
+                .and_then(Value::as_str)
+                .filter(|source| !source.is_empty())
                 .map(str::to_string),
             latency: record
                 .get("latency_ms")
@@ -330,6 +341,13 @@ impl M7Run {
     pub fn recorded(&self) -> RecordedTrace {
         let mut recorder = TraceRecorder::on(Clock::new(), self.trace());
         self.record(&mut recorder);
+        // §11: M7's simulation ran on the node's state, and its own record says so, so
+        // the 21 s span this loader timed is reads-and-compute rather than CPU time. A run
+        // whose record names no state source keeps the nominal class: there is nothing
+        // here to override it with.
+        if let Some(source) = self.state_source.as_deref() {
+            recorder.classify_reads(Stage::Simulation, source);
+        }
         recorder.finish().with_session(self.session_id.clone())
     }
 }

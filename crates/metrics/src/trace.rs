@@ -136,14 +136,17 @@ impl Stage {
         }
     }
 
-    /// §11: whether a stage's time is this process working, the chain and its
-    /// nodes answering, or both. Summing across a mixed category is how a run
-    /// gets blamed for a node it does not control.
+    /// §11's *nominal* class: where a stage's time belongs judging by what the stage
+    /// is. Summing across a mixed category is how a run gets blamed for a node it does
+    /// not control. A span whose contents disagree with its name carries the override
+    /// on its record instead — see [`StageRecord::cost_domain`].
     pub const fn domain(self) -> Domain {
         match self {
             Self::StateUpdate
             | Self::GraphUpdate
             | Self::OpportunityDetection
+            // Nominal only: on the route path this stage's state arrives from a node
+            // while the span is open, and that run says so on the record.
             | Self::Simulation
             | Self::Risk
             | Self::Build
@@ -322,6 +325,8 @@ pub enum TraceError {
     NotStarted { stage: Stage },
     #[error("stage {stage} already has a record; this trace does not silently replace one")]
     AlreadyRecorded { stage: Stage },
+    #[error("stage {stage} has no measured span, so there is nothing to class")]
+    Unmeasured { stage: Stage },
     #[error("the trace is closed; a stage cannot be written after the lifecycle ended")]
     TraceClosed,
 }
@@ -343,9 +348,29 @@ pub struct StageRecord {
     pub duration_ns: Option<u64>,
     pub granularity: Option<Granularity>,
     pub note: Option<String>,
+    /// §11's class as this span actually earned it, when that disagrees with the
+    /// class the stage's name suggests. `None` means the nominal [`Stage::domain`]
+    /// stands.
+    ///
+    /// One stage needs this. `Simulation` is a local computation, and on a
+    /// dump-backed run every microsecond of its span is this process working; on the
+    /// route path its state arrives from a node *inside* the same span
+    /// (`crates/simulation/src/state.rs` reads accounts, code and storage slots
+    /// through the chain adapter), so labelling that span local would file node
+    /// round trips under CPU. The run knows which of the two it used — the provider
+    /// names its own source — so the class is handed over rather than guessed from
+    /// the stage name, the same way §9's Skipped-versus-Failed is read off
+    /// `ExecutionMode`'s predicates instead of inferred.
+    pub cost_domain: Option<Domain>,
 }
 
 impl StageRecord {
+    /// The cost class to sum this span into: the one the run stated, or the stage's
+    /// nominal class when the run had no reason to disagree.
+    pub fn domain(&self) -> Domain {
+        self.cost_domain.unwrap_or_else(|| self.stage.domain())
+    }
+
     /// A span measured directly on the run's clock.
     pub fn measured(stage: Stage, started_ns: u64, ended_ns: u64) -> Self {
         Self {
@@ -358,6 +383,7 @@ impl StageRecord {
             duration_ns: Some(ended_ns.saturating_sub(started_ns)),
             granularity: Some(Granularity::Nanosecond),
             note: None,
+            cost_domain: None,
         }
     }
 
@@ -375,6 +401,7 @@ impl StageRecord {
             ),
             granularity: Some(Granularity::Millisecond),
             note: None,
+            cost_domain: None,
         }
     }
 
@@ -395,6 +422,7 @@ impl StageRecord {
             duration_ns: Some(duration_ms.saturating_mul(granularity.factor())),
             granularity: Some(granularity),
             note: Some(note.to_string()),
+            cost_domain: None,
         }
     }
 
@@ -409,6 +437,7 @@ impl StageRecord {
             duration_ns: None,
             granularity: Some(granularity),
             note: None,
+            cost_domain: None,
         }
     }
 
@@ -422,6 +451,7 @@ impl StageRecord {
             duration_ns: Some(ended_ns.saturating_sub(started_ns)),
             granularity: Some(Granularity::Nanosecond),
             note: Some(note.to_string()),
+            cost_domain: None,
         }
     }
 
@@ -439,6 +469,7 @@ impl StageRecord {
             duration_ns: None,
             granularity: Some(Granularity::Millisecond),
             note: Some(note.to_string()),
+            cost_domain: None,
         }
     }
 
@@ -452,6 +483,7 @@ impl StageRecord {
             duration_ns: None,
             granularity: None,
             note: Some(note.to_string()),
+            cost_domain: None,
         }
     }
 
@@ -470,7 +502,8 @@ impl StageRecord {
         json!({
             "stage": self.stage.as_str(),
             "half": self.stage.half().as_str(),
-            "domain": self.stage.domain().as_str(),
+            "domain": self.domain().as_str(),
+            "nominal_domain": self.stage.domain().as_str(),
             "outcome": self.outcome.as_str(),
             "started_ns": self.started_ns,
             "ended_ns": self.ended_ns,
@@ -672,7 +705,8 @@ impl LatencyTrace {
             .get(&stage)
             .ok_or(TraceError::NotStarted { stage })?;
         let granularity = record.granularity.unwrap_or(Granularity::Nanosecond);
-        let (started_ns, outcome) = (record.started_ns, record.outcome);
+        let (started_ns, outcome, cost_domain) =
+            (record.started_ns, record.outcome, record.cost_domain);
         if outcome.is_terminal() {
             return Err(TraceError::AlreadyClosed { stage, outcome });
         }
@@ -687,6 +721,7 @@ impl LatencyTrace {
                 duration_ns: Some(ended_ns.saturating_sub(started_ns)),
                 granularity: Some(granularity),
                 note: None,
+                cost_domain,
             },
         );
         Ok(())
@@ -718,6 +753,7 @@ impl LatencyTrace {
                 duration_ns: Some(ended_ns.saturating_sub(started_ns)),
                 granularity: record.granularity,
                 note: Some(note.to_string()),
+                cost_domain: record.cost_domain,
             },
         );
         Ok(())
@@ -749,6 +785,41 @@ impl LatencyTrace {
         }
         self.set_started_from(&record);
         self.stages.insert(stage, record);
+        Ok(())
+    }
+
+    /// Say, after the fact, which cost class one recorded stage's span belongs to,
+    /// with the run's own words beside it.
+    ///
+    /// This is the §11 correction for a span whose contents disagree with its stage
+    /// name, and it is deliberately a statement the caller makes rather than a class
+    /// this crate infers: only the run knows whether the state a simulation computed
+    /// on came from a node or from a file. The record must already exist — this
+    /// relabels a measurement, it never opens one — and the duration is untouched, so
+    /// a relabelled stage moves between the two sums of §11 without changing any
+    /// number in §12.
+    pub fn reclassify(
+        &mut self,
+        stage: Stage,
+        domain: Domain,
+        note: &str,
+    ) -> Result<(), TraceError> {
+        self.guard_open()?;
+        let record = self
+            .stages
+            .get_mut(&stage)
+            .ok_or(TraceError::NotStarted { stage })?;
+        if record.duration_ns.is_none() {
+            // A skip, a cancel and an open record have no span to put in a sum, so a
+            // class would be a label on nothing — and rewriting such a record's reason
+            // is not what this call is for.
+            return Err(TraceError::Unmeasured { stage });
+        }
+        record.cost_domain = Some(domain);
+        record.note = Some(match record.note.take() {
+            Some(previous) => format!("{previous} | {note}"),
+            None => note.to_string(),
+        });
         Ok(())
     }
 
@@ -905,16 +976,18 @@ impl LatencyTrace {
         sum
     }
 
-    /// §11's split. `Mixed` (preflight) is counted in neither sum and shows up in
-    /// `unclassified_ns`, so a reader can add it to whichever side they argue it
-    /// belongs to rather than having this file have decided for them.
+    /// §11's split, over the class each span actually earned rather than the class its
+    /// stage name suggests (see [`StageRecord::cost_domain`]). `Mixed` is counted in
+    /// neither of the other two sums and shows up on its own, so a reader can add it to
+    /// whichever side they argue it belongs to rather than having this file have
+    /// decided for them.
     pub fn cost_split_ns(&self) -> CostSplit {
         let mut split = CostSplit::default();
         for record in self.stages.values() {
             let Some(duration) = record.duration_ns else {
                 continue;
             };
-            match record.stage.domain() {
+            match record.domain() {
                 Domain::Local => split.local_ns = Some(split.local_ns.unwrap_or(0) + duration),
                 Domain::Network => {
                     split.network_ns = Some(split.network_ns.unwrap_or(0) + duration)
@@ -941,6 +1014,7 @@ impl LatencyTrace {
                     "stage": stage.as_str(),
                     "half": stage.half().as_str(),
                     "domain": stage.domain().as_str(),
+                    "nominal_domain": stage.domain().as_str(),
                     "outcome": "absent",
                     "started_ns": null,
                     "ended_ns": null,
@@ -975,7 +1049,7 @@ impl LatencyTrace {
                 "stage_duration_sum": self.stage_duration_sum_ns(),
                 "local_processing": split.local_ns,
                 "network_or_chain": split.network_ns,
-                "mixed_preflight": split.mixed_ns,
+                "mixed_reads_and_compute": split.mixed_ns,
             },
         })
     }
@@ -1238,6 +1312,79 @@ mod tests {
             split.local_ns.unwrap() + split.network_ns.unwrap() + split.mixed_ns.unwrap(),
             trace.stage_duration_sum_ns().expect("a sum"),
             "the split covers the sum exactly, so nothing is double-counted or dropped"
+        );
+    }
+
+    /// §11's second half: the class a stage's *name* suggests and the class a span
+    /// earned are not always the same thing, and the sums have to follow the span. The
+    /// reclassification moves 500 ns out of `local` and into `mixed`; no duration
+    /// changes, and the row keeps both labels so a reader can see what was overridden.
+    #[test]
+    fn reclassifying_a_span_moves_the_time_between_the_two_sums() {
+        let mut trace = LatencyTrace::new(TraceSource::Live, 1, Some(7), Some("opp-11"));
+        for (index, stage) in [Stage::Simulation, Stage::Risk].iter().enumerate() {
+            trace.begin(*stage, index as u64 * 1_000).expect("open");
+            trace
+                .complete(*stage, index as u64 * 1_000 + 500)
+                .expect("close");
+        }
+        assert_eq!(
+            trace.stage(Stage::Simulation).expect("row").domain(),
+            Domain::Local,
+            "the nominal class of a simulation is local work"
+        );
+        let before = trace.cost_split_ns();
+        assert_eq!(before.local_ns, Some(1_000));
+        assert_eq!(before.mixed_ns, None);
+
+        trace
+            .reclassify(
+                Stage::Simulation,
+                Domain::Mixed,
+                "state read from rpc:chain-1",
+            )
+            .expect("the stage is measured, so it has a span to class");
+        let after = trace.cost_split_ns();
+        assert_eq!(after.local_ns, Some(500), "only Risk is left as CPU work");
+        assert_eq!(after.mixed_ns, Some(500));
+        assert_eq!(
+            trace.stage(Stage::Simulation).expect("row").duration_ns,
+            Some(500),
+            "classing a span changes its label and not its length"
+        );
+        assert_eq!(trace.stage_duration_sum_ns(), Some(1_000));
+
+        let rows = trace.to_json();
+        let index = Stage::ALL
+            .iter()
+            .position(|stage| *stage == Stage::Simulation)
+            .expect("in the list");
+        let row = &rows["stages"][index];
+        assert_eq!(row["domain"], json!("mixed"));
+        assert_eq!(row["nominal_domain"], json!("local"));
+    }
+
+    /// A skip has no span to class, and rewriting the reason it carries would let a
+    /// later label overwrite why the lifecycle stopped where it did.
+    #[test]
+    fn a_stage_with_no_measured_span_refuses_to_be_classified() {
+        let mut trace = LatencyTrace::new(TraceSource::Live, 1, Some(8), Some("opp-12"));
+        trace
+            .skip(Stage::Simulation, "the run never reached the EVM")
+            .expect("open");
+        let error = trace
+            .reclassify(Stage::Simulation, Domain::Mixed, "rpc:chain-1")
+            .expect_err("a skip carries no duration to move");
+        assert!(matches!(
+            error,
+            TraceError::Unmeasured {
+                stage: Stage::Simulation
+            }
+        ));
+        assert_eq!(
+            trace.stage(Stage::Simulation).expect("row").note.as_deref(),
+            Some("the run never reached the EVM"),
+            "the skip's own reason stands"
         );
     }
 

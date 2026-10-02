@@ -21,7 +21,8 @@ use std::path::{Path, PathBuf};
 
 use evm_execution::{ExecutionMode, ExecutionRecord, ExecutionStatus};
 use evm_metrics::{
-    unix_ms, BaselineSet, Clock, Granularity, LatencyTrace, PipelineTiming, Stage, StageRecord,
+    unix_ms, BaselineSet, Clock, Domain, Granularity, LatencyTrace, PipelineTiming, Stage,
+    StageRecord,
 };
 use serde_json::{json, Value};
 
@@ -83,6 +84,15 @@ pub const SAME_MILLISECOND: &str = "both stamps are the same millisecond, so thi
 pub const NO_GATE_ON_LIVE: &str = "this build runs §26's preflight on the route path only: a \
      live run handed its risk decision straight to the execution lane, so no gate span exists \
      on this lifecycle";
+
+/// §11's override sentence, on the one stage whose span can hold a node: the state a
+/// simulation computes on may arrive over RPC *while the span is open*, so filing that
+/// duration under local processing would count a node's latency as this binary's CPU
+/// time. The run's own `state_source` string follows this sentence in the note, so the
+/// claim names the field it read rather than asking the reader to trust the label.
+pub const STATE_READ_INSIDE_SPAN: &str = "the state this span computed on was read from a node \
+     while the span was open, so §11 files it as reads-and-compute rather than as local \
+     processing; the run's state source is ";
 
 /// §42.2's recorder. A `None` trace means this run measures nothing: each method
 /// below becomes a no-op, including the clock read, so a run without the flag takes
@@ -175,6 +185,38 @@ impl TraceRecorder {
         if let Some(trace) = self.trace.as_mut() {
             let outcome = trace.complete(stage, ended_ns);
             self.defer(outcome, stage, "close");
+        }
+    }
+
+    /// §11: say on the row this recorder already wrote whether that span is this
+    /// process working or a node answering while the span was open.
+    ///
+    /// `state_source` is the string the run itself carried into its evidence —
+    /// `RpcStateProvider` names itself `rpc:chain-N`, a dump names its file — so this
+    /// is not a second policy about where state comes from, and it is not a guess from
+    /// the stage's name. Simulation is the one stage that needs it: it computes on
+    /// state, and on the route path every account, code and storage slot it computes on
+    /// arrives over RPC inside the span, which the stage's nominal class would file
+    /// under CPU.
+    ///
+    /// A stage this lifecycle never measured is left exactly as it stands: a skip has no
+    /// span to class, and refusing the write here would report an instrumentation fault
+    /// for what is only a lifecycle that stopped early.
+    pub fn classify_reads(&mut self, stage: Stage, state_source: &str) {
+        let Some(domain) = read_domain(state_source) else {
+            return;
+        };
+        let measured = self
+            .trace()
+            .and_then(|trace| trace.stage(stage))
+            .is_some_and(|record| record.duration_ns.is_some());
+        if !measured {
+            return;
+        }
+        let note = format!("{STATE_READ_INSIDE_SPAN}{state_source}");
+        if let Some(trace) = self.trace.as_mut() {
+            let outcome = trace.reclassify(stage, domain, &note);
+            self.defer(outcome, stage, "class a span");
         }
     }
 
@@ -694,6 +736,17 @@ fn rung(
     }
 }
 
+/// Whether a run's state source means a node answered *inside* the span that read it.
+///
+/// The two providers that exist name themselves: `RpcStateProvider` is `rpc:chain-N`
+/// (`crates/simulation/src/state.rs`) and a dump carries the file it was read from
+/// (`dump:fixtures/…`, `crates/pipeline/src/sim.rs`). Nothing else in the workspace
+/// produces the string, so this reads a label the provider wrote about itself rather
+/// than deciding where state came from a second time.
+fn read_domain(state_source: &str) -> Option<Domain> {
+    state_source.starts_with("rpc:").then_some(Domain::Mixed)
+}
+
 /// Whether this mode ever attempts this stage, read from the two predicates the
 /// execution lane itself stops on (§19/§20). Nothing here is a second policy: a stage
 /// the lane will not try is a stage the trace must not report as having failed, and the
@@ -769,6 +822,10 @@ fn readme(summary: &Value, traces: usize) -> String {
          reading of a stamp the run wrote anyway, not a nanosecond measurement.\n\
          - `live`, `replay` and `fixture` rows are never blended into one percentile, and a \
          fixture's number is a test's latency rather than a market's.\n\
+         - `domain` is §11's cost class for the span as it was actually earned, and \
+         `nominal_domain` is the class the stage's name suggests; where they differ, the span \
+         held a node (a simulation that read its state over RPC), and `totals_ns` files that \
+         time under `mixed_reads_and_compute` rather than under `local_processing`.\n\
          - `generated_at_unix_ms` is metadata about the file and enters no duration.\n",
         summary["git_revision"].as_str().unwrap_or("unknown"),
         summary["execution_mode"].as_str().unwrap_or("unknown"),
@@ -1345,6 +1402,70 @@ mod tests {
         assert_eq!(settled.duration_ns, Some(0));
         assert_eq!(settled.note.as_deref(), Some(SAME_MILLISECOND));
         assert_eq!(record_of(&ladder_run, Stage::Settlement).note, None);
+    }
+
+    /// §11 on the one stage it can be wrong about. A simulation whose state came from a
+    /// dump is this process working; a simulation whose state came from `rpc:chain-91342`
+    /// spent most of its span waiting on a node, and filing that under local processing
+    /// would blame this binary for a node's latency — or, worse, credit it with time it
+    /// never computed. The class comes from the run's own `state_source` string, and the
+    /// duration is left exactly as it was measured.
+    #[test]
+    fn a_simulation_span_that_read_from_a_node_is_not_counted_as_local_processing() {
+        let mut on_node = recorder();
+        on_node.begin_at(Stage::Simulation, 1_000);
+        on_node.end_at(Stage::Simulation, 24_000_000);
+        on_node.classify_reads(Stage::Simulation, "rpc:chain-91342");
+        let span = record_of(&on_node, Stage::Simulation);
+        assert_eq!(span.domain(), Domain::Mixed);
+        assert_eq!(span.duration_ns, Some(23_999_000), "the span is unchanged");
+        let note = span.note.clone().expect("the row names its class");
+        assert!(
+            note.contains("rpc:chain-91342"),
+            "the sentence has to name the source it read: {note}"
+        );
+
+        let dump = {
+            let mut on_dump = recorder();
+            on_dump.begin_at(Stage::Simulation, 1_000);
+            on_dump.end_at(Stage::Simulation, 21_000);
+            on_dump.classify_reads(
+                Stage::Simulation,
+                "data/evidence/m5/replay-91342/dump-37191169.json@37191169",
+            );
+            record_of(&on_dump, Stage::Simulation)
+        };
+        assert_eq!(
+            dump.domain(),
+            Domain::Local,
+            "a run that read a file is this process working"
+        );
+        assert_eq!(dump.note, None, "and nothing is added to its row");
+    }
+
+    /// The same call on a stage that never ran: there is no span to class, and writing a
+    /// refusal into `instrumentation_refusals` for a lifecycle that stopped early would
+    /// turn the run's own outcome into an apparent fault of this module (§35).
+    #[test]
+    fn classing_a_stage_with_no_span_says_nothing_and_refuses_nothing() {
+        let mut stopped = recorder();
+        stopped.skip(
+            Stage::Simulation,
+            "the finding went stale before its run started",
+        );
+        stopped.classify_reads(Stage::Simulation, "rpc:chain-91342");
+        let row = record_of(&stopped, Stage::Simulation);
+        assert_eq!(row.outcome, StageOutcome::Skipped);
+        assert_eq!(row.duration_ns, None);
+        assert_eq!(
+            row.note.as_deref(),
+            Some("the finding went stale before its run started"),
+            "the skip's own reason stands"
+        );
+        assert!(
+            stopped.finish().refusals.is_empty(),
+            "a stage that was never measured is not a refused write"
+        );
     }
 
     /// The answer of [`record_discovery`] is where this lifecycle's story ends, so a run

@@ -42,7 +42,7 @@ use evm_live::{
     now_unix_ms, BlockAnnouncement, FlashblockSource, MarketDataSource, MarketEvent, PollingSource,
     SourceKind, SourceStatus, WebSocketSource,
 };
-use evm_metrics::{Clock, LatencyTrace, PipelineTiming, TraceSource};
+use evm_metrics::{Clock, LatencyTrace, PipelineTiming, Stage, TraceSource};
 use evm_opportunity::Opportunity;
 use evm_protocol::Registry;
 use evm_replay::StateChange;
@@ -529,12 +529,17 @@ impl<'a> Session<'a> {
     /// blocks produces `Replay` rows and an endpoint produces `Live` ones, so §45's rule
     /// that the two never blend into one percentile is a consequence of which producer
     /// answered rather than of a flag that could be set wrong.
+    ///
+    /// `state_source` is that same provider's name for itself, carried to §11 for the one
+    /// stage whose span may hold a node inside it: a simulation that computed on state
+    /// read from an endpoint did not spend that time in this process.
     fn note_lifecycle(
         &mut self,
         timing: &PipelineTiming,
         opportunity_id: &str,
         observed_block: BlockNumber,
         execution_id: Option<&str>,
+        state_source: &str,
         detail: &str,
     ) -> Result<()> {
         let Some(evidence) = self.latency.as_mut() else {
@@ -563,6 +568,7 @@ impl<'a> Session<'a> {
             .map(|stage| stage.mode())
             .unwrap_or_default();
         record_lifecycle(&mut recorder, timing, ladder, mode, detail);
+        recorder.classify_reads(Stage::Simulation, state_source);
         let session_id = self.evidence.session_id().to_string();
         evidence.record(recorder.finish().with_session(session_id))
     }
@@ -596,6 +602,7 @@ impl<'a> Session<'a> {
                     &outcome.id.to_string(),
                     outcome.observed_block,
                     None,
+                    &outcome.state_source,
                     &detail,
                 )?;
                 return Ok(());
@@ -627,6 +634,7 @@ impl<'a> Session<'a> {
                 &outcome.id.to_string(),
                 outcome.observed_block,
                 None,
+                &outcome.state_source,
                 "the finding was invalidated while its own run was in flight, so it never \
                  reached the risk layer (§24)",
             )?;
@@ -720,6 +728,7 @@ impl<'a> Session<'a> {
             &outcome.id.to_string(),
             outcome.observed_block,
             execution_id.as_deref(),
+            &outcome.state_source,
             &detail,
         )
     }

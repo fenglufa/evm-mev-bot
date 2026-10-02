@@ -442,6 +442,14 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         }
     };
     trace.recorder.end(Stage::Simulation);
+    // §11: this span asked a node for the state it computed on — `state_source` is the
+    // provider's own name for itself, the same string that goes into the run's
+    // simulation evidence — so the row says which cost class its time belongs to rather
+    // than letting the stage's name decide. Nothing is read here to make that decision;
+    // the run already carried the fact.
+    trace
+        .recorder
+        .classify_reads(Stage::Simulation, &state_source);
     let simulation_ms = clock.now_ms().saturating_sub(simulated_at);
     latencies.insert("simulation_latency_ms".to_string(), json!(simulation_ms));
     metrics.bump("simulation_count");
