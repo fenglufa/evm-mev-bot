@@ -1,0 +1,226 @@
+{
+  "_provenance": {
+    "asked": "真实链上把 SequenceStage 要用的三个读取（getReserves 系列、balanceOf、getL1Fee）跑一遍，并把 L1 预估对着 M6 那笔真实扣费核一次",
+    "endpoint": "https://sepolia-rpc.giwa.io",
+    "milestone": "M7 §20/§26/§36",
+    "no_key_in_this_file": true,
+    "no_value_at_risk": "read-only; the account whose balances are named is §58's synthetic scalar-one address, which holds 0 wei of WETH at block 37556179",
+    "run_command": "GIWA_RPC_URL=https://sepolia-rpc.giwa.io cargo test -p evm-execution --test live_reads_probe -- --ignored --nocapture",
+    "sources": [
+      "data/evidence/m6/validation/node-answers-37503978.json",
+      "data/evidence/m7/candidate-fee-measurement.json"
+    ],
+    "urls_from_env": [
+      "GIWA_RPC_URL"
+    ]
+  },
+  "finding": {
+    "head": {
+      "chain_id": 91342,
+      "hash": "0xcca820fc71c03747d8b871ed540072272bf5c700e309f22caeb1b2d5863e1d0d",
+      "number": 37556179,
+      "read_by": "eth_getBlockByNumber(\"latest\")"
+    },
+    "l1_fee_estimate": {
+      "at_head": {
+        "block": 37556179,
+        "pre_signing_envelope_is_at_least_the_real_charge": true,
+        "pre_signing_envelope_shape": {
+          "l1_fee_wei": "8557728352",
+          "l1_gas_used": "1754",
+          "length": 110,
+          "nonzero_bytes": 110,
+          "zero_bytes": 0
+        },
+        "pre_signing_envelope_wei": "8557728352",
+        "real_bytes_wei": "8557728352",
+        "real_envelope_shape": {
+          "l1_fee_wei": "8557728352",
+          "l1_gas_used": "1754",
+          "length": 110,
+          "nonzero_bytes": 110,
+          "zero_bytes": 0
+        }
+      },
+      "at_the_block_that_was_charged": {
+        "answered": true,
+        "difference_wei": "705498019",
+        "exact_match": false,
+        "oracle_says": "8010756363",
+        "receipt_charged": "7305258344"
+      },
+      "byte_cost_model_against_length": [
+        {
+          "l1_fee_wei": "8427166442",
+          "l1_gas_used": "1727",
+          "length": 108,
+          "nonzero_bytes": 108,
+          "role": "what a swap step's envelope costs: 4-byte selector, two amounts, the address, the empty bytes, plus a 65-byte signature placeholder",
+          "zero_bytes": 0
+        },
+        {
+          "l1_fee_wei": "9928628401",
+          "l1_gas_used": "2035",
+          "length": 130,
+          "nonzero_bytes": 130,
+          "role": "a deposit or withdraw step",
+          "zero_bytes": 0
+        },
+        {
+          "l1_fee_wei": "8557728352",
+          "l1_gas_used": "1754",
+          "length": 110,
+          "nonzero_bytes": 110,
+          "role": "the mined envelope's own length",
+          "zero_bytes": 0
+        },
+        {
+          "l1_fee_wei": "15412228600",
+          "l1_gas_used": "3159",
+          "length": 212,
+          "nonzero_bytes": 212,
+          "role": "the largest step in the sequence — swap with its full calldata",
+          "zero_bytes": 0
+        }
+      ],
+      "byte_cost_model_at_the_same_block": [
+        {
+          "l1_fee_wei": "7804059144",
+          "l1_gas_used": "1600",
+          "length": 110,
+          "nonzero_bytes": 0,
+          "shape": "all_zero",
+          "zero_bytes": 110
+        },
+        {
+          "l1_fee_wei": "7804059144",
+          "l1_gas_used": "1600",
+          "length": 110,
+          "nonzero_bytes": 110,
+          "shape": "all_ff",
+          "zero_bytes": 0
+        },
+        {
+          "l1_fee_wei": "7804059144",
+          "l1_gas_used": "1600",
+          "length": 110,
+          "nonzero_bytes": 55,
+          "shape": "alternating",
+          "zero_bytes": 55
+        },
+        {
+          "l1_fee_wei": "8557728352",
+          "l1_gas_used": "1754",
+          "length": 110,
+          "nonzero_bytes": 110,
+          "shape": "pseudorandom_nonzero",
+          "zero_bytes": 0
+        }
+      ],
+      "envelope_rebuilt_from_node_fields": true,
+      "method": "eth_call getL1Fee(bytes)",
+      "oracle": "0x420000000000000000000000000000000000000f",
+      "rebuilt_hash_matches_receipt_transaction_hash": true,
+      "receipt_l1_fee_wei": "7305258344",
+      "receipt_l1_gas_used": "0x640",
+      "transaction_hash": "0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95"
+    },
+    "l1_fee_model_finding": "this chain's fee predeploy prices a payload by how well it compresses, not by its length or its zero-byte count: four 110-byte payloads that differ only in their byte values cost \"1600\" L1 gas for the three low-entropy shapes and \"1754\" for the high-entropy one, read at block 37556179. The mined envelope prices like the high-entropy shape (\"1754\" gas, 8557728352 wei) and so does the pre-signing placeholder (\"1754\" gas, 8557728352 wei) — which is what this target asserts: the estimate may fall above the coming charge but not below it. A placeholder of the same length filled with 0xff priced 9.7% under the mined bytes and was replaced on the strength of that measurement. The estimate is still only a forecast: re-read at the block this transaction was charged, the predeploy says \"8010756363\" wei against the \"7305258344\" wei its receipt records, so §37's bill stays the receipt's own l1Fee field and the profit line reports this gap rather than closing it.",
+    "m7_consequence": "the preflight's L1 leg and §20's token snapshots run against this endpoint; nothing about the sequence's cost model rests on a number this repository invented.",
+    "pools": [
+      {
+        "block_timestamp_last": "1757405620",
+        "candidate": 0,
+        "mid": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "priced_at_block": 37530593,
+        "read_at_block": 37556179,
+        "recorded_reserve0": "1000000000000000000000",
+        "recorded_reserve1": "1000000000000000",
+        "reserve0": "1000000000000000000000",
+        "reserve0_moved": false,
+        "reserve1": "1000000000000000",
+        "reserve1_moved": false,
+        "reserve_of_mid": "1000000000000000000000",
+        "reserve_of_weth": "1000000000000000",
+        "role": "buy",
+        "source": "eth_call token0(), token1(), getReserves() at 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 for block 37556179",
+        "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "token1": "0x4200000000000000000000000000000000000006"
+      },
+      {
+        "block_timestamp_last": "1757403527",
+        "candidate": 0,
+        "mid": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "priced_at_block": 37530593,
+        "read_at_block": 37556179,
+        "recorded_reserve0": "2000000000000000000000",
+        "recorded_reserve1": "20000000000000000",
+        "reserve0": "2000000000000000000000",
+        "reserve0_moved": false,
+        "reserve1": "20000000000000000",
+        "reserve1_moved": false,
+        "reserve_of_mid": "2000000000000000000000",
+        "reserve_of_weth": "20000000000000000",
+        "role": "sell",
+        "source": "eth_call token0(), token1(), getReserves() at 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E for block 37556179",
+        "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "token1": "0x4200000000000000000000000000000000000006"
+      },
+      {
+        "block_timestamp_last": "1757406181",
+        "candidate": 1,
+        "mid": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25",
+        "pool": "0xda1687064f6f0367678cb168ba10c980959d0272",
+        "priced_at_block": 37530593,
+        "read_at_block": 37556179,
+        "recorded_reserve0": "1000000000000000",
+        "recorded_reserve1": "1000000000000000000000",
+        "reserve0": "1000000000000000",
+        "reserve0_moved": false,
+        "reserve1": "1000000000000000000000",
+        "reserve1_moved": false,
+        "reserve_of_mid": "1000000000000000000000",
+        "reserve_of_weth": "1000000000000000",
+        "role": "buy",
+        "source": "eth_call token0(), token1(), getReserves() at 0xDa1687064F6f0367678Cb168ba10C980959D0272 for block 37556179",
+        "token0": "0x4200000000000000000000000000000000000006",
+        "token1": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25"
+      },
+      {
+        "block_timestamp_last": "1757420718",
+        "candidate": 1,
+        "mid": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25",
+        "pool": "0x7c580b975fb97c43018bc05a41f0c6a7d10350ad",
+        "priced_at_block": 37530593,
+        "read_at_block": 37556179,
+        "recorded_reserve0": "1000000000000000",
+        "recorded_reserve1": "10000000000000000000",
+        "reserve0": "1000000000000000",
+        "reserve0_moved": false,
+        "reserve1": "10000000000000000000",
+        "reserve1_moved": false,
+        "reserve_of_mid": "10000000000000000000",
+        "reserve_of_weth": "1000000000000000",
+        "role": "sell",
+        "source": "eth_call token0(), token1(), getReserves() at 0x7C580B975fb97c43018Bc05A41f0c6a7d10350aD for block 37556179",
+        "token0": "0x4200000000000000000000000000000000000006",
+        "token1": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25"
+      }
+    ],
+    "token_balances": {
+      "account": "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
+      "mid_token": {
+        "amount": "0",
+        "source": "eth_call balanceOf(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf) on token 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f at block 37556179",
+        "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+      },
+      "weth": {
+        "amount": "0",
+        "source": "eth_call balanceOf(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf) on token 0x4200000000000000000000000000000000000006 at block 37556179"
+      }
+    },
+    "verdict": "the three reads the sequence executor needs are answered by this endpoint: getReserves/token0/token1 at a named height, balanceOf at a named height, and getL1Fee(bytes) on the fee predeploy at both the head and a historical block. §36's source line can therefore name an oracle read rather than an assumption."
+  }
+}

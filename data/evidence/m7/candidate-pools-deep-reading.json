@@ -1,0 +1,244 @@
+{
+ "_provenance": {
+  "milestone": "M7-P0",
+  "read_at_head": 37527089,
+  "rpc_endpoint": "https://sepolia-rpc.giwa.io",
+  "methods": [
+   "eth_call",
+   "eth_getCode",
+   "eth_getBalance",
+   "eth_getLogs"
+  ],
+  "how": "read both tokens' metadata and both pools' reserves, balances, native balance and code for the two WETH round trips that beat cost, and compare each pool's reserve against the balance it actually holds",
+  "proves": "that the reserves are authoritative: every pool's getReserves() word equals the balanceOf() of that token in that pool, so the quoted price is backed by assets and not by a stale or manipulated reserve slot",
+  "does_not_prove": "that the route executes. Neither pool has ever emitted a Swap, so the fee is not attested and the mid token's transfer behaviour is unmeasured"
+ },
+ "candidates": {
+  "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": {
+   "pair": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f-4200000000000000000000000000000000000006",
+   "mid": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+   "pools": [
+    "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+    "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+   ],
+   "analytic": {
+    "gross": 3100464037910442,
+    "at": 1500000000000000,
+    "route": [
+     "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+     "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    ]
+   },
+   "tokens": {
+    "0x4200000000000000000000000000000000000006": {
+     "name": "20000000000000000000000000000000000000000000000000000000000000000d5772617070656420457468657200000000000000000000000000000000000000",
+     "symbol": "2000000000000000000000000000000000000000000000000000000000000000045745544800000000000000000000000000000000000000000000000000000000",
+     "decimals": "12",
+     "totalSupply": "796a005e2e65d1eb07",
+     "fee": "0x",
+     "FEE": "0x",
+     "feeTo": "0x",
+     "feeToSetter": "0x",
+     "factory": "0x",
+     "balanceOf_pool1": 20000000000000000,
+     "balanceOf_pool2": 1000000000000000,
+     "balanceOf_ours": 0
+    },
+    "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": {
+     "name": "20000000000000000000000000000000000000000000000000000000000000000b426c6f77537761702e696f000000000000000000000000000000000000000000",
+     "symbol": "200000000000000000000000000000000000000000000000000000000000000003424c530000000000000000000000000000000000000000000000000000000000",
+     "decimals": "12",
+     "totalSupply": "295be96e64066972000000",
+     "fee": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "FEE": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "feeTo": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "feeToSetter": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "factory": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "balanceOf_pool1": 2000000000000000000000,
+     "balanceOf_pool2": 1000000000000000000000,
+     "balanceOf_ours": 0
+    }
+   },
+   "pools_detail": {
+    "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e": {
+     "token0": "0x00000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+     "token1": "0x0000000000000000000000004200000000000000000000000000000000000006",
+     "getReserves": "0x00000000000000000000000000000000000000000000006c6b935b8bbd40000000000000000000000000000000000000000000000000000000470de4df8200000000000000000000000000000000000000000000000000000000000068bfd987",
+     "kLast": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "code_len": 29910,
+     "native": "0x0",
+     "creator": "0x18b5edc574b956b1a811affac8312b34ff38f11d"
+    },
+    "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4": {
+     "token0": "0x00000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+     "token1": "0x0000000000000000000000004200000000000000000000000000000000000006",
+     "getReserves": "0x00000000000000000000000000000000000000000000003635c9adc5dea0000000000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000068bfe1b4",
+     "kLast": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "code_len": 29910,
+     "native": "0x0",
+     "creator": "0x18b5edc574b956b1a811affac8312b34ff38f11d"
+    }
+   },
+   "mid_transfer_logs_last20k": {
+    "__err": "HTTPError:HTTP Error 400: Bad Request"
+   },
+   "mid_any_logs_last20k": {
+    "__err": "HTTPError:HTTP Error 400: Bad Request"
+   }
+  },
+  "0x7b9dc86c3495d377526247ade5ea7b864a5cec25": {
+   "pair": "0x4200000000000000000000000000000000000006-7b9dc86c3495d377526247ade5ea7b864a5cec25",
+   "mid": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25",
+   "pools": [
+    "0xda1687064f6f0367678cb168ba10c980959d0272",
+    "0x7c580b975fb97c43018bc05a41f0c6a7d10350ad"
+   ],
+   "analytic": {
+    "gross": 800449503489436,
+    "at": 80000000000000,
+    "route": [
+     "0xda1687064f6f0367678cb168ba10c980959d0272",
+     "0x7c580b975fb97c43018bc05a41f0c6a7d10350ad"
+    ]
+   },
+   "tokens": {
+    "0x4200000000000000000000000000000000000006": {
+     "name": "20000000000000000000000000000000000000000000000000000000000000000d5772617070656420457468657200000000000000000000000000000000000000",
+     "symbol": "2000000000000000000000000000000000000000000000000000000000000000045745544800000000000000000000000000000000000000000000000000000000",
+     "decimals": "12",
+     "totalSupply": "796a005e2e65d1eb07",
+     "fee": "0x",
+     "FEE": "0x",
+     "feeTo": "0x",
+     "feeToSetter": "0x",
+     "factory": "0x",
+     "balanceOf_pool1": 1000000000000000,
+     "balanceOf_pool2": 1000000000000000,
+     "balanceOf_ours": 0
+    },
+    "0x7b9dc86c3495d377526247ade5ea7b864a5cec25": {
+     "name": "20000000000000000000000000000000000000000000000000000000000000000b426c6f77537761702e696f000000000000000000000000000000000000000000",
+     "symbol": "200000000000000000000000000000000000000000000000000000000000000004424c4f5700000000000000000000000000000000000000000000000000000000",
+     "decimals": "12",
+     "totalSupply": "295bef95b4a24ac8d38000",
+     "fee": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "FEE": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "feeTo": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "feeToSetter": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "factory": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "balanceOf_pool1": 1000000000000000000000,
+     "balanceOf_pool2": 10000000000000000000,
+     "balanceOf_ours": 0
+    }
+   },
+   "pools_detail": {
+    "0xda1687064f6f0367678cb168ba10c980959d0272": {
+     "token0": "0x0000000000000000000000004200000000000000000000000000000000000006",
+     "token1": "0x0000000000000000000000007b9dc86c3495d377526247ade5ea7b864a5cec25",
+     "getReserves": "0x00000000000000000000000000000000000000000000000000038d7ea4c6800000000000000000000000000000000000000000000000003635c9adc5dea000000000000000000000000000000000000000000000000000000000000068bfe3e5",
+     "kLast": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "code_len": 29910,
+     "native": "0x0",
+     "creator": "0x18b5edc574b956b1a811affac8312b34ff38f11d"
+    },
+    "0x7c580b975fb97c43018bc05a41f0c6a7d10350ad": {
+     "token0": "0x0000000000000000000000004200000000000000000000000000000000000006",
+     "token1": "0x0000000000000000000000007b9dc86c3495d377526247ade5ea7b864a5cec25",
+     "getReserves": "0x00000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000008ac7230489e800000000000000000000000000000000000000000000000000000000000068c01cae",
+     "kLast": {
+      "__err": "{\"code\": 3, \"message\": \"execution reverted\"}"
+     },
+     "code_len": 29910,
+     "native": "0x0",
+     "creator": "0x18b5edc574b956b1a811affac8312b34ff38f11d"
+    }
+   },
+   "mid_transfer_logs_last20k": {
+    "__err": "HTTPError:HTTP Error 400: Bad Request"
+   },
+   "mid_any_logs_last20k": {
+    "__err": "HTTPError:HTTP Error 400: Bad Request"
+   }
+  }
+ },
+ "log_history": {
+  "born_block": 4060504,
+  "pools": {
+   "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e": {
+    "logs_in_creation_window": 7,
+    "kinds": {
+     "0xddf252ad1b": 3,
+     "Sync": 2,
+     "Mint": 2
+    },
+    "swap_count": 0,
+    "sync_count": 2,
+    "sync_data": [
+     "0x00000000000000000000000000000000000000000000003635c9adc5dea00000000000000000000000000000000000000000000000000000002386f26fc10000",
+     "0x00000000000000000000000000000000000000000000006c6b935b8bbd40000000000000000000000000000000000000000000000000000000470de4df820000"
+    ]
+   },
+   "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4": {
+    "logs_in_creation_window": 4,
+    "kinds": {
+     "0xddf252ad1b": 2,
+     "Sync": 1,
+     "Mint": 1
+    },
+    "swap_count": 0,
+    "sync_count": 1,
+    "sync_data": [
+     "0x00000000000000000000000000000000000000000000003635c9adc5dea0000000000000000000000000000000000000000000000000000000038d7ea4c68000"
+    ]
+   },
+   "0xda1687064f6f0367678cb168ba10c980959d0272": {
+    "logs_in_creation_window": 4,
+    "kinds": {
+     "0xddf252ad1b": 2,
+     "Sync": 1,
+     "Mint": 1
+    },
+    "swap_count": 0,
+    "sync_count": 1,
+    "sync_data": [
+     "0x00000000000000000000000000000000000000000000000000038d7ea4c6800000000000000000000000000000000000000000000000003635c9adc5dea00000"
+    ]
+   },
+   "0x7c580b975fb97c43018bc05a41f0c6a7d10350ad": {
+    "logs_in_creation_window": 0,
+    "kinds": {},
+    "swap_count": 0,
+    "sync_count": 0,
+    "sync_data": []
+   }
+  },
+  "finding": "the four candidate pools have Mint and Sync logs and ZERO Swap logs. The 0.30% fee these screens price with has never been charged on any of them, so it is an assumption carried over from the M3 venues and must be measured before any of this is called an opportunity"
+ },
+ "bytecode_note": "the candidate pools are 14954-byte contracts; the fee-attested M3 venue is 5393 bytes. They are not the same implementation, so code identity does not transfer the attested fee either"
+}

@@ -1,0 +1,192 @@
+{
+  "counters": {
+    "build_count": 6,
+    "execution_build_success": 1,
+    "execution_preflight_success": 1,
+    "execution_profit_verified": 1,
+    "execution_receipt_success": 1,
+    "execution_sequence_attempt": 1,
+    "execution_sequence_profit_verified_positive": 1,
+    "execution_sequence_submission_submitted": 6,
+    "execution_settle_success": 1,
+    "execution_sign_success": 1,
+    "execution_submit_success": 1,
+    "included_count": 6,
+    "opportunity_count": 1,
+    "profitable_count": 1,
+    "risk_accept_count": 1,
+    "sign_count": 6,
+    "simulation_count": 1,
+    "submit_count": 6
+  },
+  "latency": [
+    {
+      "measured": true,
+      "name": "execution_build_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 2201,
+        "min_ms": 2201,
+        "name": "execution_build_latency",
+        "p50_ms": 2201,
+        "p95_ms": 2201,
+        "p99_ms": 2201,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "execution_preflight_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 5786,
+        "min_ms": 5786,
+        "name": "execution_preflight_latency",
+        "p50_ms": 5786,
+        "p95_ms": 5786,
+        "p99_ms": 5786,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "execution_profit_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 0,
+        "min_ms": 0,
+        "name": "execution_profit_latency",
+        "p50_ms": 0,
+        "p95_ms": 0,
+        "p99_ms": 0,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "execution_receipt_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 3367,
+        "min_ms": 3367,
+        "name": "execution_receipt_latency",
+        "p50_ms": 3367,
+        "p95_ms": 3367,
+        "p99_ms": 3367,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "execution_settlement_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 27221,
+        "min_ms": 27221,
+        "name": "execution_settlement_latency",
+        "p50_ms": 27221,
+        "p95_ms": 27221,
+        "p99_ms": 27221,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "execution_sign_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 772,
+        "min_ms": 772,
+        "name": "execution_sign_latency",
+        "p50_ms": 772,
+        "p95_ms": 772,
+        "p99_ms": 772,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "execution_submission_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 253,
+        "min_ms": 253,
+        "name": "execution_submission_latency",
+        "p50_ms": 253,
+        "p95_ms": 253,
+        "p99_ms": 253,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "inclusion_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 3367,
+        "min_ms": 3367,
+        "name": "inclusion_latency",
+        "p50_ms": 3367,
+        "p95_ms": 3367,
+        "p99_ms": 3367,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "opportunity_detection_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 2087,
+        "min_ms": 2087,
+        "name": "opportunity_detection_latency",
+        "p50_ms": 2087,
+        "p95_ms": 2087,
+        "p99_ms": 2087,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "sign_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 772,
+        "min_ms": 772,
+        "name": "sign_latency",
+        "p50_ms": 772,
+        "p95_ms": 772,
+        "p99_ms": 772,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "simulation_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 21449,
+        "min_ms": 21449,
+        "name": "simulation_latency",
+        "p50_ms": 21449,
+        "p95_ms": 21449,
+        "p99_ms": 21449,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "submission_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 253,
+        "min_ms": 253,
+        "name": "submission_latency",
+        "p50_ms": 253,
+        "p95_ms": 253,
+        "p99_ms": 253,
+        "unit": "ms"
+      }
+    }
+  ]
+}

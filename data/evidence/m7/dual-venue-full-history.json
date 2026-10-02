@@ -1,0 +1,4679 @@
+{
+  "_provenance": {
+    "does_not_prove": "that a divergence is executable or worth anything \u2014 running the sequence against these bytecodes does that, which is what real_market_fee.rs is. Nor does it price the chain's trading pools: the log query is filtered to this venue set. Chunks the node refused are in uncovered_blocks.",
+    "how": "every log the 101 pools of the census's 50 multi-venue token pairs emitted between their own PairCreated block and this head, in 5000-block chunks, typed by topic-and-data shape rather than by a remembered hash; then token0, token1, getReserves, the pool's own LP totalSupply and that LP's balance in the wallet the pool reports as its creator, all at the one head block",
+    "methods": [
+      "eth_blockNumber",
+      "eth_getLogs",
+      "eth_call"
+    ],
+    "milestone": "M7-P1b",
+    "proves": "which of the pools a same-pair cycle would have to use has ever had a counterparty, what each venue's reserve ratio is at one pinned head, and whether the seeded liquidity's LP tokens still sit with the deployer",
+    "read_at_head": 37532301,
+    "rpc_endpoint": "https://sepolia-rpc.giwa.io",
+    "scan_from_block": 4058192,
+    "scan_to_block": 37532301
+  },
+  "chunk_blocks": 5000,
+  "chunks_scanned": 6695,
+  "failed_reads": [],
+  "pairs": {
+    "0x000d8dad0881c061d74911fd3ff45da41c6c2cb2-4200000000000000000000000000000000000006": {
+      "swaps_ever": 2,
+      "venues": [
+        {
+          "address": "0x5543d6dadbbc4a6ec474243a154177d066469ea4",
+          "created_block": 37190158,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe636b01458237b8372794180ac4978ca28d49378",
+          "first_log_block": 37190158,
+          "last_log_block": 37191158,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 38235485391300054390,
+          "reserve1": 41851499007093,
+          "reserve_written_at_timestamp": 1790536274,
+          "swap_count_ever": 1,
+          "token0": "0x000d8dad0881c061d74911fd3ff45da41c6c2cb2",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0xd9f800f5b2dc606794d18e143f47ad6517021341",
+          "created_block": 37190158,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9fd6aaea57eb46aece9c49fcdba2d0ae9309a6e4",
+          "first_log_block": 37190158,
+          "last_log_block": 37191158,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 43817804600413289,
+          "reserve0": 41764514608699945610,
+          "reserve1": 45977869103862,
+          "reserve_written_at_timestamp": 1790536274,
+          "swap_count_ever": 1,
+          "token0": "0x000d8dad0881c061d74911fd3ff45da41c6c2cb2",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x03a884af9fa7af6557a21496f67e781fc8d00f95-678bde2845a6fc6a609a677cf123fe7a3c6f35cb": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0xacb1a7492fc9d49db9c49e0d52f17c69c1d5f42a",
+          "created_block": 31714080,
+          "events_ever": {
+            "mint_or_burn": 2,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+          },
+          "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+          "first_log_block": 31714335,
+          "last_log_block": 31715786,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 63245553203367586,
+          "reserve0": 200000000000000000000000,
+          "reserve1": 20000000000,
+          "reserve_written_at_timestamp": 1785060902,
+          "swap_count_ever": 0,
+          "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+          "token1": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb"
+        },
+        {
+          "address": "0x98476278c3179a15418c54d464fac0f1bfab5ddd",
+          "created_block": 31721667,
+          "events_ever": {
+            "mint_or_burn": 2,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+          },
+          "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+          "first_log_block": 31721667,
+          "last_log_block": 31820805,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 166132477258361496,
+          "reserve0": 400000000000000000000000,
+          "reserve1": 69000000000,
+          "reserve_written_at_timestamp": 1785165921,
+          "swap_count_ever": 0,
+          "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+          "token1": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x03a884af9fa7af6557a21496f67e781fc8d00f95-7c20cb4ab7c6d731c6a167433986ffd17c16ddc6": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+          "created_block": 31714087,
+          "events_ever": {
+            "mint_or_burn": 2,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+          },
+          "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+          "first_log_block": 31714343,
+          "last_log_block": 31715794,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 200000000000000000,
+          "reserve0": 200000000000000000000000,
+          "reserve1": 200000000000,
+          "reserve_written_at_timestamp": 1785060910,
+          "swap_count_ever": 0,
+          "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+          "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+        },
+        {
+          "address": "0x9069175fcbd67e421cc1b1edb43127ee96de30cc",
+          "created_block": 31721667,
+          "events_ever": {
+            "mint_or_burn": 2,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+          },
+          "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+          "first_log_block": 31721667,
+          "last_log_block": 31820805,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 166132477258361496,
+          "reserve0": 400000000000000000000000,
+          "reserve1": 69000000000,
+          "reserve_written_at_timestamp": 1785165921,
+          "swap_count_ever": 0,
+          "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+          "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x03a884af9fa7af6557a21496f67e781fc8d00f95-c5bf73bddef871bafb49d12f5d05a5b300422cdf": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+          "created_block": 31714094,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+          "first_log_block": 31715802,
+          "last_log_block": 31715802,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 316227766016837933199,
+          "reserve0": 100000000000000000000000,
+          "reserve1": 1000000000000000000,
+          "reserve_written_at_timestamp": 1785060918,
+          "swap_count_ever": 0,
+          "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+          "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+        },
+        {
+          "address": "0x3ea4bdb262a38e5b653cc931afd687fe5fdc4e76",
+          "created_block": 31721667,
+          "events_ever": {
+            "mint_or_burn": 2,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+          },
+          "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+          "first_log_block": 31721667,
+          "last_log_block": 31820805,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 894427190999915878562,
+          "reserve0": 400000000000000000000000,
+          "reserve1": 2000000000000000000,
+          "reserve_written_at_timestamp": 1785165921,
+          "swap_count_ever": 0,
+          "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+          "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x0745e84011b0558a37eb4bfc894b5a29c3876f29-4200000000000000000000000000000000000006": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0x616d834775633f027b86df65dfcae1d5c2239d09",
+          "created_block": 37187564,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+          "first_log_block": 37187576,
+          "last_log_block": 37187576,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 40000000000000000000,
+          "reserve1": 40000000000000,
+          "reserve_written_at_timestamp": 1790532692,
+          "swap_count_ever": 0,
+          "token0": "0x0745e84011b0558a37eb4bfc894b5a29c3876f29",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0x3b9176a69168ae44cfefeffc46be8bbd49a5726d",
+          "created_block": 37187566,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+          "first_log_block": 37187582,
+          "last_log_block": 37187582,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 40000000000000000000,
+          "reserve1": 40000000000000,
+          "reserve_written_at_timestamp": 1790532698,
+          "swap_count_ever": 0,
+          "token0": "0x0745e84011b0558a37eb4bfc894b5a29c3876f29",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f-4200000000000000000000000000000000000006": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "created_block": 4058192,
+          "events_ever": {
+            "mint_or_burn": 2,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+          },
+          "factory": "0x1b9718e3caddbd508e6531a5fcf09eea9d516088",
+          "first_log_block": 4058192,
+          "last_log_block": 4058411,
+          "lp_held_by_creator": 6324555320336757662,
+          "lp_total_supply": 6324555320336758662,
+          "reserve0": 2000000000000000000000,
+          "reserve1": 20000000000000000,
+          "reserve_written_at_timestamp": 1757403527,
+          "swap_count_ever": 0,
+          "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "created_block": 4060504,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9249248102e00e2f1103e3c83e99c4eea82e65e9",
+          "first_log_block": 4060504,
+          "last_log_block": 4060504,
+          "lp_held_by_creator": 999999999999999000,
+          "lp_total_supply": 1000000000000000000,
+          "reserve0": 1000000000000000000000,
+          "reserve1": 1000000000000000,
+          "reserve_written_at_timestamp": 1757405620,
+          "swap_count_ever": 0,
+          "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac-4200000000000000000000000000000000000006": {
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x46503d6ad9f91eac86b5084fe30858aecbe439a9",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223107,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 677544000000000000,
+          "reserve1": 369299608003,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0x5dc46b157c34043bbbdb9608eb0af521659d8a79",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223107,
+          "last_log_block": 37223876,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000000000,
+          "reserve1": 500000000000,
+          "reserve_written_at_timestamp": 1790568992,
+          "swap_count_ever": 0,
+          "token0": "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x1477d41fe0e9280e66475335b9e5844220cacb82-4200000000000000000000000000000000000006": {
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x4952066fa997ea6d574e176ef5dbec21b3e36f8b",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223106,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 745416000000000000,
+          "reserve1": 335757434141,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x1477d41fe0e9280e66475335b9e5844220cacb82",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0x3d33a6bfff5d1c656c9c6a6701d01979c2e285f5",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223106,
+          "last_log_block": 37223872,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000000000,
+          "reserve1": 500000000000,
+          "reserve_written_at_timestamp": 1790568988,
+          "swap_count_ever": 0,
+          "token0": "0x1477d41fe0e9280e66475335b9e5844220cacb82",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x195ae861143297bf5615f87973614251a8503775-4200000000000000000000000000000000000006": {
+      "swaps_ever": 2,
+      "venues": [
+        {
+          "address": "0x9b8f4cb83f1505347334daa121a6f7ffa5f55500",
+          "created_block": 37187584,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 2,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+          "first_log_block": 37187596,
+          "last_log_block": 37187965,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 34646431799285044030,
+          "reserve1": 46200000000000,
+          "reserve_written_at_timestamp": 1790533081,
+          "swap_count_ever": 2,
+          "token0": "0x195ae861143297bf5615f87973614251a8503775",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0xc48f08f80cb0a78e77bcbed59de7326f47516e37",
+          "created_block": 37187586,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+          "first_log_block": 37187602,
+          "last_log_block": 37187602,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 40000000000000000000,
+          "reserve1": 40000000000000,
+          "reserve_written_at_timestamp": 1790532718,
+          "swap_count_ever": 0,
+          "token0": "0x195ae861143297bf5615f87973614251a8503775",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x2003bfae2ef61eda44f1356f470b5d17464f4f20-4200000000000000000000000000000000000006": {
+      "swaps_ever": 2,
+      "venues": [
+        {
+          "address": "0x112111ec78cb8fe9529ff805ef17670f6e9ab1bc",
+          "created_block": 37222733,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x01634aeb0f9cda75b9144cc1e530a6dc8d2aa46e",
+          "first_log_block": 37222733,
+          "last_log_block": 37222733,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 38235485391300054390,
+          "reserve1": 41851499007093,
+          "reserve_written_at_timestamp": 1790567849,
+          "swap_count_ever": 1,
+          "token0": "0x2003bfae2ef61eda44f1356f470b5d17464f4f20",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0xc444614176616bcb535804e258028c45917e5f7c",
+          "created_block": 37222733,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe08ea16a62201cda545df9e67b4493aff268b2fd",
+          "first_log_block": 37222733,
+          "last_log_block": 37222733,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 43817804600413289,
+          "reserve0": 41764514608699945610,
+          "reserve1": 45977869103862,
+          "reserve_written_at_timestamp": 1790567849,
+          "swap_count_ever": 1,
+          "token0": "0x2003bfae2ef61eda44f1356f470b5d17464f4f20",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x2703c846903ad7dcc65e6fe9e85a5f59f7565b09-709d21e8c0e7740b8719547543a796a6a504b993": {
+      "swaps_ever": 4,
+      "venues": [
+        {
+          "address": "0xa85e57d0c5c6d92d67bf2ba1c2f0951915be7f10",
+          "created_block": 4533620,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 4,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x8cc2580eb008219c172437dfda9d749569549f7c",
+          "first_log_block": 4549655,
+          "last_log_block": 4593238,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 497929099802371450308857,
+          "reserve0": 551869024139259826391058,
+          "reserve1": 456811213565167356792305,
+          "reserve_written_at_timestamp": 1757938354,
+          "swap_count_ever": 4,
+          "token0": "0x2703c846903ad7dcc65e6fe9e85a5f59f7565b09",
+          "token1": "0x709d21e8c0e7740b8719547543a796a6a504b993"
+        },
+        {
+          "address": "0x18a27d3c9bdc338d9ba4d43d1984b94f3ec69b5d",
+          "created_block": 4978751,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe5eed7d40a3f63c6277246847a478a16dda4386a",
+          "first_log_block": 4979026,
+          "last_log_block": 4979026,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 1581138830084189665999,
+          "reserve0": 5000000000000000000000,
+          "reserve1": 500000000000000000000,
+          "reserve_written_at_timestamp": 1758324142,
+          "swap_count_ever": 0,
+          "token0": "0x2703c846903ad7dcc65e6fe9e85a5f59f7565b09",
+          "token1": "0x709d21e8c0e7740b8719547543a796a6a504b993"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x377242c363458405b42eaa8a751511ff970d3057-4200000000000000000000000000000000000006": {
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xeb1f285e13ea04bc7f5d83522848f23dc126153e",
+          "created_block": 37223488,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223488,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 726138000000000000,
+          "reserve1": 344647674894,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x377242c363458405b42eaa8a751511ff970d3057",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0x3cd8230f1a5b9315834632be9d01742f0f569972",
+          "created_block": 37223488,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223488,
+          "last_log_block": 37223882,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000000000,
+          "reserve1": 500000000000,
+          "reserve_written_at_timestamp": 1790568998,
+          "swap_count_ever": 0,
+          "token0": "0x377242c363458405b42eaa8a751511ff970d3057",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x3808eca92d1845416be419fb73257706dec3629f-4200000000000000000000000000000000000006": {
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x5103da7ee3fc7f9a245c43ef92dc4857af2ba19b",
+          "created_block": 37223105,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223105,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 752318000000000000,
+          "reserve1": 332685570819,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x3808eca92d1845416be419fb73257706dec3629f",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0x47b5b17685df68f935e0810608ae75003407646c",
+          "created_block": 37223105,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223105,
+          "last_log_block": 37223868,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000000000,
+          "reserve1": 500000000000,
+          "reserve_written_at_timestamp": 1790568984,
+          "swap_count_ever": 0,
+          "token0": "0x3808eca92d1845416be419fb73257706dec3629f",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96-4200000000000000000000000000000000000006": {
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x4a231fd326ea4a833ac7bc1178e467088fbfad7c",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223107,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 688117000000000000,
+          "reserve1": 363638071947,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0xc1ee735dd32b2db5b6314fd7e7ef0a3fa846d382",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223107,
+          "last_log_block": 37223877,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000000000,
+          "reserve1": 500000000000,
+          "reserve_written_at_timestamp": 1790568993,
+          "swap_count_ever": 0,
+          "token0": "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077-4200000000000000000000000000000000000006": {
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xccaa51daea9eaf6c14b01d40abbc4fe18229bef8",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223106,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 683430000000000000,
+          "reserve1": 366127249969,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077",
+          "token1": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "address": "0x3fe071db2e55bdaf870d07317397a47d4277d836",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223106,
+          "last_log_block": 37223874,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000000000,
+          "reserve1": 500000000000,
+          "reserve_written_at_timestamp": 1790568990,
+          "swap_count_ever": 0,
+          "token0": "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077",
+          "token1": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x4200000000000000000000000000000000000006-4682e95161873123859c461f0bca0ada9fe1a240": {
+      "buy_other": 397815877466,
+      "buy_other_token": "0x4682e95161873123859c461f0bca0ada9fe1a240",
+      "buy_weth": 628845000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x4682e95161873123859c461f0bca0ada9fe1a240",
+      "sell_over_buy": 0.632614,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x8e08ceffef66dfcc9ade2a013bd081292359c3f3",
+          "created_block": 37223108,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223108,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 397815877466,
+          "reserve1": 628845000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x4682e95161873123859c461f0bca0ada9fe1a240"
+        },
+        {
+          "address": "0xe9393cbe54d8acc4e65cebe52e751fc6af5c2ea3",
+          "created_block": 37223108,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223108,
+          "last_log_block": 37223880,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568996,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x4682e95161873123859c461f0bca0ada9fe1a240"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1580743845634329390866424,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-5047ec4509d4d53cdbfc5ac279c4434099b7de5a": {
+      "buy_other": 330127887119,
+      "buy_other_token": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a",
+      "buy_weth": 758160000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a",
+      "sell_over_buy": 0.435433,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xe0c051aa98a38f90b6cea77d66d1126fca72399e",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223107,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 330127887119,
+          "reserve1": 758160000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a"
+        },
+        {
+          "address": "0x0a33bfcea548c942129633cbce113d8f57f539b6",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223107,
+          "last_log_block": 37223879,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568995,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 2296564542354789977072673,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-5ffb098e5381d2512471341a23d83c7b2fcfdf42": {
+      "buy_other": 353201412973,
+      "buy_other_token": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42",
+      "buy_weth": 708510000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42",
+      "sell_over_buy": 0.498513,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xdbf299d50a0cedf324c9e9496a7e464fbb826c45",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223107,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 353201412973,
+          "reserve1": 708510000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42"
+        },
+        {
+          "address": "0x59ae3d8b69e11105c2fcc0a45a94aac6f0fe3203",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223107,
+          "last_log_block": 37223878,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568994,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 2005965927588633627705484,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-677999c00bf03e79fd1affb15cd108d897028fb8": {
+      "buy_other": 350569424232,
+      "buy_other_token": "0x677999c00bf03e79fd1affb15cd108d897028fb8",
+      "buy_weth": 713841000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x677999c00bf03e79fd1affb15cd108d897028fb8",
+      "sell_over_buy": 0.491103,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xace7b6ea758ae29909e41f0c9e06088510c829ae",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223106,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 350569424232,
+          "reserve1": 713841000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x677999c00bf03e79fd1affb15cd108d897028fb8"
+        },
+        {
+          "address": "0xb5b8fde93ceb3209081cbfb5f761b7610376ce5b",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223106,
+          "last_log_block": 37223873,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568989,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x677999c00bf03e79fd1affb15cd108d897028fb8"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 2036232913249142812084487,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-734eccd37b38116db67bb03831333ffa1dc2d4a3": {
+      "buy_other": 362837723639,
+      "buy_other_token": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3",
+      "buy_weth": 689643000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3",
+      "sell_over_buy": 0.526124,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x3cf114d454032347be343f457942bd01cd0332d3",
+          "created_block": 37223109,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223109,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 362837723639,
+          "reserve1": 689643000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3"
+        },
+        {
+          "address": "0xd25855e2816972d52f38abcbc2e29ba8477cab78",
+          "created_block": 37223109,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223109,
+          "last_log_block": 37223881,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568997,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1900692665259222197520396,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-73d884c7a0b4767b7c07e1fc1706a64a3c6eee33": {
+      "buy_other": 386607098083,
+      "buy_other_token": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33",
+      "buy_weth": 647130000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33",
+      "sell_over_buy": 0.597418,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x10b78cc89702372539086cb12a7be9b4b1c40d8f",
+          "created_block": 37223488,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223488,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 386607098083,
+          "reserve1": 647130000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33"
+        },
+        {
+          "address": "0xa1b27e2491606830c712eb368c52bd04b6654f1d",
+          "created_block": 37223488,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223488,
+          "last_log_block": 37223883,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568999,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1673869939814371424177543,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-76a9f4e95032f2e7e432fb47e85042f3833bc633": {
+      "buy_other": 362807900435,
+      "buy_other_token": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633",
+      "buy_weth": 689700000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633",
+      "sell_over_buy": 0.526037,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x4e8cf8cfeba78e2f503400c4c32329bc5f6b821e",
+          "created_block": 37223105,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223105,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 362807900435,
+          "reserve1": 689700000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633"
+        },
+        {
+          "address": "0x7c1e30f10e835fa2c06439f9b432d8cb19094805",
+          "created_block": 37223105,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223105,
+          "last_log_block": 37223869,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568985,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1901006012198362782876867,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-7b9dc86c3495d377526247ade5ea7b864a5cec25": {
+      "buy_other": 1000000000000000,
+      "buy_other_token": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25",
+      "buy_weth": 1000000000000000000000,
+      "sell_other": 1000000000000000,
+      "sell_other_token": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25",
+      "sell_over_buy": 0.01,
+      "sell_weth": 10000000000000000000,
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0xda1687064f6f0367678cb168ba10c980959d0272",
+          "created_block": 4061065,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9249248102e00e2f1103e3c83e99c4eea82e65e9",
+          "first_log_block": 4061065,
+          "last_log_block": 4061065,
+          "lp_held_by_creator": 999999999999999000,
+          "lp_total_supply": 1000000000000000000,
+          "reserve0": 1000000000000000,
+          "reserve1": 1000000000000000000000,
+          "reserve_written_at_timestamp": 1757406181,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25"
+        },
+        {
+          "address": "0x7c580b975fb97c43018bc05a41f0c6a7d10350ad",
+          "created_block": 4075602,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 4
+          },
+          "factory": "0xad5acdf1d4515155ca05f51d1496d8ac346a171b",
+          "first_log_block": 4075602,
+          "last_log_block": 4727409,
+          "lp_held_by_creator": 20000000000000000,
+          "lp_total_supply": 100000000000000000,
+          "reserve0": 1000000000000000,
+          "reserve1": 10000000000000000000,
+          "reserve_written_at_timestamp": 1757420718,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1000000000000000000000000,
+      "weth_per_mid_sell": 10000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-7ee91c0d92d790cce5b1fbac0cb072e05ad10385": {
+      "buy_other": 390278549022,
+      "buy_other_token": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385",
+      "buy_weth": 641025000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385",
+      "sell_over_buy": 0.608835,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x9084f1633787f798b6dcc4f915068c29c5152a59",
+          "created_block": 37223109,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223109,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 390278549022,
+          "reserve1": 641025000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385"
+        },
+        {
+          "address": "0x4b804e4c766fcd4f7d50a55fe199b0944a01ef53",
+          "created_block": 37223109,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223109,
+          "last_log_block": 37223882,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568998,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1642480739990312467109774,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5": {
+      "buy_other": 347859648569,
+      "buy_other_token": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5",
+      "buy_weth": 719414500000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5",
+      "sell_over_buy": 0.483532,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xf437c686f4a2e74c0aba48511f5f540195df4818",
+          "created_block": 37223105,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223105,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 347859648569,
+          "reserve1": 719414500000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5"
+        },
+        {
+          "address": "0xdb74b294e1a08b287d3a0438f3d6768edf3fcf4e",
+          "created_block": 37223105,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223105,
+          "last_log_block": 37223870,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568986,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 2068117135630636151929205,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-86380eba48f82d2d4167260a9e9d04345f462770": {
+      "buy_other": 356432872222,
+      "buy_other_token": "0x86380eba48f82d2d4167260a9e9d04345f462770",
+      "buy_weth": 702069000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x86380eba48f82d2d4167260a9e9d04345f462770",
+      "sell_over_buy": 0.507689,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x50de79a6754bf4b48fe291441a89ef37fb702057",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223107,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 356432872222,
+          "reserve1": 702069000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x86380eba48f82d2d4167260a9e9d04345f462770"
+        },
+        {
+          "address": "0x41839207b1d72f29054444716811a5e1c92dd926",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223107,
+          "last_log_block": 37223878,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568994,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x86380eba48f82d2d4167260a9e9d04345f462770"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1969708898125211707791651,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-8668f207441ad2991b91ddb97942fb1cf0e7f857": {
+      "buy_other": 400951415932,
+      "buy_other_token": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857",
+      "buy_weth": 623916000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857",
+      "sell_over_buy": 0.642637,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xb2353fe6d7ff6d56a83937da8577b967275a37ec",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223106,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 400951415932,
+          "reserve1": 623916000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857"
+        },
+        {
+          "address": "0x3d2ae231e04f0498e4c09b68e80e3c02c39e8770",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223106,
+          "last_log_block": 37223870,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568986,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1556088780855718531988396,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-8e890d57deca39f27eed12b74f38587f2c58582e": {
+      "buy_other": 329218213935,
+      "buy_other_token": "0x8e890d57deca39f27eed12b74f38587f2c58582e",
+      "buy_weth": 760266000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0x8e890d57deca39f27eed12b74f38587f2c58582e",
+      "sell_over_buy": 0.43303,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x386198cccac7e9bd0d7ae67da78b45652498cb12",
+          "created_block": 37223108,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223108,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 329218213935,
+          "reserve1": 760266000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x8e890d57deca39f27eed12b74f38587f2c58582e"
+        },
+        {
+          "address": "0xb4b42db1b3d41a581c08a274bcddc44c2c5e5182",
+          "created_block": 37223108,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223108,
+          "last_log_block": 37223880,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568996,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x8e890d57deca39f27eed12b74f38587f2c58582e"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 2309307224873363080746099,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-9d0c58f3d49e2216d533c901fca4b79d123b7eec": {
+      "buy_other": 48400000000000,
+      "buy_other_token": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec",
+      "buy_weth": 36373556424479403474,
+      "sell_other": 40000000000000,
+      "sell_other_token": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec",
+      "sell_over_buy": 1.330637,
+      "sell_weth": 40000000000000000000,
+      "swaps_ever": 1,
+      "venues": [
+        {
+          "address": "0xb99e3a154b379205d121fa0dc5be2ac513a0e220",
+          "created_block": 37187604,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 3,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+          "first_log_block": 37187616,
+          "last_log_block": 37187755,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 48400000000000,
+          "reserve1": 36373556424479403474,
+          "reserve_written_at_timestamp": 1790532871,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec"
+        },
+        {
+          "address": "0x3813479cd750a0a6738d36fedce6e7b1b85ebe26",
+          "created_block": 37187606,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+          "first_log_block": 37187622,
+          "last_log_block": 37187622,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 40000000000000,
+          "reserve1": 40000000000000000000,
+          "reserve_written_at_timestamp": 1790532738,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 751519760836351311446280,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-b435aff0b8779ac1ae8e3e232a47da63d6d78d79": {
+      "buy_other": 44000000000000,
+      "buy_other_token": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79",
+      "buy_weth": 40000000000000000000,
+      "sell_other": 40000000000000,
+      "sell_other_token": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79",
+      "sell_over_buy": 1.1,
+      "sell_weth": 40000000000000000000,
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0x08b4ddaf033eacd73f2f0e04417b89e6f8cfd9c4",
+          "created_block": 37187624,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+          "first_log_block": 37187636,
+          "last_log_block": 37187757,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 44000000000000,
+          "reserve1": 40000000000000000000,
+          "reserve_written_at_timestamp": 1790532873,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79"
+        },
+        {
+          "address": "0xc3ba575ee825c1c34903e77e2da180f6fdcf17bb",
+          "created_block": 37187626,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+          "first_log_block": 37187642,
+          "last_log_block": 37187642,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 40000000000000,
+          "reserve1": 40000000000000000000,
+          "reserve_written_at_timestamp": 1790532758,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 909090909090909090909090,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-b76a12633999b6ca6dfd16d4699a45f73978af19": {
+      "buy_other": 41851499007093,
+      "buy_other_token": "0xb76a12633999b6ca6dfd16d4699a45f73978af19",
+      "buy_weth": 38235485391300054390,
+      "sell_other": 45977869103862,
+      "sell_other_token": "0xb76a12633999b6ca6dfd16d4699a45f73978af19",
+      "sell_over_buy": 0.994267,
+      "sell_weth": 41764514608699945610,
+      "swaps_ever": 2,
+      "venues": [
+        {
+          "address": "0xbef54daf14da40cac3346f3666903b15a8d4c84c",
+          "created_block": 37190032,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xa3f0d4175a27e4479dcc62c14261e7f5b924f9aa",
+          "first_log_block": 37190044,
+          "last_log_block": 37191172,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 41851499007093,
+          "reserve1": 38235485391300054390,
+          "reserve_written_at_timestamp": 1790536288,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xb76a12633999b6ca6dfd16d4699a45f73978af19"
+        },
+        {
+          "address": "0x0fd0137acfcd03a94fa67d140e262650978ed4a0",
+          "created_block": 37190034,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x5c74f184e62216b07867393026b4adc8e93967be",
+          "first_log_block": 37190050,
+          "last_log_block": 37191172,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 43817804600413289,
+          "reserve0": 45977869103862,
+          "reserve1": 41764514608699945610,
+          "reserve_written_at_timestamp": 1790536288,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xb76a12633999b6ca6dfd16d4699a45f73978af19"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 913598946236546917097143,
+      "weth_per_mid_sell": 908361249068671050396652
+    },
+    "0x4200000000000000000000000000000000000006-bc1b42216c1fd29ccc0fc83370a5666f391d36a0": {
+      "buy_other": 41851499007093,
+      "buy_other_token": "0xbc1b42216c1fd29ccc0fc83370a5666f391d36a0",
+      "buy_weth": 38235485391300054390,
+      "sell_other": 45977869103862,
+      "sell_other_token": "0xbc1b42216c1fd29ccc0fc83370a5666f391d36a0",
+      "sell_over_buy": 0.994267,
+      "sell_weth": 41764514608699945610,
+      "swaps_ever": 2,
+      "venues": [
+        {
+          "address": "0x5f0a77a4281615e94c94410f11502ad675481c95",
+          "created_block": 37204350,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x1e7a7f32e703a279c6e4ec787e47be2570b44f79",
+          "first_log_block": 37204350,
+          "last_log_block": 37204351,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 41851499007093,
+          "reserve1": 38235485391300054390,
+          "reserve_written_at_timestamp": 1790549467,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xbc1b42216c1fd29ccc0fc83370a5666f391d36a0"
+        },
+        {
+          "address": "0xc569b4351be44b13749b64395a0634e8e5a44ec2",
+          "created_block": 37204350,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xd72e15eefad37c555a1214a8975f38209e30c3d6",
+          "first_log_block": 37204350,
+          "last_log_block": 37204351,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 43817804600413289,
+          "reserve0": 45977869103862,
+          "reserve1": 41764514608699945610,
+          "reserve_written_at_timestamp": 1790549467,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xbc1b42216c1fd29ccc0fc83370a5666f391d36a0"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 913598946236546917097143,
+      "weth_per_mid_sell": 908361249068671050396652
+    },
+    "0x4200000000000000000000000000000000000006-bce17d4a973b8778335312eb32e41fe085bebb23": {
+      "buy_other": 369841960560,
+      "buy_other_token": "0xbce17d4a973b8778335312eb32e41fe085bebb23",
+      "buy_weth": 676545000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0xbce17d4a973b8778335312eb32e41fe085bebb23",
+      "sell_over_buy": 0.546663,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xbc457b9fff394d5d2c2b30a219f19cf5a0b7a42b",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223106,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 369841960560,
+          "reserve1": 676545000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xbce17d4a973b8778335312eb32e41fe085bebb23"
+        },
+        {
+          "address": "0xf5a0cc177dc7f8f0d6abffa38a4640508a0539d1",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223106,
+          "last_log_block": 37223874,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568990,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xbce17d4a973b8778335312eb32e41fe085bebb23"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1829281347566951152223255,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-bd27300e23577d103a5763c1f45e5cf380655b05": {
+      "buy_other": 48400000000000,
+      "buy_other_token": "0xbd27300e23577d103a5763c1f45e5cf380655b05",
+      "buy_weth": 36373556424479403474,
+      "sell_other": 40000000000000,
+      "sell_other_token": "0xbd27300e23577d103a5763c1f45e5cf380655b05",
+      "sell_over_buy": 1.330637,
+      "sell_weth": 40000000000000000000,
+      "swaps_ever": 1,
+      "venues": [
+        {
+          "address": "0xa4b69fbaa7e99ec700b755eafd70086ed778574f",
+          "created_block": 37187504,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 3,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+          "first_log_block": 37187516,
+          "last_log_block": 37187735,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 48400000000000,
+          "reserve1": 36373556424479403474,
+          "reserve_written_at_timestamp": 1790532851,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xbd27300e23577d103a5763c1f45e5cf380655b05"
+        },
+        {
+          "address": "0x93249955231f8b37d5b3c3731b50631e04003277",
+          "created_block": 37187506,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+          "first_log_block": 37187522,
+          "last_log_block": 37187522,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 40000000000000,
+          "reserve1": 40000000000000000000,
+          "reserve_written_at_timestamp": 1790532638,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xbd27300e23577d103a5763c1f45e5cf380655b05"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 751519760836351311446280,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-c3b2f961f93f1984ce97bd96fc2d1082f7e33ee6": {
+      "swaps_ever": 1,
+      "venues": [
+        {
+          "address": "0xe389d382394642ad6c414f0b311189bbf46d7f97",
+          "created_block": 4063307,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9249248102e00e2f1103e3c83e99c4eea82e65e9",
+          "first_log_block": 4063307,
+          "last_log_block": 4063307,
+          "lp_held_by_creator": 65954528791,
+          "lp_total_supply": 65954529791,
+          "reserve0": 1000000000000000,
+          "reserve1": 4350000,
+          "reserve_written_at_timestamp": 1757408423,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xc3b2f961f93f1984ce97bd96fc2d1082f7e33ee6"
+        },
+        {
+          "address": "0x9b824feab4624911264af349539f1b063a26e504",
+          "created_block": 4065285,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x3bf08fe026598054afc65f2f5dc50f9a6ee7119a",
+          "first_log_block": 4065285,
+          "last_log_block": 4065285,
+          "lp_held_by_creator": 65954528791,
+          "lp_total_supply": 65954529791,
+          "reserve0": 1000000000000000,
+          "reserve1": 4350000,
+          "reserve_written_at_timestamp": 1757410401,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xc3b2f961f93f1984ce97bd96fc2d1082f7e33ee6"
+        },
+        {
+          "address": "0xfe5c2d9ecb5d7726d64587e854ea367a475cdccc",
+          "created_block": 4070348,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 3,
+            "unclassified:0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925": 1,
+            "unclassified:0xdccd412f0b1252819cb1fd330b93224ca42612892bb3f4f789976e6d81936496": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 4
+          },
+          "factory": "0xad5acdf1d4515155ca05f51d1496d8ac346a171b",
+          "first_log_block": 4070348,
+          "last_log_block": 4075529,
+          "lp_held_by_creator": 59359075912,
+          "lp_total_supply": 59359076912,
+          "reserve0": 900100001517713,
+          "reserve1": 3914568,
+          "reserve_written_at_timestamp": 1757420645,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xc3b2f961f93f1984ce97bd96fc2d1082f7e33ee6"
+        }
+      ],
+      "weth_paired": true
+    },
+    "0x4200000000000000000000000000000000000006-c5c66aea7f3accbe4fb93abc6fc67ded194d2b54": {
+      "buy_other": 48400000000000,
+      "buy_other_token": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54",
+      "buy_weth": 36373556424479403474,
+      "sell_other": 40000000000000,
+      "sell_other_token": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54",
+      "sell_over_buy": 1.330637,
+      "sell_weth": 40000000000000000000,
+      "swaps_ever": 1,
+      "venues": [
+        {
+          "address": "0x884b3be88d46d659b1c392b9d6d2157fd8fcffa6",
+          "created_block": 37187544,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 3,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+          "first_log_block": 37187556,
+          "last_log_block": 37187741,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 48400000000000,
+          "reserve1": 36373556424479403474,
+          "reserve_written_at_timestamp": 1790532857,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54"
+        },
+        {
+          "address": "0x9889f51dd4542649198b04f499d80e0618bec432",
+          "created_block": 37187546,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+          "first_log_block": 37187562,
+          "last_log_block": 37187562,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 40000000000000,
+          "reserve1": 40000000000000000000,
+          "reserve_written_at_timestamp": 1790532678,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 751519760836351311446280,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-ca6453931adcafa58fe93ca88b7f7f3c3d0238da": {
+      "buy_other": 335290325695,
+      "buy_other_token": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da",
+      "buy_weth": 746460000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da",
+      "sell_over_buy": 0.449174,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xdf0249441ba1741b01a07971f6ca197e7b5df254",
+          "created_block": 37223105,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223105,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 335290325695,
+          "reserve1": 746460000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da"
+        },
+        {
+          "address": "0x7ca5b94deae67e31c2ebb9e8b56b1f2db6acbcf0",
+          "created_block": 37223105,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223105,
+          "last_log_block": 37223868,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568984,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 2226309388595435835872007,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-cc7dd5cf1592d46a0dd6061976ee6a2b9e322d80": {
+      "buy_other": 315844433108,
+      "buy_other_token": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80",
+      "buy_weth": 792540000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80",
+      "sell_over_buy": 0.398522,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xfffcd966645ac0c8dae66a6f85fefa9ce76e42bb",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223106,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 315844433108,
+          "reserve1": 792540000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80"
+        },
+        {
+          "address": "0x4f2f29231cc6889e8c2550ca27a4a4a4630c3517",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223106,
+          "last_log_block": 37223872,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568988,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 2509273290655081720592653,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-cffe7472a7a1a6947f56233854ae91a54c862f62": {
+      "buy_other": 35099900253008,
+      "buy_other_token": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "buy_weth": 45655538604883371699,
+      "sell_other": 36641298079327,
+      "sell_other_token": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "sell_over_buy": 0.916432,
+      "sell_weth": 43677608078641141054,
+      "swaps_ever": 5,
+      "venues": [
+        {
+          "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+          "created_block": 37187524,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 4,
+            "sync": 6,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+          "first_log_block": 37187536,
+          "last_log_block": 37191169,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 35099900253008,
+          "reserve1": 45655538604883371699,
+          "reserve_written_at_timestamp": 1790536285,
+          "swap_count_ever": 4,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xcffe7472a7a1a6947f56233854ae91a54c862f62"
+        },
+        {
+          "address": "0x5bef6275607901dcd58160356660151be0637440",
+          "created_block": 37187526,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+          "first_log_block": 37187542,
+          "last_log_block": 37191169,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 36641298079327,
+          "reserve1": 43677608078641141054,
+          "reserve_written_at_timestamp": 1790536285,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xcffe7472a7a1a6947f56233854ae91a54c862f62"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1300731291991941543272284,
+      "weth_per_mid_sell": 1192032225061481193612406
+    },
+    "0x4200000000000000000000000000000000000006-dcb1b2df4db294d9e786d0b5bd981be3d142cf81": {
+      "buy_other": 354470423347,
+      "buy_other_token": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81",
+      "buy_weth": 705960000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81",
+      "sell_over_buy": 0.502111,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0xd2b3d4452a58cf0cf39548c10e6236167c7490fa",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223107,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 354470423347,
+          "reserve1": 705960000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81"
+        },
+        {
+          "address": "0xe7d666952fa25370cfcd2cd82cd98866aa1b3994",
+          "created_block": 37223107,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223107,
+          "last_log_block": 37223876,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568992,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1991590704054081334998248,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-ddae43b6b2dd2a342a4a36d914f141cd6b4f54da": {
+      "buy_other": 49027245896042,
+      "buy_other_token": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da",
+      "buy_weth": 32657286189772954948,
+      "sell_other": 48000000000000,
+      "sell_other_token": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da",
+      "sell_over_buy": 1.251054,
+      "sell_weth": 40000000000000000000,
+      "swaps_ever": 2,
+      "venues": [
+        {
+          "address": "0xc4104f6e8ec7f7458560c1f31a7a528340288087",
+          "created_block": 37222623,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 2,
+            "sync": 3,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x991f930d249ae294484315cdbb7dcac5980fe289",
+          "first_log_block": 37222623,
+          "last_log_block": 37222671,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 49027245896042,
+          "reserve1": 32657286189772954948,
+          "reserve_written_at_timestamp": 1790567787,
+          "swap_count_ever": 2,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da"
+        },
+        {
+          "address": "0x510dcdd0eddb81b38006ea501e85fbf43633cd39",
+          "created_block": 37222623,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x8d671d1ff74c2d8070e15e14a10c64a5d3aeb6e5",
+          "first_log_block": 37222623,
+          "last_log_block": 37222623,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 43817804600413289,
+          "reserve0": 48000000000000,
+          "reserve1": 40000000000000000000,
+          "reserve_written_at_timestamp": 1790567739,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 666104848292312457582712,
+      "weth_per_mid_sell": 833333333333333333333333
+    },
+    "0x4200000000000000000000000000000000000006-e8388e2d3f4e081375b507946c94d0fd242781db": {
+      "buy_other": 353117387372,
+      "buy_other_token": "0xe8388e2d3f4e081375b507946c94d0fd242781db",
+      "buy_weth": 708679500000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0xe8388e2d3f4e081375b507946c94d0fd242781db",
+      "sell_over_buy": 0.498275,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x663ada0eb53baecb1a915e7a47b293f9e5a247ab",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223106,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 353117387372,
+          "reserve1": 708679500000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xe8388e2d3f4e081375b507946c94d0fd242781db"
+        },
+        {
+          "address": "0x3a06a6578893c0a8e70bde914433b53eb8c68482",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223106,
+          "last_log_block": 37223875,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568991,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xe8388e2d3f4e081375b507946c94d0fd242781db"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 2006923265020151911728162,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x4200000000000000000000000000000000000006-f4619cf278a24cfd51798e1bb87c73030a9979e3": {
+      "buy_other": 41851499007093,
+      "buy_other_token": "0xf4619cf278a24cfd51798e1bb87c73030a9979e3",
+      "buy_weth": 38235485391300054390,
+      "sell_other": 45977869103862,
+      "sell_other_token": "0xf4619cf278a24cfd51798e1bb87c73030a9979e3",
+      "sell_over_buy": 0.994267,
+      "sell_weth": 41764514608699945610,
+      "swaps_ever": 2,
+      "venues": [
+        {
+          "address": "0xec136e8746af198b4bf172b89d6557ed73bf8ebe",
+          "created_block": 37215191,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xa5329691e9fba547a7f87f59c9ac2f2fbcf09aae",
+          "first_log_block": 37215191,
+          "last_log_block": 37215193,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 40000000000000000,
+          "reserve0": 41851499007093,
+          "reserve1": 38235485391300054390,
+          "reserve_written_at_timestamp": 1790560309,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xf4619cf278a24cfd51798e1bb87c73030a9979e3"
+        },
+        {
+          "address": "0x10aa47cc9395a70e2995c8ee1a2a1c876ceece11",
+          "created_block": 37215191,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xbf72dd6433b37da489e6538f5098fe766f80e9a2",
+          "first_log_block": 37215191,
+          "last_log_block": 37215193,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 43817804600413289,
+          "reserve0": 45977869103862,
+          "reserve1": 41764514608699945610,
+          "reserve_written_at_timestamp": 1790560309,
+          "swap_count_ever": 1,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xf4619cf278a24cfd51798e1bb87c73030a9979e3"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 913598946236546917097143,
+      "weth_per_mid_sell": 908361249068671050396652
+    },
+    "0x4200000000000000000000000000000000000006-f5b1afbb4df98d2d846cc76920b2161653d0dfaa": {
+      "buy_other": 377808524541,
+      "buy_other_token": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa",
+      "buy_weth": 662235000000000000,
+      "sell_other": 500000000000,
+      "sell_other_token": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa",
+      "sell_over_buy": 0.570505,
+      "sell_weth": 500000000000000000,
+      "swaps_ever": 3,
+      "venues": [
+        {
+          "address": "0x2269c89c3945fa862f967f01c9a171518d623670",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "swap": 3,
+            "sync": 5,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+          "first_log_block": 37223106,
+          "last_log_block": 37224031,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 377808524541,
+          "reserve1": 662235000000000000,
+          "reserve_written_at_timestamp": 1790569147,
+          "swap_count_ever": 3,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa"
+        },
+        {
+          "address": "0x9e63f054b9dcf31b0ad4eac89da296e4d9e23d68",
+          "created_block": 37223106,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+          "first_log_block": 37223106,
+          "last_log_block": 37223871,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 500000000000000,
+          "reserve0": 500000000000,
+          "reserve1": 500000000000000000,
+          "reserve_written_at_timestamp": 1790568987,
+          "swap_count_ever": 0,
+          "token0": "0x4200000000000000000000000000000000000006",
+          "token1": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa"
+        }
+      ],
+      "weth_paired": true,
+      "weth_per_mid_buy": 1752832339621108454040545,
+      "weth_per_mid_sell": 1000000000000000000000000
+    },
+    "0x47016377896a98ac9c628d70a71de83f4592ea11-a0c47ab6685b48770ac6fb4f0d2edeed267f15d9": {
+      "swaps_ever": 1,
+      "venues": [
+        {
+          "address": "0x133e57116919b80b29fcbeb6ae74b70494529b16",
+          "created_block": 28543905,
+          "events_ever": {},
+          "factory": "0x9d780c911105d464d310394b2a7e21f5c7cee008",
+          "first_log_block": 0,
+          "last_log_block": 0,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 0,
+          "reserve0": 0,
+          "reserve1": 0,
+          "reserve_written_at_timestamp": 0,
+          "swap_count_ever": 0,
+          "token0": "0x47016377896a98ac9c628d70a71de83f4592ea11",
+          "token1": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9"
+        },
+        {
+          "address": "0xa47c8e56a2ce9789cef4b419a7a67ab9409cd3ab",
+          "created_block": 28544298,
+          "events_ever": {
+            "mint_or_burn": 6,
+            "swap": 1,
+            "sync": 7,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 7
+          },
+          "factory": "0xc5689d351ca0059681327c5e9cc7c8427273b41f",
+          "first_log_block": 28544333,
+          "last_log_block": 28545331,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 595049504950495049500,
+          "reserve0": 589175425953736298612,
+          "reserve1": 601000000000000000000,
+          "reserve_written_at_timestamp": 1781890447,
+          "swap_count_ever": 1,
+          "token0": "0x47016377896a98ac9c628d70a71de83f4592ea11",
+          "token1": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb-7c20cb4ab7c6d731c6a167433986ffd17c16ddc6": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0x32d7a03d4222864b22da103bcfe87e99a8044b8f",
+          "created_block": 31714059,
+          "events_ever": {},
+          "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+          "first_log_block": 0,
+          "last_log_block": 0,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 0,
+          "reserve0": 0,
+          "reserve1": 0,
+          "reserve_written_at_timestamp": 0,
+          "swap_count_ever": 0,
+          "token0": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb",
+          "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+        },
+        {
+          "address": "0x0ab4d94e4cda1737bae0afc409f012e4cd88b268",
+          "created_block": 31721667,
+          "events_ever": {
+            "mint_or_burn": 2,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+          },
+          "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+          "first_log_block": 31721667,
+          "last_log_block": 31820805,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 69000000000,
+          "reserve0": 69000000000,
+          "reserve1": 69000000000,
+          "reserve_written_at_timestamp": 1785165921,
+          "swap_count_ever": 0,
+          "token0": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb",
+          "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb-c5bf73bddef871bafb49d12f5d05a5b300422cdf": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0x267c5c5d5ea1b3bdb228d7974d22270b09123be2",
+          "created_block": 31714066,
+          "events_ever": {},
+          "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+          "first_log_block": 0,
+          "last_log_block": 0,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 0,
+          "reserve0": 0,
+          "reserve1": 0,
+          "reserve_written_at_timestamp": 0,
+          "swap_count_ever": 0,
+          "token0": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb",
+          "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+        },
+        {
+          "address": "0xe4fef40a9bc13658dde41291dbd07e1f4a788f54",
+          "created_block": 31721667,
+          "events_ever": {
+            "mint_or_burn": 2,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+          },
+          "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+          "first_log_block": 31721667,
+          "last_log_block": 31820805,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 371483512420134,
+          "reserve0": 69000000000,
+          "reserve1": 2000000000000000000,
+          "reserve_written_at_timestamp": 1785165921,
+          "swap_count_ever": 0,
+          "token0": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb",
+          "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6-c5bf73bddef871bafb49d12f5d05a5b300422cdf": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+          "created_block": 31714073,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+          "first_log_block": 31715779,
+          "last_log_block": 31715779,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 1870828693386970,
+          "reserve0": 3500000000000,
+          "reserve1": 1000000000000000000,
+          "reserve_written_at_timestamp": 1785060895,
+          "swap_count_ever": 0,
+          "token0": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+          "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+        },
+        {
+          "address": "0x43cf0bbc781cbd6824ca3ff1da12dc12cfbb8761",
+          "created_block": 31721667,
+          "events_ever": {
+            "mint_or_burn": 2,
+            "sync": 2,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+          },
+          "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+          "first_log_block": 31721667,
+          "last_log_block": 31820805,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 371483512420134,
+          "reserve0": 69000000000,
+          "reserve1": 2000000000000000000,
+          "reserve_written_at_timestamp": 1785165921,
+          "swap_count_ever": 0,
+          "token0": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+          "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0x94ff19d99ccf5f0bcd30bf84963224b18f5eef69-a0c47ab6685b48770ac6fb4f0d2edeed267f15d9": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0x84d051815352f326443d5b1899b8467a2f099693",
+          "created_block": 28543912,
+          "events_ever": {},
+          "factory": "0x9d780c911105d464d310394b2a7e21f5c7cee008",
+          "first_log_block": 0,
+          "last_log_block": 0,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 0,
+          "reserve0": 0,
+          "reserve1": 0,
+          "reserve_written_at_timestamp": 0,
+          "swap_count_ever": 0,
+          "token0": "0x94ff19d99ccf5f0bcd30bf84963224b18f5eef69",
+          "token1": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9"
+        },
+        {
+          "address": "0x0320fce15a53ac48e9010bfff4da21d3cd095bff",
+          "created_block": 28544305,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xc5689d351ca0059681327c5e9cc7c8427273b41f",
+          "first_log_block": 28544982,
+          "last_log_block": 28544982,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 1000000000000000,
+          "reserve0": 1000000000000000,
+          "reserve1": 1000000000000000,
+          "reserve_written_at_timestamp": 1781890098,
+          "swap_count_ever": 0,
+          "token0": "0x94ff19d99ccf5f0bcd30bf84963224b18f5eef69",
+          "token1": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9"
+        }
+      ],
+      "weth_paired": false
+    },
+    "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9-c8e99ff69b8ce543082783378ef9fa90d6999c93": {
+      "swaps_ever": 0,
+      "venues": [
+        {
+          "address": "0x61c1d098b78306d5cc751eb16bd058d5969dbf15",
+          "created_block": 28543909,
+          "events_ever": {},
+          "factory": "0x9d780c911105d464d310394b2a7e21f5c7cee008",
+          "first_log_block": 0,
+          "last_log_block": 0,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 0,
+          "reserve0": 0,
+          "reserve1": 0,
+          "reserve_written_at_timestamp": 0,
+          "swap_count_ever": 0,
+          "token0": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9",
+          "token1": "0xc8e99ff69b8ce543082783378ef9fa90d6999c93"
+        },
+        {
+          "address": "0xccc9eb614585eacd07195db9fecb08c61b72e465",
+          "created_block": 28544301,
+          "events_ever": {
+            "mint_or_burn": 1,
+            "sync": 1,
+            "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+          },
+          "factory": "0xc5689d351ca0059681327c5e9cc7c8427273b41f",
+          "first_log_block": 28544978,
+          "last_log_block": 28544978,
+          "lp_held_by_creator": 0,
+          "lp_total_supply": 1000000000000000000,
+          "reserve0": 1000000000000000000,
+          "reserve1": 1000000000000000000,
+          "reserve_written_at_timestamp": 1781890094,
+          "swap_count_ever": 0,
+          "token0": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9",
+          "token1": "0xc8e99ff69b8ce543082783378ef9fa90d6999c93"
+        }
+      ],
+      "weth_paired": false
+    }
+  },
+  "unclassified_topic0_tally": {
+    "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925": 2,
+    "0xdccd412f0b1252819cb1fd330b93224ca42612892bb3f4f789976e6d81936496": 1,
+    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 104
+  },
+  "uncovered_blocks": [],
+  "venue_count": 101,
+  "venues": {
+    "0x0320fce15a53ac48e9010bfff4da21d3cd095bff": {
+      "address": "0x0320fce15a53ac48e9010bfff4da21d3cd095bff",
+      "created_block": 28544305,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xc5689d351ca0059681327c5e9cc7c8427273b41f",
+      "first_log_block": 28544982,
+      "last_log_block": 28544982,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 1000000000000000,
+      "reserve0": 1000000000000000,
+      "reserve1": 1000000000000000,
+      "reserve_written_at_timestamp": 1781890098,
+      "swap_count_ever": 0,
+      "token0": "0x94ff19d99ccf5f0bcd30bf84963224b18f5eef69",
+      "token1": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9"
+    },
+    "0x08b4ddaf033eacd73f2f0e04417b89e6f8cfd9c4": {
+      "address": "0x08b4ddaf033eacd73f2f0e04417b89e6f8cfd9c4",
+      "created_block": 37187624,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+      "first_log_block": 37187636,
+      "last_log_block": 37187757,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 44000000000000,
+      "reserve1": 40000000000000000000,
+      "reserve_written_at_timestamp": 1790532873,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79"
+    },
+    "0x0a33bfcea548c942129633cbce113d8f57f539b6": {
+      "address": "0x0a33bfcea548c942129633cbce113d8f57f539b6",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223107,
+      "last_log_block": 37223879,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568995,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a"
+    },
+    "0x0ab4d94e4cda1737bae0afc409f012e4cd88b268": {
+      "address": "0x0ab4d94e4cda1737bae0afc409f012e4cd88b268",
+      "created_block": 31721667,
+      "events_ever": {
+        "mint_or_burn": 2,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+      },
+      "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+      "first_log_block": 31721667,
+      "last_log_block": 31820805,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 69000000000,
+      "reserve0": 69000000000,
+      "reserve1": 69000000000,
+      "reserve_written_at_timestamp": 1785165921,
+      "swap_count_ever": 0,
+      "token0": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb",
+      "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+    },
+    "0x0e70f2af6bff7c9810ee613814039d95a939e3b5": {
+      "address": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+      "created_block": 31714094,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+      "first_log_block": 31715802,
+      "last_log_block": 31715802,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 316227766016837933199,
+      "reserve0": 100000000000000000000000,
+      "reserve1": 1000000000000000000,
+      "reserve_written_at_timestamp": 1785060918,
+      "swap_count_ever": 0,
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+    },
+    "0x0fd0137acfcd03a94fa67d140e262650978ed4a0": {
+      "address": "0x0fd0137acfcd03a94fa67d140e262650978ed4a0",
+      "created_block": 37190034,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x5c74f184e62216b07867393026b4adc8e93967be",
+      "first_log_block": 37190050,
+      "last_log_block": 37191172,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 43817804600413289,
+      "reserve0": 45977869103862,
+      "reserve1": 41764514608699945610,
+      "reserve_written_at_timestamp": 1790536288,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xb76a12633999b6ca6dfd16d4699a45f73978af19"
+    },
+    "0x10aa47cc9395a70e2995c8ee1a2a1c876ceece11": {
+      "address": "0x10aa47cc9395a70e2995c8ee1a2a1c876ceece11",
+      "created_block": 37215191,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xbf72dd6433b37da489e6538f5098fe766f80e9a2",
+      "first_log_block": 37215191,
+      "last_log_block": 37215193,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 43817804600413289,
+      "reserve0": 45977869103862,
+      "reserve1": 41764514608699945610,
+      "reserve_written_at_timestamp": 1790560309,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xf4619cf278a24cfd51798e1bb87c73030a9979e3"
+    },
+    "0x10b78cc89702372539086cb12a7be9b4b1c40d8f": {
+      "address": "0x10b78cc89702372539086cb12a7be9b4b1c40d8f",
+      "created_block": 37223488,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223488,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 386607098083,
+      "reserve1": 647130000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33"
+    },
+    "0x112111ec78cb8fe9529ff805ef17670f6e9ab1bc": {
+      "address": "0x112111ec78cb8fe9529ff805ef17670f6e9ab1bc",
+      "created_block": 37222733,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x01634aeb0f9cda75b9144cc1e530a6dc8d2aa46e",
+      "first_log_block": 37222733,
+      "last_log_block": 37222733,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 38235485391300054390,
+      "reserve1": 41851499007093,
+      "reserve_written_at_timestamp": 1790567849,
+      "swap_count_ever": 1,
+      "token0": "0x2003bfae2ef61eda44f1356f470b5d17464f4f20",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x133e57116919b80b29fcbeb6ae74b70494529b16": {
+      "address": "0x133e57116919b80b29fcbeb6ae74b70494529b16",
+      "created_block": 28543905,
+      "events_ever": {},
+      "factory": "0x9d780c911105d464d310394b2a7e21f5c7cee008",
+      "first_log_block": 0,
+      "last_log_block": 0,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 0,
+      "reserve0": 0,
+      "reserve1": 0,
+      "reserve_written_at_timestamp": 0,
+      "swap_count_ever": 0,
+      "token0": "0x47016377896a98ac9c628d70a71de83f4592ea11",
+      "token1": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9"
+    },
+    "0x18a27d3c9bdc338d9ba4d43d1984b94f3ec69b5d": {
+      "address": "0x18a27d3c9bdc338d9ba4d43d1984b94f3ec69b5d",
+      "created_block": 4978751,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe5eed7d40a3f63c6277246847a478a16dda4386a",
+      "first_log_block": 4979026,
+      "last_log_block": 4979026,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 1581138830084189665999,
+      "reserve0": 5000000000000000000000,
+      "reserve1": 500000000000000000000,
+      "reserve_written_at_timestamp": 1758324142,
+      "swap_count_ever": 0,
+      "token0": "0x2703c846903ad7dcc65e6fe9e85a5f59f7565b09",
+      "token1": "0x709d21e8c0e7740b8719547543a796a6a504b993"
+    },
+    "0x2269c89c3945fa862f967f01c9a171518d623670": {
+      "address": "0x2269c89c3945fa862f967f01c9a171518d623670",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223106,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 377808524541,
+      "reserve1": 662235000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa"
+    },
+    "0x267c5c5d5ea1b3bdb228d7974d22270b09123be2": {
+      "address": "0x267c5c5d5ea1b3bdb228d7974d22270b09123be2",
+      "created_block": 31714066,
+      "events_ever": {},
+      "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+      "first_log_block": 0,
+      "last_log_block": 0,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 0,
+      "reserve0": 0,
+      "reserve1": 0,
+      "reserve_written_at_timestamp": 0,
+      "swap_count_ever": 0,
+      "token0": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+    },
+    "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4": {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "created_block": 4060504,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9249248102e00e2f1103e3c83e99c4eea82e65e9",
+      "first_log_block": 4060504,
+      "last_log_block": 4060504,
+      "lp_held_by_creator": 999999999999999000,
+      "lp_total_supply": 1000000000000000000,
+      "reserve0": 1000000000000000000000,
+      "reserve1": 1000000000000000,
+      "reserve_written_at_timestamp": 1757405620,
+      "swap_count_ever": 0,
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x32d7a03d4222864b22da103bcfe87e99a8044b8f": {
+      "address": "0x32d7a03d4222864b22da103bcfe87e99a8044b8f",
+      "created_block": 31714059,
+      "events_ever": {},
+      "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+      "first_log_block": 0,
+      "last_log_block": 0,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 0,
+      "reserve0": 0,
+      "reserve1": 0,
+      "reserve_written_at_timestamp": 0,
+      "swap_count_ever": 0,
+      "token0": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb",
+      "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+    },
+    "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42": {
+      "address": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+      "created_block": 31714087,
+      "events_ever": {
+        "mint_or_burn": 2,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+      },
+      "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+      "first_log_block": 31714343,
+      "last_log_block": 31715794,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 200000000000000000,
+      "reserve0": 200000000000000000000000,
+      "reserve1": 200000000000,
+      "reserve_written_at_timestamp": 1785060910,
+      "swap_count_ever": 0,
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+    },
+    "0x3813479cd750a0a6738d36fedce6e7b1b85ebe26": {
+      "address": "0x3813479cd750a0a6738d36fedce6e7b1b85ebe26",
+      "created_block": 37187606,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+      "first_log_block": 37187622,
+      "last_log_block": 37187622,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 40000000000000,
+      "reserve1": 40000000000000000000,
+      "reserve_written_at_timestamp": 1790532738,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec"
+    },
+    "0x386198cccac7e9bd0d7ae67da78b45652498cb12": {
+      "address": "0x386198cccac7e9bd0d7ae67da78b45652498cb12",
+      "created_block": 37223108,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223108,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 329218213935,
+      "reserve1": 760266000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x8e890d57deca39f27eed12b74f38587f2c58582e"
+    },
+    "0x3a06a6578893c0a8e70bde914433b53eb8c68482": {
+      "address": "0x3a06a6578893c0a8e70bde914433b53eb8c68482",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223106,
+      "last_log_block": 37223875,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568991,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xe8388e2d3f4e081375b507946c94d0fd242781db"
+    },
+    "0x3b9176a69168ae44cfefeffc46be8bbd49a5726d": {
+      "address": "0x3b9176a69168ae44cfefeffc46be8bbd49a5726d",
+      "created_block": 37187566,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+      "first_log_block": 37187582,
+      "last_log_block": 37187582,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 40000000000000000000,
+      "reserve1": 40000000000000,
+      "reserve_written_at_timestamp": 1790532698,
+      "swap_count_ever": 0,
+      "token0": "0x0745e84011b0558a37eb4bfc894b5a29c3876f29",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x3cd8230f1a5b9315834632be9d01742f0f569972": {
+      "address": "0x3cd8230f1a5b9315834632be9d01742f0f569972",
+      "created_block": 37223488,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223488,
+      "last_log_block": 37223882,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000000000,
+      "reserve1": 500000000000,
+      "reserve_written_at_timestamp": 1790568998,
+      "swap_count_ever": 0,
+      "token0": "0x377242c363458405b42eaa8a751511ff970d3057",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x3cf114d454032347be343f457942bd01cd0332d3": {
+      "address": "0x3cf114d454032347be343f457942bd01cd0332d3",
+      "created_block": 37223109,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223109,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 362837723639,
+      "reserve1": 689643000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3"
+    },
+    "0x3d2ae231e04f0498e4c09b68e80e3c02c39e8770": {
+      "address": "0x3d2ae231e04f0498e4c09b68e80e3c02c39e8770",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223106,
+      "last_log_block": 37223870,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568986,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857"
+    },
+    "0x3d33a6bfff5d1c656c9c6a6701d01979c2e285f5": {
+      "address": "0x3d33a6bfff5d1c656c9c6a6701d01979c2e285f5",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223106,
+      "last_log_block": 37223872,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000000000,
+      "reserve1": 500000000000,
+      "reserve_written_at_timestamp": 1790568988,
+      "swap_count_ever": 0,
+      "token0": "0x1477d41fe0e9280e66475335b9e5844220cacb82",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x3ea4bdb262a38e5b653cc931afd687fe5fdc4e76": {
+      "address": "0x3ea4bdb262a38e5b653cc931afd687fe5fdc4e76",
+      "created_block": 31721667,
+      "events_ever": {
+        "mint_or_burn": 2,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+      },
+      "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+      "first_log_block": 31721667,
+      "last_log_block": 31820805,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 894427190999915878562,
+      "reserve0": 400000000000000000000000,
+      "reserve1": 2000000000000000000,
+      "reserve_written_at_timestamp": 1785165921,
+      "swap_count_ever": 0,
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+    },
+    "0x3fe071db2e55bdaf870d07317397a47d4277d836": {
+      "address": "0x3fe071db2e55bdaf870d07317397a47d4277d836",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223106,
+      "last_log_block": 37223874,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000000000,
+      "reserve1": 500000000000,
+      "reserve_written_at_timestamp": 1790568990,
+      "swap_count_ever": 0,
+      "token0": "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x41839207b1d72f29054444716811a5e1c92dd926": {
+      "address": "0x41839207b1d72f29054444716811a5e1c92dd926",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223107,
+      "last_log_block": 37223878,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568994,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x86380eba48f82d2d4167260a9e9d04345f462770"
+    },
+    "0x43cf0bbc781cbd6824ca3ff1da12dc12cfbb8761": {
+      "address": "0x43cf0bbc781cbd6824ca3ff1da12dc12cfbb8761",
+      "created_block": 31721667,
+      "events_ever": {
+        "mint_or_burn": 2,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+      },
+      "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+      "first_log_block": 31721667,
+      "last_log_block": 31820805,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 371483512420134,
+      "reserve0": 69000000000,
+      "reserve1": 2000000000000000000,
+      "reserve_written_at_timestamp": 1785165921,
+      "swap_count_ever": 0,
+      "token0": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+    },
+    "0x46503d6ad9f91eac86b5084fe30858aecbe439a9": {
+      "address": "0x46503d6ad9f91eac86b5084fe30858aecbe439a9",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223107,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 677544000000000000,
+      "reserve1": 369299608003,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x47b5b17685df68f935e0810608ae75003407646c": {
+      "address": "0x47b5b17685df68f935e0810608ae75003407646c",
+      "created_block": 37223105,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223105,
+      "last_log_block": 37223868,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000000000,
+      "reserve1": 500000000000,
+      "reserve_written_at_timestamp": 1790568984,
+      "swap_count_ever": 0,
+      "token0": "0x3808eca92d1845416be419fb73257706dec3629f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x4952066fa997ea6d574e176ef5dbec21b3e36f8b": {
+      "address": "0x4952066fa997ea6d574e176ef5dbec21b3e36f8b",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223106,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 745416000000000000,
+      "reserve1": 335757434141,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x1477d41fe0e9280e66475335b9e5844220cacb82",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x4a231fd326ea4a833ac7bc1178e467088fbfad7c": {
+      "address": "0x4a231fd326ea4a833ac7bc1178e467088fbfad7c",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223107,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 688117000000000000,
+      "reserve1": 363638071947,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x4b804e4c766fcd4f7d50a55fe199b0944a01ef53": {
+      "address": "0x4b804e4c766fcd4f7d50a55fe199b0944a01ef53",
+      "created_block": 37223109,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223109,
+      "last_log_block": 37223882,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568998,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385"
+    },
+    "0x4e8cf8cfeba78e2f503400c4c32329bc5f6b821e": {
+      "address": "0x4e8cf8cfeba78e2f503400c4c32329bc5f6b821e",
+      "created_block": 37223105,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223105,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 362807900435,
+      "reserve1": 689700000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633"
+    },
+    "0x4f2f29231cc6889e8c2550ca27a4a4a4630c3517": {
+      "address": "0x4f2f29231cc6889e8c2550ca27a4a4a4630c3517",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223106,
+      "last_log_block": 37223872,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568988,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80"
+    },
+    "0x50de79a6754bf4b48fe291441a89ef37fb702057": {
+      "address": "0x50de79a6754bf4b48fe291441a89ef37fb702057",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223107,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 356432872222,
+      "reserve1": 702069000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x86380eba48f82d2d4167260a9e9d04345f462770"
+    },
+    "0x5103da7ee3fc7f9a245c43ef92dc4857af2ba19b": {
+      "address": "0x5103da7ee3fc7f9a245c43ef92dc4857af2ba19b",
+      "created_block": 37223105,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223105,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 752318000000000000,
+      "reserve1": 332685570819,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x3808eca92d1845416be419fb73257706dec3629f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x510dcdd0eddb81b38006ea501e85fbf43633cd39": {
+      "address": "0x510dcdd0eddb81b38006ea501e85fbf43633cd39",
+      "created_block": 37222623,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x8d671d1ff74c2d8070e15e14a10c64a5d3aeb6e5",
+      "first_log_block": 37222623,
+      "last_log_block": 37222623,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 43817804600413289,
+      "reserve0": 48000000000000,
+      "reserve1": 40000000000000000000,
+      "reserve_written_at_timestamp": 1790567739,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da"
+    },
+    "0x5543d6dadbbc4a6ec474243a154177d066469ea4": {
+      "address": "0x5543d6dadbbc4a6ec474243a154177d066469ea4",
+      "created_block": 37190158,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe636b01458237b8372794180ac4978ca28d49378",
+      "first_log_block": 37190158,
+      "last_log_block": 37191158,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 38235485391300054390,
+      "reserve1": 41851499007093,
+      "reserve_written_at_timestamp": 1790536274,
+      "swap_count_ever": 1,
+      "token0": "0x000d8dad0881c061d74911fd3ff45da41c6c2cb2",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x59ae3d8b69e11105c2fcc0a45a94aac6f0fe3203": {
+      "address": "0x59ae3d8b69e11105c2fcc0a45a94aac6f0fe3203",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223107,
+      "last_log_block": 37223878,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568994,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42"
+    },
+    "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e": {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "created_block": 4058192,
+      "events_ever": {
+        "mint_or_burn": 2,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+      },
+      "factory": "0x1b9718e3caddbd508e6531a5fcf09eea9d516088",
+      "first_log_block": 4058192,
+      "last_log_block": 4058411,
+      "lp_held_by_creator": 6324555320336757662,
+      "lp_total_supply": 6324555320336758662,
+      "reserve0": 2000000000000000000000,
+      "reserve1": 20000000000000000,
+      "reserve_written_at_timestamp": 1757403527,
+      "swap_count_ever": 0,
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x5bef6275607901dcd58160356660151be0637440": {
+      "address": "0x5bef6275607901dcd58160356660151be0637440",
+      "created_block": 37187526,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+      "first_log_block": 37187542,
+      "last_log_block": 37191169,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 36641298079327,
+      "reserve1": 43677608078641141054,
+      "reserve_written_at_timestamp": 1790536285,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xcffe7472a7a1a6947f56233854ae91a54c862f62"
+    },
+    "0x5dc46b157c34043bbbdb9608eb0af521659d8a79": {
+      "address": "0x5dc46b157c34043bbbdb9608eb0af521659d8a79",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223107,
+      "last_log_block": 37223876,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000000000,
+      "reserve1": 500000000000,
+      "reserve_written_at_timestamp": 1790568992,
+      "swap_count_ever": 0,
+      "token0": "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x5f0a77a4281615e94c94410f11502ad675481c95": {
+      "address": "0x5f0a77a4281615e94c94410f11502ad675481c95",
+      "created_block": 37204350,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x1e7a7f32e703a279c6e4ec787e47be2570b44f79",
+      "first_log_block": 37204350,
+      "last_log_block": 37204351,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 41851499007093,
+      "reserve1": 38235485391300054390,
+      "reserve_written_at_timestamp": 1790549467,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xbc1b42216c1fd29ccc0fc83370a5666f391d36a0"
+    },
+    "0x616d834775633f027b86df65dfcae1d5c2239d09": {
+      "address": "0x616d834775633f027b86df65dfcae1d5c2239d09",
+      "created_block": 37187564,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+      "first_log_block": 37187576,
+      "last_log_block": 37187576,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 40000000000000000000,
+      "reserve1": 40000000000000,
+      "reserve_written_at_timestamp": 1790532692,
+      "swap_count_ever": 0,
+      "token0": "0x0745e84011b0558a37eb4bfc894b5a29c3876f29",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x61c1d098b78306d5cc751eb16bd058d5969dbf15": {
+      "address": "0x61c1d098b78306d5cc751eb16bd058d5969dbf15",
+      "created_block": 28543909,
+      "events_ever": {},
+      "factory": "0x9d780c911105d464d310394b2a7e21f5c7cee008",
+      "first_log_block": 0,
+      "last_log_block": 0,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 0,
+      "reserve0": 0,
+      "reserve1": 0,
+      "reserve_written_at_timestamp": 0,
+      "swap_count_ever": 0,
+      "token0": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9",
+      "token1": "0xc8e99ff69b8ce543082783378ef9fa90d6999c93"
+    },
+    "0x663ada0eb53baecb1a915e7a47b293f9e5a247ab": {
+      "address": "0x663ada0eb53baecb1a915e7a47b293f9e5a247ab",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223106,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 353117387372,
+      "reserve1": 708679500000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xe8388e2d3f4e081375b507946c94d0fd242781db"
+    },
+    "0x7c1e30f10e835fa2c06439f9b432d8cb19094805": {
+      "address": "0x7c1e30f10e835fa2c06439f9b432d8cb19094805",
+      "created_block": 37223105,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223105,
+      "last_log_block": 37223869,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568985,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633"
+    },
+    "0x7c580b975fb97c43018bc05a41f0c6a7d10350ad": {
+      "address": "0x7c580b975fb97c43018bc05a41f0c6a7d10350ad",
+      "created_block": 4075602,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 4
+      },
+      "factory": "0xad5acdf1d4515155ca05f51d1496d8ac346a171b",
+      "first_log_block": 4075602,
+      "last_log_block": 4727409,
+      "lp_held_by_creator": 20000000000000000,
+      "lp_total_supply": 100000000000000000,
+      "reserve0": 1000000000000000,
+      "reserve1": 10000000000000000000,
+      "reserve_written_at_timestamp": 1757420718,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25"
+    },
+    "0x7ca5b94deae67e31c2ebb9e8b56b1f2db6acbcf0": {
+      "address": "0x7ca5b94deae67e31c2ebb9e8b56b1f2db6acbcf0",
+      "created_block": 37223105,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223105,
+      "last_log_block": 37223868,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568984,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da"
+    },
+    "0x84d051815352f326443d5b1899b8467a2f099693": {
+      "address": "0x84d051815352f326443d5b1899b8467a2f099693",
+      "created_block": 28543912,
+      "events_ever": {},
+      "factory": "0x9d780c911105d464d310394b2a7e21f5c7cee008",
+      "first_log_block": 0,
+      "last_log_block": 0,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 0,
+      "reserve0": 0,
+      "reserve1": 0,
+      "reserve_written_at_timestamp": 0,
+      "swap_count_ever": 0,
+      "token0": "0x94ff19d99ccf5f0bcd30bf84963224b18f5eef69",
+      "token1": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9"
+    },
+    "0x884b3be88d46d659b1c392b9d6d2157fd8fcffa6": {
+      "address": "0x884b3be88d46d659b1c392b9d6d2157fd8fcffa6",
+      "created_block": 37187544,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 3,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+      "first_log_block": 37187556,
+      "last_log_block": 37187741,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 48400000000000,
+      "reserve1": 36373556424479403474,
+      "reserve_written_at_timestamp": 1790532857,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54"
+    },
+    "0x8e08ceffef66dfcc9ade2a013bd081292359c3f3": {
+      "address": "0x8e08ceffef66dfcc9ade2a013bd081292359c3f3",
+      "created_block": 37223108,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223108,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 397815877466,
+      "reserve1": 628845000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x4682e95161873123859c461f0bca0ada9fe1a240"
+    },
+    "0x9069175fcbd67e421cc1b1edb43127ee96de30cc": {
+      "address": "0x9069175fcbd67e421cc1b1edb43127ee96de30cc",
+      "created_block": 31721667,
+      "events_ever": {
+        "mint_or_burn": 2,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+      },
+      "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+      "first_log_block": 31721667,
+      "last_log_block": 31820805,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 166132477258361496,
+      "reserve0": 400000000000000000000000,
+      "reserve1": 69000000000,
+      "reserve_written_at_timestamp": 1785165921,
+      "swap_count_ever": 0,
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+    },
+    "0x9084f1633787f798b6dcc4f915068c29c5152a59": {
+      "address": "0x9084f1633787f798b6dcc4f915068c29c5152a59",
+      "created_block": 37223109,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223109,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 390278549022,
+      "reserve1": 641025000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385"
+    },
+    "0x93249955231f8b37d5b3c3731b50631e04003277": {
+      "address": "0x93249955231f8b37d5b3c3731b50631e04003277",
+      "created_block": 37187506,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+      "first_log_block": 37187522,
+      "last_log_block": 37187522,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 40000000000000,
+      "reserve1": 40000000000000000000,
+      "reserve_written_at_timestamp": 1790532638,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xbd27300e23577d103a5763c1f45e5cf380655b05"
+    },
+    "0x98476278c3179a15418c54d464fac0f1bfab5ddd": {
+      "address": "0x98476278c3179a15418c54d464fac0f1bfab5ddd",
+      "created_block": 31721667,
+      "events_ever": {
+        "mint_or_burn": 2,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+      },
+      "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+      "first_log_block": 31721667,
+      "last_log_block": 31820805,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 166132477258361496,
+      "reserve0": 400000000000000000000000,
+      "reserve1": 69000000000,
+      "reserve_written_at_timestamp": 1785165921,
+      "swap_count_ever": 0,
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb"
+    },
+    "0x9889f51dd4542649198b04f499d80e0618bec432": {
+      "address": "0x9889f51dd4542649198b04f499d80e0618bec432",
+      "created_block": 37187546,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+      "first_log_block": 37187562,
+      "last_log_block": 37187562,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 40000000000000,
+      "reserve1": 40000000000000000000,
+      "reserve_written_at_timestamp": 1790532678,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54"
+    },
+    "0x9b824feab4624911264af349539f1b063a26e504": {
+      "address": "0x9b824feab4624911264af349539f1b063a26e504",
+      "created_block": 4065285,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x3bf08fe026598054afc65f2f5dc50f9a6ee7119a",
+      "first_log_block": 4065285,
+      "last_log_block": 4065285,
+      "lp_held_by_creator": 65954528791,
+      "lp_total_supply": 65954529791,
+      "reserve0": 1000000000000000,
+      "reserve1": 4350000,
+      "reserve_written_at_timestamp": 1757410401,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xc3b2f961f93f1984ce97bd96fc2d1082f7e33ee6"
+    },
+    "0x9b8f4cb83f1505347334daa121a6f7ffa5f55500": {
+      "address": "0x9b8f4cb83f1505347334daa121a6f7ffa5f55500",
+      "created_block": 37187584,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 2,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+      "first_log_block": 37187596,
+      "last_log_block": 37187965,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 34646431799285044030,
+      "reserve1": 46200000000000,
+      "reserve_written_at_timestamp": 1790533081,
+      "swap_count_ever": 2,
+      "token0": "0x195ae861143297bf5615f87973614251a8503775",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0x9e63f054b9dcf31b0ad4eac89da296e4d9e23d68": {
+      "address": "0x9e63f054b9dcf31b0ad4eac89da296e4d9e23d68",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223106,
+      "last_log_block": 37223871,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568987,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa"
+    },
+    "0xa1b27e2491606830c712eb368c52bd04b6654f1d": {
+      "address": "0xa1b27e2491606830c712eb368c52bd04b6654f1d",
+      "created_block": 37223488,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223488,
+      "last_log_block": 37223883,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568999,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33"
+    },
+    "0xa47c8e56a2ce9789cef4b419a7a67ab9409cd3ab": {
+      "address": "0xa47c8e56a2ce9789cef4b419a7a67ab9409cd3ab",
+      "created_block": 28544298,
+      "events_ever": {
+        "mint_or_burn": 6,
+        "swap": 1,
+        "sync": 7,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 7
+      },
+      "factory": "0xc5689d351ca0059681327c5e9cc7c8427273b41f",
+      "first_log_block": 28544333,
+      "last_log_block": 28545331,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 595049504950495049500,
+      "reserve0": 589175425953736298612,
+      "reserve1": 601000000000000000000,
+      "reserve_written_at_timestamp": 1781890447,
+      "swap_count_ever": 1,
+      "token0": "0x47016377896a98ac9c628d70a71de83f4592ea11",
+      "token1": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9"
+    },
+    "0xa4b69fbaa7e99ec700b755eafd70086ed778574f": {
+      "address": "0xa4b69fbaa7e99ec700b755eafd70086ed778574f",
+      "created_block": 37187504,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 3,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+      "first_log_block": 37187516,
+      "last_log_block": 37187735,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 48400000000000,
+      "reserve1": 36373556424479403474,
+      "reserve_written_at_timestamp": 1790532851,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xbd27300e23577d103a5763c1f45e5cf380655b05"
+    },
+    "0xa85e57d0c5c6d92d67bf2ba1c2f0951915be7f10": {
+      "address": "0xa85e57d0c5c6d92d67bf2ba1c2f0951915be7f10",
+      "created_block": 4533620,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 4,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x8cc2580eb008219c172437dfda9d749569549f7c",
+      "first_log_block": 4549655,
+      "last_log_block": 4593238,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 497929099802371450308857,
+      "reserve0": 551869024139259826391058,
+      "reserve1": 456811213565167356792305,
+      "reserve_written_at_timestamp": 1757938354,
+      "swap_count_ever": 4,
+      "token0": "0x2703c846903ad7dcc65e6fe9e85a5f59f7565b09",
+      "token1": "0x709d21e8c0e7740b8719547543a796a6a504b993"
+    },
+    "0xacb1a7492fc9d49db9c49e0d52f17c69c1d5f42a": {
+      "address": "0xacb1a7492fc9d49db9c49e0d52f17c69c1d5f42a",
+      "created_block": 31714080,
+      "events_ever": {
+        "mint_or_burn": 2,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+      },
+      "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+      "first_log_block": 31714335,
+      "last_log_block": 31715786,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 63245553203367586,
+      "reserve0": 200000000000000000000000,
+      "reserve1": 20000000000,
+      "reserve_written_at_timestamp": 1785060902,
+      "swap_count_ever": 0,
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb"
+    },
+    "0xace7b6ea758ae29909e41f0c9e06088510c829ae": {
+      "address": "0xace7b6ea758ae29909e41f0c9e06088510c829ae",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223106,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 350569424232,
+      "reserve1": 713841000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x677999c00bf03e79fd1affb15cd108d897028fb8"
+    },
+    "0xb2353fe6d7ff6d56a83937da8577b967275a37ec": {
+      "address": "0xb2353fe6d7ff6d56a83937da8577b967275a37ec",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223106,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 400951415932,
+      "reserve1": 623916000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857"
+    },
+    "0xb4b42db1b3d41a581c08a274bcddc44c2c5e5182": {
+      "address": "0xb4b42db1b3d41a581c08a274bcddc44c2c5e5182",
+      "created_block": 37223108,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223108,
+      "last_log_block": 37223880,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568996,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x8e890d57deca39f27eed12b74f38587f2c58582e"
+    },
+    "0xb5b8fde93ceb3209081cbfb5f761b7610376ce5b": {
+      "address": "0xb5b8fde93ceb3209081cbfb5f761b7610376ce5b",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223106,
+      "last_log_block": 37223873,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568989,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x677999c00bf03e79fd1affb15cd108d897028fb8"
+    },
+    "0xb99e3a154b379205d121fa0dc5be2ac513a0e220": {
+      "address": "0xb99e3a154b379205d121fa0dc5be2ac513a0e220",
+      "created_block": 37187604,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 3,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+      "first_log_block": 37187616,
+      "last_log_block": 37187755,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 48400000000000,
+      "reserve1": 36373556424479403474,
+      "reserve_written_at_timestamp": 1790532871,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec"
+    },
+    "0xbc457b9fff394d5d2c2b30a219f19cf5a0b7a42b": {
+      "address": "0xbc457b9fff394d5d2c2b30a219f19cf5a0b7a42b",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223106,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 369841960560,
+      "reserve1": 676545000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xbce17d4a973b8778335312eb32e41fe085bebb23"
+    },
+    "0xbef54daf14da40cac3346f3666903b15a8d4c84c": {
+      "address": "0xbef54daf14da40cac3346f3666903b15a8d4c84c",
+      "created_block": 37190032,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xa3f0d4175a27e4479dcc62c14261e7f5b924f9aa",
+      "first_log_block": 37190044,
+      "last_log_block": 37191172,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 41851499007093,
+      "reserve1": 38235485391300054390,
+      "reserve_written_at_timestamp": 1790536288,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xb76a12633999b6ca6dfd16d4699a45f73978af19"
+    },
+    "0xc1ee735dd32b2db5b6314fd7e7ef0a3fa846d382": {
+      "address": "0xc1ee735dd32b2db5b6314fd7e7ef0a3fa846d382",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223107,
+      "last_log_block": 37223877,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000000000,
+      "reserve1": 500000000000,
+      "reserve_written_at_timestamp": 1790568993,
+      "swap_count_ever": 0,
+      "token0": "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0xc3ba575ee825c1c34903e77e2da180f6fdcf17bb": {
+      "address": "0xc3ba575ee825c1c34903e77e2da180f6fdcf17bb",
+      "created_block": 37187626,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+      "first_log_block": 37187642,
+      "last_log_block": 37187642,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 40000000000000,
+      "reserve1": 40000000000000000000,
+      "reserve_written_at_timestamp": 1790532758,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79"
+    },
+    "0xc4104f6e8ec7f7458560c1f31a7a528340288087": {
+      "address": "0xc4104f6e8ec7f7458560c1f31a7a528340288087",
+      "created_block": 37222623,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 2,
+        "sync": 3,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x991f930d249ae294484315cdbb7dcac5980fe289",
+      "first_log_block": 37222623,
+      "last_log_block": 37222671,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 49027245896042,
+      "reserve1": 32657286189772954948,
+      "reserve_written_at_timestamp": 1790567787,
+      "swap_count_ever": 2,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da"
+    },
+    "0xc444614176616bcb535804e258028c45917e5f7c": {
+      "address": "0xc444614176616bcb535804e258028c45917e5f7c",
+      "created_block": 37222733,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe08ea16a62201cda545df9e67b4493aff268b2fd",
+      "first_log_block": 37222733,
+      "last_log_block": 37222733,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 43817804600413289,
+      "reserve0": 41764514608699945610,
+      "reserve1": 45977869103862,
+      "reserve_written_at_timestamp": 1790567849,
+      "swap_count_ever": 1,
+      "token0": "0x2003bfae2ef61eda44f1356f470b5d17464f4f20",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0xc48f08f80cb0a78e77bcbed59de7326f47516e37": {
+      "address": "0xc48f08f80cb0a78e77bcbed59de7326f47516e37",
+      "created_block": 37187586,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x1e594a501d8dca00b988e0dff7966cb0a223cdac",
+      "first_log_block": 37187602,
+      "last_log_block": 37187602,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 40000000000000000000,
+      "reserve1": 40000000000000,
+      "reserve_written_at_timestamp": 1790532718,
+      "swap_count_ever": 0,
+      "token0": "0x195ae861143297bf5615f87973614251a8503775",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0xc569b4351be44b13749b64395a0634e8e5a44ec2": {
+      "address": "0xc569b4351be44b13749b64395a0634e8e5a44ec2",
+      "created_block": 37204350,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xd72e15eefad37c555a1214a8975f38209e30c3d6",
+      "first_log_block": 37204350,
+      "last_log_block": 37204351,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 43817804600413289,
+      "reserve0": 45977869103862,
+      "reserve1": 41764514608699945610,
+      "reserve_written_at_timestamp": 1790549467,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xbc1b42216c1fd29ccc0fc83370a5666f391d36a0"
+    },
+    "0xccaa51daea9eaf6c14b01d40abbc4fe18229bef8": {
+      "address": "0xccaa51daea9eaf6c14b01d40abbc4fe18229bef8",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223106,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 683430000000000000,
+      "reserve1": 366127249969,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0xccc9eb614585eacd07195db9fecb08c61b72e465": {
+      "address": "0xccc9eb614585eacd07195db9fecb08c61b72e465",
+      "created_block": 28544301,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xc5689d351ca0059681327c5e9cc7c8427273b41f",
+      "first_log_block": 28544978,
+      "last_log_block": 28544978,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 1000000000000000000,
+      "reserve0": 1000000000000000000,
+      "reserve1": 1000000000000000000,
+      "reserve_written_at_timestamp": 1781890094,
+      "swap_count_ever": 0,
+      "token0": "0xa0c47ab6685b48770ac6fb4f0d2edeed267f15d9",
+      "token1": "0xc8e99ff69b8ce543082783378ef9fa90d6999c93"
+    },
+    "0xd25855e2816972d52f38abcbc2e29ba8477cab78": {
+      "address": "0xd25855e2816972d52f38abcbc2e29ba8477cab78",
+      "created_block": 37223109,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223109,
+      "last_log_block": 37223881,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568997,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3"
+    },
+    "0xd2b3d4452a58cf0cf39548c10e6236167c7490fa": {
+      "address": "0xd2b3d4452a58cf0cf39548c10e6236167c7490fa",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223107,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 354470423347,
+      "reserve1": 705960000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81"
+    },
+    "0xd9f800f5b2dc606794d18e143f47ad6517021341": {
+      "address": "0xd9f800f5b2dc606794d18e143f47ad6517021341",
+      "created_block": 37190158,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9fd6aaea57eb46aece9c49fcdba2d0ae9309a6e4",
+      "first_log_block": 37190158,
+      "last_log_block": 37191158,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 43817804600413289,
+      "reserve0": 41764514608699945610,
+      "reserve1": 45977869103862,
+      "reserve_written_at_timestamp": 1790536274,
+      "swap_count_ever": 1,
+      "token0": "0x000d8dad0881c061d74911fd3ff45da41c6c2cb2",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0xda1687064f6f0367678cb168ba10c980959d0272": {
+      "address": "0xda1687064f6f0367678cb168ba10c980959d0272",
+      "created_block": 4061065,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9249248102e00e2f1103e3c83e99c4eea82e65e9",
+      "first_log_block": 4061065,
+      "last_log_block": 4061065,
+      "lp_held_by_creator": 999999999999999000,
+      "lp_total_supply": 1000000000000000000,
+      "reserve0": 1000000000000000,
+      "reserve1": 1000000000000000000000,
+      "reserve_written_at_timestamp": 1757406181,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x7b9dc86c3495d377526247ade5ea7b864a5cec25"
+    },
+    "0xdb74b294e1a08b287d3a0438f3d6768edf3fcf4e": {
+      "address": "0xdb74b294e1a08b287d3a0438f3d6768edf3fcf4e",
+      "created_block": 37223105,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223105,
+      "last_log_block": 37223870,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568986,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5"
+    },
+    "0xdbf299d50a0cedf324c9e9496a7e464fbb826c45": {
+      "address": "0xdbf299d50a0cedf324c9e9496a7e464fbb826c45",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223107,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 353201412973,
+      "reserve1": 708510000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42"
+    },
+    "0xdf0249441ba1741b01a07971f6ca197e7b5df254": {
+      "address": "0xdf0249441ba1741b01a07971f6ca197e7b5df254",
+      "created_block": 37223105,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223105,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 335290325695,
+      "reserve1": 746460000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da"
+    },
+    "0xe0c051aa98a38f90b6cea77d66d1126fca72399e": {
+      "address": "0xe0c051aa98a38f90b6cea77d66d1126fca72399e",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223107,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 330127887119,
+      "reserve1": 758160000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a"
+    },
+    "0xe1a9db8507570806ef64ff8d3583787c43f9eff0": {
+      "address": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+      "created_block": 31714073,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x760aa9d41cb1db0a262e44d0f1fc309644d079f3",
+      "first_log_block": 31715779,
+      "last_log_block": 31715779,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 1870828693386970,
+      "reserve0": 3500000000000,
+      "reserve1": 1000000000000000000,
+      "reserve_written_at_timestamp": 1785060895,
+      "swap_count_ever": 0,
+      "token0": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+    },
+    "0xe389d382394642ad6c414f0b311189bbf46d7f97": {
+      "address": "0xe389d382394642ad6c414f0b311189bbf46d7f97",
+      "created_block": 4063307,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9249248102e00e2f1103e3c83e99c4eea82e65e9",
+      "first_log_block": 4063307,
+      "last_log_block": 4063307,
+      "lp_held_by_creator": 65954528791,
+      "lp_total_supply": 65954529791,
+      "reserve0": 1000000000000000,
+      "reserve1": 4350000,
+      "reserve_written_at_timestamp": 1757408423,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xc3b2f961f93f1984ce97bd96fc2d1082f7e33ee6"
+    },
+    "0xe4fef40a9bc13658dde41291dbd07e1f4a788f54": {
+      "address": "0xe4fef40a9bc13658dde41291dbd07e1f4a788f54",
+      "created_block": 31721667,
+      "events_ever": {
+        "mint_or_burn": 2,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 3
+      },
+      "factory": "0xb104d59ef3fc127b4d86a3a644c9ee918ed3d117",
+      "first_log_block": 31721667,
+      "last_log_block": 31820805,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 371483512420134,
+      "reserve0": 69000000000,
+      "reserve1": 2000000000000000000,
+      "reserve_written_at_timestamp": 1785165921,
+      "swap_count_ever": 0,
+      "token0": "0x678bde2845a6fc6a609a677cf123fe7a3c6f35cb",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+    },
+    "0xe7d666952fa25370cfcd2cd82cd98866aa1b3994": {
+      "address": "0xe7d666952fa25370cfcd2cd82cd98866aa1b3994",
+      "created_block": 37223107,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223107,
+      "last_log_block": 37223876,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568992,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81"
+    },
+    "0xe9393cbe54d8acc4e65cebe52e751fc6af5c2ea3": {
+      "address": "0xe9393cbe54d8acc4e65cebe52e751fc6af5c2ea3",
+      "created_block": 37223108,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223108,
+      "last_log_block": 37223880,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568996,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x4682e95161873123859c461f0bca0ada9fe1a240"
+    },
+    "0xeb1f285e13ea04bc7f5d83522848f23dc126153e": {
+      "address": "0xeb1f285e13ea04bc7f5d83522848f23dc126153e",
+      "created_block": 37223488,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223488,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 726138000000000000,
+      "reserve1": 344647674894,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x377242c363458405b42eaa8a751511ff970d3057",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "0xec136e8746af198b4bf172b89d6557ed73bf8ebe": {
+      "address": "0xec136e8746af198b4bf172b89d6557ed73bf8ebe",
+      "created_block": 37215191,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xa5329691e9fba547a7f87f59c9ac2f2fbcf09aae",
+      "first_log_block": 37215191,
+      "last_log_block": 37215193,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 41851499007093,
+      "reserve1": 38235485391300054390,
+      "reserve_written_at_timestamp": 1790560309,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xf4619cf278a24cfd51798e1bb87c73030a9979e3"
+    },
+    "0xf437c686f4a2e74c0aba48511f5f540195df4818": {
+      "address": "0xf437c686f4a2e74c0aba48511f5f540195df4818",
+      "created_block": 37223105,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223105,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 347859648569,
+      "reserve1": 719414500000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5"
+    },
+    "0xf487d533cae6cddd0c7e7bbbac084dd04d876578": {
+      "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+      "created_block": 37187524,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 4,
+        "sync": 6,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+      "first_log_block": 37187536,
+      "last_log_block": 37191169,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 40000000000000000,
+      "reserve0": 35099900253008,
+      "reserve1": 45655538604883371699,
+      "reserve_written_at_timestamp": 1790536285,
+      "swap_count_ever": 4,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xcffe7472a7a1a6947f56233854ae91a54c862f62"
+    },
+    "0xf5a0cc177dc7f8f0d6abffa38a4640508a0539d1": {
+      "address": "0xf5a0cc177dc7f8f0d6abffa38a4640508a0539d1",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "sync": 2,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0xe896fc0a53bc91901de315c36d859972ee0819ef",
+      "first_log_block": 37223106,
+      "last_log_block": 37223874,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 500000000000,
+      "reserve1": 500000000000000000,
+      "reserve_written_at_timestamp": 1790568990,
+      "swap_count_ever": 0,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xbce17d4a973b8778335312eb32e41fe085bebb23"
+    },
+    "0xfe5c2d9ecb5d7726d64587e854ea367a475cdccc": {
+      "address": "0xfe5c2d9ecb5d7726d64587e854ea367a475cdccc",
+      "created_block": 4070348,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 1,
+        "sync": 3,
+        "unclassified:0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925": 1,
+        "unclassified:0xdccd412f0b1252819cb1fd330b93224ca42612892bb3f4f789976e6d81936496": 1,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 4
+      },
+      "factory": "0xad5acdf1d4515155ca05f51d1496d8ac346a171b",
+      "first_log_block": 4070348,
+      "last_log_block": 4075529,
+      "lp_held_by_creator": 59359075912,
+      "lp_total_supply": 59359076912,
+      "reserve0": 900100001517713,
+      "reserve1": 3914568,
+      "reserve_written_at_timestamp": 1757420645,
+      "swap_count_ever": 1,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xc3b2f961f93f1984ce97bd96fc2d1082f7e33ee6"
+    },
+    "0xfffcd966645ac0c8dae66a6f85fefa9ce76e42bb": {
+      "address": "0xfffcd966645ac0c8dae66a6f85fefa9ce76e42bb",
+      "created_block": 37223106,
+      "events_ever": {
+        "mint_or_burn": 1,
+        "swap": 3,
+        "sync": 5,
+        "unclassified:0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": 2
+      },
+      "factory": "0x9d9e0636c40e355aaeedd82118241135705bb47a",
+      "first_log_block": 37223106,
+      "last_log_block": 37224031,
+      "lp_held_by_creator": 0,
+      "lp_total_supply": 500000000000000,
+      "reserve0": 315844433108,
+      "reserve1": 792540000000000000,
+      "reserve_written_at_timestamp": 1790569147,
+      "swap_count_ever": 3,
+      "token0": "0x4200000000000000000000000000000000000006",
+      "token1": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80"
+    }
+  },
+  "venues_that_ever_swapped": 44,
+  "window_fully_covered": true
+}

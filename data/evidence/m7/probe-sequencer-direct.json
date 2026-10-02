@@ -1,0 +1,3083 @@
+{
+  "_provenance": {
+    "asked": "M7 Coding.md 29: re-study RETH_ROLLUP_SEQUENCERHTTP and verify HTTP method / request format / response format / authentication / transaction submission semantics, without assuming it is a raw transaction API",
+    "client": "the same reqwest shape as crates/chain/src/rpc.rs: POST, Content-Type: application/json, {jsonrpc,id,method,params} — the deliberate difference from data/evidence/m7/probe-sequencer-method-whitelist.json, whose -32700 answer was produced by a hand-rolled client",
+    "hosts": [
+      {
+        "name": "rpc",
+        "url": "https://sepolia-rpc.giwa.io",
+        "url_env": "GIWA_RPC_URL"
+      },
+      {
+        "name": "sequencer",
+        "url": "https://sepolia-sequencer.giwa.io",
+        "url_env": "RETH_ROLLUP_SEQUENCERHTTP"
+      },
+      {
+        "name": "flashblocks",
+        "url": "https://sepolia-rpc-flashblocks.giwa.io",
+        "url_env": "GIWA_FLASHBLOCKS_RPC_URL"
+      }
+    ],
+    "milestone": "M7 §29",
+    "no_key_in_this_file": "the only signature is over the synthetic scalar-1 key (§40); the operator's key is never read (§19) and its environment variable is never touched",
+    "no_value_at_risk": "every probe payload has value 0 from 0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, whose native balance this run read as 0x0 before the first submission and again after the last; the nonce 1 was read from eth_getTransactionCount(\"pending\") rather than assumed — this well-known key is not virgin on this chain, it already has a transaction in its history",
+    "run_by": "cargo test -p evm-execution --test sequencer_direct_probe -- --ignored --nocapture",
+    "urls_from_env": [
+      "GIWA_RPC_URL",
+      "RETH_ROLLUP_SEQUENCERHTTP",
+      "GIWA_FLASHBLOCKS_RPC_URL"
+    ]
+  },
+  "calls": [
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_getBalance [\"0x7e5f4552091a69125d5dfcb7b8c2659029395bdf\",\"latest\"]",
+      "latency_ms": 693,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0x7e5f4552091a69125d5dfcb7b8c2659029395bdf\",\"latest\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x0\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6be269cfcbe1-SIN",
+        "content-length": "40",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x0"
+      },
+      "section": "0_unfunded_control",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_getTransactionCount [\"0x7e5f4552091a69125d5dfcb7b8c2659029395bdf\",\"pending\"]",
+      "latency_ms": 231,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionCount\",\"params\":[\"0x7e5f4552091a69125d5dfcb7b8c2659029395bdf\",\"pending\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x1\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6be41df3cbe1-SIN",
+        "content-length": "40",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x1"
+      },
+      "section": "0_unfunded_control",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_chainId []",
+      "latency_ms": 239,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6be58909cbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_blockNumber []",
+      "latency_ms": 242,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x23d0785\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6be70cd1cbe1-SIN",
+        "content-length": "46",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x23d0785"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "net_version []",
+      "latency_ms": 246,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"net_version\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"91342\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6be8880dcbe1-SIN",
+        "content-length": "42",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "91342"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "web3_clientVersion []",
+      "latency_ms": 230,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"web3_clientVersion\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6bea1b64cbe1-SIN",
+        "content-length": "81",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_getTransactionReceipt [\"0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95\"]",
+      "latency_ms": 237,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionReceipt\",\"params\":[\"0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":{\"blobGasUsed\":\"0x9c40\",\"blockHash\":\"0xfdf3508c899e7ff9d8fd8fd35300a7d6adfab97ca869f5df2e0b086d685ce3af\",\"blockNumber\":\"0x23c43ea\",\"contractAddress\":null,\"cumulativeGasUsed\":\"0x140f62\",\"daFootprintGasScalar\":\"0x190\",\"effectiveGasPrice\":\"0xf43d1\",\"from\":\"0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c\",\"gasUsed\":\"0x5208\",\"l1BaseFeeScalar\":\"0x558\",\"l1BlobBaseFee\":\"0x3b2fd9b\",\"l1BlobBaseFeeScalar\":\"0xc3c9d\",\"l1Fee\":\"0x1b36d6568\",\"l1GasPrice\":\"0x3f669e1f\",\"l1GasUsed\":\"0x640\",\"logs\":[],\"logsBloom\":\"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"status\":\"0x1\",\"to\":\"0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c\",\"transactionHash\":\"0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95\",\"transactionIndex\":\"0x9\",\"type\":\"0x2\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6beb8edecbe1-SIN",
+        "content-length": "1235",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": {
+          "blobGasUsed": "0x9c40",
+          "blockHash": "0xfdf3508c899e7ff9d8fd8fd35300a7d6adfab97ca869f5df2e0b086d685ce3af",
+          "blockNumber": "0x23c43ea",
+          "contractAddress": null,
+          "cumulativeGasUsed": "0x140f62",
+          "daFootprintGasScalar": "0x190",
+          "effectiveGasPrice": "0xf43d1",
+          "from": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "gasUsed": "0x5208",
+          "l1BaseFeeScalar": "0x558",
+          "l1BlobBaseFee": "0x3b2fd9b",
+          "l1BlobBaseFeeScalar": "0xc3c9d",
+          "l1Fee": "0x1b36d6568",
+          "l1GasPrice": "0x3f669e1f",
+          "l1GasUsed": "0x640",
+          "logs": [],
+          "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "status": "0x1",
+          "to": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "transactionHash": "0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95",
+          "transactionIndex": "0x9",
+          "type": "0x2"
+        }
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_getTransactionCount [\"0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf\",\"pending\"]",
+      "latency_ms": 244,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionCount\",\"params\":[\"0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf\",\"pending\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x1\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6bed0a94cbe1-SIN",
+        "content-length": "40",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x1"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_chainId []",
+      "latency_ms": 953,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6bf1be0c250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_blockNumber []",
+      "latency_ms": 234,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6bf48928250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "net_version []",
+      "latency_ms": 237,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"net_version\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6bf60ae9250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "web3_clientVersion []",
+      "latency_ms": 233,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"web3_clientVersion\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6bf77c9a250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_getTransactionReceipt [\"0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95\"]",
+      "latency_ms": 255,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionReceipt\",\"params\":[\"0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6bf91e6f250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_getTransactionCount [\"0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf\",\"pending\"]",
+      "latency_ms": 230,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionCount\",\"params\":[\"0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf\",\"pending\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6bfa8822250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_chainId []",
+      "latency_ms": 1036,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6bff9e8f1f9f-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 0,
+      "http_verb": "POST",
+      "label": "eth_blockNumber []",
+      "latency_ms": 20003,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": null,
+      "response_json": "<not JSON>",
+      "section": "1_read_surface",
+      "transport_error": "error sending request for url (https://sepolia-rpc-flashblocks.giwa.io/)"
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "net_version []",
+      "latency_ms": 859,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"net_version\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"91342\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c81fa9a6cc1-SIN",
+        "content-length": "42",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "91342"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "web3_clientVersion []",
+      "latency_ms": 239,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"web3_clientVersion\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c84e9806cc1-SIN",
+        "content-length": "81",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "reth/v2.3.0-9384bc5/x86_64-unknown-linux-gnu"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_getTransactionReceipt [\"0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95\"]",
+      "latency_ms": 239,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionReceipt\",\"params\":[\"0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":{\"blobGasUsed\":\"0x9c40\",\"blockHash\":\"0xfdf3508c899e7ff9d8fd8fd35300a7d6adfab97ca869f5df2e0b086d685ce3af\",\"blockNumber\":\"0x23c43ea\",\"contractAddress\":null,\"cumulativeGasUsed\":\"0x140f62\",\"daFootprintGasScalar\":\"0x190\",\"effectiveGasPrice\":\"0xf43d1\",\"from\":\"0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c\",\"gasUsed\":\"0x5208\",\"l1BaseFeeScalar\":\"0x558\",\"l1BlobBaseFee\":\"0x3b2fd9b\",\"l1BlobBaseFeeScalar\":\"0xc3c9d\",\"l1Fee\":\"0x1b36d6568\",\"l1GasPrice\":\"0x3f669e1f\",\"l1GasUsed\":\"0x640\",\"logs\":[],\"logsBloom\":\"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"status\":\"0x1\",\"to\":\"0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c\",\"transactionHash\":\"0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95\",\"transactionIndex\":\"0x9\",\"type\":\"0x2\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c865d3c6cc1-SIN",
+        "content-length": "1235",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": {
+          "blobGasUsed": "0x9c40",
+          "blockHash": "0xfdf3508c899e7ff9d8fd8fd35300a7d6adfab97ca869f5df2e0b086d685ce3af",
+          "blockNumber": "0x23c43ea",
+          "contractAddress": null,
+          "cumulativeGasUsed": "0x140f62",
+          "daFootprintGasScalar": "0x190",
+          "effectiveGasPrice": "0xf43d1",
+          "from": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "gasUsed": "0x5208",
+          "l1BaseFeeScalar": "0x558",
+          "l1BlobBaseFee": "0x3b2fd9b",
+          "l1BlobBaseFeeScalar": "0xc3c9d",
+          "l1Fee": "0x1b36d6568",
+          "l1GasPrice": "0x3f669e1f",
+          "l1GasUsed": "0x640",
+          "logs": [],
+          "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "status": "0x1",
+          "to": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "transactionHash": "0x8a0ca6bf59dada20c7ffc64c43f51fa603e821bae7e62d874e0c17b159471f95",
+          "transactionIndex": "0x9",
+          "type": "0x2"
+        }
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_getTransactionCount [\"0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf\",\"pending\"]",
+      "latency_ms": 245,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionCount\",\"params\":[\"0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf\",\"pending\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x1\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c87d8d36cc1-SIN",
+        "content-length": "40",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x1"
+      },
+      "section": "1_read_surface",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "mev_sendBundle []",
+      "latency_ms": 244,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"mev_sendBundle\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c897a53cbe1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_sendBundle []",
+      "latency_ms": 236,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendBundle\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c8aed72cbe1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "engine_submitBlock []",
+      "latency_ms": 237,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"engine_submitBlock\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c8c5914cbe1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "sequencer_submit []",
+      "latency_ms": 243,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"sequencer_submit\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c8ddc37cbe1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "giwa_sendRawTransaction []",
+      "latency_ms": 235,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"giwa_sendRawTransaction\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c8f6f8ccbe1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransactionFlashblock []",
+      "latency_ms": 248,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransactionFlashblock\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c90eaaacbe1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "txpool_content []",
+      "latency_ms": 234,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"txpool_content\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c926e16cbe1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "private_txSubmit []",
+      "latency_ms": 243,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"private_txSubmit\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c93d9b6cbe1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "etch_sendRawTransaction []",
+      "latency_ms": 227,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"etch_sendRawTransaction\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c956d36cbe1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "mev_sendBundle []",
+      "latency_ms": 473,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"mev_sendBundle\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c96de2c250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_sendBundle []",
+      "latency_ms": 240,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendBundle\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c99c8e9250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "engine_submitBlock []",
+      "latency_ms": 235,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"engine_submitBlock\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c9b4a37250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "sequencer_submit []",
+      "latency_ms": 246,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"sequencer_submit\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c9ccb8d250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "giwa_sendRawTransaction []",
+      "latency_ms": 239,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"giwa_sendRawTransaction\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c9e5cb5250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransactionFlashblock []",
+      "latency_ms": 263,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransactionFlashblock\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6c9ffe6d250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "txpool_content []",
+      "latency_ms": 243,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"txpool_content\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ca17fce250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "private_txSubmit []",
+      "latency_ms": 238,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"private_txSubmit\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ca2f91e250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "etch_sendRawTransaction []",
+      "latency_ms": 252,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"etch_sendRawTransaction\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ca47a4b250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "mev_sendBundle []",
+      "latency_ms": 238,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"mev_sendBundle\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ca61fce6cc1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_sendBundle []",
+      "latency_ms": 238,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendBundle\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ca78c846cc1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "engine_submitBlock []",
+      "latency_ms": 238,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"engine_submitBlock\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ca9096d6cc1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "sequencer_submit []",
+      "latency_ms": 234,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"sequencer_submit\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6caa8e1f6cc1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "giwa_sendRawTransaction []",
+      "latency_ms": 239,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"giwa_sendRawTransaction\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cabfafe6cc1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransactionFlashblock []",
+      "latency_ms": 234,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransactionFlashblock\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cad7fbc6cc1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "txpool_content []",
+      "latency_ms": 242,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"txpool_content\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6caf0c686cc1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "private_txSubmit []",
+      "latency_ms": 232,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"private_txSubmit\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cb078656cc1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "etch_sendRawTransaction []",
+      "latency_ms": 240,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"etch_sendRawTransaction\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cb1ecdf6cc1-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "2_direct_protocol",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "POST eth_chainId",
+      "latency_ms": 238,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cb37c32cbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 405,
+      "http_verb": "GET",
+      "label": "GET eth_chainId",
+      "latency_ms": 240,
+      "request_body": null,
+      "request_headers_sent": [],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cb4ef89cbe1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 405,
+      "http_verb": "PUT",
+      "label": "PUT eth_chainId",
+      "latency_ms": 508,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cb67b2dcbe1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 405,
+      "http_verb": "DELETE",
+      "label": "DELETE eth_chainId",
+      "latency_ms": 643,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cbb3e9ecbe1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 405,
+      "http_verb": "HEAD",
+      "label": "HEAD eth_chainId",
+      "latency_ms": 283,
+      "request_body": null,
+      "request_headers_sent": [],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cbdccb7cbe1-SIN",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 405,
+      "http_verb": "OPTIONS",
+      "label": "OPTIONS eth_chainId",
+      "latency_ms": 251,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cbf6854cbe1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 405,
+      "http_verb": "PATCH",
+      "label": "PATCH eth_chainId",
+      "latency_ms": 244,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cc0fbe1cbe1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "POST eth_chainId",
+      "latency_ms": 237,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cc28f9a250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 405,
+      "http_verb": "GET",
+      "label": "GET eth_chainId",
+      "latency_ms": 234,
+      "request_body": null,
+      "request_headers_sent": [],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cc3f948250a-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 405,
+      "http_verb": "PUT",
+      "label": "PUT eth_chainId",
+      "latency_ms": 245,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cc58ab4250a-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 405,
+      "http_verb": "DELETE",
+      "label": "DELETE eth_chainId",
+      "latency_ms": 247,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cc70c47250a-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 405,
+      "http_verb": "HEAD",
+      "label": "HEAD eth_chainId",
+      "latency_ms": 242,
+      "request_body": null,
+      "request_headers_sent": [],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cc88dc5250a-SIN",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 405,
+      "http_verb": "OPTIONS",
+      "label": "OPTIONS eth_chainId",
+      "latency_ms": 238,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cca1f07250a-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 405,
+      "http_verb": "PATCH",
+      "label": "PATCH eth_chainId",
+      "latency_ms": 242,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6ccb8889250a-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "POST eth_chainId",
+      "latency_ms": 245,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ccd0a3a6cc1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 405,
+      "http_verb": "GET",
+      "label": "GET eth_chainId",
+      "latency_ms": 244,
+      "request_body": null,
+      "request_headers_sent": [],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cce9e7c6cc1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 405,
+      "http_verb": "PUT",
+      "label": "PUT eth_chainId",
+      "latency_ms": 251,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cd02b046cc1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 405,
+      "http_verb": "DELETE",
+      "label": "DELETE eth_chainId",
+      "latency_ms": 245,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cd1bf7d6cc1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 405,
+      "http_verb": "HEAD",
+      "label": "HEAD eth_chainId",
+      "latency_ms": 255,
+      "request_body": null,
+      "request_headers_sent": [],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cd33b986cc1-SIN",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 405,
+      "http_verb": "OPTIONS",
+      "label": "OPTIONS eth_chainId",
+      "latency_ms": 272,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cd4df9e6cc1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 405,
+      "http_verb": "PATCH",
+      "label": "PATCH eth_chainId",
+      "latency_ms": 266,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "",
+      "response_headers": {
+        "cf-ray": "a43f6cd68c306cc1-SIN",
+        "content-length": "0",
+        "server": "cloudflare"
+      },
+      "response_json": "<not JSON>",
+      "section": "3_http_method",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_chainId — canonical, with content-type",
+      "latency_ms": 302,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cd83f01cbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_chainId — canonical, NO content-type",
+      "latency_ms": 335,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cda1b75cbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_chainId — canonical, text/plain content-type",
+      "latency_ms": 256,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cdc3862cbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_chainId — params omitted",
+      "latency_ms": 258,
+      "request_body": "{\"\"jsonrpc\"\":\"\"2.0\"\",\"\"id\"\":1,\"\"method\"\":\"\"eth_chainId\"\"}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cddecfecbe1-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_chainId — jsonrpc field omitted",
+      "latency_ms": 247,
+      "request_body": "{\"\"id\"\":1,\"\"method\"\":\"\"eth_chainId\"\",\"\"params\"\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cdf6877cbe1-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_chainId — id omitted",
+      "latency_ms": 248,
+      "request_body": "{\"\"jsonrpc\"\":\"\"2.0\"\",\"\"method\"\":\"\"eth_chainId\"\",\"\"params\"\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ce0fc91cbe1-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_chainId — params as an object, not an array",
+      "latency_ms": 394,
+      "request_body": "{\"\"jsonrpc\"\":\"\"2.0\"\",\"\"id\"\":1,\"\"method\"\":\"\"eth_chainId\"\",\"\"params\"\":{}}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ce329f6cbe1-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_chainId — a batch of two",
+      "latency_ms": 242,
+      "request_body": "[{\"\"jsonrpc\"\":\"\"2.0\"\",\"\"id\"\":1,\"\"method\"\":\"\"eth_chainId\"\",\"\"params\"\":[]},{\"\"jsonrpc\"\":\"\"2.0\"\",\"\"id\"\":2,\"\"method\"\":\"\"eth_blockNumber\"\",\"\"params\"\":[]}]",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ce4fe1ecbe1-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_chainId — not JSON at all",
+      "latency_ms": 267,
+      "request_body": "{",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ce67a39cbe1-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_chainId — empty body",
+      "latency_ms": 249,
+      "request_body": "",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ce82e96cbe1-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction — no params key at all",
+      "latency_ms": 239,
+      "request_body": "{\"\"jsonrpc\"\":\"\"2.0\"\",\"\"id\"\":1,\"\"method\"\":\"\"eth_sendRawTransaction\"\"}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ce9ba50cbe1-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction — no params key at all",
+      "latency_ms": 261,
+      "request_body": "{\"\"jsonrpc\"\":\"\"2.0\"\",\"\"id\"\":1,\"\"method\"\":\"\"eth_sendRawTransaction\"\"}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ceb3f1c250a-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction — no params key at all",
+      "latency_ms": 304,
+      "request_body": "{\"\"jsonrpc\"\":\"\"2.0\"\",\"\"id\"\":1,\"\"method\"\":\"\"eth_sendRawTransaction\"\"}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cecefb96cc1-SIN",
+        "content-length": "76",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32700,
+          "message": "parse error"
+        },
+        "id": null,
+        "jsonrpc": "2.0"
+      },
+      "section": "4_request_format",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_chainId with authorization",
+      "latency_ms": 311,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type",
+        "authorization"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6ceeceaccbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "5_authentication",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_chainId with x-api-key",
+      "latency_ms": 304,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type",
+        "x-api-key"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cf0bc0bcbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "5_authentication",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_chainId with x-giwa-key",
+      "latency_ms": 292,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type",
+        "x-giwa-key"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cf2a8aacbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "5_authentication",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_chainId with cookie",
+      "latency_ms": 250,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type",
+        "cookie"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cf46cf0cbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x164ce"
+      },
+      "section": "5_authentication",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 403,
+      "http_verb": "POST",
+      "label": "eth_chainId with authorization",
+      "latency_ms": 237,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_chainId\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type",
+        "authorization"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cf608bb250a-SIN",
+        "content-length": "91",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32601,
+          "message": "rpc method is not whitelisted"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "5_authentication",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction []",
+      "latency_ms": 240,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"missing value for required argument 0\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cf79ca1cbe1-SIN",
+        "content-length": "99",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "missing value for required argument 0"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x\"]",
+      "latency_ms": 254,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"typed transaction too short\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cf9084bcbe1-SIN",
+        "content-length": "89",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "typed transaction too short"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0xdeadbeef\"]",
+      "latency_ms": 235,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0xdeadbeef\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"rlp: value size exceeds available input length\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cfaac0fcbe1-SIN",
+        "content-length": "108",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "rlp: value size exceeds available input length"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f86b8301\"]",
+      "latency_ms": 244,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f86b8301\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"rlp: value size exceeds available input length\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cfc1fe3cbe1-SIN",
+        "content-length": "108",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "rlp: value size exceeds available input length"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]",
+      "latency_ms": 258,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32003,\"message\":\"insufficient funds for gas * price + value: have 0 want 21007770000\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cfdab7acbe1-SIN",
+        "content-length": "129",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32003,
+          "message": "insufficient funds for gas * price + value: have 0 want 21007770000"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f8680101830f4240830f43b28252089442000000000000000000000000000000000000068080c080a058faf8922d674e53b252c1ac4c3fa16b36f25b8fd7b213eefeddeb3ad6772b05a0175ec3316fe4b779ec9b4b98c04463b7c043addec5bfafe93069e18589b50b5c\"]",
+      "latency_ms": 234,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f8680101830f4240830f43b28252089442000000000000000000000000000000000000068080c080a058faf8922d674e53b252c1ac4c3fa16b36f25b8fd7b213eefeddeb3ad6772b05a0175ec3316fe4b779ec9b4b98c04463b7c043addec5bfafe93069e18589b50b5c\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"invalid chain ID\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6cff4f6ecbe1-SIN",
+        "content-length": "78",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32000,
+          "message": "invalid chain ID"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]",
+      "latency_ms": 243,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32003,\"message\":\"insufficient funds for gas * price + value: have 0 want 21007770000\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d00bbaccbe1-SIN",
+        "content-length": "129",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32003,
+          "message": "insufficient funds for gas * price + value: have 0 want 21007770000"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction []",
+      "latency_ms": 238,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"missing value for required argument 0\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d024bfc250a-SIN",
+        "content-length": "99",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "missing value for required argument 0"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x\"]",
+      "latency_ms": 234,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"typed transaction too short\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d03cd78250a-SIN",
+        "content-length": "89",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "typed transaction too short"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0xdeadbeef\"]",
+      "latency_ms": 238,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0xdeadbeef\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"rlp: value size exceeds available input length\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d053ef5250a-SIN",
+        "content-length": "108",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "rlp: value size exceeds available input length"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f86b8301\"]",
+      "latency_ms": 235,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f86b8301\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"rlp: value size exceeds available input length\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d06b893250a-SIN",
+        "content-length": "108",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "rlp: value size exceeds available input length"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]",
+      "latency_ms": 243,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32003,\"message\":\"insufficient funds for gas * price + value: have 0 want 21007770000\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d083a5d250a-SIN",
+        "content-length": "129",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32003,
+          "message": "insufficient funds for gas * price + value: have 0 want 21007770000"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f8680101830f4240830f43b28252089442000000000000000000000000000000000000068080c080a058faf8922d674e53b252c1ac4c3fa16b36f25b8fd7b213eefeddeb3ad6772b05a0175ec3316fe4b779ec9b4b98c04463b7c043addec5bfafe93069e18589b50b5c\"]",
+      "latency_ms": 237,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f8680101830f4240830f43b28252089442000000000000000000000000000000000000068080c080a058faf8922d674e53b252c1ac4c3fa16b36f25b8fd7b213eefeddeb3ad6772b05a0175ec3316fe4b779ec9b4b98c04463b7c043addec5bfafe93069e18589b50b5c\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"invalid chain ID\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d09bc2e250a-SIN",
+        "content-length": "78",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32000,
+          "message": "invalid chain ID"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "sequencer",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]",
+      "latency_ms": 246,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32003,\"message\":\"insufficient funds for gas * price + value: have 0 want 21007770000\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d0b3d98250a-SIN",
+        "content-length": "129",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32003,
+          "message": "insufficient funds for gas * price + value: have 0 want 21007770000"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction []",
+      "latency_ms": 240,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"missing value for required argument 0\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d0cc9906cc1-SIN",
+        "content-length": "99",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "missing value for required argument 0"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x\"]",
+      "latency_ms": 244,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"typed transaction too short\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d0e4d8f6cc1-SIN",
+        "content-length": "89",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "typed transaction too short"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0xdeadbeef\"]",
+      "latency_ms": 244,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0xdeadbeef\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"rlp: value size exceeds available input length\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d0fd9c26cc1-SIN",
+        "content-length": "108",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "rlp: value size exceeds available input length"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 400,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f86b8301\"]",
+      "latency_ms": 235,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f86b8301\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"rlp: value size exceeds available input length\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d115dd96cc1-SIN",
+        "content-length": "108",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32602,
+          "message": "rlp: value size exceeds available input length"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]",
+      "latency_ms": 242,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32003,\"message\":\"insufficient funds for gas * price + value: have 0 want 21007770000\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d12c9b26cc1-SIN",
+        "content-length": "129",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32003,
+          "message": "insufficient funds for gas * price + value: have 0 want 21007770000"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f8680101830f4240830f43b28252089442000000000000000000000000000000000000068080c080a058faf8922d674e53b252c1ac4c3fa16b36f25b8fd7b213eefeddeb3ad6772b05a0175ec3316fe4b779ec9b4b98c04463b7c043addec5bfafe93069e18589b50b5c\"]",
+      "latency_ms": 241,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f8680101830f4240830f43b28252089442000000000000000000000000000000000000068080c080a058faf8922d674e53b252c1ac4c3fa16b36f25b8fd7b213eefeddeb3ad6772b05a0175ec3316fe4b779ec9b4b98c04463b7c043addec5bfafe93069e18589b50b5c\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"invalid chain ID\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d144d7e6cc1-SIN",
+        "content-length": "78",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32000,
+          "message": "invalid chain ID"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "flashblocks",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_sendRawTransaction [\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]",
+      "latency_ms": 249,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"0x02f86b830164ce01830f4240830f43b28252089442000000000000000000000000000000000000068080c001a098e17b32c97cfa7a7dd05eca4d6f4cbbfe08cf379b04e3a11ab646ea8cde2cf7a00375412ec50aafc23c3ec214e8eb6eda1523fdd4760cb2879f8a8e5241894b1d\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32003,\"message\":\"insufficient funds for gas * price + value: have 0 want 21007770000\"},\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d15d9e66cc1-SIN",
+        "content-length": "129",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "error": {
+          "code": -32003,
+          "message": "insufficient funds for gas * price + value: have 0 want 21007770000"
+        },
+        "id": 1,
+        "jsonrpc": "2.0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_getTransactionByHash [\"0x79970f48389d4fe4e0f21a67923f0afa6ca584d0bc9ba17afb8ed452dd73d1d9\"]",
+      "latency_ms": 238,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionByHash\",\"params\":[\"0x79970f48389d4fe4e0f21a67923f0afa6ca584d0bc9ba17afb8ed452dd73d1d9\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":null,\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d175b02cbe1-SIN",
+        "content-length": "39",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": null
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    },
+    {
+      "host": "rpc",
+      "http_status": 200,
+      "http_verb": "POST",
+      "label": "eth_getBalance [\"0x7e5f4552091a69125d5dfcb7b8c2659029395bdf\",\"latest\"]",
+      "latency_ms": 256,
+      "request_body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0x7e5f4552091a69125d5dfcb7b8c2659029395bdf\",\"latest\"]}",
+      "request_headers_sent": [
+        "content-type"
+      ],
+      "response_body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x0\",\"id\":1}\n",
+      "response_headers": {
+        "cf-ray": "a43f6d18dea8cbe1-SIN",
+        "content-length": "40",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "response_json": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0x0"
+      },
+      "section": "6_submission_semantics",
+      "transport_error": null
+    }
+  ],
+  "finding": {
+    "accepted_submissions": [],
+    "authentication": [
+      "rpc eth_chainId with authorization → http 200 {\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "rpc eth_chainId with x-api-key → http 200 {\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "rpc eth_chainId with x-giwa-key → http 200 {\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "rpc eth_chainId with cookie → http 200 {\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "sequencer eth_chainId with authorization → http 403 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n"
+    ],
+    "content_type_is_required": "a canonical envelope sent without Content-Type answered http 200 {\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+    "did_the_accepted_payload_reach_the_pool": "eth_getTransactionByHash(0x79970f48389d4fe4e0f21a67923f0afa6ca584d0bc9ba17afb8ed452dd73d1d9) → {\"jsonrpc\":\"2.0\",\"result\":null,\"id\":1}\n",
+    "direct_protocol_candidates": [
+      {
+        "method": "mev_sendBundle",
+        "refused_by": [
+          "rpc",
+          "sequencer",
+          "flashblocks"
+        ],
+        "served_by": []
+      },
+      {
+        "method": "eth_sendBundle",
+        "refused_by": [
+          "rpc",
+          "sequencer",
+          "flashblocks"
+        ],
+        "served_by": []
+      },
+      {
+        "method": "engine_submitBlock",
+        "refused_by": [
+          "rpc",
+          "sequencer",
+          "flashblocks"
+        ],
+        "served_by": []
+      },
+      {
+        "method": "sequencer_submit",
+        "refused_by": [
+          "rpc",
+          "sequencer",
+          "flashblocks"
+        ],
+        "served_by": []
+      },
+      {
+        "method": "giwa_sendRawTransaction",
+        "refused_by": [
+          "rpc",
+          "sequencer",
+          "flashblocks"
+        ],
+        "served_by": []
+      },
+      {
+        "method": "eth_sendRawTransactionFlashblock",
+        "refused_by": [
+          "rpc",
+          "sequencer",
+          "flashblocks"
+        ],
+        "served_by": []
+      },
+      {
+        "method": "txpool_content",
+        "refused_by": [
+          "rpc",
+          "sequencer",
+          "flashblocks"
+        ],
+        "served_by": []
+      },
+      {
+        "method": "private_txSubmit",
+        "refused_by": [
+          "rpc",
+          "sequencer",
+          "flashblocks"
+        ],
+        "served_by": []
+      },
+      {
+        "method": "etch_sendRawTransaction",
+        "refused_by": [
+          "rpc",
+          "sequencer",
+          "flashblocks"
+        ],
+        "served_by": []
+      }
+    ],
+    "eth_sendRawTransaction_refused_by": [],
+    "eth_sendRawTransaction_served_by": [
+      "rpc",
+      "sequencer",
+      "flashblocks"
+    ],
+    "http_method": [
+      "rpc POST eth_chainId → http 200",
+      "rpc GET eth_chainId → http 405",
+      "rpc PUT eth_chainId → http 405",
+      "rpc DELETE eth_chainId → http 405",
+      "rpc HEAD eth_chainId → http 405",
+      "rpc OPTIONS eth_chainId → http 405",
+      "rpc PATCH eth_chainId → http 405",
+      "sequencer POST eth_chainId → http 403",
+      "sequencer GET eth_chainId → http 405",
+      "sequencer PUT eth_chainId → http 405",
+      "sequencer DELETE eth_chainId → http 405",
+      "sequencer HEAD eth_chainId → http 405",
+      "sequencer OPTIONS eth_chainId → http 405",
+      "sequencer PATCH eth_chainId → http 405",
+      "flashblocks POST eth_chainId → http 200",
+      "flashblocks GET eth_chainId → http 405",
+      "flashblocks PUT eth_chainId → http 405",
+      "flashblocks DELETE eth_chainId → http 405",
+      "flashblocks HEAD eth_chainId → http 405",
+      "flashblocks OPTIONS eth_chainId → http 405",
+      "flashblocks PATCH eth_chainId → http 405"
+    ],
+    "m7_consequence": "§29's answer decides which submitter the §58 run uses. SequencerDirect has no protocol on this endpoint and the host does not serve the reads §6's connect check needs, so the live run goes over eth_sendRawTransaction to the host that answers both — recorded here rather than assumed from M6.",
+    "misspelled_control": "http 403 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+    "read_surface_chain_id_served_by": [
+      "rpc",
+      "flashblocks"
+    ],
+    "request_format": [
+      "eth_chainId — canonical, with content-type → http 200 {\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "eth_chainId — canonical, NO content-type → http 200 {\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "eth_chainId — canonical, text/plain content-type → http 200 {\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "eth_chainId — params omitted → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "eth_chainId — jsonrpc field omitted → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "eth_chainId — id omitted → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "eth_chainId — params as an object, not an array → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "eth_chainId — a batch of two → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "eth_chainId — not JSON at all → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "eth_chainId — empty body → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "eth_sendRawTransaction — no params key at all → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "eth_sendRawTransaction — no params key at all → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n",
+      "eth_sendRawTransaction — no params key at all → http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n"
+    ],
+    "response_format": {
+      "headers_on_a_read": {
+        "cf-ray": "a43f6cd83f01cbe1-SIN",
+        "content-length": "44",
+        "content-type": "application/json",
+        "server": "cloudflare"
+      },
+      "refusal_shape": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32601,\"message\":\"rpc method is not whitelisted\"},\"id\":1}\n",
+      "success_shape": "{\"jsonrpc\":\"2.0\",\"result\":\"0x164ce\",\"id\":1}\n",
+      "transport_refusal_shape": "http 400 {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32700,\"message\":\"parse error\"},\"id\":null}\n"
+    },
+    "sender_unaffected": "balance 0x0 before and 0x0 after",
+    "submission_semantics": [
+      "rpc: no params → http 400 missing value for required argument 0",
+      "rpc: empty bytes → http 400 typed transaction too short",
+      "rpc: not RLP → http 400 rlp: value size exceeds available input length",
+      "rpc: truncated 1559 envelope → http 400 rlp: value size exceeds available input length",
+      "rpc: fully formed, right chain id, unfunded sender → http 200 insufficient funds for gas * price + value: have 0 want 21007770000",
+      "rpc: fully formed, chain id 1, replayed onto this chain → http 200 invalid chain ID",
+      "rpc: replay of the same bytes → http 200 insufficient funds for gas * price + value: have 0 want 21007770000",
+      "sequencer: no params → http 400 missing value for required argument 0",
+      "sequencer: empty bytes → http 400 typed transaction too short",
+      "sequencer: not RLP → http 400 rlp: value size exceeds available input length",
+      "sequencer: truncated 1559 envelope → http 400 rlp: value size exceeds available input length",
+      "sequencer: fully formed, right chain id, unfunded sender → http 200 insufficient funds for gas * price + value: have 0 want 21007770000",
+      "sequencer: fully formed, chain id 1, replayed onto this chain → http 200 invalid chain ID",
+      "sequencer: replay of the same bytes → http 200 insufficient funds for gas * price + value: have 0 want 21007770000",
+      "flashblocks: no params → http 400 missing value for required argument 0",
+      "flashblocks: empty bytes → http 400 typed transaction too short",
+      "flashblocks: not RLP → http 400 rlp: value size exceeds available input length",
+      "flashblocks: truncated 1559 envelope → http 400 rlp: value size exceeds available input length",
+      "flashblocks: fully formed, right chain id, unfunded sender → http 200 insufficient funds for gas * price + value: have 0 want 21007770000",
+      "flashblocks: fully formed, chain id 1, replayed onto this chain → http 200 invalid chain ID",
+      "flashblocks: replay of the same bytes → http 200 insufficient funds for gas * price + value: have 0 want 21007770000"
+    ],
+    "verdict": "Every submission rung was refused by every host, so nothing in this run reached a mempool. The submission interface is `eth_sendRawTransaction` over POST with a canonical JSON-RPC envelope on the host that serves reads; the §29 host adds no protocol that the read host does not already answer.",
+    "www_authenticate_ever_returned": false
+  },
+  "interpretation": {
+    "authentication": "none. The 4 credential-shaped headers this run sent changed no answer, and no response in the run carried WWW-Authenticate — so the endpoint has no auth story to verify, and 6 of the 6 reads asked of the §29 host were refused by the method whitelist rather than by an identity check.",
+    "direct_protocol": "absent on every host: 27 refusals across the direct-protocol candidates, with the misspelled control refusing the same way. §29's 「如果无法验证：SequencerDirect = BLOCKED」 applies to the *private path*, not to the endpoint: as a plain submission front the host does verify, and the lane therefore stays on eth_sendRawTransaction over the read host.",
+    "http_method": "POST is the only verb any host answers. 18 of the 18 non-POST requests (GET, PUT, DELETE, HEAD, OPTIONS, PATCH, each with the same valid body) came back HTTP 405 with no JSON-RPC object at all — the front refuses the verb before the method is ever looked at.",
+    "request_format": "the envelope must carry jsonrpc, id, method AND params, with params an array: the canonical body (what crates/chain/src/rpc.rs writes) answers 0x164ce, and the 10 malformed-or-incomplete bodies measured here all answer HTTP 400 -32700 parse error with id null. Content-Type is not part of the contract — the same body without it still answered — which resolves the -32700 that data/evidence/m7/probe-sequencer-method-whitelist.json recorded for a correctly-named method: that probe's hand-rolled client sent a body missing one of the four required keys, so the node was refusing the envelope, not the method.",
+    "response_format": "one JSON-RPC object per request, newline-terminated, served by cloudflare with content-type application/json. Success is {result,id}; refusal is {error:{code,message},id}. Two status regimes matter for §25 and §39: a body the node could not even parse answers HTTP 400 with a -32602 or -32700, while a transaction it decoded and then refused answers HTTP 200 with a -32000-range code. crates/chain/src/rpc.rs only turns an answer into a refusal when the status is 2xx, so its caller sees the semantic refusals as Rejected and the decode refusals as Unknown — the safe direction (a 400 never releases the nonce lane), and recorded as a boundary of the submission path rather than papered over.",
+    "sequencer_host_reads": "the host named by RETH_ROLLUP_SEQUENCERHTTP refuses 6 of 6 reads with -32601, eth_chainId among them. That is the decisive fact: GiwaSequencerDirect::connect verifies the chain id before it will build anything (§6), so this host cannot be the configured endpoint at all — a submit-only front whose identity cannot be checked is exactly what §6 refuses to act on.",
+    "transaction_submission_semantics": "eth_sendRawTransaction on all three hosts runs the same four checks in the same order and answers them with the same strings: arity (-32602 missing value for required argument 0), RLP/type-envelope decode (-32602 typed transaction too short, rlp: value size exceeds available input length), signature domain (-32000 invalid chain ID for a chain-1 payload on chain 91342), then pool state (-32003 insufficient funds for gas * price + value: have 0 want 21007770000). Replaying the identical bytes immediately answered the same -32003 rather than 'already known', and eth_getTransactionByHash of that payload's hash returned result null — so 9 refusals at HTTP 200 and 12 at HTTP 400, and nothing this run sent ever entered a mempool."
+  }
+}

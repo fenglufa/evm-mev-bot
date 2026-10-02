@@ -158,8 +158,16 @@ fn no_code_outside_the_execution_crate_can_send_a_transaction() {
         "the scan found only {scanned} source files outside the execution crate"
     );
     let execution = production_files().len() - scanned;
+    // M6 opened this crate with 19 files (signer, tx/rlp codec, submitter, receipt,
+    // lifecycle, gate, stage, …). M7 added seven more — `cost.rs`, `preflight.rs`,
+    // `profit.rs`, `market.rs`, `sequence.rs`, `giwa/reads.rs`,
+    // `giwa/preflight_facts.rs` — because §35–§39's cost model, §26's thirteen
+    // checks, §17's asset deltas, §51's market label and §54's six-step ladder are
+    // all facts about *sending*, so they belong on this side of the wall, not in the
+    // pipeline's. 26 today; the ceiling is 32 with one milestone of headroom, so a
+    // jump to 40 still means what it says: the exception stopped being one layer.
     assert!(
-        (4..=25).contains(&execution),
+        (4..=32).contains(&execution),
         "the execution crate holds {execution} source files, which is not the shape of one \
          gated layer — either this exception grew into the rest of the workspace or the \
          filter stopped matching it"

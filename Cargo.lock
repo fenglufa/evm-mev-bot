@@ -1486,6 +1486,7 @@ dependencies = [
  "evm-chain",
  "evm-core",
  "evm-metrics",
+ "evm-opportunity",
  "evm-protocol",
  "evm-replay",
  "evm-risk",

@@ -9,11 +9,13 @@
 //! key is built from the identity half of it. If the two halves were in different
 //! types, a transaction could be correct while its provenance was not.
 //!
-//! One intent is one transaction. The M4 plan is a sequence of up to seven steps from
-//! one sender, and a milestone without an executor contract (§4) cannot turn a
-//! multi-step sequence into one atomic transaction — so [`TransactionIntent::from_run`]
-//! refuses rather than pretending: it names the step count, and the caller either
-//! executes a genuinely single-step intent or stops.
+//! One intent is one transaction. The M4 plan is a sequence of steps from one sender, and
+//! a milestone without an executor contract (§4) cannot turn a multi-step sequence into one
+//! atomic transaction — so [`TransactionIntent::from_run`] refuses a multi-step run rather
+//! than pretending: it names the step count, and the caller either executes a genuinely
+//! single-step intent or stops. M7's answer is the other constructor,
+//! [`TransactionIntent::from_simulated_step`]: one intent per step, each carrying the
+//! [`SequencePosition`] a runner will honour, sent serially by [`crate::sequence`].
 
 use alloy_primitives::{Address, Bytes, ChainId, B256, U256};
 use evm_core::BlockNumber;
@@ -70,6 +72,28 @@ impl ExecutionIds {
             "{}|{:#x}|{:#x}",
             self.opportunity_id, self.simulation_id, state_fingerprint
         )
+    }
+}
+
+/// Where one transaction sits in a serial sequence.
+///
+/// M7's trade cannot be one atomic transaction: §4 forbids the executor contract that
+/// would make it one, so the route is carried by N transactions from one EOA, sent in
+/// order by [`crate::sequence`]. This value is what lets the builder tell that shape
+/// apart from the failure §4 was written against — an intent that claims to be step 1 of
+/// a 7-step run *without* a runner that will send the other six, which is a half-trade
+/// reaching a node.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SequencePosition {
+    /// 0-based index of this transaction within the sequence.
+    pub index: usize,
+    /// How many transactions the sequence has in total.
+    pub count: usize,
+}
+
+impl SequencePosition {
+    pub fn describe(self) -> String {
+        format!("transaction {} of {}", self.index + 1, self.count)
     }
 }
 
@@ -152,6 +176,11 @@ pub struct TransactionIntent {
     /// How many steps the simulated sequence had; `1` is the only submittable value
     /// without an executor contract.
     pub simulated_steps: usize,
+    /// [`Some`] exactly when a runner has committed to sending this transaction as part of
+    /// a serial sequence — with its position. `None` on M6's two paths (a single-step
+    /// arbitrage intent and §35's validation transaction), and the builder requires it to
+    /// be `Some` for any intent whose `simulated_steps` is above one.
+    pub sequence: Option<SequencePosition>,
 }
 
 impl TransactionIntent {
@@ -242,6 +271,110 @@ impl TransactionIntent {
             minimum_required_profit_wei,
             funding,
             simulated_steps: run.steps.len(),
+            sequence: None,
+        })
+    }
+
+    /// One transaction of the serial sequence [`crate::sequence`] runs: the same
+    /// opportunity, simulation and risk decision as its siblings, carrying one step of the
+    /// simulated plan.
+    ///
+    /// `position.count` must equal the number of this run's steps that are transactions and
+    /// `position.index` must name `step` within that list, because those two equalities are
+    /// what make this intent's *sequence* a fact about the simulation rather than a claim by
+    /// the caller: an intent that says "transaction 2 of 6" is only buildable if the run
+    /// really has six executable steps and this is its second. [`crate::builder`] reads that
+    /// agreement as §4's permission — without it, a multi-step intent is a half-trade with no
+    /// runner committed to the other half.
+    ///
+    /// Note the position counts *transactions*, not plan steps: a plan that measures state
+    /// between calls has step indices ahead of sequence positions, and the check below is
+    /// against the executable list for exactly that reason.
+    pub fn from_simulated_step(
+        run: &SimulationResult,
+        decision: &evm_risk::RiskDecision,
+        opportunity_id: &str,
+        state_fingerprint: &str,
+        funding: SenderFunding,
+        position: SequencePosition,
+        step: &evm_simulation::ExecutedStep,
+    ) -> Result<Self> {
+        if !decision.accepted() {
+            return Err(ExecutionError::InvalidIntent(format!(
+                "a sequence step needs a RiskDecision::Accept and this is {}: {}",
+                decision.name(),
+                decision.reason()
+            )));
+        }
+        if !run.success() {
+            return Err(ExecutionError::InvalidIntent(format!(
+                "the accepted run did not complete: {}",
+                run.summary()
+            )));
+        }
+        if step.index >= run.steps.len() || run.steps[step.index] != *step {
+            return Err(ExecutionError::InvalidIntent(format!(
+                "the step offered as position {} is not one of this run's {} steps, so the \
+                 sequence position could not have come from the simulation",
+                step.index,
+                run.steps.len()
+            )));
+        }
+        let executable = crate::sequence::broadcastable(run);
+        if position.count != executable.len() {
+            return Err(ExecutionError::InvalidIntent(format!(
+                "the intent claims a sequence of {} transactions and this run has {} steps \
+                 that are transactions; one of the two is not this simulation",
+                position.count,
+                executable.len()
+            )));
+        }
+        if executable.get(position.index) != Some(&step) {
+            return Err(ExecutionError::InvalidIntent(format!(
+                "the intent claims to be transaction {} of {} and the step offered is plan step \
+                 {}, which is not that transaction of this run",
+                position.index, position.count, step.index
+            )));
+        }
+        if !step.status.succeeded() {
+            return Err(ExecutionError::InvalidIntent(format!(
+                "step {} of the accepted run did not succeed: {:?}",
+                step.index, step.status
+            )));
+        }
+        let net_profit = match &run.net_profit {
+            NetProfit::Gain { amount, .. } => Some(*amount),
+            _ => None,
+        };
+        let minimum_required_profit_wei = match decision {
+            evm_risk::RiskDecision::Accept {
+                minimum_net_profit_wei,
+                ..
+            } => *minimum_net_profit_wei,
+            _ => U256::ZERO,
+        };
+        let ids = ExecutionIds::of(run, decision, opportunity_id);
+        Ok(Self {
+            ids,
+            chain_id: run.chain_id.0,
+            block_number: run.block.number,
+            block_hash: run.block.hash,
+            state_fingerprint: state_fingerprint.to_string(),
+            sender: step.from,
+            target: step.to,
+            value: step.value,
+            calldata: step.calldata.clone(),
+            nonce: step.nonce,
+            gas_limit: step.gas_limit,
+            tx_type: TransactionType::DynamicFee,
+            max_fee_per_gas: None,
+            max_priority_fee_per_gas: None,
+            access_list: Vec::new(),
+            simulation_profit_wei: net_profit,
+            minimum_required_profit_wei,
+            funding,
+            simulated_steps: run.steps.len(),
+            sequence: Some(position),
         })
     }
 
@@ -313,6 +446,7 @@ impl TransactionIntent {
                 ),
             },
             simulated_steps: 1,
+            sequence: None,
         })
     }
 

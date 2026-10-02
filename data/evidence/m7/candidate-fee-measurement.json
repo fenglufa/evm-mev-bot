@@ -1,0 +1,140 @@
+{
+  "_provenance": {
+    "base_fee_per_gas": "362",
+    "block_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+    "block_timestamp": 1790875709,
+    "does_not_prove": "that any of this is worth broadcasting: the L1 data fee is not an EVM charge and is not in these numbers, the pools are priced as they were at one head block, and a simulation never competes for inclusion. It also does not prove the pools are a market — see getReserves_blockTimestampLast on each pool",
+    "how": "each candidate's two pools are read at one pinned live block; the canonical six-step sequence is then executed in REVM against the node's state at that block, demanding a payout computed from an assumed effective fee; the assumption is bisected until the pool switches from honouring the demand to refusing it, and that switch is the fee",
+    "methods": [
+      "eth_blockNumber",
+      "eth_getBlockByNumber",
+      "eth_call",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount"
+    ],
+    "milestone": "M7-P1",
+    "proves": "what each of these pools actually hands over for this input, against its own deployed bytecode and the node's own state — the fee a submission would get, whether each leg executes at all, what the mid token's transfer does between the pools, and the native-denominated result of the whole sequence after L2 gas",
+    "read_at_head": 37530593,
+    "rpc_endpoint": "https://sepolia-rpc.giwa.io"
+  },
+  "bracket_reading": "a leg's fee_ppm is the smallest assumed fee, in parts per million of the input, whose demand the pool honours; it refuses the demand at one ppm less, so the effective fee is in (fee_ppm - 1, fee_ppm]. The figure is form-free: it claims only what the pool hands over, not that the pool computes 997/1000",
+  "candidates": [
+    {
+      "buy_leg": {
+        "demanded_mid": "599278701662993388098",
+        "fee_ppm_upper_inclusive": 3000,
+        "logs_agree": true,
+        "mid_handed_to_sender": "599278701662993388098",
+        "pool_paid_per_logs": "599278701662993388098",
+        "pool_received_per_logs": "1500000000000000",
+        "swap_log_present": true,
+        "sync_logs_in_run": 1
+      },
+      "buying_pool": {
+        "address": "0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4",
+        "getReserves_blockTimestampLast": "1757405620",
+        "reserve0": "1000000000000000000000",
+        "reserve1": "1000000000000000",
+        "token0": "0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f",
+        "token1": "0x4200000000000000000000000000000000000006"
+      },
+      "control_reversed_orientation": {
+        "demanded_mid": "136935258500232883092",
+        "status": "completed"
+      },
+      "dump": "/Volumes/superfs/evm-mev-bot/fixtures/simulation-m7/dump-37530593-07D4af6E.json",
+      "executes": true,
+      "input_wei": "1500000000000000",
+      "mid": "0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f",
+      "priced_run_at_measured_boundaries": {
+        "compared": "OutputComparison { analytical: 4600464037910442, simulated: Some(4600464037910442) }",
+        "fingerprint": "0x6a8347521f4a2d7eddceb9be87767b1c7f370fe260ad0acb206e5bcb5d509c9b",
+        "gas_charge": "Priced { gas_used: 455582, effective_gas_price: 362, base_fee_per_gas: Some(362), wei: 164920684, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as its header reports it, with no tip\" } }",
+        "gas_used": 455582,
+        "net_profit": "Gain { amount: 3100463872989758, gross: 3100464037910442, gas_cost: 164920684, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 4600464037910442, native_start: 1500130320000000, native_end: 4600594192989758, native_spent: 1500000000000000, gas_paid: 164920684, proved_by: \"withdraw(4600464037910442) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+        "outcome": "Executed { output: 4600464037910442, movement: Increased { by: 3100464037910442 } }",
+        "status": "completed",
+        "steps": 12,
+        "weth_handed_back": "4600464037910442"
+      },
+      "probes": 35,
+      "sell_leg": {
+        "demanded_weth": "4600464037910442",
+        "fee_ppm_upper_inclusive": 3000,
+        "logs_agree": true,
+        "mid_transfer_took": "0",
+        "pool_paid_per_logs": "4600464037910442",
+        "pool_received_per_logs": "599278701662993388098",
+        "swap_log_present": true
+      },
+      "selling_pool": {
+        "address": "0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E",
+        "getReserves_blockTimestampLast": "1757403527",
+        "reserve0": "2000000000000000000000",
+        "reserve1": "20000000000000000",
+        "token0": "0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f",
+        "token1": "0x4200000000000000000000000000000000000006"
+      }
+    },
+    {
+      "buy_leg": {
+        "demanded_mid": "73868267022301252130",
+        "fee_ppm_upper_inclusive": 3000,
+        "logs_agree": true,
+        "mid_handed_to_sender": "73868267022301252130",
+        "pool_paid_per_logs": "73868267022301252130",
+        "pool_received_per_logs": "80000000000000",
+        "swap_log_present": true,
+        "sync_logs_in_run": 1
+      },
+      "buying_pool": {
+        "address": "0xDa1687064F6f0367678Cb168ba10C980959D0272",
+        "getReserves_blockTimestampLast": "1757406181",
+        "reserve0": "1000000000000000",
+        "reserve1": "1000000000000000000000",
+        "token0": "0x4200000000000000000000000000000000000006",
+        "token1": "0x7b9Dc86c3495D377526247adE5EA7b864a5Cec25"
+      },
+      "control_reversed_orientation": {
+        "demanded_mid": "727002967359050445",
+        "status": "completed"
+      },
+      "dump": "/Volumes/superfs/evm-mev-bot/fixtures/simulation-m7/dump-37530593-7b9Dc86c.json",
+      "executes": true,
+      "input_wei": "80000000000000",
+      "mid": "0x7b9Dc86c3495D377526247adE5EA7b864a5Cec25",
+      "priced_run_at_measured_boundaries": {
+        "compared": "OutputComparison { analytical: 880449503489436, simulated: Some(880449503489436) }",
+        "fingerprint": "0x929122fc89e5de1361fc2fdd247cb1af8dfca0795cd377c4cb6b330e584e229e",
+        "gas_charge": "Priced { gas_used: 489810, effective_gas_price: 362, base_fee_per_gas: Some(362), wei: 177311220, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as its header reports it, with no tip\" } }",
+        "gas_used": 489810,
+        "net_profit": "Gain { amount: 800449326178216, gross: 800449503489436, gas_cost: 177311220, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 880449503489436, native_start: 80130320000000, native_end: 880579646178216, native_spent: 80000000000000, gas_paid: 177311220, proved_by: \"withdraw(880449503489436) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+        "outcome": "Executed { output: 880449503489436, movement: Increased { by: 800449503489436 } }",
+        "status": "completed",
+        "steps": 12,
+        "weth_handed_back": "880449503489436"
+      },
+      "probes": 35,
+      "sell_leg": {
+        "demanded_weth": "880449503489436",
+        "fee_ppm_upper_inclusive": 3000,
+        "logs_agree": true,
+        "mid_transfer_took": "0",
+        "pool_paid_per_logs": "880449503489436",
+        "pool_received_per_logs": "73868267022301252130",
+        "swap_log_present": true
+      },
+      "selling_pool": {
+        "address": "0x7C580B975fb97c43018Bc05A41f0c6a7d10350aD",
+        "getReserves_blockTimestampLast": "1757420718",
+        "reserve0": "1000000000000000",
+        "reserve1": "10000000000000000000",
+        "token0": "0x4200000000000000000000000000000000000006",
+        "token1": "0x7b9Dc86c3495D377526247adE5EA7b864a5Cec25"
+      }
+    }
+  ],
+  "fee_ceiling_ppm_tested": 20000
+}

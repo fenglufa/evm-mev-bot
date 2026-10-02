@@ -1,0 +1,241 @@
+{
+ "_provenance": {
+  "milestone": "M7-P0",
+  "read_at_head": null,
+  "rpc_endpoint": "https://sepolia-rpc.giwa.io",
+  "methods": [
+   "eth_blockNumber",
+   "eth_call",
+   "eth_getBlockByNumber",
+   "eth_getTransactionByHash",
+   "eth_sendRawTransaction",
+   "mev_sendBundle",
+   "eth_sendBundle",
+   "sequencer_*",
+   "txpool_*"
+  ],
+  "how": "POST every method name to both hosts and record the exact JSON-RPC error object",
+  "proves": "which methods each GIWA host is willing to serve, error string included",
+  "does_not_prove": "that a bundle would be accepted - the method is not served at all"
+ },
+ "hosts": {
+  "https://sepolia-sequencer.giwa.io": {
+   "methods": {
+    "mev_sendBundle": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 1245
+    },
+    "engine_submitBlock": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 819
+    },
+    "sequencer_submit": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 1317
+    },
+    "giwa_sendRawTransaction": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 668
+    },
+    "eth_sendRawTransactionFlashblock": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 916
+    },
+    "txpool_status": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 1945
+    },
+    "txpool_content": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 1365
+    },
+    "eth_sendRawTransaction": {
+     "http": 400,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32700,
+       "message": "parse error"
+      },
+      "id": 1
+     },
+     "ms": 921
+    }
+   },
+   "eth_blockNumber": {
+    "http": 403,
+    "json": {
+     "jsonrpc": "2.0",
+     "error": {
+      "code": -32601,
+      "message": "rpc method is not whitelisted"
+     },
+     "id": 1
+    },
+    "ms": 1450
+   }
+  },
+  "https://sepolia-rpc.giwa.io": {
+   "methods": {
+    "mev_sendBundle": {
+     "error": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1018)>",
+     "ms": 5002
+    },
+    "engine_submitBlock": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 1023
+    },
+    "sequencer_submit": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 486
+    },
+    "giwa_sendRawTransaction": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 927
+    },
+    "eth_sendRawTransactionFlashblock": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 650
+    },
+    "txpool_status": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 793
+    },
+    "txpool_content": {
+     "http": 403,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32601,
+       "message": "rpc method is not whitelisted"
+      },
+      "id": 1
+     },
+     "ms": 658
+    },
+    "eth_sendRawTransaction": {
+     "http": 400,
+     "json": {
+      "jsonrpc": "2.0",
+      "error": {
+       "code": -32700,
+       "message": "parse error"
+      },
+      "id": 1
+     },
+     "ms": 789
+    }
+   },
+   "eth_blockNumber": {
+    "http": 200,
+    "json": {
+     "jsonrpc": "2.0",
+     "result": "0x23c7ac6",
+     "id": 1
+    },
+    "ms": 521
+   }
+  }
+ },
+ "finding": {
+  "sepolia-sequencer.giwa.io": "write-only: eth_sendRawTransaction passes the whitelist (malformed payloads come back as -32602 parse/RLP errors), while every read and every MEV/bundle method returns HTTP 403 -32601 'rpc method is not whitelisted'",
+  "sepolia-rpc.giwa.io": "reads served; mev_sendBundle differs from the other unwhitelisted methods by closing the TLS session (UNEXPECTED_EOF_WHILE_READING) instead of answering -32601 - recorded as an anomaly, not interpreted",
+  "m7_consequence": "task book 29 (re-probe SequencerDirect) is answered: no bundle, no engine_*, no txpool, no pending access from either host. The only usable path is a plain eth_sendRawTransaction to the RPC host, with all state read from it"
+ }
+}

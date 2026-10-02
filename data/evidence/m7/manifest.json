@@ -1,0 +1,28 @@
+{
+ "milestone": "M7-P0",
+ "purpose": "the observation surface M7 has to price on: what the chain offers, what it traded, what a same-pair round trip is worth on paper, and what is still unproven about the two candidates that beat cost",
+ "files": [
+  "probe-sequencer-method-whitelist.json",
+  "probe-pair-created-log-shape.json",
+  "census-pair-created.json",
+  "live-pool-activity.json",
+  "weth-native-denomination.json",
+  "dual-venue-economics.json",
+  "candidate-pools-deep-reading.json"
+ ],
+ "headline": {
+  "pools_on_chain": 1030,
+  "token_pairs": 979,
+  "token_pairs_with_two_pools": 50,
+  "of_those_any_activity_in_window": 0,
+  "weth_round_trip_shapes_priced": 32,
+  "weth_round_trips_beating_cost": 2,
+  "both_of_those_fee_attested": false,
+  "both_of_those_executed_in_simulation": false
+ },
+ "open": [
+  "measure the effective fee of 0x5b3c1e3f, 0x2a3ceafb, 0xda168706, 0x7c580b97 by executing against pinned real state - no Swap log exists to read it from",
+  "measure the mid tokens' real transfer behaviour the same way (task book 17)",
+  "decide whether a pool that has not traded in a year is a market: the reserves are authoritative and the divergence is real, but the state engine only learns reserves from Sync logs, so nothing in the live pipeline can see these pools at all"
+ ]
+}

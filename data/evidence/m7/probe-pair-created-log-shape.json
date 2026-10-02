@@ -1,0 +1,34 @@
+{
+ "_provenance": {
+  "milestone": "M7-P0",
+  "read_at_head": 37518390,
+  "rpc_endpoint": "https://sepolia-rpc.giwa.io",
+  "methods": [
+   "eth_getLogs"
+  ],
+  "how": "scan the whole chain in 4999-block chunks for PairCreated topic0 and inspect the raw log objects, then re-extract the pair address two ways",
+  "proves": "that on this chain PairCreated is emitted with THREE topics: token0 and token1 indexed, the pair address in data word 0 and the pair index in data word 1, even though the signature declares the pair as indexed",
+  "does_not_prove": "which declaration a given factory implements - the shape is per-deployment and a parser has to read it rather than assume it"
+ },
+ "topic0": "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9",
+ "observed_shapes": {
+  "3-topic, pair in data word0": 1030
+ },
+ "raw_example": {
+  "address": "0x5f6e8a566c0944af181f158e6dee60bafbaf3b9e",
+  "blockHash": "0x76f66b7c725e8911558d909c73335330e93b2141ab7bff4f8fedd29ba9d104c8",
+  "blockNumber": "0x2376fec",
+  "blockTimestamp": "0x6ab95c48",
+  "data": "0x000000000000000000000000616d834775633f027b86df65dfcae1d5c2239d090000000000000000000000000000000000000000000000000000000000000004",
+  "logIndex": "0x44",
+  "removed": false,
+  "topics": [
+   "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9",
+   "0x0000000000000000000000000745e84011b0558a37eb4bfc894b5a29c3876f29",
+   "0x0000000000000000000000004200000000000000000000000000000000000006"
+  ],
+  "transactionHash": "0x820d7cb2ea4207158b97e21205461aedb6cd9b1f7f2dd9e03e7db7b8ebc4c032",
+  "transactionIndex": "0x3c"
+ },
+ "bug_it_caught": "extracting the pair from data word 2 (the index word) instead of word 0 returned 1030 addresses of the form 0x0000...00NN, which made every dual-venue pair disappear. The census was re-run after the fix; the pre-fix output is not recorded as evidence"
+}

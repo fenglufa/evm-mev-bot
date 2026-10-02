@@ -151,10 +151,21 @@ impl TransactionBuilder {
                 intent.sender
             )));
         }
-        if intent.simulated_steps != 1 {
+        // §4 read both ways. A multi-step intent that names no runner is a half-trade
+        // reaching a node, and that is the failure the rule exists for. One that carries a
+        // self-consistent sequence position is a step of a route [`crate::sequence`] has
+        // committed to sending serially from one EOA — which is the shape §4 allows
+        // *because* no executor contract is involved. The count is the number of
+        // transactions in the sequence and `simulated_steps` the length of the plan, so the
+        // two legitimately differ (a measurement step is not broadcast).
+        let positioned = intent
+            .sequence
+            .is_some_and(|position| position.count > 1 && position.index < position.count);
+        if intent.simulated_steps != 1 && !positioned {
             return Err(ExecutionError::InvalidIntent(format!(
                 "this intent describes step 1 of a {}-step sequence and there is no executor \
-                 contract to make it atomic (§4)",
+                 contract to make it atomic (§4); it also carries no sequence position, so no \
+                 runner has committed to sending the rest of it",
                 intent.simulated_steps
             )));
         }

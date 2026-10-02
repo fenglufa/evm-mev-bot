@@ -48,9 +48,23 @@
 //! be a different path. `--execution-mode` is required there: `submit` is the only
 //! spelling that puts bytes on the wire, and it has to be typed.
 //!
+//! M7 adds `arbitrage`: the same lane asked for a *route* instead of a transfer. The flags
+//! name one candidate — two venues, the token they disagree about, the input size, and the
+//! file that measured its fee — and [`evm_pipeline::arbitrage::run_once`] reads the chain at
+//! the live head, simulates in REVM against the node's own state, applies §26's gate, and
+//! sends only in `submit`. This is the third place §1's ban on *making* an opportunity is
+//! enforced by shape rather than by discipline: there is no flag that sets a reserve, a
+//! balance, an allowance or a funding, and a run refuses to start without `--market` and
+//! `--market-evidence`, because §51's REAL_MARKET/CONTROLLED_FIXTURE split is only a
+//! separation if the label has to be typed and has to name something a reader can open.
+//! `--execution-mode` is required here for the same reason it is required on `validate`.
+//!
 //! Exit codes: `0` the session ended on its own terms, `1` it was stopped by a
 //! fact that makes the session incomplete (§8's unrecovered gap, a closed queue,
-//! a chain mismatch), `2` the flags themselves could not describe a run.
+//! a chain mismatch), `2` the flags themselves could not describe a run. On `arbitrage`
+//! the `0` is narrower: it means one §56 `VerifiedPositive` profit on a REAL_MARKET route,
+//! so every other result — including a run that finished and made nothing — exits `1` with
+//! its evidence still on disk.
 
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
@@ -60,7 +74,8 @@ use clap::{Parser, Subcommand, ValueEnum};
 use serde_json::{json, Value};
 
 use evm_chain::HttpChainAdapter;
-use evm_execution::{ExecutionMode, ExecutionSetup};
+use evm_core::Fee;
+use evm_execution::{ExecutionMode, ExecutionSetup, MarketKind, Tolerance};
 use evm_live::{FlashblockConfig, SourceConfig};
 use evm_metrics::{Clock, Metrics};
 use evm_pipeline::config::{CanonicalSource, PipelineConfig, QueueConfig, RiskConfig};
@@ -68,6 +83,7 @@ use evm_pipeline::error::PipelineError;
 use evm_pipeline::runner;
 use evm_pipeline::EvidenceFile;
 use evm_pipeline::EvidenceWriter;
+use evm_pipeline::{ArbitrageConfig, ArbitrageRun, RouteCandidate};
 
 /// Where the canonical blocks come from, in the words the CLI uses. The runner's
 /// own [`CanonicalSource`] is not a `ValueEnum` because it carries a path.
@@ -94,10 +110,13 @@ enum SourceArg {
                   line in an evidence file. The flag hands accepted findings to the execution \
                   lane, which builds them and — only when named — signs them; §34 keeps an \
                   intent funded by a simulation override from reaching a node in any mode, and \
-                  no mode has a relay, a bundle builder, or gas-bidding logic. The other \
-                  subcommand, `validate`, runs one §35 execution validation transaction — a \
-                  zero-value transfer to the signing account unless told otherwise — to verify \
-                  build, sign, submit and receipt on the real chain; it trades nothing."
+                  no mode has a relay, a bundle builder, or gas-bidding logic. `validate` runs \
+                  one §35 execution validation transaction — a zero-value transfer to the \
+                  signing account unless told otherwise — to verify build, sign, submit and \
+                  receipt on the real chain; it trades nothing. `arbitrage` runs M7's §57: one \
+                  named route (two venues, one mid token, one measured fee, all cited) priced \
+                  at the live head, simulated in REVM against the node's own state, gated by \
+                  §26's preflight, and then taken as far as --execution-mode allows."
 )]
 pub struct Cli {
     #[command(subcommand)]
@@ -112,6 +131,9 @@ pub enum Command {
     Live(Box<LiveArgs>),
     /// Drive one §35 validation transaction through the execution lane.
     Validate(ValidateArgs),
+    /// M7 §57: one named route, priced on the live chain, decided, and sent only if the
+    /// mode says so.
+    Arbitrage(Box<ArbitrageArgs>),
 }
 
 /// §47's flags, plus the knobs §50's queues and §25's thresholds need in order to
@@ -675,6 +697,368 @@ pub fn print_validation(outcome: &ValidationOutcome) {
     );
 }
 
+/// §51's answer to "whose account is this", phrased so an evidence file names a
+/// funded wallet rather than an address a reader has to recognise. It is a `&'static
+/// str` because [`evm_simulation::SimulationSender`] requires one, which is also why
+/// there is no `--sender-label` flag: a label a run can invent at runtime is a label
+/// a run can get wrong in the record it just wrote.
+pub const ARBITRAGE_SENDER_LABEL: &str =
+    "the operator's funded test wallet, paid for out of pocket";
+
+/// §18's tolerance between the simulation's figure and the receipt's, as the tests and
+/// the M7 evidence files spell it: one part in a hundred. A run that wants a different
+/// band types it; a run that wants none types `0/1`, which [`Tolerance`] reads as
+/// "exact match required".
+const DEFAULT_TOLERANCE_NUM: u64 = 1;
+const DEFAULT_TOLERANCE_DEN: u64 = 100;
+
+/// M7 §57's one route, asked for by name.
+///
+/// The candidate is *input*, not a discovery, and that is the §27 rule pushed as far
+/// toward the user as a command line can: `run_once` holds no list of alternatives, so a
+/// preflight refusal ends the attempt instead of quietly trying the next pair. What the
+/// flags do supply is the evidence a reader needs in order to not take the run's word for
+/// anything — `--fee-evidence` names the file that measured the fee by bisection, and
+/// `--market-evidence` names what puts this route on §51's real side of the line.
+///
+/// What there is no flag for is the thing §1 forbids: no reserve, balance, allowance,
+/// approval, transfer tax, gas figure or L1 fee can be set here, because a route that
+/// needed one of those to look profitable is not a route the market offered.
+#[derive(Parser)]
+pub struct ArbitrageArgs {
+    /// JSON-RPC endpoint the route is read from, priced at, and sent through. Required.
+    #[arg(long, env = "GIWA_RPC_URL")]
+    rpc_url: Option<String>,
+
+    /// How far this route may go: `build-only`, `sign-only` or `submit` (§20, §32). The
+    /// last one is the only spelling that puts bytes on the wire, and there is no default.
+    #[arg(long)]
+    execution_mode: Option<String>,
+
+    /// The wallet that signs, pays for gas, and holds both legs' assets. Required even in
+    /// `build-only`: §19/§20 audit *this* account's balance deltas, so the run has to know
+    /// whose balances it is about to read before it reads the chain. A signing mode whose
+    /// key proves a different account is refused by the lane.
+    #[arg(long)]
+    sender: Option<String>,
+
+    /// §16's input asset — the token the route starts and ends in (on GIWA, WETH9).
+    #[arg(long)]
+    input_token: Option<String>,
+
+    /// The token the two venues disagree about (§16's Token X).
+    #[arg(long)]
+    candidate_mid: Option<String>,
+
+    /// The two venues, repeated exactly twice (§5: two venues, same pair). Which one is
+    /// bought through is decided from the reserves read at the pinned block, not from the
+    /// order they are typed in.
+    #[arg(long = "candidate-pool")]
+    candidate_pool: Vec<String>,
+
+    /// Input size in wei of the input token. Must be positive; §48 asks the first real
+    /// route for the smallest size that still clears every cost, so this is deliberately
+    /// not defaulted.
+    #[arg(long)]
+    input_wei: Option<u128>,
+
+    /// The chain this candidate was named on. `0` (the default) means "the chain the
+    /// endpoint answers for", and §45/§46's check still runs against the registry either
+    /// way; naming it is how a candidate gathered at one block is caught being run on
+    /// another network.
+    #[arg(long, default_value_t = 0)]
+    candidate_chain_id: u64,
+
+    /// The pool fee's numerator, as measured — not as the registry claims.
+    #[arg(long)]
+    fee_num: Option<u32>,
+
+    /// The pool fee's denominator, e.g. `1_000_000` for a 3000 ppm demand.
+    #[arg(long)]
+    fee_den: Option<u32>,
+
+    /// The file or block a reader can open to check that fee (§5's "fee proven"). A bare
+    /// number with no citation is the unfounded claim §1 exists to stop.
+    #[arg(long)]
+    fee_evidence: Option<String>,
+
+    /// §51's category: `real-market` or `controlled-fixture`. Required, with no default —
+    /// a run that forgot to say which kind it is would otherwise be reported as the
+    /// expensive kind.
+    #[arg(long)]
+    market: Option<String>,
+
+    /// What puts this run in that category: the evidence path for a REAL_MARKET route, or
+    /// what the fixture proves for a CONTROLLED_FIXTURE one. Required either way.
+    #[arg(long)]
+    market_evidence: Option<String>,
+
+    /// §18's tolerance numerator, against the simulation-vs-reality bands.
+    #[arg(long, default_value_t = DEFAULT_TOLERANCE_NUM)]
+    tolerance_num: u64,
+
+    /// §18's tolerance denominator. `0` is refused: a band with no denominator is not a
+    /// band.
+    #[arg(long, default_value_t = DEFAULT_TOLERANCE_DEN)]
+    tolerance_den: u64,
+
+    /// §76's risk floor, in wei. `0` means "any strictly positive net figure passes" and is
+    /// stated as such in the evidence rather than implied.
+    #[arg(long, default_value_t = 0)]
+    minimum_net_profit_wei: u128,
+
+    /// Gas ceiling. Absent means the pinned block's own gas limit answers it (§13).
+    #[arg(long)]
+    maximum_gas: Option<u64>,
+
+    /// Attested pools, for §46's chain-id boundary. Repeatable.
+    #[arg(long)]
+    registry_dir: Vec<PathBuf>,
+
+    /// Where this attempt's evidence goes. Created if missing. Each invocation should get
+    /// its own directory: §27 means a second candidate is a second run, and two runs
+    /// sharing a path would be one ambiguous pile of receipts.
+    #[arg(long, default_value = "data/evidence/m7/route")]
+    evidence_dir: PathBuf,
+
+    /// Print the run's §57 record as JSON instead of the summary lines.
+    #[arg(long)]
+    json: bool,
+}
+
+impl ArbitrageArgs {
+    /// The config these flags describe, or the reason they describe none. No network, no
+    /// key, no read: every refusal here is about the command line and costs nothing, which
+    /// is the point — §32's kill switch is only cheap to use if getting it wrong is free.
+    pub fn to_config(&self) -> std::result::Result<ArbitrageConfig, String> {
+        let rpc_url = self.rpc_url.clone().ok_or_else(|| {
+            "--rpc-url (or GIWA_RPC_URL) is required: the route is read, priced, simulated \
+             and sent through one endpoint, and §5 forbids any of those numbers coming from \
+             somewhere else"
+                .to_string()
+        })?;
+        let mode = ExecutionMode::parse(
+            self.execution_mode
+                .as_deref()
+                .ok_or_else(|| "--execution-mode is required".to_string())?,
+        )
+        .map_err(|error| error.to_string())?;
+        let sender = parse_address(
+            self.sender.as_deref().ok_or_else(|| {
+                "--sender is required: the asset deltas are audited against \
+                               one account"
+                    .to_string()
+            })?,
+            "--sender",
+        )?;
+        let input_token = parse_address(
+            self.input_token.as_deref().ok_or_else(|| {
+                "--input-token is required (§16's start and end asset)".to_string()
+            })?,
+            "--input-token",
+        )?;
+        let mid_token = parse_address(
+            self.candidate_mid
+                .as_deref()
+                .ok_or_else(|| "--candidate-mid is required (§16's Token X)".to_string())?,
+            "--candidate-mid",
+        )?;
+        if self.candidate_pool.len() != 2 {
+            return Err(format!(
+                "--candidate-pool is given exactly twice (§5: two venues for one pair); this \
+                 command line gives it {} times",
+                self.candidate_pool.len()
+            ));
+        }
+        let venues = [
+            parse_address(&self.candidate_pool[0], "--candidate-pool (first)")?,
+            parse_address(&self.candidate_pool[1], "--candidate-pool (second)")?,
+        ];
+        if venues[0] == venues[1] {
+            return Err(
+                "the two venues are the same pool, so there is no second price to disagree \
+                 with the first"
+                    .to_string(),
+            );
+        }
+        if mid_token == input_token {
+            return Err("--candidate-mid must differ from --input-token (§16's shape)".to_string());
+        }
+        let input_amount = self.input_wei.filter(|wei| *wei > 0).ok_or_else(|| {
+            "--input-wei is required and must be positive: a route that trades nothing \
+                 proves nothing"
+                .to_string()
+        })?;
+        let (num, den) = match (self.fee_num, self.fee_den) {
+            (Some(num), Some(den)) => (num, den),
+            _ => {
+                return Err(
+                    "--fee-num and --fee-den are both required: §5 makes the fee part of what \
+                     an opportunity is, so a run may price a route with no fee asserted."
+                        .to_string(),
+                )
+            }
+        };
+        let fee =
+            Fee::new(num, den).ok_or_else(|| format!("fee {num}/{den} has a zero denominator"))?;
+        if num > den {
+            return Err(format!(
+                "fee {num}/{den} takes more than the whole input, which no venue charges and \
+                 no measurement should report"
+            ));
+        }
+        let fee_evidence = required_evidence(self.fee_evidence.as_deref(), "--fee-evidence")?;
+        let market = MarketKind::parse(
+            self.market.as_deref().ok_or_else(|| {
+                "--market is required (§51's real-market or controlled-fixture; \
+                                a run does not get to be unlabelled)"
+                    .to_string()
+            })?,
+            &required_evidence(self.market_evidence.as_deref(), "--market-evidence")?,
+        )?;
+        if self.tolerance_den == 0 {
+            return Err(
+                "--tolerance-den 0 is not a band; use --tolerance-num 0 with a \
+                        non-zero denominator to demand an exact match"
+                    .to_string(),
+            );
+        }
+
+        Ok(ArbitrageConfig {
+            rpc_url,
+            registry_dirs: if self.registry_dir.is_empty() {
+                default_registry_dirs()
+            } else {
+                self.registry_dir.clone()
+            },
+            sender,
+            sender_label: ARBITRAGE_SENDER_LABEL,
+            candidate: RouteCandidate {
+                chain_id: self.candidate_chain_id,
+                input_token,
+                mid_token,
+                venues,
+                input_amount: alloy_primitives::U256::from(input_amount),
+                fee,
+                fee_evidence,
+            },
+            market,
+            setup: ExecutionSetup {
+                mode,
+                ..ExecutionSetup::default()
+            },
+            tolerance: Tolerance::new(self.tolerance_num, self.tolerance_den),
+            risk: RiskConfig {
+                minimum_net_profit_wei: self.minimum_net_profit_wei,
+                maximum_gas: self.maximum_gas,
+            },
+            evidence_dir: self.evidence_dir.clone(),
+        })
+    }
+}
+
+/// An evidence string that a reader could actually open: present, and not whitespace.
+fn required_evidence(spec: Option<&str>, flag: &str) -> std::result::Result<String, String> {
+    let text = spec.ok_or_else(|| {
+        format!(
+            "{flag} is required: §5/§51 count a claim as evidence only if it names where \
+                 to check it"
+        )
+    })?;
+    if text.trim().is_empty() {
+        return Err(format!("{flag} cannot be empty or blank"));
+    }
+    Ok(text.to_string())
+}
+
+/// Run one route and report it, returning the process's exit code.
+fn run_arbitrage(args: ArbitrageArgs) -> i32 {
+    let json = args.json;
+    let config = match args.to_config() {
+        Ok(config) => config,
+        Err(detail) => {
+            eprintln!("evm-mev-bot: {detail}");
+            return 2;
+        }
+    };
+    let runtime = match tokio::runtime::Runtime::new() {
+        Ok(runtime) => runtime,
+        Err(error) => {
+            eprintln!("evm-mev-bot: cannot start a runtime: {error}");
+            return 2;
+        }
+    };
+    let evidence_dir = config.evidence_dir.clone();
+    runtime.block_on(async move {
+        match evm_pipeline::arbitrage::run_once(&config).await {
+            Ok(run) => {
+                // A refusal is a result, so it prints on stdout and exits 1: the run
+                // completed its own account, and §57's acceptance item is about reading
+                // that account truthfully rather than about the exit code looking good.
+                if json {
+                    println!(
+                        "{}",
+                        serde_json::to_string_pretty(&run.record()).unwrap_or_default()
+                    );
+                } else {
+                    print_arbitrage(&run);
+                }
+                run.exit_code()
+            }
+            Err(error) => {
+                eprintln!("evm-mev-bot: {error}");
+                eprintln!(
+                    "evm-mev-bot: the route stopped before any stage wrote a record under {}.",
+                    evidence_dir.display()
+                );
+                1
+            }
+        }
+    })
+}
+
+/// Print one route run: the one-line verdict the run itself produces, then the §52 amount
+/// lines in the one denomination §11 demands, then where the recomputable evidence is.
+pub fn print_arbitrage(run: &ArbitrageRun) {
+    println!();
+    println!("{}", run.line());
+    let (buy, sell) = run
+        .legs
+        .as_ref()
+        .map_or((run.candidate.venues[0], run.candidate.venues[1]), |legs| {
+            (legs.buy.pool, legs.sell.pool)
+        });
+    println!(
+        "route={:#x} -> {:#x} -> {:#x} -> {:#x} -> back, input={} wei",
+        run.candidate.input_token, buy, run.candidate.mid_token, sell, run.candidate.input_amount,
+    );
+    println!("market={}", run.market.describe());
+    if let Some(refusal) = &run.refusal {
+        println!("stopped at {} — {}", refusal.stage, refusal.detail);
+    }
+    let record = run.record();
+    let amounts = &record["m7_amounts"];
+    if !amounts.is_null() {
+        let field = |name: &str| amounts[name].as_str().unwrap_or("unreported");
+        println!(
+            "profit: gross={} l2={} l1={} net={} ({}) status={} verified={}",
+            field("gross_profit"),
+            field("l2_cost"),
+            field("l1_cost"),
+            field("net_profit"),
+            field("denomination"),
+            field("profit_status"),
+            run.counts_as_successful_real_arbitrage(),
+        );
+        println!("l1 fee source={}", field("l1_fee_source"));
+    }
+    println!(
+        "counters={}",
+        serde_json::to_string(&record["counters"]).unwrap_or_default()
+    );
+    println!("evidence={}", run.evidence_dir.display());
+}
+
 /// The repository's own committed attestations. These are paths inside this
 /// project, not endpoints, which is why they may be defaults where a URL may not.
 pub fn default_registry_dirs() -> Vec<PathBuf> {
@@ -695,6 +1079,9 @@ pub fn parse_live(argv: &[&str]) -> std::result::Result<LiveArgs, String> {
         Command::Validate(_) => {
             Err("this command line is a `validate` run, not a `live` one".to_string())
         }
+        Command::Arbitrage(_) => {
+            Err("this command line is an `arbitrage` run, not a `live` one".to_string())
+        }
     }
 }
 
@@ -705,6 +1092,23 @@ pub fn parse_validate(argv: &[&str]) -> std::result::Result<ValidateArgs, String
         Command::Validate(args) => Ok(args),
         Command::Live(_) => {
             Err("this command line is a `live` run, not a `validate` one".to_string())
+        }
+        Command::Arbitrage(_) => {
+            Err("this command line is an `arbitrage` run, not a `validate` one".to_string())
+        }
+    }
+}
+
+/// The `arbitrage` arguments a command line describes, or the reason it does not.
+pub fn parse_arbitrage(argv: &[&str]) -> std::result::Result<ArbitrageArgs, String> {
+    let cli = Cli::try_parse_from(argv).map_err(|error| error.to_string())?;
+    match cli.command {
+        Command::Arbitrage(args) => Ok(*args),
+        Command::Live(_) => {
+            Err("this command line is a `live` run, not an `arbitrage` one".to_string())
+        }
+        Command::Validate(_) => {
+            Err("this command line is a `validate` run, not an `arbitrage` one".to_string())
         }
     }
 }
@@ -719,6 +1123,7 @@ pub fn cli_main(cli: Cli) -> i32 {
     match cli.command {
         Command::Live(args) => run_live(*args),
         Command::Validate(args) => run_validate(args),
+        Command::Arbitrage(args) => run_arbitrage(*args),
     }
 }
 

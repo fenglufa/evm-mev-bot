@@ -16,6 +16,13 @@
 //! its submission path is the one method the endpoint *does* answer, and any claim about a
 //! private relay is recorded as BLOCKED rather than implemented.
 
+pub mod preflight_facts;
+pub mod reads;
 pub mod sequencer_direct;
 
+pub use preflight_facts::{GatheredPreflight, LivePreflightReads};
+pub use reads::{
+    estimate_l1_fee, pool_state_row, pre_signing_envelope, read_pool, GiwaAssetReader, PoolState,
+    GAS_PRICE_ORACLE,
+};
 pub use sequencer_direct::{parse_receipt, GiwaSequencerDirect};

@@ -36,6 +36,7 @@
 
 pub mod builder;
 pub mod chain_read;
+pub mod cost;
 pub mod error;
 pub mod evidence;
 pub mod fee;
@@ -43,10 +44,14 @@ pub mod gate;
 pub mod giwa;
 pub mod intent;
 pub mod lifecycle;
+pub mod market;
 pub mod mode;
 pub mod nonce;
+pub mod preflight;
+pub mod profit;
 pub mod receipt;
 pub mod rlp;
+pub mod sequence;
 pub mod signer;
 pub mod stage;
 pub mod submitter;
@@ -54,6 +59,7 @@ pub mod tx;
 
 pub use builder::{Build, BuildPolicy, GasPolicy, RoundTrip, TransactionBuilder};
 pub use chain_read::{read_binding, ChainReader};
+pub use cost::{EstimatedCost, ExecutionCostEvidence, L1FeeSource, SequenceCost};
 pub use error::{ExecutionError, Result};
 pub use evidence::{SignedTransactionEvidence, SubmissionEvidence};
 pub use fee::{FeePolicy, FeeReading, FeeSource, FeeSourceKind};
@@ -61,17 +67,35 @@ pub use gate::{
     BalanceEvidence, BlockBinding, Freshness, GateAttempt, GateCheck, GateFacts, GateFailure,
     GateOutcome, NonceEvidence, PreSubmitGate,
 };
-pub use giwa::{parse_receipt, GiwaSequencerDirect};
+pub use giwa::{
+    estimate_l1_fee, parse_receipt, pool_state_row, pre_signing_envelope, read_pool,
+    GiwaAssetReader, GiwaSequencerDirect, PoolState, GAS_PRICE_ORACLE,
+};
 pub use intent::{ExecutionIds, SenderFunding, TransactionIntent};
 pub use lifecycle::{
-    meter, Claim, ExecutionId, ExecutionLane, ExecutionRecord, ExecutionStatus, LaneRelease,
-    Ledger, LANES,
+    meter, Claim, ExecutionId, ExecutionLane, ExecutionOutcome, ExecutionRecord, ExecutionStatus,
+    LaneRelease, Ledger, LANES,
 };
+pub use market::MarketKind;
 pub use mode::ExecutionMode;
 pub use nonce::{NonceAllocator, NonceReading, NonceSource};
+pub use preflight::{
+    ExecutionPreflight, HeadReading, InputAssetEvidence, PreflightCheck, PreflightFacts,
+    PreflightFinding, PreflightReport, Repricing, ReserveReading, SequencePricing, StepPricing,
+};
+pub use profit::{
+    AssetSnapshot, BalanceDelta, ProfitDenomination, ProfitEquation, ProfitEvidence, ProfitSign,
+    ProfitTerm, ProfitVerificationStatus, RealizedProfit,
+};
 pub use receipt::{
     bind, ExpectedTransaction, Receipt, ReceiptPolicy, ReceiptStatus, ReceiptTracker,
     TrackedReceipt,
+};
+pub use sequence::{
+    audit_route, broadcastable, read_snapshot, reconcile_flows, swap_observations, transfer_flows,
+    wrap_moves, AssetReader, AssetReading, DeltaAudit, DeltaLine, FlowCheck, PlannedStep,
+    RouteAudit, RouteLeg, SequencePlan, SequenceReport, SequenceStage, SnapshotPin, SwapObserved,
+    TokenFlow, Tolerance, TransactionStep, WrapMove,
 };
 pub use signer::{recover_sender, signing_hash_for_chain, ExecutionKey, Signer, PRIVATE_KEY_ENV};
 pub use stage::{Abilities, AttemptProvenance, ExecutionSetup, ExecutionStage, StageReport};

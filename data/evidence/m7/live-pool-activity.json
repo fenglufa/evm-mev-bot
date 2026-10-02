@@ -1,0 +1,229 @@
+{
+ "_provenance": {
+  "milestone": "M7-P0",
+  "read_at_head": 37518439,
+  "rpc_endpoint": "https://sepolia-rpc.giwa.io",
+  "methods": [
+   "eth_getLogs"
+  ],
+  "how": "Sync and Swap topic0 filtered per pool over the last 20000 blocks",
+  "proves": "which pools actually traded inside the observation window",
+  "does_not_prove": "that a pool with no log in the window is dead forever - it says nothing was traded in the window, which is exactly the window a live system prices against"
+ },
+ "window_blocks": 20000,
+ "errors": [],
+ "pools_with_activity": 34,
+ "activity": {
+  "0xad153c844ccac3d2ea991170624200e54730be74": {
+   "sync": 32375,
+   "swap": 0,
+   "last_sync": 37518439,
+   "last_swap": 0
+  },
+  "0x3978e57bbceb7666d54a03551c03691f897f6092": {
+   "sync": 6389,
+   "swap": 3202,
+   "last_sync": 37518437,
+   "last_swap": 37518432
+  },
+  "0x7708053900dfe547491cfc78f9e7231d2c490eff": {
+   "sync": 67,
+   "swap": 67,
+   "last_sync": 37518245,
+   "last_swap": 37518245
+  },
+  "0x6f36d6842e0c8dc0c32233b739bafbe29b29f0bd": {
+   "sync": 66,
+   "swap": 66,
+   "last_sync": 37518207,
+   "last_swap": 37518207
+  },
+  "0xa0c441d00270afa04df29a56434c198c7087900e": {
+   "sync": 62,
+   "swap": 62,
+   "last_sync": 37518323,
+   "last_swap": 37518323
+  },
+  "0x8fe6f3dab7d68d130dda03ac13eed829f6c6ce86": {
+   "sync": 62,
+   "swap": 62,
+   "last_sync": 37517640,
+   "last_swap": 37517640
+  },
+  "0xcaafb95fc292c10a526f03fa480407bb438dac67": {
+   "sync": 60,
+   "swap": 60,
+   "last_sync": 37517957,
+   "last_swap": 37517957
+  },
+  "0x0a034c9800ae91d9c2ebe46d93f2b5780befc55e": {
+   "sync": 58,
+   "swap": 58,
+   "last_sync": 37518258,
+   "last_swap": 37518258
+  },
+  "0xafc11cd0290b7dedd0ef3dcf0cdc0dea82b46f78": {
+   "sync": 58,
+   "swap": 58,
+   "last_sync": 37518431,
+   "last_swap": 37518431
+  },
+  "0x506fdc42252a1f1635f78aee202819e164ab1559": {
+   "sync": 56,
+   "swap": 56,
+   "last_sync": 37518361,
+   "last_swap": 37518361
+  },
+  "0x88269c1f3c758e1a740603aa7cdd54e82908cac6": {
+   "sync": 54,
+   "swap": 54,
+   "last_sync": 37518109,
+   "last_swap": 37518109
+  },
+  "0x6c2095cb26833ea0dfe7fc4f16f75c9e3c5061b9": {
+   "sync": 53,
+   "swap": 53,
+   "last_sync": 37517537,
+   "last_swap": 37517537
+  },
+  "0x48567d6cf791f98e41762f4070c2f3bfb412b7f2": {
+   "sync": 53,
+   "swap": 53,
+   "last_sync": 37517276,
+   "last_swap": 37517276
+  },
+  "0x6e2aa65af57961b257f52119c6bd79aa0dcdb906": {
+   "sync": 52,
+   "swap": 52,
+   "last_sync": 37518282,
+   "last_swap": 37518282
+  },
+  "0x79b79aa8f51ab8039671a75e0808e2f6bc5ff53e": {
+   "sync": 52,
+   "swap": 52,
+   "last_sync": 37518420,
+   "last_swap": 37518420
+  },
+  "0x5a8747e47a41e37f7bcb64387c1dc4ebf9403c11": {
+   "sync": 50,
+   "swap": 50,
+   "last_sync": 37518221,
+   "last_swap": 37518221
+  },
+  "0x93f41b89ef62c2fce97adc18c4f27159a39ac4bf": {
+   "sync": 49,
+   "swap": 49,
+   "last_sync": 37518123,
+   "last_swap": 37518123
+  },
+  "0x6d21b6528330ff98765701c9f2a10542177f58da": {
+   "sync": 49,
+   "swap": 49,
+   "last_sync": 37518300,
+   "last_swap": 37518300
+  },
+  "0xee26bedf873a788583c69220651cdaa0fc12c4a9": {
+   "sync": 47,
+   "swap": 47,
+   "last_sync": 37517849,
+   "last_swap": 37517849
+  },
+  "0x066502c5819295142484445054e0f47b5a8b936f": {
+   "sync": 43,
+   "swap": 43,
+   "last_sync": 37518032,
+   "last_swap": 37518032
+  },
+  "0x87cd5e84151cf6be5638976a7c2382364d215927": {
+   "sync": 41,
+   "swap": 41,
+   "last_sync": 37518381,
+   "last_swap": 37518381
+  },
+  "0x94f0033babba0bec1c17b808e0980ecfd3b35b4c": {
+   "sync": 6,
+   "swap": 6,
+   "last_sync": 37505288,
+   "last_swap": 37505288
+  },
+  "0xec6ebf4a7a3088eb22535c9f767b9ab5845d8227": {
+   "sync": 4,
+   "swap": 4,
+   "last_sync": 37506272,
+   "last_swap": 37506272
+  },
+  "0xfe298a51a6ce6d3a7465f619d69be384b409fb27": {
+   "sync": 3,
+   "swap": 3,
+   "last_sync": 37516338,
+   "last_swap": 37516338
+  },
+  "0x693f53ae8d15f69f35502c827a0c1180879a3376": {
+   "sync": 2,
+   "swap": 2,
+   "last_sync": 37506149,
+   "last_swap": 37506149
+  },
+  "0x0afd05888e79a573c980ffae9b28f7ae82ba38d2": {
+   "sync": 1,
+   "swap": 1,
+   "last_sync": 37506033,
+   "last_swap": 37506033
+  },
+  "0xdb3de0e95fc45a73f839cfbfb359bf2a12514db3": {
+   "sync": 1,
+   "swap": 1,
+   "last_sync": 37506050,
+   "last_swap": 37506050
+  },
+  "0x602dd999f11bfcb14645fbb48a6c7f8b433d19e6": {
+   "sync": 1,
+   "swap": 1,
+   "last_sync": 37506109,
+   "last_swap": 37506109
+  },
+  "0xe5de1939165de4635f93e060a8de571c3cab5c1b": {
+   "sync": 1,
+   "swap": 1,
+   "last_sync": 37506136,
+   "last_swap": 37506136
+  },
+  "0xf2b2ffa19c24f084aa4894af14e7d9175dd74a5c": {
+   "sync": 1,
+   "swap": 1,
+   "last_sync": 37506166,
+   "last_swap": 37506166
+  },
+  "0x28356120b54398bbd40af5643e2c23bceb941591": {
+   "sync": 1,
+   "swap": 1,
+   "last_sync": 37506192,
+   "last_swap": 37506192
+  },
+  "0x8df9062fc2995b06de754c040f1f7eac411abbdb": {
+   "sync": 1,
+   "swap": 1,
+   "last_sync": 37506719,
+   "last_swap": 37506719
+  },
+  "0x4db758ab5e494d5b81627dd39258240aa9db9d46": {
+   "sync": 1,
+   "swap": 1,
+   "last_sync": 37506719,
+   "last_swap": 37506719
+  },
+  "0xd6d0f9f9536590b2c0fdc76fab5fe415f59c0bed": {
+   "sync": 1,
+   "swap": 1,
+   "last_sync": 37511505,
+   "last_swap": 37511505
+  }
+ },
+ "dual_venue_pools_with_activity": 0,
+ "finding": {
+  "dual_venue_pools_in_window": 101,
+  "of_those_any_sync_or_swap": 0,
+  "actively_traded_pools": 34,
+  "actively_traded_pools_sharing_a_token_pair": 0
+ }
+}

@@ -7,6 +7,8 @@ license.workspace = true
 [dependencies]
 evm-core.workspace = true
 evm-chain.workspace = true
+evm-opportunity.workspace = true
+evm-protocol.workspace = true
 evm-simulation.workspace = true
 evm-risk.workspace = true
 evm-metrics.workspace = true
@@ -20,7 +22,6 @@ thiserror.workspace = true
 tokio.workspace = true
 
 [dev-dependencies]
-evm-protocol.workspace = true
 evm-state.workspace = true
 evm-replay.workspace = true
 reqwest.workspace = true

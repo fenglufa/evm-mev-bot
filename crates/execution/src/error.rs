@@ -79,6 +79,14 @@ pub enum ExecutionError {
     #[error("receipt binding broken: {0}")]
     ReceiptBinding(String),
 
+    /// §18/§47: the transaction ran, and what it produced is not what the simulation said
+    /// it would produce, by more than the tolerance the run declared. Distinct from
+    /// `TransactionReverted` (the chain refused the call) and from `ReceiptBinding` (we
+    /// cannot tie the receipt to our transaction): this is the case where every read is
+    /// fine and the *world* disagreed with the model.
+    #[error("execution mismatch: {0}")]
+    ExecutionMismatch(String),
+
     /// §19/§20: the capability was asked for in a mode that does not have it — signing
     /// in `BuildOnly`, broadcasting in `SignOnly`. The gate, reported.
     #[error("mode gate: {0}")]

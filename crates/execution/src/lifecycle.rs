@@ -1,11 +1,13 @@
 //! §28/§29/§30/§11/§38: one record per execution attempt, and the rules for moving it.
 //!
-//! The lifecycle is a ladder of nine named states. The task book's reason for insisting
+//! The lifecycle is a ladder of twelve named states. The task book's reason for insisting
 //! on it (§28: "不要把所有状态都塞进 bool success") is that each rung is a different
 //! *claim*, and a report that says "executed" has to be able to point at the rung it
 //! means. `Included` and `Failed` are not two values of one flag; they are two different
 //! things the chain told us, with two different latencies attached and two different
-//! counters bumped.
+//! counters bumped. M7 (§54) added three rungs at the ends that matter: `Preflighted`
+//! before anything is built, and `Settled` + `ProfitVerified` after the chain is done —
+//! the last one being the rung the milestone's success condition is actually stated on.
 //!
 //! Three more things live here because they are properties of the ladder rather than of
 //! any individual step:
@@ -24,7 +26,7 @@
 
 use std::collections::BTreeMap;
 
-use alloy_primitives::{Address, B256, U256};
+use alloy_primitives::{Address, B256, I256, U256};
 use serde::{Deserialize, Serialize};
 
 use evm_metrics::Metrics;
@@ -32,6 +34,7 @@ use evm_metrics::Metrics;
 use crate::error::{ExecutionError, Result};
 use crate::intent::TransactionIntent;
 use crate::nonce::{NonceAllocator, NonceReading};
+use crate::profit::ProfitVerificationStatus;
 use crate::receipt::{Receipt, ReceiptStatus};
 use crate::submitter::SubmissionOutcome;
 use crate::tx::TransactionType;
@@ -40,7 +43,7 @@ use crate::tx::TransactionType;
 /// than a config value someone can flip.
 pub const LANES: usize = 1;
 
-/// §28's status list.
+/// §28's status list, extended by §54's three M7 rungs.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecutionStatus {
@@ -50,14 +53,28 @@ pub enum ExecutionStatus {
     Simulated,
     /// The risk layer accepted that run (§2's first boundary: this is still not a send).
     RiskApproved,
+    /// §54's M7 rung: §26's thirteen checks ran over *this* attempt and passed. It sits
+    /// before `Built` on purpose — a transaction nobody re-priced against the live head is
+    /// bytes nobody should sign.
+    Preflighted,
     /// Unsigned bytes exist ([`crate::builder`]).
     Built,
     /// A signature exists and recovers to the sender ([`crate::signer`]).
     Signed,
     /// The node acknowledged the raw bytes (§2.3: not inclusion).
     Submitted,
-    /// A bound receipt with `status == success` exists (§27).
+    /// A bound receipt with `status == success` exists (§27). Not terminal: §54 puts two
+    /// more rungs above it, because an inclusion says the EVM did not revert and says
+    /// nothing about what the wallet ended up holding.
     Included,
+    /// §54's M7 rung: the before/after snapshots, the flow audit, the route audit, the bill
+    /// and §39's equation have all been computed for this attempt.
+    Settled,
+    /// §54's last rung and "the most important new state in M7": the settlement produced a
+    /// *final* profit verdict — [`crate::profit::ProfitVerificationStatus::is_final`],
+    /// positive or negative. Which way it went is
+    /// [`ExecutionRecord::realized_profit`], not this rung.
+    ProfitVerified,
     /// A bound receipt with `status == failure` exists. Not `Failed`: the transaction
     /// ran and reverted, which is a fact about the chain (§P).
     Reverted,
@@ -68,14 +85,17 @@ pub enum ExecutionStatus {
 
 impl ExecutionStatus {
     /// The ladder, in order, with the two stop states last.
-    const LADDER: [Self; 7] = [
+    const LADDER: [Self; 10] = [
         Self::Detected,
         Self::Simulated,
         Self::RiskApproved,
+        Self::Preflighted,
         Self::Built,
         Self::Signed,
         Self::Submitted,
         Self::Included,
+        Self::Settled,
+        Self::ProfitVerified,
     ];
 
     pub fn name(self) -> &'static str {
@@ -83,10 +103,13 @@ impl ExecutionStatus {
             Self::Detected => "detected",
             Self::Simulated => "simulated",
             Self::RiskApproved => "risk_approved",
+            Self::Preflighted => "preflighted",
             Self::Built => "built",
             Self::Signed => "signed",
             Self::Submitted => "submitted",
             Self::Included => "included",
+            Self::Settled => "settled",
+            Self::ProfitVerified => "profit_verified",
             Self::Reverted => "reverted",
             Self::Failed => "failed",
         }
@@ -101,8 +124,13 @@ impl ExecutionStatus {
     }
 
     /// Whether nothing further can be learned about this attempt.
+    ///
+    /// `Included` dropped out of this list in M7 (§54). It used to read as "the chain took
+    /// it, end of story"; §19 says a receipt proves only that the EVM did not revert, so
+    /// the story continues through settlement to a profit verdict, and a ladder that called
+    /// inclusion final had nowhere for those later claims to go.
     pub fn terminal(self) -> bool {
-        matches!(self, Self::Included | Self::Reverted | Self::Failed)
+        matches!(self, Self::ProfitVerified | Self::Reverted | Self::Failed)
     }
 
     /// Whether the attempt may still touch the network. `Signed` is the last rung that
@@ -110,7 +138,12 @@ impl ExecutionStatus {
     pub fn before_submission(self) -> bool {
         matches!(
             self,
-            Self::Detected | Self::Simulated | Self::RiskApproved | Self::Built | Self::Signed
+            Self::Detected
+                | Self::Simulated
+                | Self::RiskApproved
+                | Self::Preflighted
+                | Self::Built
+                | Self::Signed
         )
     }
 
@@ -126,6 +159,13 @@ impl ExecutionStatus {
     /// signed is exactly the fabrication §2.2 and §29 exist to make impossible. Walking
     /// back from `Submitted` to `Signed` — which is how a blind retry of a live
     /// transaction gets written — is refused by the same forward-only rule.
+    ///
+    /// M7 adds two more required predecessors, and they are the point of §54: `Settled`
+    /// needs `Included` (nothing to account for until the route is on chain) and
+    /// `ProfitVerified` needs `Settled` (no profit claim without the audits behind it).
+    /// `Preflighted` deliberately does *not* gate `Built` here — §35's validation
+    /// transaction has no opportunity to re-price — so the sequence stage enforces it for
+    /// arbitrages, where §26 says it belongs.
     pub fn can_follow(from: Self, to: Self) -> bool {
         if to == Self::Failed {
             return !from.terminal();
@@ -139,6 +179,8 @@ impl ExecutionStatus {
             Self::Signed => Self::Built,
             Self::Submitted => Self::Signed,
             Self::Included => Self::Submitted,
+            Self::Settled => Self::Included,
+            Self::ProfitVerified => Self::Settled,
             _ => {
                 return to.rank() > from.rank();
             }
@@ -179,6 +221,12 @@ pub struct ExecutionRecord {
     pub value_wei: U256,
 
     pub transaction_hash: Option<B256>,
+    /// How many transactions the totals on this record cover. A single-transaction attempt
+    /// says `1`; a route says `N`, and the per-transaction hashes are in
+    /// [`crate::sequence::SequenceReport::transactions`]. Without this line, a record whose
+    /// `gas_used` is the sum of six receipts reads like the bill of the one hash named above
+    /// it, which is exactly the mismatch §55's field list exists to prevent.
+    pub route_transactions: Option<usize>,
     pub status: ExecutionStatus,
 
     pub created_at_ms: u64,
@@ -186,6 +234,10 @@ pub struct ExecutionRecord {
     pub signed_at_ms: Option<u64>,
     pub submitted_at_ms: Option<u64>,
     pub included_at_ms: Option<u64>,
+    /// §54's two M7 stamps, so a report can state how long settlement took without
+    /// re-reading a log file for it.
+    pub settled_at_ms: Option<u64>,
+    pub profit_verified_at_ms: Option<u64>,
 
     pub gas_used: Option<u64>,
     pub effective_gas_price: Option<U256>,
@@ -193,6 +245,30 @@ pub struct ExecutionRecord {
     /// `gas_used * effective_gas_price` because they are different bills (see
     /// [`crate::receipt`]).
     pub l1_fee: Option<U256>,
+
+    /// §55's execution-side binding: the block the record's own receipt named, by number
+    /// *and* by hash. For a route this is the first transaction's block — the one the
+    /// `transaction_hash` above belongs to.
+    pub execution_block: Option<u64>,
+    pub execution_block_hash: Option<B256>,
+    /// §55's asset side, in the route's input asset: what it put in, what it got back, and
+    /// the difference before any cost line.
+    pub input_asset: Option<Address>,
+    pub input_amount: Option<U256>,
+    pub gross_output: Option<U256>,
+    pub gross_profit: Option<I256>,
+    /// §55's cost lines: `l2_fee` over the route's receipts, and `total_fee` = `l2_fee` +
+    /// `l1_fee`. §12's subtraction uses the total, so the record has to carry it rather than
+    /// let a reader add two columns and hope they match the run.
+    pub l2_fee: Option<U256>,
+    pub total_fee: Option<U256>,
+    /// §12's net after every cost line, or `None` when §14 says the two halves cannot be
+    /// added in one denomination. A null here is the honest rendering of "unproven" — a
+    /// zero would be a claim.
+    pub realized_profit: Option<I256>,
+    /// §56's verdict as a field, so "counted as a successful real arbitrage" is a read
+    /// rather than an inference from how far up a ladder the status word sits.
+    pub profit_status: Option<ProfitVerificationStatus>,
 
     pub simulation_profit_wei: Option<U256>,
     /// `gas_limit * max_fee_per_gas + value`, the bound §33's balance check uses. An
@@ -234,15 +310,28 @@ impl ExecutionRecord {
             max_priority_fee_per_gas: intent.max_priority_fee_per_gas,
             value_wei: intent.value,
             transaction_hash: None,
+            route_transactions: None,
             status,
             created_at_ms,
             built_at_ms: None,
             signed_at_ms: None,
             submitted_at_ms: None,
             included_at_ms: None,
+            settled_at_ms: None,
+            profit_verified_at_ms: None,
             gas_used: None,
             effective_gas_price: None,
             l1_fee: None,
+            execution_block: None,
+            execution_block_hash: None,
+            input_asset: None,
+            input_amount: None,
+            gross_output: None,
+            gross_profit: None,
+            l2_fee: None,
+            total_fee: None,
+            realized_profit: None,
+            profit_status: None,
             simulation_profit_wei: intent.simulation_profit_wei,
             estimated_execution_cost_wei: intent.unsigned().maximum_cost_wei().ok(),
             failure: None,
@@ -269,6 +358,8 @@ impl ExecutionRecord {
             ExecutionStatus::Signed => self.signed_at_ms = Some(at_ms),
             ExecutionStatus::Submitted => self.submitted_at_ms = Some(at_ms),
             ExecutionStatus::Included => self.included_at_ms = Some(at_ms),
+            ExecutionStatus::Settled => self.settled_at_ms = Some(at_ms),
+            ExecutionStatus::ProfitVerified => self.profit_verified_at_ms = Some(at_ms),
             ExecutionStatus::Reverted => {
                 // A revert is an inclusion with a failed status, so the block stamp is
                 // kept — dropping it would lose the fact that the chain did execute it.
@@ -304,7 +395,51 @@ impl ExecutionRecord {
         self.gas_used = Some(receipt.gas_used);
         self.effective_gas_price = Some(receipt.effective_gas_price);
         self.l1_fee = receipt.l1_fee;
+        // §55's execution-side binding comes from the receipt the record just took, and
+        // `route_transactions` starts at the one transaction this record is addressed by.
+        // A sequence that settles later replaces both through [`Self::attach_outcome`].
+        self.execution_block = Some(receipt.block_number);
+        self.execution_block_hash = Some(receipt.block_hash);
+        self.route_transactions = Some(1);
+        self.l2_fee = receipt.l2_cost_wei();
+        // No total when the L1 half was never read: `l2 + 0` is a lower bound, and §37's
+        // rule that an unmeasured fee is stated as one lives here too.
+        self.total_fee = match (self.l2_fee, receipt.l1_fee) {
+            (Some(l2), Some(l1)) => l2.checked_add(l1),
+            _ => None,
+        };
         Ok(from)
+    }
+
+    /// §55's outcome lines, folded in once the route has been accounted for.
+    ///
+    /// The cost fields *replace* what [`ExecutionRecord::attach_receipt`] wrote, and that is
+    /// the whole reason this is a separate step rather than a mutation of the receipt
+    /// binding: a receipt-bound record carries the one transaction its hash names, while
+    /// §55 asks the record for the run's totals. For a single-transaction attempt the two
+    /// readings are the same numbers; for a sequence they are not, and a record that kept
+    /// the first transaction's bill next to the route's profit would make §12's subtraction
+    /// unreadable. The hash and the execution block stay on the first transaction's values
+    /// because they *are* what the record is addressed by — [`Self::route_transactions`] is
+    /// the line that says so.
+    ///
+    /// This is a data fold, not a ladder claim: it never moves [`Self::status`]. A route that
+    /// landed, lost money and stopped is `Failed` (§34's half-executed arbitrage) *and*
+    /// carries a `VerifiedNegative` net (§56's proven loss), because those answer two
+    /// different questions — "did the attempt go as planned" and "what did the wallet end
+    /// up with" — and collapsing them is how a loss disappears from the record.
+    pub fn attach_outcome(&mut self, outcome: &ExecutionOutcome) {
+        self.route_transactions = Some(outcome.route_transactions);
+        self.input_asset = Some(outcome.input_asset);
+        self.input_amount = Some(outcome.input_amount);
+        self.gross_output = Some(outcome.gross_output);
+        self.gross_profit = Some(outcome.gross_profit);
+        self.gas_used = Some(outcome.gas_used);
+        self.l2_fee = Some(outcome.l2_fee);
+        self.l1_fee = Some(outcome.l1_fee);
+        self.total_fee = Some(outcome.total_fee);
+        self.realized_profit = outcome.realized_profit;
+        self.profit_status = Some(outcome.profit_status);
     }
 
     /// Stop this attempt, with §39's reason.
@@ -335,11 +470,14 @@ impl ExecutionRecord {
             ExecutionStatus::Detected
             | ExecutionStatus::Simulated
             | ExecutionStatus::RiskApproved
+            | ExecutionStatus::Preflighted
             | ExecutionStatus::Built
             | ExecutionStatus::Signed => false,
-            ExecutionStatus::Submitted | ExecutionStatus::Included | ExecutionStatus::Reverted => {
-                true
-            }
+            ExecutionStatus::Submitted
+            | ExecutionStatus::Included
+            | ExecutionStatus::Settled
+            | ExecutionStatus::ProfitVerified
+            | ExecutionStatus::Reverted => true,
             ExecutionStatus::Failed => self.submitted_at_ms.is_some(),
         }
     }
@@ -347,6 +485,32 @@ impl ExecutionRecord {
     pub fn has_transaction(&self) -> bool {
         self.transaction_hash.is_some()
     }
+}
+
+/// §55's outcome block, as one bundle the settlement hands over.
+///
+/// It is a struct rather than ten arguments so the record cannot be given a total that was
+/// not added from the two halves it also carries: [`ExecutionOutcome::total_fee`] and
+/// [`ExecutionOutcome::realized_profit`] arrive together with the `l2_fee` and `l1_fee` they
+/// were computed from, and [`ExecutionRecord::attach_outcome`] writes all of them or none.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ExecutionOutcome {
+    /// How many transactions these totals cover. `1` for a lone transaction.
+    pub route_transactions: usize,
+    pub input_asset: Address,
+    pub input_amount: U256,
+    /// What the route handed back in its own input asset, measured from the receipts.
+    pub gross_output: U256,
+    /// `gross_output − input_amount`, before any cost line (§12's first subtraction).
+    pub gross_profit: I256,
+    /// `Σ gas_used` over the route's receipts.
+    pub gas_used: u64,
+    pub l2_fee: U256,
+    pub l1_fee: U256,
+    pub total_fee: U256,
+    /// §12's net, or `None` when §14 forbids one denomination.
+    pub realized_profit: Option<I256>,
+    pub profit_status: ProfitVerificationStatus,
 }
 
 /// §30's id: derived, never counted.
@@ -484,6 +648,13 @@ impl Ledger {
     /// Record a stop that is not a failure on the ledger's own copy (§24, §20, §26).
     pub fn block(&mut self, execution_id: &str, reason: &str) -> Result<()> {
         self.record_mut(execution_id)?.block(reason);
+        Ok(())
+    }
+
+    /// Fold §55's outcome lines into the ledger's own copy of the record.
+    pub fn attach_outcome(&mut self, execution_id: &str, outcome: &ExecutionOutcome) -> Result<()> {
+        let record = self.record_mut(execution_id)?;
+        record.attach_outcome(outcome);
         Ok(())
     }
 
@@ -650,11 +821,23 @@ pub mod metric_keys {
     pub const SIGN_LATENCY: &str = "execution_sign_latency";
     pub const SUBMISSION_LATENCY: &str = "execution_submission_latency";
     pub const RECEIPT_LATENCY: &str = "execution_receipt_latency";
+    pub const SETTLEMENT_LATENCY: &str = "execution_settlement_latency";
+    pub const PROFIT_LATENCY: &str = "execution_profit_latency";
     pub const BUILD_SUCCESS: &str = "execution_build_success";
     pub const SIGN_SUCCESS: &str = "execution_sign_success";
     pub const SUBMIT_SUCCESS: &str = "execution_submit_success";
     pub const RECEIPT_SUCCESS: &str = "execution_receipt_success";
     pub const REVERT: &str = "execution_revert";
+    /// §54's three new rungs, one counter each: how many attempts were re-priced, accounted
+    /// for, and given a final profit verdict — in that order, because the ladder is what
+    /// makes the three numbers mean different things.
+    pub const PREFLIGHT_SUCCESS: &str = "execution_preflight_success";
+    pub const SETTLE_SUCCESS: &str = "execution_settle_success";
+    pub const PROFIT_VERIFIED: &str = "execution_profit_verified";
+    /// §53's `preflight_latency`. Emitted by [`crate::giwa::LivePreflightReads`], not by
+    /// [`meter`]: §26's verdict is a pure decision, so the span worth timing is the set of
+    /// chain reads that fed it, and those happen outside any execution record.
+    pub const PREFLIGHT_LATENCY: &str = "execution_preflight_latency";
 }
 
 /// Emit §38's metrics for one transition.
@@ -685,6 +868,24 @@ pub fn meter(metrics: &mut Metrics, previous: Option<ExecutionStatus>, record: &
         metrics.bump(metric_keys::SUBMIT_SUCCESS);
         if let (Some(from), Some(to)) = (record.signed_at_ms, record.submitted_at_ms) {
             metrics.record_from(metric_keys::SUBMISSION_LATENCY, from, to);
+        }
+    }
+    if reached == ExecutionStatus::Preflighted {
+        // No latency here on purpose: §26's gate is a pure decision over facts the caller
+        // read, so the span worth timing belongs to those reads, which are outside this
+        // record. §53's `preflight_latency` is emitted by whoever performs them.
+        metrics.bump(metric_keys::PREFLIGHT_SUCCESS);
+    }
+    if reached == ExecutionStatus::Settled {
+        metrics.bump(metric_keys::SETTLE_SUCCESS);
+        if let (Some(from), Some(to)) = (record.included_at_ms, record.settled_at_ms) {
+            metrics.record_from(metric_keys::SETTLEMENT_LATENCY, from, to);
+        }
+    }
+    if reached == ExecutionStatus::ProfitVerified {
+        metrics.bump(metric_keys::PROFIT_VERIFIED);
+        if let (Some(from), Some(to)) = (record.settled_at_ms, record.profit_verified_at_ms) {
+            metrics.record_from(metric_keys::PROFIT_LATENCY, from, to);
         }
     }
     match reached {
@@ -788,10 +989,13 @@ mod tests {
         for (index, status) in [
             ExecutionStatus::Simulated,
             ExecutionStatus::RiskApproved,
+            ExecutionStatus::Preflighted,
             ExecutionStatus::Built,
             ExecutionStatus::Signed,
             ExecutionStatus::Submitted,
             ExecutionStatus::Included,
+            ExecutionStatus::Settled,
+            ExecutionStatus::ProfitVerified,
         ]
         .into_iter()
         .enumerate()
@@ -799,11 +1003,12 @@ mod tests {
             let at = 1_000 + (index as u64 + 1) * 100;
             record.advance(status, at).expect("the ladder is walkable");
         }
-        assert_eq!(record.status, ExecutionStatus::Included);
+        assert_eq!(record.status, ExecutionStatus::ProfitVerified);
+        assert!(record.status.terminal());
         assert!(record.was_sent());
         assert!(record.included_at_ms.is_some());
         assert!(!ExecutionStatus::can_follow(
-            ExecutionStatus::Included,
+            ExecutionStatus::ProfitVerified,
             ExecutionStatus::Signed
         ));
 
@@ -814,6 +1019,173 @@ mod tests {
         assert!(!signed.was_sent());
         assert!(!signed.has_transaction());
         assert!(signed.status.before_submission());
+    }
+
+    /// §54's point: inclusion is not the end of the claim, and the two rungs after it each
+    /// need the one before. A record that reached `ProfitVerified` without passing `Settled`
+    /// would be a profit number no audit produced.
+    #[test]
+    fn settlement_and_the_profit_verdict_have_the_rungs_below_them() {
+        assert!(!ExecutionStatus::Included.terminal());
+        assert!(!ExecutionStatus::Settled.terminal());
+        assert!(ExecutionStatus::ProfitVerified.terminal());
+        assert!(ExecutionStatus::can_follow(
+            ExecutionStatus::Included,
+            ExecutionStatus::Settled
+        ));
+        assert!(!ExecutionStatus::can_follow(
+            ExecutionStatus::Submitted,
+            ExecutionStatus::Settled
+        ));
+        assert!(!ExecutionStatus::can_follow(
+            ExecutionStatus::Included,
+            ExecutionStatus::ProfitVerified
+        ));
+        assert!(ExecutionStatus::can_follow(
+            ExecutionStatus::Settled,
+            ExecutionStatus::ProfitVerified
+        ));
+        // §26's gate sits before any bytes exist, and `before_submission` has to say so.
+        assert!(ExecutionStatus::Preflighted.before_submission());
+        assert!(!ExecutionStatus::can_follow(
+            ExecutionStatus::RiskApproved,
+            ExecutionStatus::Settled
+        ));
+
+        // A half-executed route: the first transaction landed, a later one reverted, so the
+        // attempt stopped. `Included` is no longer final, which is what lets the record say
+        // `Failed` about the route rather than being frozen at the one rung that oversells it.
+        assert!(ExecutionStatus::can_follow(
+            ExecutionStatus::Included,
+            ExecutionStatus::Failed
+        ));
+        let mut record = ExecutionRecord::open(&intent(), ExecutionStatus::Included, 1_000);
+        record
+            .fail(
+                &ExecutionError::TransactionReverted {
+                    transaction_hash: "0xabc".to_string(),
+                    block_number: 102,
+                },
+                2_000,
+            )
+            .unwrap();
+        assert_eq!(record.status, ExecutionStatus::Failed);
+        // … and a settled one can still fail if the accounting then finds the run
+        // unprovable in a way that stops the attempt; a *verified* one cannot.
+        assert!(ExecutionStatus::can_follow(
+            ExecutionStatus::Settled,
+            ExecutionStatus::Failed
+        ));
+        assert!(!ExecutionStatus::can_follow(
+            ExecutionStatus::ProfitVerified,
+            ExecutionStatus::Failed
+        ));
+        assert!(!ExecutionStatus::can_follow(
+            ExecutionStatus::Reverted,
+            ExecutionStatus::Settled
+        ));
+    }
+
+    /// §55's outcome lines, and the rule that a route's totals replace the single receipt's
+    /// numbers the record was stamped with.
+    #[test]
+    fn the_record_carries_the_outcome_lines_m7_added() {
+        let mut ledger = Ledger::new();
+        let Claim::New(handle) = ledger.claim(&intent(), ExecutionStatus::Submitted, 1_000) else {
+            panic!()
+        };
+        let hash = B256::left_padding_from(&[77]);
+        ledger
+            .attach_transaction_hash(&handle.execution_id, hash)
+            .unwrap();
+        let mut receipt = receipt_for(hash);
+        receipt.gas_used = 100_000;
+        receipt.effective_gas_price = U256::from(362u64);
+        ledger.attach_receipt(&receipt, 2_000).unwrap();
+        ledger
+            .advance(&handle.execution_id, ExecutionStatus::Settled, 2_500)
+            .unwrap();
+
+        let one_l2 = U256::from(36_200_000u64);
+        let one_l1 = U256::from(7_400_000_000u64);
+        {
+            let record = ledger.get(&handle.execution_id).unwrap();
+            assert_eq!(record.execution_block, Some(101));
+            assert_eq!(record.route_transactions, Some(1));
+            assert_eq!(record.l2_fee, Some(one_l2));
+            assert_eq!(record.total_fee, Some(one_l2 + one_l1));
+            assert!(record.was_sent());
+            // Nothing has been accounted for yet, so the profit lines are absent, not zero.
+            assert_eq!(record.realized_profit, None);
+            assert_eq!(record.gross_profit, None);
+            assert_eq!(record.profit_status, None);
+        }
+
+        let input = U256::from(1_000_000_000_000_000u64);
+        let output = U256::from(1_002_000_000_000_000u64);
+        let gross = output - input;
+        let route_l2 = one_l2 * U256::from(6u64);
+        let route_l1 = one_l1 * U256::from(6u64);
+        let total = route_l2 + route_l1;
+        ledger
+            .attach_outcome(
+                &handle.execution_id,
+                &ExecutionOutcome {
+                    route_transactions: 6,
+                    input_asset: Address::from_slice(&[6u8; 20]),
+                    input_amount: input,
+                    gross_output: output,
+                    gross_profit: I256::from_raw(gross),
+                    gas_used: 600_000,
+                    l2_fee: route_l2,
+                    l1_fee: route_l1,
+                    total_fee: total,
+                    realized_profit: Some(I256::from_raw(gross - total)),
+                    profit_status: ProfitVerificationStatus::VerifiedPositive,
+                },
+            )
+            .unwrap();
+        let record = ledger.get(&handle.execution_id).unwrap();
+        assert_eq!(record.route_transactions, Some(6));
+        assert_eq!(record.gas_used, Some(600_000), "the route total");
+        assert_eq!(record.l2_fee, Some(route_l2));
+        assert_eq!(record.l1_fee, Some(route_l1));
+        assert_eq!(record.total_fee, Some(total));
+        assert_eq!(record.input_amount, Some(input));
+        assert_eq!(record.gross_output, Some(output));
+        assert_eq!(record.gross_profit, Some(I256::from_raw(gross)));
+        assert_eq!(record.realized_profit, Some(I256::from_raw(gross - total)));
+        // §12's claim, readable straight off the record: the net is the gross minus the bill.
+        assert!(record.realized_profit.unwrap() > I256::ZERO);
+        assert_eq!(record.execution_block, Some(101));
+        assert_eq!(
+            record.profit_status,
+            Some(ProfitVerificationStatus::VerifiedPositive)
+        );
+        assert!(record
+            .profit_status
+            .unwrap()
+            .counts_as_successful_real_arbitrage());
+        // The JSON a report reads has the lines too.
+        let json = serde_json::to_value(record).unwrap();
+        for key in [
+            "execution_block",
+            "execution_block_hash",
+            "input_asset",
+            "input_amount",
+            "gross_output",
+            "gross_profit",
+            "l2_fee",
+            "total_fee",
+            "realized_profit",
+            "profit_status",
+        ] {
+            assert!(json.get(key).is_some(), "§55 requires {key}");
+        }
+        assert_eq!(
+            json["profit_status"],
+            serde_json::json!("verified_positive")
+        );
     }
 
     #[test]
@@ -847,13 +1219,17 @@ mod tests {
             ExecutionStatus::Submitted,
             ExecutionStatus::Reverted
         ));
-        // Anything unfinished can fail; a finished thing cannot.
+        // Anything unfinished can fail; a verified or reverted one cannot.
         assert!(ExecutionStatus::can_follow(
             ExecutionStatus::Built,
             ExecutionStatus::Failed
         ));
         assert!(!ExecutionStatus::can_follow(
-            ExecutionStatus::Included,
+            ExecutionStatus::ProfitVerified,
+            ExecutionStatus::Failed
+        ));
+        assert!(!ExecutionStatus::can_follow(
+            ExecutionStatus::Reverted,
             ExecutionStatus::Failed
         ));
         let _ = error;
@@ -1106,9 +1482,15 @@ mod tests {
             "estimated_execution_cost_wei",
             "simulation_profit_wei",
         ] {
-            assert!(json.get(key).is_some(), "§29 requires {key} in the record");
+            assert!(json.get(key).is_some(), "§28 requires {key} in the record");
         }
-        // §29's deferral, checked as an absence: M6 must not claim a realized profit.
-        assert!(json.get("realized_profit").is_none());
+        // §55's addition, checked the other way round from how M6 checked it: the profit
+        // lines now exist on the record, and a fresh one must leave them **null** rather
+        // than zero. M6's absence test is superseded — an open attempt has no realized
+        // profit, but it now has a place to put one.
+        let json = serde_json::to_value(&record).unwrap();
+        assert!(json["realized_profit"].is_null());
+        assert!(json["gross_profit"].is_null());
+        assert!(json["profit_status"].is_null());
     }
 }

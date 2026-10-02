@@ -188,6 +188,7 @@ async fn gate(fixture: &Fixture, request: &SimulationRequest) -> Gate {
         detail: request
             .sender_setup_override()
             .expect("the canonical spec funds its sender")
+            .expect("the canonical spec's sender is scaffolded")
             .reason,
     };
     let opportunity_id = opportunity_id(fixture, &run);

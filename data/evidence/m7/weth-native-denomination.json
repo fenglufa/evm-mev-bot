@@ -1,0 +1,30 @@
+{
+ "_provenance": {
+  "milestone": "M7-P0",
+  "read_at_head": 37527392,
+  "rpc_endpoint": "https://sepolia-rpc.giwa.io",
+  "methods": [
+   "eth_call",
+   "eth_getBalance",
+   "eth_getBlockByNumber",
+   "eth_getTransactionReceipt"
+  ],
+  "how": "read decimals()/totalSupply()/name()/symbol() of 0x4200...0006 at a pinned block and compare them against native wei, then look for a real deposit tx",
+  "proves": "that the chain's wrapped gas asset is 18-decimals 'Wrapped Ether'/'WETH', so a raw WETH unit and a wei of native ETH are the same size and token profit can be netted against gas cost without any scaling factor",
+  "does_not_prove": "that WETH and ETH are worth the same to a market - here they are the same asset by construction, which is why the wrap/unwrap pair is the only denomination bridge used"
+ },
+ "weth": "0x4200000000000000000000000000000000000006",
+ "decimals_word": "0x0000000000000000000000000000000000000000000000000000000000000012",
+ "total_supply_word": "0x0000000000000000000000000000000000000000000000796b0454b7e4232087",
+ "name_word_tail": "0d57726170706564204574686572 (len 13, 'Wrapped Ether')",
+ "symbol_word_tail": "0457455448 (len 4, 'WETH')",
+ "native_balance_of_m6_wallet_wei": 19999971686320656,
+ "m6_wallet": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+ "deposit_txs_seen": [
+  [
+   37524492,
+   "0x3234d9009a924b657630b47715a69127c37850e8a788cb8e2b82e05166181330",
+   1942827358320
+  ]
+ ]
+}

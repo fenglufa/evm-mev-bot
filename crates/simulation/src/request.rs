@@ -40,18 +40,40 @@ use crate::plan::{Funding, Settle};
 use crate::route::PricedRoute;
 use crate::state::{BlockPin, StateOverride};
 
-/// The deterministic test sender (§58).
+/// Where the native this sender spends gas money comes from.
 ///
-/// Derived from a fixed label rather than generated from a key, so two machines
-/// pick the same address and the run stays reproducible (§37). There is no private
-/// key for it because it was never a key: the bytes below are a hash of a sentence,
-/// and nothing in this repository is capable of signing with it. Its only role is to
-/// own enough balance and nonce to spend gas inside a sandbox that is discarded the
-/// moment the run reports.
+/// M4's §58 answer was *always* [`Endowment::Scaffolded`]: the sandbox has no keys, so the
+/// only way a derived address can run a plan is for the request to hand it a balance. That
+/// is a fact about the sandbox, and [`SimulationRequest::sender_setup_override`] states it
+/// as one — which is why M6 §34 can read it and refuse to broadcast what it funded.
+///
+/// M7 asks for the same engine over the *same* real state a submission would meet, so the
+/// declaration has to be possible: [`Endowment::PinnedState`] makes the run spend what the
+/// account at the pinned block actually holds, and if that is not enough the EVM's own
+/// balance check says so. A profit measured against a manufactured balance cannot be an
+/// executable one, and the two are told apart here rather than in a report.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Endowment {
+    /// §58's scaffolding: the request overwrites this account's balance with
+    /// [`TransactionSpec::endowment_wei`]. Buildable evidence; a transaction it funded is
+    /// not submittable.
+    #[default]
+    Scaffolded,
+    /// No setup is applied to the sender at all: its balance and nonce are whatever the
+    /// pinned block reports, which is the only state a real submission is priced against.
+    PinnedState,
+}
+
+/// The account a run executes as.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 pub struct SimulationSender {
     pub address: Address,
     pub label: &'static str,
+    /// Whose money this account may spend. Defaulted to the scaffolding so every M4/M5
+    /// request reads as it did before; [`SimulationSender::from_pinned_state`] is the
+    /// declaration M7's real runs have to make.
+    pub endowment: Endowment,
 }
 
 /// The label the test sender is derived from, kept so the address can be re-derived
@@ -66,11 +88,34 @@ impl SimulationSender {
     }
 
     /// The sender M4 runs as, unless a request says otherwise.
+    ///
+    /// Derived from a fixed label rather than generated from a key, so two machines pick
+    /// the same address and the run stays reproducible (§37). There is no private key for
+    /// it because it was never a key, and nothing in this repository can sign with it: its
+    /// only role is to hold enough balance and nonce to spend gas in a sandbox that is
+    /// discarded when the run reports — which is what [`Endowment::Scaffolded`] supplies.
     pub fn default_test_sender() -> Self {
         Self {
             address: Self::address_of(DEFAULT_SENDER_LABEL),
             label: DEFAULT_SENDER_LABEL,
+            endowment: Endowment::Scaffolded,
         }
+    }
+
+    /// A run that spends only what an account holds on chain. `address` is a real account,
+    /// so — unlike [`Self::default_test_sender`] — the label describes who funded it rather
+    /// than deriving it.
+    pub fn from_pinned_state(address: Address, label: &'static str) -> Self {
+        Self {
+            address,
+            label,
+            endowment: Endowment::PinnedState,
+        }
+    }
+
+    /// Whether this run manufactured the balance it trades with.
+    pub fn is_scaffolded(&self) -> bool {
+        self.endowment == Endowment::Scaffolded
     }
 }
 
@@ -345,22 +390,30 @@ impl SimulationRequest {
     ///
     /// Returns the setup it is going to apply rather than applying it in secret, so
     /// a reader of the request can see the one balance the run manufactured
-    /// (§57: approval and balance setup is stated, not implied).
+    /// (§57: approval and balance setup is stated, not implied). A sender that declared
+    /// [`Endowment::PinnedState`] contributes nothing here, and the vector that comes
+    /// back is what proves it.
     pub fn preflight(&self) -> Result<Vec<StateOverride>, SimulationError> {
         self.check_overrides()?;
         let mut setup = self.state.overrides.clone();
-        setup.push(self.sender_setup_override()?);
+        setup.extend(self.sender_setup_override()?);
         Ok(setup)
     }
 
     /// The sender's own setup entry: [`TransactionSpec::endowment_wei`] at the price
     /// this request declares, with the numbers in the reason so the override is
-    /// quotable without re-deriving them.
-    pub fn sender_setup_override(&self) -> Result<StateOverride, SimulationError> {
+    /// quotable without re-deriving them — or `None` when the sender declared
+    /// [`Endowment::PinnedState`], which is this request stating that it manufactured no
+    /// balance at all. M6 §34 reads exactly this signal to decide what may never reach a
+    /// node, so the option is the boundary rather than a description of it.
+    pub fn sender_setup_override(&self) -> Result<Option<StateOverride>, SimulationError> {
+        let spec = &self.transaction;
+        if !spec.sender.is_scaffolded() {
+            return Ok(None);
+        }
         let price = self.max_fee_per_gas()?;
         let wrapped = self.native_to_wrap();
-        let spec = &self.transaction;
-        Ok(StateOverride::balance(
+        Ok(Some(StateOverride::balance(
             self.sender_address(),
             spec.endowment_wei(price, wrapped),
             format!(
@@ -369,7 +422,7 @@ impl SimulationRequest {
                  which is this run's scaffolding and not a fact about this chain",
                 spec.steps_planned, spec.gas_limit_per_step, wrapped,
             ),
-        ))
+        )))
     }
 
     pub fn input_token(&self) -> TokenId {
@@ -413,14 +466,24 @@ impl SimulationRequest {
     /// at an address this simulation does not run as is refused. The consequence is
     /// the one that matters for the real run: token balances are never manufactured,
     /// so a sender that wants WETH has to be an account the pinned state already
-    /// says holds WETH. Native gas money, by contrast, is a field on the sender's
-    /// own account and is overridden freely.
+    /// says holds WETH. Native gas money is a field on the sender's own account, so
+    /// §57 permits it — and [`Endowment`] is what makes that permission a declaration
+    /// rather than a blank cheque: a run that says it spends the chain's balance may
+    /// not then hand itself one.
     pub fn check_overrides(&self) -> Result<(), SimulationError> {
         let sender = self.transaction.sender.address;
         let pools = self.route.pools();
         for entry in &self.state.overrides {
             let touched = entry.address;
             if touched == sender {
+                if !self.transaction.sender.is_scaffolded() && entry.balance.is_some() {
+                    return Err(SimulationError::UnsupportedTransaction(format!(
+                        "override at {sender} sets a balance, and this run declared its \
+                         sender's endowment as {:?}: a run may not claim to spend the chain's \
+                         state and then hand itself a balance",
+                        self.transaction.sender.endowment,
+                    )));
+                }
                 continue;
             }
             let what = if pools.iter().any(|pool| pool.address == touched) {
@@ -572,7 +635,8 @@ mod tests {
         );
         let setup = request
             .sender_setup_override()
-            .expect("setup for the sender");
+            .expect("no reading error")
+            .expect("this sender is scaffolded");
         assert_eq!(setup.address, request.sender_address());
         assert_eq!(
             setup.balance,
@@ -603,7 +667,11 @@ mod tests {
             "the deposit is the input amount"
         );
         assert_eq!(
-            wrapped.sender_setup_override().expect("setup").balance,
+            wrapped
+                .sender_setup_override()
+                .expect("no reading error")
+                .expect("this sender is scaffolded")
+                .balance,
             Some(
                 U256::from(30_000_000u64 * 8) * U256::from(1_001_000u128)
                     + wrapped.route.input_amount
@@ -628,10 +696,43 @@ mod tests {
             unpriced
                 .sender_setup_override()
                 .expect("setup")
+                .expect("a scaffolded sender")
                 .balance
                 .expect("a balance"),
             U256::ZERO
         );
+    }
+
+    /// §34's boundary read at the product rather than asserted in prose: a sender that
+    /// declares the pinned state as its endowment applies no balance setup at all — and
+    /// cannot hand itself one behind that declaration.
+    #[test]
+    fn a_sender_that_spends_the_pinned_state_manufactures_no_balance() {
+        let mut real = request();
+        real.transaction.sender =
+            SimulationSender::from_pinned_state(Address::from_slice(&[7u8; 20]), "M7 real sender");
+        assert_eq!(
+            real.sender_setup_override().expect("no reading error"),
+            None
+        );
+        assert_eq!(
+            real.preflight().expect("a clean request"),
+            real.state.overrides,
+            "the whole setup this run applies is what the caller declared, and nothing more"
+        );
+
+        let sneaking = SimulationRequest {
+            state: real.state.clone().with_override(StateOverride::balance(
+                real.sender_address(),
+                U256::from(1u64),
+                "an endowment wearing a real-state label".to_string(),
+            )),
+            ..real.clone()
+        };
+        let error = sneaking
+            .preflight()
+            .expect_err("a declared run may not be scaffolded by hand");
+        assert!(error.to_string().contains("sets a balance"), "{error}");
     }
 
     /// A ruleset that caps one transaction's gas is refused when the plan's per-step

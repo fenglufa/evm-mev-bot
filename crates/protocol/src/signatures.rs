@@ -18,6 +18,8 @@ sol! {
     event Burn(address indexed sender, uint256 amount0, uint256 amount1, address indexed to);
     event PairCreated(address indexed token0, address indexed token1, address indexed pair, uint256 pairIndex);
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event Deposit(address indexed dst, uint256 wad);
+    event Withdrawal(address indexed src, uint256 wad);
 }
 
 /// keccak256("getReserves()")
@@ -62,6 +64,27 @@ impl Default for V2Topics {
             burn: Burn::SIGNATURE_HASH,
             pair_created: PairCreated::SIGNATURE_HASH,
             transfer: Transfer::SIGNATURE_HASH,
+        }
+    }
+}
+
+/// The topic0 values of the wrapped gas asset, computed from the two declarations above.
+///
+/// A wrap or an unwrap moves no `Transfer`. `deposit()` mints and `withdraw()` burns, and the
+/// only chain-visible statement of either is these two single-topic logs — so an execution
+/// audit that reads `Transfer` alone sees the wrapped token leave the wallet and never see it
+/// come back, and calls that a disagreement.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Weth9Topics {
+    pub deposit: B256,
+    pub withdrawal: B256,
+}
+
+impl Default for Weth9Topics {
+    fn default() -> Self {
+        Self {
+            deposit: Deposit::SIGNATURE_HASH,
+            withdrawal: Withdrawal::SIGNATURE_HASH,
         }
     }
 }
@@ -152,6 +175,40 @@ mod tests {
         );
     }
 
+    /// The wrapped gas asset's own two events, pinned the same way as `V2Topics`.
+    ///
+    /// Census over 5,000 blocks ending at head 37,549,725 on chain 91,342, `eth_getLogs`
+    /// for 0x4200000000000000000000000000000000000006 alone — 24,970 logs, and exactly four
+    /// topic0 families, each with its `(topic count, data bytes)` shape:
+    /// - 0xe1fffcc4.. (2 topics, 32 bytes) — 12,701 logs.
+    /// - 0xddf252ad.. (3 topics, 32 bytes) —  7,397 logs, the ERC-20 `Transfer`.
+    /// - 0x7fcf532c.. (2 topics, 32 bytes) —  3,164 logs.
+    /// - 0x8c5be1e5.. (3 topics, 32 bytes) —  1,708 logs, `Approval`.
+    ///
+    /// The first family is identified independently of its hash: transaction
+    /// 0x3234d9009a924b657630b47715a69127c37850e8a788cb8e2b82e05166181330 (block 37,524,492)
+    /// calls the token contract with value and its receipt holds one 2-topic log of 32 bytes
+    /// with that topic0, and no `Transfer` — a `deposit()`. So the other 2-topic family is the
+    /// burn side, and this test's point is that the burn's topic0 is what the
+    /// `Withdrawal(address,uint256)` declaration computes, not what an ABI browser says.
+    #[test]
+    fn weth9_topic0s_match_what_the_token_contract_emitted() {
+        let topics = Weth9Topics::default();
+        assert_eq!(
+            topics.deposit,
+            b256!("0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c")
+        );
+        assert_eq!(
+            topics.withdrawal,
+            b256!("0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65")
+        );
+        assert_ne!(
+            topics.withdrawal,
+            V2Topics::default().transfer,
+            "an unwrap is not a Transfer, which is why a flow audit has to read both"
+        );
+    }
+
     #[test]
     fn function_selectors_are_derived_not_assumed() {
         assert_eq!(
@@ -186,6 +243,24 @@ mod tests {
             selector_of("Burn(address,uint256,uint256)"),
             [0x49, 0x99, 0x5e, 0x5d],
             "the shorter Burn declaration is a different event"
+        );
+    }
+
+    /// The wrap/unwrap pair is the short shape — one indexed address and one word — and that
+    /// is what the chain's log shape shows: 2 topics and 32 data bytes, where `Transfer` is
+    /// 3 topics and `Swap` is 3 topics over 128 bytes.
+    #[test]
+    fn weth9_declarations_match_the_observed_log_shapes() {
+        assert_eq!(Deposit::SIGNATURE, "Deposit(address,uint256)");
+        assert_eq!(Withdrawal::SIGNATURE, "Withdrawal(address,uint256)");
+        sol! {
+            event WithdrawalBalances(address indexed src, uint256 wad, uint256 bal);
+        }
+        assert_ne!(
+            WithdrawalBalances::SIGNATURE_HASH,
+            Weth9Topics::default().withdrawal,
+            "a Withdrawal that also reported the remaining balance is a different event, and \
+             the chain's 32-byte data rules it out"
         );
     }
 }

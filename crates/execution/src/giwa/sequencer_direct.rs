@@ -90,6 +90,17 @@ impl GiwaSequencerDirect {
         self.chain_id
     }
 
+    /// §20's ERC-20 snapshot reader, over this adapter's own connection pool.
+    ///
+    /// Offered here rather than constructed by the caller because the caller is then the
+    /// execution lane's own [`crate::sequence::SequenceStage`], which must read balances
+    /// from the same socket it sends through: a second connection is not a second opinion,
+    /// it is a second moment, and §20's before/after pair is only comparable when both come
+    /// from one endpoint.
+    pub fn assets(&self) -> super::GiwaAssetReader {
+        super::GiwaAssetReader::new(&self.http)
+    }
+
     pub fn url(&self) -> &str {
         self.http.url()
     }

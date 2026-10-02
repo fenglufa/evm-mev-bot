@@ -614,6 +614,7 @@ async fn run_job(index: usize, job: SimulationJob, clock: Clock) -> SimOutcome {
     let sender_override = request
         .sender_setup_override()
         .ok()
+        .flatten()
         .map(|setup| setup.reason);
     let started = clock.now_ms();
     // The queue wait is the part of §23's latency that is *this design's* cost,

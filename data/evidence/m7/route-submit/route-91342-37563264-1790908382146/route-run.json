@@ -1,0 +1,1192 @@
+{
+  "candidate": {
+    "fee": "997/1000",
+    "fee_evidence": "data/evidence/m7/candidate-fee-measurement.json",
+    "input_amount": "100000000000000",
+    "input_token": "0x4200000000000000000000000000000000000006",
+    "mid_token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+    "venues": [
+      "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    ]
+  },
+  "chain_id": 91342,
+  "counters": {
+    "counters": {
+      "build_count": 6,
+      "execution_build_success": 1,
+      "execution_preflight_success": 1,
+      "execution_profit_verified": 1,
+      "execution_receipt_success": 1,
+      "execution_sequence_attempt": 1,
+      "execution_sequence_profit_verified_positive": 1,
+      "execution_sequence_submission_submitted": 6,
+      "execution_settle_success": 1,
+      "execution_sign_success": 1,
+      "execution_submit_success": 1,
+      "included_count": 6,
+      "opportunity_count": 1,
+      "profitable_count": 1,
+      "risk_accept_count": 1,
+      "sign_count": 6,
+      "simulation_count": 1,
+      "submit_count": 6
+    },
+    "latency": [
+      {
+        "measured": true,
+        "name": "execution_build_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 2201,
+          "min_ms": 2201,
+          "name": "execution_build_latency",
+          "p50_ms": 2201,
+          "p95_ms": 2201,
+          "p99_ms": 2201,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "execution_preflight_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 5786,
+          "min_ms": 5786,
+          "name": "execution_preflight_latency",
+          "p50_ms": 5786,
+          "p95_ms": 5786,
+          "p99_ms": 5786,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "execution_profit_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 0,
+          "min_ms": 0,
+          "name": "execution_profit_latency",
+          "p50_ms": 0,
+          "p95_ms": 0,
+          "p99_ms": 0,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "execution_receipt_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 3367,
+          "min_ms": 3367,
+          "name": "execution_receipt_latency",
+          "p50_ms": 3367,
+          "p95_ms": 3367,
+          "p99_ms": 3367,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "execution_settlement_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 27221,
+          "min_ms": 27221,
+          "name": "execution_settlement_latency",
+          "p50_ms": 27221,
+          "p95_ms": 27221,
+          "p99_ms": 27221,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "execution_sign_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 772,
+          "min_ms": 772,
+          "name": "execution_sign_latency",
+          "p50_ms": 772,
+          "p95_ms": 772,
+          "p99_ms": 772,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "execution_submission_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 253,
+          "min_ms": 253,
+          "name": "execution_submission_latency",
+          "p50_ms": 253,
+          "p95_ms": 253,
+          "p99_ms": 253,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "inclusion_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 3367,
+          "min_ms": 3367,
+          "name": "inclusion_latency",
+          "p50_ms": 3367,
+          "p95_ms": 3367,
+          "p99_ms": 3367,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "opportunity_detection_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 2087,
+          "min_ms": 2087,
+          "name": "opportunity_detection_latency",
+          "p50_ms": 2087,
+          "p95_ms": 2087,
+          "p99_ms": 2087,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "sign_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 772,
+          "min_ms": 772,
+          "name": "sign_latency",
+          "p50_ms": 772,
+          "p95_ms": 772,
+          "p99_ms": 772,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "simulation_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 21449,
+          "min_ms": 21449,
+          "name": "simulation_latency",
+          "p50_ms": 21449,
+          "p95_ms": 21449,
+          "p99_ms": 21449,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "submission_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 253,
+          "min_ms": 253,
+          "name": "submission_latency",
+          "p50_ms": 253,
+          "p95_ms": 253,
+          "p99_ms": 253,
+          "unit": "ms"
+        }
+      }
+    ]
+  },
+  "evidence_dir": "data/evidence/m7/route-submit/route-91342-37563264-1790908382146",
+  "execution": {
+    "after": {
+      "account": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "block_hash": "0x9ac350a2ff31f90440f6fddeccf2c8eee17ca2164f094392218094266bb9ced9",
+      "block_number": 37563327,
+      "native_wei": "0x49c516f0268f10",
+      "provenance": "block 37563327 (0x9ac350a2ff31f90440f6fddeccf2c8eee17ca2164f094392218094266bb9ced9); native: eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, 37563327); eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f at block 37563327; eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x4200000000000000000000000000000000000006 at block 37563327",
+      "token_balances": {
+        "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": "0x0",
+        "0x4200000000000000000000000000000000000006": "0x0"
+      }
+    },
+    "before": {
+      "account": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "block_hash": "0x292cd8b8637fdba12a67b5af08d4297cc4dde2a024860471f2513aa143bfac7b",
+      "block_number": 37563288,
+      "native_wei": "0x470dde47e18a10",
+      "provenance": "block 37563288 (0x292cd8b8637fdba12a67b5af08d4297cc4dde2a024860471f2513aa143bfac7b); native: eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, 37563288); eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f at block 37563288; eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x4200000000000000000000000000000000000006 at block 37563288",
+      "token_balances": {
+        "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": "0x0",
+        "0x4200000000000000000000000000000000000006": "0x0"
+      }
+    },
+    "completed": true,
+    "cost": {
+      "l1_fee_total": "0x9fd25b9eb",
+      "l2_fee_total": "0x53bf5c66bf",
+      "lines": [
+        {
+          "effective_gas_price": "0xf43fa",
+          "gas_used": 44932,
+          "l1_fee": "0x1b1f10f16",
+          "l1_fee_source": {
+            "detail": {
+              "block_number": 37563300,
+              "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+            },
+            "kind": "receipt_field"
+          },
+          "l2_fee": "0xa7756f2e8",
+          "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+          "total_execution_cost": "0xc294801fe",
+          "transaction_hash": "0x960e91b2e2ef4cfe44d6420a0b8b1283e15d5b0def211a2d609161f6a882c93b"
+        },
+        {
+          "effective_gas_price": "0xf43fb",
+          "gas_used": 31972,
+          "l1_fee": "0x19ae7731e",
+          "l1_fee_source": {
+            "detail": {
+              "block_number": 37563305,
+              "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+            },
+            "kind": "receipt_field"
+          },
+          "l2_fee": "0x772861f8c",
+          "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+          "total_execution_cost": "0x90d6d92aa",
+          "transaction_hash": "0x5caefdecaa16708370500876e87d6fac64fff6ee34094077cccfc4f0272bcb1f"
+        },
+        {
+          "effective_gas_price": "0xf43f8",
+          "gas_used": 127200,
+          "l1_fee": "0x1b166938c",
+          "l1_fee_source": {
+            "detail": {
+              "block_number": 37563310,
+              "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+            },
+            "kind": "receipt_field"
+          },
+          "l2_fee": "0x1da10bf900",
+          "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+          "total_execution_cost": "0x1f52728c8c",
+          "transaction_hash": "0xda125ecbea78f0de9fcb9ac061a2829698c4151db288142273bc80475fa0a286"
+        },
+        {
+          "effective_gas_price": "0xf43f5",
+          "gas_used": 29983,
+          "l1_fee": "0x1a878c0af",
+          "l1_fee_source": {
+            "detail": {
+              "block_number": 37563316,
+              "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+            },
+            "kind": "receipt_field"
+          },
+          "l2_fee": "0x6fbe833ab",
+          "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+          "total_execution_cost": "0x8a460f45a",
+          "transaction_hash": "0x306c9f39134151265b8bc17302f1b8630f4de71ff22775ee0b368e5ba3319df7"
+        },
+        {
+          "effective_gas_price": "0xf43f4",
+          "gas_used": 95013,
+          "l1_fee": "0x1adf522cd",
+          "l1_fee_source": {
+            "detail": {
+              "block_number": 37563322,
+              "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+            },
+            "kind": "receipt_field"
+          },
+          "l2_fee": "0x1621af6e44",
+          "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+          "total_execution_cost": "0x17cfa49111",
+          "transaction_hash": "0x212350d0e7b905289291e3ce12f97743c7739cf844feae60204f71cc63094a82"
+        },
+        {
+          "effective_gas_price": "0xf43f4",
+          "gas_used": 30435,
+          "l1_fee": "0x1a878c0af",
+          "l1_fee_source": {
+            "detail": {
+              "block_number": 37563327,
+              "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+            },
+            "kind": "receipt_field"
+          },
+          "l2_fee": "0x716dbb95c",
+          "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+          "total_execution_cost": "0x8bf547a0b",
+          "transaction_hash": "0x9895e8891479567ebade840ecec9e4576c2bbe19c6a64ab13201e097a6cda93f"
+        }
+      ],
+      "total_execution_cost": "0x5dbc8220aa",
+      "transaction_count": 6
+    },
+    "delta_audit": {
+      "lines": [
+        {
+          "actual": "90661089388014913158",
+          "difference": "0",
+          "expected": "90661089388014913158",
+          "name": "mid token handed from the wallet to the selling venue",
+          "source": "expected is the simulation's `sender_mid_received` measurement; actual is the Transfer logs leaving 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c for a venue, in a token that is not the route's input",
+          "within_tolerance": true
+        },
+        {
+          "actual": "864806517171626",
+          "difference": "0",
+          "expected": "864806517171626",
+          "name": "route's input token received back from the selling venue",
+          "source": "expected is the simulation's `sender_input_end` measurement against an input of 100000000000000 0x4200000000000000000000000000000000000006; actual is the Transfer logs arriving at 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c from a venue, in 0x4200000000000000000000000000000000000006",
+          "within_tolerance": true
+        },
+        {
+          "actual": "359535",
+          "difference": "0",
+          "expected": "359535",
+          "name": "gas used across the sequence",
+          "source": "expected is the simulated plan's total of 359535 gas units; actual is gas_used over 6 bound receipt(s). The bill is the L2 + L1 total of 402594603178 wei and §12's profit uses that, not this comparison",
+          "within_tolerance": true
+        },
+        {
+          "actual": "20764375608889104",
+          "difference": "-402387307908",
+          "expected": "20764777996197012",
+          "name": "native balance of the wallet at the end of the route",
+          "source": "expected is the simulation's `sender_native_end` measurement, read as the purse the wallet started with plus what the route settled back minus the input and the simulated gas bill; actual is eth_getBalance at block 37563327. The two are not meant to be equal, and the known difference is sized rather than hand-waved: the simulated bill carries no L1 data fee, and the chain charged 42901813739 wei of it across 6 transaction(s), so a shortfall of about that size is this line's expected shape and anything beyond the tolerance is state that moved for a reason outside this run",
+          "within_tolerance": true
+        }
+      ],
+      "tolerance": {
+        "denominator": 100,
+        "numerator": 1
+      },
+      "uncompared": []
+    },
+    "detail": "",
+    "execution_id": "exec-2848a69220cd6f79",
+    "flow_checks": [
+      {
+        "agrees": true,
+        "balance_delta": "0",
+        "balance_read": true,
+        "burned": "0",
+        "log_net": "0",
+        "minted": "0",
+        "token": "0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f"
+      },
+      {
+        "agrees": true,
+        "balance_delta": "0",
+        "balance_read": true,
+        "burned": "864806517171626",
+        "log_net": "764806517171626",
+        "minted": "100000000000000",
+        "token": "0x4200000000000000000000000000000000000006"
+      }
+    ],
+    "flows": [
+      {
+        "amount": "100000000000000",
+        "block_number": 37563305,
+        "from": "0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c",
+        "log_index": 136,
+        "to": "0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4",
+        "token": "0x4200000000000000000000000000000000000006",
+        "transaction_hash": "0x5caefdecaa16708370500876e87d6fac64fff6ee34094077cccfc4f0272bcb1f"
+      },
+      {
+        "amount": "90661089388014913158",
+        "block_number": 37563310,
+        "from": "0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4",
+        "log_index": 95,
+        "to": "0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c",
+        "token": "0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f",
+        "transaction_hash": "0xda125ecbea78f0de9fcb9ac061a2829698c4151db288142273bc80475fa0a286"
+      },
+      {
+        "amount": "90661089388014913158",
+        "block_number": 37563316,
+        "from": "0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c",
+        "log_index": 34,
+        "to": "0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E",
+        "token": "0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f",
+        "transaction_hash": "0x306c9f39134151265b8bc17302f1b8630f4de71ff22775ee0b368e5ba3319df7"
+      },
+      {
+        "amount": "864806517171626",
+        "block_number": 37563322,
+        "from": "0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E",
+        "log_index": 28,
+        "to": "0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c",
+        "token": "0x4200000000000000000000000000000000000006",
+        "transaction_hash": "0x212350d0e7b905289291e3ce12f97743c7739cf844feae60204f71cc63094a82"
+      }
+    ],
+    "lane": "released",
+    "market": {
+      "counts_as_real_arbitrage": true,
+      "evidence": "both pools attested in data/protocols-m3; reserves and blockTimestampLast read at the pinned live head by this run",
+      "market_kind": "REAL_MARKET"
+    },
+    "mismatch": null,
+    "mode": "submit",
+    "opportunity_id": "m7-91342-37563264-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+    "profit": {
+      "account": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "after": {
+        "account": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "block_hash": "0x9ac350a2ff31f90440f6fddeccf2c8eee17ca2164f094392218094266bb9ced9",
+        "block_number": 37563327,
+        "native_wei": "0x49c516f0268f10",
+        "provenance": "block 37563327 (0x9ac350a2ff31f90440f6fddeccf2c8eee17ca2164f094392218094266bb9ced9); native: eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, 37563327); eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f at block 37563327; eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x4200000000000000000000000000000000000006 at block 37563327",
+        "token_balances": {
+          "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": "0x0",
+          "0x4200000000000000000000000000000000000006": "0x0"
+        }
+      },
+      "before": {
+        "account": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "block_hash": "0x292cd8b8637fdba12a67b5af08d4297cc4dde2a024860471f2513aa143bfac7b",
+        "block_number": 37563288,
+        "native_wei": "0x470dde47e18a10",
+        "provenance": "block 37563288 (0x292cd8b8637fdba12a67b5af08d4297cc4dde2a024860471f2513aa143bfac7b); native: eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, 37563288); eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f at block 37563288; eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x4200000000000000000000000000000000000006 at block 37563288",
+        "token_balances": {
+          "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": "0x0",
+          "0x4200000000000000000000000000000000000006": "0x0"
+        }
+      },
+      "block_after": 37563327,
+      "block_before": 37563288,
+      "cost": {
+        "l1_fee_total": "0x9fd25b9eb",
+        "l2_fee_total": "0x53bf5c66bf",
+        "lines": [
+          {
+            "effective_gas_price": "0xf43fa",
+            "gas_used": 44932,
+            "l1_fee": "0x1b1f10f16",
+            "l1_fee_source": {
+              "detail": {
+                "block_number": 37563300,
+                "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+              },
+              "kind": "receipt_field"
+            },
+            "l2_fee": "0xa7756f2e8",
+            "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+            "total_execution_cost": "0xc294801fe",
+            "transaction_hash": "0x960e91b2e2ef4cfe44d6420a0b8b1283e15d5b0def211a2d609161f6a882c93b"
+          },
+          {
+            "effective_gas_price": "0xf43fb",
+            "gas_used": 31972,
+            "l1_fee": "0x19ae7731e",
+            "l1_fee_source": {
+              "detail": {
+                "block_number": 37563305,
+                "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+              },
+              "kind": "receipt_field"
+            },
+            "l2_fee": "0x772861f8c",
+            "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+            "total_execution_cost": "0x90d6d92aa",
+            "transaction_hash": "0x5caefdecaa16708370500876e87d6fac64fff6ee34094077cccfc4f0272bcb1f"
+          },
+          {
+            "effective_gas_price": "0xf43f8",
+            "gas_used": 127200,
+            "l1_fee": "0x1b166938c",
+            "l1_fee_source": {
+              "detail": {
+                "block_number": 37563310,
+                "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+              },
+              "kind": "receipt_field"
+            },
+            "l2_fee": "0x1da10bf900",
+            "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+            "total_execution_cost": "0x1f52728c8c",
+            "transaction_hash": "0xda125ecbea78f0de9fcb9ac061a2829698c4151db288142273bc80475fa0a286"
+          },
+          {
+            "effective_gas_price": "0xf43f5",
+            "gas_used": 29983,
+            "l1_fee": "0x1a878c0af",
+            "l1_fee_source": {
+              "detail": {
+                "block_number": 37563316,
+                "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+              },
+              "kind": "receipt_field"
+            },
+            "l2_fee": "0x6fbe833ab",
+            "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+            "total_execution_cost": "0x8a460f45a",
+            "transaction_hash": "0x306c9f39134151265b8bc17302f1b8630f4de71ff22775ee0b368e5ba3319df7"
+          },
+          {
+            "effective_gas_price": "0xf43f4",
+            "gas_used": 95013,
+            "l1_fee": "0x1adf522cd",
+            "l1_fee_source": {
+              "detail": {
+                "block_number": 37563322,
+                "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+              },
+              "kind": "receipt_field"
+            },
+            "l2_fee": "0x1621af6e44",
+            "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+            "total_execution_cost": "0x17cfa49111",
+            "transaction_hash": "0x212350d0e7b905289291e3ce12f97743c7739cf844feae60204f71cc63094a82"
+          },
+          {
+            "effective_gas_price": "0xf43f4",
+            "gas_used": 30435,
+            "l1_fee": "0x1a878c0af",
+            "l1_fee_source": {
+              "detail": {
+                "block_number": 37563327,
+                "read_by": "eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)"
+              },
+              "kind": "receipt_field"
+            },
+            "l2_fee": "0x716dbb95c",
+            "source": "gas_used and effectiveGasPrice from the bound receipt: eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc)",
+            "total_execution_cost": "0x8bf547a0b",
+            "transaction_hash": "0x9895e8891479567ebade840ecec9e4576c2bbe19c6a64ab13201e097a6cda93f"
+          }
+        ],
+        "total_execution_cost": "0x5dbc8220aa",
+        "transaction_count": 6
+      },
+      "denomination": {
+        "kind": "native_wei"
+      },
+      "equation": {
+        "checks_out": true,
+        "observed_final_balance": "20764375608889104",
+        "predicted_final_balance": "20764375608889104",
+        "terms": [
+          {
+            "amount": "0x470dde47e18a10",
+            "label": "A — native balance read before the sequence, at block 37563288",
+            "sign": "add"
+          },
+          {
+            "amount": "0x31289754165aa",
+            "label": "B — native handed back by the executed settle (gross output, measured from the transaction logs)",
+            "sign": "add"
+          },
+          {
+            "amount": "0x5af3107a4000",
+            "label": "C — native put into the round trip (input, measured from the executed step that spent it)",
+            "sign": "subtract"
+          },
+          {
+            "amount": "0x53bf5c66bf",
+            "label": "D — L2 gas charged across 6 transaction(s)",
+            "sign": "subtract"
+          },
+          {
+            "amount": "0x9fd25b9eb",
+            "label": "E — L1 data fee charged across the same 6 transaction(s)",
+            "sign": "subtract"
+          }
+        ]
+      },
+      "final_balance": "0x49c516f0268f10",
+      "final_token_balance": "0x0",
+      "gas_cost": "0x53bf5c66bf",
+      "gross_profit": "764806517171626",
+      "initial_balance": "0x470dde47e18a10",
+      "initial_token_balance": "0x0",
+      "input_asset_delta": "-100000000000000",
+      "l1_fee": "0x9fd25b9eb",
+      "native_balance_delta": "764403922568448",
+      "net_profit": "764403922568448",
+      "opportunity_id": "m7-91342-37563264-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "output_asset_delta": "864806517171626",
+      "source": "balances from block 37563288 (0x292cd8b8637fdba12a67b5af08d4297cc4dde2a024860471f2513aa143bfac7b); native: eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, 37563288); eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f at block 37563288; eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x4200000000000000000000000000000000000006 at block 37563288 and block 37563327 (0x9ac350a2ff31f90440f6fddeccf2c8eee17ca2164f094392218094266bb9ced9); native: eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, 37563327); eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f at block 37563327; eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x4200000000000000000000000000000000000006 at block 37563327; costs from 6 bound receipt(s): receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563300 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563305 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563310 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563316 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563322 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563327",
+      "status": "verified_positive",
+      "total_execution_cost": "0x5dbc8220aa"
+    },
+    "route": {
+      "detail": "both venues emitted their own Swap, in route order, with the route's sender 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c in the loop",
+      "legs": [
+        {
+          "first_swap_block": 37563310,
+          "first_swap_log_index": 97,
+          "leg": 1,
+          "pool": "0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4",
+          "swap_logs": 1,
+          "verdict": "0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 emitted 1 Swap log(s), first at block 37563310 log 97, carrying amount0 in/out 0/90661089388014913158 and amount1 in/out 100000000000000/0 to 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c"
+        },
+        {
+          "first_swap_block": 37563322,
+          "first_swap_log_index": 30,
+          "leg": 2,
+          "pool": "0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E",
+          "swap_logs": 1,
+          "verdict": "0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E emitted 1 Swap log(s), first at block 37563322 log 30, carrying amount0 in/out 90661089388014913158/0 and amount1 in/out 0/864806517171626 to 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c"
+        }
+      ],
+      "passed": true
+    },
+    "sources": [
+      "6 broadcastable transaction(s) from a 12-step simulated plan pinned to block 37563264; venues 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 then 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E over input token 0x4200000000000000000000000000000000000006",
+      "preflight passed for m7-91342-37563264-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000: 14 lines, ceiling 100542649055784 wei, re-priced output 864806517171626",
+      "step 1: fee from eip1559 maxFeePerGas = baseFee(455) * 2 + tip(1000000) = 1000910, read at block 37563264 at block 37563264 (eip1559), eip1559 maxFee=1000910 tip=1000000",
+      "step 1: nonce 1 from eth_getTransactionCount at #37563295 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\")",
+      "tx 0x960e91b2e2ef4cfe44d6420a0b8b1283e15d5b0def211a2d609161f6a882c93b: l2 44951859944 wei + l1 7280332566 wei = 52232192510 wei; l1 source: receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563300",
+      "step 2: fee from eip1559 maxFeePerGas = baseFee(455) * 2 + tip(1000000) = 1000910, read at block 37563264 at block 37563264 (eip1559), eip1559 maxFee=1000910 tip=1000000",
+      "step 2: nonce 2 from eth_getTransactionCount at #37563301 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\")",
+      "tx 0x5caefdecaa16708370500876e87d6fac64fff6ee34094077cccfc4f0272bcb1f: l2 31986163596 wei + l1 6893826846 wei = 38879990442 wei; l1 source: receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563305",
+      "step 3: fee from eip1559 maxFeePerGas = baseFee(455) * 2 + tip(1000000) = 1000910, read at block 37563264 at block 37563264 (eip1559), eip1559 maxFee=1000910 tip=1000000",
+      "step 3: nonce 3 from eth_getTransactionCount at #37563306 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\")",
+      "tx 0xda125ecbea78f0de9fcb9ac061a2829698c4151db288142273bc80475fa0a286: l2 127255968000 wei + l1 7271256972 wei = 134527224972 wei; l1 source: receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563310",
+      "step 4: fee from eip1559 maxFeePerGas = baseFee(455) * 2 + tip(1000000) = 1000910, read at block 37563264 at block 37563264 (eip1559), eip1559 maxFee=1000910 tip=1000000",
+      "step 4: nonce 4 from eth_getTransactionCount at #37563312 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\")",
+      "tx 0x306c9f39134151265b8bc17302f1b8630f4de71ff22775ee0b368e5ba3319df7: l2 29996102571 wei + l1 7121453231 wei = 37117555802 wei; l1 source: receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563316",
+      "step 5: fee from eip1559 maxFeePerGas = baseFee(455) * 2 + tip(1000000) = 1000910, read at block 37563264 at block 37563264 (eip1559), eip1559 maxFee=1000910 tip=1000000",
+      "step 5: nonce 5 from eth_getTransactionCount at #37563317 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\")",
+      "tx 0x212350d0e7b905289291e3ce12f97743c7739cf844feae60204f71cc63094a82: l2 95054425668 wei + l1 7213490893 wei = 102267916561 wei; l1 source: receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563322",
+      "step 6: fee from eip1559 maxFeePerGas = baseFee(455) * 2 + tip(1000000) = 1000910, read at block 37563264 at block 37563264 (eip1559), eip1559 maxFee=1000910 tip=1000000",
+      "step 6: nonce 6 from eth_getTransactionCount at #37563323 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\")",
+      "tx 0x9895e8891479567ebade840ecec9e4576c2bbe19c6a64ab13201e097a6cda93f: l2 30448269660 wei + l1 7121453231 wei = 37569722891 wei; l1 source: receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563327",
+      "verified_positive: net 764403922568448"
+    ],
+    "status": "profit_verified",
+    "steps_planned": 6,
+    "stopped_at": null,
+    "transactions": [
+      {
+        "block_hash": "0x39003ca187e9d9930123609aba7edb6b18076be48f18ae55d1422772f688a047",
+        "block_number": 37563300,
+        "gas_limit": 64932,
+        "gas_used": 44932,
+        "l1_fee": "7280332566",
+        "l1_fee_source": "receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563300",
+        "l2_fee": "44951859944",
+        "logs": 1,
+        "nonce": 1,
+        "position": 0,
+        "receipt_status": "included",
+        "signature": "deposit()",
+        "total_execution_cost": "52232192510",
+        "transaction_hash": "0x960e91b2e2ef4cfe44d6420a0b8b1283e15d5b0def211a2d609161f6a882c93b"
+      },
+      {
+        "block_hash": "0x2a6e48a5f3ea204e19eb5a75d10eae51e4885bd60e66fa2df56d813ccda3bae7",
+        "block_number": 37563305,
+        "gas_limit": 51972,
+        "gas_used": 31972,
+        "l1_fee": "6893826846",
+        "l1_fee_source": "receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563305",
+        "l2_fee": "31986163596",
+        "logs": 1,
+        "nonce": 2,
+        "position": 1,
+        "receipt_status": "included",
+        "signature": "transfer(address,uint256)",
+        "total_execution_cost": "38879990442",
+        "transaction_hash": "0x5caefdecaa16708370500876e87d6fac64fff6ee34094077cccfc4f0272bcb1f"
+      },
+      {
+        "block_hash": "0xc55fc33fb30e7f32536fd3c7626f82a3a09f9ea8bf215ecff6e5ebf25fa24e5f",
+        "block_number": 37563310,
+        "gas_limit": 147200,
+        "gas_used": 127200,
+        "l1_fee": "7271256972",
+        "l1_fee_source": "receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563310",
+        "l2_fee": "127255968000",
+        "logs": 3,
+        "nonce": 3,
+        "position": 2,
+        "receipt_status": "included",
+        "signature": "swap(uint256,uint256,address,bytes)",
+        "total_execution_cost": "134527224972",
+        "transaction_hash": "0xda125ecbea78f0de9fcb9ac061a2829698c4151db288142273bc80475fa0a286"
+      },
+      {
+        "block_hash": "0x7d16a9e10722bb6851ae1f4c600121e98f148724aba5cabec93c2512afa3f8bb",
+        "block_number": 37563316,
+        "gas_limit": 49983,
+        "gas_used": 29983,
+        "l1_fee": "7121453231",
+        "l1_fee_source": "receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563316",
+        "l2_fee": "29996102571",
+        "logs": 1,
+        "nonce": 4,
+        "position": 3,
+        "receipt_status": "included",
+        "signature": "transfer(address,uint256)",
+        "total_execution_cost": "37117555802",
+        "transaction_hash": "0x306c9f39134151265b8bc17302f1b8630f4de71ff22775ee0b368e5ba3319df7"
+      },
+      {
+        "block_hash": "0xe2750f5058fbead25a13055b3f58ef3c419012b8011735f59ac4b55718368649",
+        "block_number": 37563322,
+        "gas_limit": 115013,
+        "gas_used": 95013,
+        "l1_fee": "7213490893",
+        "l1_fee_source": "receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563322",
+        "l2_fee": "95054425668",
+        "logs": 3,
+        "nonce": 5,
+        "position": 4,
+        "receipt_status": "included",
+        "signature": "swap(uint256,uint256,address,bytes)",
+        "total_execution_cost": "102267916561",
+        "transaction_hash": "0x212350d0e7b905289291e3ce12f97743c7739cf844feae60204f71cc63094a82"
+      },
+      {
+        "block_hash": "0x9ac350a2ff31f90440f6fddeccf2c8eee17ca2164f094392218094266bb9ced9",
+        "block_number": 37563327,
+        "gas_limit": 50435,
+        "gas_used": 30435,
+        "l1_fee": "7121453231",
+        "l1_fee_source": "receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563327",
+        "l2_fee": "30448269660",
+        "logs": 1,
+        "nonce": 6,
+        "position": 5,
+        "receipt_status": "included",
+        "signature": "withdraw(uint256)",
+        "total_execution_cost": "37569722891",
+        "transaction_hash": "0x9895e8891479567ebade840ecec9e4576c2bbe19c6a64ab13201e097a6cda93f"
+      }
+    ],
+    "wraps": [
+      {
+        "account": "0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c",
+        "amount": "100000000000000",
+        "block_number": 37563300,
+        "kind": "deposit",
+        "log_index": 7,
+        "token": "0x4200000000000000000000000000000000000006",
+        "transaction_hash": "0x960e91b2e2ef4cfe44d6420a0b8b1283e15d5b0def211a2d609161f6a882c93b"
+      },
+      {
+        "account": "0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c",
+        "amount": "864806517171626",
+        "block_number": 37563327,
+        "kind": "withdrawal",
+        "log_index": 43,
+        "token": "0x4200000000000000000000000000000000000006",
+        "transaction_hash": "0x9895e8891479567ebade840ecec9e4576c2bbe19c6a64ab13201e097a6cda93f"
+      }
+    ]
+  },
+  "latency_ms": {
+    "inclusion_latency_ms": 3367,
+    "opportunity_detection_latency_ms": 2087,
+    "preflight_latency_ms": 5786,
+    "profit_verified_at_ms": 84584,
+    "rung_stamps": {
+      "built": 52971,
+      "created": 50770,
+      "included": 57363,
+      "profit_verified": 84584,
+      "settled": 84584,
+      "signed": 53743,
+      "submitted": 53996
+    },
+    "settled_at_ms": 84584,
+    "sign_latency_ms": 772,
+    "simulation_latency_ms": 21449,
+    "submission_latency_ms": 253
+  },
+  "m7_amounts": {
+    "denomination": "wei — the round trip starts and ends in native ETH, so profit and cost are already the same unit",
+    "gross_profit": "764806517171626",
+    "l1_cost": "42901813739",
+    "l1_fee_source": "receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563300 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563305 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563310 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563316 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563322 | receipt field `l1Fee`, eth_getTransactionReceipt over the configured GIWA RPC URL (public_http_rpc), in block 37563327",
+    "l2_cost": "359692789439",
+    "net_profit": "764403922568448",
+    "profit_status": "verified_positive"
+  },
+  "market": {
+    "counts_as_real_arbitrage": true,
+    "evidence": "both pools attested in data/protocols-m3; reserves and blockTimestampLast read at the pinned live head by this run",
+    "market_kind": "REAL_MARKET"
+  },
+  "milestone": "M7",
+  "mode": "submit",
+  "pinned_block": 37563264,
+  "pinned_block_hash": "0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0",
+  "plan": {
+    "funding": "real chain state: rpc:chain-91342",
+    "opportunity_id": "m7-91342-37563264-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+    "provenance": "6 broadcastable transaction(s) from a 12-step simulated plan pinned to block 37563264; venues 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 then 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E over input token 0x4200000000000000000000000000000000000006",
+    "state_fingerprint": "pinned-block-37563264-0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0",
+    "steps": [
+      "transaction 1 (deposit()), simulated step 2, target 0x4200000000000000000000000000000000000006, gas 44932",
+      "transaction 2 (transfer(address,uint256)), simulated step 3, target 0x4200000000000000000000000000000000000006, gas 31972",
+      "transaction 3 (swap(uint256,uint256,address,bytes)), simulated step 4, target 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, gas 127200",
+      "transaction 4 (transfer(address,uint256)), simulated step 6, target 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f, gas 29983",
+      "transaction 5 (swap(uint256,uint256,address,bytes)), simulated step 7, target 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E, gas 95013",
+      "transaction 6 (withdraw(uint256)), simulated step 9, target 0x4200000000000000000000000000000000000006, gas 30435"
+    ],
+    "tokens": [
+      "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "0x4200000000000000000000000000000000000006"
+    ]
+  },
+  "preflight": {
+    "attempt_id": "m7-91342-37563264-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+    "fee_at_head": {
+      "base_fee_per_gas": "442",
+      "block_hash": "0x292cd8b8637fdba12a67b5af08d4297cc4dde2a024860471f2513aa143bfac7b",
+      "block_number": 37563288,
+      "max_fee_per_gas": "1000884",
+      "max_priority_fee_per_gas": "1000000",
+      "provenance": "eip1559 maxFeePerGas = baseFee(442) * 2 + tip(1000000) = 1000884, read at block 37563288",
+      "suggested_tip_wei": "1000000"
+    },
+    "fee_at_pinned_block": {
+      "base_fee_per_gas": "455",
+      "block_hash": "0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0",
+      "block_number": 37563264,
+      "max_fee_per_gas": "1000910",
+      "max_priority_fee_per_gas": "1000000",
+      "provenance": "eip1559 maxFeePerGas = baseFee(455) * 2 + tip(1000000) = 1000910, read at block 37563264",
+      "suggested_tip_wei": "1000000"
+    },
+    "head": {
+      "block_hash": "0x292cd8b8637fdba12a67b5af08d4297cc4dde2a024860471f2513aa143bfac7b",
+      "block_number": 37563288,
+      "source": "eth_getBlockByNumber(\"latest\") over https://sepolia-rpc.giwa.io: number and hash out of the same header"
+    },
+    "input_asset": {
+      "available_wei": "19999971686320656",
+      "kind": "native",
+      "required_wei": "100000000000000",
+      "source": "eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) at block 37563288, against the 100000000000000 wei this route's first step wraps"
+    },
+    "market": {
+      "counts_as_real_arbitrage": true,
+      "evidence": "both pools attested in data/protocols-m3; reserves and blockTimestampLast read at the pinned live head by this run",
+      "market_kind": "REAL_MARKET"
+    },
+    "pinned_block": {
+      "block_hash": "0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0",
+      "block_number": 37563264
+    },
+    "pools": [
+      {
+        "block_timestamp_last": "1757405620",
+        "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "read_at_block": 37563288,
+        "reserve0": "1000000000000000000000",
+        "reserve1": "1000000000000000",
+        "source": "eth_call token0(), token1(), getReserves() at 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 for block 37563288",
+        "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "token1": "0x4200000000000000000000000000000000000006"
+      },
+      {
+        "block_timestamp_last": "1757403527",
+        "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "read_at_block": 37563288,
+        "reserve0": "2000000000000000000000",
+        "reserve1": "20000000000000000",
+        "source": "eth_call token0(), token1(), getReserves() at 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E for block 37563288",
+        "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "token1": "0x4200000000000000000000000000000000000006"
+      }
+    ],
+    "preflight": {
+      "attempt_id": "m7-91342-37563264-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "expected_net_after_costs_wei": "664263868115842",
+      "findings": [
+        {
+          "check": "chain_id",
+          "detail": "the intent's, the configured and the endpoint's chain id all say 91342: eth_chainId answered for the node",
+          "passed": true
+        },
+        {
+          "check": "current_head",
+          "detail": "head 37563288 (0x292cd8b8637fdba12a67b5af08d4297cc4dde2a024860471f2513aa143bfac7b) from eth_getBlockByNumber(\"latest\") over https://sepolia-rpc.giwa.io: number and hash out of the same header, at or past the pinned block 37563264",
+          "passed": true
+        },
+        {
+          "check": "opportunity_block",
+          "detail": "eth_getBlockByNumber still names a canonical block 37563264 (0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0)",
+          "passed": true
+        },
+        {
+          "check": "opportunity_block_hash",
+          "detail": "the intent pins 0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0 at block 37563264 and the endpoint's block hash there is the same",
+          "passed": true
+        },
+        {
+          "check": "pool_reserves",
+          "detail": "eth_call token0(), token1(), getReserves() at 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 for block 37563288 and eth_call token0(), token1(), getReserves() at 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E for block 37563288 re-read at the head: the same two legs now pay 864806517171626 wei on an input of 100000000000000, against the 864806517171626 wei the priced simulation measured — the route moved by 0 wei. Net of the sequence ceiling of 100542649055784 wei is 664263868115842, and the risk floor this attempt was accepted against is 0 wei. Fees used: 997/1000 + 997/1000 — data/evidence/m7/candidate-fee-measurement.json",
+          "passed": true
+        },
+        {
+          "check": "simulation_result",
+          "detail": "the run this intent came from (simulation 0x5ed32ed692029fdcbe80f8db34699461edc9ab2a8050eff45694d54466436b42) completed successfully",
+          "passed": true
+        },
+        {
+          "check": "risk_decision",
+          "detail": "the risk layer's decision on this run is Accept (decision 0x8a08b790c4fb646bd207ce4ec7bfad6496d8b072a89e8d36718ab4451745ded6)",
+          "passed": true
+        },
+        {
+          "check": "nonce",
+          "detail": "eth_getTransactionCount at #37563290 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\") — step 1 of this sequence is priced to carry the pending nonce, and the lane allocates from that same reading when it signs: the account's pending nonce is 1, which is the nonce the intent carries",
+          "passed": true
+        },
+        {
+          "check": "native_balance",
+          "detail": "eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) at block 37563288: step 1's ceiling is 100073114893840 wei and the whole 6-step sequence's is 100542649055784: 19999971686320656 wei covers the sequence ceiling of 100542649055784 wei (L2 ceilings + value + L1 estimates over 6 steps)",
+          "passed": true
+        },
+        {
+          "check": "input_asset_balance",
+          "detail": "eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) at block 37563288, against the 100000000000000 wei this route's first step wraps: the route opens by wrapping 100000000000000 wei of native and the account holds 19999971686320656",
+          "passed": true
+        },
+        {
+          "check": "gas_estimate",
+          "detail": "6 step(s), each limit at or above the gas its simulation step measured (total limit 479535 gas)",
+          "passed": true
+        },
+        {
+          "check": "fee_estimate",
+          "detail": "head block 37563288: eip1559 maxFeePerGas = baseFee(442) * 2 + tip(1000000) = 1000884, read at block 37563288; the transaction's own ceiling is max_fee_per_gas 1000910, and the head's own ceiling is 1000884, 26 wei/gas below the transaction's — the base fee fell between the block this plan was priced at and the head, so the run pays at most what it was costed at — the sequence ceiling the balance and profit lines use is computed from 1000910, the worse of the two",
+          "passed": true
+        },
+        {
+          "check": "l1_fee_estimate",
+          "detail": "every step's ceiling includes an L1 estimate; sequence total 62677678934 wei (source: estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37563288 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37563288 over a 120-byte envelope); the charge itself was never read)",
+          "passed": true
+        },
+        {
+          "check": "real_state_funding",
+          "detail": "§34: rpc:chain-91342 — eth_getBalance and eth_call see the funding this plan spends, so nothing about this run depends on a state override",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "rejected_because": null,
+      "repriced_output_wei": "0x31289754165aa",
+      "sequence_ceiling_wei": "0x5b7168e1ba28"
+    },
+    "preflight_latency_ms": 5786,
+    "priced_intent": {
+      "access_list": [],
+      "block_hash": "0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0",
+      "block_number": 37563264,
+      "calldata": "0xd0e30db0",
+      "chain_id": 91342,
+      "funding": {
+        "real_state": {
+          "source": "rpc:chain-91342"
+        }
+      },
+      "gas_limit": 30000000,
+      "ids": {
+        "opportunity_id": "m7-91342-37563264-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "risk_decision_id": "0x8a08b790c4fb646bd207ce4ec7bfad6496d8b072a89e8d36718ab4451745ded6",
+        "simulation_id": "0x5ed32ed692029fdcbe80f8db34699461edc9ab2a8050eff45694d54466436b42"
+      },
+      "max_fee_per_gas": "0xf45ce",
+      "max_priority_fee_per_gas": "0xf4240",
+      "minimum_required_profit_wei": "0x0",
+      "nonce": 1,
+      "sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "sequence": {
+        "count": 6,
+        "index": 0
+      },
+      "simulated_steps": 12,
+      "simulation_profit_wei": "0x2b796586c1284",
+      "state_fingerprint": "pinned-block-37563264-0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0",
+      "target": "0x4200000000000000000000000000000000000006",
+      "tx_type": "dynamic_fee",
+      "value": "0x5af3107a4000"
+    },
+    "sequence_ceiling_wei": "100542649055784",
+    "sequence_l1_estimate_wei": "62677678934",
+    "steps": [
+      {
+        "gas_limit": 64932,
+        "index": 0,
+        "l1_fee_estimate_wei": "8123805720",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37563288 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37563288 over a 120-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "100064991088120",
+        "max_fee_per_gas": "1000910",
+        "simulated_gas_used": 44932,
+        "to": "0x4200000000000000000000000000000000000006",
+        "total_ceiling_wei": "100073114893840",
+        "value_wei": "100000000000000"
+      },
+      {
+        "gas_limit": 51972,
+        "index": 1,
+        "l1_fee_estimate_wei": "10169287498",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37563288 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37563288 over a 179-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "52019294520",
+        "max_fee_per_gas": "1000910",
+        "simulated_gas_used": 31972,
+        "to": "0x4200000000000000000000000000000000000006",
+        "total_ceiling_wei": "62188582018",
+        "value_wei": "0"
+      },
+      {
+        "gas_limit": 147200,
+        "index": 2,
+        "l1_fee_estimate_wei": "12406533193",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37563288 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37563288 over a 277-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "147333952000",
+        "max_fee_per_gas": "1000910",
+        "simulated_gas_used": 127200,
+        "to": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "total_ceiling_wei": "159740485193",
+        "value_wei": "0"
+      },
+      {
+        "gas_limit": 49983,
+        "index": 3,
+        "l1_fee_estimate_wei": "11319870999",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37563288 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37563288 over a 179-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "50028484530",
+        "max_fee_per_gas": "1000910",
+        "simulated_gas_used": 29983,
+        "to": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "total_ceiling_wei": "61348355529",
+        "value_wei": "0"
+      },
+      {
+        "gas_limit": 115013,
+        "index": 4,
+        "l1_fee_estimate_wei": "12086926665",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37563288 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37563288 over a 277-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "115117661830",
+        "max_fee_per_gas": "1000910",
+        "simulated_gas_used": 95013,
+        "to": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "total_ceiling_wei": "127204588495",
+        "value_wei": "0"
+      },
+      {
+        "gas_limit": 50435,
+        "index": 5,
+        "l1_fee_estimate_wei": "8571254859",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37563288 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37563288 over a 146-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "50480895850",
+        "max_fee_per_gas": "1000910",
+        "simulated_gas_used": 30435,
+        "to": "0x4200000000000000000000000000000000000006",
+        "total_ceiling_wei": "59052150709",
+        "value_wei": "0"
+      }
+    ]
+  },
+  "refusal": null,
+  "risk": {
+    "decision": "Accept: no broadcast: M4 simulates. An Accept here means the simulation satisfied the stated thresholds, not that a transaction was or may be sent. Completed on 37563264:0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0, measured 455594 of gas costing 207295270 wei, and netted 764806309876356 against a minimum of 0"
+  },
+  "route": {
+    "buy": {
+      "getReserves_blockTimestampLast": "1757405620",
+      "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "read_at_block": 37563264,
+      "reserve0": "1000000000000000000000",
+      "reserve1": "1000000000000000",
+      "source": "eth_call token0(), token1(), getReserves() at 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 for block 37563264",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "mid_demand": "90661089388014913158",
+    "out_demand": "864806517171626",
+    "priced_by": "getReserves(), token0() and token1() read at block 37563264 for 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 and 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E; the 997/1000 fee on both legs is the figure this candidate carries, proven by bisection against these pools' own deployed bytecode — data/evidence/m7/candidate-fee-measurement.json",
+    "sell": {
+      "getReserves_blockTimestampLast": "1757403527",
+      "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "read_at_block": 37563264,
+      "reserve0": "2000000000000000000000",
+      "reserve1": "20000000000000000",
+      "source": "eth_call token0(), token1(), getReserves() at 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E for block 37563264",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    }
+  },
+  "sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+  "session_id": "route-91342-37563264-1790908382146",
+  "simulation": {
+    "block": 37563264,
+    "block_hash": "0x890e33dd1ded16a96a4d3574f4e3da26d8ae5091001c49fd89d3479bb513cce0",
+    "chain_id": 91342,
+    "compared": {
+      "analytical": "0x31289754165aa",
+      "simulated": "0x31289754165aa"
+    },
+    "completed": true,
+    "fingerprint": "5ed32ed692029fdcbe80f8db34699461edc9ab2a8050eff45694d54466436b42",
+    "gas_used": 455594,
+    "net_profit": "Gain { amount: 764806309876356, gross: 764806517171626, gas_cost: 207295270, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 864806517171626, native_start: 19999971686320656, native_end: 20764777996197012, native_spent: 100000000000000, gas_paid: 207295270, proved_by: \"withdraw(864806517171626) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+    "outcome": {
+      "Executed": {
+        "movement": {
+          "Increased": {
+            "by": "0x2b79664c725aa"
+          }
+        },
+        "output": "0x31289754165aa"
+      }
+    },
+    "plan": {
+      "analytical_mid_amount": "0x4ea2ce4749290c686",
+      "analytical_output": "0x31289754165aa",
+      "evm_rules": "prague",
+      "input_amount": "0x5af3107a4000",
+      "input_token": "0x4200000000000000000000000000000000000006",
+      "pools": [
+        "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+      ],
+      "priced_by": "getReserves(), token0() and token1() read at block 37563264 for 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 and 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E; the 997/1000 fee on both legs is the figure this candidate carries, proven by bisection against these pools' own deployed bytecode — data/evidence/m7/candidate-fee-measurement.json",
+      "steps": [
+        "native balance of 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, recorded as sender_native_start",
+        "balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on 0x4200000000000000000000000000000000000006, recorded as sender_input_start",
+        "deposit 100000000000000 native into 0x4200000000000000000000000000000000000006, msg.value = 100000000000000",
+        "transfer 100000000000000 of 0x4200000000000000000000000000000000000006 to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4",
+        "ask 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 to pay out 90661089388014913158 of 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4",
+        "balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f, recorded as sender_mid_received",
+        "transfer the measured mid delivery of 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E",
+        "ask 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E to pay out 864806517171626 of 0x4200000000000000000000000000000000000006 to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E",
+        "balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on 0x4200000000000000000000000000000000000006, recorded as sender_input_end",
+        "withdraw the measured final balance from 0x4200000000000000000000000000000000000006 into native",
+        "balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on 0x4200000000000000000000000000000000000006, recorded as sender_input_after_unwrap",
+        "native balance of 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, recorded as sender_native_end"
+      ]
+    },
+    "sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+    "session_id": "",
+    "slippage": {
+      "expected_output": "0x31289754165aa",
+      "minimum_output": "0x31289754165aa",
+      "policy": "Exact"
+    },
+    "state_source": "rpc:chain-91342",
+    "status": "Completed",
+    "steps": 12
+  },
+  "successful_real_arbitrage": true
+}

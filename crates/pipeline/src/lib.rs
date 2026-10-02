@@ -11,10 +11,12 @@
 //!
 //! ```text
 //! crates/live     which canonical blocks exist, and what the endpoint can do
-//! crates/pipeline ─┬─ engine   block → decode → state → graph → finding      (§9–16)
-//!                  ├─ sim      bounded queue + Option C worker threads       (§21–23)
-//!                  ├─ runner   bootstrap, one stream, graceful shutdown      (§7–8, §49)
-//!                  └─ evidence metrics.json, live-session.json, one .jsonl per stage
+//! crates/pipeline ─┬─ engine    block → decode → state → graph → finding      (§9–16)
+//!                  ├─ sim       bounded queue + Option C worker threads       (§21–23)
+//!                  ├─ runner    bootstrap, one stream, graceful shutdown      (§7–8, §49)
+//!                  ├─ arbitrage M7's one route: pin → price → REVM → risk →
+//!                  │            preflight → the six steps on chain            (§57 A–Q)
+//!                  └─ evidence  metrics.json, live-session.json, one .jsonl per stage
 //!                                                                     (§41, §48, §52–53)
 //! ```
 //!
@@ -46,6 +48,7 @@
 //! (`eth_chainId`) and checked against the registry before a block is fetched
 //! (§45/§46).
 
+pub mod arbitrage;
 pub mod config;
 pub mod engine;
 pub mod error;
@@ -53,6 +56,9 @@ pub mod evidence;
 pub mod runner;
 pub mod sim;
 
+pub use arbitrage::{
+    run_once, ArbitrageConfig, ArbitrageRun, PricedLegs, Refusal, RouteCandidate, Venue,
+};
 pub use config::{CanonicalSource, PipelineConfig, QueueConfig, RiskConfig};
 pub use engine::{BlockOutcome, ChainPool, MarketEngine};
 pub use error::{PipelineError, Result};

@@ -10,7 +10,7 @@
 //! decision it came from (§37), and the signed and submission rows name the
 //! execution they belong to (§52, §53).
 //!
-//! §49's other half lives in [`EvidenceWriter::finish`]: the two summary files
+//! §49's other half lives in [`EvidenceWriter::write_whole`]: the summary files
 //! are written to a temporary name and renamed into place, so a process that
 //! dies mid-write leaves the previous complete file rather than half of a new
 //! one.
@@ -131,6 +131,26 @@ impl EvidenceWriter {
             dir,
             session_id,
             &[
+                EvidenceFile::Executions,
+                EvidenceFile::SignedTransactions,
+                EvidenceFile::Submissions,
+            ],
+        )
+    }
+
+    /// A session directory holding M7's route-run files: the three rows a finding walks
+    /// through on its way to a decision, plus the execution lane's three. No
+    /// `blocks.jsonl` and no `state-updates.jsonl`, because a route run pins one block and
+    /// drives no state engine — an empty stream file would read as a stream that saw nothing
+    /// rather than as a run that never had one.
+    pub fn route_run(dir: &Path, session_id: &str) -> Result<Self> {
+        Self::open_kinds(
+            dir,
+            session_id,
+            &[
+                EvidenceFile::Opportunities,
+                EvidenceFile::SimulationResults,
+                EvidenceFile::RiskDecisions,
                 EvidenceFile::Executions,
                 EvidenceFile::SignedTransactions,
                 EvidenceFile::Submissions,

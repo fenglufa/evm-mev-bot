@@ -58,7 +58,8 @@ pub use plan::{
     ResolvedStep, Settle,
 };
 pub use request::{
-    EvmRules, SimulationRequest, SimulationSender, StateSpec, TransactionSpec, DEFAULT_SENDER_LABEL,
+    Endowment, EvmRules, SimulationRequest, SimulationSender, StateSpec, TransactionSpec,
+    DEFAULT_SENDER_LABEL,
 };
 pub use result::{
     AccountChange, Denomination, ExecutedLog, ExecutedStep, ExecutionStatus, GrossMovement,

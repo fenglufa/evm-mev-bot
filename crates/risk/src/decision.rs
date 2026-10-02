@@ -34,9 +34,13 @@ impl RiskRule {
 /// It is a constant and not a test assertion because there is nothing here to
 /// assert: no type in this crate can name a transaction, a key or a node, so the
 /// statement is about the shape of the layer rather than about a path through it.
-pub const NO_BROADCAST: &str = "no broadcast: M4 simulates. An Accept here means the \
-                               simulation satisfied the stated thresholds, not that a \
-                               transaction was or may be sent.";
+/// The wording is milestone-neutral on purpose — from M7 the same `Accept` string
+/// sits next to runs that really did broadcast, so it may not claim the process
+/// stops here; it claims only that *this answer* is not the thing that sends.
+pub const NO_BROADCAST: &str = "no broadcast: this crate only judges a simulation. An \
+                               Accept here means the simulation satisfied the stated \
+                               thresholds; deciding to build, sign, or send anything is \
+                               the caller's execution mode (§32), not this answer.";
 
 /// §46's answer to one simulation.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
