@@ -68,6 +68,14 @@ pub const DECODE_AND_APPLY_STAMP: &str = "this build stamps a block decoded and 
      applied at one instant, because both are the answer to one replay call: the span is the \
      resolution of the stamp, not a measurement that applying state costs no time";
 
+/// A millisecond pair whose two stamps are one instant. §9 forbids a *skipped* stage
+/// from reporting 0 ms; this is the other half of the same honesty rule — a stage that
+/// did run and did answer can legitimately land inside one millisecond, and the number
+/// then measures the clock, not a stage that costs nothing. Without the sentence beside
+/// it a reader sums a 0 into a budget and concludes the observation is free.
+pub const SAME_MILLISECOND: &str = "both stamps are the same millisecond, so this span is the \
+     resolution of this clock rather than a measurement that this stage costs no time";
+
 /// §20 asks Preflight to be its own stage. On the route path it is, measured
 /// (`crates/pipeline/src/arbitrage.rs`); on the live path this build goes from the risk
 /// decision straight to the lane, so the stage has no span to read and is recorded as
@@ -534,7 +542,9 @@ pub fn record_ladder(
 ///
 /// One of those pairs describes one instant rather than a span and says so in its note
 /// ([`DECODE_AND_APPLY_STAMP`]) instead of pretending to a measurement this build does
-/// not have.
+/// not have. Any other pair whose two stamps fall inside one millisecond carries
+/// [`SAME_MILLISECOND`] for the same reason: the row's 0 is a reading of this clock, and
+/// a reader who sums it into a budget would learn that the stage is free.
 ///
 /// Every stage with both instants gets a span; the answer is the last one it timed,
 /// which is where this lifecycle's story ends if it ended above the decision. A stage
@@ -594,7 +604,7 @@ pub fn record_discovery(recorder: &mut TraceRecorder, timing: &PipelineTiming) -
             break;
         };
         recorder.put(StageRecord {
-            note: note.map(str::to_string),
+            note: span_note(note, started, finished),
             ..StageRecord::measured_ms(stage, started, finished)
         });
         last = Some(stage);
@@ -642,11 +652,24 @@ pub fn record_lifecycle(
     }
 }
 
+/// The note a measured row carries: the caller's caveat where it gave one, and otherwise
+/// the resolution sentence when its two stamps are one instant. A pair that already
+/// carries its own caveat is left alone — [`DECODE_AND_APPLY_STAMP`] and the history
+/// loader's [`crate::history::SAME_INSTANT`] both already say what this would add.
+fn span_note(note: Option<&str>, started: u64, ended: u64) -> Option<String> {
+    match note {
+        Some(existing) => Some(existing.to_string()),
+        None if started == ended => Some(SAME_MILLISECOND.to_string()),
+        None => None,
+    }
+}
+
 /// One rung pair of the execution ladder, placed under whichever of §9's states the two
 /// stamps and the run's mode describe. `entered` is the instant the stage began, present
 /// only when a stamp proves it began; `ended` is the instant it handed the next rung its
 /// stamp. `note` is what the reader needs beyond the numbers — the revert, in M7's case —
-/// and `detail` is why this attempt stopped where it did.
+/// and `detail` is why this attempt stopped where it did. Two equal stamps get
+/// [`SAME_MILLISECOND`] when the caller gave no note of its own.
 fn rung(
     recorder: &mut TraceRecorder,
     stage: Stage,
@@ -658,7 +681,7 @@ fn rung(
 ) {
     match (entered, ended) {
         (Some(started), Some(ended)) => recorder.put(StageRecord {
-            note: note.map(str::to_string),
+            note: span_note(note, started, ended),
             ..StageRecord::measured_ms(stage, started, ended)
         }),
         (Some(started), None) if attempts(mode, stage) => recorder.put(StageRecord::failed_ms(
@@ -1257,6 +1280,71 @@ mod tests {
         assert_eq!(state.duration_ns, Some(0));
         assert_eq!(state.note.as_deref(), Some(DECODE_AND_APPLY_STAMP));
         assert_eq!(record_of(&recorder, Stage::Observation).note, None);
+    }
+
+    /// §9's rule read the other way round. It forbids a skipped stage from reporting 0 ms;
+    /// this is the case it cannot reach — a stage that *did* run and *did* answer, inside one
+    /// millisecond. The 0 is then a true figure about a clock, and a reader who sums it into
+    /// a budget would learn that observing a block costs nothing. So the row names the clock
+    /// it hit, on either half of a lifecycle, and backs off where a caveat already explains
+    /// the pair in its own words.
+    #[test]
+    fn a_span_that_lands_inside_one_millisecond_names_the_clock_it_hit() {
+        let stuck = [
+            Some(1_000),
+            Some(1_002),
+            Some(1_002),
+            Some(1_002),
+            Some(1_002),
+            Some(1_005),
+            Some(1_005),
+            Some(1_040),
+        ];
+        let mut discovery = recorder();
+        record_discovery(&mut discovery, &timing(stuck));
+
+        for stage in [
+            Stage::GraphUpdate,
+            Stage::OpportunityDetection,
+            Stage::Simulation,
+        ] {
+            let record = record_of(&discovery, stage);
+            assert_eq!(record.outcome, StageOutcome::Completed, "{stage}");
+            assert_eq!(record.duration_ns, Some(0), "{stage}");
+            assert_eq!(record.note.as_deref(), Some(SAME_MILLISECOND), "{stage}");
+        }
+        // A pair that is a real span gains nothing from this rule: a note is a claim.
+        assert_eq!(record_of(&discovery, Stage::Risk).note, None);
+        // And a pair with its own explanation keeps it instead of doubling up.
+        assert_eq!(
+            record_of(&discovery, Stage::StateUpdate).note.as_deref(),
+            Some(DECODE_AND_APPLY_STAMP)
+        );
+
+        // The execution ladder obeys the same reading, which is how M7's own
+        // `settled` → `profit_verified` pair arrives: the account was closed inside the
+        // millisecond the receipt landed.
+        let record = ladder(&[
+            (ExecutionStatus::Preflighted, 2_000),
+            (ExecutionStatus::Built, 3_000),
+            (ExecutionStatus::Signed, 4_000),
+            (ExecutionStatus::Submitted, 5_000),
+            (ExecutionStatus::Included, 6_000),
+            (ExecutionStatus::Settled, 7_000),
+            (ExecutionStatus::ProfitVerified, 7_000),
+        ]);
+        let mut ladder_run = recorder();
+        record_ladder(
+            &mut ladder_run,
+            Some(&record),
+            ExecutionMode::Submit,
+            "the route is accounted for",
+        );
+        let settled = record_of(&ladder_run, Stage::ProfitVerification);
+        assert_eq!(settled.outcome, StageOutcome::Completed);
+        assert_eq!(settled.duration_ns, Some(0));
+        assert_eq!(settled.note.as_deref(), Some(SAME_MILLISECOND));
+        assert_eq!(record_of(&ladder_run, Stage::Settlement).note, None);
     }
 
     /// The answer of [`record_discovery`] is where this lifecycle's story ends, so a run
