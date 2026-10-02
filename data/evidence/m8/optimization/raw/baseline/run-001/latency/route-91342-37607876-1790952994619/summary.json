@@ -1,0 +1,510 @@
+{
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1790952994622,
+  "generated_at_used_for_durations": false,
+  "git_revision": "33c4d6b",
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "percentile_algorithm": "nearest_rank",
+  "percentile_rule": "a rank is reported only when its index is strictly below the largest index; otherwise it would reprint max",
+  "sample_count": 1,
+  "schema_version": 1,
+  "sources": [
+    {
+      "chain_id": 91342,
+      "latencies_ns": {
+        "build_duration": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "end_to_end:detection_latency": {
+          "max_ns": 2560621041,
+          "measured": true,
+          "min_ns": 2560621041,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "inclusion_to_receipt": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "observation_to_opportunity": {
+          "max_ns": 2560621041,
+          "measured": true,
+          "min_ns": 2560621041,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "opportunity_to_inclusion": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "opportunity_to_profit_verified": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "opportunity_to_simulation_start": {
+          "max_ns": 1740417,
+          "measured": true,
+          "min_ns": 1740417,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "opportunity_to_submit": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "preflight_duration": {
+          "max_ns": 10661214500,
+          "measured": true,
+          "min_ns": 10661214500,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "receipt_to_settlement": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "risk_duration": {
+          "max_ns": 145875,
+          "measured": true,
+          "min_ns": 145875,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "risk_to_preflight": {
+          "max_ns": 8336708,
+          "measured": true,
+          "min_ns": 8336708,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "settlement_to_profit_verified": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "sign_duration": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "simulation_duration": {
+          "max_ns": 33575521875,
+          "measured": true,
+          "min_ns": 33575521875,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "simulation_to_risk": {
+          "max_ns": 3348042,
+          "measured": true,
+          "min_ns": 3348042,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "stage_duration:observation": {
+          "max_ns": 670914583,
+          "measured": true,
+          "min_ns": 670914583,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "stage_duration:opportunity_detection": {
+          "max_ns": 1889706458,
+          "measured": true,
+          "min_ns": 1889706458,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "stage_duration:preflight": {
+          "max_ns": 10661214500,
+          "measured": true,
+          "min_ns": 10661214500,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "stage_duration:risk": {
+          "max_ns": 145875,
+          "measured": true,
+          "min_ns": 145875,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "stage_duration:simulation": {
+          "max_ns": 33575521875,
+          "measured": true,
+          "min_ns": 33575521875,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "submit_duration": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "submit_to_inclusion": {
+          "measured": false,
+          "note": "no run in this baseline produced this figure",
+          "samples": 0,
+          "unit": "ns"
+        },
+        "total:stage_duration_sum": {
+          "max_ns": 46797503291,
+          "measured": true,
+          "min_ns": 46797503291,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "total:wall_clock": {
+          "max_ns": 46823074041,
+          "measured": true,
+          "min_ns": 46823074041,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        }
+      },
+      "sample_count": 1,
+      "source": "live",
+      "trace_ids": [
+        "lat-afa2d25044bd209d"
+      ]
+    }
+  ],
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}

@@ -1,0 +1,96 @@
+{
+  "baseline_arm": {
+    "per_kind": [
+      {
+        "hits": 30,
+        "kind": "code",
+        "lookups": 45,
+        "method": "eth_getCode",
+        "misses": 15,
+        "misses_equal_wire": false,
+        "wire_calls": 69
+      },
+      {
+        "hits": 0,
+        "kind": "balance",
+        "lookups": 0,
+        "method": "eth_getBalance",
+        "misses": 0,
+        "misses_equal_wire": false,
+        "wire_calls": 54
+      },
+      {
+        "hits": 0,
+        "kind": "nonce",
+        "lookups": 0,
+        "method": "eth_getTransactionCount",
+        "misses": 0,
+        "misses_equal_wire": false,
+        "wire_calls": 54
+      },
+      {
+        "hits": 78,
+        "kind": "storage",
+        "lookups": 138,
+        "method": "eth_getStorageAt",
+        "misses": 60,
+        "misses_equal_wire": true,
+        "wire_calls": 60
+      }
+    ],
+    "runs": [
+      "run-001",
+      "run-002",
+      "run-003"
+    ],
+    "why_the_account_kinds_carry_nothing": "with reuse off, balance, nonce and the bytecode an account read asks for are never looked up, so they have neither hits nor misses to report and every one of their reads is a wire call. Only the two kinds this boundary already reused at M8.2's HEAD — a direct bytecode read, and storage — carry numbers here, which is why baseline's `wire_calls` exceed its lookups."
+  },
+  "cached_arm": {
+    "alignment": "misses_equal_wire is §12's check. In the reuse arm every read the boundary did not already hold went to the node, and nothing reached the node that the boundary had not been asked about. A kind where that is false is a read that bypassed the boundary — §16's hidden problem, caught by an arithmetic check rather than by an audit.",
+    "per_kind": [
+      {
+        "hits": 81,
+        "kind": "code",
+        "lookups": 99,
+        "method": "eth_getCode",
+        "misses": 18,
+        "misses_equal_wire": true,
+        "wire_calls": 18
+      },
+      {
+        "hits": 36,
+        "kind": "balance",
+        "lookups": 54,
+        "method": "eth_getBalance",
+        "misses": 18,
+        "misses_equal_wire": true,
+        "wire_calls": 18
+      },
+      {
+        "hits": 36,
+        "kind": "nonce",
+        "lookups": 54,
+        "method": "eth_getTransactionCount",
+        "misses": 18,
+        "misses_equal_wire": true,
+        "wire_calls": 18
+      },
+      {
+        "hits": 78,
+        "kind": "storage",
+        "lookups": 138,
+        "method": "eth_getStorageAt",
+        "misses": 60,
+        "misses_equal_wire": true,
+        "wire_calls": 60
+      }
+    ],
+    "runs": [
+      "run-001",
+      "run-002",
+      "run-003"
+    ]
+  },
+  "schema": "m8.3.1-cache-stats/v1",
+  "source": "each run's simulation-traces.jsonl line, `state_read_cache` — the boundary's own counter, incremented at the lookup that made it true and never derived from the call list."
+}

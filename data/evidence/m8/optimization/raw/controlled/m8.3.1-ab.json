@@ -1,0 +1,319 @@
+{
+  "ask": "1 wei (the smallest output that is still a trade)",
+  "baseline": {
+    "cache_hits": 37,
+    "cache_misses": 26,
+    "method_counts": {
+      "eth_getBalance": {
+        "requests": 18
+      },
+      "eth_getBlockByNumber": {
+        "requests": 1
+      },
+      "eth_getCode": {
+        "requests": 23
+      },
+      "eth_getStorageAt": {
+        "requests": 21
+      },
+      "eth_getTransactionCount": {
+        "requests": 18
+      }
+    },
+    "method_sequence": [
+      "eth_getBlockByNumber",
+      "eth_getCode",
+      "eth_getCode",
+      "eth_getCode",
+      "eth_getCode",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode"
+    ],
+    "per_kind": {
+      "balance": {
+        "hits": 0,
+        "misses": 0
+      },
+      "code": {
+        "hits": 10,
+        "misses": 5
+      },
+      "nonce": {
+        "hits": 0,
+        "misses": 0
+      },
+      "reuse": false,
+      "storage": {
+        "hits": 27,
+        "misses": 21
+      },
+      "total_hits": 37,
+      "total_misses": 26
+    },
+    "result": {
+      "fingerprint": "0xd54891737d934871622ce879b55c67a90bba5b343a7954821b20d138ad9dbf67",
+      "gas_used": 423502,
+      "gross_profit": null,
+      "logs": 12,
+      "measurements": [
+        "sender_input_start=0",
+        "sender_mid_received=881325264824006417",
+        "sender_input_end=1",
+        "sender_input_after_unwrap=0",
+        "sender_native_start=822844720992",
+        "sender_native_end=107872949401"
+      ],
+      "net_profit": "Shortfall { before_gas: 714844720991, gas_cost: 127050600, amount: 714971771591, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 1, native_start: 822844720992, native_end: 107872949401, native_spent: 714844720992, gas_paid: 127050600, proved_by: \"withdraw(1) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+      "net_profit_word": "shortfall",
+      "outcome": "Executed { output: 1, movement: Decreased { by: 714844720991 } }",
+      "revert": "None",
+      "reverted": false,
+      "status": "Completed",
+      "step_statuses": [
+        "0:Success",
+        "1:Success",
+        "2:Success",
+        "3:Success",
+        "4:Success",
+        "5:Success",
+        "6:Success",
+        "7:Success",
+        "8:Success",
+        "9:Success",
+        "10:Success",
+        "11:Success"
+      ]
+    },
+    "reuse": false,
+    "rpc_count": 81,
+    "rpc_wall_ns": 37768633,
+    "run_wall_ns": 55135000,
+    "simulation_id": "m8.3.1-ab-baseline-37191169",
+    "state_read_count": 80,
+    "tally_scope": "only the reads M8.2's HEAD already looked up: eth_getStorageAt and the direct bytecode path; an account triple went straight to the node"
+  },
+  "block": 37191169,
+  "block_hash": "0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670",
+  "cached": {
+    "cache_hits": 78,
+    "cache_misses": 39,
+    "method_counts": {
+      "eth_getBalance": {
+        "requests": 6
+      },
+      "eth_getBlockByNumber": {
+        "requests": 1
+      },
+      "eth_getCode": {
+        "requests": 6
+      },
+      "eth_getStorageAt": {
+        "requests": 21
+      },
+      "eth_getTransactionCount": {
+        "requests": 6
+      }
+    },
+    "method_sequence": [
+      "eth_getBlockByNumber",
+      "eth_getCode",
+      "eth_getCode",
+      "eth_getCode",
+      "eth_getCode",
+      "eth_getCode",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getBalance",
+      "eth_getTransactionCount",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt",
+      "eth_getStorageAt"
+    ],
+    "per_kind": {
+      "balance": {
+        "hits": 12,
+        "misses": 6
+      },
+      "code": {
+        "hits": 27,
+        "misses": 6
+      },
+      "nonce": {
+        "hits": 12,
+        "misses": 6
+      },
+      "reuse": true,
+      "storage": {
+        "hits": 27,
+        "misses": 21
+      },
+      "total_hits": 78,
+      "total_misses": 39
+    },
+    "result": {
+      "fingerprint": "0xd54891737d934871622ce879b55c67a90bba5b343a7954821b20d138ad9dbf67",
+      "gas_used": 423502,
+      "gross_profit": null,
+      "logs": 12,
+      "measurements": [
+        "sender_input_start=0",
+        "sender_mid_received=881325264824006417",
+        "sender_input_end=1",
+        "sender_input_after_unwrap=0",
+        "sender_native_start=822844720992",
+        "sender_native_end=107872949401"
+      ],
+      "net_profit": "Shortfall { before_gas: 714844720991, gas_cost: 127050600, amount: 714971771591, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 1, native_start: 822844720992, native_end: 107872949401, native_spent: 714844720992, gas_paid: 127050600, proved_by: \"withdraw(1) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+      "net_profit_word": "shortfall",
+      "outcome": "Executed { output: 1, movement: Decreased { by: 714844720991 } }",
+      "revert": "None",
+      "reverted": false,
+      "status": "Completed",
+      "step_statuses": [
+        "0:Success",
+        "1:Success",
+        "2:Success",
+        "3:Success",
+        "4:Success",
+        "5:Success",
+        "6:Success",
+        "7:Success",
+        "8:Success",
+        "9:Success",
+        "10:Success",
+        "11:Success"
+      ]
+    },
+    "reuse": true,
+    "rpc_count": 40,
+    "rpc_wall_ns": 51665418,
+    "run_wall_ns": 70887209,
+    "simulation_id": "m8.3.1-ab-cached-37191169",
+    "state_read_count": 39,
+    "tally_scope": "every state read of the four kinds was looked up here"
+  },
+  "chain_id": 91342,
+  "comparison": {
+    "answers_reused_added": 41,
+    "baseline_request_count": 80,
+    "cached_request_count": 39,
+    "fields_equal": true,
+    "fingerprint_equal": true,
+    "per_method_removed": {
+      "eth_getBalance": 12,
+      "eth_getBlockByNumber": 0,
+      "eth_getCode": 17,
+      "eth_getStorageAt": 0,
+      "eth_getTransactionCount": 12
+    },
+    "result_equal": true,
+    "rpc_wall_removed_ns": 0,
+    "run_wall_removed_ns": 0,
+    "state_reads_removed": 41
+  },
+  "generated_by": "cargo test -p evm-simulation --test state_reuse_ab",
+  "schema": "m8.3.1-ab-stub/v1",
+  "state_source": "local JSON-RPC stub serving fixtures/simulation-m4/dump-37191169.json",
+  "variable": "state read reuse"
+}

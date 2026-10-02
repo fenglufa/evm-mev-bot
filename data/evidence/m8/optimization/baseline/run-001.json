@@ -1,0 +1,99 @@
+{
+  "arm": "baseline",
+  "chain_id": 91342,
+  "execution_mode": "build-only",
+  "git_revision": "33c4d6b",
+  "market": {
+    "counts_as_real_arbitrage": true,
+    "evidence": "reserves and blockTimestampLast read at the pinned live head by this run",
+    "market_kind": "REAL_MARKET"
+  },
+  "milestone": "M8.3.1",
+  "pinned_block": 37607876,
+  "read_from": {
+    "directory": "raw/baseline/run-001",
+    "latency_summary": "raw/baseline/run-001/latency/route-91342-37607876-1790952994619/summary.json",
+    "run_record": "raw/baseline/run-001/route-91342-37607876-1790952994619/route-run.json",
+    "simulation_traces": "raw/baseline/run-001/diagnosis/route-91342-37607876-1790952994619/simulation-traces.jsonl"
+  },
+  "refusal": null,
+  "run_label": "run-001",
+  "schema": "m8.3.1-live-run/v1",
+  "second_clock": {
+    "difference_ns": 4834,
+    "key": "sources[].latencies_ns.simulation_duration.min_ns",
+    "simulation_duration_ns": 33575521875,
+    "traced_by_rpc_boundary_ns": 33575526709
+  },
+  "session_id": "route-91342-37607876-1790952994619",
+  "simulations": [
+    {
+      "arm": "baseline",
+      "block": 37607876,
+      "cache_by_kind": [
+        {
+          "hits": 10,
+          "kind": "code",
+          "method": "eth_getCode",
+          "misses": 5
+        },
+        {
+          "hits": 0,
+          "kind": "balance",
+          "method": "eth_getBalance",
+          "misses": 0
+        },
+        {
+          "hits": 0,
+          "kind": "nonce",
+          "method": "eth_getTransactionCount",
+          "misses": 0
+        },
+        {
+          "hits": 26,
+          "kind": "storage",
+          "method": "eth_getStorageAt",
+          "misses": 20
+        }
+      ],
+      "cache_hit": 36,
+      "cache_miss": 25,
+      "duplicate_reads": 41,
+      "header_rpc_count": 1,
+      "result": {
+        "completed": true,
+        "fingerprint": "858613247ee804f6b55cf21ba7bcd5abb438d535324097d9fd3a3e1911caae6f",
+        "gas_used": 421394,
+        "outcome": [
+          "Executed"
+        ],
+        "read_from": "raw/baseline/run-001/route-91342-37607876-1790952994619/route-run.json: simulation",
+        "status": "Completed"
+      },
+      "rpc_count": 80,
+      "rpc_count_by_method": {
+        "eth_getBalance": 18,
+        "eth_getBlockByNumber": 1,
+        "eth_getCode": 23,
+        "eth_getStorageAt": 20,
+        "eth_getTransactionCount": 18
+      },
+      "rpc_wall_duration": {
+        "ms": 33571,
+        "ms_is_truncated": true,
+        "ns": 33571761375
+      },
+      "simulation_duration": {
+        "ms": 33575,
+        "ms_is_truncated": true,
+        "ns": 33575526709
+      },
+      "simulation_id": "m7-91342-37607876-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "state_read_tally_scope": "state_read_cache: a hit is a state read this simulation answered from what it had already read at its own pinned block, so it cost no request; a miss is a read it had to ask for. With reuse off, the account kinds (balance, nonce, and the bytecode an account asks for) are never looked up and so carry neither number — only the kinds this boundary reused before M8.3.1 (code on a direct read, storage) are tallied. Nothing here is derived from the call list; it is counted at the lookup that made it true.",
+      "state_rpc_count": 79,
+      "unique_reads": 39
+    }
+  ],
+  "state_read_reuse": false,
+  "successful_real_arbitrage": false
+}

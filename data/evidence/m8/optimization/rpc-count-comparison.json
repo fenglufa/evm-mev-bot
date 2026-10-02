@@ -1,0 +1,158 @@
+{
+  "baseline_runs": [
+    {
+      "arm": "baseline",
+      "block": 37607876,
+      "counts": {
+        "eth_getBalance": 18,
+        "eth_getBlockByNumber": 1,
+        "eth_getCode": 23,
+        "eth_getStorageAt": 20,
+        "eth_getTransactionCount": 18
+      },
+      "run": "run-001",
+      "session_id": "route-91342-37607876-1790952994619",
+      "total_calls": 80
+    },
+    {
+      "arm": "baseline",
+      "block": 37607984,
+      "counts": {
+        "eth_getBalance": 18,
+        "eth_getBlockByNumber": 1,
+        "eth_getCode": 23,
+        "eth_getStorageAt": 20,
+        "eth_getTransactionCount": 18
+      },
+      "run": "run-002",
+      "session_id": "route-91342-37607984-1790953102182",
+      "total_calls": 80
+    },
+    {
+      "arm": "baseline",
+      "block": 37608070,
+      "counts": {
+        "eth_getBalance": 18,
+        "eth_getBlockByNumber": 1,
+        "eth_getCode": 23,
+        "eth_getStorageAt": 20,
+        "eth_getTransactionCount": 18
+      },
+      "run": "run-003",
+      "session_id": "route-91342-37608070-1790953188257",
+      "total_calls": 80
+    }
+  ],
+  "cached_runs": [
+    {
+      "arm": "cached",
+      "block": 37607780,
+      "counts": {
+        "eth_getBalance": 6,
+        "eth_getBlockByNumber": 1,
+        "eth_getCode": 6,
+        "eth_getStorageAt": 20,
+        "eth_getTransactionCount": 6
+      },
+      "run": "run-001",
+      "session_id": "route-91342-37607780-1790952898072",
+      "total_calls": 39
+    },
+    {
+      "arm": "cached",
+      "block": 37607955,
+      "counts": {
+        "eth_getBalance": 6,
+        "eth_getBlockByNumber": 1,
+        "eth_getCode": 6,
+        "eth_getStorageAt": 20,
+        "eth_getTransactionCount": 6
+      },
+      "run": "run-002",
+      "session_id": "route-91342-37607955-1790953073809",
+      "total_calls": 39
+    },
+    {
+      "arm": "cached",
+      "block": 37608041,
+      "counts": {
+        "eth_getBalance": 6,
+        "eth_getBlockByNumber": 1,
+        "eth_getCode": 6,
+        "eth_getStorageAt": 20,
+        "eth_getTransactionCount": 6
+      },
+      "run": "run-003",
+      "session_id": "route-91342-37608041-1790953159484",
+      "total_calls": 39
+    }
+  ],
+  "duplicates": {
+    "baseline_duplicate_reads": 123,
+    "cached_duplicate_reads": 0,
+    "note": "a duplicate read is one §3 identity asked of the same pinned block twice inside a single simulation. That is M8.2's measurement and a different account from the cache tally: this counts arrivals at the endpoint, the tally counts lookups at the boundary."
+  },
+  "measured_by": "the request counter at the RPC boundary — the same events M8.2's diagnosis records, counted per method here rather than per key (§7). Nothing in this file is inferred from the cache statistics.",
+  "method_sequence": {
+    "controlled_stub_ab_note": "the sequence check itself — the cached arm's calls are the baseline arm's in the same order with whole calls removed — is asserted where both arms share one pinned block, by crates/simulation/tests/state_reuse_ab.rs.",
+    "controlled_stub_ab_per_method_removed": {
+      "eth_getBalance": 12,
+      "eth_getBlockByNumber": 0,
+      "eth_getCode": 17,
+      "eth_getStorageAt": 0,
+      "eth_getTransactionCount": 12
+    },
+    "live_arms": "not compared. The arms ran at different heads, so their call lists are not the same questions in the same order, and a subsequence check across them would be comparing chain state rather than behaviour."
+  },
+  "schema": "m8.3.1-rpc-count-comparison/v1",
+  "totals": {
+    "baseline": {
+      "eth_getBalance": 54,
+      "eth_getBlockByNumber": 3,
+      "eth_getCode": 69,
+      "eth_getStorageAt": 60,
+      "eth_getTransactionCount": 54
+    },
+    "cached": {
+      "eth_getBalance": 18,
+      "eth_getBlockByNumber": 3,
+      "eth_getCode": 18,
+      "eth_getStorageAt": 60,
+      "eth_getTransactionCount": 18
+    },
+    "note": "these are sums over the runs each arm recorded, and the per-run columns are above; §19 forbids a figure that is not in a run's own files.",
+    "per_method": [
+      {
+        "baseline": 69,
+        "cached": 18,
+        "method": "eth_getCode",
+        "removed": 51
+      },
+      {
+        "baseline": 54,
+        "cached": 18,
+        "method": "eth_getBalance",
+        "removed": 36
+      },
+      {
+        "baseline": 54,
+        "cached": 18,
+        "method": "eth_getTransactionCount",
+        "removed": 36
+      },
+      {
+        "baseline": 60,
+        "cached": 60,
+        "method": "eth_getStorageAt",
+        "removed": 0
+      },
+      {
+        "baseline": 3,
+        "cached": 3,
+        "method": "eth_getBlockByNumber",
+        "removed": 0
+      }
+    ],
+    "state_reads_removed": 123
+  }
+}

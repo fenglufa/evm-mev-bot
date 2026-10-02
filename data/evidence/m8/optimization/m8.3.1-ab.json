@@ -1,0 +1,819 @@
+{
+  "arms": {
+    "baseline": {
+      "runs": [
+        "raw/baseline/run-001",
+        "raw/baseline/run-002",
+        "raw/baseline/run-003"
+      ],
+      "state_read_reuse": false,
+      "switch": "--no-state-read-reuse"
+    },
+    "cached": {
+      "runs": [
+        "raw/cached/run-001",
+        "raw/cached/run-002",
+        "raw/cached/run-003"
+      ],
+      "state_read_reuse": true,
+      "switch": "the default: no flag"
+    }
+  },
+  "controlled_stub_ab": {
+    "ask": "1 wei (the smallest output that is still a trade)",
+    "baseline": {
+      "cache_hits": 37,
+      "cache_misses": 26,
+      "method_counts": {
+        "eth_getBalance": {
+          "requests": 18
+        },
+        "eth_getBlockByNumber": {
+          "requests": 1
+        },
+        "eth_getCode": {
+          "requests": 23
+        },
+        "eth_getStorageAt": {
+          "requests": 21
+        },
+        "eth_getTransactionCount": {
+          "requests": 18
+        }
+      },
+      "method_sequence": [
+        "eth_getBlockByNumber",
+        "eth_getCode",
+        "eth_getCode",
+        "eth_getCode",
+        "eth_getCode",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode"
+      ],
+      "per_kind": {
+        "balance": {
+          "hits": 0,
+          "misses": 0
+        },
+        "code": {
+          "hits": 10,
+          "misses": 5
+        },
+        "nonce": {
+          "hits": 0,
+          "misses": 0
+        },
+        "reuse": false,
+        "storage": {
+          "hits": 27,
+          "misses": 21
+        },
+        "total_hits": 37,
+        "total_misses": 26
+      },
+      "result": {
+        "fingerprint": "0xd54891737d934871622ce879b55c67a90bba5b343a7954821b20d138ad9dbf67",
+        "gas_used": 423502,
+        "gross_profit": null,
+        "logs": 12,
+        "measurements": [
+          "sender_input_start=0",
+          "sender_mid_received=881325264824006417",
+          "sender_input_end=1",
+          "sender_input_after_unwrap=0",
+          "sender_native_start=822844720992",
+          "sender_native_end=107872949401"
+        ],
+        "net_profit": "Shortfall { before_gas: 714844720991, gas_cost: 127050600, amount: 714971771591, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 1, native_start: 822844720992, native_end: 107872949401, native_spent: 714844720992, gas_paid: 127050600, proved_by: \"withdraw(1) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+        "net_profit_word": "shortfall",
+        "outcome": "Executed { output: 1, movement: Decreased { by: 714844720991 } }",
+        "revert": "None",
+        "reverted": false,
+        "status": "Completed",
+        "step_statuses": [
+          "0:Success",
+          "1:Success",
+          "2:Success",
+          "3:Success",
+          "4:Success",
+          "5:Success",
+          "6:Success",
+          "7:Success",
+          "8:Success",
+          "9:Success",
+          "10:Success",
+          "11:Success"
+        ]
+      },
+      "reuse": false,
+      "rpc_count": 81,
+      "rpc_wall_ns": 37768633,
+      "run_wall_ns": 55135000,
+      "simulation_id": "m8.3.1-ab-baseline-37191169",
+      "state_read_count": 80,
+      "tally_scope": "only the reads M8.2's HEAD already looked up: eth_getStorageAt and the direct bytecode path; an account triple went straight to the node"
+    },
+    "block": 37191169,
+    "block_hash": "0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670",
+    "cached": {
+      "cache_hits": 78,
+      "cache_misses": 39,
+      "method_counts": {
+        "eth_getBalance": {
+          "requests": 6
+        },
+        "eth_getBlockByNumber": {
+          "requests": 1
+        },
+        "eth_getCode": {
+          "requests": 6
+        },
+        "eth_getStorageAt": {
+          "requests": 21
+        },
+        "eth_getTransactionCount": {
+          "requests": 6
+        }
+      },
+      "method_sequence": [
+        "eth_getBlockByNumber",
+        "eth_getCode",
+        "eth_getCode",
+        "eth_getCode",
+        "eth_getCode",
+        "eth_getCode",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt",
+        "eth_getStorageAt"
+      ],
+      "per_kind": {
+        "balance": {
+          "hits": 12,
+          "misses": 6
+        },
+        "code": {
+          "hits": 27,
+          "misses": 6
+        },
+        "nonce": {
+          "hits": 12,
+          "misses": 6
+        },
+        "reuse": true,
+        "storage": {
+          "hits": 27,
+          "misses": 21
+        },
+        "total_hits": 78,
+        "total_misses": 39
+      },
+      "result": {
+        "fingerprint": "0xd54891737d934871622ce879b55c67a90bba5b343a7954821b20d138ad9dbf67",
+        "gas_used": 423502,
+        "gross_profit": null,
+        "logs": 12,
+        "measurements": [
+          "sender_input_start=0",
+          "sender_mid_received=881325264824006417",
+          "sender_input_end=1",
+          "sender_input_after_unwrap=0",
+          "sender_native_start=822844720992",
+          "sender_native_end=107872949401"
+        ],
+        "net_profit": "Shortfall { before_gas: 714844720991, gas_cost: 127050600, amount: 714971771591, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 1, native_start: 822844720992, native_end: 107872949401, native_spent: 714844720992, gas_paid: 127050600, proved_by: \"withdraw(1) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+        "net_profit_word": "shortfall",
+        "outcome": "Executed { output: 1, movement: Decreased { by: 714844720991 } }",
+        "revert": "None",
+        "reverted": false,
+        "status": "Completed",
+        "step_statuses": [
+          "0:Success",
+          "1:Success",
+          "2:Success",
+          "3:Success",
+          "4:Success",
+          "5:Success",
+          "6:Success",
+          "7:Success",
+          "8:Success",
+          "9:Success",
+          "10:Success",
+          "11:Success"
+        ]
+      },
+      "reuse": true,
+      "rpc_count": 40,
+      "rpc_wall_ns": 51665418,
+      "run_wall_ns": 70887209,
+      "simulation_id": "m8.3.1-ab-cached-37191169",
+      "state_read_count": 39,
+      "tally_scope": "every state read of the four kinds was looked up here"
+    },
+    "chain_id": 91342,
+    "comparison": {
+      "answers_reused_added": 41,
+      "baseline_request_count": 80,
+      "cached_request_count": 39,
+      "fields_equal": true,
+      "fingerprint_equal": true,
+      "per_method_removed": {
+        "eth_getBalance": 12,
+        "eth_getBlockByNumber": 0,
+        "eth_getCode": 17,
+        "eth_getStorageAt": 0,
+        "eth_getTransactionCount": 12
+      },
+      "result_equal": true,
+      "rpc_wall_removed_ns": 0,
+      "run_wall_removed_ns": 0,
+      "state_reads_removed": 41
+    },
+    "generated_by": "cargo test -p evm-simulation --test state_reuse_ab",
+    "schema": "m8.3.1-ab-stub/v1",
+    "state_source": "local JSON-RPC stub serving fixtures/simulation-m4/dump-37191169.json",
+    "variable": "state read reuse"
+  },
+  "files": [
+    "m8.3.1-ab.json",
+    "rpc-count-comparison.json",
+    "cache-stats.json",
+    "README.md",
+    "baseline/",
+    "cached/"
+  ],
+  "git_revisions": {
+    "controlled_stub": "cargo test -p evm-simulation --test state_reuse_ab",
+    "live_runs": [
+      "33c4d6b",
+      "33c4d6b",
+      "33c4d6b",
+      "33c4d6b",
+      "33c4d6b",
+      "33c4d6b"
+    ]
+  },
+  "metrics": {
+    "baseline_duplicate_reads": {
+      "distribution": {
+        "max": 41,
+        "measured": true,
+        "min": 41,
+        "p50": 41,
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "count"
+      },
+      "per_run": [
+        41,
+        41,
+        41
+      ],
+      "total": 123,
+      "unit": "count"
+    },
+    "baseline_rpc_count": {
+      "distribution": {
+        "max": 80,
+        "measured": true,
+        "min": 80,
+        "p50": 80,
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "count"
+      },
+      "per_run": [
+        80,
+        80,
+        80
+      ],
+      "total": 240,
+      "unit": "count"
+    },
+    "baseline_rpc_wall_duration": {
+      "distribution": {
+        "max_ns": 36559381000,
+        "measured": true,
+        "min_ns": 33262513625,
+        "p50_ns": 33571761375,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_run": [
+        33571761375,
+        36559381000,
+        33262513625
+      ],
+      "total": 103393656000,
+      "unit": "ns"
+    },
+    "baseline_simulation_duration": {
+      "distribution": {
+        "max_ns": 36559967125,
+        "measured": true,
+        "min_ns": 33263131292,
+        "p50_ns": 33575526709,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_run": [
+        33575526709,
+        36559967125,
+        33263131292
+      ],
+      "total": 103398625126,
+      "unit": "ns"
+    },
+    "cache_hits": {
+      "baseline_arm": {
+        "distribution": {
+          "max": 36,
+          "measured": true,
+          "min": 36,
+          "p50": 36,
+          "p90": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "count"
+        },
+        "per_run": [
+          36,
+          36,
+          36
+        ],
+        "total": 108,
+        "unit": "count"
+      },
+      "cached_arm": {
+        "distribution": {
+          "max": 77,
+          "measured": true,
+          "min": 77,
+          "p50": 77,
+          "p90": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "count"
+        },
+        "per_run": [
+          77,
+          77,
+          77
+        ],
+        "total": 231,
+        "unit": "count"
+      }
+    },
+    "cache_misses": {
+      "baseline_arm": {
+        "distribution": {
+          "max": 25,
+          "measured": true,
+          "min": 25,
+          "p50": 25,
+          "p90": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "count"
+        },
+        "per_run": [
+          25,
+          25,
+          25
+        ],
+        "total": 75,
+        "unit": "count"
+      },
+      "cached_arm": {
+        "distribution": {
+          "max": 38,
+          "measured": true,
+          "min": 38,
+          "p50": 38,
+          "p90": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "count"
+        },
+        "per_run": [
+          38,
+          38,
+          38
+        ],
+        "total": 114,
+        "unit": "count"
+      }
+    },
+    "optimized_duplicate_reads": {
+      "distribution": {
+        "max": 0,
+        "measured": true,
+        "min": 0,
+        "p50": 0,
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "count"
+      },
+      "per_run": [
+        0,
+        0,
+        0
+      ],
+      "total": 0,
+      "unit": "count"
+    },
+    "optimized_rpc_count": {
+      "distribution": {
+        "max": 39,
+        "measured": true,
+        "min": 39,
+        "p50": 39,
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "count"
+      },
+      "per_run": [
+        39,
+        39,
+        39
+      ],
+      "total": 117,
+      "unit": "count"
+    },
+    "optimized_rpc_wall_duration": {
+      "distribution": {
+        "max_ns": 15801540709,
+        "measured": true,
+        "min_ns": 13722774500,
+        "p50_ns": 14352437875,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_run": [
+        14352437875,
+        15801540709,
+        13722774500
+      ],
+      "total": 43876753084,
+      "unit": "ns"
+    },
+    "optimized_simulation_duration": {
+      "distribution": {
+        "max_ns": 15807791125,
+        "measured": true,
+        "min_ns": 13725627625,
+        "p50_ns": 14358245625,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "per_run": [
+        14358245625,
+        15807791125,
+        13725627625
+      ],
+      "total": 43891664375,
+      "unit": "ns"
+    },
+    "result_equal": {
+      "controlled_stub_ab": true,
+      "controlled_stub_ab_read_from": "raw/controlled/m8.3.1-ab.json: comparison.result_equal",
+      "live_arms": null,
+      "live_arms_reason": "the two arms ran against the live head, and a head advances: each run pins the block the node was at when it asked, so no live pair shares §6's pinned block and no live pair has a result that should be equal. Each run's fingerprint is recorded anyway, below, so a reader can see what each arm actually computed. Equality of two simulations of one pinned state is the controlled stub A/B's claim, at block 37191169, read from the file named above.",
+      "per_run_fingerprints": {
+        "baseline": [
+          {
+            "block": 37607876,
+            "fingerprint": "858613247ee804f6b55cf21ba7bcd5abb438d535324097d9fd3a3e1911caae6f",
+            "run": "run-001"
+          },
+          {
+            "block": 37607984,
+            "fingerprint": "030a5bf32069600533478c882030c822b309ac5b483381fd023e842ac69bb994",
+            "run": "run-002"
+          },
+          {
+            "block": 37608070,
+            "fingerprint": "c2c71cbc0b37af32da69724cbdbfbd0493e054c5a5479d80cb637dd7675ded60",
+            "run": "run-003"
+          }
+        ],
+        "cached": [
+          {
+            "block": 37607780,
+            "fingerprint": "18073218abc688360cbf51e9bd1214f00e99661bb62744f4aa84f852de7d9f4d",
+            "run": "run-001"
+          },
+          {
+            "block": 37607955,
+            "fingerprint": "0f826e0cb95fe28aabce254dc30b438078fa50b67d3d9b394e38bdb6ff09a9cc",
+            "run": "run-002"
+          },
+          {
+            "block": 37608041,
+            "fingerprint": "2c6058ea47f9dedd93c63a4aea363cffd519b004c000fb77b593abb62782a5c4",
+            "run": "run-003"
+          }
+        ]
+      }
+    },
+    "rpc_time_reduction": {
+      "baseline_total_ns": 103393656000,
+      "integer_terms": {
+        "denominator": 103393656000,
+        "notation": "integer terms, no float (§13)",
+        "numerator": 59516902916
+      },
+      "optimized_total_ns": 43876753084,
+      "removed_ns": 59516902916,
+      "removed_per_mille": 575
+    },
+    "simulation_time_reduction": {
+      "baseline_total_ns": 103398625126,
+      "integer_terms": {
+        "denominator": 103398625126,
+        "notation": "integer terms, no float (§13)",
+        "numerator": 59506960751
+      },
+      "optimized_total_ns": 43891664375,
+      "removed_ns": 59506960751,
+      "removed_per_mille": 575
+    }
+  },
+  "milestone": "M8.3.1",
+  "sample_policy": "M8.1's rule, unchanged: min and max from one sample, p50 from two, p90 from ten, p95 from twenty, p99 from a hundred. Three runs per arm therefore report min, p50 and max and null above that — §15 says 样本不足不要算 p95/p99, and the ranks that need more runs say so in the file rather than in this sentence.",
+  "schema": "m8.3.1-ab/v1",
+  "totals_are_sums_over_runs": "every `total` here is the sum over the runs listed under `arms`; each run's own figures are in `per_run` and in baseline/run-00N.json and cached/run-00N.json.",
+  "variable": "state read reuse, and nothing else. Both arms are the same command line with one switch added (§6); the arm a run was given is read out of that run's own record rather than assumed from the directory it was filed under."
+}
