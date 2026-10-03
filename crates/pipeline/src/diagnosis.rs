@@ -45,6 +45,10 @@ use evm_simulation::StateReadStats;
 use serde::Deserialize;
 use serde_json::{json, Value};
 
+use crate::canonicalization::{
+    cross_stage_run_table, cross_stage_tables, CROSS_STAGE_RUN_FILE, DUPLICATE_MATRIX_FILE,
+    DUPLICATE_SUMMARY_FILE, REUSE_CANDIDATES_FILE, STAGE_PAIRS_FILE,
+};
 use crate::error::{PipelineError, Result};
 
 /// The schema version of one line of `simulation-traces.jsonl`.
@@ -2644,6 +2648,17 @@ pub const DEPENDENCY_FILES: [&str; 6] = [
     PIPELINE_CALLS_FILE,
     PIPELINE_SUMMARY_FILE,
     STAGE_SUMMARY_FILE,
+];
+
+/// M8.4.2 §14's four tables, and the only keys [`cross_stage_tables`] returns. The list is the
+/// gate: a directory written under this milestone's switch holds exactly these beside the
+/// files it already wrote, so a table the bundle forgot is a missing file a reader sees rather
+/// than an empty one it does not.
+pub const CROSS_STAGE_FILES: [&str; 4] = [
+    DUPLICATE_MATRIX_FILE,
+    DUPLICATE_SUMMARY_FILE,
+    REUSE_CANDIDATES_FILE,
+    STAGE_PAIRS_FILE,
 ];
 
 /// What issued one storage read, decided from the `caller` name the site stamped.
@@ -5722,6 +5737,13 @@ pub struct DiagnosisEvidence {
     /// lines this directory already wrote plus the rows of both sinks, so no file here carries
     /// a clock reading the run did not already take (§12).
     dependency: Option<DependencyTables>,
+    /// M8.4.2 §14's four cross-stage tables, and which of its two build paths this run is on.
+    ///
+    /// A field of its own rather than a flag inside [`DependencyTables`]: §3 asks this
+    /// milestone to read M8.4.1's evidence rather than replace it, and a directory may be
+    /// written with either switch alone. What this one adds is four regroupings of the call
+    /// rows `pipeline-calls.json` already holds — no new clock reading, no new call (§26).
+    cross_stage: Option<CrossStageTables>,
     /// The lines written so far, kept in the order they were appended: §6's map is built by
     /// decoding these again rather than by holding a second copy of the analysis.
     dependency_lines: Vec<Value>,
@@ -5745,6 +5767,22 @@ enum DependencyTables {
     ///
     /// An assembly cannot use [`Self::Own`] because the run names come from the directories the
     /// lines were read out of, not from the directory being written.
+    Pooled(Value),
+}
+
+/// M8.4.2 §14's four tables, either built here or handed in already pooled.
+///
+/// The two paths exist for the same reason [`DependencyTables`]'s do: a run directory can only
+/// pair asks made inside that run, while an assembly over several runs has to be told the run
+/// each row came from. §5's direction is `producer → consumer` by clock order, and two runs'
+/// clocks are not comparable — so the assembly pools per-run pairs rather than ordering rows
+/// across runs.
+enum CrossStageTables {
+    /// Build this directory's own tables at [`DiagnosisEvidence::finish`] from the call rows it
+    /// recorded, and write this run's pair list beside them.
+    Own,
+    /// An assembly over several runs: [`DiagnosisEvidence::attach_cross_stage`] hands the pooled
+    /// bundle over, keyed by file name.
     Pooled(Value),
 }
 
@@ -6147,6 +6185,7 @@ impl DiagnosisEvidence {
             storage_rows: Vec::new(),
             account_rows: Vec::new(),
             dependency: None,
+            cross_stage: None,
             dependency_lines: Vec::new(),
             pipeline_rows: Vec::new(),
             stage_span_rows: Vec::new(),
@@ -6189,12 +6228,14 @@ impl DiagnosisEvidence {
                 self.account_rows.extend(rows.iter().cloned());
             }
         }
-        if matches!(self.dependency, Some(DependencyTables::Own)) {
+        if self.collects_call_rows() {
             // The same argument as above, one milestone later: §4's rows and §9's rows are read
             // out of the line this call is about to append, and out of the events that line was
             // built from. The line is kept whole because §6's map decodes it again — the map a
             // reader rebuilds from `simulation-traces.jsonl` is therefore the same object this
-            // directory wrote, not a second implementation that happens to agree today.
+            // directory wrote, not a second implementation that happens to agree today. It is
+            // kept for either switch, since a cross-stage directory still needs the line's
+            // chain and height for the run's own provenance (§3).
             self.dependency_lines.push(line.clone());
             let rows = pipeline_call_rows(
                 &self.run_name,
@@ -6243,7 +6284,7 @@ impl DiagnosisEvidence {
             spans: spans.to_vec(),
             endpoint_id: endpoint_id.map(str::to_string),
         });
-        if matches!(self.dependency, Some(DependencyTables::Own)) {
+        if self.collects_call_rows() {
             // §9's other sink, on the same clock: both sinks of one run share its
             // `clock.origin_instant()`, so one sweep over the two lists is a statement about
             // one run's wall time. The spans travel too, because §9's stage rows are the run's
@@ -6251,7 +6292,9 @@ impl DiagnosisEvidence {
             let rows =
                 pipeline_call_rows(&self.run_name, PIPELINE_SINK_LIFECYCLE, events, endpoint_id);
             self.pipeline_rows.extend(rows);
-            self.stage_span_rows = spans.iter().map(StageSpan::to_json).collect();
+            if matches!(self.dependency, Some(DependencyTables::Own)) {
+                self.stage_span_rows = spans.iter().map(StageSpan::to_json).collect();
+            }
         }
     }
 
@@ -6287,6 +6330,28 @@ impl DiagnosisEvidence {
     /// runs' reads to a run that made none of them.
     pub fn attach_dependency(&mut self, tables: Value) {
         self.dependency = Some(DependencyTables::Pooled(tables));
+    }
+
+    /// Ask for M8.4.2 §14's tables, built from the call rows this directory records.
+    ///
+    /// The same shape as [`Self::with_dependency_tables`] for the same reason: the switch
+    /// decides which files [`Self::finish`] writes and changes nothing else. A run that asks
+    /// for both gets M8.4.1's six names and this milestone's five over one collection pass,
+    /// because both read the same rows (§3).
+    pub fn with_cross_stage_tables(mut self) -> Self {
+        self.cross_stage = Some(CrossStageTables::Own);
+        self
+    }
+
+    /// M8.4.2's four tables for a directory assembled from several runs, already pooled by
+    /// [`crate::canonicalization::cross_stage_tables`] over the run records they came from.
+    ///
+    /// An assembly cannot use [`CrossStageTables::Own`]: this directory has no calls of its
+    /// own, and §5's direction is a clock order that only exists *within* a run — two runs'
+    /// monotonic origins are not comparable, so the pooling happens per run and the root
+    /// tables add the per-run counts up.
+    pub fn attach_cross_stage(&mut self, tables: Value) {
+        self.cross_stage = Some(CrossStageTables::Pooled(tables));
     }
 
     /// Describe this directory as a folding together of runs that already exist.
@@ -6461,6 +6526,49 @@ impl DiagnosisEvidence {
             None
         };
 
+        // M8.4.2 §14's four tables and §12's per-run pair list, and only under this
+        // milestone's switch. Built *before* the block below, which hands this run's lines and
+        // rows over to M8.4.1's tables and leaves those lists empty: one collection pass feeds
+        // both milestones, because both regroup the same published rows (§3) and neither takes a
+        // call or a clock reading this run did not already record (§26).
+        let cross_stage = match self.cross_stage.take() {
+            None => None,
+            Some(CrossStageTables::Pooled(tables)) => Some(tables),
+            Some(CrossStageTables::Own) => {
+                let mut record = self.own_provenance();
+                record["calls"] = Value::Array(self.pipeline_rows.clone());
+                let mut tables = cross_stage_tables(std::slice::from_ref(&record));
+                if let Some(object) = tables.as_object_mut() {
+                    object.insert(
+                        CROSS_STAGE_RUN_FILE.to_string(),
+                        cross_stage_run_table(&record),
+                    );
+                }
+                Some(tables)
+            }
+        };
+        if let Some(bundle) = cross_stage.as_ref() {
+            for name in CROSS_STAGE_FILES {
+                let table = bundle.get(name).ok_or_else(|| PipelineError::Evidence {
+                    path: self.dir.join(name),
+                    detail: format!("the bundle handed to this directory has no {name} table"),
+                })?;
+                self.write_whole(name, &with_metadata(table.clone(), &metadata))?;
+            }
+            // §12's per-run list is a run's own pairs, so a pooled bundle that carries none
+            // grows no empty table: those lists belong in the run directories, beside the rows
+            // they were paired from.
+            if let Some(table) = bundle
+                .get(CROSS_STAGE_RUN_FILE)
+                .filter(|table| table.is_object())
+            {
+                self.write_whole(
+                    CROSS_STAGE_RUN_FILE,
+                    &with_metadata(table.clone(), &metadata),
+                )?;
+            }
+        }
+
         // M8.4.1 §6's and §21's six tables, and only under this milestone's switch. The same
         // argument as the block above: each one is a grouping over what this directory already
         // recorded — its trace lines, and the two sinks' call rows — so a directory written
@@ -6472,33 +6580,11 @@ impl DiagnosisEvidence {
                 // sixth time: a directory whose simulations all refused to trace still gets the
                 // tables, and its chain and height say `null` there because nothing was
                 // recorded, not because the writer gave up.
-                let line = self.dependency_lines.first();
-                let at = |key: &str| match line {
-                    Some(line) => line[key].clone(),
-                    None => Value::Null,
-                };
-                let endpoint_id = match at("endpoint_id") {
-                    Value::Null => self
-                        .pipeline_rows
-                        .iter()
-                        .find_map(|row| row["endpoint_id"].as_str())
-                        .map(|digest| json!(digest))
-                        .unwrap_or(Value::Null),
-                    found => found,
-                };
-                dependency_tables_of(&[json!({
-                    "run": self.run_name,
-                    "source": at("source"),
-                    "chain_id": at("chain_id"),
-                    "block_number": at("block_number"),
-                    "endpoint_id": endpoint_id,
-                    "execution_mode": self.execution_mode,
-                    "git_revision": self.git_revision,
-                    "generated_at_unix_ms": self.generated_at_unix_ms,
-                    "lines": self.dependency_lines,
-                    "calls": self.pipeline_rows,
-                    "stage_spans": self.stage_span_rows,
-                })])
+                let mut record = self.own_provenance();
+                record["lines"] = Value::Array(std::mem::take(&mut self.dependency_lines));
+                record["calls"] = Value::Array(std::mem::take(&mut self.pipeline_rows));
+                record["stage_spans"] = Value::Array(std::mem::take(&mut self.stage_span_rows));
+                dependency_tables_of(&[record])
             }
             DependencyTables::Pooled(tables) => tables,
         });
@@ -6521,10 +6607,57 @@ impl DiagnosisEvidence {
                 outside.as_ref(),
                 bottleneck.as_ref(),
                 dependency.as_ref(),
+                cross_stage.as_ref(),
             ),
         )
         .map_err(|error| write_failed(README_FILE, error))?;
         Ok(self.dir.clone())
+    }
+
+    /// Whether this directory has to keep the call rows and trace lines the two evidence
+    /// milestones group over.
+    ///
+    /// Either switch asks for them, and the rows are read once for both (§3): M8.4.1 pairs
+    /// them into a dependency map and a stage ladder, M8.4.2 into duplicate pairs and reuse
+    /// candidates. A directory with neither keeps M8.2's file set and holds no rows at all,
+    /// which is why this is a question about memory and not about what gets written.
+    fn collects_call_rows(&self) -> bool {
+        matches!(self.dependency, Some(DependencyTables::Own))
+            || matches!(self.cross_stage, Some(CrossStageTables::Own))
+    }
+
+    /// This directory's own run record header: the eight fields both evidence milestones
+    /// publish about the run, read off what the run recorded rather than passed in again.
+    ///
+    /// Chain and height come from the first simulation trace line, because those are the
+    /// fields a simulation's window states; a run that recorded no simulation line, or whose
+    /// endpoint was only ever seen by the lifecycle sink, says so with `null` and with the
+    /// endpoint digest found in its rows rather than with a guess.
+    fn own_provenance(&self) -> Value {
+        let line = self.dependency_lines.first();
+        let at = |key: &str| match line {
+            Some(line) => line[key].clone(),
+            None => Value::Null,
+        };
+        let endpoint_id = match at("endpoint_id") {
+            Value::Null => self
+                .pipeline_rows
+                .iter()
+                .find_map(|row| row["endpoint_id"].as_str())
+                .map(|digest| json!(digest))
+                .unwrap_or(Value::Null),
+            found => found,
+        };
+        json!({
+            "run": self.run_name,
+            "source": at("source"),
+            "chain_id": at("chain_id"),
+            "block_number": at("block_number"),
+            "endpoint_id": endpoint_id,
+            "execution_mode": self.execution_mode,
+            "git_revision": self.git_revision,
+            "generated_at_unix_ms": self.generated_at_unix_ms,
+        })
     }
 
     fn write_whole(&mut self, name: &str, value: &Value) -> Result<()> {
@@ -6627,6 +6760,7 @@ fn readme(
     outside: Option<&Value>,
     bottleneck: Option<&Value>,
     dependency: Option<&Value>,
+    cross_stage: Option<&Value>,
 ) -> String {
     let mut lines: Vec<String> = Vec::new();
     lines.push(format!(
@@ -6782,6 +6916,20 @@ fn readme(
            splits by stage.\n"
         ),
     });
+    limitations.push_str(&match cross_stage {
+        Some(_) => "- The cross-stage tables say that one stage asked what another had \
+           already asked, and what would have to hold to serve the second from the first's \
+           answer; they do not say that the repeat was pointless. Whether it is wasteful \
+           depends on a lifetime this record cannot see — whether the first answer was still \
+           held, and whether the second asker needed a fresh read — and \
+           `{REUSE_CANDIDATES_FILE}` lists those as conditions rather than settling them.\n"
+            .to_string(),
+        None => format!(
+            "- This run did not ask for M8.4.2's cross-stage tables \
+           (`{DUPLICATE_MATRIX_FILE}` and the three beside it are written only under that \
+           switch), so nothing here says whether two stages of this run asked the same thing.\n"
+        ),
+    });
     limitations.push_str(
         "- Submission, receipt and header reads on other transports — the WebSocket client's \
            own request path, and everything `crates/execution` sends through its submitter — \
@@ -6913,6 +7061,48 @@ fn readme(
             reads["ordered"].as_u64().unwrap_or(0),
             reads["unknown"].as_u64().unwrap_or(0),
             pairs.join(", ")
+        ));
+    }
+    if let Some(bundle) = cross_stage {
+        let summary = &bundle[DUPLICATE_SUMMARY_FILE];
+        let candidates = &bundle[REUSE_CANDIDATES_FILE];
+        lines.push(format!(
+            "## Cross-stage RPC redundancy\n\n\
+             M8.4.2's switch was on, so the directory also holds four tables that answer \
+             「did two stages of this run ask for the same thing」 and nothing else: \
+             `{DUPLICATE_MATRIX_FILE}` (pairs per §4 duplicate class per §17 scope, with the \
+             totals both ways), `{DUPLICATE_SUMMARY_FILE}` (§16's figures, each also broken \
+             out by method, by producer stage and by consumer stage), \
+             `{REUSE_CANDIDATES_FILE}` (§15's one row per directed pair, carrying §6's three \
+             verdicts — duplicate, reusable, safe to reuse — and the five §6 conditions each \
+             verdict came from) and `{STAGE_PAIRS_FILE}` (§13's eleven named stage pairs, \
+             where a path with no RPC on either side is reported as `not_applicable` rather \
+             than as a zero). Beside them, `{CROSS_STAGE_RUN_FILE}` is this run's own pair \
+             list, un-pooled, so a figure in the four tables above traces to the single run \
+             that carried it. Like M8.4.1's, not one of these files issues a request or reads \
+             a clock: each regroups the call rows `pipeline-calls.json` already holds.\n\n\
+             This run: {} ask(s), {} of them repeating an earlier ask — {} exact, \
+             {} same target at a different block; {} cross-stage, {} within one stage; \
+             {} reuse candidate(s), {} of them safe to reuse.\n\n\
+             Two words are kept apart on purpose. `duplicate` is about the ask: two rows of \
+             one run whose §8 canonical key matches. `reusable` is about the answer, and a \
+             duplicate is not automatically reusable — §7's rule that equal data proves \
+             nothing about whether it may be served from a cache is why a pair that matches \
+             exactly can still be a candidate with `unknown` rather than a \
+             `yes`. `same_block=false` refuses one outright, since two asks of one target at \
+             two heights are not the same question (§23). Nothing in this milestone removes a \
+             read, adds a cache, or changes when a call is issued: §2 draws that line, and the \
+             candidates here stop at being candidates.\n",
+            summary["total_asks"].as_u64().unwrap_or(0),
+            summary["duplicate_pairs"].as_u64().unwrap_or(0),
+            summary["exact_duplicate_pairs"].as_u64().unwrap_or(0),
+            summary["same_target_different_block_pairs"]
+                .as_u64()
+                .unwrap_or(0),
+            summary["cross_stage_pairs"].as_u64().unwrap_or(0),
+            summary["intra_stage_pairs"].as_u64().unwrap_or(0),
+            candidates["candidates"].as_u64().unwrap_or(0),
+            candidates["safe_to_reuse"].as_u64().unwrap_or(0),
         ));
     }
     if let Some(runs) = summary.get("assembled_from").filter(|runs| runs.is_array()) {
@@ -10836,6 +11026,247 @@ mod tests {
         }
     }
 
+    /// §14/§15's switch, at the same writer and with the same three claims as the test above,
+    /// over a run whose calls contain one cross-stage duplicate on purpose: a reserve read
+    /// issued in detection and the same word read again by the interpreter, one §8 identity
+    /// asked twice across a stage boundary. The fifth arm asks for this milestone's switch
+    /// *alone*, which is where the two fields earn their separation — the run's chain id still
+    /// reaches the table, because the rows and the trace line they came from are collected for
+    /// either switch (§3).
+    #[test]
+    fn the_cross_stage_switch_adds_five_tables_and_leaves_the_other_two_switches_alone() {
+        let written = [
+            (false, false, false),
+            (true, false, false),
+            (true, true, false),
+            (true, true, true),
+            (false, false, true),
+        ]
+        .map(|(acquisition, dependency, cross_stage)| {
+            let dir = temp_dir(&format!("xstage-{acquisition}-{dependency}-{cross_stage}"));
+            let outcome = write_a_cross_stage_directory(&dir, acquisition, dependency, cross_stage);
+            let names = sorted_names(
+                &std::fs::read_dir(&outcome)
+                    .expect("the directory is readable")
+                    .map(|entry| {
+                        entry
+                            .expect("one entry")
+                            .file_name()
+                            .to_string_lossy()
+                            .to_string()
+                    })
+                    .collect::<Vec<String>>()
+                    .iter()
+                    .map(String::as_str)
+                    .collect::<Vec<&str>>(),
+            );
+            (outcome, names)
+        });
+        let read = |dir: &Path, name: &str| -> Value {
+            serde_json::from_str(
+                &std::fs::read_to_string(dir.join(name))
+                    .unwrap_or_else(|error| panic!("{name}: not readable: {error}")),
+            )
+            .expect("one JSON object")
+        };
+
+        // The listings: each switch adds its own names and no other switch's.
+        let base = [
+            TRACES_FILE,
+            SIMULATION_SUMMARY_FILE,
+            RPC_SUMMARY_FILE,
+            DUPLICATES_FILE,
+            OUTSIDE_FILE,
+            README_FILE,
+        ];
+        let acquisition_files = [
+            STORAGE_BREAKDOWN_FILE,
+            ACCOUNT_MATRIX_FILE,
+            RPC_GAPS_FILE,
+            BOTTLENECK_FILE,
+        ];
+        let cross_stage_files = CROSS_STAGE_FILES
+            .iter()
+            .copied()
+            .chain(std::iter::once(CROSS_STAGE_RUN_FILE))
+            .collect::<Vec<&str>>();
+        let expected = |extra: &[&[&'static str]]| -> Vec<&'static str> {
+            base.iter()
+                .copied()
+                .chain(extra.iter().flat_map(|list| list.iter().copied()))
+                .collect()
+        };
+        let dependency_files = DEPENDENCY_FILES.to_vec();
+        for (index, expected) in [
+            expected(&[]),
+            expected(&[&acquisition_files[..]]),
+            expected(&[&acquisition_files[..], &dependency_files[..]]),
+            expected(&[
+                &acquisition_files[..],
+                &dependency_files[..],
+                &cross_stage_files[..],
+            ]),
+            expected(&[&cross_stage_files[..]]),
+        ]
+        .iter()
+        .enumerate()
+        {
+            let (_, names) = &written[index];
+            assert_eq!(
+                names,
+                &sorted_names(expected),
+                "switch setting {index} wrote a file set other than the one its three flags \
+                 name"
+            );
+        }
+
+        // The five tables agree with each other, and every figure is this run's own four asks.
+        let (dir, _) = &written[3];
+        let matrix = read(dir, DUPLICATE_MATRIX_FILE);
+        let summary = read(dir, DUPLICATE_SUMMARY_FILE);
+        let candidates = read(dir, REUSE_CANDIDATES_FILE);
+        let pairs = read(dir, STAGE_PAIRS_FILE);
+        let per_run = read(dir, CROSS_STAGE_RUN_FILE);
+        assert_eq!(matrix["totals"]["pairs"], json!(1));
+        assert_eq!(matrix["rows"].as_array().expect("rows").len(), 1);
+        assert_eq!(
+            matrix["rows"][0]["producer_stage"],
+            json!("opportunity_detection")
+        );
+        assert_eq!(matrix["rows"][0]["consumer_stage"], json!("simulation"));
+        assert_eq!(
+            matrix["rows"][0]["duplicate_type"],
+            json!("exact_duplicate")
+        );
+        assert_eq!(matrix["rows"][0]["scope"], json!("cross_stage"));
+        assert_eq!(summary["total_asks"], json!(4));
+        assert_eq!(summary["duplicate_pairs"], json!(1));
+        assert_eq!(summary["exact_duplicate_pairs"], json!(1));
+        assert_eq!(summary["cross_stage_pairs"], json!(1));
+        assert_eq!(summary["intra_stage_pairs"], json!(0));
+        assert_eq!(summary["safe_reuse_candidates"], json!(0));
+        assert_eq!(candidates["pairs"], json!(1));
+        assert_eq!(candidates["candidates"], json!(1));
+        assert_eq!(candidates["safe_to_reuse"], json!(0));
+        assert_eq!(
+            candidates["rows"][0]["same_block"],
+            json!(true),
+            "both asks name height 37594591, so §23 does not refuse this pair — and it is \
+             still a candidate rather than safe, because no recorded field says who holds the \
+             first answer"
+        );
+        assert_eq!(candidates["rows"][0]["block_relation"], json!("same_block"));
+        assert_eq!(candidates["rows"][0]["identity"]["chain_id"], json!(91_342));
+        assert_eq!(
+            candidates["rows"][0]["producer"]["sink"],
+            json!("lifecycle")
+        );
+        assert_eq!(
+            candidates["rows"][0]["consumer"]["sink"],
+            json!("simulation")
+        );
+        assert_eq!(candidates["rows"][0]["producer"]["rpc_id"], json!(9));
+        assert_eq!(candidates["rows"][0]["consumer"]["rpc_id"], json!(1));
+        assert_eq!(pairs["rows"].as_array().expect("rows").len(), 11);
+        let detection_to_simulation = pairs["rows"]
+            .as_array()
+            .expect("rows")
+            .iter()
+            .find(|row| row["pair"] == json!("Detection -> Simulation"))
+            .expect("§13's eleven rows are all listed");
+        assert_eq!(detection_to_simulation["status"], json!("measured"));
+        assert_eq!(detection_to_simulation["pairs"], json!(1));
+        assert_eq!(detection_to_simulation["producer_asks"], json!(1));
+        assert_eq!(detection_to_simulation["consumer_asks"], json!(2));
+        assert_eq!(per_run["pairs"], json!(1));
+        assert_eq!(per_run["pairs_rows"].as_array().expect("rows").len(), 1);
+        assert_eq!(per_run["asks"], json!(4));
+        assert_eq!(
+            per_run["pairs_rows"][0]["candidate_id"], candidates["rows"][0]["candidate_id"],
+            "the per-run list and the pooled candidate row are the same pair stated twice, so \
+             a root figure has to name the run row it came from"
+        );
+
+        // The switch alone still reads the run's chain id off the trace line — the rows and
+        // the line are collected for either switch, which is what §3's shared-evidence rule
+        // asks for.
+        let (alone, _) = &written[4];
+        assert_eq!(
+            read(alone, REUSE_CANDIDATES_FILE)["rows"][0]["identity"]["chain_id"],
+            json!(91_342),
+            "a cross-stage directory written without M8.4.1's switch lost the run's chain from \
+             the identity, which means it re-derived the key instead of reading the record"
+        );
+        let alone_matrix = read(alone, DUPLICATE_MATRIX_FILE);
+        let alone_summary = read(alone, DUPLICATE_SUMMARY_FILE);
+        let alone_candidates = read(alone, REUSE_CANDIDATES_FILE);
+        assert_eq!(
+            alone_matrix["totals"], matrix["totals"],
+            "the matrix's totals moved with M8.4.1's switch, which makes this milestone's \
+             tables a re-analysis of rows that switch already wrote rather than an answer of \
+             their own"
+        );
+        assert_eq!(
+            alone_candidates["rows"][0]["identity"], candidates["rows"][0]["identity"],
+            "one ask's §8 identity came out two ways from one record"
+        );
+        for key in [
+            "total_asks",
+            "asks_with_identity",
+            "asks_without_identity",
+            "identity_groups",
+            "target_groups",
+            "duplicate_pairs",
+            "exact_duplicate_pairs",
+            "cross_stage_pairs",
+            "intra_stage_pairs",
+            "reuse_candidates",
+            "safe_reuse_candidates",
+            "refused_by_block_identity",
+        ] {
+            assert_eq!(
+                alone_summary[key], summary[key],
+                "the summary figure {key} depends on a switch this milestone does not use"
+            );
+        }
+
+        // The README names the five files it describes, and a directory without them says so.
+        let readme = std::fs::read_to_string(dir.join(README_FILE)).expect("readable");
+        for name in cross_stage_files.iter().copied() {
+            assert!(
+                readme.contains(name),
+                "the README of a directory that wrote {name} never names it"
+            );
+        }
+        let (older, _) = &written[2];
+        let older_readme = std::fs::read_to_string(older.join(README_FILE)).expect("readable");
+        assert!(
+            older_readme.contains("did not ask for M8.4.2"),
+            "a directory without the five tables has to say it did not ask for them"
+        );
+        assert!(
+            !older_readme.contains("## Cross-stage RPC redundancy"),
+            "the section that reports the five tables appeared in a directory that wrote none"
+        );
+
+        // Both directories ran the same calls, so every file the two share is byte-equal —
+        // asking for five more tables did not restate the ten already there. M8.4.1's own six
+        // are not in this list: their node ids carry the directory's name, and the two arms
+        // have different names by construction.
+        for name in base
+            .iter()
+            .filter(|name| **name != README_FILE)
+            .chain(acquisition_files.iter())
+        {
+            assert_eq!(
+                std::fs::read(older.join(name)).expect("older readable"),
+                std::fs::read(dir.join(name)).expect("newer readable"),
+                "{name} differs between the three-switch and two-switch directories, which \
+                 makes the new switch a re-analysis rather than an addition"
+            );
+        }
+    }
+
     /// One run, written under either setting of the two switches. The calls are the same in
     /// every arm: two interpreter storage reads of two different slots inside the simulation,
     /// and one head read in the lifecycle.
@@ -10876,6 +11307,72 @@ mod tests {
                 evm_metrics::Stage::Observation.as_str(),
                 Some((0, 500)),
             )],
+            Some("rpc-0123456789abcdef"),
+        );
+        evidence.finish().expect("writes")
+    }
+
+    /// One run, written under any of the three evidence switches, with the calls a cross-stage
+    /// duplicate needs: detection prices one word of the pool at the pin, and the interpreter
+    /// asks for that same word — same address, same slot, same height, same endpoint — inside
+    /// its own simulation. The second interpreter read is of a different slot, so it is the
+    /// control on the first: a run with a real repeat and a real non-repeat in it.
+    fn write_a_cross_stage_directory(
+        dir: &Path,
+        state_acquisition: bool,
+        dependency: bool,
+        cross_stage: bool,
+    ) -> PathBuf {
+        let events = vec![
+            labeled_storage_call(1, "0x01", 2_100, 2_400, "execute: step 0 — swap"),
+            labeled_storage_call(2, "0x02", 2_500, 2_800, "execute: step 0 — swap"),
+        ];
+        let mut evidence =
+            DiagnosisEvidence::open(dir, "revision", "build-only", state_acquisition)
+                .expect("the directory opens");
+        if dependency {
+            evidence = evidence.with_dependency_tables();
+        }
+        if cross_stage {
+            evidence = evidence.with_cross_stage_tables();
+        }
+        evidence.generated_at_unix_ms = 1_700_000_000_000;
+        evidence
+            .record(
+                SimulationDiagnosis::new(node_window(2_000, 3_000), events)
+                    .with_state_reads(Some(named_arm(true)))
+                    .with_endpoint(Some("rpc-0123456789abcdef".to_string())),
+                &[],
+            )
+            .expect("records");
+        // The same word, asked before the simulation ran, from a stage the cache M8.3.1 built
+        // cannot reach: §18's point, and the pair §13 names Detection -> Simulation.
+        let mut reserve_read =
+            labeled_storage_call(9, "0x01", 600, 700, "reserve priced at the pin");
+        reserve_read.stage = Some(
+            evm_metrics::Stage::OpportunityDetection
+                .as_str()
+                .to_string(),
+        );
+        evidence.record_lifecycle(
+            &[
+                labeled_call(
+                    8,
+                    "eth_getBlockByNumber",
+                    evm_metrics::Stage::Observation.as_str(),
+                    "head and header that fixed the pin",
+                    0,
+                    200,
+                ),
+                reserve_read,
+            ],
+            &[
+                span(evm_metrics::Stage::Observation.as_str(), Some((0, 500))),
+                span(
+                    evm_metrics::Stage::OpportunityDetection.as_str(),
+                    Some((550, 900)),
+                ),
+            ],
             Some("rpc-0123456789abcdef"),
         );
         evidence.finish().expect("writes")

@@ -1001,6 +1001,30 @@ pub struct ArbitrageArgs {
     #[arg(long)]
     diagnose_storage_dependency: bool,
 
+    /// M8.4.2 §11/§14's diagnosis-only switch: it adds that milestone's four pooled tables
+    /// (`duplicate-matrix.json`, `duplicate-summary.json`, `reuse-candidates.json`,
+    /// `stage-pairs.json`) plus this run's own pair list (`cross-stage-duplicates.json`), and
+    /// nothing else.
+    ///
+    /// The question it answers is 「did two stages of this run ask the node the same question,
+    /// and may the second ask have been answered from the first」 — a classification over the
+    /// call rows, never a change to them. No read is added, dropped, reordered, cached, batched
+    /// or prefetched because of this flag, and the candidate rows it writes carry a reuse verdict
+    /// that is a *question* answered per pair (§6/§7), not a switch that reuses anything.
+    ///
+    /// It is a separate flag from `--diagnose-storage-dependency` for the same reason that flag
+    /// is separate from `--diagnose-state-acquisition`: the evidence directories already
+    /// committed are gated file-for-file, and a switch that grew a listing when an older one was
+    /// on would fail that gate for a reason that is not a measurement. Note the direction it does
+    /// NOT go: this milestone's tables cite `pipeline-calls.json` as the raw rows they are
+    /// computed from, and that file is `--diagnose-storage-dependency`'s, so an evidence run
+    /// asks for both flags or its numbers cannot be recomputed from its own directory.
+    ///
+    /// Like the older flags it requires the diagnosis directory (`--rpc-trace`, or an
+    /// `--rpc-output` path), and refuses when given alone rather than doing nothing.
+    #[arg(long)]
+    diagnose_cross_stage: bool,
+
     /// M8.3.3 §9's bound on how many of one simulation's state reads may be waiting on the
     /// node at the same instant. Absent, the run is serial at that boundary exactly as
     /// M8.3.2's were (§28), and §10's baseline comparison depends on that.
@@ -1142,6 +1166,7 @@ impl ArbitrageArgs {
                 "--diagnose-storage-dependency",
                 self.diagnose_storage_dependency,
             ),
+            ("--diagnose-cross-stage", self.diagnose_cross_stage),
         ] {
             if given && diagnosis_home.is_none() {
                 return Err(format!(
@@ -1187,6 +1212,7 @@ impl ArbitrageArgs {
             state_read_concurrency: state_read_concurrency(self.state_read_concurrency)?,
             state_acquisition_diagnosis: self.diagnose_state_acquisition,
             storage_dependency_diagnosis: self.diagnose_storage_dependency,
+            cross_stage_diagnosis: self.diagnose_cross_stage,
         })
     }
 }

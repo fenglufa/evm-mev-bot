@@ -51,6 +51,7 @@
 //! (§45/§46).
 
 pub mod arbitrage;
+pub mod canonicalization;
 pub mod config;
 pub mod diagnosis;
 pub mod engine;

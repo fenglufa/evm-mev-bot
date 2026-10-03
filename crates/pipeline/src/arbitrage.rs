@@ -192,6 +192,18 @@ pub struct ArbitrageConfig {
     /// add a request, a batch, a cache, a concurrency bound, or an ordering — §1's list — and
     /// none of those is reachable from a field this module reads.
     pub storage_dependency_diagnosis: bool,
+    /// M8.4.2 §11/§14's diagnosis-only switch: it adds that milestone's four tables
+    /// (`duplicate-matrix.json`, `duplicate-summary.json`, `reuse-candidates.json`,
+    /// `stage-pairs.json`) plus the run's own pair list (`cross-stage-duplicates.json`), and
+    /// nothing else.
+    ///
+    /// The third field of the same shape for the same reason: what it reads is the call rows
+    /// M8.4.1's switch already collects, and the files it grows are regroupings of records this
+    /// directory already held — a cross-stage duplicate is only visible by comparing a lifecycle
+    /// read with a simulation read, so without this sink it would ever see one of the two. It
+    /// cannot add a read, remove one, reorder one, cache one, or change a concurrency bound — §2's
+    /// list — and none of those is reachable from a field this module reads.
+    pub cross_stage_diagnosis: bool,
 }
 
 /// One venue, as the node described it at the block the run pinned.
@@ -354,9 +366,13 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     //
     // M8.4.1 asks for this same sink under its own name rather than building a third one: §9's
     // stage rows have no other source for the lifecycle's calls, and a second sink on one
-    // handle would either duplicate every row or replace the first.
+    // handle would either duplicate every row or replace the first. M8.4.2 asks for the same
+    // sink for the same reason — a cross-stage duplicate is found by comparing a lifecycle read
+    // with a simulation read, and without this list it would only ever see one of the two.
     let lifecycle = if config.diagnosis_dir.is_some()
-        && (config.state_acquisition_diagnosis || config.storage_dependency_diagnosis)
+        && (config.state_acquisition_diagnosis
+            || config.storage_dependency_diagnosis
+            || config.cross_stage_diagnosis)
     {
         let sink = RpcTraceSink::new(
             clock.origin_instant(),
@@ -896,9 +912,16 @@ impl RunTrace {
         // M8.4.1's switch is that third reason for the same stamps: its §9 stage rows are these
         // same windows, so a run that asked for that milestone's tables and no `traces.jsonl`
         // still runs the recorder and writes nothing extra.
+        // M8.4.2's switch is a fourth reason, and it is not its own reason: that milestone's
+        // tables read only recorded call rows, whose `started_ns` comes from the sink's own
+        // monotonic origin, so no span of theirs needs this recorder. But the sink this switch
+        // builds also makes the directory write `outside-simulation-rpc.json`, and that file
+        // classifies every lifecycle call against the run's stage spans — with the recorder off
+        // it would hold nothing but `unknown`, which is a worse file rather than a smaller one.
         let measuring = evidence.is_some()
             || config.state_acquisition_diagnosis
-            || config.storage_dependency_diagnosis;
+            || config.storage_dependency_diagnosis
+            || config.cross_stage_diagnosis;
         Ok(Self {
             recorder: if measuring {
                 TraceRecorder::on(clock, trace)
@@ -1051,17 +1074,19 @@ impl RunDiagnosis {
         let evidence = match config.diagnosis_dir.as_ref() {
             None => None,
             Some(base) => {
-                let opened = DiagnosisEvidence::open(
+                let mut opened = DiagnosisEvidence::open(
                     &base.join(session_id),
                     git_revision(),
                     config.setup.mode.name(),
                     config.state_acquisition_diagnosis,
                 )?;
-                Some(if config.storage_dependency_diagnosis {
-                    opened.with_dependency_tables()
-                } else {
-                    opened
-                })
+                if config.storage_dependency_diagnosis {
+                    opened = opened.with_dependency_tables();
+                }
+                if config.cross_stage_diagnosis {
+                    opened = opened.with_cross_stage_tables();
+                }
+                Some(opened)
             }
         };
         Ok(Self {
@@ -1856,6 +1881,7 @@ mod tests {
             state_read_concurrency: 1,
             state_acquisition_diagnosis: false,
             storage_dependency_diagnosis: false,
+            cross_stage_diagnosis: false,
         }
     }
 
