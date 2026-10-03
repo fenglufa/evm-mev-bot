@@ -104,7 +104,7 @@ The last command's second invocation is the one that fails if a number in this d
 - 「storage 是独立的」 — no read here carries a proof of it, and the count of such proofs is in §1 above; a slot that differs is not one
 - 「provider 是瓶颈」 — one duration is recorded at the point a request becomes bytes on the wire, so node work, network round trip and this process's decode are not separable there (§9's second bullet)
 - 「C4 一定更优」 — no concurrency arm is in this directory, and the leg a proof of independence would have to be built on is the one §1 forbids this milestone to touch
-- 「execution RPC = 0」 — the execution lane's own adapter has no sink in this build: what its reads cost is in the lifecycle rows and the buckets above where the same adapter was traced, and the surfaces that stayed out are named rather than counted as none
+- 「execution RPC = 0」 — the lane's reads are in these tables: its adapter is built through `connect_with_trace`, so its head, nonce, balance and fee reads are the `preflight` and `build` rows of §5's table, and the only lane surfaces with no row are the ones a build-only run never reaches — `sign`, `submit`, `receipt`, which §8 counts as zero lines and §9 lists as a mode boundary rather than as a measured zero cost
 - 「network latency」 — nothing measured a round trip separately from a request, so every duration here is a total
 - 「this run got faster」 — nothing was changed to make a run faster, and the three live runs sit on three different blocks, so a difference between two of them is a difference between blocks as much as between anything else
 
