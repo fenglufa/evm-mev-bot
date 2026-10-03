@@ -700,6 +700,73 @@ fn the_state_acquisition_diagnosis_moves_one_field_and_refuses_a_missing_home() 
     assert!(named.state_acquisition_diagnosis);
 }
 
+/// M8.4.1 §14/§15's switch, tested the same way — and the two things that are specific to it:
+/// that it moves its own field and not M8.3.2's, and that the two switches stay independent.
+/// The second is not tidiness. M8.3.2's evidence directories are gated on their file listing
+/// (`crates/pipeline/tests/post_reuse_evidence.rs`), so a flag that implied the older switch —
+/// or that the older switch implied, adding six names to a directory nobody asked to grow —
+/// would turn a committed-evidence comparison into a diff about the file set rather than about
+/// a measurement.
+#[test]
+fn the_storage_dependency_diagnosis_moves_one_field_and_stays_apart_from_the_other_switch() {
+    let mut traced_flags = complete();
+    traced_flags.push("--rpc-trace");
+    let plain = build(&traced_flags).expect("a traced run");
+    assert!(
+        !plain.storage_dependency_diagnosis,
+        "§14: the dependency tables are opt-in, so the default command line writes M8.3.3's \
+         file set"
+    );
+
+    let mut flags = traced_flags.clone();
+    flags.push("--diagnose-storage-dependency");
+    let diagnosed = build(&flags).expect("the same route, its dependency tables asked for too");
+    assert!(diagnosed.storage_dependency_diagnosis);
+    assert!(
+        !diagnosed.state_acquisition_diagnosis,
+        "asking for M8.4.1's tables must not silently ask for M8.3.2's four acquisition files"
+    );
+
+    let trimmed = |config: &ArbitrageConfig, arm: &str| {
+        format!("{config:?}").replace(&format!("storage_dependency_diagnosis: {arm}"), "")
+    };
+    assert_eq!(
+        trimmed(&plain, "false"),
+        trimmed(&diagnosed, "true"),
+        "one field moved, and no other field of the config can tell this flag was typed"
+    );
+    assert_eq!(diagnosed.diagnosis_dir, plain.diagnosis_dir);
+    assert_eq!(diagnosed.state_read_reuse, plain.state_read_reuse);
+    assert_eq!(
+        diagnosed.state_read_concurrency,
+        plain.state_read_concurrency
+    );
+    assert_eq!(
+        diagnosed.setup.mode,
+        ExecutionMode::BuildOnly,
+        "§14/§15: a run that writes these tables signs nothing and broadcasts nothing"
+    );
+
+    // Both switches together is what an M8.4.1 evidence run is configured as: each still
+    // governs only its own files.
+    let mut flags = traced_flags.clone();
+    flags.extend([
+        "--diagnose-storage-dependency",
+        "--diagnose-state-acquisition",
+    ]);
+    let both = build(&flags).expect("the two switches compose");
+    assert!(both.storage_dependency_diagnosis && both.state_acquisition_diagnosis);
+
+    // Refused without a home, and named in the refusal.
+    let mut flags = complete();
+    flags.push("--diagnose-storage-dependency");
+    let refused = build(&flags).expect_err("tables with nowhere to write are a refusal");
+    assert!(
+        refused.contains("--diagnose-storage-dependency"),
+        "the refusal has to name the flag the caller typed: {refused}"
+    );
+}
+
 /// The built binary, run with these arguments — which start at the subcommand, because argv's
 /// first element is the program name the shell already gave it.
 fn binary(args: &[&str]) -> Output {

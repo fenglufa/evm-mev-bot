@@ -28,6 +28,7 @@ use std::time::Duration;
 
 use alloy_primitives::{Address, Bytes, I256, U256};
 use async_trait::async_trait;
+use evm_chain::{RpcTraceSink, RpcTraceSource};
 use evm_core::{BlockNumber, ChainId, LogIndex, TxHash, TxIndex};
 use evm_execution::{
     audit_route, broadcastable, reconcile_flows, swap_observations, transfer_flows, wrap_moves,
@@ -1168,6 +1169,22 @@ struct Scripted {
     answers: Mutex<VecDeque<SubmissionOutcome>>,
     receipts: Mutex<VecDeque<Option<Receipt>>>,
     sent: Mutex<Vec<Vec<u8>>>,
+    /// M8.4.1 §12's account of the lane: every read this endpoint answered, with the label the
+    /// lane had stamped on the run's trace at the instant it asked.
+    reads: Mutex<Vec<LaneRead>>,
+    /// The same sink handle the stage was given, so the endpoint can report what it was told
+    /// rather than the test having to guess. `None` is the uninstrumented arm.
+    trace: Option<RpcTraceSink>,
+}
+
+/// One read the lane asked for, as its endpoint saw it.
+struct LaneRead {
+    /// Which surface of the four this came in on — the endpoint's own name for the question.
+    site: &'static str,
+    /// The stage stamped at the moment of the ask, and the leg that asked, or `None` when
+    /// nothing was watching.
+    stage: Option<String>,
+    caller: Option<String>,
 }
 
 impl Scripted {
@@ -1193,7 +1210,53 @@ impl Scripted {
             answers: Mutex::new(VecDeque::new()),
             receipts: Mutex::new(receipts),
             sent: Mutex::new(Vec::new()),
+            reads: Mutex::new(Vec::new()),
+            trace: None,
         }
+    }
+
+    /// Answer reads while reporting the label the lane stamped on `trace` for each one.
+    fn traced(mut self, trace: RpcTraceSink) -> Self {
+        self.trace = Some(trace);
+        self
+    }
+
+    /// Tally one read and the label it went out under.
+    ///
+    /// The label is read here, at the endpoint, because that is the moment the lane's ask has
+    /// happened and its answer has not: a stamp the lane put after the read would be recorded
+    /// as what followed it, and §9's question is what asked.
+    fn read(&self, site: &'static str) {
+        let label = self
+            .trace
+            .as_ref()
+            .and_then(|sink| sink.context())
+            .map(|context| (Some(context.stage), Some(context.caller)));
+        let (stage, caller) = label.unwrap_or((None, None));
+        self.reads
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .push(LaneRead {
+                site,
+                stage,
+                caller,
+            });
+    }
+
+    /// The reads this endpoint answered, in arrival order, each with its label.
+    fn lane_reads(&self) -> Vec<LaneRead> {
+        // A clone of the whole tally: `LaneRead` owns its strings, and the test that compares
+        // two arms holds two of these endpoints, so this borrows nothing.
+        self.reads
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .iter()
+            .map(|read| LaneRead {
+                site: read.site,
+                stage: read.stage.clone(),
+                caller: read.caller.clone(),
+            })
+            .collect()
     }
 
     /// The receipt for transaction `position`, in the shape the M6 probe measured on this
@@ -1309,6 +1372,7 @@ impl FeeSource for Scripted {
         tx_type: TransactionType,
         policy: &FeePolicy,
     ) -> evm_execution::Result<FeeReading> {
+        self.read("fee_reading");
         policy.apply(
             CHAIN,
             block_number,
@@ -1320,10 +1384,12 @@ impl FeeSource for Scripted {
     }
 
     async fn suggested_tip(&self) -> evm_execution::Result<Option<U256>> {
+        self.read("suggested_tip");
         Ok(Some(u(TIP as u128)))
     }
 
     async fn balance(&self, address: Address, block_number: u64) -> evm_execution::Result<U256> {
+        self.read("balance");
         Ok(self
             .balances
             .get(&block_number)
@@ -1340,6 +1406,7 @@ impl AssetReader for Scripted {
         account: Address,
         block_number: u64,
     ) -> evm_execution::Result<AssetReading> {
+        self.read("token_balance");
         Ok(AssetReading {
             amount: self
                 .tokens
@@ -1356,6 +1423,7 @@ impl AssetReader for Scripted {
 #[async_trait]
 impl NonceSource for Scripted {
     async fn nonce(&self, address: Address) -> evm_execution::Result<NonceReading> {
+        self.read("nonce");
         let seen = self.next_nonce.load(Ordering::SeqCst);
         Ok(NonceReading {
             address,
@@ -1375,10 +1443,12 @@ impl ChainReader for Scripted {
         &self,
         number: BlockNumber,
     ) -> evm_execution::Result<Option<alloy_primitives::B256>> {
+        self.read("block_hash_at");
         Ok(self.blocks.get(&number.0).copied())
     }
 
     async fn endpoint_chain_id(&self) -> evm_execution::Result<u64> {
+        self.read("endpoint_chain_id");
         Ok(CHAIN)
     }
 }
@@ -2322,4 +2392,212 @@ async fn a_balance_the_logs_do_not_explain_is_stated_as_a_flow_gap() {
         report.sources
     );
     assert_eq!(metrics.get("execution_sequence_flow_unreconciled"), 1);
+}
+
+// ---------------------------------------------------------------------------
+// M8.4.1 §9, §11, §12: the execution lane under the same trace as the simulation
+// ---------------------------------------------------------------------------
+
+/// A sink with no simulation behind it — the lane's reads are the only ones it sees.
+fn lane_sink() -> RpcTraceSink {
+    RpcTraceSink::new(
+        std::time::Instant::now(),
+        "lane-under-test",
+        RpcTraceSource::Live,
+        Some(CHAIN),
+    )
+}
+
+/// §9, §11: which leg of the lane asked for each read.
+///
+/// M8.3.2's `outside-simulation-rpc.json` could only say *that* the execution lane read the
+/// node; it could not say which of the lane's own legs a given `eth_getBalance` belonged to,
+/// because the lane opened a socket no sink was watching. The lane now answers through the
+/// run's own adapter, and this table is what that buys: ten named questions, each carrying the
+/// stage and the caller the code stamped before asking it.
+///
+/// The order matters as much as the labels. The three before-snapshot rows come first because
+/// §20's snapshot is taken before any transaction is priced; the five step-1 rows then follow
+/// [`SequenceStage::drive_step`]'s recipe — price, nonce, then §26's gate — and the run ends
+/// there because `BuildOnly` refuses to read a key. Nothing in the fixture decides that order:
+/// it is the crate's control flow, and the assertion is written against what the endpoint saw.
+#[tokio::test]
+async fn every_lane_read_arrives_labelled_with_the_leg_that_asked() {
+    let sink = lane_sink();
+    let endpoint = Scripted::new(ExecutionMode::BuildOnly).traced(sink.clone());
+    let (stage, scripted) = assemble(endpoint, ExecutionMode::BuildOnly, Tolerance::new(1, 100));
+    let mut stage = stage.with_rpc_trace(sink);
+    let mut metrics = Metrics::default();
+    let report = drive(&mut stage, &mut metrics).await;
+    assert_eq!(scripted.sent_count(), 0);
+    let reads = scripted.lane_reads();
+    let table: Vec<(&str, Option<&str>, Option<&str>)> = reads
+        .iter()
+        .map(|read| (read.site, read.stage.as_deref(), read.caller.as_deref()))
+        .collect();
+    assert_eq!(
+        table,
+        vec![
+            (
+                "balance",
+                Some("build"),
+                Some("before-snapshot: native and input-token balances")
+            ),
+            (
+                "token_balance",
+                Some("build"),
+                Some("before-snapshot: native and input-token balances")
+            ),
+            (
+                "token_balance",
+                Some("build"),
+                Some("before-snapshot: native and input-token balances")
+            ),
+            (
+                "fee_reading",
+                Some("build"),
+                Some("step 1: fee at pinned block")
+            ),
+            (
+                "nonce",
+                Some("build"),
+                Some("step 1: pending and latest nonces")
+            ),
+            (
+                "endpoint_chain_id",
+                Some("build"),
+                Some("step 1: gate — endpoint chain id")
+            ),
+            (
+                "block_hash_at",
+                Some("build"),
+                Some("step 1: gate — block binding at pin")
+            ),
+            (
+                "balance",
+                Some("build"),
+                Some("step 1: gate — native balance")
+            ),
+        ],
+        "{table:#?}"
+    );
+    // §20's ceiling, stated as a number rather than as prose: `BuildOnly` stops at the first
+    // step's sign, so the after-snapshot and every later step's reads never happen.
+    assert_eq!(report.stopped_at, Some(0));
+    assert_eq!(report.reached, Some(ExecutionStatus::Built));
+}
+
+/// §11, §17: a run that does send the route labels *every* read, and none of them lands
+/// outside the four stages the lane's own work belongs to.
+///
+/// The count is the interesting part: 3 + 6×6 + 3. Two snapshots of three reads each (native
+/// plus the route's two tokens), and per step five reads under `build` — price, nonce, and
+/// §26's three gate facts — plus one `block_hash_at` under `receipt`, where
+/// [`crate::sequence::ReceiptTracker`] re-binds the block the receipt arrived in. A read that
+/// arrived unlabelled would mean a leg of the lane the trace cannot name, which is exactly the
+/// gap §11 forbids leaving silently.
+#[tokio::test]
+async fn a_route_that_sends_labels_every_read_it_asked_for() {
+    let sink = lane_sink();
+    let endpoint = Scripted::new(ExecutionMode::Submit).traced(sink.clone());
+    let (stage, scripted) = assemble(endpoint, ExecutionMode::Submit, Tolerance::new(1, 100));
+    let mut stage = stage.with_rpc_trace(sink);
+    let mut metrics = Metrics::default();
+    let report = drive(&mut stage, &mut metrics).await;
+    assert!(report.completed, "{}", report.detail);
+
+    let reads = scripted.lane_reads();
+    assert_eq!(reads.len(), 42, "3 + 6 steps × 6 + 3");
+    let unlabelled: Vec<&str> = reads
+        .iter()
+        .filter(|read| read.stage.is_none() || read.caller.is_none())
+        .map(|read| read.site)
+        .collect();
+    assert!(unlabelled.is_empty(), "{unlabelled:?}");
+
+    let stages: std::collections::BTreeSet<&str> = reads
+        .iter()
+        .map(|read| read.stage.as_deref().unwrap_or_default())
+        .collect();
+    assert_eq!(
+        stages,
+        std::collections::BTreeSet::from(["build", "receipt", "settlement"])
+    );
+    // The last snapshot is the settlement one, and it is the only place `settlement` appears —
+    // a label that had leaked out of `settle` would show up here as a second run of rows.
+    let settlement = reads
+        .iter()
+        .filter(|read| read.stage.as_deref() == Some("settlement"))
+        .count();
+    assert_eq!(settlement, 3);
+    assert!(report.after.is_some(), "{}", report.detail);
+}
+
+/// §12: the instrument did not add, drop or reorder a call, and did not change what the run
+/// concluded.
+///
+/// Two arms, same fixture, same mode — one with the sink on both the stage and its endpoint,
+/// one with neither. The comparison is on the endpoint's own tally (what the lane asked for,
+/// in the order it asked) and on the report's non-timestamp fields, because those are the
+/// fields a run's *semantics* live in: a stamp that had also inserted a read, or re-ordered
+/// one, or changed a label the code then read back, would show up as a differing sequence, a
+/// differing count, or a differing `detail`.
+#[tokio::test]
+async fn labelling_the_lane_changes_neither_its_calls_nor_its_verdict() {
+    let sink = lane_sink();
+    let (mut traced_stage, traced_endpoint) = assemble(
+        Scripted::new(ExecutionMode::BuildOnly).traced(sink.clone()),
+        ExecutionMode::BuildOnly,
+        Tolerance::new(1, 100),
+    );
+    traced_stage = traced_stage.with_rpc_trace(sink);
+    let mut traced_metrics = Metrics::default();
+    let traced = drive(&mut traced_stage, &mut traced_metrics).await;
+
+    let (mut plain_stage, plain_endpoint) = assemble(
+        Scripted::new(ExecutionMode::BuildOnly),
+        ExecutionMode::BuildOnly,
+        Tolerance::new(1, 100),
+    );
+    let mut plain_metrics = Metrics::default();
+    let plain = drive(&mut plain_stage, &mut plain_metrics).await;
+
+    let traced_sites: Vec<&str> = traced_endpoint
+        .lane_reads()
+        .iter()
+        .map(|read| read.site)
+        .collect();
+    let plain_sites: Vec<&str> = plain_endpoint
+        .lane_reads()
+        .iter()
+        .map(|read| read.site)
+        .collect();
+    assert_eq!(traced_sites, plain_sites);
+    assert_eq!(traced_sites.len(), plain_sites.len());
+    // The instrumented arm is the one that has labels to lose, so a bare count match is only
+    // meaningful if that arm really was watched.
+    assert!(traced_endpoint
+        .lane_reads()
+        .iter()
+        .all(|read| read.stage.is_some()));
+    assert!(plain_endpoint
+        .lane_reads()
+        .iter()
+        .all(|read| read.stage.is_none()));
+
+    assert_eq!(traced.completed, plain.completed);
+    assert_eq!(traced.steps_planned, plain.steps_planned);
+    assert_eq!(traced.reached, plain.reached);
+    assert_eq!(traced.stopped_at, plain.stopped_at);
+    assert_eq!(traced.detail, plain.detail);
+    assert_eq!(traced.sources, plain.sources);
+    assert_eq!(traced.transactions.len(), plain.transactions.len());
+    assert_eq!(
+        traced.before.map(|snapshot| snapshot.provenance),
+        plain.before.map(|snapshot| snapshot.provenance)
+    );
+    assert_eq!(
+        traced_metrics.counters.entries(),
+        plain_metrics.counters.entries()
+    );
 }

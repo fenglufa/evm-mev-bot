@@ -586,3 +586,241 @@ async fn a_simulation_sink_replaces_the_lifecycle_sink_it_inherits() {
     assert_eq!(lifecycle.simulation_id(), "lifecycle");
     assert_eq!(simulation.simulation_id(), "simulation");
 }
+
+/// M8.4.1 §4's caller field, tested where the claim is actually made: on the way to the
+/// wire. A stamp is a statement about the *next* calls this sink records, so a call issued
+/// under it must carry it, and a call issued after the label is taken off must not inherit
+/// it — it must say it was never labelled. The second half is the part a reader can't get
+/// from the code alone: an absent `stage` and a `stage` that quietly belongs to an earlier
+/// phase look identical in a table.
+#[tokio::test]
+async fn a_stamped_context_lands_on_the_call_issued_under_it() {
+    let (stub, base) = connected(Behaviour::Answer).await;
+    let observed = sink();
+    let traced = ChainAdapter::with_rpc_trace(&base, observed.clone()).expect("a source to watch");
+
+    observed.set_context("simulation", "account: sender");
+    traced
+        .get_balance(BlockNumber(100), POOL)
+        .await
+        .expect("balance");
+    observed.clear_context();
+    traced
+        .get_nonce(BlockNumber(100), POOL)
+        .await
+        .expect("nonce");
+
+    let events = observed.events();
+    assert_eq!(events.len(), 2);
+    assert_eq!(
+        (
+            events[0].stage.as_deref(),
+            events[0].caller.as_deref(),
+            events[0].context_note,
+        ),
+        (Some("simulation"), Some("account: sender"), None),
+        "the read issued under the stamp carries that stamp and calls it exact"
+    );
+    assert_eq!(
+        (
+            events[1].stage.as_deref(),
+            events[1].caller.as_deref(),
+            events[1].context_note,
+        ),
+        (None, None, Some(evm_chain::CONTEXT_NOT_STAMPED)),
+        "the read after the label was cleared borrows nothing — absence is named: {:?}",
+        events[1]
+    );
+    assert_eq!(
+        stub.received().len(),
+        3,
+        "connect plus the two reads: stamping asked the node for nothing"
+    );
+    assert_eq!(observed.outstanding_calls(), 0);
+}
+
+/// §11's published blind spot, closed: the call that *learns* the chain id is now a record,
+/// and it is a record without pretending to know things it cannot know yet — it is keyed
+/// against no chain (the id is what it returns), it carries no stage (nothing stamped), and
+/// the sink's chain id is filled only once the answer is read. The untraced control on the
+/// second stub is §12 applied to `connect`: the same one arrival either way.
+#[tokio::test]
+async fn the_connect_call_that_learns_the_chain_id_is_recorded_and_adds_no_request() {
+    let stub = Stub::spawn(Behaviour::Answer);
+    let observed = RpcTraceSink::new(
+        std::time::Instant::now(),
+        "connect-under-test",
+        RpcTraceSource::Live,
+        None,
+    );
+    assert_eq!(
+        observed.chain_id(),
+        None,
+        "the sink starts without a chain id"
+    );
+    let adapter = HttpChainAdapter::connect_with_trace(&stub.url, Some(observed.clone()))
+        .await
+        .expect("the stub answers eth_chainId");
+
+    assert_eq!(
+        stub.received(),
+        vec!["eth_chainId".to_string()],
+        "one POST, which is all a connect has ever been"
+    );
+    assert_eq!(adapter.chain_id(), CHAIN);
+    assert_eq!(
+        observed.chain_id(),
+        Some(CHAIN.0),
+        "the id the call returned is now the sink's, so every later key is keyed on it"
+    );
+    assert!(observed.endpoint_id().is_some());
+
+    let events = observed.events();
+    assert_eq!(events.len(), 1);
+    assert_eq!(events[0].method, "eth_chainId");
+    assert!(events[0].success);
+    assert_eq!(events[0].block, None);
+    assert_eq!(
+        events[0].dedup_key, None,
+        "a call made before the chain id exists cannot be keyed by one"
+    );
+    assert_eq!(
+        events[0].key_note,
+        Some(evm_chain::DEDUP_KEY_UNAVAILABLE_FOR_METHOD)
+    );
+    assert_eq!(
+        (
+            events[0].stage.as_deref(),
+            events[0].caller.as_deref(),
+            events[0].context_note,
+        ),
+        (None, None, Some(evm_chain::CONTEXT_NOT_STAMPED)),
+        "the connect is observed, and not attributed to a stage nobody had entered yet"
+    );
+
+    // The one call this test exists to make visible, read from the other side: a later read
+    // through the same adapter is keyed on the id the first call returned. The address half of
+    // the key is not restated here — it is `describe_call`'s own normalization, already
+    // asserted above; what this assertion is about is the chain field.
+    adapter
+        .get_code(BlockNumber(100), POOL)
+        .await
+        .expect("code");
+    let later_key = observed.events()[1]
+        .dedup_key
+        .as_deref()
+        .expect("a key")
+        .to_string();
+    assert!(
+        later_key.starts_with(&format!("code|{}|100|", CHAIN.0)),
+        "the read after the connect is keyed on the chain the connect learned: {later_key}"
+    );
+    assert!(!later_key.contains("chain-unknown"));
+
+    let control = Stub::spawn(Behaviour::Answer);
+    HttpChainAdapter::connect(&control.url)
+        .await
+        .expect("the same stub, the same answer");
+    assert_eq!(
+        control.received(),
+        vec!["eth_chainId".to_string()],
+        "a sink on the connect path is one more line in a timeline, not one more request"
+    );
+}
+
+/// §12's rule at the layer that carries the label: three reads stamped one after another
+/// against a second stub's identical, unstamped sequence. If stamping cost a request — a
+/// re-read of the block, a `eth_chainId` per phase — the two sequences would diverge here.
+#[tokio::test]
+async fn stamping_a_sink_adds_no_request() {
+    let (stub, base) = connected(Behaviour::Answer).await;
+    let observed = sink();
+    let traced = ChainAdapter::with_rpc_trace(&base, observed.clone()).expect("a source to watch");
+
+    observed.set_context("simulation", "state: code");
+    traced.get_code(BlockNumber(100), POOL).await.expect("code");
+    observed.set_context("simulation", "state: balance");
+    traced
+        .get_balance(BlockNumber(100), POOL)
+        .await
+        .expect("balance");
+    observed.set_context("preflight", "nonce: sender");
+    traced
+        .get_nonce(BlockNumber(100), POOL)
+        .await
+        .expect("nonce");
+
+    let (untouched, plain_base) = connected(Behaviour::Answer).await;
+    let plain: std::sync::Arc<dyn ChainAdapter> = std::sync::Arc::new(plain_base);
+    plain.get_code(BlockNumber(100), POOL).await.expect("code");
+    plain
+        .get_balance(BlockNumber(100), POOL)
+        .await
+        .expect("balance");
+    plain
+        .get_nonce(BlockNumber(100), POOL)
+        .await
+        .expect("nonce");
+
+    assert_eq!(
+        stub.received(),
+        untouched.received(),
+        "stamped and unstamped ask for the same things in the same order"
+    );
+    let events = observed.events();
+    assert_eq!(
+        events
+            .iter()
+            .map(|event| event.caller.as_deref().unwrap_or("-"))
+            .collect::<Vec<_>>(),
+        vec!["state: code", "state: balance", "nonce: sender"],
+        "each read reports the phase that was stamped immediately before it"
+    );
+    assert!(events.iter().all(|event| event.context_note.is_none()));
+}
+
+/// The failure mode a stamped label has that a per-call argument does not: two calls open at
+/// one sink are both issued under the one label, and neither can be called exact. Both
+/// records must say so — this is the claim §20's "no unproven attribution" turns into when
+/// the pipeline does run calls concurrently, and it is checked at the wire because that is
+/// where the overlap happens.
+#[tokio::test]
+async fn two_calls_open_at_one_sink_both_say_their_label_is_shared() {
+    let (stub, base) = connected(Behaviour::Answer).await;
+    let observed = sink();
+    let traced = ChainAdapter::with_rpc_trace(&base, observed.clone()).expect("a source to watch");
+    observed.set_context("simulation", "codes: touched_contracts");
+
+    let (code, balance) = tokio::join!(
+        traced.get_code(BlockNumber(100), POOL),
+        traced.get_balance(BlockNumber(100), POOL)
+    );
+    code.expect("code");
+    balance.expect("balance");
+
+    let events = observed.events();
+    assert_eq!(events.len(), 2);
+    for event in &events {
+        assert_eq!(event.stage.as_deref(), Some("simulation"));
+        assert_eq!(
+            event.caller.as_deref(),
+            Some("codes: touched_contracts"),
+            "each call keeps the label it was issued under"
+        );
+        assert_eq!(
+            event.context_note,
+            Some(evm_chain::CONTEXT_AMBIGUOUS_CONCURRENT_CALLS),
+            "and both say the label was shared with another open call"
+        );
+    }
+    assert_eq!(
+        stub.received().len(),
+        3,
+        "connect plus the two reads — being two at once did not double anything"
+    );
+    assert_eq!(
+        observed.outstanding_calls(),
+        0,
+        "both guards released, so the next call is not ambiguously attributed by a stranded count"
+    );
+}
