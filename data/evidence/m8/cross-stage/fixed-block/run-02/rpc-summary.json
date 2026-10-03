@@ -1,0 +1,511 @@
+{
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_refusals": [],
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791046257242,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "per_method": [
+    {
+      "count": 1,
+      "dedup_eligible": false,
+      "distribution_ns": {
+        "max_ns": 1691291,
+        "measured": true,
+        "min_ns": 1691291,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": "dedup_key_unavailable_for_method",
+      "max_duration_ns": 1691291,
+      "method": "eth_chainId",
+      "min_duration_ns": 1691291,
+      "retried_calls": 0,
+      "source": "fixture",
+      "success_count": 1,
+      "total_attempts": 1,
+      "total_duration_ns": 1691291
+    },
+    {
+      "count": 6,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 42463666,
+        "measured": true,
+        "min_ns": 888333,
+        "p50_ns": 1449166,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 6,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 42463666,
+      "method": "eth_getBalance",
+      "min_duration_ns": 888333,
+      "retried_calls": 0,
+      "source": "fixture",
+      "success_count": 6,
+      "total_attempts": 6,
+      "total_duration_ns": 71063665
+    },
+    {
+      "count": 1,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 4412792,
+        "measured": true,
+        "min_ns": 4412792,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 4412792,
+      "method": "eth_getBlockByNumber",
+      "min_duration_ns": 4412792,
+      "retried_calls": 0,
+      "source": "fixture",
+      "success_count": 1,
+      "total_attempts": 1,
+      "total_duration_ns": 4412792
+    },
+    {
+      "count": 6,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 6373500,
+        "measured": true,
+        "min_ns": 1510417,
+        "p50_ns": 2084834,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 6,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 6373500,
+      "method": "eth_getCode",
+      "min_duration_ns": 1510417,
+      "retried_calls": 0,
+      "source": "fixture",
+      "success_count": 6,
+      "total_attempts": 6,
+      "total_duration_ns": 22872543
+    },
+    {
+      "count": 21,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 52128208,
+        "measured": true,
+        "min_ns": 669000,
+        "p50_ns": 1846167,
+        "p90_ns": 3773167,
+        "p95_ns": 5480166,
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 21,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 52128208,
+      "method": "eth_getStorageAt",
+      "min_duration_ns": 669000,
+      "retried_calls": 0,
+      "source": "fixture",
+      "success_count": 21,
+      "total_attempts": 21,
+      "total_duration_ns": 95966374
+    },
+    {
+      "count": 6,
+      "dedup_eligible": true,
+      "distribution_ns": {
+        "max_ns": 108259208,
+        "measured": true,
+        "min_ns": 1268417,
+        "p50_ns": 1409250,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 6,
+        "unit": "ns"
+      },
+      "error_classes": {},
+      "failure_count": 0,
+      "key_note": null,
+      "max_duration_ns": 108259208,
+      "method": "eth_getTransactionCount",
+      "min_duration_ns": 1268417,
+      "retried_calls": 0,
+      "source": "fixture",
+      "success_count": 6,
+      "total_attempts": 6,
+      "total_duration_ns": 130737542
+    }
+  ],
+  "per_source": [
+    {
+      "calls_per_simulation": {
+        "distribution": {
+          "max": 41,
+          "measured": true,
+          "min": 41,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "count"
+        },
+        "integer_mean": 41
+      },
+      "failed_calls": 0,
+      "gap_count_total": 40,
+      "gap_wide_simulations": 1,
+      "gap_width_distribution_ns": {
+        "max_ns": 3451500,
+        "measured": true,
+        "min_ns": 26750,
+        "p50_ns": 193500,
+        "p90_ns": 1435459,
+        "p95_ns": 1687708,
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 40,
+        "unit": "ns"
+      },
+      "overlap_simulations": 0,
+      "per_simulation_gap_ns": {
+        "max_ns": 22697918,
+        "measured": true,
+        "min_ns": 22697918,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "per_simulation_non_rpc_ns": {
+        "max_ns": 24977335,
+        "measured": true,
+        "min_ns": 24977335,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "per_simulation_overlap_ns": {
+        "max_ns": 0,
+        "measured": true,
+        "min_ns": 0,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "per_simulation_serial_wait_ns": {
+        "max_ns": 326744207,
+        "measured": true,
+        "min_ns": 326744207,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "per_simulation_sum_ns": {
+        "max_ns": 326744207,
+        "measured": true,
+        "min_ns": 326744207,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "per_simulation_union_ns": {
+        "max_ns": 326744207,
+        "measured": true,
+        "min_ns": 326744207,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "per_simulation_wall_ns": {
+        "max_ns": 349442125,
+        "measured": true,
+        "min_ns": 349442125,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "retried_calls": 0,
+      "serial_simulations": 1,
+      "simulations": 1,
+      "simulations_without_calls": 0,
+      "source": "fixture",
+      "successful_calls": 41,
+      "total_attempts": 41,
+      "total_calls": 41
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "simulations": 1,
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}

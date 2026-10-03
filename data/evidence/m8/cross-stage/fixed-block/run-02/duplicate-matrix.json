@@ -1,0 +1,43 @@
+{
+  "canonicalization_schema": 1,
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_schema": 2,
+  "duplicate_classes": [
+    "exact_duplicate",
+    "semantic_duplicate",
+    "same_target_different_block",
+    "same_method_different_semantics",
+    "same_target_block_undetermined",
+    "not_a_duplicate"
+  ],
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791046257242,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "pair_formation_rule": "one ask is examined once, against the earliest earlier ask that asked the same thing. If an earlier ask with the identical §8 identity exists, the pair is §4.1's exact duplicate and its producer is the earliest ask of that identity. If not, but an earlier ask of the same target exists — the same identity with the block term removed — the producer is that earliest ask of the target, and §4's class is decided by the two block terms. An ask with neither is the first ask for its target and forms no pair. Pairs are formed between rows, and a row is one logical request with its HTTP tries listed beside it, so §25's rule holds by construction: a call that tried three times is one ask here and cannot contribute three duplicates.",
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "which stage's answer is the same ask as which later stage's, per §4's duplicate class, per run",
+  "recompute": "one row per (producer stage, consumer stage, class, scope) over every pair of every run in `runs`; the identity list is the §8 identity of each pair's consumer, so a cell can be traced to the rows it came from",
+  "rows": [],
+  "runs": 1,
+  "scopes": [
+    "cross_stage",
+    "intra_stage",
+    "same_logical_request"
+  ],
+  "sources_are_never_blended": true,
+  "totals": {
+    "by_class": {},
+    "by_scope": {},
+    "pairs": 0
+  },
+  "unit": "ns"
+}

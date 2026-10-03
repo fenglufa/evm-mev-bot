@@ -1,6 +1,6 @@
 # M8.2 simulation state acquisition diagnosis
 
-3 simulation(s) are recorded here — one line of `simulation-traces.jsonl` each, with the
+1 simulation(s) are recorded here — one line of `simulation-traces.jsonl` each, with the
 per-method and per-source tables in `rpc-summary.json`, `simulation-summary.json` and
 `duplicate-reads.json`. Nothing here changed what the run decided: the difference between a
 traced run and an untraced one is that a call which was already about to happen got two
@@ -98,49 +98,27 @@ counts simulations that ran, were traced, and asked the node for nothing.
 
 ## Known limitations
 
-- `live`: 3 simulation(s) measured fully serial, 0 with any overlap, 0 with no recorded call inside the window. A source with one simulation cannot support p90 or above, and says so rather than estimating.
+- `fixture`: 1 simulation(s) measured fully serial, 0 with any overlap, 0 with no recorded call inside the window. A source with one simulation cannot support p90 or above, and says so rather than estimating.
 - The record is taken at the wire, so a slow decode and a slow node are one number (§17). What separates them here is the attempt list, not a sub-timer.
-- Detection-stage reads (the reserves priced before a simulation is built) and the gate's own reads are **not** in these traces: the sink here is attached to the adapter the simulation itself reads through, so a call in a trace line is a call that simulation made. The rest of the lifecycle is reported beside them, in `outside-simulation-rpc.json`, and classified by the stage that held it.
-- This run did not ask for M8.4.1's dependency and pipeline tables (`storage-reads.json` and the five beside it are written only under that switch), so nothing here says which storage read waited on which, nor how the lifecycle's RPC splits by stage.
+- Detection-stage reads (the reserves priced before a simulation is built) and the gate's own reads are not in these traces: the sink is attached to the adapter the simulation itself reads through, so a call in this directory is a call that simulation made. This run did not ask for the lifecycle half (`outside-simulation-rpc.json` is written only when §17's switch is on), so nothing here says what those other reads cost.
+- The dependency file says which leg issued a read and what that leg's own proof is; it does not say whether the read *could* have been issued earlier. Whether a slot is needed before a later call is a question about values, and the only values recorded here are the ones the requests carried.
 - This run did not ask for M8.4.2's cross-stage tables (`duplicate-matrix.json` and the three beside it are written only under that switch), so nothing here says whether two stages of this run asked the same thing.
 - Submission, receipt and header reads on other transports — the WebSocket client's own request path, and everything `crates/execution` sends through its submitter — are outside what this adapter sees, and are named here rather than counted as zero.
 - A source whose adapter cannot hand out a traced clone reports no sink at all. That is recorded as `diagnosis_refusals`, not as a simulation with zero calls.
 
-## Outside-simulation RPC
-
-`outside-simulation-rpc.json` counts the lifecycle's other reads and keeps them out of the 39-call state-read baseline, which is §14's rule: a saving on the gate's reads and a saving on state acquisition are different findings, and adding one to the other would make the first look like the second. A call is classified by the stage span that holds its `started_ns` — the latency trace's own stamps, on the same monotonic origin, so containment is a comparison rather than a second measurement. This run: simulation-state=0, simulation-context=6, detection=18, preflight=39, orchestration=0, unknown=0.
-
-Three reads no sink of this build can see are listed in the file as `unreachable_reads` instead of being counted as zero: `eth_chainId` inside `HttpChainAdapter::connect` (it is the call that produces the adapter a sink could be attached to), the execution lane's own adapter, and the WebSocket transport. A span written from millisecond stamps holds nothing here: it is marked unusable rather than widened to fit a nanosecond call.
-
 ## Acquisition tables and bottleneck classification
 
-§17's switch was on for this run, so the directory also holds four tables grouped over the lines above rather than measured again: `storage-breakdown.json` (every storage read with its address, slot and duration, then grouped by address — §6), `account-read-matrix.json` (code, balance and nonce per address — §9), `rpc-gaps.json` (every idle stretch between calls, one sample per wait — §12) and `bottleneck-classification.json` (§25's A–G verdict). Each is built from the `duration_row` projection of these same lines, so a figure that appears in both a line and a table is one figure copied, not two computed. This run: live → primary G (Mixed / insufficient evidence), secondary [A, B, C].
+§17's switch was on for this run, so the directory also holds four tables grouped over the lines above rather than measured again: `storage-breakdown.json` (every storage read with its address, slot and duration, then grouped by address — §6), `account-read-matrix.json` (code, balance and nonce per address — §9), `rpc-gaps.json` (every idle stretch between calls, one sample per wait — §12) and `bottleneck-classification.json` (§25's A–G verdict). Each is built from the `duration_row` projection of these same lines, so a figure that appears in both a line and a table is one figure copied, not two computed. This run: fixture → primary C (Serial dependency bound), secondary [A, F].
 
 The classification file publishes the threshold it applied beside the integers it applied it to, per source, and never adds two sources together. A `not_measured` category is an absent figure; `ruled_out_by_measurement` is a figure that landed on the safe side of a declared line. §18: naming a category is the whole of what this file does — the directions it makes possible are written in the completion report as candidates and none of them is implemented here.
 
-## How this directory was assembled
+## Storage dependency and whole-pipeline RPC
 
-This is not one run's directory. It is 3 folded together by replaying each source
-run's `simulation-traces.jsonl` lines through the writer that produced them, so every table
-here is the same function of the same recorded calls as the tables in the per-run
-directories — the runs' own figures are not re-typed, averaged or re-derived from a
-second implementation.
+M8.4.1's switch was on, so the directory also holds six tables that answer 「why must these reads be serial」 and 「where does the run's non-simulation RPC time go」, and answer nothing else: `storage-reads.json` (one §4 record per `eth_getStorageAt` — caller, address, slot, height, dependency, depends_on, and the evidence beside each), `dependency-map.json` (`nodes` / `edges` / `summary` over the same rows), `dependency-summary.json` (§19's one-screen tally), `pipeline-calls.json` (every call of both sinks of every run, one row each), `pipeline-summary.json` (§17's per-run totals and per-stage rows) and `stage-summary.json` (the same stage arrays lifted out per run). Not one of them issues a request or reads a clock: each is a re-read of the trace lines and the call rows this directory had already written.
 
-- route-91342-37619758-1790964876815 (1 simulation(s), 39 call(s))
-- route-91342-37619794-1790964912619 (1 simulation(s), 39 call(s))
-- route-91342-37619820-1790964938013 (1 simulation(s), 39 call(s))
+This run: 21 storage read(s) — 0 independent, 20 ordered, 1 unknown; over pairs of reads within one simulation, ordered=210, independent=0, undecidable=0, contradiction=0.
 
-Pooling simulations is sound because every timeline figure is measured *inside one
-simulation's own window*: a gap, a serial wait and an overlap are differences of
-stamps that share that simulation's origin, so a run contributes whole simulations
-and never half a clock. What is not poolable is a figure that spans two runs' clocks,
-and there is one such figure here: `outside-simulation-rpc.json` keeps each run's stage spans with
-that run, under `assembled_from`, and tags each pooled row with the run it was
-measured in.
-
-`generated_at_unix_ms` is the source runs' stamp rather than the moment of assembly,
-so re-assembling the same runs writes byte-identical files. No duration is computed
-from it (§7).
+Two words are load-bearing here. §5: different slots are *not* evidence of independence — a read is `independent` only when the leg that issued it is provably sequential in the other direction (the materialised audit pass, whose whole list exists before any of it is asked for), and the file names that leg and its proof rather than asserting it. §3: an `unknown` is never promoted to `independent`; the majority of read pairs in a normal run are `undecidable` because they sit on different legs, and this file says so instead of picking a side. `not observed` likewise appears where a surface has no sink at all — it is not a zero (§11), and `pipeline-summary.json`'s `not_observed` column lists which surfaces those are.
 
 ## What this directory is not
 

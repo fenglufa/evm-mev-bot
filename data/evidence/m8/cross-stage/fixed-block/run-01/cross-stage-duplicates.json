@@ -1,0 +1,100 @@
+{
+  "asks": 41,
+  "asks_by_read_category": [
+    {
+      "asks": 1,
+      "category": "block_read"
+    },
+    {
+      "asks": 1,
+      "category": "chain_identity"
+    },
+    {
+      "asks": 39,
+      "category": "state_read"
+    }
+  ],
+  "asks_by_stage": [
+    {
+      "asks": 40,
+      "stage": "simulation"
+    },
+    {
+      "asks": 1,
+      "stage": "unstamped"
+    }
+  ],
+  "asks_with_identity": 41,
+  "asks_without_identity": 0,
+  "canonicalization_schema": 1,
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_schema": 2,
+  "duplicate_classes": [
+    "exact_duplicate",
+    "semantic_duplicate",
+    "same_target_different_block",
+    "same_method_different_semantics",
+    "same_target_block_undetermined",
+    "not_a_duplicate"
+  ],
+  "execution_mode": "build-only",
+  "first_asks_for_their_target": 41,
+  "generated_at_unix_ms": 1791046256692,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+  "identity_groups": 41,
+  "instrumentation_issues_no_requests": true,
+  "integrity": {
+    "note": "§25's retry rule is enforced by one row being one logical request, so a run whose rows are all single-try has no retry that could be mis-counted — reported as a measurement, not as a pass",
+    "rows_whose_fields_disagree_with_their_key": 0,
+    "rows_with_more_than_one_physical_attempt": 0
+  },
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "pair_formation_rule": "one ask is examined once, against the earliest earlier ask that asked the same thing. If an earlier ask with the identical §8 identity exists, the pair is §4.1's exact duplicate and its producer is the earliest ask of that identity. If not, but an earlier ask of the same target exists — the same identity with the block term removed — the producer is that earliest ask of the target, and §4's class is decided by the two block terms. An ask with neither is the first ask for its target and forms no pair. Pairs are formed between rows, and a row is one logical request with its HTTP tries listed beside it, so §25's rule holds by construction: a call that tried three times is one ask here and cannot contribute three duplicates.",
+  "pairs": 0,
+  "pairs_by_class_and_scope": [],
+  "pairs_rows": [],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "§5's directed duplicate pairs of this run: which ask repeated which, what §4 class each pair is, and what §6's three levels came to",
+  "read_categories": [
+    "state_read",
+    "block_read",
+    "chain_identity",
+    "simulation_call",
+    "transaction_preparation",
+    "other"
+  ],
+  "recompute": "every row of `pairs_rows` is two rows of the run's own `pipeline-calls.json` read through `RpcReadKey::of_row`; the class, the block relation and the five conditions are functions of those two rows and of nothing else",
+  "reuse_conditions": [
+    "block_identity",
+    "state_semantics",
+    "lifecycle_ownership",
+    "no_freshness_requirement",
+    "same_block"
+  ],
+  "run_provenance": {
+    "block_number": 37191169,
+    "calls": 41,
+    "chain_id": 91342,
+    "endpoint_id": "rpc-aea251ab960c58e9",
+    "execution_mode": "build-only",
+    "generated_at_unix_ms": 1791046256692,
+    "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+    "run": "run-01",
+    "source": "fixture"
+  },
+  "scopes": [
+    "cross_stage",
+    "intra_stage",
+    "same_logical_request"
+  ],
+  "sources_are_never_blended": true,
+  "target_groups": 41,
+  "unit": "ns"
+}

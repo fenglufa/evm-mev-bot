@@ -1,0 +1,42 @@
+{
+  "candidates": 0,
+  "canonicalization_schema": 1,
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "conditions_are_never_omitted": "every row carries every condition in the order above, including the ones this build cannot check",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791046257242,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+  "instrumentation_issues_no_requests": true,
+  "levels": {
+    "duplicate": "§4's first three classes — the two asks are the same ask",
+    "reusable": "§6's level B: yes only when every condition resolved to met, no when a condition was measured in the negative, unknown when one is unmet or not checkable from a record",
+    "safe_to_reuse": "§6's level C, computed from the five conditions listed on the row rather than asserted by it"
+  },
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "pair_formation_rule": "one ask is examined once, against the earliest earlier ask that asked the same thing. If an earlier ask with the identical §8 identity exists, the pair is §4.1's exact duplicate and its producer is the earliest ask of that identity. If not, but an earlier ask of the same target exists — the same identity with the block term removed — the producer is that earliest ask of the target, and §4's class is decided by the two block terms. An ask with neither is the first ask for its target and forms no pair. Pairs are formed between rows, and a row is one logical request with its HTTP tries listed beside it, so §25's rule holds by construction: a call that tried three times is one ask here and cannot contribute three duplicates.",
+  "pairs": 0,
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "§15's reuse candidates: one row per directed pair, with duplicate, reusable and safe_to_reuse as three separate verdicts and the condition list each verdict came from",
+  "recompute": "each row names its two rows by run, sink and rpc_id; the identity is those rows' §8 terms and the verdict is `reuse_verdict` over the five conditions printed beside it",
+  "refused_by_block_identity": 0,
+  "reuse_conditions": [
+    "block_identity",
+    "state_semantics",
+    "lifecycle_ownership",
+    "no_freshness_requirement",
+    "same_block"
+  ],
+  "rows": [],
+  "runs": 1,
+  "safe_to_reuse": 0,
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}

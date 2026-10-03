@@ -1,0 +1,91 @@
+{
+  "asks_with_identity": 41,
+  "asks_without_identity": 0,
+  "by_consumer_stage": [],
+  "by_method": [],
+  "by_producer_stage": [],
+  "canonicalization_schema": 1,
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "cross_stage_pairs": 0,
+  "declarations": {
+    "block_rule": "§23: two named, unequal heights end the question in the negative; a tag against a height, or a tag against a tag, is not a height comparison and is reported as not met rather than as violated",
+    "class_rules": [
+      "exact_duplicate",
+      "semantic_duplicate",
+      "same_target_different_block",
+      "same_method_different_semantics",
+      "same_target_block_undetermined",
+      "not_a_duplicate"
+    ],
+    "freshness_rule": "a consumer that asks a tag, or asks a §9 category whose answer is a property of the head, has stated a freshness requirement; a consumer that names a height has not stated its absence",
+    "identity_rules": "crates/chain/src/rpc_trace.rs's §12 key list, read back by canonicalization.rs, plus one addition this milestone declares: a method §12 refuses that takes no parameters is identified by its method name and its endpoint digest",
+    "reuse_rule": "safe_to_reuse is computed as every condition of REUSE_CONDITIONS resolving to checked_met; lifecycle ownership is not checkable from a recorded call, so a pair can be a duplicate at one height on one endpoint and still be unknown"
+  },
+  "diagnosis_schema": 2,
+  "duplicate_classes_are_mutually_exclusive": "every pair lands in exactly one of DUPLICATE_CLASSES, and the class counts below sum to the pair count",
+  "duplicate_pairs": 0,
+  "exact_duplicate_pairs": 0,
+  "execution_mode": "build-only",
+  "first_asks_for_their_target": 41,
+  "generated_at_unix_ms": 1791046257287,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+  "identity_groups": 41,
+  "instrumentation_issues_no_requests": true,
+  "integrity": {
+    "note": "§25's retry rule needs a retry to be tested against, and these runs recorded none; the rule is enforced by one row being one logical request, and canonicalization's own tests cover the case a live run did not",
+    "rows_whose_fields_disagree_with_their_key": 0,
+    "rows_with_more_than_one_physical_attempt": 0
+  },
+  "intra_stage_pairs": 0,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "pair_formation_rule": "one ask is examined once, against the earliest earlier ask that asked the same thing. If an earlier ask with the identical §8 identity exists, the pair is §4.1's exact duplicate and its producer is the earliest ask of that identity. If not, but an earlier ask of the same target exists — the same identity with the block term removed — the producer is that earliest ask of the target, and §4's class is decided by the two block terms. An ask with neither is the first ask for its target and forms no pair. Pairs are formed between rows, and a row is one logical request with its HTTP tries listed beside it, so §25's rule holds by construction: a call that tried three times is one ask here and cannot contribute three duplicates.",
+  "per_run": [
+    {
+      "asks": 41,
+      "asks_with_identity": 41,
+      "detail_file": "instrumented/cross-stage-duplicates.json",
+      "identity_groups": 41,
+      "pairs": 0,
+      "pairs_by_class_and_scope": [],
+      "refused_by_block_identity": 0,
+      "reuse_candidates": 0,
+      "run": "instrumented",
+      "safe_to_reuse": 0,
+      "target_groups": 41
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "§16's cross-run figures: how many asks the runs made, how many of them repeated an earlier ask, and how many of those repeats this build can call safe to serve from the earlier answer",
+  "recompute": "every figure is a fold over `reuse-candidates.json`'s rows, which are pairs of rows of the runs' own `pipeline-calls.json`",
+  "refused_by_block_identity": 0,
+  "reuse_candidates": 0,
+  "run_names": [
+    "instrumented"
+  ],
+  "runs": 1,
+  "safe_reuse_candidates": 0,
+  "same_logical_request_pairs": 0,
+  "same_method_different_semantics_pairs": 0,
+  "same_target_block_undetermined_pairs": 0,
+  "same_target_different_block_pairs": 0,
+  "semantic_duplicate": {
+    "consequence": "an exact duplicate here is exact *after* that normalization, which is §4.1's param-semantics condition rather than §4.2's literal difference — so the exact count is not an upper bound that excludes semantic duplicates, it is a count that already absorbed them",
+    "figure": 0,
+    "measured": "identity groups whose members spell one term two ways, counted over the runs' published rows",
+    "mechanism": "§4.2's two spellings of one ask cannot be told apart in this corpus's rows because the collapse happens at record time: `describe_call` normalizes the block parameter, the address, the storage word and the calldata before any of them is stored, and `pipeline_call_row` lowercases the target again, so a row holds one spelling of each term by the time this module reads it",
+    "status": "not_measurable_from_this_record"
+  },
+  "semantic_duplicate_pairs": 0,
+  "sources_are_never_blended": true,
+  "target_groups": 41,
+  "total_asks": 41,
+  "unit": "ns",
+  "unknown_reuse_candidates": 0
+}

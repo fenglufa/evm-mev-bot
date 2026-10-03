@@ -1,0 +1,1156 @@
+{
+  "assembled_from": [
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "run": "route-91342-37700740-1791045857463",
+      "simulations": 1
+    }
+  ],
+  "classification_rules": {
+    "different_legs": "undecidable — the legs are sequenced by two statements of the engine, and nothing here traces one leg's return value into the other's parameters. §5 is explicit that a sequence of code is not a proof about values, in either direction",
+    "same_leg_fiber_overlapped": "neither — the leg's proof and the stamps disagree, so the pair is a `contradiction` and both nodes read `unknown`. This is the only way a wrong proof shows up in this file, which is why it is not resolved by preferring the code",
+    "same_leg_fiber_serial": "ordered — asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler ; and the stamps show the earlier read closed before this one opened",
+    "same_leg_materialised": "independent — asked by the §36 state-change audit: state_changes() materialises and sorts slot_reads(touched) — every (address, slot) pair — before the leg's first await (crates/simulation/src/engine.rs), and then asks every key in that list whether or not an earlier answer changes anything, so no read in this leg takes an address, a slot or its own existence from another read's return value",
+    "unknown_is_never_promoted": "a read classified `unknown` is not a read that is assumed independent: §3 forbids the derivation and §28 restates it. The worst thing this file can do is make an unproven pair look decided, so the rule is applied in the direction that loses information rather than the one that gains a category — an unrecognized phase name, a missing stamp, or an ambiguity note all land on `unknown`, and the counts below would have to be re-read before any of them could change",
+    "unstamped_or_ambiguous": "unknown — §4's stamp rule: a label that could belong to another call is not this call's label"
+  },
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "decoding_refusals": [],
+  "dependency_states": [
+    "independent",
+    "ordered",
+    "unknown"
+  ],
+  "diagnosis_schema": 2,
+  "edges": [
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15",
+      "wait_before_start_ns": 718647125
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18",
+      "wait_before_start_ns": 471485792
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19",
+      "wait_before_start_ns": 174750
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20",
+      "wait_before_start_ns": 474583
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21",
+      "wait_before_start_ns": 442792
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24",
+      "wait_before_start_ns": 804358167
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25",
+      "wait_before_start_ns": 589875
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26",
+      "wait_before_start_ns": 142708
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27",
+      "wait_before_start_ns": 3328125
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30",
+      "wait_before_start_ns": 494709542
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31",
+      "wait_before_start_ns": 144625
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32",
+      "wait_before_start_ns": 355958
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33",
+      "wait_before_start_ns": 320167
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34",
+      "wait_before_start_ns": 1229000
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc35",
+      "wait_before_start_ns": 4459834
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc35",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc36",
+      "wait_before_start_ns": 469125
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc36",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc37",
+      "wait_before_start_ns": 331375
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc37",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc38",
+      "wait_before_start_ns": 350000
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc38",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc39",
+      "wait_before_start_ns": 130500
+    }
+  ],
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791045857467,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+  "instrumentation_issues_no_requests": true,
+  "leg_vocabulary": {
+    "phases_seen": [
+      "execute: step 1 (nonce 7) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+      "execute: step 3 (nonce 9) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "execute: step 6 (nonce 12) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "views: getReserves()",
+      "views: token0()",
+      "views: token1()"
+    ],
+    "proofs": [
+      {
+        "leg": "fiber",
+        "proof": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler"
+      },
+      {
+        "leg": "materialised_audit",
+        "proof": "asked by the §36 state-change audit: state_changes() materialises and sorts slot_reads(touched) — every (address, slot) pair — before the leg's first await (crates/simulation/src/engine.rs), and then asks every key in that list whether or not an earlier answer changes anything, so no read in this leg takes an address, a slot or its own existence from another read's return value"
+      },
+      {
+        "leg": "unstamped",
+        "proof": "no caller was stamped when this call went out, so the site that issued it is not known to this analysis. §5 forbids inferring one from the slot number or from the order the calls happen to appear in"
+      },
+      {
+        "leg": "ambiguous_label",
+        "proof": "this record carries a context_note: the sink had another call outstanding, or was relabelled while this call was in flight, so the stage and caller written on it are not established to be this call's (§4's stamp rule). The measurement fields below still come from this call's own stamps"
+      },
+      {
+        "leg": "unattributed_site",
+        "proof": "the caller names a site this file has no dependency proof for. Either a later edit renamed a phase or a test stamped one by hand; the name is published in `leg_vocabulary` so the disagreement is visible instead of being read as a proven relation"
+      }
+    ],
+    "reads_per_leg": [
+      {
+        "leg": "fiber",
+        "reads": 20
+      }
+    ],
+    "source": "the `caller` string the issuing site stamped (M8.4.1 §4/§9), matched against evm_simulation::engine's own phase constants — INTERPRETER_PHASE_PREFIXES and SLOT_AUDIT_PHASE — so a rename is one edit and one failing test rather than a table that silently degrades"
+  },
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "nodes": [
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "views: token0()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "unknown",
+      "depends_on": [],
+      "duration_ns": 248722333,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: token0()`",
+        "0 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference"
+      ],
+      "finished_ns": 7453698792,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15"
+      ],
+      "index": 0,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#11",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 11,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 0,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000006",
+      "stage": "simulation",
+      "started_ns": 7204976459,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "not_determined"
+    },
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "views: token1()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11"
+      ],
+      "duration_ns": 235013458,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: token1()`",
+        "1 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "1 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11"
+      ],
+      "finished_ns": 8407359375,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18"
+      ],
+      "index": 1,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#15",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 15,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 1,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000007",
+      "stage": "simulation",
+      "started_ns": 8172345917,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "views: token0()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15"
+      ],
+      "duration_ns": 248933042,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: token0()`",
+        "2 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "7 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "2 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15"
+      ],
+      "finished_ns": 9127778209,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19"
+      ],
+      "index": 2,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#18",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18",
+      "non_storage_reads_in_same_leg_before": 7,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 18,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 2,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000006",
+      "stage": "simulation",
+      "started_ns": 8878845167,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "views: token1()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18"
+      ],
+      "duration_ns": 242501500,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: token1()`",
+        "3 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "3 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18"
+      ],
+      "finished_ns": 9370454459,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20"
+      ],
+      "index": 3,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#19",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 19,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 3,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000007",
+      "stage": "simulation",
+      "started_ns": 9127952959,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "views: getReserves()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19"
+      ],
+      "duration_ns": 238945083,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: getReserves()`",
+        "4 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "4 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19"
+      ],
+      "finished_ns": 9609874125,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21"
+      ],
+      "index": 4,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#20",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 20,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 4,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000008",
+      "stage": "simulation",
+      "started_ns": 9370929042,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "views: getReserves()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20"
+      ],
+      "duration_ns": 243892583,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: getReserves()`",
+        "5 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "5 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20"
+      ],
+      "finished_ns": 9854209500,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24"
+      ],
+      "index": 5,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#21",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 21,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 5,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000008",
+      "stage": "simulation",
+      "started_ns": 9610316917,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 1 (nonce 7) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21"
+      ],
+      "duration_ns": 232356375,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 1 (nonce 7) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231`",
+        "6 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "6 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21"
+      ],
+      "finished_ns": 10890924042,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25"
+      ],
+      "index": 6,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#24",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 24,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 6,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x05822d3e2ebb7a872393b4558653ad1e9b65a460779e182fcc8ddaab7e9ffe43",
+      "stage": "simulation",
+      "started_ns": 10658567667,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 3 (nonce 9) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24"
+      ],
+      "duration_ns": 234807667,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 3 (nonce 9) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb`",
+        "7 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "7 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24"
+      ],
+      "finished_ns": 11126321584,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26"
+      ],
+      "index": 7,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#25",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 25,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 7,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x2e5fa5a20a968dad9e38de565071b24012ee3d83208e5aa1aff07e2ab55713ab",
+      "stage": "simulation",
+      "started_ns": 10891513917,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 3 (nonce 9) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25"
+      ],
+      "duration_ns": 234263250,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 3 (nonce 9) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb`",
+        "8 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "8 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25"
+      ],
+      "finished_ns": 11360727542,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27"
+      ],
+      "index": 8,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#26",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 26,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 8,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x1b1bb8ff368a01a4515d946798f9ce83f922cd929f5f78345be8839b0a76b6b5",
+      "stage": "simulation",
+      "started_ns": 11126464292,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26"
+      ],
+      "duration_ns": 239397583,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "9 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "9 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26"
+      ],
+      "finished_ns": 11603453250,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30"
+      ],
+      "index": 9,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#27",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 27,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 9,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x000000000000000000000000000000000000000000000000000000000000000c",
+      "stage": "simulation",
+      "started_ns": 11364055667,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27"
+      ],
+      "duration_ns": 244820167,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "10 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "10 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27"
+      ],
+      "finished_ns": 12342982959,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31"
+      ],
+      "index": 10,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#30",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 30,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 10,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0xdfaea0954cbbd4bf3acdce7cdc235c914da8e1a0cc7b7edca8bea4342c7e7483",
+      "stage": "simulation",
+      "started_ns": 12098162792,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30"
+      ],
+      "duration_ns": 243507875,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "11 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "11 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30"
+      ],
+      "finished_ns": 12586635459,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32"
+      ],
+      "index": 11,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#31",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 31,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 11,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x2cd94663f0c2301aa845214efa861a070af8e70c2d96027534ab991c96129041",
+      "stage": "simulation",
+      "started_ns": 12343127584,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31"
+      ],
+      "duration_ns": 236472458,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "12 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "12 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31"
+      ],
+      "finished_ns": 12823463875,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33"
+      ],
+      "index": 12,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#32",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 32,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 12,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000009",
+      "stage": "simulation",
+      "started_ns": 12586991417,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32"
+      ],
+      "duration_ns": 229753583,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "13 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "13 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32"
+      ],
+      "finished_ns": 13053537625,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34"
+      ],
+      "index": 13,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#33",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 33,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 13,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x000000000000000000000000000000000000000000000000000000000000000a",
+      "stage": "simulation",
+      "started_ns": 12823784042,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 6 (nonce 12) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33"
+      ],
+      "duration_ns": 242620875,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 6 (nonce 12) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f: transfer(address,uint256), value 0, selector 0xa9059cbb`",
+        "14 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "14 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33"
+      ],
+      "finished_ns": 13297387500,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc35"
+      ],
+      "index": 14,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#34",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 34,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 14,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x4b1c689c92d22dbbfe367179bd99e043109f97f70bd4a1b451a2699bf9e9fae6",
+      "stage": "simulation",
+      "started_ns": 13054766625,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34"
+      ],
+      "duration_ns": 238555541,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "15 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "15 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34"
+      ],
+      "finished_ns": 13540402875,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc36"
+      ],
+      "index": 15,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#35",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc35",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 35,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 15,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x000000000000000000000000000000000000000000000000000000000000000c",
+      "stage": "simulation",
+      "started_ns": 13301847334,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc35"
+      ],
+      "duration_ns": 235797625,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "16 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "16 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc35"
+      ],
+      "finished_ns": 13776669625,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc37"
+      ],
+      "index": 16,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#36",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc36",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 36,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 16,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0xcfa4c03372b9736c2488d7888e17ad65d25fce1f5f6b940ab060d3382ed42080",
+      "stage": "simulation",
+      "started_ns": 13540872000,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc36"
+      ],
+      "duration_ns": 233598459,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "17 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "17 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc35, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc36"
+      ],
+      "finished_ns": 14010599459,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc38"
+      ],
+      "index": 17,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#37",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc37",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 37,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 17,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0xb77ec4036e45e3fb60a35dbc31e61e5833c2d7087a9bf5e464ec2c8a1156943d",
+      "stage": "simulation",
+      "started_ns": 13777001000,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc37"
+      ],
+      "duration_ns": 251822916,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "18 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "18 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc35, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc36, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc37"
+      ],
+      "finished_ns": 14262772375,
+      "followed_by": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc39"
+      ],
+      "index": 18,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#38",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc38",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 38,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 18,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000009",
+      "stage": "simulation",
+      "started_ns": 14010949459,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "attempts": 1,
+      "block_number": 37700740,
+      "block_tag": "37700740",
+      "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc38"
+      ],
+      "duration_ns": 244516584,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "19 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "19 read(s) of this leg this one cannot precede: route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc15, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc18, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc19, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc20, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc21, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc24, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc25, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc26, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc27, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc30, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc31, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc32, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc33, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc34, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc35, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc36, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc37, route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc38"
+      ],
+      "finished_ns": 14507419459,
+      "followed_by": [],
+      "index": 19,
+      "leg": "fiber",
+      "logical_request_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000#39",
+      "method": "eth_getStorageAt",
+      "node_id": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc39",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 39,
+      "run": "route-91342-37700740-1791045857463",
+      "same_leg_reads_before": 19,
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "slot": "0x000000000000000000000000000000000000000000000000000000000000000a",
+      "stage": "simulation",
+      "started_ns": 14262902875,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    }
+  ],
+  "pair_states": [
+    "ordered",
+    "independent",
+    "undecidable",
+    "contradiction"
+  ],
+  "pair_summary": [
+    {
+      "pairs": 190,
+      "relation": "ordered"
+    },
+    {
+      "pairs": 0,
+      "relation": "independent"
+    },
+    {
+      "pairs": 0,
+      "relation": "undecidable"
+    },
+    {
+      "pairs": 0,
+      "relation": "contradiction"
+    }
+  ],
+  "per_simulation": [
+    {
+      "all_calls_in_the_simulation": 39,
+      "block_number": 37700740,
+      "chain_id": 91342,
+      "dependency_counts": {
+        "independent": 0,
+        "ordered": 19,
+        "unknown": 1
+      },
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "legs": [
+        {
+          "callers": [
+            "execute: step 1 (nonce 7) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+            "execute: step 3 (nonce 9) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+            "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "execute: step 6 (nonce 12) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f: transfer(address,uint256), value 0, selector 0xa9059cbb",
+            "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "views: getReserves()",
+            "views: token0()",
+            "views: token1()"
+          ],
+          "class": "one at a time by the interpreter, so this leg is the serial part of the answer to §0's first question",
+          "first_node": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc11",
+          "last_node": "route-91342-37700740-1791045857463:m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000:rpc39",
+          "leg": "fiber",
+          "pairs_within": 190,
+          "reads": 20
+        }
+      ],
+      "run": "route-91342-37700740-1791045857463",
+      "simulation_id": "m7-91342-37700740-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "source": "live",
+      "storage_reads": 20
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "§3–§6: for every eth_getStorageAt a simulation made — who issued it, at which address, slot and height, what it waited for, what waited on it, and on what proof that ordering is the right word",
+  "reading_rules": [
+    "§5: two different slots are not two independent reads. Every word in this file is a statement about the code that issued the read, and `slot` is carried here as an identifying field and never as a reason",
+    "§20: no row of this file says the provider is the bottleneck, that these reads could be batched, or that running them together would be faster. §1 forbids the change, and an `independent` word here is a statement about parameters, not a licence to reorder",
+    "§18 and §3: `ordered` means the later read could not have been issued before the earlier answered. It does not mean the earlier read's *value* was used — that is `uses_prior_response`, and for an interpreter leg it is not determined here",
+    "pairs are counted within one simulation only. Two simulations of one run are two sinks, two windows and two answers"
+  ],
+  "sources_are_never_blended": true,
+  "summary": {
+    "independent": 0,
+    "ordered": 19,
+    "total": 20,
+    "unknown": 1
+  },
+  "unit": "ns"
+}

@@ -1,0 +1,680 @@
+{
+  "assembled_from": [
+    {
+      "arm": "§11 live",
+      "asks": 82,
+      "block_number": 37700740,
+      "cache_hits": 77,
+      "call_rows": 82,
+      "chain_id": 91342,
+      "configured_concurrency": 1,
+      "directory": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "pairs": 26,
+      "reuse_candidates": 14,
+      "route_mode": "build-only",
+      "run": "route-91342-37700740-1791045857463",
+      "safe_to_reuse": 0,
+      "simulations": 1,
+      "source": "live",
+      "state_read_reuse": true,
+      "successful_real_arbitrage": false
+    },
+    {
+      "arm": "§11 live",
+      "asks": 82,
+      "block_number": 37700778,
+      "cache_hits": 77,
+      "call_rows": 82,
+      "chain_id": 91342,
+      "configured_concurrency": 1,
+      "directory": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045896095,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "pairs": 26,
+      "reuse_candidates": 14,
+      "route_mode": "build-only",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": 0,
+      "simulations": 1,
+      "source": "live",
+      "state_read_reuse": true,
+      "successful_real_arbitrage": false
+    },
+    {
+      "arm": "§11 live",
+      "asks": 82,
+      "block_number": 37700806,
+      "cache_hits": 77,
+      "call_rows": 82,
+      "chain_id": 91342,
+      "configured_concurrency": 1,
+      "directory": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045924234,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "pairs": 26,
+      "reuse_candidates": 14,
+      "route_mode": "build-only",
+      "run": "route-91342-37700806-1791045924232",
+      "safe_to_reuse": 0,
+      "simulations": 1,
+      "source": "live",
+      "state_read_reuse": true,
+      "successful_real_arbitrage": false
+    }
+  ],
+  "canonicalization_schema": 1,
+  "duplicate_classes": [
+    "exact_duplicate",
+    "semantic_duplicate",
+    "same_target_different_block",
+    "same_method_different_semantics",
+    "same_target_block_undetermined",
+    "not_a_duplicate"
+  ],
+  "pair_formation_rule": "one ask is examined once, against the earliest earlier ask that asked the same thing. If an earlier ask with the identical §8 identity exists, the pair is §4.1's exact duplicate and its producer is the earliest ask of that identity. If not, but an earlier ask of the same target exists — the same identity with the block term removed — the producer is that earliest ask of the target, and §4's class is decided by the two block terms. An ask with neither is the first ask for its target and forms no pair. Pairs are formed between rows, and a row is one logical request with its HTTP tries listed beside it, so §25's rule holds by construction: a call that tried three times is one ask here and cannot contribute three duplicates.",
+  "question": "which stage's answer is the same ask as which later stage's, per §4's duplicate class, per run",
+  "recompute": "one row per (producer stage, consumer stage, class, scope) over every pair of every run in `runs`; the identity list is the §8 identity of each pair's consumer, so a cell can be traced to the rows it came from",
+  "root": "data/evidence/m8/cross-stage/",
+  "rows": [
+    {
+      "block_relations": [
+        "same_block"
+      ],
+      "consumer_categories": [
+        "block_read"
+      ],
+      "consumer_stage": "build",
+      "duplicate_type": "exact_duplicate",
+      "identities": [
+        "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+        "method=eth_getBlockByNumber|block=37700778|chain=91342|hydrated=false",
+        "method=eth_getBlockByNumber|block=37700806|chain=91342|hydrated=false"
+      ],
+      "methods": [
+        "eth_getBlockByNumber"
+      ],
+      "pairs": 6,
+      "pairs_per_run": [
+        {
+          "pairs": 2,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 2,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 2,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "block_read"
+      ],
+      "producer_stage": "observation",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "same_block"
+      ],
+      "consumer_categories": [
+        "block_read"
+      ],
+      "consumer_stage": "preflight",
+      "duplicate_type": "exact_duplicate",
+      "identities": [
+        "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+        "method=eth_getBlockByNumber|block=37700778|chain=91342|hydrated=false",
+        "method=eth_getBlockByNumber|block=37700806|chain=91342|hydrated=false"
+      ],
+      "methods": [
+        "eth_getBlockByNumber"
+      ],
+      "pairs": 6,
+      "pairs_per_run": [
+        {
+          "pairs": 2,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 2,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 2,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "block_read"
+      ],
+      "producer_stage": "observation",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "tag_against_height"
+      ],
+      "consumer_categories": [
+        "block_read"
+      ],
+      "consumer_stage": "preflight",
+      "duplicate_type": "same_target_block_undetermined",
+      "identities": [
+        "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false"
+      ],
+      "methods": [
+        "eth_getBlockByNumber"
+      ],
+      "pairs": 3,
+      "pairs_per_run": [
+        {
+          "pairs": 1,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "block_read"
+      ],
+      "producer_stage": "observation",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "different_block"
+      ],
+      "consumer_categories": [
+        "block_read"
+      ],
+      "consumer_stage": "preflight",
+      "duplicate_type": "same_target_different_block",
+      "identities": [
+        "method=eth_getBlockByNumber|block=37700753|chain=91342|hydrated=false",
+        "method=eth_getBlockByNumber|block=37700793|chain=91342|hydrated=false",
+        "method=eth_getBlockByNumber|block=37700821|chain=91342|hydrated=false"
+      ],
+      "methods": [
+        "eth_getBlockByNumber"
+      ],
+      "pairs": 3,
+      "pairs_per_run": [
+        {
+          "pairs": 1,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "block_read"
+      ],
+      "producer_stage": "observation",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "same_block"
+      ],
+      "consumer_categories": [
+        "block_read"
+      ],
+      "consumer_stage": "simulation",
+      "duplicate_type": "exact_duplicate",
+      "identities": [
+        "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+        "method=eth_getBlockByNumber|block=37700778|chain=91342|hydrated=false",
+        "method=eth_getBlockByNumber|block=37700806|chain=91342|hydrated=false"
+      ],
+      "methods": [
+        "eth_getBlockByNumber"
+      ],
+      "pairs": 3,
+      "pairs_per_run": [
+        {
+          "pairs": 1,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "block_read"
+      ],
+      "producer_stage": "observation",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "different_block"
+      ],
+      "consumer_categories": [
+        "state_read"
+      ],
+      "consumer_stage": "preflight",
+      "duplicate_type": "same_target_different_block",
+      "identities": [
+        "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method=eth_call|block=37700753|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method=eth_call|block=37700753|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method=eth_call|block=37700753|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method=eth_call|block=37700753|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method=eth_call|block=37700793|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method=eth_call|block=37700793|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method=eth_call|block=37700793|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method=eth_call|block=37700793|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method=eth_call|block=37700793|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method=eth_call|block=37700793|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method=eth_call|block=37700821|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method=eth_call|block=37700821|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method=eth_call|block=37700821|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method=eth_call|block=37700821|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method=eth_call|block=37700821|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method=eth_call|block=37700821|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+      ],
+      "methods": [
+        "eth_call"
+      ],
+      "pairs": 18,
+      "pairs_per_run": [
+        {
+          "pairs": 6,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 6,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 6,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "state_read"
+      ],
+      "producer_stage": "opportunity_detection",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "both_ask_a_tag",
+        "no_block_in_either_request",
+        "same_block"
+      ],
+      "consumer_categories": [
+        "block_read",
+        "state_read",
+        "transaction_preparation"
+      ],
+      "consumer_stage": "build",
+      "duplicate_type": "exact_duplicate",
+      "identities": [
+        "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700753|chain=91342",
+        "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700793|chain=91342",
+        "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700821|chain=91342",
+        "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+        "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=pending|chain=91342",
+        "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas"
+      ],
+      "methods": [
+        "eth_getBalance",
+        "eth_getBlockByNumber",
+        "eth_getTransactionCount",
+        "eth_maxPriorityFeePerGas"
+      ],
+      "pairs": 12,
+      "pairs_per_run": [
+        {
+          "pairs": 4,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 4,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 4,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "block_read",
+        "state_read",
+        "transaction_preparation"
+      ],
+      "producer_stage": "preflight",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "both_ask_a_tag",
+        "no_block_in_either_request"
+      ],
+      "consumer_categories": [
+        "block_read",
+        "transaction_preparation"
+      ],
+      "consumer_stage": "preflight",
+      "duplicate_type": "exact_duplicate",
+      "identities": [
+        "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+        "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas"
+      ],
+      "methods": [
+        "eth_getBlockByNumber",
+        "eth_maxPriorityFeePerGas"
+      ],
+      "pairs": 6,
+      "pairs_per_run": [
+        {
+          "pairs": 2,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 2,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 2,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "block_read",
+        "transaction_preparation"
+      ],
+      "producer_stage": "preflight",
+      "safe_to_reuse": 0,
+      "scope": "intra_stage"
+    },
+    {
+      "block_relations": [
+        "same_block"
+      ],
+      "consumer_categories": [
+        "state_read"
+      ],
+      "consumer_stage": "build",
+      "duplicate_type": "exact_duplicate",
+      "identities": [
+        "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+        "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700778|chain=91342",
+        "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700806|chain=91342"
+      ],
+      "methods": [
+        "eth_getBalance"
+      ],
+      "pairs": 3,
+      "pairs_per_run": [
+        {
+          "pairs": 1,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "state_read"
+      ],
+      "producer_stage": "simulation",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "different_block"
+      ],
+      "consumer_categories": [
+        "transaction_preparation"
+      ],
+      "consumer_stage": "build",
+      "duplicate_type": "same_target_different_block",
+      "identities": [
+        "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700761|chain=91342",
+        "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700802|chain=91342",
+        "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700829|chain=91342"
+      ],
+      "methods": [
+        "eth_getTransactionCount"
+      ],
+      "pairs": 3,
+      "pairs_per_run": [
+        {
+          "pairs": 1,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "state_read"
+      ],
+      "producer_stage": "simulation",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "tag_against_height"
+      ],
+      "consumer_categories": [
+        "transaction_preparation"
+      ],
+      "consumer_stage": "preflight",
+      "duplicate_type": "same_target_block_undetermined",
+      "identities": [
+        "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=pending|chain=91342"
+      ],
+      "methods": [
+        "eth_getTransactionCount"
+      ],
+      "pairs": 3,
+      "pairs_per_run": [
+        {
+          "pairs": 1,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "state_read"
+      ],
+      "producer_stage": "simulation",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "different_block"
+      ],
+      "consumer_categories": [
+        "state_read",
+        "transaction_preparation"
+      ],
+      "consumer_stage": "preflight",
+      "duplicate_type": "same_target_different_block",
+      "identities": [
+        "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700753|chain=91342",
+        "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700793|chain=91342",
+        "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700821|chain=91342",
+        "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700755|chain=91342",
+        "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700794|chain=91342",
+        "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700822|chain=91342"
+      ],
+      "methods": [
+        "eth_getBalance",
+        "eth_getTransactionCount"
+      ],
+      "pairs": 6,
+      "pairs_per_run": [
+        {
+          "pairs": 2,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 2,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 2,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "state_read"
+      ],
+      "producer_stage": "simulation",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "no_block_in_either_request"
+      ],
+      "consumer_categories": [
+        "chain_identity"
+      ],
+      "consumer_stage": "build",
+      "duplicate_type": "exact_duplicate",
+      "identities": [
+        "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId"
+      ],
+      "methods": [
+        "eth_chainId"
+      ],
+      "pairs": 3,
+      "pairs_per_run": [
+        {
+          "pairs": 1,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "chain_identity"
+      ],
+      "producer_stage": "unstamped",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    },
+    {
+      "block_relations": [
+        "no_block_in_either_request"
+      ],
+      "consumer_categories": [
+        "chain_identity"
+      ],
+      "consumer_stage": "preflight",
+      "duplicate_type": "exact_duplicate",
+      "identities": [
+        "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId"
+      ],
+      "methods": [
+        "eth_chainId"
+      ],
+      "pairs": 3,
+      "pairs_per_run": [
+        {
+          "pairs": 1,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700778-1791045896094"
+        },
+        {
+          "pairs": 1,
+          "run": "route-91342-37700806-1791045924232"
+        }
+      ],
+      "producer_categories": [
+        "chain_identity"
+      ],
+      "producer_stage": "unstamped",
+      "safe_to_reuse": 0,
+      "scope": "cross_stage"
+    }
+  ],
+  "runs": 3,
+  "scopes": [
+    "cross_stage",
+    "intra_stage",
+    "same_logical_request"
+  ],
+  "totals": {
+    "by_class": {
+      "exact_duplicate": 42,
+      "same_target_block_undetermined": 6,
+      "same_target_different_block": 30
+    },
+    "by_scope": {
+      "cross_stage": 72,
+      "intra_stage": 6
+    },
+    "pairs": 78
+  },
+  "unit": "pairs"
+}

@@ -1,0 +1,249 @@
+{
+  "canonicalization_schema": 1,
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791046257566,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "named_pairs_are_never_omitted": "a pair this build cannot measure is reported with the reason, because a missing row would read as a zero",
+  "pair_formation_rule": "one ask is examined once, against the earliest earlier ask that asked the same thing. If an earlier ask with the identical §8 identity exists, the pair is §4.1's exact duplicate and its producer is the earliest ask of that identity. If not, but an earlier ask of the same target exists — the same identity with the block term removed — the producer is that earliest ask of the target, and §4's class is decided by the two block terms. An ask with neither is the first ask for its target and forms no pair. Pairs are formed between rows, and a row is one logical request with its HTTP tries listed beside it, so §25's rule holds by construction: a call that tried three times is one ask here and cannot contribute three duplicates.",
+  "pairs_observed_but_not_named": [],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "§13's stage pairs, one row each, with the duplicates each cell holds and the reason a cell has none",
+  "recompute": "each row is a filter of `reuse-candidates.json`'s rows on the producer and consumer stage labels those rows carry",
+  "rows": [
+    {
+      "candidates": 0,
+      "consumer_asks": 0,
+      "consumer_stages": [
+        "preflight"
+      ],
+      "identities": [],
+      "pair": "Detection -> Preflight",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 0,
+      "producer_stages": [
+        "opportunity_detection"
+      ],
+      "safe_to_reuse": 0,
+      "status": "measured_one_side_issued_no_calls",
+      "why": "detection prices the pair at the pin; preflight re-prices it before the build"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 40,
+      "consumer_stages": [
+        "simulation"
+      ],
+      "identities": [],
+      "pair": "Detection -> Simulation",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 0,
+      "producer_stages": [
+        "opportunity_detection"
+      ],
+      "safe_to_reuse": 0,
+      "status": "measured_one_side_issued_no_calls",
+      "why": "§20's pair: the same reserves read by the opportunity finder and by the EVM's state provider"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 0,
+      "consumer_stages": [
+        "build"
+      ],
+      "identities": [],
+      "pair": "Detection -> Build",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 0,
+      "producer_stages": [
+        "opportunity_detection"
+      ],
+      "safe_to_reuse": 0,
+      "status": "measured_one_side_issued_no_calls",
+      "why": "detection's answers against the state the built transaction is described from"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 0,
+      "consumer_stages": [
+        "preflight"
+      ],
+      "identities": [],
+      "pair": "State Update -> Preflight",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 0,
+      "producer_stages": [
+        "state_update",
+        "graph_update"
+      ],
+      "safe_to_reuse": 0,
+      "status": "measured_one_side_issued_no_calls",
+      "why": "§21's pair, if the state update ever asks a node: this build's graph is rebuilt from recorded events, so these stages may issue no calls at all"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 40,
+      "consumer_stages": [
+        "simulation"
+      ],
+      "identities": [],
+      "pair": "State Update -> Simulation",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 0,
+      "producer_stages": [
+        "state_update",
+        "graph_update"
+      ],
+      "safe_to_reuse": 0,
+      "status": "measured_one_side_issued_no_calls",
+      "why": "§21's own question — StateStore versus REVM canonical state — which is why this pair is reported even when its cell is empty"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 0,
+      "consumer_stages": [
+        "preflight"
+      ],
+      "identities": [],
+      "pair": "Opportunity -> Preflight",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 0,
+      "producer_stages": [],
+      "safe_to_reuse": 0,
+      "status": "not_applicable_no_such_stage",
+      "why": "this build has no stage named `opportunity`: the candidate list is assembled inside `opportunity_detection`, which issues the calls §13's Detection rows already count, so there is no second producer to compare with"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 40,
+      "consumer_stages": [
+        "simulation"
+      ],
+      "identities": [],
+      "pair": "Opportunity -> Simulation",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 0,
+      "producer_stages": [],
+      "safe_to_reuse": 0,
+      "status": "not_applicable_no_such_stage",
+      "why": "the same absence as Opportunity -> Preflight"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 40,
+      "consumer_stages": [
+        "simulation"
+      ],
+      "identities": [],
+      "pair": "Preflight -> Simulation",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 0,
+      "producer_stages": [
+        "preflight"
+      ],
+      "safe_to_reuse": 0,
+      "status": "measured_one_side_issued_no_calls",
+      "why": "the gate's facts against the state the simulation ran on"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 0,
+      "consumer_stages": [
+        "build"
+      ],
+      "identities": [],
+      "pair": "Preflight -> Build",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 0,
+      "producer_stages": [
+        "preflight"
+      ],
+      "safe_to_reuse": 0,
+      "status": "measured_one_side_issued_no_calls",
+      "why": "§19's pair: nonce, balance, fee, block, chain id, gas"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 0,
+      "consumer_stages": [
+        "build"
+      ],
+      "identities": [],
+      "pair": "Simulation -> Build",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 40,
+      "producer_stages": [
+        "simulation"
+      ],
+      "safe_to_reuse": 0,
+      "status": "measured_one_side_issued_no_calls",
+      "why": "§13's pair, and the one M8.3.1's cache cannot answer: the cache is one simulation's own, so a build that reads what a simulation read is outside its scope (§18)"
+    },
+    {
+      "candidates": 0,
+      "consumer_asks": 0,
+      "consumer_stages": [],
+      "identities": [],
+      "pair": "Simulation -> Execution Preparation",
+      "pairs": 0,
+      "pairs_by_class": {},
+      "pairs_by_scope": {},
+      "pairs_in_the_other_direction": 0,
+      "producer_asks": 40,
+      "producer_stages": [
+        "simulation"
+      ],
+      "safe_to_reuse": 0,
+      "status": "not_applicable_no_such_stage",
+      "why": "this build stamps no stage named execution preparation: the gate and the before-snapshot reads carry `build`, so this pair's numbers are Simulation -> Build's, and M8.4.1 §13 already records the absence"
+    }
+  ],
+  "sources_are_never_blended": true,
+  "statuses": [
+    "measured",
+    "measured_no_duplicates",
+    "measured_one_side_issued_no_calls",
+    "not_applicable_no_such_stage"
+  ],
+  "unit": "ns"
+}

@@ -1,0 +1,2677 @@
+{
+  "candidates": 14,
+  "canonicalization_schema": 1,
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "conditions_are_never_omitted": "every row carries every condition in the order above, including the ones this build cannot check",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791045896095,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+  "instrumentation_issues_no_requests": true,
+  "levels": {
+    "duplicate": "§4's first three classes — the two asks are the same ask",
+    "reusable": "§6's level B: yes only when every condition resolved to met, no when a condition was measured in the negative, unknown when one is unmet or not checkable from a record",
+    "safe_to_reuse": "§6's level C, computed from the five conditions listed on the row rather than asserted by it"
+  },
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "pair_formation_rule": "one ask is examined once, against the earliest earlier ask that asked the same thing. If an earlier ask with the identical §8 identity exists, the pair is §4.1's exact duplicate and its producer is the earliest ask of that identity. If not, but an earlier ask of the same target exists — the same identity with the block term removed — the producer is that earliest ask of the target, and §4's class is decided by the two block terms. An ask with neither is the first ask for its target and forms no pair. Pairs are formed between rows, and a row is one logical request with its HTTP tries listed beside it, so §25's rule holds by construction: a call that tried three times is one ask here and cannot contribute three duplicates.",
+  "pairs": 26,
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "§15's reuse candidates: one row per directed pair, with duplicate, reusable and safe_to_reuse as three separate verdicts and the condition list each verdict came from",
+  "recompute": "each row names its two rows by run, sink and rpc_id; the identity is those rows' §8 terms and the verdict is `reuse_verdict` over the five conditions printed beside it",
+  "refused_by_block_identity": 10,
+  "reuse_conditions": [
+    "block_identity",
+    "state_semantics",
+    "lifecycle_ownership",
+    "no_freshness_requirement",
+    "same_block"
+  ],
+  "rows": [
+    {
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc1",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_met",
+          "reason": "both asks name the same height"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checked_met",
+          "reason": "one height names one block, and both asks name it"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "header at pin",
+        "category": "block_read",
+        "duration_ns": 253823875,
+        "finished_ns": 3548427791,
+        "logical_request_id": "route-91342-37700778-1791045896094:simulation:rpc1",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 1,
+        "sink": "simulation",
+        "stage": "simulation",
+        "stage_label": "simulation",
+        "started_ns": 3294603916,
+        "success": true
+      },
+      "consumer_block": "37700778",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": "37700778",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBlockByNumber|block=37700778|chain=91342|hydrated=false",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBlockByNumber|chain=91342|hydrated=false",
+        "method": "eth_getBlockByNumber",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700778"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "hydrated",
+            "false"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "head and header that fixed the pin",
+        "category": "block_read",
+        "duration_ns": 246731625,
+        "finished_ns": 1322354958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc2",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 2,
+        "sink": "lifecycle",
+        "stage": "observation",
+        "stage_label": "observation",
+        "started_ns": 1075623333,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "lifecycle_ownership: not_checkable_from_a_record — no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": true,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "tag_against_height",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc10",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checkable_not_met",
+          "reason": "one side names a height and the other a tag: the record has no value for what the tag resolved to, so the condition is neither met nor violated"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (tag_against_height)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "checkable_not_met",
+          "reason": "the consumer asks a tag, which is a request for the newest answer the node holds: a stated freshness requirement, and §7's example of the case where matching data is not permission"
+        }
+      ],
+      "consumer": {
+        "caller": "head at latest",
+        "category": "block_read",
+        "duration_ns": 283774125,
+        "finished_ns": 15866589958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc10",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 10,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 15582815833,
+        "success": true
+      },
+      "consumer_block": "latest",
+      "consumer_block_form": "tag",
+      "duplicate": false,
+      "duplicate_type": "same_target_block_undetermined",
+      "identity": {
+        "address": null,
+        "block_number": null,
+        "block_tag": "latest",
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBlockByNumber|chain=91342|hydrated=false",
+        "method": "eth_getBlockByNumber",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "latest"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "hydrated",
+            "false"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "head and header that fixed the pin",
+        "category": "block_read",
+        "duration_ns": 246731625,
+        "finished_ns": 1322354958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc2",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 2,
+        "sink": "lifecycle",
+        "stage": "observation",
+        "stage_label": "observation",
+        "started_ns": 1075623333,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checkable_not_met — one side names a height and the other a tag: the record has no value for what the tag resolved to, so the condition is neither met nor violated",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": null,
+      "scope": "cross_stage",
+      "verdict": "not_a_candidate"
+    },
+    {
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc11",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_met",
+          "reason": "both asks name the same height"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checked_met",
+          "reason": "one height names one block, and both asks name it"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "fee at pinned block",
+        "category": "block_read",
+        "duration_ns": 420899708,
+        "finished_ns": 16287586291,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc11",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 11,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 15866686583,
+        "success": true
+      },
+      "consumer_block": "37700778",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": "37700778",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBlockByNumber|block=37700778|chain=91342|hydrated=false",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBlockByNumber|chain=91342|hydrated=false",
+        "method": "eth_getBlockByNumber",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700778"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "hydrated",
+            "false"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "head and header that fixed the pin",
+        "category": "block_read",
+        "duration_ns": 246731625,
+        "finished_ns": 1322354958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc2",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 2,
+        "sink": "lifecycle",
+        "stage": "observation",
+        "stage_label": "observation",
+        "started_ns": 1075623333,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "lifecycle_ownership: not_checkable_from_a_record — no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": true,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc13",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "fee at head",
+        "category": "block_read",
+        "duration_ns": 249904250,
+        "finished_ns": 16769930791,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc13",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 13,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 16520026541,
+        "success": true
+      },
+      "consumer_block": "37700793",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": null,
+        "block_number": "37700793",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBlockByNumber|block=37700793|chain=91342|hydrated=false",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBlockByNumber|chain=91342|hydrated=false",
+        "method": "eth_getBlockByNumber",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700793"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "hydrated",
+            "false"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "head and header that fixed the pin",
+        "category": "block_read",
+        "duration_ns": 246731625,
+        "finished_ns": 1322354958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc2",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 2,
+        "sink": "lifecycle",
+        "stage": "observation",
+        "stage_label": "observation",
+        "started_ns": 1075623333,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc14",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checkable_not_met",
+          "reason": "neither ask carries a block term, so §6's block-identity condition cannot be met by it; this is an absent identity, not a matching one"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (no_block_in_either_request)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "checkable_not_met",
+          "reason": "the consumer's §9 category is a read whose answer is a property of the head (a fee, a gas ceiling, a pending nonce), so its purpose is to be fresh"
+        }
+      ],
+      "consumer": {
+        "caller": "fee at head",
+        "category": "transaction_preparation",
+        "duration_ns": 243764333,
+        "finished_ns": 17013741791,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc14",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 14,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 16769977458,
+        "success": true
+      },
+      "consumer_block": null,
+      "consumer_block_form": "absent",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": null,
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+        "identity_note": null,
+        "identity_source": "identity_from_a_parameterless_request",
+        "identity_without_block": null,
+        "method": "eth_maxPriorityFeePerGas",
+        "slot": null,
+        "terms": [
+          [
+            "endpoint",
+            "rpc-faa716cada04a9ef"
+          ],
+          [
+            "method_kind",
+            "eth_maxPriorityFeePerGas"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "fee at pinned block",
+        "category": "transaction_preparation",
+        "duration_ns": 232306042,
+        "finished_ns": 16519929500,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc12",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 12,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 16287623458,
+        "success": true
+      },
+      "producer_block": null,
+      "producer_block_form": "absent",
+      "reason": "same_block: checkable_not_met — neither ask carries a block term, so §6's block-identity condition cannot be met by it; this is an absent identity, not a matching one",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": null,
+      "scope": "intra_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc15",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checkable_not_met",
+          "reason": "§23's own failure case: both sides ask a tag, which names the head at answer time and not a block, so the condition is not met even though the two asks read alike"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (both_ask_a_tag)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "checkable_not_met",
+          "reason": "the consumer asks a tag, which is a request for the newest answer the node holds: a stated freshness requirement, and §7's example of the case where matching data is not permission"
+        }
+      ],
+      "consumer": {
+        "caller": "pending and latest nonces",
+        "category": "block_read",
+        "duration_ns": 243191416,
+        "finished_ns": 17257002041,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc15",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 15,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 17013810625,
+        "success": true
+      },
+      "consumer_block": "latest",
+      "consumer_block_form": "tag",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": null,
+        "block_tag": "latest",
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBlockByNumber|chain=91342|hydrated=false",
+        "method": "eth_getBlockByNumber",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "latest"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "hydrated",
+            "false"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "head at latest",
+        "category": "block_read",
+        "duration_ns": 283774125,
+        "finished_ns": 15866589958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc10",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 10,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 15582815833,
+        "success": true
+      },
+      "producer_block": "latest",
+      "producer_block_form": "tag",
+      "reason": "same_block: checkable_not_met — §23's own failure case: both sides ask a tag, which names the head at answer time and not a block, so the condition is not met even though the two asks read alike",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": null,
+      "scope": "intra_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc16",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "checkable_not_met",
+          "reason": "the consumer's §9 category is a read whose answer is a property of the head (a fee, a gas ceiling, a pending nonce), so its purpose is to be fresh"
+        }
+      ],
+      "consumer": {
+        "caller": "pending and latest nonces",
+        "category": "transaction_preparation",
+        "duration_ns": 247461958,
+        "finished_ns": 17504521166,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc16",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 16,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 17257059208,
+        "success": true
+      },
+      "consumer_block": "37700794",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "block_number": "37700794",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700794|chain=91342",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|chain=91342",
+        "method": "eth_getTransactionCount",
+        "slot": null,
+        "terms": [
+          [
+            "address",
+            "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+          ],
+          [
+            "block",
+            "37700794"
+          ],
+          [
+            "chain",
+            "91342"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "account: sender",
+        "category": "state_read",
+        "duration_ns": 283929417,
+        "finished_ns": 5944277333,
+        "logical_request_id": "route-91342-37700778-1791045896094:simulation:rpc8",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 8,
+        "sink": "simulation",
+        "stage": "simulation",
+        "stage_label": "simulation",
+        "started_ns": 5660347916,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "tag_against_height",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc17",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checkable_not_met",
+          "reason": "one side names a height and the other a tag: the record has no value for what the tag resolved to, so the condition is neither met nor violated"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (tag_against_height)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "checkable_not_met",
+          "reason": "the consumer asks a tag, which is a request for the newest answer the node holds: a stated freshness requirement, and §7's example of the case where matching data is not permission"
+        }
+      ],
+      "consumer": {
+        "caller": "pending and latest nonces",
+        "category": "transaction_preparation",
+        "duration_ns": 252157167,
+        "finished_ns": 17756726375,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc17",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 17,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 17504569208,
+        "success": true
+      },
+      "consumer_block": "pending",
+      "consumer_block_form": "tag",
+      "duplicate": false,
+      "duplicate_type": "same_target_block_undetermined",
+      "identity": {
+        "address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "block_number": null,
+        "block_tag": "pending",
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=pending|chain=91342",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|chain=91342",
+        "method": "eth_getTransactionCount",
+        "slot": null,
+        "terms": [
+          [
+            "address",
+            "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+          ],
+          [
+            "block",
+            "pending"
+          ],
+          [
+            "chain",
+            "91342"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "account: sender",
+        "category": "state_read",
+        "duration_ns": 283929417,
+        "finished_ns": 5944277333,
+        "logical_request_id": "route-91342-37700778-1791045896094:simulation:rpc8",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 8,
+        "sink": "simulation",
+        "stage": "simulation",
+        "stage_label": "simulation",
+        "started_ns": 5660347916,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checkable_not_met — one side names a height and the other a tag: the record has no value for what the tag resolved to, so the condition is neither met nor violated",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": null,
+      "scope": "cross_stage",
+      "verdict": "not_a_candidate"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc24",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "category": "state_read",
+        "duration_ns": 613887708,
+        "finished_ns": 19893487166,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc24",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 24,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 19279599458,
+        "success": true
+      },
+      "consumer_block": "37700793",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "block_number": "37700793",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_call|block=37700793|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_call|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method": "eth_call",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700793"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "data",
+            "0dfe1681"
+          ],
+          [
+            "to",
+            "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "category": "state_read",
+        "duration_ns": 257412709,
+        "finished_ns": 1581269125,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc3",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 3,
+        "sink": "lifecycle",
+        "stage": "opportunity_detection",
+        "stage_label": "opportunity_detection",
+        "started_ns": 1323856416,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc25",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "category": "state_read",
+        "duration_ns": 242302667,
+        "finished_ns": 20135848750,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc25",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 25,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 19893546083,
+        "success": true
+      },
+      "consumer_block": "37700793",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "block_number": "37700793",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_call|block=37700793|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_call|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method": "eth_call",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700793"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "data",
+            "d21220a7"
+          ],
+          [
+            "to",
+            "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "category": "state_read",
+        "duration_ns": 251151541,
+        "finished_ns": 1832503291,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc4",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 4,
+        "sink": "lifecycle",
+        "stage": "opportunity_detection",
+        "stage_label": "opportunity_detection",
+        "started_ns": 1581351750,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc26",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "category": "state_read",
+        "duration_ns": 269715208,
+        "finished_ns": 20405660666,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc26",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 26,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 20135945458,
+        "success": true
+      },
+      "consumer_block": "37700793",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "block_number": "37700793",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_call|block=37700793|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_call|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "method": "eth_call",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700793"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "data",
+            "0902f1ac"
+          ],
+          [
+            "to",
+            "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "category": "state_read",
+        "duration_ns": 244055709,
+        "finished_ns": 2076740625,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc5",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 5,
+        "sink": "lifecycle",
+        "stage": "opportunity_detection",
+        "stage_label": "opportunity_detection",
+        "started_ns": 1832684916,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc27",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "category": "state_read",
+        "duration_ns": 254294458,
+        "finished_ns": 20660029208,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc27",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 27,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 20405734750,
+        "success": true
+      },
+      "consumer_block": "37700793",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "block_number": "37700793",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_call|block=37700793|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_call|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method": "eth_call",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700793"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "data",
+            "0dfe1681"
+          ],
+          [
+            "to",
+            "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "category": "state_read",
+        "duration_ns": 707280833,
+        "finished_ns": 2784222833,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc6",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 6,
+        "sink": "lifecycle",
+        "stage": "opportunity_detection",
+        "stage_label": "opportunity_detection",
+        "started_ns": 2076942000,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc28",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "category": "state_read",
+        "duration_ns": 257958542,
+        "finished_ns": 20918046250,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc28",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 28,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 20660087708,
+        "success": true
+      },
+      "consumer_block": "37700793",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "block_number": "37700793",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_call|block=37700793|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_call|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method": "eth_call",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700793"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "data",
+            "d21220a7"
+          ],
+          [
+            "to",
+            "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "category": "state_read",
+        "duration_ns": 261852542,
+        "finished_ns": 3046260083,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc7",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 7,
+        "sink": "lifecycle",
+        "stage": "opportunity_detection",
+        "stage_label": "opportunity_detection",
+        "started_ns": 2784407541,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc29",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "category": "state_read",
+        "duration_ns": 257852125,
+        "finished_ns": 21176391916,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc29",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 29,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 20918539791,
+        "success": true
+      },
+      "consumer_block": "37700793",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "block_number": "37700793",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_call|block=37700793|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_call|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "method": "eth_call",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700793"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "data",
+            "0902f1ac"
+          ],
+          [
+            "to",
+            "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "category": "state_read",
+        "duration_ns": 247246167,
+        "finished_ns": 3293659375,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc8",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 8,
+        "sink": "lifecycle",
+        "stage": "opportunity_detection",
+        "stage_label": "opportunity_detection",
+        "started_ns": 3046413208,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc30",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "native balance of the sender",
+        "category": "state_read",
+        "duration_ns": 253410334,
+        "finished_ns": 21429869250,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc30",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 30,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 21176458916,
+        "success": true
+      },
+      "consumer_block": "37700793",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "block_number": "37700793",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700793|chain=91342",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|chain=91342",
+        "method": "eth_getBalance",
+        "slot": null,
+        "terms": [
+          [
+            "address",
+            "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+          ],
+          [
+            "block",
+            "37700793"
+          ],
+          [
+            "chain",
+            "91342"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "account: sender",
+        "category": "state_read",
+        "duration_ns": 254128084,
+        "finished_ns": 5660279375,
+        "logical_request_id": "route-91342-37700778-1791045896094:simulation:rpc7",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 7,
+        "sink": "simulation",
+        "stage": "simulation",
+        "stage_label": "simulation",
+        "started_ns": 5406151291,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc31",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checkable_not_met",
+          "reason": "neither ask carries a block term, so §6's block-identity condition cannot be met by it; this is an absent identity, not a matching one"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (no_block_in_either_request)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer carries no block term, so nothing here states or refuses a freshness requirement"
+        }
+      ],
+      "consumer": {
+        "caller": "endpoint chain id",
+        "category": "chain_identity",
+        "duration_ns": 237915584,
+        "finished_ns": 21667901000,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc31",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 31,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 21429985416,
+        "success": true
+      },
+      "consumer_block": null,
+      "consumer_block_form": "absent",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": null,
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+        "identity_note": null,
+        "identity_source": "identity_from_a_parameterless_request",
+        "identity_without_block": null,
+        "method": "eth_chainId",
+        "slot": null,
+        "terms": [
+          [
+            "endpoint",
+            "rpc-faa716cada04a9ef"
+          ],
+          [
+            "method_kind",
+            "eth_chainId"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": null,
+        "category": "chain_identity",
+        "duration_ns": 622328875,
+        "finished_ns": 15582729375,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc9",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 9,
+        "sink": "lifecycle",
+        "stage": null,
+        "stage_label": "unstamped",
+        "started_ns": 14960400500,
+        "success": true
+      },
+      "producer_block": null,
+      "producer_block_form": "absent",
+      "reason": "same_block: checkable_not_met — neither ask carries a block term, so §6's block-identity condition cannot be met by it; this is an absent identity, not a matching one",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": null,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc32",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_met",
+          "reason": "both asks name the same height"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checked_met",
+          "reason": "one height names one block, and both asks name it"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "block binding at pin",
+        "category": "block_read",
+        "duration_ns": 238703958,
+        "finished_ns": 21906651583,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc32",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 32,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 21667947625,
+        "success": true
+      },
+      "consumer_block": "37700778",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": "37700778",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBlockByNumber|block=37700778|chain=91342|hydrated=false",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBlockByNumber|chain=91342|hydrated=false",
+        "method": "eth_getBlockByNumber",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700778"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "hydrated",
+            "false"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "head and header that fixed the pin",
+        "category": "block_read",
+        "duration_ns": 246731625,
+        "finished_ns": 1322354958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc2",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 2,
+        "sink": "lifecycle",
+        "stage": "observation",
+        "stage_label": "observation",
+        "started_ns": 1075623333,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "lifecycle_ownership: not_checkable_from_a_record — no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": true,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc33",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_met",
+          "reason": "both asks name the same height"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checked_met",
+          "reason": "one height names one block, and both asks name it"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "before-snapshot: native and input-token balances",
+        "category": "state_read",
+        "duration_ns": 245284083,
+        "finished_ns": 22159274666,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc33",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 33,
+        "sink": "lifecycle",
+        "stage": "build",
+        "stage_label": "build",
+        "started_ns": 21913990583,
+        "success": true
+      },
+      "consumer_block": "37700793",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "block_number": "37700793",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700793|chain=91342",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|chain=91342",
+        "method": "eth_getBalance",
+        "slot": null,
+        "terms": [
+          [
+            "address",
+            "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+          ],
+          [
+            "block",
+            "37700793"
+          ],
+          [
+            "chain",
+            "91342"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "native balance of the sender",
+        "category": "state_read",
+        "duration_ns": 253410334,
+        "finished_ns": 21429869250,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc30",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 30,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 21176458916,
+        "success": true
+      },
+      "producer_block": "37700793",
+      "producer_block_form": "number",
+      "reason": "lifecycle_ownership: not_checkable_from_a_record — no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": true,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc36",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_met",
+          "reason": "both asks name the same height"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checked_met",
+          "reason": "one height names one block, and both asks name it"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "step 1: fee at pinned block",
+        "category": "block_read",
+        "duration_ns": 738291542,
+        "finished_ns": 23419785458,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc36",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 36,
+        "sink": "lifecycle",
+        "stage": "build",
+        "stage_label": "build",
+        "started_ns": 22681493916,
+        "success": true
+      },
+      "consumer_block": "37700778",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": "37700778",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBlockByNumber|block=37700778|chain=91342|hydrated=false",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBlockByNumber|chain=91342|hydrated=false",
+        "method": "eth_getBlockByNumber",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700778"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "hydrated",
+            "false"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "head and header that fixed the pin",
+        "category": "block_read",
+        "duration_ns": 246731625,
+        "finished_ns": 1322354958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc2",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 2,
+        "sink": "lifecycle",
+        "stage": "observation",
+        "stage_label": "observation",
+        "started_ns": 1075623333,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "lifecycle_ownership: not_checkable_from_a_record — no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": true,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc37",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checkable_not_met",
+          "reason": "neither ask carries a block term, so §6's block-identity condition cannot be met by it; this is an absent identity, not a matching one"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (no_block_in_either_request)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "checkable_not_met",
+          "reason": "the consumer's §9 category is a read whose answer is a property of the head (a fee, a gas ceiling, a pending nonce), so its purpose is to be fresh"
+        }
+      ],
+      "consumer": {
+        "caller": "step 1: fee at pinned block",
+        "category": "transaction_preparation",
+        "duration_ns": 672078583,
+        "finished_ns": 24091927833,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc37",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 37,
+        "sink": "lifecycle",
+        "stage": "build",
+        "stage_label": "build",
+        "started_ns": 23419849250,
+        "success": true
+      },
+      "consumer_block": null,
+      "consumer_block_form": "absent",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": null,
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+        "identity_note": null,
+        "identity_source": "identity_from_a_parameterless_request",
+        "identity_without_block": null,
+        "method": "eth_maxPriorityFeePerGas",
+        "slot": null,
+        "terms": [
+          [
+            "endpoint",
+            "rpc-faa716cada04a9ef"
+          ],
+          [
+            "method_kind",
+            "eth_maxPriorityFeePerGas"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "fee at pinned block",
+        "category": "transaction_preparation",
+        "duration_ns": 232306042,
+        "finished_ns": 16519929500,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc12",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 12,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 16287623458,
+        "success": true
+      },
+      "producer_block": null,
+      "producer_block_form": "absent",
+      "reason": "same_block: checkable_not_met — neither ask carries a block term, so §6's block-identity condition cannot be met by it; this is an absent identity, not a matching one",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": null,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc38",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checkable_not_met",
+          "reason": "§23's own failure case: both sides ask a tag, which names the head at answer time and not a block, so the condition is not met even though the two asks read alike"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (both_ask_a_tag)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "checkable_not_met",
+          "reason": "the consumer asks a tag, which is a request for the newest answer the node holds: a stated freshness requirement, and §7's example of the case where matching data is not permission"
+        }
+      ],
+      "consumer": {
+        "caller": "step 1: pending and latest nonces",
+        "category": "block_read",
+        "duration_ns": 805252708,
+        "finished_ns": 24897215708,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc38",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 38,
+        "sink": "lifecycle",
+        "stage": "build",
+        "stage_label": "build",
+        "started_ns": 24091963000,
+        "success": true
+      },
+      "consumer_block": "latest",
+      "consumer_block_form": "tag",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": null,
+        "block_tag": "latest",
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBlockByNumber|chain=91342|hydrated=false",
+        "method": "eth_getBlockByNumber",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "latest"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "hydrated",
+            "false"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "head at latest",
+        "category": "block_read",
+        "duration_ns": 283774125,
+        "finished_ns": 15866589958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc10",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 10,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 15582815833,
+        "success": true
+      },
+      "producer_block": "latest",
+      "producer_block_form": "tag",
+      "reason": "same_block: checkable_not_met — §23's own failure case: both sides ask a tag, which names the head at answer time and not a block, so the condition is not met even though the two asks read alike",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": null,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "different_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc39",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_violated",
+          "reason": "§23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\""
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (different_block)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "checkable_not_met",
+          "reason": "the consumer's §9 category is a read whose answer is a property of the head (a fee, a gas ceiling, a pending nonce), so its purpose is to be fresh"
+        }
+      ],
+      "consumer": {
+        "caller": "step 1: pending and latest nonces",
+        "category": "transaction_preparation",
+        "duration_ns": 817098333,
+        "finished_ns": 25714455333,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc39",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 39,
+        "sink": "lifecycle",
+        "stage": "build",
+        "stage_label": "build",
+        "started_ns": 24897357000,
+        "success": true
+      },
+      "consumer_block": "37700802",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "same_target_different_block",
+      "identity": {
+        "address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "block_number": "37700802",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700802|chain=91342",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|chain=91342",
+        "method": "eth_getTransactionCount",
+        "slot": null,
+        "terms": [
+          [
+            "address",
+            "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+          ],
+          [
+            "block",
+            "37700802"
+          ],
+          [
+            "chain",
+            "91342"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "account: sender",
+        "category": "state_read",
+        "duration_ns": 283929417,
+        "finished_ns": 5944277333,
+        "logical_request_id": "route-91342-37700778-1791045896094:simulation:rpc8",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 8,
+        "sink": "simulation",
+        "stage": "simulation",
+        "stage_label": "simulation",
+        "started_ns": 5660347916,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "same_block: checked_violated — §23: two named heights differ, so safe_to_reuse is false and the reason is \"different block identity\"",
+      "reusable": "no",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": false,
+      "scope": "cross_stage",
+      "verdict": "refused_different_block_identity"
+    },
+    {
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc40",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checkable_not_met",
+          "reason": "§23's own failure case: both sides ask a tag, which names the head at answer time and not a block, so the condition is not met even though the two asks read alike"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (both_ask_a_tag)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "checkable_not_met",
+          "reason": "the consumer asks a tag, which is a request for the newest answer the node holds: a stated freshness requirement, and §7's example of the case where matching data is not permission"
+        }
+      ],
+      "consumer": {
+        "caller": "step 1: pending and latest nonces",
+        "category": "transaction_preparation",
+        "duration_ns": 756125084,
+        "finished_ns": 26470693625,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc40",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 40,
+        "sink": "lifecycle",
+        "stage": "build",
+        "stage_label": "build",
+        "started_ns": 25714568541,
+        "success": true
+      },
+      "consumer_block": "pending",
+      "consumer_block_form": "tag",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "block_number": null,
+        "block_tag": "pending",
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=pending|chain=91342",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|chain=91342",
+        "method": "eth_getTransactionCount",
+        "slot": null,
+        "terms": [
+          [
+            "address",
+            "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+          ],
+          [
+            "block",
+            "pending"
+          ],
+          [
+            "chain",
+            "91342"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "pending and latest nonces",
+        "category": "transaction_preparation",
+        "duration_ns": 252157167,
+        "finished_ns": 17756726375,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc17",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 17,
+        "sink": "lifecycle",
+        "stage": "preflight",
+        "stage_label": "preflight",
+        "started_ns": 17504569208,
+        "success": true
+      },
+      "producer_block": "pending",
+      "producer_block_form": "tag",
+      "reason": "same_block: checkable_not_met — §23's own failure case: both sides ask a tag, which names the head at answer time and not a block, so the condition is not met even though the two asks read alike",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": null,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc41",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checkable_not_met",
+          "reason": "neither ask carries a block term, so §6's block-identity condition cannot be met by it; this is an absent identity, not a matching one"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checkable_not_met",
+          "reason": "the record's block terms do not give one identity (no_block_in_either_request)"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer carries no block term, so nothing here states or refuses a freshness requirement"
+        }
+      ],
+      "consumer": {
+        "caller": "step 1: gate — endpoint chain id",
+        "category": "chain_identity",
+        "duration_ns": 233074042,
+        "finished_ns": 26703964625,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc41",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 41,
+        "sink": "lifecycle",
+        "stage": "build",
+        "stage_label": "build",
+        "started_ns": 26470890583,
+        "success": true
+      },
+      "consumer_block": null,
+      "consumer_block_form": "absent",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": null,
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+        "identity_note": null,
+        "identity_source": "identity_from_a_parameterless_request",
+        "identity_without_block": null,
+        "method": "eth_chainId",
+        "slot": null,
+        "terms": [
+          [
+            "endpoint",
+            "rpc-faa716cada04a9ef"
+          ],
+          [
+            "method_kind",
+            "eth_chainId"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": null,
+        "category": "chain_identity",
+        "duration_ns": 622328875,
+        "finished_ns": 15582729375,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc9",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 9,
+        "sink": "lifecycle",
+        "stage": null,
+        "stage_label": "unstamped",
+        "started_ns": 14960400500,
+        "success": true
+      },
+      "producer_block": null,
+      "producer_block_form": "absent",
+      "reason": "same_block: checkable_not_met — neither ask carries a block term, so §6's block-identity condition cannot be met by it; this is an absent identity, not a matching one",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": null,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc42",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_met",
+          "reason": "both asks name the same height"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checked_met",
+          "reason": "one height names one block, and both asks name it"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "step 1: gate — block binding at pin",
+        "category": "block_read",
+        "duration_ns": 265655416,
+        "finished_ns": 26969667666,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc42",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 42,
+        "sink": "lifecycle",
+        "stage": "build",
+        "stage_label": "build",
+        "started_ns": 26704012250,
+        "success": true
+      },
+      "consumer_block": "37700778",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": null,
+        "block_number": "37700778",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBlockByNumber|block=37700778|chain=91342|hydrated=false",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBlockByNumber|chain=91342|hydrated=false",
+        "method": "eth_getBlockByNumber",
+        "slot": null,
+        "terms": [
+          [
+            "block",
+            "37700778"
+          ],
+          [
+            "chain",
+            "91342"
+          ],
+          [
+            "hydrated",
+            "false"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "head and header that fixed the pin",
+        "category": "block_read",
+        "duration_ns": 246731625,
+        "finished_ns": 1322354958,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc2",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 2,
+        "sink": "lifecycle",
+        "stage": "observation",
+        "stage_label": "observation",
+        "started_ns": 1075623333,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "lifecycle_ownership: not_checkable_from_a_record — no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": true,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    },
+    {
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc43",
+      "conditions": [
+        {
+          "condition": "same_block",
+          "outcome": "checked_met",
+          "reason": "both asks name the same height"
+        },
+        {
+          "condition": "block_identity",
+          "outcome": "checked_met",
+          "reason": "one height names one block, and both asks name it"
+        },
+        {
+          "condition": "state_semantics",
+          "outcome": "checked_met",
+          "reason": "same method, same terms, same endpoint digest: what the node was asked is one ask. This does not say the two callers mean the same thing by the answer — §21's StateStore-versus-REVM question — only that the ask is one ask"
+        },
+        {
+          "condition": "lifecycle_ownership",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)"
+        },
+        {
+          "condition": "no_freshness_requirement",
+          "outcome": "not_checkable_from_a_record",
+          "reason": "the consumer names a height rather than a tag, which is weaker than a stated freshness requirement and is not its absence: no recorded field says why the code asked again"
+        }
+      ],
+      "consumer": {
+        "caller": "step 1: gate — native balance",
+        "category": "state_read",
+        "duration_ns": 251177250,
+        "finished_ns": 27220910541,
+        "logical_request_id": "route-91342-37700778-1791045896094:lifecycle:rpc43",
+        "physical_attempts": 1,
+        "role": "consumer",
+        "rpc_id": 43,
+        "sink": "lifecycle",
+        "stage": "build",
+        "stage_label": "build",
+        "started_ns": 26969733291,
+        "success": true
+      },
+      "consumer_block": "37700778",
+      "consumer_block_form": "number",
+      "duplicate": true,
+      "duplicate_type": "exact_duplicate",
+      "identity": {
+        "address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "block_number": "37700778",
+        "block_tag": null,
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700778|chain=91342",
+        "identity_note": null,
+        "identity_source": "identity_from_the_recorded_dedup_key",
+        "identity_without_block": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|chain=91342",
+        "method": "eth_getBalance",
+        "slot": null,
+        "terms": [
+          [
+            "address",
+            "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+          ],
+          [
+            "block",
+            "37700778"
+          ],
+          [
+            "chain",
+            "91342"
+          ]
+        ]
+      },
+      "producer": {
+        "caller": "account: sender",
+        "category": "state_read",
+        "duration_ns": 254128084,
+        "finished_ns": 5660279375,
+        "logical_request_id": "route-91342-37700778-1791045896094:simulation:rpc7",
+        "physical_attempts": 1,
+        "role": "producer",
+        "rpc_id": 7,
+        "sink": "simulation",
+        "stage": "simulation",
+        "stage_label": "simulation",
+        "started_ns": 5406151291,
+        "success": true
+      },
+      "producer_block": "37700778",
+      "producer_block_form": "number",
+      "reason": "lifecycle_ownership: not_checkable_from_a_record — no field of a recorded call says who holds an answer after it arrives, and M8.3.1's reuse boundary is documented as one simulation's own; whether a later stage may be served from an earlier stage's memory is a property of code this milestone is forbidden to change (§2, §22)",
+      "reusable": "unknown",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": false,
+      "same_block": true,
+      "scope": "cross_stage",
+      "verdict": "reuse_candidate_unknown"
+    }
+  ],
+  "runs": 1,
+  "safe_to_reuse": 0,
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}
