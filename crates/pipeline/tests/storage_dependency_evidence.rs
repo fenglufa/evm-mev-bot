@@ -844,9 +844,10 @@ fn build_readme(runs: &[Run], root: &Value) -> String {
         .map(|(_, row)| row["rpc_count_total"].as_u64().unwrap_or(0))
         .sum();
     // The four named buckets do not hold the arm's calls, and a sentence that added them up and
-    // called the sum 「calls across the runs」 would read as though they did: the arm records 224,
-    // these hold 215. The difference is this bucket and the rows no stage stamped, so the reader
-    // can re-add the 224 from the two figures named beside them.
+    // called the sum 「calls across the runs」 would read as though they did. The difference is
+    // this bucket and the rows no stage stamped, so the reader can re-add the arm's total from the
+    // two figures named beside them — and each of those two has to be pointed at where it actually
+    // prints, because one is a row of the table above and the other is a per-run total, not a row.
     let unnamed_bucket_calls: u64 = dependency["pipeline"]["stages_the_seven_do_not_name"]
         ["rpc_count_total"]
         .as_u64()
@@ -866,8 +867,10 @@ fn build_readme(runs: &[Run], root: &Value) -> String {
     lines.push(format!(
         "**Q3 — into the stages around the simulation, and it is not a small part.** {named_calls} \
          of the arm's {arm_calls} recorded calls fall in the four buckets §7 names — {named}. The \
-         remaining {} are {unnamed_bucket_calls} in `stages_the_seven_do_not_name` and {unstamped_calls} \
-         the issuing code stamped no stage at all, both rows printing in §5 — one population of \
+         remaining {} are {unnamed_bucket_calls} in `stages_the_seven_do_not_name`, the last row of \
+        §5's table, and {unstamped_calls} the issuing code stamped no stage at all, which print as \
+        `calls_without_a_stamped_stage` in each run's totals and as `stage: null` rows in \
+        `{PIPELINE_CALLS_FILE}` — one population of \
          {arm_calls} read at two granularities, not two counts to add to it. A bucket's union is \
          measured inside one run and then added across runs, never swept across two clocks, so \
          these are sums of {runs} separate measurements and not one distribution. \
