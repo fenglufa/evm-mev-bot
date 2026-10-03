@@ -37,9 +37,9 @@ use std::sync::Arc;
 use alloy_primitives::{Address, B256, I256, U256};
 use async_trait::async_trait;
 
-use evm_chain::ChainLog;
+use evm_chain::{ChainLog, RpcTraceSink};
 use evm_core::BlockNumber;
-use evm_metrics::{Clock, Metrics};
+use evm_metrics::{Clock, Metrics, Stage};
 use evm_protocol::signatures::{topic_address, word, V2Topics, Weth9Topics};
 use evm_simulation::{Binding, ExecutedStep, SimulationResult};
 
@@ -1280,6 +1280,14 @@ pub struct SequenceStage {
     /// go. Tracked on the stage rather than inferred from the report because a submission that
     /// was `Unknown` produced no report row at all.
     in_flight: bool,
+    /// The trace this lane's reads are being recorded into, when the run has one.
+    ///
+    /// M8.4.1 §11's second half: connecting the lane's socket to the run's sink makes its calls
+    /// *visible*, and this handle is what makes each one *attributable* — §9 asks every recorded
+    /// call for the stage and the caller that issued it, and the code issuing a step's fee,
+    /// nonce, balance and binding reads is this function, which no layer above it can name.
+    /// `None` is the ordinary case and not a failure: no sink, no labels, same run.
+    rpc_trace: Option<RpcTraceSink>,
 }
 
 impl SequenceStage {
@@ -1333,6 +1341,7 @@ impl SequenceStage {
             configured_chain_id,
             tolerance,
             in_flight: false,
+            rpc_trace: None,
         })
     }
 
@@ -1356,12 +1365,35 @@ impl SequenceStage {
         clock: Clock,
         tolerance: Tolerance,
     ) -> Result<Self> {
+        Self::connect_with_trace(url, expected_chain_id, setup, clock, tolerance, None).await
+    }
+
+    /// [`connect`][Self::connect], with the run's RPC trace passed through to the lane's socket.
+    ///
+    /// M8.4.1 §11 asks whether the execution lane's nonce, fee, balance and block-header reads
+    /// can join the trace the rest of the run already writes. They can, and this is the only
+    /// change that takes: the sink goes onto the one adapter the lane builds for itself, so its
+    /// calls land in the same event list as the market's, in the same order, off the same
+    /// monotonic origin. No request is added (§12) — the sink observes the calls this function
+    /// was already going to make.
+    ///
+    /// `trace` is also kept on the stage, because §9's `caller` has to be stamped by the code
+    /// that issues the read and the four ability surfaces this stage holds carry no sink.
+    pub async fn connect_with_trace(
+        url: &str,
+        expected_chain_id: u64,
+        setup: ExecutionSetup,
+        clock: Clock,
+        tolerance: Tolerance,
+        trace: Option<RpcTraceSink>,
+    ) -> Result<Self> {
         let adapter = Arc::new(
-            crate::giwa::GiwaSequencerDirect::connect(
+            crate::giwa::GiwaSequencerDirect::connect_with_trace(
                 url,
                 expected_chain_id,
                 setup.mode,
                 crate::submitter::EndpointKind::PublicHttpRpc,
+                trace.clone(),
             )
             .await?,
         );
@@ -1373,7 +1405,7 @@ impl SequenceStage {
         };
         let assets = Arc::new(adapter.assets());
         let signer = Signer::from_env(setup.mode)?;
-        Self::new(
+        let mut stage = Self::new(
             abilities,
             assets,
             signer,
@@ -1381,7 +1413,9 @@ impl SequenceStage {
             expected_chain_id,
             clock,
             tolerance,
-        )
+        )?;
+        stage.rpc_trace = trace;
+        Ok(stage)
     }
 
     /// The lane's four surfaces, for the caller that has to price the same attempt it is
@@ -1390,8 +1424,38 @@ impl SequenceStage {
         &self.abilities
     }
 
+    /// A stage assembled rather than connected — a scripted endpoint in a test — with the
+    /// run's trace attached for labelling.
+    ///
+    /// [`connect_with_trace`][Self::connect_with_trace] both wires the sink onto the live socket
+    /// and keeps the handle for stamping; a caller that hands over four abilities has already
+    /// done the first half wherever those abilities record, and this sets only the second. It
+    /// exists so the labelling can be tested without a node: the reads a scripted endpoint
+    /// answers are the same reads, in the same order, with the same labels on them.
+    pub fn with_rpc_trace(mut self, sink: RpcTraceSink) -> Self {
+        self.rpc_trace = Some(sink);
+        self
+    }
+
     pub fn setup(&self) -> &ExecutionSetup {
         &self.setup
+    }
+
+    /// Name the lane's next reads for the trace: which stage they serve, and which leg of it
+    /// asked.
+    ///
+    /// The stage names are [`evm_metrics`]'s own and not invented for the report (§8), and each
+    /// is the stage the run's own ladder gives these reads a span for. `build` covers the price,
+    /// nonce, gate and before-snapshot reads: the ladder stamps no instant of its own for them,
+    /// so a leg that is really §26's gate keeps the gate in its *caller* name rather than in a
+    /// stage name that does not exist.
+    ///
+    /// With no sink this is a `None` test and nothing else — no lock, no clock read, no request
+    /// (§12).
+    fn stamp(&self, stage: Stage, caller: &str) {
+        if let Some(sink) = &self.rpc_trace {
+            sink.set_context(stage.as_str(), caller);
+        }
     }
 
     pub fn ledger(&self) -> &Ledger {
@@ -1462,6 +1526,10 @@ impl SequenceStage {
                 report.sources.push(verdict.describe());
             }
         }
+        self.stamp(
+            Stage::Build,
+            "before-snapshot: native and input-token balances",
+        );
         report.before = match self
             .snapshot(plan, before_head.block_number, before_head.block_hash)
             .await
@@ -1543,6 +1611,10 @@ impl SequenceStage {
         }
 
         let fees = self.abilities.fees.clone();
+        self.stamp(
+            Stage::Build,
+            &format!("step {step_number}: fee at pinned block"),
+        );
         let reading = fees
             .fee_reading(
                 intent.block_number.0,
@@ -1563,6 +1635,10 @@ impl SequenceStage {
         ));
 
         let nonces = self.abilities.nonces.clone();
+        self.stamp(
+            Stage::Build,
+            &format!("step {step_number}: pending and latest nonces"),
+        );
         let nonce_reading = nonces.nonce(intent.sender).await?;
         let nonce = self.lane.allocate(&nonce_reading)?;
         intent.nonce = nonce;
@@ -1577,10 +1653,22 @@ impl SequenceStage {
         self.rung(execution_id, ExecutionStatus::Built, metrics);
 
         let chain = self.abilities.chain.clone();
+        self.stamp(
+            Stage::Build,
+            &format!("step {step_number}: gate — endpoint chain id"),
+        );
         let endpoint_chain_id = chain.endpoint_chain_id().await?;
+        self.stamp(
+            Stage::Build,
+            &format!("step {step_number}: gate — block binding at pin"),
+        );
         let binding = read_binding(&*chain, intent.block_number, intent.block_hash).await;
 
         let fees = self.abilities.fees.clone();
+        self.stamp(
+            Stage::Build,
+            &format!("step {step_number}: gate — native balance"),
+        );
         let available = fees.balance(intent.sender, intent.block_number.0).await?;
         let maximum_spend_wei = build.unsigned.maximum_cost_wei()?;
         let source = format!(
@@ -1696,6 +1784,7 @@ impl SequenceStage {
         }
 
         let submitter = self.abilities.submitter.clone();
+        self.stamp(Stage::Submit, &format!("step {step_number}: raw bytes"));
         let submission = submitter.submit(&signed).await?;
         metrics.bump(&format!(
             "execution_sequence_submission_{}",
@@ -1732,6 +1821,10 @@ impl SequenceStage {
         };
         let receipt_submitter = self.abilities.submitter.clone();
         let receipt_chain = self.abilities.chain.clone();
+        self.stamp(
+            Stage::Receipt,
+            &format!("step {step_number}: receipt and canonical binding"),
+        );
         let tracked = ReceiptTracker::new(self.setup.receipts)
             .track(
                 &expected,
@@ -1859,6 +1952,10 @@ impl SequenceStage {
             block_number: last.block_number,
             block_hash: last.block_hash,
         };
+        self.stamp(
+            Stage::Settlement,
+            "after-snapshot: native and input-token balances",
+        );
         let after = match self.snapshot(plan, pin.block_number, pin.block_hash).await {
             Ok(after) => after,
             Err(error) => {

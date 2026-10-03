@@ -30,7 +30,7 @@ use futures_util::future::BoxFuture;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-use evm_chain::{normalize_address, BlockContext, ChainAdapter};
+use evm_chain::{normalize_address, BlockContext, ChainAdapter, RpcTraceSink};
 use evm_core::{BlockNumber, ChainId};
 
 use crate::acquisition::{BoundedDispatch, ConcurrencyReport, StateReadDescriptor};
@@ -170,6 +170,20 @@ pub trait StateProvider: Send + Sync {
     /// returns `Ok(None)`; the EVM then reads zero, which is what the chain
     /// would give for a hash outside the 256-block window anyway.
     async fn block_hash(&self, number: BlockNumber) -> ProviderResult<Option<B256>>;
+
+    /// Name the phase of the run that the reads issued below are part of (M8.4.1 §4).
+    ///
+    /// The default does nothing, and doing nothing is the honest answer for a source that
+    /// issues no calls: a recorded dump answers from disk, so there is no request to
+    /// attribute. Only [`RpcStateProvider`] can use this, because only it puts anything on
+    /// the wire to be labelled.
+    ///
+    /// This is a *statement about the code that follows*, not about a span of time: the
+    /// phase is what the caller is about to ask for, and the provider puts it on the calls
+    /// it issues until the next name. A phase that is never named is not guessed at — the
+    /// reads say they carry no phase, which is §28's 「没有证明就不能说」 applied to
+    /// attribution.
+    fn note_read_phase(&self, _phase: &str) {}
 
     /// This same source with a run's setup layered on top (§18, §57).
     ///
@@ -782,7 +796,22 @@ pub struct RpcStateProvider {
     recorded: Arc<Mutex<StateDump>>,
     reuse: bool,
     dispatch: Arc<BoundedDispatch>,
+    /// The sink this provider's own calls land in, taken from the adapter it reads
+    /// through rather than handed in: a label belongs on the record of the call it
+    /// describes, and the only way to be sure of that is to read it off the same
+    /// handle the call goes out on. `None` is a normal value — a source that was
+    /// never traced has nothing to label.
+    trace: Option<RpcTraceSink>,
+    /// The phase [`StateProvider::note_read_phase`] last named, shared across
+    /// [`StateProvider::with_setup`] for the same reason the cache is: naming phases
+    /// is one simulation's act, and a source derived from it is still that reader.
+    phase: Arc<Mutex<String>>,
 }
+
+/// The stage this provider stamps its calls with: §8's rule that a report uses the
+/// names the code already has. `simulation` is the stage the latency ladder calls this
+/// run's state reads, and this type is only ever a simulation's state source.
+const SIMULATION_STAGE: &str = "simulation";
 
 /// One member of an account read, as a batch carries it.
 ///
@@ -832,6 +861,7 @@ impl RpcStateProvider {
         concurrency: usize,
     ) -> Self {
         let chain_id = chain.chain_id();
+        let trace = chain.rpc_trace();
         Self {
             recorded: Arc::new(Mutex::new(StateDump::empty(chain_id, pin))),
             chain,
@@ -841,6 +871,8 @@ impl RpcStateProvider {
             cache: Arc::new(Mutex::new(StateReadCache::new(reuse))),
             reuse,
             dispatch: Arc::new(BoundedDispatch::new(concurrency)),
+            trace,
+            phase: Arc::new(Mutex::new(String::new())),
         }
     }
 
@@ -918,6 +950,44 @@ impl RpcStateProvider {
         }
     }
 
+    /// Put the run's current phase on the call about to be issued.
+    ///
+    /// Called at the one point each read has in common — after the reuse boundary has said
+    /// the node must be asked, before the request goes out — because that is the only place
+    /// where the label and the call are the same event. Two consequences follow from it:
+    ///
+    /// A read answered from cache stamps nothing, because it issues nothing, and a label
+    /// that outlived its phase would attribute a later call to the wrong caller. So when no
+    /// phase has been named this clears rather than leaves the sink holding whatever the
+    /// last phase was: the record then says `context_not_stamped`, which is §28's
+    /// 「没有测到就记录 not observed」 for an attribution this run did not make.
+    ///
+    /// A phase that has not moved is not stamped again. [`RpcTraceSink::set_context`] moves
+    /// the sink's stamp counter, and re-stamping the identical text while an earlier call of
+    /// the same batch is still open is exactly the overlap the `context_restamped_mid_call`
+    /// note exists to report — here it would be reported about a label that never changed.
+    fn stamp_read(&self) {
+        let Some(sink) = &self.trace else { return };
+        let phase = self.current_phase();
+        if phase.is_empty() {
+            sink.clear_context();
+            return;
+        }
+        let already = sink
+            .context()
+            .is_some_and(|held| held.stage == SIMULATION_STAGE && held.caller == phase);
+        if !already {
+            sink.set_context(SIMULATION_STAGE, phase);
+        }
+    }
+
+    fn current_phase(&self) -> String {
+        self.phase
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .clone()
+    }
+
     /// One `eth_getBalance`, asked of the reuse boundary first when `ask` says to.
     ///
     /// The second half of the returned pair is whether this call cost the node a
@@ -939,6 +1009,7 @@ impl RpcStateProvider {
         // taken just before the request, released once the answer is in. A hit
         // returned above never had a request to have outstanding, and counting one
         // would put an overlap in the evidence that the wire did not have (§16).
+        self.stamp_read();
         let _outstanding = self.dispatch.enter();
         let value = self
             .chain
@@ -965,6 +1036,7 @@ impl RpcStateProvider {
         if let Some(value) = cached {
             return Ok((value, false));
         }
+        self.stamp_read();
         let _outstanding = self.dispatch.enter();
         let value = self
             .chain
@@ -989,6 +1061,7 @@ impl RpcStateProvider {
         if let Some(code) = cached {
             return Ok((code, false));
         }
+        self.stamp_read();
         let _outstanding = self.dispatch.enter();
         let code = self
             .chain
@@ -1030,6 +1103,13 @@ impl StateProvider for RpcStateProvider {
 
     fn source(&self) -> String {
         format!("rpc:chain-{}", self.chain_id.0)
+    }
+
+    fn note_read_phase(&self, phase: &str) {
+        *self
+            .phase
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner) = phase.to_string();
     }
 
     async fn account(&self, address: Address) -> ProviderResult<Option<AccountState>> {
@@ -1132,6 +1212,7 @@ impl StateProvider for RpcStateProvider {
         if let Some(value) = cached {
             return Ok(value);
         }
+        self.stamp_read();
         let value = self
             .chain
             .get_storage_at(self.pin.number, address, slot)
@@ -1207,6 +1288,7 @@ impl StateProvider for RpcStateProvider {
     }
 
     async fn header(&self) -> ProviderResult<BlockContext> {
+        self.stamp_read();
         let block = self
             .chain
             .get_block_context(self.pin.number)
@@ -1221,6 +1303,7 @@ impl StateProvider for RpcStateProvider {
     }
 
     async fn block_hash(&self, number: BlockNumber) -> ProviderResult<Option<B256>> {
+        self.stamp_read();
         let block = self
             .chain
             .get_block(number)
@@ -1249,7 +1332,17 @@ impl StateProvider for RpcStateProvider {
             // The same scheduler, not a fresh one: the bound is this simulation's, and
             // so is the high-water mark §15 reports. A derived source that restarted
             // the count would let one run report two peaks.
+            // The same scheduler, not a fresh one: the bound is this simulation's, and
+            // so is the high-water mark §15 reports. A derived source that restarted
+            // the count would let one run report two peaks.
             dispatch: Arc::clone(&self.dispatch),
+            // The sink is a handle to the adapter above, and this provider reads through
+            // that same adapter, so the derived source labels the same timeline. The phase
+            // is shared for the same reason: a run names its phases once, across a
+            // `with_setup` boundary, and a label that reset to "no phase named" here would
+            // strip the attribution off every read of every step that follows.
+            trace: self.trace.clone(),
+            phase: Arc::clone(&self.phase),
         })
     }
 }

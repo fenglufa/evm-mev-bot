@@ -32,6 +32,22 @@ pub trait ChainAdapter: Send + Sync {
         None
     }
 
+    /// The observation handle this source is recording into, if it has one.
+    ///
+    /// The mirror of [`Self::with_rpc_trace`]: that one installs a sink for a caller that
+    /// owns the adapter; this one hands it back to a reader that only holds
+    /// `Arc<dyn ChainAdapter>` and needs to say what its next call is for. M8.4.1 §4's
+    /// `caller` field is stamped through here, by the simulation's state provider, which is
+    /// the only code that knows whether a given read is the header, the sender's account,
+    /// or step three of six.
+    ///
+    /// `None` is the same honest answer as in [`Self::with_rpc_trace`]: a source with no
+    /// calls to record has no label to attach them to, and the provider reads that as
+    /// "stamp nothing" rather than as "stamping failed".
+    fn rpc_trace(&self) -> Option<RpcTraceSink> {
+        None
+    }
+
     async fn latest_block(&self) -> Result<BlockNumber>;
 
     async fn get_block(&self, number: BlockNumber) -> Result<ChainBlock>;
@@ -80,6 +96,10 @@ impl<T: ChainAdapter + ?Sized> ChainAdapter for std::sync::Arc<T> {
 
     fn with_rpc_trace(&self, sink: RpcTraceSink) -> Option<Arc<dyn ChainAdapter>> {
         (**self).with_rpc_trace(sink)
+    }
+
+    fn rpc_trace(&self) -> Option<RpcTraceSink> {
+        (**self).rpc_trace()
     }
 
     async fn latest_block(&self) -> Result<BlockNumber> {

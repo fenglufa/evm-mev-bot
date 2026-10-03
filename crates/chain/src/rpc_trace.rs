@@ -43,6 +43,35 @@
 //! that burned a 20 s client timeout and then succeeded is a different shape from one
 //! that took 20 s in a single attempt — and §25's E against its B turns on which of
 //! the two happened.
+//!
+//! ## M8.4.1: who asked, stated by the caller rather than inferred from a clock
+//!
+//! M8.4.1 §4 and §9 ask each call to carry the stage it belongs to and the code that
+//! issued it. Until now the only attribution available was the pipeline's
+//! containment test — "this call's `started_ns` falls inside that stage's span" — and
+//! that test has a proven blind spot: the execution ladder's spans are written from
+//! *millisecond* stamps, so a nanosecond call cannot be claimed to sit inside them, and
+//! a call in one of those gaps classifies as `unknown` however obvious its author is to
+//! someone who has read the code. So the label is stamped instead of inferred:
+//!
+//! ```text
+//! who stamps        the code that issues the call, through [`RpcTraceSink::set_context`]
+//! who reads it      [`request_with`][crate::rpc::HttpChainAdapter::request_with], at the
+//!                   same instant it takes the start stamp
+//! what it costs     one clone of two short strings per call, on the traced path only
+//! when it lies      never, because the sink refuses to call an ambiguous label exact:
+//!                   [`RpcCallEvent::context_note`] says so when a second call was
+//!                   outstanding at this sink, or when the label was replaced while this
+//!                   call was in flight
+//! ```
+//!
+//! The note matters more than the label. A stamped label is a claim about the *sink's*
+//! state at one instant; it becomes a claim about *this call* only if no other call
+//! could have been issued under the same stamp. With concurrency 1 that holds and the
+//! note is absent; with a batch of independent reads in flight it does not, and the
+//! event says so rather than shipping a label that two calls share. The pipeline's
+//! containment test stays in place beside it — the two are separate accounts of the
+//! same question, and where they disagree the disagreement is the finding.
 
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard, OnceLock, PoisonError};
@@ -59,7 +88,26 @@ use serde_json::Value;
 /// of that key's five terms. A reader that wanted it had to take apart a string another
 /// module builds — so the field is stated rather than re-derived. Nothing else moved: a
 /// version-1 line and a version-2 line describe the same call.
-pub const RPC_TRACE_SCHEMA: u64 = 2;
+///
+/// Version 3 adds [`RpcCallEvent::stage`], [`RpcCallEvent::caller`] and
+/// [`RpcCallEvent::context_note`] — M8.4.1 §4/§9's "who issued this, from what code",
+/// stated by the issuing site instead of inferred from a time window. The delta is
+/// additive and every one of the three is optional, which is why
+/// [`RPC_TRACE_SCHEMA_READABLE`] lists 2 as well: a version-2 line is a complete account
+/// of the same call that simply predates the question: it carries no stage, no caller and
+/// no note, because the build that wrote it could not have stamped any of them.
+/// What a reader must not do is read that absence as "this call had no stage".
+pub const RPC_TRACE_SCHEMA: u64 = 3;
+
+/// The event schemas this build can read, oldest first.
+///
+/// A range rather than one number because the three fields version 3 adds are optional:
+/// rejecting a version-2 line would throw away evidence that was written honestly, and
+/// the only thing the reader loses is the attribution M8.4.1 asked for. Every other
+/// mismatch — a newer schema, a field of the wrong shape, a class word this build does
+/// not emit — stays fatal, because a guessed field in an evidence file is the one failure
+/// a later reader cannot see.
+pub const RPC_TRACE_SCHEMA_READABLE: [u64; 2] = [2, RPC_TRACE_SCHEMA];
 
 /// The largest event list one sink will hold.
 ///
@@ -143,6 +191,57 @@ pub struct RpcCallEvent {
     /// §12 list does not cover it) or [`DEDUP_KEY_PARAMS_UNREADABLE`] (the params were
     /// not the shape the rule assumes). Never a guess in its place.
     pub key_note: Option<&'static str>,
+    /// The lifecycle stage the issuing code said this call belongs to, or `None` when
+    /// nobody stamped one. M8.4.1 §9's `stage`, taken from the same name the latency trace
+    /// uses: the stamper is pipeline code holding the trace's own `Stage` enum, so the
+    /// word here is that enum's `as_str()` and not a second vocabulary invented for the
+    /// evidence (§8's rule).
+    ///
+    /// Read this together with [`RpcCallEvent::context_note`]: the note is what says
+    /// whether the label can be attributed to *this* call alone.
+    ///
+    /// The three context fields are `skip_serializing_if`-absent rather than `null` when
+    /// there is nothing to say, and that is what keeps a version-2 trace line re-emittable
+    /// byte for byte: the calls M8.3.2 and M8.3.3 committed predate the question, so a
+    /// re-assembly of their own evidence must not invent keys their lines never carried.
+    /// What a reader loses is a `null` it would have had to ignore anyway — and
+    /// [`RpcCallEvent::trace_schema`] still says which side of the boundary a line is on.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage: Option<String>,
+    /// The site that issued the call, in the words of the code that issued it — a phase
+    /// name plus the read it is going to make, not a file:line that a later edit could
+    /// silently misplace. `None` for an unstamped call.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caller: Option<String>,
+    /// Why `stage` and `caller` are what they are, from the closed set
+    /// [`CONTEXT_NOT_STAMPED`], [`CONTEXT_AMBIGUOUS_CONCURRENT_CALLS`],
+    /// [`CONTEXT_AMBIGUOUS_RESTAMPED_MID_CALL`]. `None` when a label was stamped *and*
+    /// nothing else was outstanding at this sink while the call was open, which is the only
+    /// case in which a stamped label is a fact about one call rather than about a window.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_note: Option<&'static str>,
+}
+
+/// What the code issuing a call says it is for: M8.4.1 §4's `stage` and `caller`, as one
+/// stamp on [`RpcTraceSink::set_context`].
+///
+/// `String` rather than `&'static str` because a caller label is assembled at the call
+/// site (`"step 3 of 6 — execute"`), and because putting the stage enum in here would make
+/// `evm-chain` depend on `evm-metrics` for a word that a sink only ever stores. The names
+/// are the trace's own because the *stamper* is pipeline code holding the `Stage` enum.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+pub struct RpcCallContext {
+    pub stage: String,
+    pub caller: String,
+}
+
+impl RpcCallContext {
+    pub fn new(stage: impl Into<String>, caller: impl Into<String>) -> Self {
+        Self {
+            stage: stage.into(),
+            caller: caller.into(),
+        }
+    }
 }
 
 /// §12's note when a method is outside the key list this build can name.
@@ -164,6 +263,35 @@ pub const CLASS_OK: &str = "ok";
 /// build measures is the whole provider call, and request construction, the wait on
 /// the node, and response decoding are not separable at the point the record is taken.
 pub const BREAKDOWN_UNAVAILABLE: &str = "breakdown_unavailable";
+
+/// The closed set of [`RpcCallEvent::context_note`] values, in the order a table lists
+/// them. A note is never a fourth value: one of these three strings or no string at all
+/// is the whole of what this build says about a label's exactness.
+pub const CONTEXT_NOTES: [&str; 3] = [
+    CONTEXT_NOT_STAMPED,
+    CONTEXT_AMBIGUOUS_CONCURRENT_CALLS,
+    CONTEXT_AMBIGUOUS_RESTAMPED_MID_CALL,
+];
+
+/// No label was on the sink when this call was issued, so `stage` and `caller` are absent
+/// as a fact about the *observer*, not about the call. This is the state of every sink in
+/// a run that has RPC tracing on and context stamping off, and it is also the state of a
+/// sink whose owner never reaches a stamping site.
+pub const CONTEXT_NOT_STAMPED: &str = "context_not_stamped";
+
+/// A second call was outstanding at this sink at one of the two instants this call was
+/// stamped or recorded, so the label the sink held was shared. The stage and caller are
+/// still the ones that were on the sink — they are not stripped — but they describe a
+/// window, not this call. M8.4.1 §5's rule that concurrency must not be *assumed* away
+/// is what this note exists for: with a batch of independent reads in flight, a stamped
+/// label is a weaker claim than a sequential one, and the evidence says which it is.
+pub const CONTEXT_AMBIGUOUS_CONCURRENT_CALLS: &str = "context_ambiguous_concurrent_calls";
+
+/// The label on the sink changed between this call's start stamp and its record, so the
+/// site that stamps moved on while the request was still open. Same handling as the
+/// concurrency note: the label is published with its note rather than quietly replaced by
+/// whichever stamp was current last.
+pub const CONTEXT_AMBIGUOUS_RESTAMPED_MID_CALL: &str = "context_restamped_mid_call";
 
 /// Where one sink's calls came from, in §20's three words.
 ///
@@ -208,7 +336,22 @@ struct Inner {
     origin: Instant,
     simulation_id: String,
     source: RpcTraceSource,
-    chain_id: Option<u64>,
+    /// Set in the same `OnceLock` shape as [`Self::endpoint`], for the same reason: a sink
+    /// that exists before the chain id does (M8.4.1 §11's `connect_with_trace`, whose whole
+    /// point is to observe the call that *learns* the id) cannot be given it at
+    /// construction, and a field that could be reassigned would let a later run overwrite
+    /// an earlier one's identity.
+    chain_id: OnceLock<u64>,
+    /// The label the issuing code last stamped, and how many stamps have been put on this
+    /// sink. One mutex because the two are one fact — a label and its sequence number —
+    /// and a snapshot that took them separately could pair a label with a stamp count that
+    /// already moved past it.
+    context: Mutex<ContextSlot>,
+    /// Logical calls currently outstanding at this sink: incremented before the request
+    /// starts, decremented after it is recorded. A count, not a claim about the node's
+    /// connection pool — it says that at most this many of *this sink's* calls were open at
+    /// once, which is the only concurrency the label's exactness depends on.
+    outstanding: AtomicU64,
     /// Filled once, by whoever knows the endpoint. A `OnceLock` rather than a field
     /// because a sink is shared by clone (the adapter is cloned on purpose) and an
     /// `Arc` cannot be assigned through — the alternative, `Arc::get_mut`, would
@@ -247,7 +390,12 @@ impl RpcTraceSink {
                 origin,
                 simulation_id: simulation_id.into(),
                 source,
-                chain_id,
+                chain_id: match chain_id {
+                    Some(id) => OnceLock::from(id),
+                    None => OnceLock::new(),
+                },
+                context: Mutex::new(ContextSlot::default()),
+                outstanding: AtomicU64::new(0),
                 endpoint: OnceLock::new(),
                 endpoint_id: OnceLock::new(),
                 events: Mutex::new(Vec::new()),
@@ -269,7 +417,18 @@ impl RpcTraceSink {
     }
 
     pub fn chain_id(&self) -> Option<u64> {
-        self.inner.chain_id
+        self.inner.chain_id.get().copied()
+    }
+
+    /// Fill in the chain id for a sink that was opened before it was known.
+    ///
+    /// The first id given wins, exactly as with [`Self::with_endpoint`]: a sink that could
+    /// be re-pointed at another chain would report one run's calls under another chain's
+    /// number. This exists for `connect_with_trace`, whose whole purpose is to record the
+    /// call that *learns* the id — that call is keyed `chain-unknown` by
+    /// [`describe_call`], and everything after it is not.
+    pub fn note_chain_id(&self, chain_id: u64) {
+        let _ = self.inner.chain_id.set(chain_id);
     }
 
     /// The endpoint string to scrub out of any message stored in an event.
@@ -288,6 +447,60 @@ impl RpcTraceSink {
     /// answering it by printing a credential).
     pub fn endpoint_id(&self) -> Option<&str> {
         self.inner.endpoint_id.get().map(String::as_str)
+    }
+
+    /// Put M8.4.1 §4's label on the next calls this sink records, and return the stamp's
+    /// sequence number.
+    ///
+    /// The label is one for *every* call issued until the next stamp, which is what makes
+    /// it a claim about the issuing code rather than about a span of time: the site that
+    /// stamps is the site that is about to make the read. A caller that wants a
+    /// per-call label therefore stamps, awaits the one read, stamps the next phase — the
+    /// sequential shape the simulation's state provider has at concurrency 1. Two returns
+    /// above `1` at the same sink is what [`Self::begin_call`] reports as ambiguity.
+    pub fn set_context(&self, stage: impl Into<String>, caller: impl Into<String>) -> u64 {
+        let mut slot = context_lock(&self.inner);
+        slot.current = Some(RpcCallContext::new(stage, caller));
+        slot.stamp += 1;
+        slot.stamp
+    }
+
+    /// Take the label off, for a stretch of calls that genuinely has no issuing phase to
+    /// name. Absence is stated here rather than by leaving a stale label on the sink,
+    /// because a stale label would attach an earlier phase's name to a later call.
+    pub fn clear_context(&self) -> u64 {
+        let mut slot = context_lock(&self.inner);
+        slot.current = None;
+        slot.stamp += 1;
+        slot.stamp
+    }
+
+    /// The label this sink is holding right now, if any.
+    pub fn context(&self) -> Option<RpcCallContext> {
+        context_lock(&self.inner).current.clone()
+    }
+
+    /// How many logical calls are open at this sink right now.
+    pub fn outstanding_calls(&self) -> u64 {
+        self.inner.outstanding.load(Ordering::Acquire)
+    }
+
+    /// Announce that a call is about to be issued, and snapshot the label it goes out
+    /// under.
+    ///
+    /// The returned guard holds the count for as long as the call is open and decrements it
+    /// on drop, so the choke point never has to remember to balance it — including on the
+    /// paths that return early. Nothing here asks the node anything (§12): it is one atomic
+    /// increment and one clone of the label the sink already holds.
+    pub fn begin_call(&self) -> TracedCall {
+        let opened = self.inner.outstanding.fetch_add(1, Ordering::AcqRel) + 1;
+        let slot = context_lock(&self.inner);
+        TracedCall {
+            sink: self.clone(),
+            context: slot.current.clone(),
+            stamp: slot.stamp,
+            outstanding_at_start: opened,
+        }
     }
 
     /// Nanoseconds since this sink's origin, floored rather than wrapped: a stamp, not
@@ -358,6 +571,89 @@ impl RpcTraceSink {
     pub fn next_rpc_id(&self) -> u64 {
         self.inner.next_id.fetch_add(1, Ordering::Relaxed)
     }
+}
+
+/// What [`RpcTraceSink::set_context`] holds: the current label and how many labels this
+/// sink has been given.
+///
+/// The count is what lets a call tell "the label is the one I was issued under" from "the
+/// label happens to be what somebody stamped later". A sink that was stamped once and never
+/// re-stamped while a call was open is the sequential case, and its calls carry no note.
+#[derive(Default)]
+struct ContextSlot {
+    current: Option<RpcCallContext>,
+    stamp: u64,
+}
+
+/// One call's open handle on the sink, returned by [`RpcTraceSink::begin_call`].
+///
+/// A guard rather than a pair of calls, because a count that has to be decremented on
+/// every path out of a function that has three `await`s and two early returns is a count
+/// that eventually stops matching the calls it counts. Dropping it is the whole of
+/// releasing the slot; a panicked or returned-early call therefore cannot strand the
+/// counter, and the next call's `outstanding_at_start` would be a number about a
+/// bookkeeping bug rather than about the node.
+pub struct TracedCall {
+    sink: RpcTraceSink,
+    context: Option<RpcCallContext>,
+    stamp: u64,
+    outstanding_at_start: u64,
+}
+
+impl Drop for TracedCall {
+    fn drop(&mut self) {
+        self.sink.inner.outstanding.fetch_sub(1, Ordering::AcqRel);
+    }
+}
+
+impl TracedCall {
+    /// The label to record, and whether it can be called this call's own.
+    ///
+    /// Read at record time rather than at start time, because the two things that can make
+    /// a label inexact — another call opening at the same sink, and the stamp moving — are
+    /// both about the interval the call spans, and only its end can see the whole of it.
+    ///
+    /// The note's precedence is deliberate: *no label* outranks *a shared label*, and a
+    /// demonstrated overlap outranks a stamp that moved. Each is stronger evidence about
+    /// the same call than the next, and a reader should see the strongest one that applies.
+    pub fn label(&self) -> RpcCallLabel {
+        let stamp_now = context_lock(&self.sink.inner).stamp;
+        let overlapping = self.outstanding_at_start > 1 || self.sink.outstanding_calls() > 1;
+        let note = match (self.context.is_some(), overlapping, stamp_now != self.stamp) {
+            (false, _, _) => Some(CONTEXT_NOT_STAMPED),
+            (true, true, _) => Some(CONTEXT_AMBIGUOUS_CONCURRENT_CALLS),
+            (true, false, true) => Some(CONTEXT_AMBIGUOUS_RESTAMPED_MID_CALL),
+            (true, false, false) => None,
+        };
+        RpcCallLabel {
+            // The label this call was *issued* under, never the one on the sink at its end:
+            // the start is what the issuing code said about this request. A call issued
+            // with no stamp keeps no stage even if a stamp arrived before it finished, and
+            // `CONTEXT_NOT_STAMPED` says so — that later stamp belongs to a later read.
+            stage: self.context.as_ref().map(|context| context.stage.clone()),
+            caller: self.context.as_ref().map(|context| context.caller.clone()),
+            context_note: note,
+        }
+    }
+}
+
+/// The three context fields one event gets from [`TracedCall::label`].
+///
+/// A small plain type rather than three loose returns because the choke point has to write
+/// all three or none: an event with a stage and no note would be a label this build claims
+/// is exact without having checked whether two calls share it.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct RpcCallLabel {
+    pub stage: Option<String>,
+    pub caller: Option<String>,
+    pub context_note: Option<&'static str>,
+}
+
+/// The label slot, poison-resistant for the same reason [`events_lock`] is: a panic
+/// somewhere else in the process must not turn a *record* into a panic here, and a
+/// poisoned slot still holds the label some phase stamped.
+fn context_lock(inner: &Inner) -> MutexGuard<'_, ContextSlot> {
+    inner.context.lock().unwrap_or_else(PoisonError::into_inner)
 }
 
 /// The event list, poison-resistant: a poisoned lock still holds its data, and
@@ -901,6 +1197,11 @@ mod tests {
                 }],
                 dedup_key: Some(format!("code|91342|1|0x{index}")),
                 key_note: None,
+                // Built by hand rather than issued through the choke point, so the context
+                // fields carry nothing: no stamp was taken, and no note was computed.
+                stage: None,
+                caller: None,
+                context_note: None,
             });
         }
         let events = sink.events();
@@ -941,6 +1242,9 @@ mod tests {
             attempts: Vec::new(),
             dedup_key: None,
             key_note: Some(DEDUP_KEY_UNAVAILABLE_FOR_METHOD),
+            stage: None,
+            caller: None,
+            context_note: None,
         });
         assert_eq!(sink.events()[0].duration_ns, 0);
     }
@@ -969,6 +1273,9 @@ mod tests {
             attempts: Vec::new(),
             dedup_key: None,
             key_note: Some(DEDUP_KEY_UNAVAILABLE_FOR_METHOD),
+            stage: None,
+            caller: None,
+            context_note: None,
         });
         let detail = sink.events()[0].error_detail.clone().unwrap_or_default();
         assert!(!detail.contains("abc123"), "endpoint leaked: {detail}");
@@ -1019,6 +1326,9 @@ mod tests {
             attempts: Vec::new(),
             dedup_key: None,
             key_note: None,
+            stage: None,
+            caller: None,
+            context_note: None,
         };
         for _ in 0..MAX_EVENTS_PER_SINK + 2 {
             let mut event = event.clone();
@@ -1050,5 +1360,147 @@ mod tests {
         assert_eq!(normalize_block_param("37594591"), "37594591");
         assert_eq!(normalize_block_param("0x23da5df"), "37594591");
         assert_eq!(normalize_hash("0xABC"), "0xabc");
+    }
+
+    /// M8.4.1 §4's label, in the one case where it is a fact about a single call: nothing
+    /// else was open at this sink, and nothing re-stamped while it was. The absence of a
+    /// note is the assertion — it is what lets a table say "this read was issued by this
+    /// phase" instead of "this read happened around this phase".
+    #[test]
+    fn a_label_stamped_for_one_open_call_is_that_calls_and_carries_no_note() {
+        let sink = RpcTraceSink::new(Instant::now(), "sim-ctx", RpcTraceSource::Live, Some(1));
+        sink.set_context("simulation", "step 2 of 6 — swap exact in");
+        let call = sink.begin_call();
+        let label = call.label();
+        assert_eq!(label.stage.as_deref(), Some("simulation"));
+        assert_eq!(label.caller.as_deref(), Some("step 2 of 6 — swap exact in"));
+        assert_eq!(
+            label.context_note, None,
+            "one call, one label, nothing to hedge"
+        );
+        drop(call);
+        assert_eq!(
+            sink.outstanding_calls(),
+            0,
+            "the guard balances its own count"
+        );
+    }
+
+    /// §5's rule in the shape that actually breaks attribution: two calls open at one sink
+    /// share the label, so *both* must say so. A note on only the second would let a reader
+    /// group the first with a phase it may not belong to — the exact mistake stamped
+    /// labels were supposed to remove.
+    #[test]
+    fn two_calls_open_at_one_sink_both_report_their_label_as_shared() {
+        let sink = RpcTraceSink::new(Instant::now(), "sim-ctx", RpcTraceSource::Live, Some(1));
+        sink.set_context("simulation", "codes: touched_contracts");
+        let first = sink.begin_call();
+        sink.set_context("simulation", "code: sender");
+        let second = sink.begin_call();
+
+        let first_label = first.label();
+        let second_label = second.label();
+        assert_eq!(
+            first_label.context_note,
+            Some(CONTEXT_AMBIGUOUS_CONCURRENT_CALLS)
+        );
+        assert_eq!(
+            second_label.context_note,
+            Some(CONTEXT_AMBIGUOUS_CONCURRENT_CALLS)
+        );
+        // Each keeps the label it was *issued* under, rather than the one current at its
+        // end: the start stamp is what the issuing code said about this request.
+        assert_eq!(
+            first_label.caller.as_deref(),
+            Some("codes: touched_contracts")
+        );
+        assert_eq!(second_label.caller.as_deref(), Some("code: sender"));
+        drop((first, second));
+        assert_eq!(sink.outstanding_calls(), 0);
+    }
+
+    /// The case a time window cannot see and a stamp can: a phase boundary crossed while a
+    /// request was still open. The label is published with the note rather than replaced by
+    /// whichever stamp was current last, so a reader sees the same disagreement the run had.
+    #[test]
+    fn a_label_that_moves_while_a_call_is_open_is_reported_as_moved() {
+        let sink = RpcTraceSink::new(Instant::now(), "sim-ctx", RpcTraceSource::Live, Some(1));
+        sink.set_context("observation", "latest_block");
+        let call = sink.begin_call();
+        sink.set_context("opportunity_detection", "price_legs: getReserves");
+        let label = call.label();
+        assert_eq!(label.stage.as_deref(), Some("observation"));
+        assert_eq!(
+            label.context_note,
+            Some(CONTEXT_AMBIGUOUS_RESTAMPED_MID_CALL)
+        );
+        drop(call);
+    }
+
+    /// The sink's own `None` is not the same statement as an unstamped run, and neither is
+    /// the same as a stale label left over from a phase that already ended. This test is
+    /// the difference between the two: clearing is a stamp of *nothing*, and the note says
+    /// no label was on the sink when the call went out.
+    #[test]
+    fn an_unstamped_or_cleared_sink_labels_nothing_and_says_which() {
+        let sink = RpcTraceSink::new(Instant::now(), "sim-ctx", RpcTraceSource::Live, Some(1));
+        let never = sink.begin_call().label();
+        assert_eq!(
+            (never.stage.as_deref(), never.caller.as_deref()),
+            (None, None)
+        );
+        assert_eq!(never.context_note, Some(CONTEXT_NOT_STAMPED));
+
+        sink.set_context("simulation", "header");
+        assert!(sink.context().is_some());
+        sink.clear_context();
+        assert!(sink.context().is_none());
+        let cleared = sink.begin_call().label();
+        assert_eq!(cleared.context_note, Some(CONTEXT_NOT_STAMPED));
+        assert_eq!(
+            sink.outstanding_calls(),
+            0,
+            "a temporary's drop still balances"
+        );
+    }
+
+    /// A note is a closed set because §17's tables group by it: an open-ended string would
+    /// let the same ambiguity arrive spelled two ways and be counted twice.
+    #[test]
+    fn the_context_note_is_one_of_three_words_or_none() {
+        let sink = RpcTraceSink::new(Instant::now(), "sim-ctx", RpcTraceSource::Live, Some(1));
+        let notes = [sink.begin_call().label().context_note, {
+            sink.set_context("simulation", "account: sender");
+            let call = sink.begin_call();
+            let note = call.label().context_note;
+            drop(call);
+            note
+        }];
+        for note in notes.into_iter().flatten() {
+            assert!(
+                CONTEXT_NOTES.contains(&note),
+                "`{note}` is not one of the notes this build emits"
+            );
+        }
+        assert_eq!(CONTEXT_NOTES.len(), 3);
+    }
+
+    /// §11's `connect_with_trace` precondition, stated where the type lives: a sink can be
+    /// opened before the chain id exists and filled in after, and the first id given is the
+    /// one it keeps — a sink that could be re-pointed would report one run's calls under
+    /// another chain's number.
+    #[test]
+    fn a_sink_opened_before_the_chain_id_is_known_can_be_filled_in_once() {
+        let sink = RpcTraceSink::new(Instant::now(), "lifecycle", RpcTraceSource::Live, None);
+        assert_eq!(sink.chain_id(), None);
+        sink.note_chain_id(91_342);
+        assert_eq!(sink.chain_id(), Some(91_342));
+        sink.note_chain_id(1);
+        assert_eq!(sink.chain_id(), Some(91_342), "the first id wins");
+
+        let from_construction =
+            RpcTraceSink::new(Instant::now(), "sim", RpcTraceSource::Live, Some(1));
+        from_construction.note_chain_id(91_342);
+        assert_eq!(from_construction.chain_id(), Some(1));
     }
 }

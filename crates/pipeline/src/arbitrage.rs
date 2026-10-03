@@ -179,6 +179,19 @@ pub struct ArbitrageConfig {
     /// disable the cache, enable a batch, or add concurrency — those are the three things
     /// §18 forbids, and none of them is reachable from a field this module reads.
     pub state_acquisition_diagnosis: bool,
+    /// M8.4.1 §14/§15's diagnosis-only switch: it adds that milestone's six tables
+    /// (§6, §9, §17, §21) and nothing else.
+    ///
+    /// It is a separate field from [`Self::state_acquisition_diagnosis`] rather than a rename of
+    /// it for one reason: M8.3.2's gate compares a run directory's file *listing* byte for byte
+    /// against committed evidence, so a switch that grew that listing whenever the older switch
+    /// was on would make committed evidence fail for a reason that is not a measurement. What it
+    /// shares with the older switch is the observer and nothing more: turning it on builds the
+    /// same lifecycle sink (the whole-pipeline tables have no other source for the run's
+    /// non-simulation calls), and that sink records a call the run was already making. It cannot
+    /// add a request, a batch, a cache, a concurrency bound, or an ordering — §1's list — and
+    /// none of those is reachable from a field this module reads.
+    pub storage_dependency_diagnosis: bool,
 }
 
 /// One venue, as the node described it at the block the run pinned.
@@ -338,7 +351,13 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     // derived from it, which replaces rather than stacks, so a call lands in one list or the
     // other. §17's switch is the whole of it: with the flag off, `adapter` is the adapter
     // M8.3.1 ran with, and no second sink is built.
-    let lifecycle = if config.diagnosis_dir.is_some() && config.state_acquisition_diagnosis {
+    //
+    // M8.4.1 asks for this same sink under its own name rather than building a third one: §9's
+    // stage rows have no other source for the lifecycle's calls, and a second sink on one
+    // handle would either duplicate every row or replace the first.
+    let lifecycle = if config.diagnosis_dir.is_some()
+        && (config.state_acquisition_diagnosis || config.storage_dependency_diagnosis)
+    {
         let sink = RpcTraceSink::new(
             clock.origin_instant(),
             "lifecycle",
@@ -365,11 +384,17 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     // header read it turns into a pin, and nothing else.
     let detected_at = clock.now_ms();
     let detected_ns = clock.now_ns();
+    stamp_lifecycle(
+        &lifecycle,
+        Stage::Observation,
+        "head and header that fixed the pin",
+    );
     let head = adapter.latest_block().await.map_err(PipelineError::Chain)?;
     let header = adapter
         .get_block_context(head)
         .await
         .map_err(PipelineError::Chain)?;
+    clear_lifecycle(&lifecycle);
     let observed_ns = clock.now_ns();
     let session_id = format!("route-{chain_id}-{}-{}", head.0, evm_metrics::unix_ms());
     let dir = config.evidence_dir.join(&session_id);
@@ -386,8 +411,12 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     let mut diagnosis = RunDiagnosis::open(config, clock, chain_id, head, &run.session_id)?;
     // The sink above already holds the two calls that fixed this pin, because it went onto
     // the adapter before them; handing it over here is what gives §14's file its first two
-    // rows. With the switch off, `lifecycle` is `None` and nothing downstream changes.
-    diagnosis.attach_lifecycle(lifecycle);
+    // rows. It is handed over as a clone rather than moved: M8.4.1 §11's other half is the
+    // execution lane, whose socket is built at §D and needs this same handle to put its reads
+    // on this same timeline. A clone of a sink is the same list (§6's handle-not-buffer), so
+    // there is one timeline either way. With the switch off, `lifecycle` is `None` and nothing
+    // downstream changes.
+    diagnosis.attach_lifecycle(lifecycle.clone());
     trace.recorder.begin_at(Stage::Observation, detected_ns);
     trace.recorder.end_at(Stage::Observation, observed_ns);
     // §42.3's mapping, stated in the evidence rather than only in prose: a single-route run
@@ -409,7 +438,14 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         .begin_at(Stage::OpportunityDetection, observed_ns);
 
     // ---- §A: the route, from the chain's own state at the pin ----------------------------
-    let legs = match price_legs(&adapter, ChainId(chain_id), head, config).await {
+    stamp_lifecycle(
+        &lifecycle,
+        Stage::OpportunityDetection,
+        "reserves of both venues, at the pin",
+    );
+    let legs = price_legs(&adapter, ChainId(chain_id), head, config).await;
+    clear_lifecycle(&lifecycle);
+    let legs = match legs {
         Ok(legs) => legs,
         Err(detail) => {
             // §34's shape, produced by a real run: the stage that stopped the lifecycle is
@@ -681,12 +717,19 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
     // of a directory with nothing in it. M8.2 §22's diagnosis is by then a finished
     // simulation's worth of calls, so it gets the same treatment — a run that failed at its
     // gate still has an answer to §24's questions.
-    let mut stage = match SequenceStage::connect(
+    let mut stage = match SequenceStage::connect_with_trace(
         &config.rpc_url,
         chain_id,
         config.setup.clone(),
         clock,
         config.tolerance,
+        // M8.4.1 §11: the lane opens its own socket because it must price and send over one
+        // connection, and that socket was the one surface the published evidence could only
+        // call *not observed*. It gets this run's sink, so its chain id, fees, nonces,
+        // balances, binding and snapshots are recorded on the same timeline as everything else,
+        // with the leg that asked named beside each one. `None` when the diagnosis switch is
+        // off, and no read is added or removed either way (§12).
+        lifecycle.clone(),
     )
     .await
     {
@@ -846,10 +889,16 @@ impl RunTrace {
         // spans are M8.1's stamps — the same records, the same two clock readings per stage
         // boundary, not a second set taken for the diagnosis. So a run that asked for the
         // state-acquisition diagnosis but not for `traces.jsonl` still runs the recorder, and
-        // the recorder's output goes to §14's file and nowhere else. With neither switch the
-        // recorder is `off` and every boundary below declines the clock read, exactly as it
-        // did before this type grew a second reason to exist (§40's compatibility rule).
-        let measuring = evidence.is_some() || config.state_acquisition_diagnosis;
+        // the recorder's output goes to §14's file and nowhere else. With none of these switches
+        // the recorder is `off` and every boundary below declines the clock read, exactly as it
+        // did before this type grew a second, then a third, reason to exist (§40's compatibility
+        // rule).
+        // M8.4.1's switch is that third reason for the same stamps: its §9 stage rows are these
+        // same windows, so a run that asked for that milestone's tables and no `traces.jsonl`
+        // still runs the recorder and writes nothing extra.
+        let measuring = evidence.is_some()
+            || config.state_acquisition_diagnosis
+            || config.storage_dependency_diagnosis;
         Ok(Self {
             recorder: if measuring {
                 TraceRecorder::on(clock, trace)
@@ -1001,12 +1050,19 @@ impl RunDiagnosis {
     ) -> Result<Self> {
         let evidence = match config.diagnosis_dir.as_ref() {
             None => None,
-            Some(base) => Some(DiagnosisEvidence::open(
-                &base.join(session_id),
-                git_revision(),
-                config.setup.mode.name(),
-                config.state_acquisition_diagnosis,
-            )?),
+            Some(base) => {
+                let opened = DiagnosisEvidence::open(
+                    &base.join(session_id),
+                    git_revision(),
+                    config.setup.mode.name(),
+                    config.state_acquisition_diagnosis,
+                )?;
+                Some(if config.storage_dependency_diagnosis {
+                    opened.with_dependency_tables()
+                } else {
+                    opened
+                })
+            }
         };
         Ok(Self {
             evidence,
@@ -1350,6 +1406,28 @@ fn single_attested_chain(config: &ArbitrageConfig) -> Result<u64> {
              the --registry-dir that names the chain this endpoint is",
             other.len()
         ))),
+    }
+}
+
+/// M8.4.1 §9: name the stage and the leg for the reads that follow, when a lifecycle sink is
+/// watching this run.
+///
+/// A route run reads the node in four places for reasons of its own — the pin, the two venues'
+/// reserves, §26's gate facts, and §20's lane — and until now the trace could only say that a
+/// call happened. These two calls put that name on the sink before the reads and take it off
+/// after; with the diagnosis switch off `lifecycle` is `None` and both are a no-op test, which
+/// is §12's requirement that the instrument change nothing it does not observe.
+fn stamp_lifecycle(lifecycle: &Option<RpcTraceSink>, stage: Stage, caller: &str) {
+    if let Some(sink) = lifecycle {
+        sink.set_context(stage.as_str(), caller);
+    }
+}
+
+/// Take the name off, so a leg that has finished reading cannot be credited with a later
+/// leg's call.
+fn clear_lifecycle(lifecycle: &Option<RpcTraceSink>) {
+    if let Some(sink) = lifecycle {
+        sink.clear_context();
     }
 }
 
@@ -1777,6 +1855,7 @@ mod tests {
             state_read_reuse: true,
             state_read_concurrency: 1,
             state_acquisition_diagnosis: false,
+            storage_dependency_diagnosis: false,
         }
     }
 

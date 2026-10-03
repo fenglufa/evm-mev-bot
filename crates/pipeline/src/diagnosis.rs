@@ -901,6 +901,17 @@ struct TraceCall {
     dedup_key: Option<String>,
     #[serde(default)]
     key_note: Option<String>,
+    /// M8.4.1 §4's label, and the reason it is or is not this call's own. All three default
+    /// to `None` because a version-2 line carries none of them, and a line that predates a
+    /// question is not an answer of "no" to it — see [`evm_chain::RPC_TRACE_SCHEMA_READABLE`]
+    /// and [`trace_call`], which keeps the line's own schema number so a table can tell the
+    /// three cases apart.
+    #[serde(default)]
+    stage: Option<String>,
+    #[serde(default)]
+    caller: Option<String>,
+    #[serde(default)]
+    context_note: Option<String>,
 }
 
 /// [`RpcTraceSource`]'s own word back into the variant, for a line read from disk.
@@ -952,13 +963,49 @@ fn trace_calls(line: &Value) -> std::result::Result<Vec<RpcCallEvent>, String> {
     list.into_iter().map(trace_call).collect()
 }
 
+/// [`RpcCallEvent::context_note`]'s closed set, as the strings the record carries.
+const CONTEXT_NOTE_WORDS: [&str; 3] = [
+    evm_chain::CONTEXT_NOT_STAMPED,
+    evm_chain::CONTEXT_AMBIGUOUS_CONCURRENT_CALLS,
+    evm_chain::CONTEXT_AMBIGUOUS_RESTAMPED_MID_CALL,
+];
+
+/// One context note back into the constant. A fourth word is refused rather than filed
+/// under the nearest known note: the note is the reader's only warning that a label was
+/// not exact, so a mis-classified one would be a false guarantee of attribution.
+fn context_note_from_str(word: &str) -> std::result::Result<&'static str, String> {
+    CONTEXT_NOTE_WORDS
+        .into_iter()
+        .find(|known| *known == word)
+        .ok_or_else(|| format!("`{word}` is not one of the three context notes this build emits"))
+}
+
+/// One recorded call, back into the type the choke point writes.
+///
+/// Two schemas are readable and the reason is visible in the fields. [`evm_chain`] 2 is
+/// every line already committed under M8.3.2 and M8.3.2's and M8.3.3's evidence: the whole
+/// of what version 3 adds is three optional fields, so a v2 line decodes to `None` for all
+/// three and stays a complete account of the call it recorded. The three states a reader
+/// can therefore meet are named apart, which is the distinction §28 asks for — a line that
+/// predates the question, a line whose sink was never stamped
+/// (`context_not_stamped`), and a line stamped by the code that issued the call:
+///
+/// ```text
+/// trace_schema 2                     no stage, no caller, no note — not measured
+/// trace_schema 3, note Some(_)       asked, and answered with the reason it is not exact
+/// trace_schema 3, note None          this call's own label, one open call at that sink
+/// ```
+///
+/// Any other mismatch stays fatal. A schema above
+/// [`evm_chain::RPC_TRACE_SCHEMA_READABLE`]'s top would mean a field this build would
+/// silently drop, and a silently dropped field is a wrong figure in evidence.
 fn trace_call(call: TraceCall) -> std::result::Result<RpcCallEvent, String> {
-    if call.trace_schema != evm_chain::RPC_TRACE_SCHEMA {
+    if !evm_chain::RPC_TRACE_SCHEMA_READABLE.contains(&call.trace_schema) {
         return Err(format!(
-            "call {} was written by RPC trace schema {} and this build reads {}",
+            "call {} was written by RPC trace schema {} and this build reads one of {:?}",
             call.rpc_id,
             call.trace_schema,
-            evm_chain::RPC_TRACE_SCHEMA
+            evm_chain::RPC_TRACE_SCHEMA_READABLE
         ));
     }
     let error_class = match &call.error_class {
@@ -967,6 +1014,10 @@ fn trace_call(call: TraceCall) -> std::result::Result<RpcCallEvent, String> {
     };
     let key_note = match &call.key_note {
         Some(word) => Some(note_from_str(word)?),
+        None => None,
+    };
+    let context_note = match &call.context_note {
+        Some(word) => Some(context_note_from_str(word)?),
         None => None,
     };
     let mut attempts = Vec::with_capacity(call.attempts.len());
@@ -999,6 +1050,9 @@ fn trace_call(call: TraceCall) -> std::result::Result<RpcCallEvent, String> {
         attempts,
         dedup_key: call.dedup_key,
         key_note,
+        stage: call.stage,
+        caller: call.caller,
+        context_note,
     })
 }
 
@@ -2553,8 +2607,2070 @@ pub fn dependency_map_assembled(runs: &[Value]) -> Value {
     })
 }
 
-/// §25's seven categories, in §25's own order and §25's own words.
+// ===========================================================================
+// M8.4.1 §4–§6: which storage reads had to wait for which, and on what proof
+// ===========================================================================
+
+/// §3's three classification words, as a closed set. Nothing in this file writes a fourth,
+/// and `unknown` is never derived into `independent` — §3's own rule, restated here because
+/// it is the one rule a later editor could break without any test failing.
+pub const DEPENDENCY_INDEPENDENT: &str = "independent";
+pub const DEPENDENCY_ORDERED: &str = "ordered";
+pub const DEPENDENCY_UNKNOWN: &str = "unknown";
+
+/// §6's fourth word, used on a *pair* and never on a node. A node has to take one of
+/// §3's three words; a pair of reads whose relation this build cannot argue about is
+/// recorded here rather than being filed under `unknown` and then counted as if the
+/// relation between those two reads were what §19's `unknown` is about.
+pub const DEPENDENCY_UNDECIDABLE: &str = "undecidable";
+
+/// §6's files.
+pub const DEPENDENCY_MAP_FILE: &str = "dependency-map.json";
+pub const DEPENDENCY_SUMMARY_FILE: &str = "dependency-summary.json";
+pub const STORAGE_READS_FILE: &str = "storage-reads.json";
+/// §21's pipeline-side files, beside the run-level `rpc-summary.json` M8.3.2 already writes.
+pub const PIPELINE_SUMMARY_FILE: &str = "pipeline-summary.json";
+pub const STAGE_SUMMARY_FILE: &str = "stage-summary.json";
+/// §9's raw layer: every call of one run, from both sinks, verbatim.
+pub const PIPELINE_CALLS_FILE: &str = "pipeline-calls.json";
+/// The six names §6 and §21 ask for, and the only keys [`dependency_tables_of`] returns. A
+/// directory written under M8.4.1's switch holds exactly these beside the files it already
+/// wrote — the list is what `finish` iterates, so a table this build forgot to emit is a
+/// missing file a reader sees, not an empty one.
+pub const DEPENDENCY_FILES: [&str; 6] = [
+    STORAGE_READS_FILE,
+    DEPENDENCY_MAP_FILE,
+    DEPENDENCY_SUMMARY_FILE,
+    PIPELINE_CALLS_FILE,
+    PIPELINE_SUMMARY_FILE,
+    STAGE_SUMMARY_FILE,
+];
+
+/// What issued one storage read, decided from the `caller` name the site stamped.
 ///
+/// The point of the enum is that a *leg* is the unit a dependency can be proven on. Two
+/// reads of the same leg have a relation this build can state; two reads of different legs
+/// were issued by different statements of the engine, and the only thing that proves about
+/// them is that one statement came first — which is not what §3 asks.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum ReadLeg {
+    /// A read the REVM interpreter demanded (`views: …`, `execute: …`), one SLOAD at a
+    /// time, from a fiber that holds a single outstanding database request.
+    Fiber,
+    /// The §36 audit leg, whose whole key list exists before its first request goes out.
+    Materialised,
+    /// No `caller` on the record: the run did not say who asked (§4's `not_stamped`).
+    Unstamped,
+    /// A `caller` was recorded but with an ambiguity note, so the name on this record is
+    /// not established to be this call's.
+    Ambiguous,
+    /// A `caller` this analysis has no dependency proof for — a phase name added by a
+    /// later edit, or a hand-stamped read in a test.
+    Unattributed,
+}
+
+impl ReadLeg {
+    fn as_str(self) -> &'static str {
+        match self {
+            Self::Fiber => "fiber",
+            Self::Materialised => "materialised_audit",
+            Self::Unstamped => "unstamped",
+            Self::Ambiguous => "ambiguous_label",
+            Self::Unattributed => "unattributed_site",
+        }
+    }
+
+    /// Whether this leg's code carries a dependency proof. Only legs that answer yes can
+    /// produce an `independent` or an `ordered` node; every other read is `unknown`.
+    fn is_decidable(self) -> bool {
+        matches!(self, Self::Fiber | Self::Materialised)
+    }
+
+    /// The proof itself, in the words the map publishes beside every node of this leg.
+    fn proof(self) -> &'static str {
+        match self {
+            Self::Fiber => FIBER_LEG_PROOF,
+            Self::Materialised => MATERIALISED_LEG_PROOF,
+            Self::Unstamped => UNSTAMPED_LEG_NOTE,
+            Self::Ambiguous => AMBIGUOUS_LEG_NOTE,
+            Self::Unattributed => UNATTRIBUTED_LEG_NOTE,
+        }
+    }
+}
+
+/// Every leg this analysis can name, in the order a reader meets them: the two that carry a
+/// dependency proof first, then the three that carry only a reason for being `unknown`.
+///
+/// Published as rows of `{leg, proof}` rather than as an object keyed by the leg name,
+/// because the names come from [`ReadLeg::as_str`] at run time and a JSON object cannot be
+/// built from a computed key without a second copy of the vocabulary.
+const READ_LEGS: [ReadLeg; 5] = [
+    ReadLeg::Fiber,
+    ReadLeg::Materialised,
+    ReadLeg::Unstamped,
+    ReadLeg::Ambiguous,
+    ReadLeg::Unattributed,
+];
+
+/// Why an interpreter leg's reads cannot be issued out of order.
+///
+/// Read off the dependency this build actually has, not off a general belief about EVMs:
+/// `AsyncDb`'s `Database` impl hands `block_on_runtime_result` one future per state request
+/// (`revm-database-interface-43.0.1/src/async_db.rs`), and `block_on_current` polls that
+/// single pinned future and suspends the fiber while it is pending. The interpreter is
+/// therefore never holding two database requests at once, and the next `SLOAD` is the
+/// *interpreter's* next instruction — which in a delegatecall frame or an account's first
+/// touch can be an account or bytecode load rather than a storage word. That is §5's list
+/// of implicit dependencies (lazy loading, nested execution, account initialization,
+/// contract access) as one mechanism, and it is why `eth_getStorageAt` is the one
+/// method M8.3.3's scheduler was never handed as a batch member.
+const FIBER_LEG_PROOF: &str =
+    "asked by the REVM interpreter: AsyncDb's Database impl passes one future to \
+     block_on_runtime_result, and block_on_current polls that single pinned future and \
+     suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), \
+     so the leg holds exactly one outstanding state request and its next word is the \
+     interpreter's next instruction — which account initialization, a nested call frame or a \
+     lazily loaded account can change. This is also why storage was never a batch member in \
+     M8.3.3's scheduler";
+
+/// Why the §36 audit leg's reads are mutually independent.
+///
+/// Note what this does *not* claim: the leg's key list is built from the execution's
+/// journal, so the leg as a whole follows the interpreter legs that filled that journal.
+/// That boundary is recorded as `undecidable` pairs, not folded into this proof.
+const MATERIALISED_LEG_PROOF: &str =
+    "asked by the §36 state-change audit: state_changes() materialises and \
+     sorts slot_reads(touched) — every (address, slot) pair — before the leg's first await \
+     (crates/simulation/src/engine.rs), and then asks every key in that list whether or not \
+     an earlier answer changes anything, so no read in this leg takes an address, a slot or \
+     its own existence from another read's return value";
+
+/// Why an unstamped read is `unknown` rather than a guess.
+const UNSTAMPED_LEG_NOTE: &str =
+    "no caller was stamped when this call went out, so the site that issued it is not \
+     known to this analysis. §5 forbids inferring one from the slot number or from the order \
+     the calls happen to appear in";
+
+/// Why a labelled-but-ambiguous read is `unknown`.
+const AMBIGUOUS_LEG_NOTE: &str =
+    "this record carries a context_note: the sink had another call outstanding, or was \
+     relabelled while this call was in flight, so the stage and caller written on it are not \
+     established to be this call's (§4's stamp rule). The measurement fields below still come \
+     from this call's own stamps";
+
+/// Why an unrecognised phase is `unknown`.
+const UNATTRIBUTED_LEG_NOTE: &str =
+    "the caller names a site this file has no dependency proof for. Either a later edit \
+     renamed a phase or a test stamped one by hand; the name is published in `leg_vocabulary` \
+     so the disagreement is visible instead of being read as a proven relation";
+
+/// The relation between two storage reads of one simulation, `earlier` first, as §3 asks it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum PairRelation {
+    /// §3's `independent`: the later read was issued, with the parameters it carried,
+    /// before the earlier one had answered — proven by the two calls' own stamps.
+    Independent,
+    /// §3's `ordered`: the leg's code cannot issue the later read before the earlier
+    /// answer, and the stamps show it did not.
+    Ordered,
+    /// The two reads belong to legs whose relation this build does not prove either way.
+    Undecidable,
+    /// The leg's code says one at a time and the stamps say both were open: two accounts
+    /// of one fact disagree, so neither is promoted. Recorded, never resolved by preference.
+    Contradiction,
+}
+
+impl PairRelation {
+    fn as_str(self) -> &'static str {
+        match self {
+            Self::Independent => DEPENDENCY_INDEPENDENT,
+            Self::Ordered => DEPENDENCY_ORDERED,
+            Self::Undecidable => DEPENDENCY_UNDECIDABLE,
+            Self::Contradiction => "contradiction",
+        }
+    }
+}
+
+/// §4's answer to 「是否使用前一个 RPC 返回值？」, for one read.
+///
+/// Three words because the honest answer has three states: the materialised leg's reads
+/// provably do not (`no_by_construction`), an interpreter leg's later reads are issued after
+/// the earlier answers and the interpreter's next instruction is a function of them, which
+/// makes value use possible and unproven here (`possible_not_determined`), and a read whose
+/// site is not known gets `not_determined`. §20's rule is what keeps the middle word from
+/// becoming `yes` and §5's is what keeps it from becoming `no`.
+pub const USES_PRIOR_RESPONSE_NOT_DETERMINED: &str = "not_determined";
+pub const USES_PRIOR_RESPONSE_POSSIBLE: &str = "possible_not_determined";
+pub const USES_PRIOR_RESPONSE_NO: &str = "no_by_construction";
+
+/// The four methods whose reads a pinned run must ask at the pin (§13).
+pub const STATE_READ_METHODS: [&str; 4] = [
+    "eth_getBalance",
+    "eth_getCode",
+    "eth_getStorageAt",
+    "eth_getTransactionCount",
+];
+
+/// One storage read, with everything the dependency rules need beside it.
+///
+/// A private type on purpose: what a reader gets is [`storage_dependency_rows`]' JSON, and
+/// keeping the intermediate shape inside the file is what stops a field of this struct
+/// becoming a field of the evidence by accident.
+struct ReadRecord {
+    node_id: String,
+    index: usize,
+    rpc_id: u64,
+    chain_id: Option<u64>,
+    block_number: Option<u64>,
+    block_tag: Option<String>,
+    address: Option<String>,
+    slot: Option<String>,
+    stage: Option<String>,
+    caller: Option<String>,
+    context_note: Option<&'static str>,
+    started_ns: u64,
+    finished_ns: u64,
+    duration_ns: u64,
+    attempts: usize,
+    leg: ReadLeg,
+}
+
+/// Which leg one call's own record puts it in.
+fn read_leg(event: &RpcCallEvent) -> ReadLeg {
+    match (event.caller.as_deref(), event.context_note) {
+        (None, _) => ReadLeg::Unstamped,
+        (Some(_), Some(_)) => ReadLeg::Ambiguous,
+        (Some(name), None) => {
+            if evm_simulation::engine::INTERPRETER_PHASE_PREFIXES
+                .iter()
+                .any(|prefix| name.starts_with(prefix))
+            {
+                ReadLeg::Fiber
+            } else if name == evm_simulation::engine::SLOT_AUDIT_PHASE {
+                ReadLeg::Materialised
+            } else {
+                ReadLeg::Unattributed
+            }
+        }
+    }
+}
+
+/// Two calls of one simulation outstanding at the same instant.
+///
+/// Strict on both ends, which is M8.2's rule for the same question and is the difference
+/// between a wait and an overlap: calls that merely touch (`0→500`, `500→900`) were serial,
+/// and calling them concurrent would be exactly the promotion §3 forbids.
+fn were_outstanding_together(first: (u64, u64), second: (u64, u64)) -> bool {
+    first.0 < second.1 && second.0 < first.1
+}
+
+/// §3's relation between two storage reads of one simulation, older first.
+fn pair_relation(earlier: &ReadRecord, later: &ReadRecord) -> PairRelation {
+    if !earlier.leg.is_decidable() || !later.leg.is_decidable() || earlier.leg != later.leg {
+        return PairRelation::Undecidable;
+    }
+    let overlapped = were_outstanding_together(
+        (earlier.started_ns, earlier.finished_ns),
+        (later.started_ns, later.finished_ns),
+    );
+    match (earlier.leg, overlapped) {
+        (ReadLeg::Fiber, true) => PairRelation::Contradiction,
+        (ReadLeg::Fiber, false) => PairRelation::Ordered,
+        // The audit leg's proof is about the parameters, not about the stamps, so it holds
+        // whether the two calls happened to overlap or not; an overlap is still worth saying,
+        // because it is the measurement that agrees with the code for once.
+        (ReadLeg::Materialised, _) => PairRelation::Independent,
+        _ => PairRelation::Undecidable,
+    }
+}
+
+/// §6's node identity: the call's own `rpc_id`, inside its simulation, inside its run.
+///
+/// Composed from three fields the raw evidence already publishes — it is not a fourth
+/// measurement, and a reader can rebuild any node from a `simulation-traces.jsonl` line by
+/// the same concatenation.
+fn dependency_node_id(run: Option<&str>, simulation_id: &str, rpc_id: u64) -> String {
+    match run {
+        Some(run) => format!("{run}:{simulation_id}:rpc{rpc_id}"),
+        None => format!("{simulation_id}:rpc{rpc_id}"),
+    }
+}
+
+fn read_record(
+    run: Option<&str>,
+    window: &SimulationWindow,
+    event: &RpcCallEvent,
+    index: usize,
+) -> ReadRecord {
+    ReadRecord {
+        node_id: dependency_node_id(run, &window.simulation_id, event.rpc_id),
+        index,
+        rpc_id: event.rpc_id,
+        chain_id: window.chain_id,
+        block_number: window.block_number,
+        block_tag: event.block.clone(),
+        address: event.target.as_deref().map(evm_chain::normalize_address),
+        slot: event.slot.clone(),
+        stage: event.stage.clone(),
+        caller: event.caller.clone(),
+        context_note: event.context_note,
+        started_ns: event.started_ns,
+        finished_ns: event.finished_ns,
+        duration_ns: event.duration_ns,
+        attempts: event.attempts.len().max(1),
+        leg: read_leg(event),
+    }
+}
+
+/// §4's records: one per `eth_getStorageAt` of one simulation, in the order the sink
+/// recorded them.
+///
+/// Takes every event of the simulation rather than only the storage ones because §4's
+/// question 「谁发起」 has no answer without the calls that were outstanding beside this
+/// one: an `eth_getCode` issued between two SLOADs of the same phase is §5's lazy-loading
+/// dependency made visible, and a count of calls open at this read's start is the
+/// measurement that says whether the leg's own proof still matches the wire.
+///
+/// The records are pure functions of the line the run already wrote — no new clock reading,
+/// no re-ordered list — and they are the raw layer under §6's map: `dependency-map.json` is
+/// this list plus its edges, and a reader who doubts a `summary` count can recount these rows.
+pub fn storage_dependency_rows(window: &SimulationWindow, events: &[RpcCallEvent]) -> Vec<Value> {
+    storage_dependency_rows_as(None, window, events)
+}
+
+/// [`storage_dependency_rows`], with the run label a merged directory needs in the node id.
+pub fn storage_dependency_rows_as(
+    run: Option<&str>,
+    window: &SimulationWindow,
+    events: &[RpcCallEvent],
+) -> Vec<Value> {
+    let storage: Vec<ReadRecord> = events
+        .iter()
+        .filter(|event| event.method == "eth_getStorageAt")
+        .enumerate()
+        .map(|(index, event)| read_record(run, window, event, index))
+        .collect();
+    let all: Vec<(u64, u64, u64, Option<&str>)> = events
+        .iter()
+        .map(|event| {
+            (
+                event.rpc_id,
+                event.started_ns,
+                event.finished_ns,
+                event.caller.as_deref(),
+            )
+        })
+        .collect();
+    storage
+        .iter()
+        .map(|read| {
+            let earlier = &storage[..read.index];
+            let relations: Vec<(&ReadRecord, PairRelation)> = earlier
+                .iter()
+                .map(|other| (other, pair_relation(other, read)))
+                .collect();
+            let contradictions: Vec<String> = relations
+                .iter()
+                .filter(|(_, relation)| *relation == PairRelation::Contradiction)
+                .map(|(other, _)| other.node_id.clone())
+                .collect();
+            let ordered_from: Vec<String> = relations
+                .iter()
+                .filter(|(_, relation)| *relation == PairRelation::Ordered)
+                .map(|(other, _)| other.node_id.clone())
+                .collect();
+            let independent_from: Vec<String> = relations
+                .iter()
+                .filter(|(_, relation)| *relation == PairRelation::Independent)
+                .map(|(other, _)| other.node_id.clone())
+                .collect();
+            let undecidable = relations
+                .iter()
+                .filter(|(_, relation)| matches!(relation, PairRelation::Undecidable))
+                .count();
+            // The direct wait, stated as the pair the code actually sequences: for an
+            // interpreter leg the read waits for the one before it, and everything further
+            // back follows transitively. Listing all of them would be the same fact written
+            // N times, and would make the edge list read as a measurement of N waits.
+            let depends_on: Vec<String> = earlier
+                .iter()
+                .rev()
+                .find(|other| {
+                    other.leg == read.leg && pair_relation(other, read) == PairRelation::Ordered
+                })
+                .map(|other| vec![other.node_id.clone()])
+                .unwrap_or_default();
+            let followed_by: Vec<String> = storage[read.index + 1..]
+                .iter()
+                .find(|other| {
+                    other.leg == read.leg && pair_relation(read, other) == PairRelation::Ordered
+                })
+                .map(|other| vec![other.node_id.clone()])
+                .unwrap_or_default();
+            let dependency = dependency_word(read, &contradictions, &ordered_from);
+            let open_at_start: Vec<u64> = all
+                .iter()
+                .filter(|(rpc_id, started, finished, _)| {
+                    *rpc_id != read.rpc_id
+                        && were_outstanding_together(
+                            (read.started_ns, read.finished_ns),
+                            (*started, *finished),
+                        )
+                })
+                .map(|(rpc_id, _, _, _)| *rpc_id)
+                .collect();
+            let same_leg_before = earlier.iter().filter(|other| other.leg == read.leg).count();
+            let other_leg_before = earlier.len().saturating_sub(same_leg_before);
+            let non_storage_in_leg = events
+                .iter()
+                .filter(|event| {
+                    event.method != "eth_getStorageAt"
+                        && event.caller.as_deref() == read.caller.as_deref()
+                        && event.rpc_id < read.rpc_id
+                })
+                .count();
+            let mut evidence: Vec<String> =
+                vec![format!("leg `{}`: {}", read.leg.as_str(), read.leg.proof())];
+            if let Some(caller) = read.caller.as_deref() {
+                evidence.push(format!("caller stamped by the issuing code: `{caller}`"));
+            }
+            if let Some(note) = read.context_note {
+                evidence.push(format!("context_note: `{note}`"));
+            }
+            evidence.push(format!(
+                "{same_leg_before} storage read(s) of this leg were recorded before this one, \
+                 in this simulation's own order; {other_leg_before} read(s) belong to other \
+                 legs and are counted as {DEPENDENCY_UNDECIDABLE} pairs (§5: the sequence of \
+                 two engine statements is not a proof about values)"
+            ));
+            if !open_at_start.is_empty() {
+                evidence.push(format!(
+                    "at this call's started_ns the sink held {} other call(s) outstanding \
+                     (rpc_id {})",
+                    open_at_start.len(),
+                    open_at_start
+                        .iter()
+                        .map(u64::to_string)
+                        .collect::<Vec<String>>()
+                        .join(", ")
+                ));
+            }
+            if non_storage_in_leg > 0 {
+                evidence.push(format!(
+                    "{non_storage_in_leg} non-storage state read(s) carrying this same caller \
+                     name were issued before this call — §5's implicit dependency (an account \
+                     or bytecode the interpreter needed mid-leg) stated as a count, not as an \
+                     inference"
+                ));
+            }
+            if !ordered_from.is_empty() {
+                evidence.push(format!(
+                    "{} read(s) of this leg this one cannot precede: {}",
+                    ordered_from.len(),
+                    ordered_from.join(", ")
+                ));
+            }
+            if !independent_from.is_empty() {
+                evidence.push(format!(
+                    "{} read(s) proven not to be a prerequisite: {}",
+                    independent_from.len(),
+                    independent_from.join(", ")
+                ));
+            }
+            if !contradictions.is_empty() {
+                evidence.push(format!(
+                    "CONTRADICTION: this leg's proof says one state request at a time, and \
+                     these stamps say otherwise: {} — filed as {DEPENDENCY_UNKNOWN} rather \
+                     than choosing an account",
+                    contradictions.join(", ")
+                ));
+            }
+            json!({
+                // §4's fields, in §4's order where the names match.
+                "index": read.index,
+                "chain_id": read.chain_id,
+                "block_number": read.block_number,
+                "address": read.address,
+                "slot": read.slot,
+                "block_tag": read.block_tag,
+                "caller": read.caller,
+                "stage": read.stage,
+                "dependency": dependency,
+                "depends_on": depends_on,
+                "evidence": evidence,
+                // …and the fields §4 says may be adjusted to the architecture, each named
+                // for the question it answers rather than for the table it fills.
+                "node_id": read.node_id,
+                "run": run,
+                "simulation_id": window.simulation_id,
+                "rpc_id": read.rpc_id,
+                "logical_request_id": format!("{}#{}", window.simulation_id, read.rpc_id),
+                "method": "eth_getStorageAt",
+                "context_note": read.context_note,
+                "leg": read.leg.as_str(),
+                "started_ns": read.started_ns,
+                "finished_ns": read.finished_ns,
+                "duration_ns": read.duration_ns,
+                // §18: an attempt count is recorded, never assumed. `1` here is the sink
+                // having seen one HTTP attempt for this logical read.
+                "attempts": read.attempts,
+                "retries": read.attempts.saturating_sub(1),
+                "followed_by": followed_by,
+                "uses_prior_response": uses_prior_response(read, &contradictions, &ordered_from),
+                "same_leg_reads_before": same_leg_before,
+                "other_leg_reads_before": other_leg_before,
+                "calls_outstanding_at_start": open_at_start.len(),
+                "non_storage_reads_in_same_leg_before": non_storage_in_leg,
+                "undecidable_pairs_before": undecidable,
+            })
+        })
+        .collect()
+}
+
+/// §3's word for one read, from its relations to the reads of its own leg.
+fn dependency_word(
+    read: &ReadRecord,
+    contradictions: &[String],
+    ordered_from: &[String],
+) -> &'static str {
+    if !contradictions.is_empty() || !read.leg.is_decidable() {
+        return DEPENDENCY_UNKNOWN;
+    }
+    match read.leg {
+        ReadLeg::Fiber if !ordered_from.is_empty() => DEPENDENCY_ORDERED,
+        // The leg's first interpreter read has no earlier read of its leg to wait for, and
+        // nothing here proves it waits for a read of another leg either. §28.
+        ReadLeg::Fiber => DEPENDENCY_UNKNOWN,
+        ReadLeg::Materialised => DEPENDENCY_INDEPENDENT,
+        _ => DEPENDENCY_UNKNOWN,
+    }
+}
+
+/// §4's 「是否使用前一个 RPC 返回值？」 for one read.
+fn uses_prior_response(
+    read: &ReadRecord,
+    contradictions: &[String],
+    ordered_from: &[String],
+) -> &'static str {
+    if !contradictions.is_empty() || !read.leg.is_decidable() {
+        return USES_PRIOR_RESPONSE_NOT_DETERMINED;
+    }
+    match read.leg {
+        ReadLeg::Fiber if !ordered_from.is_empty() => USES_PRIOR_RESPONSE_POSSIBLE,
+        ReadLeg::Fiber => USES_PRIOR_RESPONSE_NOT_DETERMINED,
+        ReadLeg::Materialised => USES_PRIOR_RESPONSE_NO,
+        _ => USES_PRIOR_RESPONSE_NOT_DETERMINED,
+    }
+}
+
+/// §6's map: §4's rows, the edges they imply, and the three counts §19 asks for.
+///
+/// The input is the same shape [`dependency_map_assembled`] takes — runs, each with its
+/// trace lines — because the two files are two readings of one raw layer. M8.3.3's map asks
+/// *per method* whether a read may be a batch member; this one asks *per read* what it
+/// waited for, which is why it is a new file beside that one rather than another column of
+/// it (§2: extend the instrumentation that exists, do not redesign it).
+///
+/// Every node comes out of [`storage_dependency_rows_as`], which comes out of the line the
+/// run wrote, so §6's 「所有 aggregate 必须能够从 raw evidence 重建」 is a property of the
+/// shape: `summary` is a count over `nodes`, `nodes` is the rows file, and the rows file is
+/// the trace lines regrouped.
+pub fn storage_dependency_map(runs: &[Value]) -> Value {
+    let mut nodes: Vec<Value> = Vec::new();
+    let mut edges: Vec<Value> = Vec::new();
+    let mut refusals: Vec<Value> = Vec::new();
+    let mut provenance: Vec<Value> = Vec::new();
+    let mut per_simulation: Vec<Value> = Vec::new();
+    let mut legs_seen: BTreeMap<String, usize> = BTreeMap::new();
+    let mut phase_names: BTreeSet<String> = BTreeSet::new();
+    let mut states = [0_u64; 3];
+    let mut pair_counts: BTreeMap<&'static str, u64> = BTreeMap::new();
+    for run in runs {
+        let name = run["run"].as_str().unwrap_or("?");
+        let lines: Vec<&Value> = run["lines"].as_array().into_iter().flatten().collect();
+        provenance.push(json!({
+            "run": name,
+            "git_revision": run["git_revision"].clone(),
+            "execution_mode": run["execution_mode"].clone(),
+            "endpoint_id": run["endpoint_id"].clone(),
+            "generated_at_unix_ms": run["generated_at_unix_ms"].clone(),
+            "simulations": lines.len(),
+        }));
+        for line in lines {
+            let simulation_id = line["simulation_id"]
+                .as_str()
+                .unwrap_or("<absent>")
+                .to_string();
+            let simulation = match SimulationDiagnosis::from_trace_line(line) {
+                Ok(simulation) => simulation,
+                Err(detail) => {
+                    // A line this build cannot read is named, not skipped: a map that
+                    // quietly omitted a simulation would report its reads as never made.
+                    refusals.push(json!({
+                        "run": name,
+                        "simulation_id": simulation_id,
+                        "refused": detail,
+                    }));
+                    continue;
+                }
+            };
+            let rows =
+                storage_dependency_rows_as(Some(name), &simulation.window, &simulation.events);
+            let storage: Vec<&Value> = rows.iter().collect();
+            for row in &rows {
+                if let Some(word) = row["leg"].as_str() {
+                    *legs_seen.entry(word.to_string()).or_default() += 1;
+                }
+                if let Some(caller) = row["caller"].as_str() {
+                    phase_names.insert(caller.to_string());
+                }
+                if let Some(word) = row["dependency"].as_str() {
+                    match word {
+                        DEPENDENCY_INDEPENDENT => states[0] += 1,
+                        DEPENDENCY_ORDERED => states[1] += 1,
+                        _ => states[2] += 1,
+                    }
+                }
+            }
+            edges.extend(dependency_edges(&storage));
+            // The pair tally, over the same rows the nodes are built from. Reading it off
+            // `depends_on` would miss every `undecidable` pair, which is the one class a
+            // reader needs in order to see how little of the pairs this proves.
+            for (index, later) in storage.iter().enumerate() {
+                for earlier in &storage[..index] {
+                    if let Some(relation) = pair_relation_of(earlier, later) {
+                        *pair_counts.entry(relation).or_default() += 1;
+                    }
+                }
+            }
+            per_simulation.push(json!({
+                "run": name,
+                "simulation_id": simulation.window.simulation_id,
+                "chain_id": simulation.window.chain_id,
+                "block_number": simulation.window.block_number,
+                "endpoint_id": simulation.endpoint_id,
+                "source": source_key(simulation.window.source),
+                "storage_reads": rows.len(),
+                "all_calls_in_the_simulation": simulation.events.len(),
+                "legs": leg_rows(&storage),
+                "dependency_counts": {
+                    "independent": count_rows(&storage, DEPENDENCY_INDEPENDENT),
+                    "ordered": count_rows(&storage, DEPENDENCY_ORDERED),
+                    "unknown": count_rows(&storage, DEPENDENCY_UNKNOWN),
+                },
+            }));
+            nodes.extend(rows);
+        }
+    }
+    let pairs: Vec<&'static str> = [
+        PairRelation::Ordered.as_str(),
+        PairRelation::Independent.as_str(),
+        PairRelation::Undecidable.as_str(),
+        PairRelation::Contradiction.as_str(),
+    ]
+    .to_vec();
+    let pair_summary: Vec<Value> = pairs
+        .iter()
+        .map(|word| {
+            json!({
+                "relation": word,
+                "pairs": pair_counts.get(*word).copied().unwrap_or(0),
+            })
+        })
+        .collect();
+    json!({
+        "question": "§3–§6: for every eth_getStorageAt a simulation made — who issued it, at \
+                     which address, slot and height, what it waited for, what waited on it, \
+                     and on what proof that ordering is the right word",
+        "unit": "ns",
+        "dependency_states": [
+            DEPENDENCY_INDEPENDENT,
+            DEPENDENCY_ORDERED,
+            DEPENDENCY_UNKNOWN,
+        ],
+        "pair_states": pairs,
+        "nodes": nodes,
+        "edges": edges,
+        "summary": {
+            "total": states[0] + states[1] + states[2],
+            "independent": states[0],
+            "ordered": states[1],
+            "unknown": states[2],
+        },
+        "pair_summary": pair_summary,
+        "per_simulation": per_simulation,
+        "leg_vocabulary": {
+            "source": "the `caller` string the issuing site stamped (M8.4.1 §4/§9), matched \
+                       against evm_simulation::engine's own phase constants — \
+                       INTERPRETER_PHASE_PREFIXES and SLOT_AUDIT_PHASE — so a rename is one \
+                       edit and one failing test rather than a table that silently degrades",
+            "reads_per_leg": legs_seen.iter().map(|(leg, reads)| json!({"leg": leg, "reads": reads})).collect::<Vec<Value>>(),
+            "phases_seen": phase_names.into_iter().collect::<Vec<String>>(),
+            "proofs": READ_LEGS
+                .iter()
+                .map(|leg| json!({"leg": leg.as_str(), "proof": leg.proof()}))
+                .collect::<Vec<Value>>(),
+        },
+        "classification_rules": {
+            "same_leg_fiber_serial": format!(
+                "{DEPENDENCY_ORDERED} — {} ; and the stamps show the earlier read closed \
+                 before this one opened",
+                FIBER_LEG_PROOF
+            ),
+            "same_leg_fiber_overlapped": "neither — the leg's proof and the stamps disagree, \
+                                         so the pair is a `contradiction` and both nodes read \
+                                         `unknown`. This is the only way a wrong proof shows \
+                                         up in this file, which is why it is not resolved by \
+                                         preferring the code",
+            "same_leg_materialised": format!(
+                "{DEPENDENCY_INDEPENDENT} — {}",
+                MATERIALISED_LEG_PROOF
+            ),
+            "different_legs": "undecidable — the legs are sequenced by two statements of the \
+                              engine, and nothing here traces one leg's return value into the \
+                              other's parameters. §5 is explicit that a sequence of code is \
+                              not a proof about values, in either direction",
+            "unstamped_or_ambiguous": format!(
+                "{DEPENDENCY_UNKNOWN} — §4's stamp rule: a label that could belong to another \
+                 call is not this call's label"
+            ),
+            "unknown_is_never_promoted": DEPENDENCY_UNKNOWN_PROMOTION_RULE,
+        },
+        "reading_rules": [
+            "§5: two different slots are not two independent reads. Every word in this file \
+             is a statement about the code that issued the read, and `slot` is carried here \
+             as an identifying field and never as a reason",
+            "§20: no row of this file says the provider is the bottleneck, that these reads \
+             could be batched, or that running them together would be faster. §1 forbids the \
+             change, and an `independent` word here is a statement about parameters, not a \
+             licence to reorder",
+            "§18 and §3: `ordered` means the later read could not have been issued before the \
+             earlier answered. It does not mean the earlier read's *value* was used — that is \
+             `uses_prior_response`, and for an interpreter leg it is not determined here",
+            "pairs are counted within one simulation only. Two simulations of one run are two \
+             sinks, two windows and two answers",
+        ],
+        "decoding_refusals": refusals,
+        "assembled_from": provenance,
+    })
+}
+
+/// Why `unknown` cannot become `independent` downstream, in the file that uses the words.
+const DEPENDENCY_UNKNOWN_PROMOTION_RULE: &str = "a read classified `unknown` is not a read \
+     that is assumed independent: §3 forbids the derivation and §28 restates it. The worst \
+     thing this file can do is make an unproven pair look decided, so the rule is applied in \
+     the direction that loses information rather than the one that gains a category — an \
+     unrecognized phase name, a missing stamp, or an ambiguity note all land on `unknown`, \
+     and the counts below would have to be re-read before any of them could change";
+
+/// [`pair_relation`] over two published rows, so the merged file's pair counts and its
+/// nodes cannot be computed from different accounts of the same read.
+fn pair_relation_of(earlier: &Value, later: &Value) -> Option<&'static str> {
+    let first_leg = earlier["leg"].as_str()?;
+    let second_leg = later["leg"].as_str()?;
+    let first_span = (
+        value_u64(earlier, "started_ns")?,
+        value_u64(earlier, "finished_ns")?,
+    );
+    let second_span = (
+        value_u64(later, "started_ns")?,
+        value_u64(later, "finished_ns")?,
+    );
+    let fiber = ReadLeg::Fiber.as_str();
+    let materialised = ReadLeg::Materialised.as_str();
+    if first_leg != second_leg || (first_leg != fiber && first_leg != materialised) {
+        return Some(PairRelation::Undecidable.as_str());
+    }
+    if first_leg == materialised {
+        // The audit leg's proof is about the parameters, not about the stamps, so it holds
+        // whether the two calls happened to overlap or not.
+        return Some(PairRelation::Independent.as_str());
+    }
+    Some(if were_outstanding_together(first_span, second_span) {
+        PairRelation::Contradiction.as_str()
+    } else {
+        PairRelation::Ordered.as_str()
+    })
+}
+
+/// How many published rows carry one §3 word.
+fn count_rows(rows: &[&Value], word: &str) -> u64 {
+    rows.iter()
+        .filter(|row| row["dependency"].as_str() == Some(word))
+        .count() as u64
+}
+
+/// One simulation's legs, as the map's mid-level view: the reads the interpreter demanded
+/// and the reads the audit demanded are two different answers to §0's first question, and
+/// the boundary between them is where the proven part of this analysis stops.
+fn leg_rows(rows: &[&Value]) -> Vec<Value> {
+    let mut out: Vec<Value> = Vec::new();
+    for leg in [ReadLeg::Fiber, ReadLeg::Materialised] {
+        let members: Vec<&Value> = rows
+            .iter()
+            .copied()
+            .filter(|row| row["leg"].as_str() == Some(leg.as_str()))
+            .collect();
+        if members.is_empty() {
+            continue;
+        }
+        out.push(json!({
+            "leg": leg.as_str(),
+            "reads": members.len(),
+            "first_node": members.first().and_then(|row| row["node_id"].as_str()),
+            "last_node": members.last().and_then(|row| row["node_id"].as_str()),
+            "callers": members
+                .iter()
+                .filter_map(|row| row["caller"].as_str())
+                .collect::<BTreeSet<&str>>()
+                .into_iter()
+                .collect::<Vec<&str>>(),
+            "pairs_within": members.len() * members.len().saturating_sub(1) / 2,
+            "class": match leg {
+                ReadLeg::Fiber => "one at a time by the interpreter, so this leg is the \
+                                   serial part of the answer to §0's first question",
+                _ => "mutually independent by construction, and still one leg of one run: \
+                      the leg as a whole follows the execution whose journal made its key list",
+                },
+        }));
+    }
+    let undecided: Vec<&Value> = rows
+        .iter()
+        .copied()
+        .filter(|row| match row["leg"].as_str() {
+            Some(leg) => leg != ReadLeg::Fiber.as_str() && leg != ReadLeg::Materialised.as_str(),
+            None => true,
+        })
+        .collect();
+    if !undecided.is_empty() {
+        out.push(json!({
+            "leg": "undecidable",
+            "reads": undecided.len(),
+            "callers": undecided
+                .iter()
+                .filter_map(|row| row["caller"].as_str())
+                .collect::<BTreeSet<&str>>()
+                .into_iter()
+                .collect::<Vec<&str>>(),
+            "class": "reads whose issuing site this build cannot argue about — unstamped, \
+                      ambiguously labelled, or a phase name no rule covers",
+        }));
+    }
+    out
+}
+
+/// §6's edges, from the same rows as the nodes.
+///
+/// Three kinds and no more, each asserting exactly what its proof covers:
+///
+/// ```text
+/// ordered          one edge per consecutive pair of interpreter reads — the wait the fiber
+///                  proof states. Everything further back follows transitively, and listing
+///                  it would be the same fact written N times.
+/// independent_set  one clique per materialised leg: the proof covers every pair in the leg
+///                  and no pair outside it, so it is stated once as a set rather than
+///                  imitating a per-pair measurement.
+/// undecidable      one edge per leg boundary, saying what the map does NOT know: the next
+///                  leg opened after this one closed, and that is all this file can state.
+/// ```
+fn dependency_edges(rows: &[&Value]) -> Vec<Value> {
+    let mut edges: Vec<Value> = Vec::new();
+    let mut legs: Vec<(&str, Vec<&Value>)> = Vec::new();
+    for &row in rows {
+        let leg = row["leg"].as_str().unwrap_or("?");
+        if let Some((_, members)) = legs.iter_mut().find(|(word, _)| *word == leg) {
+            members.push(row);
+        } else {
+            legs.push((leg, vec![row]));
+        }
+    }
+    for (leg, members) in &legs {
+        let decidable = *leg == ReadLeg::Fiber.as_str() || *leg == ReadLeg::Materialised.as_str();
+        if !decidable {
+            continue;
+        }
+        if *leg == ReadLeg::Fiber.as_str() {
+            for pair in members.windows(2) {
+                let (first, second) = (pair[0], pair[1]);
+                let relation = pair_relation_of(first, second);
+                edges.push(json!({
+                    "from": first["node_id"],
+                    "to": second["node_id"],
+                    "kind": relation.unwrap_or(DEPENDENCY_UNDECIDABLE),
+                    "leg": leg,
+                    "basis": FIBER_LEG_PROOF,
+                    "wait_before_start_ns": value_u64(second, "started_ns")
+                        .zip(value_u64(first, "finished_ns"))
+                        .map(|(started, finished)| started.saturating_sub(finished)),
+                }));
+            }
+        } else {
+            edges.push(json!({
+                "members": members
+                    .iter()
+                    .map(|row| row["node_id"].clone())
+                    .collect::<Vec<Value>>(),
+                "read_count": members.len(),
+                "pair_count": members.len() * members.len().saturating_sub(1) / 2,
+                "kind": DEPENDENCY_INDEPENDENT,
+                "shape": "clique: the proof is about the leg's parameters, so it covers every \
+                          pair in the set at once rather than one pair at a time",
+                "leg": leg,
+                "basis": MATERIALISED_LEG_PROOF,
+            }));
+        }
+    }
+    // The boundaries, in the order the legs' first reads appeared.
+    let mut boundaries: Vec<&(&str, Vec<&Value>)> = legs
+        .iter()
+        .filter(|(_, members)| !members.is_empty())
+        .collect();
+    boundaries.sort_by_key(|(_, members)| {
+        members
+            .iter()
+            .filter_map(|row| value_u64(row, "started_ns"))
+            .min()
+            .unwrap_or(0)
+    });
+    for pair in boundaries.windows(2) {
+        let (first_leg, first_members) = pair[0];
+        let (second_leg, second_members) = pair[1];
+        let last = match first_members.last() {
+            Some(row) => row,
+            None => continue,
+        };
+        let first_of_next = match second_members.first() {
+            Some(row) => row,
+            None => continue,
+        };
+        edges.push(json!({
+            "from": last["node_id"],
+            "to": first_of_next["node_id"],
+            "kind": DEPENDENCY_UNDECIDABLE,
+            "from_leg": first_leg,
+            "to_leg": second_leg,
+            "basis": "the two legs are issued by different statements of the engine, and the \
+                      second opened after the first had returned. §5: that sequence is not a \
+                      proof that the second read's parameters used the first read's value, and \
+                      it is not a proof that they did not",
+            "pairs_across_this_boundary": first_members.len() * second_members.len(),
+        }));
+    }
+    edges
+}
+
+// ===========================================================================
+// M8.4.1 §7–§10, §13, §17: the whole run on one timeline, and where its RPC time went
+// ===========================================================================
+
+/// The two sinks one run writes, named after the file each one becomes.
+///
+/// Both are built on the run's own monotonic origin — `crates/pipeline/src/arbitrage.rs`
+/// hands the lifecycle sink and the simulation sink the same instant to count from — which is
+/// what makes a union over the two lists *one* measurement rather than two pretending to be
+/// one. A row's `sink` says which list it came from and its `stage` says what the run was
+/// doing; for the state-acquisition sink the two carry the same word, because every call that
+/// sink holds went out while the `simulation` stage was the one stamped. That is a fact about
+/// this wiring, and the table says it in a column instead of hiding it in a name.
+pub const PIPELINE_SINK_SIMULATION: &str = "simulation";
+pub const PIPELINE_SINK_LIFECYCLE: &str = "lifecycle";
+
+/// A call the sink measured while no site had named a stage — §4's `not_stamped`, in the
+/// column a reader of the stage table looks at. The call's time still counts (it was made, it
+/// was waited on), it simply has no owner, and folding it into whichever stage happened to be
+/// named last is the mistake §4's stamp rule exists to prevent.
+pub const PIPELINE_UNSTAMPED: &str = "unstamped";
+
+/// §19's eighth key, for the stage names §8's list of seven does not cover.
+pub const PIPELINE_BUCKET_UNLISTED: &str = "stages_the_seven_do_not_name";
+
+const DETECTION_BUCKET_NOTE: &str = "§7's first rung after the block is detected: this build \
+     prices both venues and produces the candidate inside one stage, `opportunity_detection`, \
+     and every read of that leg is stamped with it";
+const STATE_UPDATE_BUCKET_NOTE: &str = "§7's second and third rungs are two stage names here, \
+     `state_update` and `graph_update`, and both are folded into this one bucket because §19 \
+     asks for one";
+const OPPORTUNITY_BUCKET_NOTE: &str = "EMPTY BY THE MAPPING, NOT BY MEASUREMENT: §8's list \
+     separates detection from opportunity and this build does not — the one stage \
+     `opportunity_detection` covers both, so its calls are filed under `detection` and are \
+     deliberately not counted a second time here";
+const PREFLIGHT_BUCKET_NOTE: &str = "§26's gate, whose reads the lane stamps `preflight` at \
+     the site that issues them, together with `risk`, the other stage between the simulation \
+     and the build";
+const SIMULATION_BUCKET_NOTE: &str = "the run's 39-odd state reads: every call the \
+     state-acquisition sink holds, all of them at the pin, all of them named by an engine \
+     phase (§4's vocabulary)";
+const BUILD_BUCKET_NOTE: &str = "§7's `Build` *and* its `Execution preparation`: the lane's \
+     fee, nonce, balance, endpoint-chain-id and block-binding reads are stamped `build` \
+     (`crates/execution/src/sequence.rs`), because the run's ladder gives those pre-submission \
+     reads no span of their own. They are measured here, in this row, and not in the empty one \
+     below";
+const EXECUTION_PREPARATION_BUCKET_NOTE: &str = "EMPTY BY THE MAPPING, NOT BY MEASUREMENT: the \
+     reads §7 means by this name exist and are counted — in `build`, which is the stage the \
+     issuing code stamps. §8 forbids renaming a stage to make a report read better, so this \
+     bucket keeps the absence of a separate name visible rather than moving calls into it";
+const UNLISTED_BUCKET_NOTE: &str = "the stage names this build has and §8's seven do not: \
+     `observation`, which is where the pin was fixed (§13), and the six rungs after the build — \
+     `sign`, `submit`, `inclusion`, `receipt`, `settlement`, `profit_verification`. They get a \
+     key of their own instead of being folded into the nearest-looking of the seven, which \
+     would put post-submission calls inside `build`";
+
+/// §8's seven bucket names, plus [`PIPELINE_BUCKET_UNLISTED`], and the code's own stage names
+/// folded into each.
+///
+/// §8 is explicit — 「使用当前代码已有 stage 名，不要为了报告好看重新命名」 — and this table is
+/// how that is obeyed rather than ignored: every per-stage row of the pipeline table is keyed
+/// on the string [`evm_metrics::Stage::as_str`] writes, and these eight names exist only
+/// because §19 requires those seven keys in the summary. The fold is a total function on the
+/// stage name, each bucket carries the reason for what it holds or does not, and no call
+/// reaches two buckets.
+pub const PIPELINE_BUCKETS: [(&str, &[&str], &str); 8] = [
+    (
+        "detection",
+        &["opportunity_detection"],
+        DETECTION_BUCKET_NOTE,
+    ),
+    (
+        "state_update",
+        &["state_update", "graph_update"],
+        STATE_UPDATE_BUCKET_NOTE,
+    ),
+    ("opportunity", &[], OPPORTUNITY_BUCKET_NOTE),
+    ("preflight", &["preflight", "risk"], PREFLIGHT_BUCKET_NOTE),
+    ("simulation", &["simulation"], SIMULATION_BUCKET_NOTE),
+    ("build", &["build"], BUILD_BUCKET_NOTE),
+    (
+        "execution_preparation",
+        &[],
+        EXECUTION_PREPARATION_BUCKET_NOTE,
+    ),
+    (
+        PIPELINE_BUCKET_UNLISTED,
+        &[
+            "observation",
+            "sign",
+            "submit",
+            "inclusion",
+            "receipt",
+            "settlement",
+            "profit_verification",
+        ],
+        UNLISTED_BUCKET_NOTE,
+    ),
+];
+
+/// Which §19 bucket one of the code's stage names belongs to, `None` for a name this build
+/// does not use (a hand-stamped test label, or a stage a later edit adds without touching the
+/// table above). Such a call still gets its own per-stage row — it is only the bucket fold that
+/// refuses to guess.
+fn bucket_of(stage: &str) -> Option<&'static str> {
+    PIPELINE_BUCKETS
+        .iter()
+        .find_map(|(bucket, stages, _)| stages.contains(&stage).then_some(*bucket))
+}
+
+/// What this timeline provably does not hold, and why — §11's rule that
+/// 「not observed」 must never be written as 「0 RPC」, published in the file that contains the
+/// zeros.
+const PIPELINE_UNOBSERVED: [(&str, &str); 4] = [
+    (
+        "market event stream",
+        "findings arrive as WebSocket notifications, not as JSON-RPC calls this build makes, so \
+         no sink of this run holds one. A run that consumed hundreds of events can and does show \
+         no rows for them, and that absence is this line, not a count of zero reads",
+    ),
+    (
+        "the node's own queueing and the network between here and there",
+        PROVIDER_BREAKDOWN,
+    ),
+    (
+        "a state answer that cost no request",
+        "a read the reuse boundary held, or one a recorded dump answered, is absent from this \
+         timeline by construction — it issued nothing. It is tallied in `duplicate-reads.json` \
+         and in the cache stats, so `rpc_count` here is not a count of state reads made",
+    ),
+    (
+        "a stage the run's mode never reached",
+        "a build-only run skips `sign`, `submit`, `receipt` and the rest; the lifecycle records \
+         them as skipped and they appear in `stages_not_completed` below with that outcome, \
+         which is a statement about the mode rather than a measured zero-duration read",
+    ),
+];
+
+const PIPELINE_TOTAL_FROM_SPANS: &str = "the first and last instants of this run's own closed \
+     nanosecond stage spans — the ladder the run recorded, not a sum of its stages";
+const PIPELINE_TOTAL_FROM_CALLS: &str = "no usable stage span of this run brackets the run, so \
+     this is the width of its own call window (first call opened to last call closed) — a \
+     floor, because time the run spent outside every call is not in it";
+const PIPELINE_TOTAL_UNMEASURED: &str = "neither a stage span nor a call of this run was \
+     recorded, so there is no duration to report — null, not zero (§9's rule)";
+
+/// One of the run's published stage spans, read back out of the evidence file it was written
+/// to, for the containment account only.
+///
+/// [`StageSpan`] is built from a live `LatencyTrace`; the assembler works from committed JSON,
+/// and this is the same three fields it needs to answer 「which stage held this instant」. The
+/// lifetime is the rows' own, because a stage name read back from JSON is text in a buffer, not
+/// a constant — pretending otherwise would be a second copy of the vocabulary to keep in sync.
+struct RunSpan<'a> {
+    stage: &'a str,
+    outcome: &'a str,
+    window_ns: Option<(u64, u64)>,
+    note: &'a str,
+}
+
+impl<'a> RunSpan<'a> {
+    fn of_json(row: &'a Value) -> Option<Self> {
+        let window = match (value_u64(row, "started_ns"), value_u64(row, "ended_ns")) {
+            (Some(started), Some(ended)) if ended >= started => Some((started, ended)),
+            _ => None,
+        };
+        Some(Self {
+            stage: row["stage"].as_str()?,
+            outcome: row["outcome"].as_str().unwrap_or("<absent>"),
+            window_ns: window,
+            note: row["note"].as_str().unwrap_or("<absent>"),
+        })
+    }
+}
+
+fn run_spans(rows: &[Value]) -> Vec<RunSpan<'_>> {
+    rows.iter().filter_map(RunSpan::of_json).collect()
+}
+
+/// The run's own span holding one instant, if a closed nanosecond span does.
+fn holding_run_span<'s, 'a>(spans: &'s [RunSpan<'a>], at_ns: u64) -> Option<&'s RunSpan<'a>> {
+    spans.iter().find(|span| {
+        span.window_ns
+            .is_some_and(|(start, end)| start <= at_ns && at_ns <= end)
+    })
+}
+
+/// §9's raw row: one recorded call, from either sink, carrying the nine fields §9 lists and
+/// the identity fields that let a reader find the row again in the run's own files.
+///
+/// The names are the ones this trace already uses, because §9 says 「如果已有字段，则复用」:
+/// `timestamp_start`/`timestamp_end` are [`RpcCallEvent`]'s `started_ns`/`finished_ns`,
+/// `duration` is `duration_ns`, and `attempt` is the length of the `attempts` list the choke
+/// point already fills — so §18's `attempt = 1` is *read off* the record rather than assumed,
+/// and a call that retried carries the row for each try. `logical_request_id` is composed
+/// (`run:sink:rpc_id`), not issued: it is unique because `rpc_id` is that sink's own 1-based
+/// counter, and it is why a reader can join one row to one line of
+/// `simulation-traces.jsonl` without a fourth clock reading.
+pub fn pipeline_call_row(
+    run: &str,
+    sink: &'static str,
+    event: &RpcCallEvent,
+    endpoint_id: Option<&str>,
+) -> Value {
+    json!({
+        "run": run,
+        "sink": sink,
+        "rpc_id": event.rpc_id,
+        "logical_request_id": format!("{run}:{sink}:rpc{}", event.rpc_id),
+        "method": event.method,
+        "stage": event.stage,
+        "caller": event.caller,
+        "context_note": event.context_note,
+        "block_tag": event.block,
+        // `target`, not `address`, and not for style: [`RpcCallEvent::target`] is the account,
+        // contract or hash a call names, and for `eth_getBlockByNumber` the code puts the *height*
+        // there (rpc_trace.rs). A column called `address` therefore held `0x37674203` and
+        // `0xlatest` for 27 of these runs' 235 rows — a name claiming an account for a call that
+        // has none, which is §28's exact prohibition. M8.3.2's `outside-simulation-rpc.json`
+        // already spells this column `target`.
+        //
+        // The account methods keep §6's lowercasing, so one account written in two checksum cases
+        // stays one value; a height or a hash is passed through as the record holds it, because
+        // address hygiene on a decimal number is what manufactured the `0x` in the first place.
+        "target": match event.method.as_str() {
+            "eth_getBalance" | "eth_getCode" | "eth_getTransactionCount" | "eth_getStorageAt"
+            | "eth_call" => event.target.as_deref().map(evm_chain::normalize_address),
+            _ => event.target.clone(),
+        },
+        "slot": event.slot,
+        "started_ns": event.started_ns,
+        "finished_ns": event.finished_ns,
+        "duration_ns": event.duration_ns,
+        // §18's two levels, both recorded: the logical read is this row, the physical attempts
+        // are the list beside it. An empty list means the record predates per-attempt stamps,
+        // which is said rather than silently read as one attempt that went unrecorded.
+        "attempt": event.attempts.len().max(1),
+        "attempts_recorded": !event.attempts.is_empty(),
+        "attempts": event
+            .attempts
+            .iter()
+            .map(|attempt| {
+                json!({
+                    "started_ns": attempt.started_ns,
+                    "finished_ns": attempt.finished_ns,
+                    "duration_ns": attempt.duration_ns,
+                    "outcome": attempt.outcome,
+                })
+            })
+            .collect::<Vec<Value>>(),
+        "success": event.success,
+        "error_class": event.error_class,
+        "error_detail": event.error_detail,
+        "endpoint_id": endpoint_id,
+        "trace_schema": event.trace_schema,
+        "dedup_key": event.dedup_key,
+        "key_note": event.key_note,
+    })
+}
+
+/// [`pipeline_call_row`] for a whole sink's list, in the order that sink recorded it.
+pub fn pipeline_call_rows(
+    run: &str,
+    sink: &'static str,
+    events: &[RpcCallEvent],
+    endpoint_id: Option<&str>,
+) -> Vec<Value> {
+    events
+        .iter()
+        .map(|event| pipeline_call_row(run, sink, event, endpoint_id))
+        .collect()
+}
+
+/// One published row as an interval, floored the way [`span_of`] floors a live event: a
+/// reversed stamp pair covers no time rather than moving a boundary backwards.
+fn pipeline_span_of_row(row: &Value) -> Option<Span> {
+    let started = value_u64(row, "started_ns")?;
+    let finished = value_u64(row, "finished_ns")?;
+    Some(Span {
+        start: started.min(finished),
+        end: started.max(finished),
+        clipped: false,
+    })
+}
+
+/// The summed duration of a list of rows — `sum`, the quantity that is *not* a wall time the
+/// moment two calls overlap (§11).
+fn total_duration_ns(rows: &[&Value]) -> u64 {
+    rows.iter()
+        .filter_map(|row| value_u64(row, "duration_ns"))
+        .fold(0_u64, u64::saturating_add)
+}
+
+/// §9's 「stage → RPC count → RPC sum → RPC union → overlap → gaps」, and §17's per-stage
+/// figures, over one list of rows.
+///
+/// Every time figure is a re-sweep of the rows' own intervals, which is what makes it
+/// recomputable: no row is dropped, no stamp is re-read, and the same list handed to this
+/// function twice writes the same bytes.
+fn stage_aggregate(rows: &[&Value]) -> Value {
+    let spans: Vec<Span> = rows
+        .iter()
+        .filter_map(|row| pipeline_span_of_row(row))
+        .collect();
+    let (union, serial, overlap, max_concurrency, gaps) = scan(&spans);
+    let gap_stats = stats(&gaps);
+    json!({
+        "rpc_count": rows.len(),
+        "rpc_sum_duration_ns": total_duration_ns(rows),
+        "rpc_union_duration_ns": union,
+        "rpc_serial_wait_duration_ns": serial,
+        "rpc_overlap_duration_ns": overlap,
+        "max_concurrency": max_concurrency,
+        "gap_count": gaps.len(),
+        "gap_total_duration_ns": gaps
+            .iter()
+            .fold(0_u64, |total, width| total.saturating_add(*width)),
+        "gap_min_duration_ns": rank_of(&gap_stats, "min_ns"),
+        "gap_median_duration_ns": rank_of(&gap_stats, "p50_ns"),
+        "gap_max_duration_ns": rank_of(&gap_stats, "max_ns"),
+        "gap_distribution_ns": gap_stats,
+    })
+}
+
+/// §17's per-method rows: `stats` verbatim, so the minimum-sample rule that empties a rank
+/// three samples cannot support is this build's existing rule and not a second, weaker one.
+///
+/// The list is *not* cut by source here — one run has one source, and the pooled table across
+/// runs does cut by source, because a p50 over a recorded dump and a live node is a number
+/// about nothing.
+fn method_rows(rows: &[&Value]) -> Vec<Value> {
+    let mut by_method: BTreeMap<&str, Vec<&Value>> = BTreeMap::new();
+    for row in rows.iter().copied() {
+        by_method
+            .entry(row["method"].as_str().unwrap_or("<absent>"))
+            .or_default()
+            .push(row);
+    }
+    by_method
+        .into_iter()
+        .map(|(method, group)| {
+            let mut durations: Vec<u64> = group
+                .iter()
+                .filter_map(|row| value_u64(row, "duration_ns"))
+                .collect();
+            durations.sort_unstable();
+            let distribution = stats(&durations);
+            let sinks: Vec<&str> = group
+                .iter()
+                .filter_map(|row| row["sink"].as_str())
+                .collect::<BTreeSet<&str>>()
+                .into_iter()
+                .collect();
+            json!({
+                "method": method,
+                "count": group.len(),
+                "sinks": sinks,
+                "rpc_sum_duration_ns": total_duration_ns(&group),
+                // §17 names them min / median / max / p95 / p99; `stats` writes the same
+                // figures as min_ns / p50_ns / max_ns / p95_ns / p99_ns, and the mapping is
+                // published rather than silently renamed.
+                "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+                "min_duration_ns": rank_of(&distribution, "min_ns"),
+                "median_duration_ns": rank_of(&distribution, "p50_ns"),
+                "max_duration_ns": rank_of(&distribution, "max_ns"),
+                "p95_duration_ns": rank_of(&distribution, "p95_ns"),
+                "p99_duration_ns": rank_of(&distribution, "p99_ns"),
+                "distribution_ns": distribution,
+                "failed_calls": group
+                    .iter()
+                    .filter(|row| row["success"].as_bool() == Some(false))
+                    .count(),
+                "retried_calls": group
+                    .iter()
+                    .filter(|row| value_u64(row, "attempt").unwrap_or(1) > 1)
+                    .count(),
+            })
+        })
+        .collect()
+}
+
+/// §13's statement, measured over the calls that carry state: which height every
+/// [`STATE_READ_METHODS`] read went out at, and what was asked at a tag.
+///
+/// `eth_getBlockByNumber` at `latest` is the pin *being taken*, not a violation of it — that is
+/// why the two accounts are separate columns rather than one boolean over every call, and why
+/// a tag outside the state-read methods is listed with its call's own identity instead of
+/// being argued away.
+fn block_pin_table(rows: &[&Value], provenance: &Value) -> Value {
+    let mut heights: BTreeSet<String> = BTreeSet::new();
+    let mut tags: Vec<Value> = Vec::new();
+    let mut state_read_calls = 0_usize;
+    let mut at_pin = 0_usize;
+    let mut at_other = 0_usize;
+    let mut other_tags: Vec<Value> = Vec::new();
+    let pin = provenance
+        .get("block_number")
+        .and_then(|number| number.as_u64())
+        .map(|number| number.to_string());
+    for row in rows.iter().copied() {
+        let state_read = STATE_READ_METHODS.contains(&row["method"].as_str().unwrap_or(""));
+        if !state_read {
+            // The header read that fixes the pin, and any other call, is listed by what its
+            // own parameter said — §13's check is about state, and a `latest` here is the run
+            // asking the node where it is.
+            if let Some(block) = row["block_tag"].as_str() {
+                if block.parse::<u64>().is_err() {
+                    other_tags.push(json!({
+                        "logical_request_id": row["logical_request_id"],
+                        "method": row["method"],
+                        "block_tag": block,
+                        "stage": row["stage"],
+                        "caller": row["caller"],
+                    }));
+                }
+            }
+            continue;
+        }
+        state_read_calls += 1;
+        match row["block_tag"].as_str() {
+            Some(block) => match block.parse::<u64>() {
+                Ok(height) => {
+                    let text = height.to_string();
+                    if Some(&text) == pin.as_ref() {
+                        at_pin += 1;
+                    } else {
+                        at_other += 1;
+                    }
+                    heights.insert(text);
+                }
+                Err(_) => tags.push(json!({
+                    "logical_request_id": row["logical_request_id"],
+                    "method": row["method"],
+                    "block_tag": block,
+                    "stage": row["stage"],
+                    "caller": row["caller"],
+                    "context_note": row["context_note"],
+                })),
+            },
+            None => tags.push(json!({
+                "logical_request_id": row["logical_request_id"],
+                "method": row["method"],
+                "block_tag": Value::Null,
+                "stage": row["stage"],
+                "caller": row["caller"],
+                "context_note": row["context_note"],
+            })),
+        }
+    }
+    json!({
+        "chain_id": provenance.get("chain_id").cloned().unwrap_or(Value::Null),
+        "block_number": provenance.get("block_number").cloned().unwrap_or(Value::Null),
+        "state_read_methods_checked": STATE_READ_METHODS,
+        "state_read_calls": state_read_calls,
+        "heights_seen": heights.iter().collect::<Vec<&String>>(),
+        // §13's boolean is about *state*, so it is computed over the four methods that read
+        // it and not over the head read whose whole job is to ask for a height.
+        "all_state_reads_pinned": state_read_calls > 0 && tags.is_empty() && heights.len() == 1,
+        // The boolean has two independent causes, and a reader cannot tell them apart from
+        // `false` alone: a tag that is not a height at all, and heights that are not the same
+        // one. A live run's execution lane re-reads facts at a fresher head than the block its
+        // simulation pinned, so the second is normal and says nothing about the first.
+        "state_read_calls_at_this_runs_block": at_pin,
+        "state_read_calls_at_another_height": at_other,
+        "state_read_calls_at_a_tag_that_is_not_a_height": tags.len(),
+        "off_pin_state_reads": tags,
+        "reads_at_a_tag_outside_the_state_methods": other_tags,
+        "rule": "§13: no `latest`, `pending` or absent height on a state read. A height is \
+                 the decimal number the run sent, and one set of them across every state read \
+                 of a run is what `true` means here; zero state reads is not `true`, it is the \
+                 `state_read_calls` count saying so",
+    })
+}
+
+/// §7–§10's table for one run: both sinks on one timeline, every §17 run figure, the stage
+/// rows §9 derives from them, the §10 split of the run's RPC time, and §13's pin statement.
+///
+/// Two attribution accounts are kept side by side rather than merged, because they answer
+/// different questions and only one of them is new. `stage` on a row is what the *issuing code*
+/// said; `stages_not_completed` and the containment column are what the run's own ladder says
+/// held that instant. Where a stamped call falls inside a different stage's span the run
+/// reports the pair as a disagreement instead of picking one — a wrong stamp and a mis-wired
+/// socket are both findings, and either one silently resolved would be a figure the report
+/// then repeats.
+///
+/// `rows` is [`PIPELINE_CALLS_FILE`]'s list for this run, already merged across the two sinks;
+/// `stage_spans` is the same run's `stage_spans` array from M8.3.2's
+/// `outside-simulation-rpc.json`, or empty when the run recorded no lifecycle.
+pub fn pipeline_run_table(
+    run: &str,
+    rows: &[Value],
+    stage_spans: &[Value],
+    provenance: &Value,
+) -> Value {
+    let refs: Vec<&Value> = rows.iter().collect();
+    let spans = run_spans(stage_spans);
+    let call_spans: Vec<Span> = refs
+        .iter()
+        .filter_map(|row| pipeline_span_of_row(row))
+        .collect();
+
+    // §17's run totals, one sweep over every call of both sinks.
+    let (union, serial, overlap, max_concurrency, gaps) = scan(&call_spans);
+    let gap_stats = stats(&gaps);
+    let first_call = call_spans.iter().map(|span| span.start).min();
+    let last_call = call_spans.iter().map(|span| span.end).max();
+    let call_window = match (first_call, last_call) {
+        (Some(first), Some(last)) => Some(last.saturating_sub(first)),
+        _ => None,
+    };
+    let usable_windows: Vec<(u64, u64)> = spans.iter().filter_map(|span| span.window_ns).collect();
+    let ladder_window = usable_windows
+        .iter()
+        .fold(None::<(u64, u64)>, |acc, &(start, end)| {
+            Some(match acc {
+                Some((low, high)) => (low.min(start), high.max(end)),
+                None => (start, end),
+            })
+        });
+    let pipeline_total = ladder_window
+        .map(|(start, end)| end.saturating_sub(start))
+        .or(call_window);
+    let total_basis = if ladder_window.is_some() {
+        PIPELINE_TOTAL_FROM_SPANS
+    } else if call_window.is_some() {
+        PIPELINE_TOTAL_FROM_CALLS
+    } else {
+        PIPELINE_TOTAL_UNMEASURED
+    };
+
+    // §9's stage rows, keyed on the code's own names (§8), including the one name the code
+    // does not use for a call that arrived unlabeled.
+    let mut by_stage: BTreeMap<&str, Vec<&Value>> = BTreeMap::new();
+    for row in refs.iter().copied() {
+        by_stage
+            .entry(row["stage"].as_str().unwrap_or(PIPELINE_UNSTAMPED))
+            .or_default()
+            .push(row);
+    }
+    let stage_rows: Vec<Value> = by_stage
+        .iter()
+        .map(|(stage, group)| {
+            let group_refs: Vec<&Value> = group.to_vec();
+            let measured = stage_aggregate(&group_refs);
+            let usable: Vec<(u64, u64)> = spans
+                .iter()
+                .filter(|span| span.stage == *stage)
+                .filter_map(|span| span.window_ns)
+                .collect();
+            let stage_duration = if usable.is_empty() {
+                Value::Null
+            } else {
+                json!(usable.iter().fold(0_u64, |total, (start, end)| total
+                    .saturating_add(end.saturating_sub(*start))))
+            };
+            let (sinks, callers): (Vec<&str>, Vec<&str>) = (
+                group
+                    .iter()
+                    .filter_map(|row| row["sink"].as_str())
+                    .collect::<BTreeSet<&str>>()
+                    .into_iter()
+                    .collect(),
+                group
+                    .iter()
+                    .filter_map(|row| row["caller"].as_str())
+                    .collect::<BTreeSet<&str>>()
+                    .into_iter()
+                    .collect(),
+            );
+            json!({
+                "stage": stage,
+                "stage_duration_ns": stage_duration,
+                "stage_span_count": usable.len(),
+                "stage_duration_note": if usable.is_empty() {
+                    format!(
+                        "this run wrote no closed nanosecond span named `{stage}`, so the \
+                         stage's own duration is not measured here; the call figures beside it \
+                         are still this run's, read off their own stamps"
+                    )
+                } else {
+                    "the sum of this stage's closed intervals — equal to its span unless the \
+                     run opened the same stage twice"
+                        .to_string()
+                },
+                "sinks": sinks,
+                "callers": callers,
+                "rpc_share_of_run_union": ratio_ns(
+                    value_u64(&measured, "rpc_union_duration_ns").unwrap_or(0),
+                    union,
+                ),
+                "rpc_share_of_pipeline_total": pipeline_total.map_or_else(
+                    || json!({"per_mille": Value::Null, "reason": total_basis}),
+                    |total| {
+                        ratio_ns(
+                            value_u64(&measured, "rpc_union_duration_ns").unwrap_or(0),
+                            total,
+                        )
+                    },
+                ),
+                "measured": measured,
+            })
+        })
+        .collect();
+
+    // §19's buckets: the same rows re-swept per bucket rather than the stage figures added,
+    // because two stages of one run can be open at once and a sum of unions would say they
+    // were not.
+    let bucket_rows: Vec<Value> = PIPELINE_BUCKETS
+        .iter()
+        .map(|(bucket, stages, note)| {
+            let group: Vec<&Value> = refs
+                .iter()
+                .copied()
+                .filter(|row| {
+                    row["stage"]
+                        .as_str()
+                        .is_some_and(|stage| stages.contains(&stage))
+                })
+                .collect();
+            let measured = stage_aggregate(&group);
+            json!({
+                "bucket": bucket,
+                "code_stage_names": stages,
+                "why": note,
+                "rpc_count": group.len(),
+                "rpc_union_duration_ns": value_u64(&measured, "rpc_union_duration_ns")
+                    .unwrap_or(0),
+                "measured": measured,
+            })
+        })
+        .collect();
+
+    // The two accounts of who held one call, kept as a comparison rather than a choice.
+    let mut compared = 0_usize;
+    let mut unheld = 0_usize;
+    let mut disagreements: Vec<Value> = Vec::new();
+    for row in refs.iter().copied() {
+        let stamped = row["stage"].as_str();
+        let Some(at_ns) = value_u64(row, "started_ns") else {
+            continue;
+        };
+        match holding_run_span(&spans, at_ns) {
+            None => unheld += 1,
+            Some(held) => {
+                compared += 1;
+                if stamped != Some(held.stage) {
+                    disagreements.push(json!({
+                        "logical_request_id": row["logical_request_id"],
+                        "stamped_stage": stamped,
+                        "held_by_stage_span": held.stage,
+                        "held_span_outcome": held.outcome,
+                        "started_ns": at_ns,
+                    }));
+                }
+            }
+        }
+    }
+
+    let non_rpc = pipeline_total.map(|total| total.saturating_sub(union));
+    // The union can be wider than the ladder. A call whose stage wrote no closed interval — the
+    // execution lane's `build` reads, which the ladder gives no span of their own — is still on
+    // this run's sink clock, and the ladder's two end instants are only as wide as the stages
+    // that closed. `non_rpc_duration_ns` above then clamps to 0, which a reader will take for
+    // "no local time"; the excess is published beside it so the 0 stops being that claim.
+    let past_ladder = match pipeline_total {
+        Some(total) if union > total => Some(union - total),
+        _ => None,
+    };
+    json!({
+        "run": run,
+        "unit": "ns",
+        "question": "§7–§10: the run outside the simulation, on the same timeline as the \
+                     calls inside it — which stage held which call, how long each leg's calls \
+                     took together, and what part of the run's wall time no call covers",
+        "provenance": provenance,
+        "calls_recorded": rows.len(),
+        "calls_by_sink": {
+            PIPELINE_SINK_SIMULATION: refs.iter().filter(|row| row["sink"].as_str() == Some(PIPELINE_SINK_SIMULATION)).count(),
+            PIPELINE_SINK_LIFECYCLE: refs.iter().filter(|row| row["sink"].as_str() == Some(PIPELINE_SINK_LIFECYCLE)).count(),
+        },
+        // §17's per-run figures.
+        "totals": {
+            "pipeline_total_duration_ns": pipeline_total,
+            "pipeline_total_duration_basis": total_basis,
+            "ladder_window_ns": ladder_window.map(|(start, end)| json!([start, end])),
+            "call_window_ns": call_window,
+            "rpc_count": rows.len(),
+            "rpc_sum_duration_ns": total_duration_ns(&refs),
+            "rpc_union_duration_ns": union,
+            "rpc_serial_wait_duration_ns": serial,
+            "rpc_overlap_duration_ns": overlap,
+            "non_rpc_duration_ns": non_rpc,
+            "non_rpc_rule": "§11: total − union, never total − sum. Two calls in flight are one \
+                             stretch of covered time, and subtracting the sum would bill the \
+                             overlap twice as local work",
+            "union_extends_past_the_ladder_window_ns": past_ladder,
+            "union_past_the_ladder_rule": "where this is not null, the calls cover more time \
+                             than the ladder's first and last closed instants span, so \
+                             `non_rpc_duration_ns` is the clamped 0 of a subtraction that would \
+                             go negative and says nothing about how much local work this run \
+                             did: the run's own wall time is at least the ladder plus this many \
+                             nanoseconds of calls that landed outside it",
+            "max_concurrency": max_concurrency,
+            "gap_count": gaps.len(),
+            "gap_total_duration_ns": gaps.iter().fold(0_u64, |t, w| t.saturating_add(*w)),
+            "gap_min_duration_ns": rank_of(&gap_stats, "min_ns"),
+            "gap_median_duration_ns": rank_of(&gap_stats, "p50_ns"),
+            "gap_max_duration_ns": rank_of(&gap_stats, "max_ns"),
+            "gap_distribution_ns": gap_stats,
+            "gap_inside_call_window_ns": call_window.map(|w| w.saturating_sub(union)),
+            "attempts_total": refs.iter().filter_map(|row| value_u64(row, "attempt")).fold(0_u64, u64::saturating_add),
+            "retried_calls": refs.iter().filter(|row| value_u64(row, "attempt").unwrap_or(1) > 1).count(),
+            "failed_calls": refs.iter().filter(|row| row["success"].as_bool() == Some(false)).count(),
+            "calls_without_a_stamped_stage": by_stage.get(PIPELINE_UNSTAMPED).map_or(0, Vec::len),
+            // Only the notes that say a stamp exists and cannot be trusted. A call with no stamp at
+            // all carries `context_not_stamped` and is counted one field above; counting it here
+            // too would bill one call to two defects.
+            "calls_with_an_ambiguous_label": refs
+                .iter()
+                .filter(|row| {
+                    matches!(
+                        row["context_note"].as_str(),
+                        Some(evm_chain::CONTEXT_AMBIGUOUS_CONCURRENT_CALLS)
+                            | Some(evm_chain::CONTEXT_AMBIGUOUS_RESTAMPED_MID_CALL)
+                    )
+                })
+                .count(),
+        },
+        "stages": stage_rows,
+        "stages_no_bucket_covers": by_stage
+            .keys()
+            .copied()
+            .filter(|stage| *stage != PIPELINE_UNSTAMPED && bucket_of(stage).is_none())
+            .collect::<Vec<&str>>(),
+        "stages_no_bucket_covers_rule": "a stamped stage name [`PIPELINE_BUCKETS`] does not \
+            fold. The eight keys cover every name `evm_metrics::Stage::as_str` writes, so a \
+            row here means that table is out of date — and the calls are still in every total \
+            and every per-stage row above, just in no §19 bucket. `unstamped` is not listed \
+            here, because it is not a stage name the code ever said",
+        "pipeline_buckets": bucket_rows,
+        "methods": method_rows(&refs),
+        "attribution_accounts": {
+            "stamped": "the `stage` the issuing code set on the sink before it made the call \
+                        (M8.4.1 §4/§9) — one per call, and the key the tables above group by",
+            "contained": "the run's own lifecycle span that holds the call's `started_ns` \
+                          (M8.3.2's account, re-read here from the published `stage_spans`)",
+            "compared": compared,
+            "inside_no_span": unheld,
+            "disagreements": disagreements,
+            "rule": "a call the ladder holds in a stage other than the one stamped on it is \
+                     reported as a pair and not resolved: either the stamp is wrong or the \
+                     socket is wired to the wrong leg, and both are findings §11 would rather \
+                     see than a table that agrees with itself",
+        },
+        "stages_not_completed": spans
+            .iter()
+            .filter(|span| span.outcome != "completed")
+            .map(|span| json!({"stage": span.stage, "outcome": span.outcome, "note": span.note}))
+            .collect::<Vec<Value>>(),
+        "block_pin": block_pin_table(&refs, provenance),
+        "not_observed": PIPELINE_UNOBSERVED
+            .iter()
+            .map(|(surface, why)| json!({"surface": surface, "why": why}))
+            .collect::<Vec<Value>>(),
+    })
+}
+
+/// §10's and §17's cross-run file: each run's table verbatim, and beside them the figures that
+/// are legitimate to take across runs.
+///
+/// What cannot cross a run boundary is an instant. `started_ns` is nanoseconds since *its own*
+/// run's monotonic origin, so three runs' spans on one sweep would be three clocks pretending
+/// to be one — a run's union, overlap and gaps therefore stay inside that run, and what this
+/// file pools is (a) durations, which are differences, and (b) one run's own integers treated as
+/// one sample in a distribution over runs. §17's percentile asks for exactly that, and §21's
+/// 「样本不足 → null」 is what [`stats`] does when three runs are not enough for a p95.
+///
+/// Method distributions pool *within a source*, because a recorded dump and a live node answer
+/// the same method in different currencies.
+pub fn pipeline_assembled(runs: &[Value]) -> Value {
+    let mut per_run: Vec<Value> = Vec::new();
+    let mut provenance: Vec<Value> = Vec::new();
+    let mut run_counts: Vec<u64> = Vec::new();
+    let mut run_totals: Vec<u64> = Vec::new();
+    let mut run_unions: Vec<u64> = Vec::new();
+    let mut run_non_rpc: Vec<u64> = Vec::new();
+    let mut bucket_unions: BTreeMap<String, Vec<u64>> = BTreeMap::new();
+    let mut bucket_counts: BTreeMap<String, u64> = BTreeMap::new();
+    let mut method_durations: BTreeMap<(String, String), Vec<u64>> = BTreeMap::new();
+    let mut pinned: Vec<Value> = Vec::new();
+
+    for run in runs {
+        let name = run["run"].as_str().unwrap_or("?");
+        let source = run["source"].as_str().unwrap_or("<absent>").to_string();
+        let owned: Vec<Value> = run["calls"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .cloned()
+            .collect();
+        let spans: Vec<Value> = run["stage_spans"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .cloned()
+            .collect();
+        let table = pipeline_run_table(name, &owned, &spans, run);
+        let totals = &table["totals"];
+        run_counts.push(value_u64(totals, "rpc_count").unwrap_or(0));
+        if let Some(total) = value_u64(totals, "pipeline_total_duration_ns") {
+            run_totals.push(total);
+        }
+        if let Some(union) = value_u64(totals, "rpc_union_duration_ns") {
+            run_unions.push(union);
+        }
+        if let Some(non_rpc) = value_u64(totals, "non_rpc_duration_ns") {
+            run_non_rpc.push(non_rpc);
+        }
+        for bucket in table["pipeline_buckets"].as_array().into_iter().flatten() {
+            let key = bucket["bucket"].as_str().unwrap_or("?").to_string();
+            *bucket_counts.entry(key.clone()).or_default() +=
+                value_u64(bucket, "rpc_count").unwrap_or(0);
+            if let Some(union) = value_u64(bucket, "rpc_union_duration_ns") {
+                bucket_unions.entry(key).or_default().push(union);
+            }
+        }
+        for row in &owned {
+            let method = row["method"].as_str().unwrap_or("<absent>");
+            if let Some(duration) = value_u64(row, "duration_ns") {
+                method_durations
+                    .entry((source.clone(), method.to_string()))
+                    .or_default()
+                    .push(duration);
+            }
+        }
+        pinned.push(json!({
+            "run": name,
+            "chain_id": run["chain_id"].clone(),
+            "block_number": run["block_number"].clone(),
+            "all_state_reads_pinned": table["block_pin"]["all_state_reads_pinned"].clone(),
+        }));
+        provenance.push(json!({
+            "run": name,
+            "source": run["source"].clone(),
+            "chain_id": run["chain_id"].clone(),
+            "block_number": run["block_number"].clone(),
+            "endpoint_id": run["endpoint_id"].clone(),
+            "execution_mode": run["execution_mode"].clone(),
+            "git_revision": run["git_revision"].clone(),
+            "generated_at_unix_ms": run["generated_at_unix_ms"].clone(),
+            "calls": owned.len(),
+            "stage_spans": spans,
+        }));
+        per_run.push(table);
+    }
+
+    let bucket_rows: Vec<Value> = PIPELINE_BUCKETS
+        .iter()
+        .map(|(bucket, stages, note)| {
+            let key = bucket.to_string();
+            let unions = bucket_unions.get(&key).cloned().unwrap_or_default();
+            let total = unions
+                .iter()
+                .fold(0_u64, |sum, width| sum.saturating_add(*width));
+            json!({
+                "bucket": bucket,
+                "code_stage_names": stages,
+                "why": note,
+                "runs_reporting_it": unions.len(),
+                "rpc_count_total": bucket_counts.get(&key).copied().unwrap_or(0),
+                "rpc_union_duration_ns_total": total,
+                "rpc_union_duration_ns_per_run": stats(&unions),
+            })
+        })
+        .collect();
+    let method_rows: Vec<Value> = method_durations
+        .into_iter()
+        .map(|((source, method), mut durations)| {
+            durations.sort_unstable();
+            let distribution = stats(&durations);
+            json!({
+                "source": source,
+                "method": method,
+                "count": durations.len(),
+                "min_duration_ns": rank_of(&distribution, "min_ns"),
+                "median_duration_ns": rank_of(&distribution, "p50_ns"),
+                "max_duration_ns": rank_of(&distribution, "max_ns"),
+                "p95_duration_ns": rank_of(&distribution, "p95_ns"),
+                "p99_duration_ns": rank_of(&distribution, "p99_ns"),
+                "distribution_ns": distribution,
+            })
+        })
+        .collect();
+    let all_pinned = pinned
+        .iter()
+        .map(|row| row["all_state_reads_pinned"].clone())
+        .collect::<Vec<Value>>();
+    json!({
+        "question": "§10 and §17 across the runs of this experiment: where a run's RPC time \
+                     went, per stage and per method, with every figure traceable to the one \
+                     run it was measured in",
+        "unit": "ns",
+        "per_run": per_run,
+        "pooled": {
+            "rule": "durations pool because a duration is a difference of one clock; instants \
+                     do not pool across runs, so no union, overlap or gap below is a \
+                     cross-run measurement — each is one run's own figure, listed as one \
+                     sample",
+            "runs": run_counts.len(),
+            "rpc_count_per_run": count_stats(&run_counts),
+            "pipeline_total_duration_ns_per_run": stats(&run_totals),
+            "rpc_union_duration_ns_per_run": stats(&run_unions),
+            "non_rpc_duration_ns_per_run": stats(&run_non_rpc),
+            "buckets": bucket_rows,
+            "methods_by_source": method_rows,
+        },
+        "block_pin": {
+            "per_run": all_pinned,
+            "every_run_pinned": pinned.iter().all(|row| row["all_state_reads_pinned"] == json!(true)),
+            "rule": "§13, checked per run and ANDed across them: a run that made no state read \
+                     reports false here rather than an empty truth, because nothing was pinned",
+        },
+        "not_observed": PIPELINE_UNOBSERVED
+            .iter()
+            .map(|(surface, why)| json!({"surface": surface, "why": why}))
+            .collect::<Vec<Value>>(),
+        "reading_rules": [
+            "§10's split is `stages[].measured.rpc_union_duration_ns` read against \
+             `totals.pipeline_total_duration_ns`: the union is the part of the run a call was \
+             in flight, the difference is the part none of these calls covers. Neither is a \
+             claim about *why* — §20 forbids calling the first one network latency and the \
+             second one local compute without a measurement that separates them",
+            "§8: the per-stage table is keyed on the code's own stage names. The eight bucket \
+             rows are §19's required summary keys and nothing else; two of them are empty by \
+             the mapping and say so in their own `why`",
+            "a run's `attribution_accounts.disagreements` is the one column that would show a \
+             stamp landing on the wrong call, so an empty list there is a check that ran, not \
+             an assumption that the labels are right",
+        ],
+        "assembled_from": provenance,
+    })
+}
+
+/// §19's summary: §6's three counts beside §10's seven figures, in one file, with nothing in
+/// either column that is not a re-read of the other two files.
+///
+/// `storage_reads` is [`storage_dependency_map`]'s own `summary`, copied rather than
+/// recomputed, so the two files cannot disagree about how many reads were proven independent.
+/// `pipeline` is the pooled bucket rows, and each one carries the stage names it folds so a
+/// reader can get from a bucket back to the per-stage rows one key away.
+pub fn dependency_summary(map: &Value, pipeline: &Value) -> Value {
+    let storage_reads = json!({
+        "total": map["summary"]["total"].clone(),
+        "independent": map["summary"]["independent"].clone(),
+        "ordered": map["summary"]["ordered"].clone(),
+        "unknown": map["summary"]["unknown"].clone(),
+    });
+    let mut pipeline_object = serde_json::Map::new();
+    for (bucket, stages, note) in PIPELINE_BUCKETS.iter() {
+        let row = pipeline["pooled"]["buckets"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .find(|candidate| candidate["bucket"].as_str() == Some(*bucket));
+        let entry = match row {
+            Some(row) => json!({
+                "code_stage_names": stages,
+                "why": note,
+                "rpc_count_total": row["rpc_count_total"].clone(),
+                "rpc_union_duration_ns_total": row["rpc_union_duration_ns_total"].clone(),
+                "rpc_union_duration_ns_per_run": row["rpc_union_duration_ns_per_run"].clone(),
+                "runs_reporting_it": row["runs_reporting_it"].clone(),
+            }),
+            None => json!({
+                "code_stage_names": stages,
+                "why": note,
+                "measured": "no bucket row in the pipeline file — the two files were assembled \
+                            from different runs, which is a wiring finding, not a zero",
+            }),
+        };
+        pipeline_object.insert((*bucket).to_string(), entry);
+    }
+    json!({
+        "question": "§19's one-screen answer: how many storage reads had to wait, on what \
+                     proof, and how the whole run's RPC time splits across the stages the \
+                     code actually names",
+        "storage_reads": storage_reads,
+        "pipeline": Value::Object(pipeline_object),
+        "per_run_totals_are_in": PIPELINE_SUMMARY_FILE,
+        "storage_read_rows_are_in": STORAGE_READS_FILE,
+        "not_a_claim": "§20: no number in this file says the provider is the bottleneck, that \
+                       these reads could be batched, that C1/C2/C4 ordering matters, or that \
+                       an uninstrumented surface made no calls. It is a description of what was \
+                       recorded, and the recomputation rules are beside each figure",
+        "recompute": "storage_reads is `dependency-map.json`'s `summary` over its `nodes`; \
+                      every pipeline figure is `pipeline-summary.json`'s `pooled.buckets`, and \
+                      each of those is a re-sweep of `pipeline-calls.json`'s rows",
+    })
+}
+
+/// §21's per-stage file: the same rows [`pipeline_assembled`] swept, lifted out of each run's
+/// table so a reader who wants 「每个 stage 的 RPC count / sum / union / overlap / gap」 does not
+/// have to open every run's object.
+///
+/// It is a *re-read*, and the file says so: nothing here re-sweeps an interval, because a second
+/// implementation of the same sweep is a second thing that can be wrong. `per_run[].stages` and
+/// `per_run[].pipeline_buckets` are the arrays from that run's own table, and `pooled_*` are
+/// `pipeline-summary.json`'s pooled arrays.
+pub fn stage_summary(pipeline: &Value) -> Value {
+    let per_run: Vec<Value> = pipeline["per_run"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .map(|table| {
+            json!({
+                "run": table["run"].clone(),
+                "provenance": table["provenance"].clone(),
+                "stages": table["stages"].clone(),
+                "pipeline_buckets": table["pipeline_buckets"].clone(),
+                "stages_no_bucket_covers": table["stages_no_bucket_covers"].clone(),
+                "attribution_accounts": table["attribution_accounts"].clone(),
+            })
+        })
+        .collect();
+    json!({
+        "question": "§19's stage half of the pipeline: every stage the code names, with the \
+                     calls it stamped and the sweep those calls make — per run, because a union \
+                     is one clock's",
+        "unit": "ns",
+        "stage_names_are": "evm_metrics::Stage::as_str(), verbatim (§8), plus \
+                            `unstamped` for a call that arrived with no label",
+        "per_run": per_run,
+        "pooled_buckets": pipeline["pooled"]["buckets"].clone(),
+        "pooled_methods_by_source": pipeline["pooled"]["methods_by_source"].clone(),
+        "not_a_claim": "no stage row here is a bottleneck verdict. A stage holding most of the \
+                        run's RPC union says where the calls were, not why they took that long \
+                        (§20)",
+        "recompute": "every array in this file is a key inside `pipeline-summary.json`; a \
+                      figure that differs between the two files is a bug in this function, not \
+                      a second measurement",
+    })
+}
+
+/// §6's and §21's six tables over the runs named in `runs`.
+///
+/// One entry per run, and each carries the raw it was built from — the trace lines and the
+/// §9 call rows, both already published in that run's own directory — so a single run's
+/// directory and an assembly over three of them go through the same function. That is what
+/// makes §6's 「所有 aggregate 必须能够从 raw evidence 重建」 a property of the code rather than
+/// of the harness: `dependency-map.json` in a run directory and the pooled one at the root are
+/// the same call over one line list and over the concatenation of three.
+///
+/// Keys are the file names they are written under, so [`DiagnosisEvidence::finish`] writes what
+/// this returned without a second list to keep in step.
+pub fn dependency_tables_of(runs: &[Value]) -> Value {
+    let map = storage_dependency_map(runs);
+    // §4's rows are the map's own nodes — not a second pass over the lines. Two files holding
+    // the same list is §6's raw/aggregate pair; two *derivations* of it would be two answers.
+    let storage_reads = json!({
+        "question": "§4's per-read records: index, chain, height, address, slot, block tag, \
+                     caller, stage, dependency, depends_on, and the evidence beside each",
+        "unit": "ns",
+        "rows": map["nodes"].clone(),
+        "rows_are_also_the_map_s_nodes": DEPENDENCY_MAP_FILE,
+        "recompute": "one row per `eth_getStorageAt` of one simulation, in the order that \
+                      simulation's sink recorded them; a reader can rebuild any row from that \
+                      simulation's line of `simulation-traces.jsonl` with \
+                      `storage_dependency_rows_as`",
+    });
+    let calls = json!({
+        "question": "§9's whole-pipeline RPC records: both sinks of every run, on that run's \
+                     own clock, each row naming the stage and the site that issued it",
+        "unit": "ns",
+        "rows": runs
+            .iter()
+            .flat_map(|run| run["calls"].as_array().into_iter().flatten().cloned())
+            .collect::<Vec<Value>>(),
+        "sinks": [PIPELINE_SINK_SIMULATION, PIPELINE_SINK_LIFECYCLE],
+        "recompute": "every stage row in `pipeline-summary.json` is a sweep over a filter of \
+                      these rows; nothing is added back to them",
+    });
+    let pipeline = pipeline_assembled(
+        &runs
+            .iter()
+            .map(|run| {
+                json!({
+                    "run": run["run"].clone(),
+                    "source": run["source"].clone(),
+                    "chain_id": run["chain_id"].clone(),
+                    "block_number": run["block_number"].clone(),
+                    "endpoint_id": run["endpoint_id"].clone(),
+                    "execution_mode": run["execution_mode"].clone(),
+                    "git_revision": run["git_revision"].clone(),
+                    "generated_at_unix_ms": run["generated_at_unix_ms"].clone(),
+                    "calls": run["calls"].clone(),
+                    "stage_spans": run["stage_spans"].clone(),
+                })
+            })
+            .collect::<Vec<Value>>(),
+    );
+    let summary = dependency_summary(&map, &pipeline);
+    json!({
+        STORAGE_READS_FILE: storage_reads,
+        DEPENDENCY_MAP_FILE: map,
+        PIPELINE_CALLS_FILE: calls,
+        PIPELINE_SUMMARY_FILE: pipeline,
+        STAGE_SUMMARY_FILE: stage_summary(&pipeline),
+        DEPENDENCY_SUMMARY_FILE: summary,
+    })
+}
+
+/// §25's seven categories, in §25's own order and §25's own words.
 /// A `bottleneck-classification.json` verdict is chosen from this list and from nothing else,
 /// which is §19's rule. G is in it because §25 counts it as an answer: mixed or insufficient
 /// evidence is a finding, and it is a different finding from a named category.
@@ -3599,6 +5715,37 @@ pub struct DiagnosisEvidence {
     storage_rows: Vec<Value>,
     /// Every simulation's `account_reads` list — §9's rows.
     account_rows: Vec<Value>,
+    /// M8.4.1 §6's and §21's tables, and which of the two ways they get built this run is.
+    ///
+    /// `None` for a run that did not ask for them, and a directory without the switch keeps
+    /// exactly the file set M8.3.3 committed. What the switch adds is a re-read of the trace
+    /// lines this directory already wrote plus the rows of both sinks, so no file here carries
+    /// a clock reading the run did not already take (§12).
+    dependency: Option<DependencyTables>,
+    /// The lines written so far, kept in the order they were appended: §6's map is built by
+    /// decoding these again rather than by holding a second copy of the analysis.
+    dependency_lines: Vec<Value>,
+    /// §9's rows for both sinks of this run — the raw layer the pipeline tables sweep.
+    pipeline_rows: Vec<Value>,
+    /// This run's lifecycle stage spans in their published form, so §9's stage rows can be
+    /// re-derived after the trace itself has been handed on and closed.
+    stage_span_rows: Vec<Value>,
+    /// The name every `logical_request_id` and every node id of this run carries: the
+    /// directory's own name, which is also the run id in `raw/`.
+    run_name: String,
+}
+
+/// M8.4.1's six tables, either built here or handed in already pooled.
+enum DependencyTables {
+    /// Build this directory's own tables at [`DiagnosisEvidence::finish`], from the lines and
+    /// the rows it recorded — the single-run case, where one directory is one run.
+    Own,
+    /// An assembly over several runs: [`DiagnosisEvidence::attach_dependency`] hands the pooled
+    /// bundle over, keyed by file name, and `finish` only puts the directory's header on each.
+    ///
+    /// An assembly cannot use [`Self::Own`] because the run names come from the directories the
+    /// lines were read out of, not from the directory being written.
+    Pooled(Value),
 }
 
 /// What §14's sweep found, kept until `finish` turns it into a file.
@@ -3999,6 +6146,17 @@ impl DiagnosisEvidence {
             duration_rows: Vec::new(),
             storage_rows: Vec::new(),
             account_rows: Vec::new(),
+            dependency: None,
+            dependency_lines: Vec::new(),
+            pipeline_rows: Vec::new(),
+            stage_span_rows: Vec::new(),
+            // The directory's own name is the run's name everywhere else in the evidence tree
+            // (`raw/<session-id>/`), so §9's request ids and §6's node ids use that rather than
+            // a fourth identifier a reader would have to map by hand.
+            run_name: dir
+                .file_name()
+                .map(|name| name.to_string_lossy().to_string())
+                .unwrap_or_else(|| "<no-run-name>".to_string()),
         })
     }
 
@@ -4030,6 +6188,21 @@ impl DiagnosisEvidence {
             if let Some(rows) = line["account_reads"].as_array() {
                 self.account_rows.extend(rows.iter().cloned());
             }
+        }
+        if matches!(self.dependency, Some(DependencyTables::Own)) {
+            // The same argument as above, one milestone later: §4's rows and §9's rows are read
+            // out of the line this call is about to append, and out of the events that line was
+            // built from. The line is kept whole because §6's map decodes it again — the map a
+            // reader rebuilds from `simulation-traces.jsonl` is therefore the same object this
+            // directory wrote, not a second implementation that happens to agree today.
+            self.dependency_lines.push(line.clone());
+            let rows = pipeline_call_rows(
+                &self.run_name,
+                PIPELINE_SINK_SIMULATION,
+                &diagnosis.events,
+                diagnosis.endpoint_id.as_deref(),
+            );
+            self.pipeline_rows.extend(rows);
         }
         let text = serde_json::to_string(&line).map_err(|error| PipelineError::Evidence {
             path: self.dir.join(TRACES_FILE),
@@ -4070,6 +6243,16 @@ impl DiagnosisEvidence {
             spans: spans.to_vec(),
             endpoint_id: endpoint_id.map(str::to_string),
         });
+        if matches!(self.dependency, Some(DependencyTables::Own)) {
+            // §9's other sink, on the same clock: both sinks of one run share its
+            // `clock.origin_instant()`, so one sweep over the two lists is a statement about
+            // one run's wall time. The spans travel too, because §9's stage rows are the run's
+            // own ladder re-read after the latency trace has been closed.
+            let rows =
+                pipeline_call_rows(&self.run_name, PIPELINE_SINK_LIFECYCLE, events, endpoint_id);
+            self.pipeline_rows.extend(rows);
+            self.stage_span_rows = spans.iter().map(StageSpan::to_json).collect();
+        }
     }
 
     /// §14's other half for a directory assembled from several runs: the table is already
@@ -4082,6 +6265,28 @@ impl DiagnosisEvidence {
     /// that run's clock, before anything was merged.
     pub fn attach_outside(&mut self, table: Value) {
         self.lifecycle = Some(LifecycleHalf::Assembled(table));
+    }
+
+    /// Ask for M8.4.1 §6's and §21's tables, built from this directory's own recorded runs.
+    ///
+    /// This is the whole of what §14's and §15's switch does: it decides which files
+    /// [`Self::finish`] writes. It is a builder rather than a fifth argument to
+    /// [`Self::open`] so every directory written before M8.4.1 — and every test that compares
+    /// one byte for byte — keeps asking for exactly the files it asked for before.
+    pub fn with_dependency_tables(mut self) -> Self {
+        self.dependency = Some(DependencyTables::Own);
+        self
+    }
+
+    /// M8.4.1's tables for a directory assembled from several runs, already pooled by
+    /// [`storage_dependency_map`] and [`pipeline_assembled`] over the raw directories they came
+    /// from, keyed by the file names they will be written under.
+    ///
+    /// The assembly cannot use [`DependencyTables::Own`]: this directory's name is the
+    /// experiment's, and a pooled map whose nodes all carry that name would attribute three
+    /// runs' reads to a run that made none of them.
+    pub fn attach_dependency(&mut self, tables: Value) {
+        self.dependency = Some(DependencyTables::Pooled(tables));
     }
 
     /// Describe this directory as a folding together of runs that already exist.
@@ -4256,6 +6461,57 @@ impl DiagnosisEvidence {
             None
         };
 
+        // M8.4.1 §6's and §21's six tables, and only under this milestone's switch. The same
+        // argument as the block above: each one is a grouping over what this directory already
+        // recorded — its trace lines, and the two sinks' call rows — so a directory written
+        // without the switch keeps M8.3.3's eight names unchanged rather than growing six more
+        // that nobody asked for.
+        let dependency = self.dependency.take().map(|half| match half {
+            DependencyTables::Own => {
+                // The run's provenance is read off what it recorded rather than passed in a
+                // sixth time: a directory whose simulations all refused to trace still gets the
+                // tables, and its chain and height say `null` there because nothing was
+                // recorded, not because the writer gave up.
+                let line = self.dependency_lines.first();
+                let at = |key: &str| match line {
+                    Some(line) => line[key].clone(),
+                    None => Value::Null,
+                };
+                let endpoint_id = match at("endpoint_id") {
+                    Value::Null => self
+                        .pipeline_rows
+                        .iter()
+                        .find_map(|row| row["endpoint_id"].as_str())
+                        .map(|digest| json!(digest))
+                        .unwrap_or(Value::Null),
+                    found => found,
+                };
+                dependency_tables_of(&[json!({
+                    "run": self.run_name,
+                    "source": at("source"),
+                    "chain_id": at("chain_id"),
+                    "block_number": at("block_number"),
+                    "endpoint_id": endpoint_id,
+                    "execution_mode": self.execution_mode,
+                    "git_revision": self.git_revision,
+                    "generated_at_unix_ms": self.generated_at_unix_ms,
+                    "lines": self.dependency_lines,
+                    "calls": self.pipeline_rows,
+                    "stage_spans": self.stage_span_rows,
+                })])
+            }
+            DependencyTables::Pooled(tables) => tables,
+        });
+        if let Some(bundle) = dependency.as_ref() {
+            for name in DEPENDENCY_FILES {
+                let table = bundle.get(name).ok_or_else(|| PipelineError::Evidence {
+                    path: self.dir.join(name),
+                    detail: format!("the bundle handed to this directory has no {name} table"),
+                })?;
+                self.write_whole(name, &with_metadata(table.clone(), &metadata))?;
+            }
+        }
+
         std::fs::write(
             self.dir.join(README_FILE),
             readme(
@@ -4264,6 +6520,7 @@ impl DiagnosisEvidence {
                 self.simulations,
                 outside.as_ref(),
                 bottleneck.as_ref(),
+                dependency.as_ref(),
             ),
         )
         .map_err(|error| write_failed(README_FILE, error))?;
@@ -4369,6 +6626,7 @@ fn readme(
     simulations: usize,
     outside: Option<&Value>,
     bottleneck: Option<&Value>,
+    dependency: Option<&Value>,
 ) -> String {
     let mut lines: Vec<String> = Vec::new();
     lines.push(format!(
@@ -4494,22 +6752,35 @@ fn readme(
         "- The record is taken at the wire, so a slow decode and a slow node are one number \
            (§17). What separates them here is the attempt list, not a sub-timer.\n",
     );
-    limitations.push_str(match outside {
-        Some(_) => {
+    limitations.push_str(&match outside {
+        Some(_) => format!(
             "- Detection-stage reads (the reserves priced before a simulation is built) \
            and the gate's own reads are **not** in these traces: the sink here is attached to \
            the adapter the simulation itself reads through, so a call in a trace line is a \
            call that simulation made. The rest of the lifecycle is reported beside them, in \
            `{OUTSIDE_FILE}`, and classified by the stage that held it.\n"
-        }
-        None => {
+        ),
+        None => format!(
             "- Detection-stage reads (the reserves priced before a simulation is built) \
            and the gate's own reads are not in these traces: the sink is attached to the \
            adapter the simulation itself reads through, so a call in this directory is a call \
-           that simulation made. This run did not ask for the lifecycle half \n\
+           that simulation made. This run did not ask for the lifecycle half \
            (`{OUTSIDE_FILE}` is written only when §17's switch is on), so nothing here says \
            what those other reads cost.\n"
-        }
+        ),
+    });
+    limitations.push_str(&match dependency {
+        Some(_) => "- The dependency file says which leg issued a read and what that leg's own \
+           proof is; it does not say whether the read *could* have been issued earlier. Whether \
+           a slot is needed before a later call is a question about values, and the only values \
+           recorded here are the ones the requests carried.\n"
+            .to_string(),
+        None => format!(
+            "- This run did not ask for M8.4.1's dependency and pipeline tables \
+           (`{STORAGE_READS_FILE}` and the five beside it are written only under that switch), \
+           so nothing here says which storage read waited on which, nor how the lifecycle's RPC \
+           splits by stage.\n"
+        ),
     });
     limitations.push_str(
         "- Submission, receipt and header reads on other transports — the WebSocket client's \
@@ -4593,6 +6864,55 @@ fn readme(
              file does — the directions it makes possible are written in the completion report as \
              candidates and none of them is implemented here.\n",
             per_source.join("; ")
+        ));
+    }
+    if let Some(bundle) = dependency {
+        let summary = &bundle[DEPENDENCY_SUMMARY_FILE];
+        let reads = &summary["storage_reads"];
+        let pairs: Vec<String> = bundle[DEPENDENCY_MAP_FILE]["pair_summary"]
+            .as_array()
+            .map(|rows| {
+                rows.iter()
+                    .map(|row| {
+                        format!(
+                            "{}={}",
+                            row["relation"].as_str().unwrap_or("?"),
+                            row["pairs"].as_u64().unwrap_or(0)
+                        )
+                    })
+                    .collect()
+            })
+            .unwrap_or_default();
+        lines.push(format!(
+            "## Storage dependency and whole-pipeline RPC\n\n\
+             M8.4.1's switch was on, so the directory also holds six tables that answer \
+             「why must these reads be serial」 and 「where does the run's non-simulation RPC \
+             time go」, and answer nothing else: `{STORAGE_READS_FILE}` (one §4 record per \
+             `eth_getStorageAt` — caller, address, slot, height, dependency, depends_on, and \
+             the evidence beside each), `{DEPENDENCY_MAP_FILE}` (`nodes` / `edges` / `summary` \
+             over the same rows), `{DEPENDENCY_SUMMARY_FILE}` (§19's one-screen tally), \
+             `{PIPELINE_CALLS_FILE}` (every call of both sinks of every run, one row each), \
+             `{PIPELINE_SUMMARY_FILE}` (§17's per-run totals and per-stage rows) and \
+             `{STAGE_SUMMARY_FILE}` (the same stage arrays lifted out per run). Not one of them \
+             issues a request or reads a clock: each is a re-read of the trace lines and the \
+             call rows this directory had already written.\n\n\
+             This run: {} storage read(s) — {} independent, {} ordered, {} unknown; over pairs \
+             of reads within one simulation, {}.\n\n\
+             Two words are load-bearing here. §5: different slots are *not* evidence of \
+             independence — a read is `independent` only when the leg that issued it is \
+             provably sequential in the other direction (the materialised audit pass, whose \
+             whole list exists before any of it is asked for), and the file names that leg and \
+             its proof rather than asserting it. §3: an `unknown` is never promoted to \
+             `independent`; the majority of read pairs in a normal run are `undecidable` \
+             because they sit on different legs, and this file says so instead of picking a \
+             side. `not observed` likewise appears where a surface has no sink at all — it is \
+             not a zero (§11), and `{PIPELINE_SUMMARY_FILE}`'s `not_observed` column lists \
+             which surfaces those are.\n",
+            reads["total"].as_u64().unwrap_or(0),
+            reads["independent"].as_u64().unwrap_or(0),
+            reads["ordered"].as_u64().unwrap_or(0),
+            reads["unknown"].as_u64().unwrap_or(0),
+            pairs.join(", ")
         ));
     }
     if let Some(runs) = summary.get("assembled_from").filter(|runs| runs.is_array()) {
@@ -4693,6 +7013,12 @@ pub(crate) fn call(
         }],
         dedup_key: dedup_key.map(str::to_string),
         key_note: dedup_key.map_or(Some(evm_chain::DEDUP_KEY_UNAVAILABLE_FOR_METHOD), |_| None),
+        // A helper's call never went through the choke point, so it carries no label: these
+        // three fields say "the sink was not stamped for this call", which is what a
+        // test-built event honestly is.
+        stage: None,
+        caller: None,
+        context_note: Some(evm_chain::CONTEXT_NOT_STAMPED),
     }
 }
 
@@ -7718,6 +10044,841 @@ mod tests {
             "the README has to say the directory is not one run's"
         );
         assert!(readme.contains("run-001 (2 simulation(s), 6 call(s))"));
+    }
+
+    // ---- M8.4.1 §3–§6: which read had to wait for which ------------------
+
+    /// A storage read carrying both labels §4 put on a record — the stage the run was in and
+    /// the phase that asked for this word.
+    ///
+    /// [`storage_call`]'s events are deliberately *un*labeled (they went through no sink),
+    /// which makes them the test for the `unknown` path and no test for the proven one. The
+    /// slots differ across these calls on purpose too: §5 is the rule under test, and a pair
+    /// of different words is the case a slot-difference classifier would get wrong.
+    fn labeled_storage_call(
+        rpc_id: u64,
+        slot: &str,
+        started_ns: u64,
+        finished_ns: u64,
+        caller: &str,
+    ) -> RpcCallEvent {
+        let mut event = storage_call(rpc_id, "0xAa11", slot, started_ns, finished_ns);
+        event.stage = Some(evm_metrics::Stage::Simulation.as_str().to_string());
+        event.caller = Some(caller.to_string());
+        event.context_note = None;
+        event
+    }
+
+    /// [`labeled_storage_call`] for any method, with the stage spelled out rather than fixed,
+    /// because the pipeline table groups by stage and a test whose calls all say the same one
+    /// proves nothing about the grouping.
+    fn labeled_call(
+        rpc_id: u64,
+        method: &str,
+        stage: &str,
+        caller: &str,
+        started_ns: u64,
+        finished_ns: u64,
+    ) -> RpcCallEvent {
+        let mut event = call(rpc_id, method, started_ns, finished_ns, Some("state|test"));
+        event.stage = Some(stage.to_string());
+        event.caller = Some(caller.to_string());
+        event.context_note = None;
+        event
+    }
+
+    /// §3's `ordered`, and §5's prohibition, on the leg that has the most reads: the
+    /// interpreter's. Two words of one plan step, issued one after the other and closing
+    /// before the next opens.
+    #[test]
+    fn two_interpreter_reads_of_two_different_slots_are_ordered_and_never_independent() {
+        let window = window(0, 10_000);
+        let events = vec![
+            labeled_storage_call(1, "0x01", 100, 400, "execute: step 0 — swap"),
+            labeled_storage_call(2, "0x02", 500, 800, "execute: step 0 — swap"),
+        ];
+        let rows = storage_dependency_rows(&window, &events);
+        assert_eq!(rows.len(), 2);
+        assert_eq!(rows[0]["leg"], ReadLeg::Fiber.as_str());
+        assert_ne!(
+            rows[0]["slot"], rows[1]["slot"],
+            "the two reads are of two different words, which is exactly what §5 says is not a \
+             reason to call them independent"
+        );
+        assert_eq!(
+            rows[0]["dependency"], DEPENDENCY_UNKNOWN,
+            "the leg's first read has no earlier read of its own leg proven as a wait, and \
+             the absence of a proof is not a licence to say `independent` (§3)"
+        );
+        assert_eq!(rows[1]["dependency"], DEPENDENCY_ORDERED);
+        assert_eq!(rows[1]["depends_on"], json!([rows[0]["node_id"]]));
+        assert_eq!(
+            rows[1]["uses_prior_response"], USES_PRIOR_RESPONSE_POSSIBLE,
+            "§18: waiting for a read is not the same claim as using its value"
+        );
+        assert!(
+            !rows
+                .iter()
+                .any(|row| row["dependency"] == DEPENDENCY_INDEPENDENT),
+            "an interpreter leg produced an `independent` node: {:?}",
+            rows.iter()
+                .map(|row| &row["dependency"])
+                .collect::<Vec<&Value>>()
+        );
+    }
+
+    /// §3's `independent`, on the one leg this build can actually prove it for: the audit that
+    /// reads back the words the run changed, whose whole key list exists before its first
+    /// request goes out.
+    #[test]
+    fn the_audit_leg_s_reads_are_independent_because_its_key_list_existed_first() {
+        let window = window(0, 10_000);
+        let events = vec![
+            labeled_storage_call(1, "0x01", 0, 300, evm_simulation::engine::SLOT_AUDIT_PHASE),
+            labeled_storage_call(
+                2,
+                "0x02",
+                400,
+                600,
+                evm_simulation::engine::SLOT_AUDIT_PHASE,
+            ),
+        ];
+        let rows = storage_dependency_rows(&window, &events);
+        for row in &rows {
+            assert_eq!(row["leg"], ReadLeg::Materialised.as_str());
+            assert_eq!(row["dependency"], DEPENDENCY_INDEPENDENT);
+            assert_eq!(row["uses_prior_response"], USES_PRIOR_RESPONSE_NO);
+            assert_eq!(row["depends_on"], json!([]));
+        }
+        // The proof is about the parameters, and the file says so where a reader looks: the
+        // evidence string names the materialised list, not the clock.
+        let evidence = rows[1]["evidence"]
+            .as_array()
+            .expect("every row carries its evidence")
+            .iter()
+            .filter_map(Value::as_str)
+            .collect::<Vec<&str>>()
+            .join(" | ");
+        assert!(
+            evidence.contains("materialises and sorts"),
+            "the audit leg's evidence does not quote its own proof: {evidence}"
+        );
+        let refs: Vec<&Value> = rows.iter().collect();
+        let clique = dependency_edges(&refs)
+            .into_iter()
+            .find(|edge| edge["kind"] == DEPENDENCY_INDEPENDENT)
+            .expect("the materialised leg is stated as one set");
+        assert_eq!(clique["pair_count"], json!(1));
+        assert_eq!(clique["read_count"], json!(2));
+    }
+
+    /// §3's rule read the hard way: a leg whose code says *one at a time* and a wire that says
+    /// *both open at once* are two accounts of one fact, and this build records the
+    /// disagreement rather than picking the flattering one.
+    #[test]
+    fn an_interpreter_pair_that_overlaps_is_a_contradiction_and_lands_on_unknown() {
+        let window = window(0, 10_000);
+        let events = vec![
+            labeled_storage_call(1, "0x01", 0, 500, "views: getReserves()"),
+            labeled_storage_call(2, "0x02", 200, 700, "views: getReserves()"),
+        ];
+        let rows = storage_dependency_rows(&window, &events);
+        assert_eq!(rows[1]["dependency"], DEPENDENCY_UNKNOWN);
+        assert_eq!(
+            rows[1]["uses_prior_response"], USES_PRIOR_RESPONSE_NOT_DETERMINED,
+            "a contradicted leg cannot claim anything about the values either"
+        );
+        let evidence: String = rows[1]["evidence"]
+            .as_array()
+            .expect("evidence")
+            .iter()
+            .filter_map(Value::as_str)
+            .collect::<Vec<&str>>()
+            .join(" | ");
+        assert!(
+            evidence.contains("CONTRADICTION"),
+            "the disagreement is not in the row's own evidence: {evidence}"
+        );
+        let refs: Vec<&Value> = rows.iter().collect();
+        assert_eq!(
+            pair_relation_of(refs[0], refs[1]),
+            Some(PairRelation::Contradiction.as_str())
+        );
+        assert!(
+            !rows
+                .iter()
+                .any(|row| row["dependency"] == DEPENDENCY_INDEPENDENT),
+            "a contradicted pair was promoted to `independent`, which §3 forbids outright"
+        );
+        assert!(dependency_edges(&refs)
+            .iter()
+            .any(|edge| edge["kind"] == PairRelation::Contradiction.as_str()));
+    }
+
+    /// §5's other half: one leg following another in the engine's text is a sequence of
+    /// statements, not a dependency between values — in either direction.
+    #[test]
+    fn one_leg_following_another_is_recorded_as_a_boundary_and_not_as_a_dependency() {
+        let window = window(0, 10_000);
+        let events = vec![
+            labeled_storage_call(1, "0x01", 0, 400, "execute: step 0 — swap"),
+            labeled_storage_call(
+                2,
+                "0x02",
+                500,
+                900,
+                evm_simulation::engine::SLOT_AUDIT_PHASE,
+            ),
+        ];
+        let rows = storage_dependency_rows(&window, &events);
+        let refs: Vec<&Value> = rows.iter().collect();
+        assert_eq!(
+            pair_relation_of(refs[0], refs[1]),
+            Some(DEPENDENCY_UNDECIDABLE)
+        );
+        // The boundary does not reach inside the second leg: its own reads are still proven
+        // independent of each other, and §19's count is about nodes.
+        assert_eq!(rows[1]["leg"], ReadLeg::Materialised.as_str());
+        assert_eq!(rows[1]["other_leg_reads_before"], json!(1));
+        assert_eq!(rows[1]["undecidable_pairs_before"], json!(1));
+        let boundary = dependency_edges(&refs)
+            .into_iter()
+            .find(|edge| edge["kind"] == DEPENDENCY_UNDECIDABLE)
+            .expect("the leg boundary is stated, not left for a reader to infer");
+        assert_eq!(boundary["from_leg"], ReadLeg::Fiber.as_str());
+        assert_eq!(boundary["to_leg"], ReadLeg::Materialised.as_str());
+        assert_eq!(boundary["pairs_across_this_boundary"], json!(1));
+    }
+
+    /// §4's stamp rule at the classifier: three different reasons a read has no known owner,
+    /// each recorded as itself and each landing on `unknown`.
+    #[test]
+    fn an_unattributable_read_is_unknown_and_says_which_of_the_three_reasons_it_is() {
+        let window = window(0, 10_000);
+        let ambiguous = {
+            let mut event = labeled_storage_call(2, "0x02", 400, 700, "views: getReserves()");
+            event.context_note = Some(evm_chain::CONTEXT_AMBIGUOUS_CONCURRENT_CALLS);
+            event
+        };
+        let events = vec![
+            storage_call(1, "0xAa11", "0x01", 0, 300),
+            ambiguous,
+            labeled_storage_call(3, "0x03", 800, 900, "a phase no rule covers"),
+        ];
+        let rows = storage_dependency_rows(&window, &events);
+        assert_eq!(rows[0]["leg"], ReadLeg::Unstamped.as_str());
+        assert_eq!(rows[1]["leg"], ReadLeg::Ambiguous.as_str());
+        assert_eq!(rows[2]["leg"], ReadLeg::Unattributed.as_str());
+        for row in &rows {
+            assert_eq!(row["dependency"], DEPENDENCY_UNKNOWN);
+            assert_eq!(
+                row["uses_prior_response"],
+                USES_PRIOR_RESPONSE_NOT_DETERMINED
+            );
+        }
+        // The three are told apart in the file, because §11's rule is the same here: an
+        // unlabeled read and an unattributable one are different facts about the build.
+        let map = storage_dependency_map(&[
+            json!({"run": "run-001", "rows_are_synthetic": true, "lines": []}),
+        ]);
+        assert!(map["nodes"].as_array().expect("nodes").is_empty());
+    }
+
+    /// §6's rebuild requirement, on a directory the writer itself produced: the map's `summary`
+    /// is a count over its own `nodes`, its nodes are its lines regrouped, and a line this
+    /// build cannot read is refused out loud rather than dropped.
+    #[test]
+    fn the_map_is_a_re_read_of_the_lines_and_promotes_nothing_it_cannot_attribute() {
+        let source = temp_dir("dependency-source");
+        write_a_directory(&source, true);
+        let lines = lines_of(&source);
+        assert_eq!(
+            lines.len(),
+            2,
+            "the fixture directory records two simulations"
+        );
+        let map = storage_dependency_map(&[json!({"run": "run-001", "lines": lines})]);
+        let nodes = map["nodes"].as_array().expect("nodes");
+        // Two `eth_getStorageAt` per simulation, and the third call of each is a `getCode`.
+        assert_eq!(nodes.len(), 4);
+        assert_eq!(map["summary"]["total"], json!(nodes.len()));
+        assert_eq!(map["summary"]["independent"], json!(0));
+        assert_eq!(map["summary"]["ordered"], json!(0));
+        assert_eq!(map["summary"]["unknown"], json!(nodes.len()));
+        assert_eq!(
+            map["per_simulation"]
+                .as_array()
+                .expect("per_simulation")
+                .len(),
+            2
+        );
+        assert!(map["decoding_refusals"]
+            .as_array()
+            .expect("refusals")
+            .is_empty());
+        assert!(map["leg_vocabulary"]["reads_per_leg"]
+            .as_array()
+            .expect("legs")
+            .iter()
+            .any(|row| row["leg"] == ReadLeg::Unstamped.as_str()));
+        // The vocabulary is the code's own, and the file says which constants it came from.
+        assert!(map["leg_vocabulary"]["proofs"]
+            .as_array()
+            .expect("proofs")
+            .iter()
+            .any(|row| row["leg"] == ReadLeg::Fiber.as_str()));
+    }
+
+    /// §8's rule about names, checked as a coverage property over the vocabulary the run can
+    /// actually stamp: every [`evm_metrics::Stage`] lands in exactly one §19 bucket, so a
+    /// bucket sum is a partition of the run's calls and not a partial one dressed up as one.
+    #[test]
+    fn the_seven_buckets_plus_the_eighth_partition_every_stage_the_code_can_name() {
+        let mut covered: BTreeSet<&str> = BTreeSet::new();
+        for (bucket, stages, _) in PIPELINE_BUCKETS.iter() {
+            for stage in stages.iter() {
+                assert!(
+                    covered.insert(*stage),
+                    "`{stage}` is folded into two buckets, so §19's pipeline figures would \
+                     double-count its calls"
+                );
+                assert_eq!(bucket_of(stage), Some(*bucket));
+            }
+        }
+        for stage in evm_metrics::Stage::ALL {
+            assert!(
+                covered.contains(stage.as_str()),
+                "`{}` is a stage this build stamps and no bucket covers it",
+                stage.as_str()
+            );
+        }
+        assert_eq!(covered.len(), evm_metrics::Stage::ALL.len());
+    }
+
+    /// §9's derivation and §17's run figures, on a worked example whose arithmetic a reader
+    /// can do by hand: four calls of two sinks inside a two-span ladder.
+    ///
+    /// The intervals are chosen so the four figures that §17 asks for cannot be confused with
+    /// each other — `1100→1300` and `1200→1600` overlap, `1400→1500` rides inside the long
+    /// one, and `1800→1900` is the call that leaves a real hole before it:
+    ///
+    /// | call | sink | stage | interval |
+    /// |---|---|---|---|
+    /// | A | simulation | simulation | 1100→1300 (200) |
+    /// | B | simulation | simulation | 1400→1500 (100) |
+    /// | C | lifecycle  | preflight | 1200→1600 (400) |
+    /// | D | lifecycle  | build     | 1800→1900 (100) |
+    ///
+    /// Read off that table by hand: sum 800, union 600 (`1100–1600` plus `1800–1900`), of
+    /// which 400 ns had exactly one call open and 200 ns had two, one 200 ns idle stretch
+    /// inside the call window (`1600–1800`), and 2000 − 600 = 1400 ns of the ladder that no
+    /// call covers.
+    #[test]
+    fn a_stage_s_count_sum_union_overlap_and_gaps_all_come_from_the_same_calls() {
+        let state_events = vec![
+            labeled_storage_call(1, "0x01", 1_100, 1_300, "views: getReserves()"),
+            labeled_storage_call(2, "0x02", 1_400, 1_500, "execute: step 0 — swap"),
+        ];
+        // Two lane reads, each stamped with the stage that issued it and each held by the
+        // *simulation* span on the ladder — the mis-wiring case, and the reason this test
+        // spells the two attribution accounts apart rather than merging them.
+        let lifecycle_events = vec![
+            labeled_call(
+                1,
+                "eth_getBlockByNumber",
+                "preflight",
+                "head and header that fixed the pin",
+                1_200,
+                1_600,
+            ),
+            labeled_call(
+                2,
+                "eth_getTransactionCount",
+                "build",
+                "nonce at build",
+                1_800,
+                1_900,
+            ),
+        ];
+        let mut rows = pipeline_call_rows(
+            "run-001",
+            PIPELINE_SINK_SIMULATION,
+            &state_events,
+            Some("rpc-0123456789abcdef"),
+        );
+        rows.extend(pipeline_call_rows(
+            "run-001",
+            PIPELINE_SINK_LIFECYCLE,
+            &lifecycle_events,
+            Some("rpc-0123456789abcdef"),
+        ));
+        let spans = vec![
+            json!({
+                "stage": "observation",
+                "outcome": "completed",
+                "started_ns": 0_u64,
+                "ended_ns": 1_000,
+                "usable_for_classification": true,
+                "note": "test span",
+            }),
+            json!({
+                "stage": "simulation",
+                "outcome": "completed",
+                "started_ns": 1_000_u64,
+                "ended_ns": 2_000,
+                "usable_for_classification": true,
+                "note": "test span",
+            }),
+        ];
+        let table = pipeline_run_table(
+            "run-001",
+            &rows,
+            &spans,
+            &json!({"chain_id": 91_342, "block_number": 37_594_591, "source": "live"}),
+        );
+
+        let totals = &table["totals"];
+        assert_eq!(totals["rpc_count"], json!(4));
+        assert_eq!(totals["rpc_sum_duration_ns"], json!(200 + 100 + 400 + 100));
+        assert_eq!(totals["rpc_union_duration_ns"], json!(600));
+        assert_eq!(totals["rpc_serial_wait_duration_ns"], json!(400));
+        assert_eq!(totals["rpc_overlap_duration_ns"], json!(200));
+        assert_eq!(totals["max_concurrency"], json!(2));
+        // The one hole this example leaves is 1600→1800, and it is the same 200 ns three
+        // ways over: counted, totalled, and — because the call window is the only place a gap
+        // can be — inside the call window.
+        assert_eq!(totals["gap_count"], json!(1));
+        assert_eq!(totals["gap_total_duration_ns"], json!(200));
+        assert_eq!(totals["gap_inside_call_window_ns"], json!(200));
+        assert_eq!(totals["gap_min_duration_ns"], json!(200));
+        assert_eq!(totals["gap_max_duration_ns"], json!(200));
+        // §17's median of one sample is §21's rule, not an invented number: one sample is
+        // below `stats`' own p50 floor, so the rank comes back null with its reason.
+        assert_eq!(totals["gap_median_duration_ns"], Value::Null);
+        assert_eq!(
+            totals["gap_distribution_ns"]["p50_reason"]["reason"],
+            json!("insufficient_sample")
+        );
+        assert_eq!(totals["call_window_ns"], json!(800));
+        // The ladder, not the call window, is `pipeline_total`: 0→2000.
+        assert_eq!(totals["pipeline_total_duration_ns"], json!(2_000));
+        assert_eq!(
+            totals["non_rpc_duration_ns"],
+            json!(2_000 - 600),
+            "§11: non-RPC is the total minus the *union* — minus the sum would bill the \
+             overlap twice as local work"
+        );
+
+        // §9's stage rows add up to the run in calls, and deliberately do *not* add up in
+        // time: two stages of one run are open at once, so their unions are 800 ns of
+        // covered-and-covered against the run's one 600 ns sweep.
+        let stages = table["stages"].as_array().expect("stage rows");
+        assert_eq!(stages.len(), 3);
+        let count_sum: u64 = stages
+            .iter()
+            .filter_map(|row| value_u64(&row["measured"], "rpc_count"))
+            .sum();
+        assert_eq!(count_sum, 4);
+        let union_sum: u64 = stages
+            .iter()
+            .filter_map(|row| value_u64(&row["measured"], "rpc_union_duration_ns"))
+            .sum();
+        assert_eq!(
+            union_sum, 800,
+            "the stage unions are re-sweeps of the same clock, and their sum is larger than \
+             the run's union by exactly the 200 ns the two sinks shared"
+        );
+        let by_stage: BTreeMap<&str, &Value> = stages
+            .iter()
+            .map(|row| (row["stage"].as_str().expect("a stage name"), row))
+            .collect();
+        let simulation_stage = by_stage["simulation"];
+        assert_eq!(simulation_stage["stage_duration_ns"], json!(1_000));
+        assert_eq!(
+            simulation_stage["measured"]["rpc_union_duration_ns"],
+            json!(300)
+        );
+        assert_eq!(simulation_stage["measured"]["max_concurrency"], json!(1));
+        assert_eq!(
+            simulation_stage["measured"]["rpc_overlap_duration_ns"],
+            json!(0)
+        );
+        assert_eq!(
+            simulation_stage["rpc_share_of_run_union"]["per_mille"],
+            json!(500),
+            "300 of the run's 600 ns union is half of it, in per-mille"
+        );
+        // `preflight` issued a call but the ladder named no preflight span, so its own
+        // duration is unmeasured while its call figures stand — the two are different facts.
+        let preflight_stage = by_stage["preflight"];
+        assert_eq!(preflight_stage["stage_duration_ns"], Value::Null);
+        assert_eq!(
+            preflight_stage["measured"]["rpc_union_duration_ns"],
+            json!(400)
+        );
+        assert!(
+            preflight_stage["stage_duration_note"]
+                .as_str()
+                .expect("a note")
+                .contains("not measured here"),
+            "a stage with no span has to say the duration is absent, not zero"
+        );
+
+        // §19's buckets read the same calls: `simulation` and `preflight` are two of the eight.
+        let buckets = table["pipeline_buckets"].as_array().expect("bucket rows");
+        assert_eq!(buckets.len(), PIPELINE_BUCKETS.len());
+        let by_name: BTreeMap<&str, &Value> = buckets
+            .iter()
+            .map(|row| (row["bucket"].as_str().expect("a bucket name"), row))
+            .collect();
+        assert_eq!(by_name["simulation"]["rpc_count"], json!(2));
+        assert_eq!(by_name["simulation"]["rpc_union_duration_ns"], json!(300));
+        assert_eq!(by_name["preflight"]["rpc_count"], json!(1));
+        assert_eq!(by_name["preflight"]["rpc_union_duration_ns"], json!(400));
+        assert_eq!(by_name["build"]["rpc_union_duration_ns"], json!(100));
+        assert_eq!(by_name["detection"]["rpc_count"], json!(0));
+        assert!(
+            table["stages_no_bucket_covers"]
+                .as_array()
+                .expect("uncovered stages")
+                .is_empty(),
+            "every stage this example stamps is folded by one of the eight buckets"
+        );
+        assert!(
+            by_name["opportunity"]["why"]
+                .as_str()
+                .expect("a why")
+                .contains("EMPTY BY THE MAPPING"),
+            "a bucket that §8 names and this build does not have to say the mapping is why"
+        );
+
+        // §13, and the two attribution accounts disagreeing rather than one being preferred:
+        // both lane reads went out at the run's own height, and both were stamped with a stage
+        // the ladder did not hold at that instant.
+        assert_eq!(table["block_pin"]["all_state_reads_pinned"], json!(true));
+        assert_eq!(
+            table["block_pin"]["state_read_calls"],
+            json!(3),
+            "`eth_getTransactionCount` is one of §13's four state methods, so the nonce read \
+             is checked beside the two storage reads and not under the header"
+        );
+        assert_eq!(table["block_pin"]["heights_seen"], json!(["37594591"]));
+        assert_eq!(
+            table["block_pin"]["reads_at_a_tag_outside_the_state_methods"]
+                .as_array()
+                .expect("other tag reads")
+                .len(),
+            0,
+            "the two lane reads went out at the run's own height, so nothing is off-pin here"
+        );
+        let attribution = &table["attribution_accounts"];
+        assert_eq!(attribution["compared"], json!(4));
+        assert_eq!(attribution["inside_no_span"], json!(0));
+        let disagreements = attribution["disagreements"]
+            .as_array()
+            .expect("disagreements");
+        assert_eq!(
+            disagreements.len(),
+            2,
+            "the header stamped `preflight` and the nonce stamped `build` are both held by the \
+             `simulation` span — the cross-check exists to show this pair, not to resolve it"
+        );
+        assert_eq!(disagreements[0]["stamped_stage"], "preflight");
+        assert_eq!(disagreements[1]["stamped_stage"], "build");
+        for row in disagreements {
+            assert_eq!(row["held_by_stage_span"], "simulation");
+        }
+    }
+
+    /// §9's and §17's rule for a run that asked for nothing: every figure that would need a
+    /// first or last call is `null`, and only the counts that are genuinely zero are zero.
+    #[test]
+    fn a_run_that_made_no_calls_reports_nulls_where_a_zero_would_claim_a_measurement() {
+        let table = pipeline_run_table(
+            "run-000",
+            &[],
+            &[],
+            &json!({"chain_id": 91_342, "block_number": 37_594_591, "source": "replay"}),
+        );
+        assert_eq!(table["totals"]["rpc_count"], json!(0));
+        assert_eq!(table["totals"]["rpc_sum_duration_ns"], json!(0));
+        assert_eq!(table["totals"]["pipeline_total_duration_ns"], Value::Null);
+        assert_eq!(table["totals"]["non_rpc_duration_ns"], Value::Null);
+        assert_eq!(table["totals"]["gap_min_duration_ns"], Value::Null);
+        assert_eq!(table["totals"]["gap_median_duration_ns"], Value::Null);
+        assert_eq!(
+            table["block_pin"]["all_state_reads_pinned"],
+            json!(false),
+            "nothing was pinned at all is not the same statement as every read was pinned"
+        );
+        let buckets = table["pipeline_buckets"].as_array().expect("buckets");
+        assert!(buckets.iter().all(|row| row["rpc_count"] == json!(0)));
+        assert!(table["stages"].as_array().expect("stages").is_empty());
+    }
+
+    /// §19's summary as a re-read: the two columns it prints are the two files' own figures,
+    /// and the buckets that are empty by the mapping stay visibly empty.
+    #[test]
+    fn the_dependency_summary_repeats_the_two_files_it_sums_up_rather_than_recomputing_them() {
+        let window = window(0, 10_000);
+        let events = vec![
+            labeled_storage_call(1, "0x01", 100, 400, "execute: step 0 — swap"),
+            labeled_storage_call(2, "0x02", 500, 800, "execute: step 0 — swap"),
+            labeled_storage_call(
+                3,
+                "0x03",
+                900,
+                1_200,
+                evm_simulation::engine::SLOT_AUDIT_PHASE,
+            ),
+        ];
+        let rows = storage_dependency_rows_as(Some("run-001"), &window, &events);
+        assert_eq!(rows.len(), 3);
+        // The map is built the way the writer will build it — from a trace line, through the
+        // decoder, not from rows handed over directly: §6's 「所有 aggregate 必须能够从 raw
+        // evidence 重建」 is about the file a reader has, and the line is that file.
+        let line = SimulationDiagnosis::new(window, events.clone()).to_trace_line(&[]);
+        let map = storage_dependency_map(&[json!({"run": "run-001", "lines": [line]})]);
+        let pipeline = pipeline_assembled(&[json!({
+            "run": "run-001",
+            "source": "live",
+            "chain_id": 91_342,
+            "block_number": 37_594_591,
+            "calls": pipeline_call_rows("run-001", PIPELINE_SINK_SIMULATION, &events, None),
+            "stage_spans": [],
+        })]);
+        let summary = dependency_summary(&map, &pipeline);
+        assert_eq!(summary["storage_reads"]["total"], map["summary"]["total"]);
+        assert_eq!(
+            summary["storage_reads"]["ordered"],
+            map["summary"]["ordered"]
+        );
+        assert_eq!(
+            summary["storage_reads"]["unknown"],
+            map["summary"]["unknown"]
+        );
+        assert_eq!(
+            summary["pipeline"]["simulation"]["rpc_count_total"],
+            json!(3)
+        );
+        assert_eq!(
+            summary["pipeline"]["opportunity"]["code_stage_names"],
+            json!([])
+        );
+        assert_eq!(
+            summary["pipeline"]["build"]["rpc_union_duration_ns_total"],
+            json!(0),
+            "the calls of this run were all stamped `simulation`, so `build` is empty because \
+             nothing was measured in it — which its own row says"
+        );
+        assert!(
+            summary["pipeline"][PIPELINE_BUCKET_UNLISTED]["code_stage_names"]
+                .as_array()
+                .expect("the eighth bucket names the stages it folds")
+                .contains(&json!("sign")),
+            "§19's seven keys are the required ones; the eighth is this build's remaining \
+             stage names and it has to be present for the partition to be checkable"
+        );
+    }
+
+    /// §14/§15's switch tested at the writer, where 「which files exist」 is decided. Three
+    /// directories from one identical run: neither switch, M8.3.2's switch alone, both. The
+    /// claims under test are (a) the new switch adds exactly [`DEPENDENCY_FILES`] and nothing
+    /// else, (b) the older switch's file set is unchanged by its existence — which is why they
+    /// are two fields and not one, and why `post_reuse_evidence.rs`'s listing gate still
+    /// passes, and (c) the six tables agree with each other and with the traces on disk, so a
+    /// reader who re-derives a figure from `simulation-traces.jsonl` gets the same bytes.
+    #[test]
+    fn the_dependency_switch_adds_six_tables_and_leaves_the_older_switch_s_files_alone() {
+        let written =
+            [(false, false), (true, false), (true, true)].map(|(acquisition, dependency)| {
+                let dir = temp_dir(&format!("dep-{acquisition}-{dependency}"));
+                let outcome = write_a_dependency_directory(&dir, acquisition, dependency);
+                let names = sorted_names(
+                    &std::fs::read_dir(&outcome)
+                        .expect("the directory is readable")
+                        .map(|entry| {
+                            entry
+                                .expect("one entry")
+                                .file_name()
+                                .to_string_lossy()
+                                .to_string()
+                        })
+                        .collect::<Vec<String>>()
+                        .iter()
+                        .map(String::as_str)
+                        .collect::<Vec<&str>>(),
+                );
+                (outcome, names)
+            });
+        let read = |dir: &Path, name: &str| -> Value {
+            serde_json::from_str(
+                &std::fs::read_to_string(dir.join(name))
+                    .unwrap_or_else(|error| panic!("{name}: not readable: {error}")),
+            )
+            .expect("one JSON object")
+        };
+
+        // (a) and (b): the listings.
+        let base = [
+            TRACES_FILE,
+            SIMULATION_SUMMARY_FILE,
+            RPC_SUMMARY_FILE,
+            DUPLICATES_FILE,
+            OUTSIDE_FILE,
+            README_FILE,
+        ];
+        let acquisition_files = [
+            STORAGE_BREAKDOWN_FILE,
+            ACCOUNT_MATRIX_FILE,
+            RPC_GAPS_FILE,
+            BOTTLENECK_FILE,
+        ];
+        for (index, expected) in [
+            base.to_vec(),
+            base.iter()
+                .chain(acquisition_files.iter())
+                .copied()
+                .collect(),
+            base.iter()
+                .chain(acquisition_files.iter())
+                .chain(DEPENDENCY_FILES.iter())
+                .copied()
+                .collect(),
+        ]
+        .iter()
+        .enumerate()
+        {
+            let (_, names) = &written[index];
+            assert_eq!(
+                names,
+                &sorted_names(expected),
+                "switch setting {index} wrote a file set other than the one its two flags name"
+            );
+        }
+
+        // (c): the six tables agree with each other.
+        let (dir, _) = &written[2];
+        let storage_reads = read(dir, STORAGE_READS_FILE);
+        let map = read(dir, DEPENDENCY_MAP_FILE);
+        let summary = read(dir, DEPENDENCY_SUMMARY_FILE);
+        let calls = read(dir, PIPELINE_CALLS_FILE);
+        let pipeline = read(dir, PIPELINE_SUMMARY_FILE);
+        let stages = read(dir, STAGE_SUMMARY_FILE);
+        assert_eq!(
+            storage_reads["rows"], map["nodes"],
+            "§4's rows and §6's nodes are one list, not two derivations of it"
+        );
+        assert_eq!(storage_reads["rows"].as_array().expect("rows").len(), 2);
+        for key in ["total", "independent", "ordered", "unknown"] {
+            assert_eq!(
+                summary["storage_reads"][key], map["summary"][key],
+                "the summary's {key} is not the map's"
+            );
+        }
+        // Two interpreter reads of two different slots, plus the one lifecycle head read the
+        // run made outside any simulation.
+        assert_eq!(calls["rows"].as_array().expect("rows").len(), 3);
+        assert_eq!(
+            pipeline["per_run"][0]["totals"]["rpc_count"],
+            json!(3),
+            "the run table counts a different number of calls than the raw rows hold"
+        );
+        assert_eq!(
+            stages["per_run"][0]["stages"], pipeline["per_run"][0]["stages"],
+            "the stage file re-reads the pipeline table; a second sweep would be a second \
+             answer"
+        );
+        assert_eq!(
+            map["nodes"][1]["dependency"], DEPENDENCY_ORDERED,
+            "the second interpreter read of a simulation is the §3 case, and this directory \
+             is where its published form is checked"
+        );
+        assert_eq!(
+            summary["storage_reads"]["independent"],
+            json!(0),
+            "nothing here is provably independent, so nothing here says it is (§3)"
+        );
+
+        // The README names the six files it describes, and the directory without them says so
+        // rather than leaving a reader to count.
+        let readme = std::fs::read_to_string(dir.join(README_FILE)).expect("readable");
+        for name in DEPENDENCY_FILES {
+            assert!(
+                readme.contains(name),
+                "the README of a directory that wrote {name} never names it"
+            );
+        }
+        let (older, _) = &written[1];
+        let older_readme = std::fs::read_to_string(older.join(README_FILE)).expect("readable");
+        assert!(
+            older_readme.contains("did not ask for M8.4.1"),
+            "a directory without the six tables has to say it did not ask for them"
+        );
+        assert!(
+            !older_readme.contains("## Storage dependency and whole-pipeline RPC"),
+            "the section that reports the six tables appeared in a directory that wrote none"
+        );
+
+        // Both directories ran the same calls, so every file the two share is byte-equal —
+        // asking for six more tables did not restate the four already there.
+        for name in base
+            .iter()
+            .filter(|name| **name != README_FILE)
+            .chain(acquisition_files.iter())
+        {
+            assert_eq!(
+                std::fs::read(older.join(name)).expect("older readable"),
+                std::fs::read(dir.join(name)).expect("newer readable"),
+                "{name} differs between the two-switch and one-switch directories, which makes \
+                 the new switch a re-analysis rather than an addition"
+            );
+        }
+    }
+
+    /// One run, written under either setting of the two switches. The calls are the same in
+    /// every arm: two interpreter storage reads of two different slots inside the simulation,
+    /// and one head read in the lifecycle.
+    fn write_a_dependency_directory(
+        dir: &Path,
+        state_acquisition: bool,
+        dependency: bool,
+    ) -> PathBuf {
+        let events = vec![
+            labeled_storage_call(1, "0x01", 100, 400, "execute: step 0 — swap"),
+            labeled_storage_call(2, "0x02", 500, 800, "execute: step 0 — swap"),
+        ];
+        let mut evidence =
+            DiagnosisEvidence::open(dir, "revision", "build-only", state_acquisition)
+                .expect("the directory opens");
+        if dependency {
+            evidence = evidence.with_dependency_tables();
+        }
+        evidence.generated_at_unix_ms = 1_700_000_000_000;
+        evidence
+            .record(
+                SimulationDiagnosis::new(node_window(0, 1_000), events.clone())
+                    .with_state_reads(Some(named_arm(true)))
+                    .with_endpoint(Some("rpc-0123456789abcdef".to_string())),
+                &[],
+            )
+            .expect("records");
+        evidence.record_lifecycle(
+            &[labeled_call(
+                9,
+                "eth_getBlockByNumber",
+                evm_metrics::Stage::Observation.as_str(),
+                "head and header that fixed the pin",
+                0,
+                200,
+            )],
+            &[span(
+                evm_metrics::Stage::Observation.as_str(),
+                Some((0, 500)),
+            )],
+            Some("rpc-0123456789abcdef"),
+        );
+        evidence.finish().expect("writes")
     }
 
     /// A directory with a distinct name per test, because these run in one process and

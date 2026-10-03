@@ -26,7 +26,9 @@ use alloy_primitives::{Address, ChainId, B256, U256};
 use async_trait::async_trait;
 use serde_json::{json, Value};
 
-use evm_chain::{chain_block_from_value, chain_log_from_value, ChainAdapter, HttpChainAdapter};
+use evm_chain::{
+    chain_block_from_value, chain_log_from_value, ChainAdapter, HttpChainAdapter, RpcTraceSink,
+};
 use evm_core::BlockNumber;
 
 use crate::chain_read::ChainReader;
@@ -57,7 +59,30 @@ impl GiwaSequencerDirect {
         mode: ExecutionMode,
         endpoint: EndpointKind,
     ) -> Result<Self> {
-        let http = HttpChainAdapter::connect(url)
+        Self::connect_with_trace(url, expected_chain_id, mode, endpoint, None).await
+    }
+
+    /// [`connect`][Self::connect], with the lane's own socket recording into the run's trace.
+    ///
+    /// M8.4.1 §11 asks whether the execution lane's reads can join the trace the rest of the
+    /// run already writes, and this is the whole of the answer: the lane builds a second
+    /// [`HttpChainAdapter`] because it must send through the connection it priced on (§20's
+    /// before/after pair), and until now that socket had no observer, so its `eth_chainId`,
+    /// its fees, its nonces and its balances were the one surface the published evidence could
+    /// only list as *not observed*. Passing the run's sink here costs no request —
+    /// [`HttpChainAdapter::connect_with_trace`] issues the same single POST `connect` does, and
+    /// records the answer it was going to parse anyway.
+    ///
+    /// With `None` this is exactly `connect`: the lane is untraced, and the run behaves as it
+    /// did before this argument existed.
+    pub async fn connect_with_trace(
+        url: &str,
+        expected_chain_id: ChainId,
+        mode: ExecutionMode,
+        endpoint: EndpointKind,
+        trace: Option<RpcTraceSink>,
+    ) -> Result<Self> {
+        let http = HttpChainAdapter::connect_with_trace(url, trace)
             .await
             .map_err(|e| ExecutionError::ChainRead(e.to_string()))?;
         // The adapter's chain id is `evm_core`'s newtype; this crate's transaction and
@@ -103,6 +128,16 @@ impl GiwaSequencerDirect {
 
     pub fn url(&self) -> &str {
         self.http.url()
+    }
+
+    /// The observation handle this lane is recording into, if it was connected with one.
+    ///
+    /// The stage holds the adapter's four ability surfaces rather than the adapter, and none of
+    /// those traits carries a sink, so a caller that wants to label the reads it is about to
+    /// make asks this. `None` is the same statement [`HttpChainAdapter::rpc_trace`] makes:
+    /// nothing is watching, so there is nothing to tell.
+    pub fn rpc_trace(&self) -> Option<RpcTraceSink> {
+        self.http.rpc_trace()
     }
 
     pub fn mode(&self) -> ExecutionMode {

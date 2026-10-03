@@ -34,7 +34,7 @@ use serde_json::{json, Value};
 
 use evm_chain::{rpc::chain_block_from_value, ChainAdapter, HttpChainAdapter};
 use evm_core::BlockNumber;
-use evm_metrics::{Clock, Metrics};
+use evm_metrics::{Clock, Metrics, Stage};
 use evm_simulation::route::PricedRoute;
 
 use crate::builder::TransactionBuilder;
@@ -202,6 +202,16 @@ impl LivePreflightReads<'_> {
     /// span belongs to these reads: the gate itself is a pure decision and the stage that
     /// consumes the verdict must not re-time it.
     pub async fn gather(&self, metrics: &mut Metrics) -> Result<GatheredPreflight> {
+        let gathered = self.gather_legs(metrics).await;
+        // One exit, so a leg that failed partway cannot leave its name on the sink: the label
+        // outlives this function otherwise, and the reads that follow are the lane's, made for
+        // its own reasons. §12's requirement is that the instrument say nothing it did not do.
+        self.clear_stamp();
+        gathered
+    }
+
+    /// The gather itself: §26's fifteen-odd reads, then the pure verdict.
+    async fn gather_legs(&self, metrics: &mut Metrics) -> Result<GatheredPreflight> {
         let started = self.clock.now_ms();
         let first = self.plan.steps.first().ok_or_else(|| {
             ExecutionError::Evidence(
@@ -210,6 +220,7 @@ impl LivePreflightReads<'_> {
         })?;
         self.route_matches_plan()?;
 
+        self.stamp("head at latest");
         let (head_number, head_hash, head_source) = self.read_head().await?;
         let head = HeadReading::Read {
             number: head_number,
@@ -221,6 +232,7 @@ impl LivePreflightReads<'_> {
             block_hash: head_hash,
         };
 
+        self.stamp("fee at pinned block");
         let fee_at_pin = self
             .fee_at(
                 self.plan.block_number,
@@ -228,38 +240,52 @@ impl LivePreflightReads<'_> {
                 first.intent.tx_type,
             )
             .await?;
+        self.stamp("fee at head");
         let fee_at_head = self
             .fee_at(head_number, head_hash, first.intent.tx_type)
             .await?;
 
+        self.stamp("pending and latest nonces");
         let nonce_reading = self.abilities.nonces.nonce(self.plan.sender).await?;
         let priced_intent = self.priced(first, &fee_at_pin, nonce_reading.pending)?;
+        self.stamp("cost ceiling per step");
         let pricing = self
             .price_steps(&fee_at_pin, nonce_reading.pending, head_number)
             .await?;
 
-        let reserves: [PoolState; 2] = [
-            self.read_leg(0, head_number).await?,
-            self.read_leg(1, head_number).await?,
-        ];
+        // One stamp per leg, so the two pools' reads are toldable apart in the trace; the
+        // order is the route's, and stamping in it is what keeps that order a fact rather than
+        // an assumption a reader has to trust.
+        self.stamp("reserves of leg 0");
+        let leg_zero = self.read_leg(0, head_number).await?;
+        self.stamp("reserves of leg 1");
+        let leg_one = self.read_leg(1, head_number).await?;
+        let reserves: [PoolState; 2] = [leg_zero, leg_one];
         let reads: [ReserveReading; 2] = [
             self.reserve_reading(0, &reserves[0])?,
             self.reserve_reading(1, &reserves[1])?,
         ];
 
+        self.stamp("native balance of the sender");
         let available_wei = self
             .abilities
             .fees
             .balance(self.plan.sender, head_number)
             .await?;
+        self.stamp("input asset of the route");
         let input_asset = self.input_asset(first, available_wei, head_number).await?;
+        self.stamp("endpoint chain id");
         let endpoint_chain_id = self.abilities.chain.endpoint_chain_id().await?;
+        self.stamp("block binding at pin");
         let binding = read_binding(
             &*self.abilities.chain,
             BlockNumber(self.plan.block_number),
             self.plan.block_hash,
         )
         .await;
+        // The verdict below is pure, so nothing reads after this point; `gather` still takes the
+        // label off on its way out, because a leg that errored never reaches here.
+        self.clear_stamp();
 
         let gate = GateFacts {
             attempt: self.attempt.clone(),
@@ -306,6 +332,31 @@ impl LivePreflightReads<'_> {
             report,
             latency_ms,
         })
+    }
+
+    /// M8.4.1 §9's label for the gate's next reads: this stage, and the §26 leg about to be
+    /// read.
+    ///
+    /// The handle is the market adapter's own because a live gather reads through two sockets —
+    /// the market's for the head, the reserves and the L1 fee, the lane's for the fees, nonces,
+    /// balance and binding — and §11 wires both to the *same* sink, so one stamp covers a leg
+    /// whichever of the two answers it. That sharing is also what makes the last stamp of a
+    /// gather able to mislead: the label outlives this function unless it is taken off, and the
+    /// lane reads for its own reasons afterwards.
+    ///
+    /// With no sink watching this is a `None` test and nothing else — no lock on the request
+    /// path, no clock read, no request (§12). The gather reads what it always read.
+    fn stamp(&self, caller: &str) {
+        if let Some(sink) = self.market.rpc_trace() {
+            sink.set_context(Stage::Preflight.as_str(), caller);
+        }
+    }
+
+    /// Take the label off, once the last read this gather makes is in hand.
+    fn clear_stamp(&self) {
+        if let Some(sink) = self.market.rpc_trace() {
+            sink.clear_context();
+        }
     }
 
     /// The chain's present head, as one header. `ChainAdapter::latest_block` would need a

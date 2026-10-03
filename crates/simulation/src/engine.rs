@@ -376,6 +376,34 @@ pub fn rpc_provider(adapter: Arc<dyn ChainAdapter>, pin: BlockPin) -> Arc<dyn St
 // The run
 // ---------------------------------------------------------------------------
 
+// These strings are not decoration. M8.4.1's dependency classifier
+// (`crates/pipeline/src/diagnosis.rs`'s leg rules) decides whether a storage read had to
+// wait for the one before it from the name on the record, and it can only do that if the
+// name still means the site it was written at: `views:` and `execute:` are the two phases
+// whose reads are demanded by the interpreter one word at a time, and `state_changes:
+// slots` is the one phase whose whole key list is built before its first request goes out.
+// A rename here silently turns proven dependencies into `unknown` in the evidence — the
+// safe direction, which is exactly why it is a contract rather than a coincidence, and why
+// `crates/simulation/tests/state_caller_labels.rs` checks the vocabulary against these
+// constants instead of against its own copy.
+
+/// One read asked for by a REVM view call, named after the call's own signature.
+pub const VIEWS_PHASE_PREFIX: &str = "views:";
+
+/// One read asked for while a plan step was executing.
+pub const EXECUTE_PHASE_PREFIX: &str = "execute:";
+
+/// The two, so a reader of the vocabulary does not have to know which is which.
+pub const INTERPRETER_PHASE_PREFIXES: [&str; 2] = [VIEWS_PHASE_PREFIX, EXECUTE_PHASE_PREFIX];
+
+/// The §36 audit leg that reads back the storage words the run changed.
+pub const SLOT_AUDIT_PHASE: &str = "state_changes: slots";
+
+/// One interpreter phase name: the prefix, one space, and what is being read.
+fn interpreter_phase(prefix: &str, detail: &str) -> String {
+    format!("{prefix} {detail}")
+}
+
 /// One step's execution, as the loop needs it.
 struct Stepped {
     gas_used: u64,
@@ -398,6 +426,27 @@ pub async fn run(
     let setup = request.preflight()?;
     let provider = provider.with_setup(setup);
 
+    // M8.4.1 §4 names the caller of every state read, and in this build the caller is a
+    // *phase of this function*: the read's address, slot, height and method already come
+    // off the wire record, and what the record cannot say for itself is which part of the
+    // run asked for it. `note_read_phase` says so at each of the sites below, and the
+    // provider puts that name on the calls it issues until the next one.
+    //
+    // ```text
+    // header at pin            the provider's own height and hash, read to check §20
+    // codes: touched_contracts the route's bytecodes, as the §5 batch names them
+    // code: sender             §58's sender must have no bytecode
+    // account: sender          its nonce, before the sequence spends any
+    // views: token0()/token1()/getReserves()  the preflight calls, per V2Call::signature()
+    // execute: step N (…)      one plan step, described by ResolvedStep::describe
+    // execute: step N — …      a MeasureNative step, described by PlanStep::describe
+    // state_changes: accounts / slots  §36's before-values, read after the run
+    // ```
+    //
+    // A phase that is never named stays never named: the provider clears the label rather
+    // than leaving the previous phase's name on a later read, so an unlabeled row in the
+    // evidence is a run that did not say who asked — not a guess about who did.
+    provider.note_read_phase("header at pin");
     let header = provider.header().await.map_err(state_error)?;
     if header.chain_id != request.chain_id {
         return Err(SimulationError::ChainMismatch {
@@ -462,6 +511,7 @@ pub async fn run(
     // unaffected, and §24's rule that the run's semantics not change is kept by the
     // error being the same `MissingCode` for the same address in route order.
     let touched = request.route.touched_contracts();
+    provider.note_read_phase("codes: touched_contracts");
     let codes = provider.codes(&touched).await.map_err(state_error)?;
     for (address, code) in touched.into_iter().zip(codes) {
         if code.is_empty() {
@@ -475,6 +525,7 @@ pub async fn run(
     // would make the sequence's reentrancy properties a question about that contract
     // rather than about the two pools.
     let sender = request.sender_address();
+    provider.note_read_phase("code: sender");
     let sender_code = provider.code(sender).await.map_err(state_error)?;
     if !sender_code.is_empty() {
         return Err(unsupported(format!(
@@ -483,6 +534,7 @@ pub async fn run(
             header.number.0
         )));
     }
+    provider.note_read_phase("account: sender");
     let sender_nonce = provider
         .account(sender)
         .await
@@ -496,13 +548,27 @@ pub async fn run(
     let mut sides = Vec::with_capacity(request.route.legs.len());
     for leg in request.route.legs.iter() {
         let pool = leg.pool.address;
+        provider.note_read_phase(&interpreter_phase(
+            VIEWS_PHASE_PREFIX,
+            V2Call::Token0.signature(),
+        ));
+        let token0 = views.address(pool, &V2Call::Token0).await?;
+        provider.note_read_phase(&interpreter_phase(
+            VIEWS_PHASE_PREFIX,
+            V2Call::Token1.signature(),
+        ));
+        let token1 = views.address(pool, &V2Call::Token1).await?;
         sides.push(PairSides {
             pool,
-            token0: views.address(pool, &V2Call::Token0).await?,
-            token1: views.address(pool, &V2Call::Token1).await?,
+            token0,
+            token1,
         });
     }
     let sides = [sides[0], sides[1]];
+    provider.note_read_phase(&interpreter_phase(
+        VIEWS_PHASE_PREFIX,
+        V2Call::GetReserves.signature(),
+    ));
     check_reserves(&mut views, request, loaded, &sides).await?;
 
     // ---- 3. build the plan --------------------------------------------------
@@ -539,6 +605,10 @@ pub async fn run(
         // account's balance, so the answer comes from the state the run is already
         // holding. It consumes neither nonce nor gas.
         if let PlanStep::MeasureNative { account, binding } = plan.steps[index] {
+            provider.note_read_phase(&interpreter_phase(
+                EXECUTE_PHASE_PREFIX,
+                &format!("step {index} — {}", plan.steps[index].describe()),
+            ));
             let value = native_balance(&evm, &provider, account).await?;
             measurements.set(binding, value);
             steps.push(ExecutedStep::native_read(
@@ -548,6 +618,7 @@ pub async fn run(
         }
 
         let step = plan.resolve_step(index, &measurements, nonce)?;
+        provider.note_read_phase(&interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe()));
         let gas_limit = request.transaction.gas_limit_per_step;
         let mut record = ExecutedStep::begun(&step, gas_limit);
         let outcome = execute(&mut evm, &template, &step, gas_limit).await?;
@@ -1206,6 +1277,7 @@ async fn state_changes(
     provider: &Arc<dyn StateProvider>,
 ) -> Result<StateChanges> {
     let mut accounts: Vec<AccountChange> = Vec::new();
+    provider.note_read_phase("state_changes: accounts");
     for (address, balance, nonce) in account_reads(touched) {
         let recorded = provider.account(address).await.map_err(state_error)?;
         let (balance_before, nonce_before) =
@@ -1222,6 +1294,7 @@ async fn state_changes(
     }
 
     let mut slots: Vec<crate::result::SlotChange> = Vec::new();
+    provider.note_read_phase(SLOT_AUDIT_PHASE);
     for (address, slot, after) in slot_reads(touched) {
         let before = provider.storage(address, slot).await.map_err(state_error)?;
         if before != after {

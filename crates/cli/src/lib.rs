@@ -982,6 +982,25 @@ pub struct ArbitrageArgs {
     #[arg(long)]
     diagnose_state_acquisition: bool,
 
+    /// M8.4.1 §14/§15's diagnosis-only switch: it adds that milestone's six tables to the
+    /// same directory — `storage-reads.json`, `dependency-map.json`,
+    /// `dependency-summary.json`, `pipeline-calls.json`, `pipeline-summary.json` and
+    /// `stage-summary.json` — and nothing else.
+    ///
+    /// What they answer is 「why must these storage reads be serial」 and 「where does the
+    /// run's non-simulation RPC time go」. What they cannot do is change either: no read is
+    /// reordered, batched, prefetched or added, and every row is a re-read of what
+    /// `--rpc-trace`'s sink and the run's own stage stamps already recorded. This is why it
+    /// is a separate flag from `--diagnose-state-acquisition` rather than a synonym for it:
+    /// M8.3.2's evidence directories are gated file-for-file against what is committed, and
+    /// a switch that added six names to a run that did not ask for them would make that gate
+    /// fail for a reason that is not a measurement.
+    ///
+    /// Like the older flag it requires the diagnosis directory (`--rpc-trace`, or an
+    /// `--rpc-output` path), and refuses when given alone rather than doing nothing.
+    #[arg(long)]
+    diagnose_storage_dependency: bool,
+
     /// M8.3.3 §9's bound on how many of one simulation's state reads may be waiting on the
     /// node at the same instant. Absent, the run is serial at that boundary exactly as
     /// M8.3.2's were (§28), and §10's baseline comparison depends on that.
@@ -1114,13 +1133,23 @@ impl ArbitrageArgs {
         // nowhere to write without that directory. An ignored flag would be the worse
         // failure: the caller would read a run's summary as if it held a lifecycle sweep.
         let diagnosis_home = diagnosis_dir(self.rpc_trace, self.rpc_output.clone());
-        if self.diagnose_state_acquisition && diagnosis_home.is_none() {
-            return Err(
-                "--diagnose-state-acquisition asks for files, and `--rpc-trace` (or \
-                        --rpc-output <dir>) is what says where they go: given this flag alone \
-                        the run would measure nothing and look as though it had"
-                    .to_string(),
-            );
+        for (flag, given) in [
+            (
+                "--diagnose-state-acquisition",
+                self.diagnose_state_acquisition,
+            ),
+            (
+                "--diagnose-storage-dependency",
+                self.diagnose_storage_dependency,
+            ),
+        ] {
+            if given && diagnosis_home.is_none() {
+                return Err(format!(
+                    "{flag} asks for files, and `--rpc-trace` (or --rpc-output <dir>) is what \
+                        says where they go: given this flag alone the run would measure nothing \
+                        and look as though it had"
+                ));
+            }
         }
 
         Ok(ArbitrageConfig {
@@ -1157,6 +1186,7 @@ impl ArbitrageArgs {
             state_read_reuse: !self.no_state_read_reuse,
             state_read_concurrency: state_read_concurrency(self.state_read_concurrency)?,
             state_acquisition_diagnosis: self.diagnose_state_acquisition,
+            storage_dependency_diagnosis: self.diagnose_storage_dependency,
         })
     }
 }

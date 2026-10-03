@@ -75,20 +75,40 @@ fn wire_error(class: &'static str, detail: String) -> ChainError {
 
 impl HttpChainAdapter {
     pub async fn connect(url: &str) -> Result<Self> {
+        Self::connect_with_trace(url, None).await
+    }
+
+    /// [`connect`][Self::connect], with the one call that *learns* the chain id recorded.
+    ///
+    /// M8.4.1 §11 asks for the endpoint's reads to be observed rather than assumed, and
+    /// `eth_chainId` was the published exception: it happens before this type exists, so
+    /// there was no adapter to attach a sink to and no chain id to describe the call with.
+    /// Both are answered the way the sink already answers them elsewhere — a `OnceLock`
+    /// filled after the fact, and `describe_call` keying that one call `chain-unknown`.
+    ///
+    /// This issues exactly what `connect` issues: one POST, same client, same timeout, same
+    /// parse. With `None` it is `connect`. A caller that passes a sink gets the same run
+    /// with one more line in its timeline, and that is the whole of the difference (§12).
+    pub async fn connect_with_trace(url: &str, sink: Option<RpcTraceSink>) -> Result<Self> {
         let http = reqwest::Client::builder()
             .timeout(std::time::Duration::from_secs(20))
             .build()
             .map_err(|e| ChainError::Rpc(e.to_string()))?;
+        let trace = sink.map(|sink| sink.with_endpoint(url));
         // This call is what *learns* the chain id, so it cannot be described with one:
         // it is recorded, when traced, against `chain-unknown` rather than a number
         // this adapter does not hold yet.
-        let raw = Self::request_with(&http, url, "eth_chainId", json!([]), None, None).await?;
+        let raw =
+            Self::request_with(&http, url, "eth_chainId", json!([]), None, trace.as_ref()).await?;
         let chain_id = ChainId(parse_u64(&raw, "eth_chainId")?);
+        if let Some(sink) = &trace {
+            sink.note_chain_id(chain_id.0);
+        }
         Ok(Self {
             http,
             url: url.to_owned(),
             chain_id,
-            trace: None,
+            trace,
         })
     }
 
@@ -112,6 +132,18 @@ impl HttpChainAdapter {
     /// it from an empty event list.
     pub fn is_rpc_traced(&self) -> bool {
         self.trace.is_some()
+    }
+
+    /// This adapter's observation handle, so a reader above it can stamp a label on the
+    /// calls it is about to make.
+    ///
+    /// M8.4.1 §4's `caller` has to be stamped by the code that issues the read — the
+    /// simulation's state provider is that code — and a provider holds the adapter as
+    /// `Arc<dyn ChainAdapter>`, so the handle has to be reachable through the trait. The
+    /// default for every other source is `None`, which the provider reads as "there is
+    /// nothing here to label": a recorded directory and a fixture issue no calls to label.
+    pub fn rpc_trace(&self) -> Option<RpcTraceSink> {
+        self.trace.clone()
     }
 
     async fn request(&self, method: &str, params: Value) -> Result<Value> {
@@ -166,6 +198,11 @@ impl HttpChainAdapter {
         // Read off the params that are about to go out, so §12's key describes what the
         // node is actually asked for rather than what a caller says it asked for.
         let description = trace.map(|_| describe_call(method, &body["params"], chain_id));
+        // Open the sink's slot for this call *before* its start stamp, so the label the
+        // issuing code stamped and the instant the call began belong to the same moment. The
+        // guard is held until after the event is recorded — that is what lets
+        // [`TracedCall::label`] see whether a second call overlapped this one.
+        let call = trace.map(|sink| sink.begin_call());
         let rpc_id = trace.map(|sink| sink.next_rpc_id());
         let started_ns = trace.map(|sink| sink.mark(Instant::now()));
         let mut attempts: Vec<RpcAttempt> = Vec::new();
@@ -229,6 +266,7 @@ impl HttpChainAdapter {
                 ),
                 None => (None, None, None, None, None),
             };
+            let label = call.as_ref().map(|call| call.label()).unwrap_or_default();
             sink.record(RpcCallEvent {
                 trace_schema: RPC_TRACE_SCHEMA,
                 rpc_id,
@@ -245,6 +283,9 @@ impl HttpChainAdapter {
                 attempts,
                 dedup_key,
                 key_note,
+                stage: label.stage,
+                caller: label.caller,
+                context_note: label.context_note,
             });
         }
 
@@ -491,6 +532,10 @@ impl ChainAdapter for HttpChainAdapter {
 
     fn with_rpc_trace(&self, sink: RpcTraceSink) -> Option<Arc<dyn ChainAdapter>> {
         Some(Arc::new(Self::with_rpc_trace(self, sink)))
+    }
+
+    fn rpc_trace(&self) -> Option<RpcTraceSink> {
+        Self::rpc_trace(self)
     }
 
     async fn latest_block(&self) -> Result<BlockNumber> {
