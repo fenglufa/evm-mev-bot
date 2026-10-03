@@ -767,6 +767,87 @@ fn the_storage_dependency_diagnosis_moves_one_field_and_stays_apart_from_the_oth
     );
 }
 
+/// M8.4.2 §11/§14's switch, tested the same way as the two before it. The three extras that
+/// are specific to it: that it moves its own field and neither of the older two; that it
+/// composes with both; and that a run asking only for it is still *accepted* — the CLI does
+/// not force M8.4.1's switch on it, even though this milestone's tables cite
+/// `pipeline-calls.json`, which that switch writes. Refusing the combination would be a
+/// policy the task book does not ask for (§33), and the evidence runs ask for both anyway.
+#[test]
+fn the_cross_stage_diagnosis_moves_one_field_and_stays_apart_from_the_other_two() {
+    let mut traced_flags = complete();
+    traced_flags.push("--rpc-trace");
+    let plain = build(&traced_flags).expect("a traced run");
+    assert!(
+        !plain.cross_stage_diagnosis,
+        "§11: the cross-stage tables are opt-in, so the default command line writes M8.4.1's \
+         file set"
+    );
+
+    let mut flags = traced_flags.clone();
+    flags.push("--diagnose-cross-stage");
+    let diagnosed = build(&flags).expect("the same route, its cross-stage tables asked for too");
+    assert!(diagnosed.cross_stage_diagnosis);
+    assert!(
+        !diagnosed.storage_dependency_diagnosis,
+        "asking for M8.4.2's five files must not silently ask for M8.4.1's six"
+    );
+    assert!(!diagnosed.state_acquisition_diagnosis, "nor M8.3.2's four");
+
+    let trimmed = |config: &ArbitrageConfig, arm: &str| {
+        format!("{config:?}").replace(&format!("cross_stage_diagnosis: {arm}"), "")
+    };
+    assert_eq!(
+        trimmed(&plain, "false"),
+        trimmed(&diagnosed, "true"),
+        "one field moved, and no other field of the config can tell this flag was typed"
+    );
+    assert_eq!(diagnosed.diagnosis_dir, plain.diagnosis_dir);
+    assert_eq!(diagnosed.state_read_reuse, plain.state_read_reuse);
+    assert_eq!(
+        diagnosed.state_read_concurrency,
+        plain.state_read_concurrency
+    );
+    assert_eq!(
+        diagnosed.setup.mode,
+        ExecutionMode::BuildOnly,
+        "§11/§28: a run that writes these tables signs nothing and broadcasts nothing"
+    );
+
+    // All three together is what an M8.4.2 evidence run is configured as (M8.4.1's switch is
+    // what puts the raw `pipeline-calls.json` in the directory these tables recompute from),
+    // and each still governs only its own files.
+    let mut flags = traced_flags.clone();
+    flags.extend([
+        "--diagnose-cross-stage",
+        "--diagnose-storage-dependency",
+        "--diagnose-state-acquisition",
+    ]);
+    let all = build(&flags).expect("the three switches compose");
+    assert!(
+        all.cross_stage_diagnosis
+            && all.storage_dependency_diagnosis
+            && all.state_acquisition_diagnosis
+    );
+    let two = {
+        let mut flags = traced_flags.clone();
+        flags.extend(["--diagnose-cross-stage", "--diagnose-storage-dependency"]);
+        flags
+    };
+    let both = build(&two).expect("M8.4.2 over M8.4.1, with the older switch unwritten");
+    assert!(both.cross_stage_diagnosis && both.storage_dependency_diagnosis);
+    assert!(!both.state_acquisition_diagnosis);
+
+    // Refused without a home, and named in the refusal.
+    let mut flags = complete();
+    flags.push("--diagnose-cross-stage");
+    let refused = build(&flags).expect_err("tables with nowhere to write are a refusal");
+    assert!(
+        refused.contains("--diagnose-cross-stage"),
+        "the refusal has to name the flag the caller typed: {refused}"
+    );
+}
+
 /// The built binary, run with these arguments — which start at the subcommand, because argv's
 /// first element is the program name the shell already gave it.
 fn binary(args: &[&str]) -> Output {

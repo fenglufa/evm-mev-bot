@@ -33,10 +33,37 @@ fn production_code(path: &Path) -> String {
         .join("\n")
 }
 
-/// Every `.rs` file under the given crate's `src`.
+/// A module file its parent compiles only under test — the same exclusion one line
+/// further down, for the case where a test lives in a file of its own.
+///
+/// `src/foo/tests.rs` is test code because `src/foo.rs` says `#[cfg(test)] mod tests;`,
+/// which is the only reason the file is built; nothing about its path gives it that
+/// reading. So the gate is read from the parent rather than assumed from the file name,
+/// and a `tests.rs` no parent gates stays in the scan as the production module it is.
+fn is_test_submodule(path: &Path) -> bool {
+    if path.file_stem().and_then(|stem| stem.to_str()) != Some("tests") {
+        return false;
+    }
+    let Some(dir) = path.parent() else {
+        return false;
+    };
+    let parents = match (dir.parent(), dir.file_name()) {
+        (Some(grandparent), Some(name)) => vec![
+            grandparent.join(name).with_extension("rs"),
+            dir.join("mod.rs"),
+        ],
+        _ => vec![dir.join("mod.rs")],
+    };
+    parents.iter().any(|parent| {
+        std::fs::read_to_string(parent).is_ok_and(|text| text.contains("#[cfg(test)]\nmod tests;"))
+    })
+}
+
+/// Every `.rs` file under the given crate's `src`, minus the test submodules.
 fn source_files(crate_name: &str) -> Vec<PathBuf> {
     let mut files = Vec::new();
     walk(&crate_src(crate_name), &mut files);
+    files.retain(|path| !is_test_submodule(path));
     files.sort();
     assert!(
         !files.is_empty(),
@@ -87,6 +114,42 @@ fn no_stage_ever_asks_for_the_latest_state() {
         saw_a_block_tag,
         "the scan saw no block tag at all, which means it is not reading the code that \
          builds them — the absence of `latest` would be an empty-input result"
+    );
+}
+
+#[test]
+fn the_exclusion_of_a_gated_test_submodule_is_load_bearing() {
+    // The scan chooses to read one file less than its glob finds, so that choice gets the
+    // same treatment as the bans: the file is there, it is gated by the parent the scan
+    // actually reads, and it carries the word the ban forbids — which is the only reason
+    // the exclusion is doing work. If the tests ever stop naming the tag, the exclusion
+    // and this control should both go away together.
+    let submodule = crate_src("pipeline")
+        .join("canonicalization")
+        .join("tests.rs");
+    assert!(
+        submodule.exists(),
+        "the scan excludes {} as a test submodule, and it does not exist",
+        submodule.display()
+    );
+    assert!(
+        is_test_submodule(&submodule),
+        "{} is no longer gated by a `#[cfg(test)] mod tests;` in its parent, so the scan \
+         must read it as the production module it would be",
+        submodule.display()
+    );
+    let text = std::fs::read_to_string(&submodule).unwrap_or_else(|error| {
+        panic!("{}: {error}", submodule.display());
+    });
+    assert!(
+        text.contains("\"latest\""),
+        "{} holds no forbidden word, so excluding it proves nothing",
+        submodule.display()
+    );
+    assert!(
+        !is_test_submodule(&crate_src("pipeline").join("canonicalization.rs")),
+        "an ordinary module file was excluded by the submodule rule — the glob is now blind \
+         to the code that carries the bans"
     );
 }
 
