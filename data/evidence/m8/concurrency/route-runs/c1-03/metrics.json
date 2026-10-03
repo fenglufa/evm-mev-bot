@@ -1,0 +1,54 @@
+{
+  "counters": {
+    "execution_preflight_blocked": 1,
+    "execution_sequence_attempt": 1,
+    "execution_sequence_stopped": 1,
+    "opportunity_count": 1,
+    "risk_accept_count": 1,
+    "simulation_count": 1
+  },
+  "latency": [
+    {
+      "measured": true,
+      "name": "execution_preflight_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 5748,
+        "min_ms": 5748,
+        "name": "execution_preflight_latency",
+        "p50_ms": 5748,
+        "p95_ms": 5748,
+        "p99_ms": 5748,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "opportunity_detection_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 1947,
+        "min_ms": 1947,
+        "name": "opportunity_detection_latency",
+        "p50_ms": 1947,
+        "p95_ms": 1947,
+        "p99_ms": 1947,
+        "unit": "ms"
+      }
+    },
+    {
+      "measured": true,
+      "name": "simulation_latency",
+      "stats": {
+        "count": 1,
+        "max_ms": 9738,
+        "min_ms": 9738,
+        "name": "simulation_latency",
+        "p50_ms": 9738,
+        "p95_ms": 9738,
+        "p99_ms": 9738,
+        "unit": "ms"
+      }
+    }
+  ]
+}

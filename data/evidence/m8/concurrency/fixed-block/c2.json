@@ -1,0 +1,1254 @@
+{
+  "arm": "c2",
+  "cache_hits": 78,
+  "cache_misses": 39,
+  "calls": [
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 31669916,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 1,
+      "started_ns": 15896458,
+      "success": true,
+      "target": "37191169"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 46240125,
+      "method": "eth_getCode",
+      "rpc_id": 2,
+      "started_ns": 31777083,
+      "success": true,
+      "target": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 46970000,
+      "method": "eth_getCode",
+      "rpc_id": 3,
+      "started_ns": 31932541,
+      "success": true,
+      "target": "0x5bef6275607901dCd58160356660151BE0637440"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 61967333,
+      "method": "eth_getCode",
+      "rpc_id": 4,
+      "started_ns": 47246208,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 62243666,
+      "method": "eth_getCode",
+      "rpc_id": 5,
+      "started_ns": 47401041,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 77923250,
+      "method": "eth_getCode",
+      "rpc_id": 6,
+      "started_ns": 62577375,
+      "success": true,
+      "target": "0x953E7e98562714C23BC22c7D186cdF516F9dfa6f"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 95407916,
+      "method": "eth_getBalance",
+      "rpc_id": 7,
+      "started_ns": 78011416,
+      "success": true,
+      "target": "0x953E7e98562714C23BC22c7D186cdF516F9dfa6f"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 95470583,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 8,
+      "started_ns": 78200583,
+      "success": true,
+      "target": "0x953E7e98562714C23BC22c7D186cdF516F9dfa6f"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 107017375,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 10,
+      "started_ns": 96173833,
+      "success": true,
+      "target": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 107075000,
+      "method": "eth_getBalance",
+      "rpc_id": 9,
+      "started_ns": 95861166,
+      "success": true,
+      "target": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 123353041,
+      "method": "eth_getStorageAt",
+      "rpc_id": 11,
+      "started_ns": 107712083,
+      "success": true,
+      "target": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 141977208,
+      "method": "eth_getBalance",
+      "rpc_id": 12,
+      "started_ns": 123826625,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000011"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 142058916,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 13,
+      "started_ns": 125361583,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000011"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 155268833,
+      "method": "eth_getCode",
+      "rpc_id": 14,
+      "started_ns": 142183666,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000011"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 173619333,
+      "method": "eth_getStorageAt",
+      "rpc_id": 15,
+      "started_ns": 157325833,
+      "success": true,
+      "target": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 185862583,
+      "method": "eth_getBalance",
+      "rpc_id": 16,
+      "started_ns": 174113541,
+      "success": true,
+      "target": "0x5bef6275607901dCd58160356660151BE0637440"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 186028333,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 17,
+      "started_ns": 174566791,
+      "success": true,
+      "target": "0x5bef6275607901dCd58160356660151BE0637440"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 204441291,
+      "method": "eth_getStorageAt",
+      "rpc_id": 18,
+      "started_ns": 188182291,
+      "success": true,
+      "target": "0x5bef6275607901dCd58160356660151BE0637440"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 220685750,
+      "method": "eth_getStorageAt",
+      "rpc_id": 19,
+      "started_ns": 204617666,
+      "success": true,
+      "target": "0x5bef6275607901dCd58160356660151BE0637440"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 232328333,
+      "method": "eth_getStorageAt",
+      "rpc_id": 20,
+      "started_ns": 221076791,
+      "success": true,
+      "target": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 245594875,
+      "method": "eth_getStorageAt",
+      "rpc_id": 21,
+      "started_ns": 232486708,
+      "success": true,
+      "target": "0x5bef6275607901dCd58160356660151BE0637440"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 262006666,
+      "method": "eth_getBalance",
+      "rpc_id": 22,
+      "started_ns": 246164041,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 262056125,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 23,
+      "started_ns": 246336458,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 277514333,
+      "method": "eth_getStorageAt",
+      "rpc_id": 24,
+      "started_ns": 262463250,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 294175375,
+      "method": "eth_getStorageAt",
+      "rpc_id": 25,
+      "started_ns": 278082250,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 310883875,
+      "method": "eth_getStorageAt",
+      "rpc_id": 26,
+      "started_ns": 294519041,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 327611458,
+      "method": "eth_getStorageAt",
+      "rpc_id": 27,
+      "started_ns": 311796708,
+      "success": true,
+      "target": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 343650833,
+      "method": "eth_getBalance",
+      "rpc_id": 28,
+      "started_ns": 327784958,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 343710625,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 29,
+      "started_ns": 327938583,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 361529000,
+      "method": "eth_getStorageAt",
+      "rpc_id": 30,
+      "started_ns": 344386416,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 377519625,
+      "method": "eth_getStorageAt",
+      "rpc_id": 31,
+      "started_ns": 361646625,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 389928416,
+      "method": "eth_getStorageAt",
+      "rpc_id": 32,
+      "started_ns": 377630541,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 409377458,
+      "method": "eth_getStorageAt",
+      "rpc_id": 33,
+      "started_ns": 390459250,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 420400875,
+      "method": "eth_getStorageAt",
+      "rpc_id": 34,
+      "started_ns": 409581291,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 433613458,
+      "method": "eth_getStorageAt",
+      "rpc_id": 35,
+      "started_ns": 420523375,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 449436250,
+      "method": "eth_getStorageAt",
+      "rpc_id": 36,
+      "started_ns": 434096000,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 462797458,
+      "method": "eth_getStorageAt",
+      "rpc_id": 37,
+      "started_ns": 449599500,
+      "success": true,
+      "target": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 479204958,
+      "method": "eth_getStorageAt",
+      "rpc_id": 38,
+      "started_ns": 463536750,
+      "success": true,
+      "target": "0x5bef6275607901dCd58160356660151BE0637440"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 495042208,
+      "method": "eth_getStorageAt",
+      "rpc_id": 39,
+      "started_ns": 479374166,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "attempts": 1,
+      "block": "37191169",
+      "finished_ns": 510836375,
+      "method": "eth_getStorageAt",
+      "rpc_id": 40,
+      "started_ns": 495147500,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000006"
+    }
+  ],
+  "commit": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+  "concurrency": {
+    "batch_dispatches": [
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          },
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000006",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          },
+          {
+            "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "touched_contracts"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x4200000000000000000000000000000000000011",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000011",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000011",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x4200000000000000000000000000000000000006",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000006",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000006",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x4200000000000000000000000000000000000011",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000011",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000011",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x4200000000000000000000000000000000000006",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000006",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000006",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x4200000000000000000000000000000000000011",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000011",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x4200000000000000000000000000000000000011",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x5bef6275607901dcd58160356660151be0637440",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      },
+      {
+        "limit": 2,
+        "reads": [
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "balance"
+          },
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "nonce"
+          },
+          {
+            "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+            "block": 37191169,
+            "chain_id": 91342,
+            "kind": "code"
+          }
+        ],
+        "site": "account_triple"
+      }
+    ],
+    "batched_reads": 58,
+    "batches": 19,
+    "configured": 2,
+    "note": "observed_peak counts the state reads this simulation's provider held outstanding at the node at one instant; a read answered from this simulation's own cache never enters it, and a read the adapter retried is still one read here while the wire trace counts its attempts. configured is the bound that was asked for and is never evidence that it happened (§15).",
+    "observed_peak": 2,
+    "serial": false
+  },
+  "endpoint": {
+    "arrivals": 41,
+    "held_ns_max": 16333584,
+    "held_ns_min": 10076208,
+    "responses_held_ns": 10000000
+  },
+  "method_counts": {
+    "eth_getBalance": {
+      "requests": 6
+    },
+    "eth_getBlockByNumber": {
+      "requests": 1
+    },
+    "eth_getCode": {
+      "requests": 6
+    },
+    "eth_getStorageAt": {
+      "requests": 21
+    },
+    "eth_getTransactionCount": {
+      "requests": 6
+    }
+  },
+  "method_sequence": [
+    "eth_getBlockByNumber",
+    "eth_getCode",
+    "eth_getCode",
+    "eth_getCode",
+    "eth_getCode",
+    "eth_getCode",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getStorageAt",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getCode",
+    "eth_getStorageAt",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt"
+  ],
+  "method_sequence_order": "the endpoint's accept order; this arm's completion order is calls[].rpc_id",
+  "per_kind": {
+    "balance": {
+      "hits": 12,
+      "misses": 6
+    },
+    "code": {
+      "hits": 27,
+      "misses": 6
+    },
+    "nonce": {
+      "hits": 12,
+      "misses": 6
+    },
+    "reuse": true,
+    "storage": {
+      "hits": 27,
+      "misses": 21
+    },
+    "total_hits": 78,
+    "total_misses": 39
+  },
+  "result": {
+    "block_hash": "0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670",
+    "block_number": 37191169,
+    "chain_id": 91342,
+    "compared": "OutputComparison { analytical: 744486240802, simulated: Some(1) }",
+    "fingerprint": "0xd54891737d934871622ce879b55c67a90bba5b343a7954821b20d138ad9dbf67",
+    "gas_charge": "Priced { gas_used: 423502, effective_gas_price: 300, base_fee_per_gas: Some(300), wei: 127050600, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37191169's own base fee as the header reports it, with no tip: §44 takes the bidding question off the table, and a hypothetical transaction on a historical block is not competing to be included in it\" } }",
+    "gas_used": 423502,
+    "gross_loss": "714844720991",
+    "gross_profit": null,
+    "log_count": 12,
+    "measurements": [
+      "sender_input_start=0",
+      "sender_mid_received=881325264824006417",
+      "sender_input_end=1",
+      "sender_input_after_unwrap=0",
+      "sender_native_start=822844720992",
+      "sender_native_end=107872949401"
+    ],
+    "net_profit": "Shortfall { before_gas: 714844720991, gas_cost: 127050600, amount: 714971771591, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 1, native_start: 822844720992, native_end: 107872949401, native_spent: 714844720992, gas_paid: 127050600, proved_by: \"withdraw(1) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+    "outcome": "Executed { output: 1, movement: Decreased { by: 714844720991 } }",
+    "plan_summary": "PlanSummary { steps: [\"native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f, recorded as sender_native_start\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0x4200000000000000000000000000000000000006, recorded as sender_input_start\", \"deposit 714844720992 native into 0x4200000000000000000000000000000000000006, msg.value = 714844720992\", \"transfer 714844720992 of 0x4200000000000000000000000000000000000006 to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578\", \"ask 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578 to pay out 908582747241243728 of 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62 to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62, recorded as sender_mid_received\", \"transfer the measured mid delivery of 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62 to 0x5bef6275607901dCd58160356660151BE0637440\", \"ask 0x5bef6275607901dCd58160356660151BE0637440 to pay out 1 of 0x4200000000000000000000000000000000000006 to 0x5bef6275607901dCd58160356660151BE0637440\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0x4200000000000000000000000000000000000006, recorded as sender_input_end\", \"withdraw the measured final balance from 0x4200000000000000000000000000000000000006 into native\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0x4200000000000000000000000000000000000006, recorded as sender_input_after_unwrap\", \"native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f, recorded as sender_native_end\"], evm_rules: \"prague\", pools: [0xf487d533cae6cddd0c7e7bbbac084dd04d876578, 0x5bef6275607901dcd58160356660151be0637440], input_token: 0x4200000000000000000000000000000000000006, input_amount: 714844720992, analytical_mid_amount: 908582747241243728, analytical_output: 744486240802, priced_by: \"evm-opportunity::detect_opportunities on block 37191169, search BoundedTernary\" }",
+    "revert": "None",
+    "reverted": false,
+    "slippage": "SlippageRecord { expected_output: 744486240802, policy: Requested { amount: 1 }, minimum_output: 1 }",
+    "state_changes": "StateChanges { accounts: [AccountChange { address: 0x4200000000000000000000000000000000000006, balance_before: 2084778439103401326576, balance_after: 2084778439818246047567, nonce_before: 0, nonce_after: 0 }, AccountChange { address: 0x953e7e98562714c23bc22c7d186cdf516f9dfa6f, balance_before: 822844720992, balance_after: 107872949401, nonce_before: 0, nonce_after: 10 }], slots: [SlotChange { address: 0x4200000000000000000000000000000000000006, slot: 111230241916413801852802404525255989888638871658492296319230567282535617465962, before: 35099900253008, after: 35814744974000 }, SlotChange { address: 0x4200000000000000000000000000000000000006, slot: 115292938885184192804478688147898716132836732221383717148840385900270088268530, before: 36641298079327, after: 36641298079326 }, SlotChange { address: 0x5bef6275607901dcd58160356660151be0637440, slot: 6, before: 48272762749198038113316466793058296272251452815442286869463868227151786303071, after: 48272762749198038113316471140355579970661823374128770258072965416838990028382 }, SlotChange { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, slot: 2, before: 999999686714884239468723, after: 999999615391138581031092 }, SlotChange { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, slot: 8982872646999191618737118203114263780923041410745226281479866996961910899578, before: 45655538604883371699, after: 44746955857642127971 }, SlotChange { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, slot: 34947539404568188445091736781444510114788718204011688031312298989286181280329, before: 43677608078641141054, after: 44514867080223947151 }, SlotChange { address: 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, slot: 6, before: 48272762749198038113316477063060754079924070508464549787600047273222589518672, after: 48272762749198038113316472345429409860270937571100186767292759838854142681776 }] }",
+    "state_source": "rpc:chain-91342",
+    "status": "Completed",
+    "steps": [
+      {
+        "calldata": "",
+        "gas_used": 0,
+        "index": 0,
+        "logs": [],
+        "measured": "sender_native_start=822844720992",
+        "selector": "",
+        "signature": "native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f (no call)",
+        "status": "Success",
+        "to": "0x0000000000000000000000000000000000000000",
+        "value": "0"
+      },
+      {
+        "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+        "gas_used": 23993,
+        "index": 1,
+        "logs": [],
+        "measured": "sender_input_start=0",
+        "selector": "0x70a08231",
+        "signature": "balanceOf(address)",
+        "status": "Success",
+        "to": "0x4200000000000000000000000000000000000006",
+        "value": "0"
+      },
+      {
+        "calldata": "d0e30db0",
+        "gas_used": 44932,
+        "index": 2,
+        "logs": [
+          "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x000000000000000000000000000000000000000000000000000000a67010cf60 }"
+        ],
+        "measured": null,
+        "selector": "0xd0e30db0",
+        "signature": "deposit()",
+        "status": "Success",
+        "to": "0x4200000000000000000000000000000000000006",
+        "value": "714844720992"
+      },
+      {
+        "calldata": "a9059cbb000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578000000000000000000000000000000000000000000000000000000a67010cf60",
+        "gas_used": 31972,
+        "index": 3,
+        "logs": [
+          "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578], data: 0x000000000000000000000000000000000000000000000000000000a67010cf60 }"
+        ],
+        "measured": null,
+        "selector": "0xa9059cbb",
+        "signature": "transfer(address,uint256)",
+        "status": "Success",
+        "to": "0x4200000000000000000000000000000000000006",
+        "value": "0"
+      },
+      {
+        "calldata": "022c0d9f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c9bef31da5ce450000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000",
+        "gas_used": 94088,
+        "index": 4,
+        "logs": [
+          "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x0000000000000000000000000000000000000000000000000c3b18a8ad697711 }",
+          "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578, 0x0000000000000000000000000000000000000000000000000000000000000000], data: 0x0000000000000000000000000000000000000000000000000060d6892cf36d3f }",
+          "ExecutedLog { address: 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, topics: [0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1], data: 0x00000000000000000000000000000000000000000000000000002092c526e2b00000000000000000000000000000000000000000000000026cfd1f45e2d80263 }",
+          "ExecutedLog { address: 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, topics: [0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x000000000000000000000000000000000000000000000000000000a67010cf60000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c9bef31da5ce450 }"
+        ],
+        "measured": null,
+        "selector": "0x022c0d9f",
+        "signature": "swap(uint256,uint256,address,bytes)",
+        "status": "Success",
+        "to": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578",
+        "value": "0"
+      },
+      {
+        "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+        "gas_used": 24004,
+        "index": 5,
+        "logs": [],
+        "measured": "sender_mid_received=881325264824006417",
+        "selector": "0x70a08231",
+        "signature": "balanceOf(address)",
+        "status": "Success",
+        "to": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62",
+        "value": "0"
+      },
+      {
+        "calldata": "a9059cbb0000000000000000000000005bef6275607901dcd58160356660151be06374400000000000000000000000000000000000000000000000000c3b18a8ad697711",
+        "gas_used": 44271,
+        "index": 6,
+        "logs": [
+          "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x0000000000000000000000005bef6275607901dcd58160356660151be0637440], data: 0x0000000000000000000000000000000000000000000000000b9e8aa03e576451 }",
+          "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x0000000000000000000000000000000000000000000000000000000000000000], data: 0x000000000000000000000000000000000000000000000000009c8e086f1212c0 }"
+        ],
+        "measured": null,
+        "selector": "0xa9059cbb",
+        "signature": "transfer(address,uint256)",
+        "status": "Success",
+        "to": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62",
+        "value": "0"
+      },
+      {
+        "calldata": "022c0d9f00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000",
+        "gas_used": 81893,
+        "index": 7,
+        "logs": [
+          "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x0000000000000000000000005bef6275607901dcd58160356660151be0637440, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x0000000000000000000000000000000000000000000000000000000000000001 }",
+          "ExecutedLog { address: 0x5bef6275607901dcd58160356660151be0637440, topics: [0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1], data: 0x00000000000000000000000000000000000000000000000000002153378e5e5e00000000000000000000000000000000000000000000000269c493c2747a798f }",
+          "ExecutedLog { address: 0x5bef6275607901dcd58160356660151be0637440, topics: [0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b9e8aa03e57645100000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000 }"
+        ],
+        "measured": null,
+        "selector": "0x022c0d9f",
+        "signature": "swap(uint256,uint256,address,bytes)",
+        "status": "Success",
+        "to": "0x5bef6275607901dCd58160356660151BE0637440",
+        "value": "0"
+      },
+      {
+        "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+        "gas_used": 23993,
+        "index": 8,
+        "logs": [],
+        "measured": "sender_input_end=1",
+        "selector": "0x70a08231",
+        "signature": "balanceOf(address)",
+        "status": "Success",
+        "to": "0x4200000000000000000000000000000000000006",
+        "value": "0"
+      },
+      {
+        "calldata": "2e1a7d4d0000000000000000000000000000000000000000000000000000000000000001",
+        "gas_used": 30363,
+        "index": 9,
+        "logs": [
+          "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x0000000000000000000000000000000000000000000000000000000000000001 }"
+        ],
+        "measured": null,
+        "selector": "0x2e1a7d4d",
+        "signature": "withdraw(uint256)",
+        "status": "Success",
+        "to": "0x4200000000000000000000000000000000000006",
+        "value": "0"
+      },
+      {
+        "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+        "gas_used": 23993,
+        "index": 10,
+        "logs": [],
+        "measured": "sender_input_after_unwrap=0",
+        "selector": "0x70a08231",
+        "signature": "balanceOf(address)",
+        "status": "Success",
+        "to": "0x4200000000000000000000000000000000000006",
+        "value": "0"
+      },
+      {
+        "calldata": "",
+        "gas_used": 0,
+        "index": 11,
+        "logs": [],
+        "measured": "sender_native_end=107872949401",
+        "selector": "",
+        "signature": "native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f (no call)",
+        "status": "Success",
+        "to": "0x0000000000000000000000000000000000000000",
+        "value": "0"
+      }
+    ]
+  },
+  "rpc_count": 40,
+  "rpc_timeline": {
+    "calls_clipped": 0,
+    "failed_calls": 0,
+    "max_concurrency": 2,
+    "non_rpc_duration_ns": 31810455,
+    "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+    "retried_calls": 0,
+    "rpc_duration_ratio": {
+      "basis": "interval union, not sum and not total − sum (§13)",
+      "denominator": 512492875,
+      "denominator_field": "simulation_duration_ns",
+      "notation": "integer per-mille (‰) of the simulation span covered by at least one RPC call in flight; 1 000 ‰ = the whole span",
+      "numerator": 480682420,
+      "numerator_field": "rpc_union_duration_ns",
+      "per_mille": 937
+    },
+    "rpc_gap_count": 31,
+    "rpc_gap_distribution_ns": {
+      "max_ns": 2153958,
+      "measured": true,
+      "min_ns": 88166,
+      "p50_ns": 343666,
+      "p90_ns": 739292,
+      "p95_ns": 2057000,
+      "p99_ns": null,
+      "p99_reason": {
+        "minimum_samples": 100,
+        "reason": "insufficient_sample"
+      },
+      "samples": 31,
+      "unit": "ns"
+    },
+    "rpc_gap_duration_ns": 14257497,
+    "rpc_gap_widths_ns": [
+      107167,
+      276208,
+      333709,
+      88166,
+      390583,
+      637083,
+      473584,
+      124750,
+      2057000,
+      494208,
+      2153958,
+      176375,
+      391041,
+      158375,
+      569166,
+      407125,
+      567917,
+      343666,
+      912833,
+      173500,
+      675791,
+      117625,
+      110916,
+      530834,
+      203833,
+      122500,
+      482542,
+      163250,
+      739292,
+      169208,
+      105292
+    ],
+    "rpc_overlap_duration_ns": 116218626,
+    "rpc_sum_duration_ns": 596901046,
+    "rpc_union_duration_ns": 480682420,
+    "rpc_wall_duration_ns": 494939917,
+    "serial_or_overlap": "overlap",
+    "serial_wait_duration_ns": 364463794,
+    "simulation_duration_ns": 512492875,
+    "successful_calls": 40,
+    "total_attempts": 40,
+    "total_calls": 40
+  },
+  "run_id": "fixed-block-c2",
+  "run_wall_ns": 496593750,
+  "simulation_id": "m8.3.3-c2-37191169",
+  "state_read_count": 39,
+  "state_read_reuse": true,
+  "witnesses": {
+    "configured_concurrency": 2,
+    "endpoint_held_connections_peak": 2,
+    "note": "configured is what the run was told and proves nothing on its own (§15); observed_max_concurrency is this simulation's scheduler bracketing the reads it was handed, so a read answered from the reuse boundary is not in it; wire_max_concurrency and the overlap beside it are swept from the RPC trace's own intervals and count requests that reached the endpoint; held_connections_peak is counted server-side and can be lowered by a slow client but not raised by either instrument.",
+    "observed_max_concurrency": 2,
+    "wire_max_concurrency": 2,
+    "wire_overlap_duration_ns": 116218626,
+    "wire_serial_or_overlap": "overlap",
+    "wire_sum_duration_ns": 596901046,
+    "wire_union_duration_ns": 480682420
+  }
+}

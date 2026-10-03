@@ -1,0 +1,232 @@
+{
+  "assembled_from": [
+    {
+      "block_number": 37636187,
+      "configured_concurrency": 1,
+      "directory": "data/evidence/m8/concurrency/runs/c1-01",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981304325,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "outside_simulation_calls": 21,
+      "run": "c1-01",
+      "simulation_calls": 39,
+      "simulations": 1,
+      "state_read_reuse": true
+    },
+    {
+      "block_number": 37636292,
+      "configured_concurrency": 1,
+      "directory": "data/evidence/m8/concurrency/runs/c1-02",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981409577,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "outside_simulation_calls": 21,
+      "run": "c1-02",
+      "simulation_calls": 39,
+      "simulations": 1,
+      "state_read_reuse": true
+    },
+    {
+      "block_number": 37636313,
+      "configured_concurrency": 1,
+      "directory": "data/evidence/m8/concurrency/runs/c1-03",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981431103,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "outside_simulation_calls": 21,
+      "run": "c1-03",
+      "simulation_calls": 39,
+      "simulations": 1,
+      "state_read_reuse": true
+    },
+    {
+      "block_number": 37636334,
+      "configured_concurrency": 2,
+      "directory": "data/evidence/m8/concurrency/runs/c2-01",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981451907,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "outside_simulation_calls": 21,
+      "run": "c2-01",
+      "simulation_calls": 39,
+      "simulations": 1,
+      "state_read_reuse": true
+    },
+    {
+      "block_number": 37636354,
+      "configured_concurrency": 2,
+      "directory": "data/evidence/m8/concurrency/runs/c2-02",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981471348,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "outside_simulation_calls": 21,
+      "run": "c2-02",
+      "simulation_calls": 39,
+      "simulations": 1,
+      "state_read_reuse": true
+    },
+    {
+      "block_number": 37636376,
+      "configured_concurrency": 2,
+      "directory": "data/evidence/m8/concurrency/runs/c2-03",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981493846,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "outside_simulation_calls": 21,
+      "run": "c2-03",
+      "simulation_calls": 39,
+      "simulations": 1,
+      "state_read_reuse": true
+    },
+    {
+      "block_number": 37636396,
+      "configured_concurrency": 4,
+      "directory": "data/evidence/m8/concurrency/runs/c4-01",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981513405,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "outside_simulation_calls": 21,
+      "run": "c4-01",
+      "simulation_calls": 39,
+      "simulations": 1,
+      "state_read_reuse": true
+    },
+    {
+      "block_number": 37636418,
+      "configured_concurrency": 4,
+      "directory": "data/evidence/m8/concurrency/runs/c4-02",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981535484,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "outside_simulation_calls": 21,
+      "run": "c4-02",
+      "simulation_calls": 39,
+      "simulations": 1,
+      "state_read_reuse": true
+    },
+    {
+      "block_number": 37636437,
+      "configured_concurrency": 4,
+      "directory": "data/evidence/m8/concurrency/runs/c4-03",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981554391,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "outside_simulation_calls": 21,
+      "run": "c4-03",
+      "simulation_calls": 39,
+      "simulations": 1,
+      "state_read_reuse": true
+    }
+  ],
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1790981554391,
+  "generated_at_used_for_durations": false,
+  "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "per_source": [
+    {
+      "duplicate_ratio": {
+        "denominator": 351,
+        "notation": "integer terms, no float (§13)",
+        "numerator": 0
+      },
+      "duplicate_state_reads": 0,
+      "per_simulation_duplicate_reads": {
+        "max": 0,
+        "measured": true,
+        "min": 0,
+        "p50": 0,
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 9,
+        "unit": "count"
+      },
+      "per_simulation_unique_reads": {
+        "max": 39,
+        "measured": true,
+        "min": 39,
+        "p50": 39,
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 9,
+        "unit": "count"
+      },
+      "simulations": 9,
+      "source": "live",
+      "state_read_cache": {
+        "balance": {
+          "hits": 108,
+          "misses": 54
+        },
+        "cache_hits": 693,
+        "cache_misses": 342,
+        "code": {
+          "hits": 243,
+          "misses": 54
+        },
+        "nonce": {
+          "hits": 108,
+          "misses": 54
+        },
+        "simulations_with_reuse": 9,
+        "simulations_without_reuse": 0,
+        "simulations_without_tally": 0,
+        "storage": {
+          "hits": 234,
+          "misses": 180
+        },
+        "tally_scope": "state_read_cache: a hit is a state read this simulation answered from what it had already read at its own pinned block, so it cost no request; a miss is a read it had to ask for. With reuse off, the account kinds (balance, nonce, and the bytecode an account asks for) are never looked up and so carry neither number — only the kinds this boundary reused before M8.3.1 (code on a direct read, storage) are tallied. Nothing here is derived from the call list; it is counted at the lookup that made it true."
+      },
+      "total_state_reads": 351,
+      "unique_state_reads": 351,
+      "unkeyed_calls": 0
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}

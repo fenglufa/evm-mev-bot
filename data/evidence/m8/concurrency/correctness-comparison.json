@@ -1,0 +1,367 @@
+{
+  "arms": [
+    "c1",
+    "c2",
+    "c4"
+  ],
+  "ask": "1 wei (the smallest output that is still a trade)",
+  "block": 37191169,
+  "block_hash": "0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670",
+  "call_counts": {
+    "call_multiset_identical_to_bound_1": true,
+    "m8_3_1_controlled_arm_comparison": {
+      "bound_1_sequence_equals_committed": true,
+      "bound_1_state_reads": 39,
+      "committed_state_read_count": 39,
+      "file": "data/evidence/m8/optimization/raw/controlled/m8.3.1-ab.json",
+      "state_read_count_identical": true
+    },
+    "ordered_sequence_identical_to_bound_1": true,
+    "state_reads_per_bound": [
+      {
+        "bound": 1,
+        "state_reads": 39
+      },
+      {
+        "bound": 2,
+        "state_reads": 39
+      },
+      {
+        "bound": 4,
+        "state_reads": 39
+      }
+    ]
+  },
+  "chain_id": 91342,
+  "commit": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+  "concurrency": [
+    {
+      "bound": 1,
+      "witnesses": {
+        "configured_concurrency": 1,
+        "endpoint_held_connections_peak": 1,
+        "note": "configured is what the run was told and proves nothing on its own (§15); observed_max_concurrency is this simulation's scheduler bracketing the reads it was handed, so a read answered from the reuse boundary is not in it; wire_max_concurrency and the overlap beside it are swept from the RPC trace's own intervals and count requests that reached the endpoint; held_connections_peak is counted server-side and can be lowered by a slow client but not raised by either instrument.",
+        "observed_max_concurrency": 1,
+        "wire_max_concurrency": 1,
+        "wire_overlap_duration_ns": 0,
+        "wire_serial_or_overlap": "serial",
+        "wire_sum_duration_ns": 635371415,
+        "wire_union_duration_ns": 635371415
+      }
+    },
+    {
+      "bound": 2,
+      "witnesses": {
+        "configured_concurrency": 2,
+        "endpoint_held_connections_peak": 2,
+        "note": "configured is what the run was told and proves nothing on its own (§15); observed_max_concurrency is this simulation's scheduler bracketing the reads it was handed, so a read answered from the reuse boundary is not in it; wire_max_concurrency and the overlap beside it are swept from the RPC trace's own intervals and count requests that reached the endpoint; held_connections_peak is counted server-side and can be lowered by a slow client but not raised by either instrument.",
+        "observed_max_concurrency": 2,
+        "wire_max_concurrency": 2,
+        "wire_overlap_duration_ns": 116218626,
+        "wire_serial_or_overlap": "overlap",
+        "wire_sum_duration_ns": 596901046,
+        "wire_union_duration_ns": 480682420
+      }
+    },
+    {
+      "bound": 4,
+      "witnesses": {
+        "configured_concurrency": 4,
+        "endpoint_held_connections_peak": 4,
+        "note": "configured is what the run was told and proves nothing on its own (§15); observed_max_concurrency is this simulation's scheduler bracketing the reads it was handed, so a read answered from the reuse boundary is not in it; wire_max_concurrency and the overlap beside it are swept from the RPC trace's own intervals and count requests that reached the endpoint; held_connections_peak is counted server-side and can be lowered by a slow client but not raised by either instrument.",
+        "observed_max_concurrency": 4,
+        "wire_max_concurrency": 4,
+        "wire_overlap_duration_ns": 151766041,
+        "wire_serial_or_overlap": "overlap",
+        "wire_sum_duration_ns": 618597335,
+        "wire_union_duration_ns": 466831294
+      }
+    }
+  ],
+  "fields": {
+    "block_hash": {
+      "identical_across_bounds": true,
+      "value_c1": "0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670"
+    },
+    "block_number": {
+      "identical_across_bounds": true,
+      "value_c1": 37191169
+    },
+    "chain_id": {
+      "identical_across_bounds": true,
+      "value_c1": 91342
+    },
+    "compared": {
+      "identical_across_bounds": true,
+      "value_c1": "OutputComparison { analytical: 744486240802, simulated: Some(1) }"
+    },
+    "fingerprint": {
+      "identical_across_bounds": true,
+      "value_c1": "0xd54891737d934871622ce879b55c67a90bba5b343a7954821b20d138ad9dbf67"
+    },
+    "gas_charge": {
+      "identical_across_bounds": true,
+      "value_c1": "Priced { gas_used: 423502, effective_gas_price: 300, base_fee_per_gas: Some(300), wei: 127050600, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37191169's own base fee as the header reports it, with no tip: §44 takes the bidding question off the table, and a hypothetical transaction on a historical block is not competing to be included in it\" } }"
+    },
+    "gas_used": {
+      "identical_across_bounds": true,
+      "value_c1": 423502
+    },
+    "gross_loss": {
+      "identical_across_bounds": true,
+      "value_c1": "714844720991"
+    },
+    "gross_profit": {
+      "identical_across_bounds": true,
+      "value_c1": null
+    },
+    "log_count": {
+      "identical_across_bounds": true,
+      "value_c1": 12
+    },
+    "measurements": {
+      "identical_across_bounds": true,
+      "value_c1": [
+        "sender_input_start=0",
+        "sender_mid_received=881325264824006417",
+        "sender_input_end=1",
+        "sender_input_after_unwrap=0",
+        "sender_native_start=822844720992",
+        "sender_native_end=107872949401"
+      ]
+    },
+    "net_profit": {
+      "identical_across_bounds": true,
+      "value_c1": "Shortfall { before_gas: 714844720991, gas_cost: 127050600, amount: 714971771591, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 1, native_start: 822844720992, native_end: 107872949401, native_spent: 714844720992, gas_paid: 127050600, proved_by: \"withdraw(1) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }"
+    },
+    "outcome": {
+      "identical_across_bounds": true,
+      "value_c1": "Executed { output: 1, movement: Decreased { by: 714844720991 } }"
+    },
+    "plan_summary": {
+      "identical_across_bounds": true,
+      "value_c1": "PlanSummary { steps: [\"native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f, recorded as sender_native_start\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0x4200000000000000000000000000000000000006, recorded as sender_input_start\", \"deposit 714844720992 native into 0x4200000000000000000000000000000000000006, msg.value = 714844720992\", \"transfer 714844720992 of 0x4200000000000000000000000000000000000006 to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578\", \"ask 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578 to pay out 908582747241243728 of 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62 to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62, recorded as sender_mid_received\", \"transfer the measured mid delivery of 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62 to 0x5bef6275607901dCd58160356660151BE0637440\", \"ask 0x5bef6275607901dCd58160356660151BE0637440 to pay out 1 of 0x4200000000000000000000000000000000000006 to 0x5bef6275607901dCd58160356660151BE0637440\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0x4200000000000000000000000000000000000006, recorded as sender_input_end\", \"withdraw the measured final balance from 0x4200000000000000000000000000000000000006 into native\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0x4200000000000000000000000000000000000006, recorded as sender_input_after_unwrap\", \"native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f, recorded as sender_native_end\"], evm_rules: \"prague\", pools: [0xf487d533cae6cddd0c7e7bbbac084dd04d876578, 0x5bef6275607901dcd58160356660151be0637440], input_token: 0x4200000000000000000000000000000000000006, input_amount: 714844720992, analytical_mid_amount: 908582747241243728, analytical_output: 744486240802, priced_by: \"evm-opportunity::detect_opportunities on block 37191169, search BoundedTernary\" }"
+    },
+    "revert": {
+      "identical_across_bounds": true,
+      "value_c1": "None"
+    },
+    "reverted": {
+      "identical_across_bounds": true,
+      "value_c1": false
+    },
+    "slippage": {
+      "identical_across_bounds": true,
+      "value_c1": "SlippageRecord { expected_output: 744486240802, policy: Requested { amount: 1 }, minimum_output: 1 }"
+    },
+    "state_changes": {
+      "identical_across_bounds": true,
+      "value_c1": "StateChanges { accounts: [AccountChange { address: 0x4200000000000000000000000000000000000006, balance_before: 2084778439103401326576, balance_after: 2084778439818246047567, nonce_before: 0, nonce_after: 0 }, AccountChange { address: 0x953e7e98562714c23bc22c7d186cdf516f9dfa6f, balance_before: 822844720992, balance_after: 107872949401, nonce_before: 0, nonce_after: 10 }], slots: [SlotChange { address: 0x4200000000000000000000000000000000000006, slot: 111230241916413801852802404525255989888638871658492296319230567282535617465962, before: 35099900253008, after: 35814744974000 }, SlotChange { address: 0x4200000000000000000000000000000000000006, slot: 115292938885184192804478688147898716132836732221383717148840385900270088268530, before: 36641298079327, after: 36641298079326 }, SlotChange { address: 0x5bef6275607901dcd58160356660151be0637440, slot: 6, before: 48272762749198038113316466793058296272251452815442286869463868227151786303071, after: 48272762749198038113316471140355579970661823374128770258072965416838990028382 }, SlotChange { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, slot: 2, before: 999999686714884239468723, after: 999999615391138581031092 }, SlotChange { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, slot: 8982872646999191618737118203114263780923041410745226281479866996961910899578, before: 45655538604883371699, after: 44746955857642127971 }, SlotChange { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, slot: 34947539404568188445091736781444510114788718204011688031312298989286181280329, before: 43677608078641141054, after: 44514867080223947151 }, SlotChange { address: 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, slot: 6, before: 48272762749198038113316477063060754079924070508464549787600047273222589518672, after: 48272762749198038113316472345429409860270937571100186767292759838854142681776 }] }"
+    },
+    "state_source": {
+      "identical_across_bounds": true,
+      "value_c1": "rpc:chain-91342"
+    },
+    "status": {
+      "identical_across_bounds": true,
+      "value_c1": "Completed"
+    },
+    "steps": {
+      "identical_across_bounds": true,
+      "value_c1": [
+        {
+          "calldata": "",
+          "gas_used": 0,
+          "index": 0,
+          "logs": [],
+          "measured": "sender_native_start=822844720992",
+          "selector": "",
+          "signature": "native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f (no call)",
+          "status": "Success",
+          "to": "0x0000000000000000000000000000000000000000",
+          "value": "0"
+        },
+        {
+          "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "gas_used": 23993,
+          "index": 1,
+          "logs": [],
+          "measured": "sender_input_start=0",
+          "selector": "0x70a08231",
+          "signature": "balanceOf(address)",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "d0e30db0",
+          "gas_used": 44932,
+          "index": 2,
+          "logs": [
+            "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x000000000000000000000000000000000000000000000000000000a67010cf60 }"
+          ],
+          "measured": null,
+          "selector": "0xd0e30db0",
+          "signature": "deposit()",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "714844720992"
+        },
+        {
+          "calldata": "a9059cbb000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578000000000000000000000000000000000000000000000000000000a67010cf60",
+          "gas_used": 31972,
+          "index": 3,
+          "logs": [
+            "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578], data: 0x000000000000000000000000000000000000000000000000000000a67010cf60 }"
+          ],
+          "measured": null,
+          "selector": "0xa9059cbb",
+          "signature": "transfer(address,uint256)",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "022c0d9f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c9bef31da5ce450000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000",
+          "gas_used": 94088,
+          "index": 4,
+          "logs": [
+            "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x0000000000000000000000000000000000000000000000000c3b18a8ad697711 }",
+            "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578, 0x0000000000000000000000000000000000000000000000000000000000000000], data: 0x0000000000000000000000000000000000000000000000000060d6892cf36d3f }",
+            "ExecutedLog { address: 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, topics: [0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1], data: 0x00000000000000000000000000000000000000000000000000002092c526e2b00000000000000000000000000000000000000000000000026cfd1f45e2d80263 }",
+            "ExecutedLog { address: 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, topics: [0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x000000000000000000000000000000000000000000000000000000a67010cf60000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c9bef31da5ce450 }"
+          ],
+          "measured": null,
+          "selector": "0x022c0d9f",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "status": "Success",
+          "to": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578",
+          "value": "0"
+        },
+        {
+          "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "gas_used": 24004,
+          "index": 5,
+          "logs": [],
+          "measured": "sender_mid_received=881325264824006417",
+          "selector": "0x70a08231",
+          "signature": "balanceOf(address)",
+          "status": "Success",
+          "to": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62",
+          "value": "0"
+        },
+        {
+          "calldata": "a9059cbb0000000000000000000000005bef6275607901dcd58160356660151be06374400000000000000000000000000000000000000000000000000c3b18a8ad697711",
+          "gas_used": 44271,
+          "index": 6,
+          "logs": [
+            "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x0000000000000000000000005bef6275607901dcd58160356660151be0637440], data: 0x0000000000000000000000000000000000000000000000000b9e8aa03e576451 }",
+            "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x0000000000000000000000000000000000000000000000000000000000000000], data: 0x000000000000000000000000000000000000000000000000009c8e086f1212c0 }"
+          ],
+          "measured": null,
+          "selector": "0xa9059cbb",
+          "signature": "transfer(address,uint256)",
+          "status": "Success",
+          "to": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62",
+          "value": "0"
+        },
+        {
+          "calldata": "022c0d9f00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000",
+          "gas_used": 81893,
+          "index": 7,
+          "logs": [
+            "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x0000000000000000000000005bef6275607901dcd58160356660151be0637440, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x0000000000000000000000000000000000000000000000000000000000000001 }",
+            "ExecutedLog { address: 0x5bef6275607901dcd58160356660151be0637440, topics: [0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1], data: 0x00000000000000000000000000000000000000000000000000002153378e5e5e00000000000000000000000000000000000000000000000269c493c2747a798f }",
+            "ExecutedLog { address: 0x5bef6275607901dcd58160356660151be0637440, topics: [0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b9e8aa03e57645100000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000 }"
+          ],
+          "measured": null,
+          "selector": "0x022c0d9f",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "status": "Success",
+          "to": "0x5bef6275607901dCd58160356660151BE0637440",
+          "value": "0"
+        },
+        {
+          "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "gas_used": 23993,
+          "index": 8,
+          "logs": [],
+          "measured": "sender_input_end=1",
+          "selector": "0x70a08231",
+          "signature": "balanceOf(address)",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "2e1a7d4d0000000000000000000000000000000000000000000000000000000000000001",
+          "gas_used": 30363,
+          "index": 9,
+          "logs": [
+            "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x0000000000000000000000000000000000000000000000000000000000000001 }"
+          ],
+          "measured": null,
+          "selector": "0x2e1a7d4d",
+          "signature": "withdraw(uint256)",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "gas_used": 23993,
+          "index": 10,
+          "logs": [],
+          "measured": "sender_input_after_unwrap=0",
+          "selector": "0x70a08231",
+          "signature": "balanceOf(address)",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "",
+          "gas_used": 0,
+          "index": 11,
+          "logs": [],
+          "measured": "sender_native_end=107872949401",
+          "selector": "",
+          "signature": "native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f (no call)",
+          "status": "Success",
+          "to": "0x0000000000000000000000000000000000000000",
+          "value": "0"
+        }
+      ]
+    }
+  },
+  "gates": {
+    "every_bound_serial_at_1": true,
+    "every_state_read_named_the_pin": true,
+    "no_bound_exceeded": true,
+    "no_retry_in_this_fixture": true,
+    "overlap_positive_above_1": true
+  },
+  "generated_by": "M833_ABC_EVIDENCE=<dir> cargo test -p evm-simulation --test concurrency_abc",
+  "milestone": "M8.3.3 §17",
+  "run_specific": [
+    "concurrency[].witnesses.wire_sum_duration_ns",
+    "concurrency[].witnesses.wire_union_duration_ns",
+    "concurrency[].witnesses.wire_overlap_duration_ns",
+    "fixed-block/<arm>.json: run_wall_ns, rpc_timeline, endpoint, calls[].*_ns"
+  ],
+  "schema": "m8.3.3-fixed-block/v1",
+  "stable_across_reruns": [
+    "fields",
+    "whole_result",
+    "call_counts",
+    "gates",
+    "concurrency[].witnesses: configured_concurrency, observed_max_concurrency, wire_max_concurrency, endpoint_held_connections_peak, wire_serial_or_overlap"
+  ],
+  "state_source": "local JSON-RPC stub serving fixtures/simulation-m4/dump-37191169.json, each response held open for 10 ms so an overlap is measurable rather than assumed",
+  "variable": "state read concurrency bound",
+  "whole_result": {
+    "fingerprint": "0xd54891737d934871622ce879b55c67a90bba5b343a7954821b20d138ad9dbf67",
+    "fingerprint_identical": true,
+    "identical": true
+  }
+}

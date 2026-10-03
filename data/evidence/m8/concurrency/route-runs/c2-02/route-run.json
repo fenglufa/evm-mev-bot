@@ -1,0 +1,536 @@
+{
+  "candidate": {
+    "fee": "997/1000",
+    "fee_evidence": "data/evidence/m7/candidate-fee-measurement.json",
+    "input_amount": "100000000000000",
+    "input_token": "0x4200000000000000000000000000000000000006",
+    "mid_token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+    "venues": [
+      "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    ]
+  },
+  "chain_id": 91342,
+  "counters": {
+    "counters": {
+      "execution_build_success": 1,
+      "execution_preflight_success": 1,
+      "execution_sequence_attempt": 1,
+      "execution_sequence_blocked": 1,
+      "execution_sequence_unsettled": 1,
+      "opportunity_count": 1,
+      "risk_accept_count": 1,
+      "simulation_count": 1
+    },
+    "latency": [
+      {
+        "measured": true,
+        "name": "execution_build_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 1959,
+          "min_ms": 1959,
+          "name": "execution_build_latency",
+          "p50_ms": 1959,
+          "p95_ms": 1959,
+          "p99_ms": 1959,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "execution_preflight_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 5736,
+          "min_ms": 5736,
+          "name": "execution_preflight_latency",
+          "p50_ms": 5736,
+          "p95_ms": 5736,
+          "p99_ms": 5736,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "opportunity_detection_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 2000,
+          "min_ms": 2000,
+          "name": "opportunity_detection_latency",
+          "p50_ms": 2000,
+          "p95_ms": 2000,
+          "p99_ms": 2000,
+          "unit": "ms"
+        }
+      },
+      {
+        "measured": true,
+        "name": "simulation_latency",
+        "stats": {
+          "count": 1,
+          "max_ms": 8625,
+          "min_ms": 8625,
+          "name": "simulation_latency",
+          "p50_ms": 8625,
+          "p95_ms": 8625,
+          "p99_ms": 8625,
+          "unit": "ms"
+        }
+      }
+    ]
+  },
+  "evidence_dir": "/Volumes/superfs/evm-mev-bot/data/evidence/m8/concurrency/route-runs/route-91342-37636354-1790981471347",
+  "execution": {
+    "after": null,
+    "before": {
+      "account": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "block_hash": "0x9f2474e35ae6e1f6c1127a1654562f5e60146fc2209d247a0ea9424749587c98",
+      "block_number": 37636365,
+      "native_wei": "0x5b889028070f10",
+      "provenance": "block 37636365 (0x9f2474e35ae6e1f6c1127a1654562f5e60146fc2209d247a0ea9424749587c98); native: eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, 37636365); eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f at block 37636365; eth_call balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on token 0x4200000000000000000000000000000000000006 at block 37636365",
+      "token_balances": {
+        "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": "0x0",
+        "0x4200000000000000000000000000000000000006": "0x0"
+      }
+    },
+    "completed": false,
+    "cost": null,
+    "delta_audit": {
+      "lines": [],
+      "tolerance": {
+        "denominator": 100,
+        "numerator": 1
+      },
+      "uncompared": []
+    },
+    "detail": "build-only stops at Built: step 1 has no signature and no bytes (§19, §20)",
+    "execution_id": "exec-57ee0e60a15f8ce6",
+    "flow_checks": [],
+    "flows": [],
+    "lane": "released",
+    "market": {
+      "counts_as_real_arbitrage": true,
+      "evidence": "reserves and blockTimestampLast read at the pinned live head by this run",
+      "market_kind": "REAL_MARKET"
+    },
+    "mismatch": null,
+    "mode": "build-only",
+    "opportunity_id": "m7-91342-37636354-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+    "profit": null,
+    "route": null,
+    "sources": [
+      "6 broadcastable transaction(s) from a 12-step simulated plan pinned to block 37636354; venues 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 then 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E over input token 0x4200000000000000000000000000000000000006",
+      "preflight passed for m7-91342-37636354-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000: 14 lines, ceiling 100509835720689 wei, re-priced output 665605650524617",
+      "step 1: fee from eip1559 maxFeePerGas = baseFee(316) * 2 + tip(1000000) = 1000632, read at block 37636354 at block 37636354 (eip1559), eip1559 maxFee=1000632 tip=1000000",
+      "step 1: nonce 7 from eth_getTransactionCount at #37636372 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\")"
+    ],
+    "status": "built",
+    "steps_planned": 6,
+    "stopped_at": 0,
+    "transactions": [],
+    "wraps": []
+  },
+  "latency_ms": {
+    "inclusion_latency_ms": null,
+    "opportunity_detection_latency_ms": 2000,
+    "preflight_latency_ms": 5736,
+    "profit_verified_at_ms": null,
+    "rung_stamps": {
+      "built": 19607,
+      "created": 17648,
+      "included": null,
+      "profit_verified": null,
+      "settled": null,
+      "signed": null,
+      "submitted": null
+    },
+    "settled_at_ms": null,
+    "sign_latency_ms": null,
+    "simulation_latency_ms": 8625,
+    "submission_latency_ms": null
+  },
+  "m7_amounts": {
+    "denomination": "not reached",
+    "gross_profit": "not measured",
+    "l1_cost": "not measured",
+    "l1_fee_source": "not reached",
+    "l2_cost": "not measured",
+    "net_profit": "not provable in one denomination",
+    "profit_status": "no profit evidence"
+  },
+  "market": {
+    "counts_as_real_arbitrage": true,
+    "evidence": "reserves and blockTimestampLast read at the pinned live head by this run",
+    "market_kind": "REAL_MARKET"
+  },
+  "milestone": "M7",
+  "mode": "build-only",
+  "pinned_block": 37636354,
+  "pinned_block_hash": "0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd",
+  "plan": {
+    "funding": "real chain state: rpc:chain-91342",
+    "opportunity_id": "m7-91342-37636354-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+    "provenance": "6 broadcastable transaction(s) from a 12-step simulated plan pinned to block 37636354; venues 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 then 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E over input token 0x4200000000000000000000000000000000000006",
+    "state_fingerprint": "pinned-block-37636354-0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd",
+    "steps": [
+      "transaction 1 (deposit()), simulated step 2, target 0x4200000000000000000000000000000000000006, gas 44932",
+      "transaction 2 (transfer(address,uint256)), simulated step 3, target 0x4200000000000000000000000000000000000006, gas 31972",
+      "transaction 3 (swap(uint256,uint256,address,bytes)), simulated step 4, target 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, gas 93000",
+      "transaction 4 (transfer(address,uint256)), simulated step 6, target 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f, gas 29983",
+      "transaction 5 (swap(uint256,uint256,address,bytes)), simulated step 7, target 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E, gas 95013",
+      "transaction 6 (withdraw(uint256)), simulated step 9, target 0x4200000000000000000000000000000000000006, gas 30435"
+    ],
+    "tokens": [
+      "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "0x4200000000000000000000000000000000000006"
+    ]
+  },
+  "preflight": {
+    "attempt_id": "m7-91342-37636354-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+    "fee_at_head": {
+      "base_fee_per_gas": "316",
+      "block_hash": "0x9f2474e35ae6e1f6c1127a1654562f5e60146fc2209d247a0ea9424749587c98",
+      "block_number": 37636365,
+      "max_fee_per_gas": "1000632",
+      "max_priority_fee_per_gas": "1000000",
+      "provenance": "eip1559 maxFeePerGas = baseFee(316) * 2 + tip(1000000) = 1000632, read at block 37636365",
+      "suggested_tip_wei": "1000000"
+    },
+    "fee_at_pinned_block": {
+      "base_fee_per_gas": "316",
+      "block_hash": "0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd",
+      "block_number": 37636354,
+      "max_fee_per_gas": "1000632",
+      "max_priority_fee_per_gas": "1000000",
+      "provenance": "eip1559 maxFeePerGas = baseFee(316) * 2 + tip(1000000) = 1000632, read at block 37636354",
+      "suggested_tip_wei": "1000000"
+    },
+    "head": {
+      "block_hash": "0x9f2474e35ae6e1f6c1127a1654562f5e60146fc2209d247a0ea9424749587c98",
+      "block_number": 37636365,
+      "source": "eth_getBlockByNumber(\"latest\") over https://sepolia-rpc.giwa.io: number and hash out of the same header"
+    },
+    "input_asset": {
+      "available_wei": "25764375608889104",
+      "kind": "native",
+      "required_wei": "100000000000000",
+      "source": "eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) at block 37636365, against the 100000000000000 wei this route's first step wraps"
+    },
+    "market": {
+      "counts_as_real_arbitrage": true,
+      "evidence": "reserves and blockTimestampLast read at the pinned live head by this run",
+      "market_kind": "REAL_MARKET"
+    },
+    "pinned_block": {
+      "block_hash": "0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd",
+      "block_number": 37636354
+    },
+    "pools": [
+      {
+        "block_timestamp_last": "1790908426",
+        "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "read_at_block": 37636365,
+        "reserve0": "909338910611985086842",
+        "reserve1": "1100000000000000",
+        "source": "eth_call token0(), token1(), getReserves() at 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 for block 37636365",
+        "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "token1": "0x4200000000000000000000000000000000000006"
+      },
+      {
+        "block_timestamp_last": "1790908438",
+        "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "read_at_block": 37636365,
+        "reserve0": "2090661089388014913158",
+        "reserve1": "19135193482828374",
+        "source": "eth_call token0(), token1(), getReserves() at 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E for block 37636365",
+        "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "token1": "0x4200000000000000000000000000000000000006"
+      }
+    ],
+    "preflight": {
+      "attempt_id": "m7-91342-37636354-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+      "expected_net_after_costs_wei": "465095814803928",
+      "findings": [
+        {
+          "check": "chain_id",
+          "detail": "the intent's, the configured and the endpoint's chain id all say 91342: eth_chainId answered for the node",
+          "passed": true
+        },
+        {
+          "check": "current_head",
+          "detail": "head 37636365 (0x9f2474e35ae6e1f6c1127a1654562f5e60146fc2209d247a0ea9424749587c98) from eth_getBlockByNumber(\"latest\") over https://sepolia-rpc.giwa.io: number and hash out of the same header, at or past the pinned block 37636354",
+          "passed": true
+        },
+        {
+          "check": "opportunity_block",
+          "detail": "eth_getBlockByNumber still names a canonical block 37636354 (0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd)",
+          "passed": true
+        },
+        {
+          "check": "opportunity_block_hash",
+          "detail": "the intent pins 0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd at block 37636354 and the endpoint's block hash there is the same",
+          "passed": true
+        },
+        {
+          "check": "pool_reserves",
+          "detail": "eth_call token0(), token1(), getReserves() at 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 for block 37636365 and eth_call token0(), token1(), getReserves() at 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E for block 37636365 re-read at the head: the same two legs now pay 665605650524617 wei on an input of 100000000000000, against the 665605650524617 wei the priced simulation measured — the route moved by 0 wei. Net of the sequence ceiling of 100509835720689 wei is 465095814803928, and the risk floor this attempt was accepted against is 0 wei. Fees used: 997/1000 + 997/1000 — data/evidence/m7/candidate-fee-measurement.json",
+          "passed": true
+        },
+        {
+          "check": "simulation_result",
+          "detail": "the run this intent came from (simulation 0xd68bb0a05ec9ff5e05a77e2dd6e638b5d67cae7be93b25819520c5b60b4490f4) completed successfully",
+          "passed": true
+        },
+        {
+          "check": "risk_decision",
+          "detail": "the risk layer's decision on this run is Accept (decision 0x5cee69db15a836981a1bd1e1c7c5aed7f63f23891ea1802008b2542815a3769a)",
+          "passed": true
+        },
+        {
+          "check": "nonce",
+          "detail": "eth_getTransactionCount at #37636366 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\") — step 1 of this sequence is priced to carry the pending nonce, and the lane allocates from that same reading when it signs: the account's pending nonce is 7, which is the nonce the intent carries",
+          "passed": true
+        },
+        {
+          "check": "native_balance",
+          "detail": "eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) at block 37636365: step 1's ceiling is 100073296651961 wei and the whole 6-step sequence's is 100509835720689: 25764375608889104 wei covers the sequence ceiling of 100509835720689 wei (L2 ceilings + value + L1 estimates over 6 steps)",
+          "passed": true
+        },
+        {
+          "check": "input_asset_balance",
+          "detail": "eth_getBalance(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) at block 37636365, against the 100000000000000 wei this route's first step wraps: the route opens by wrapping 100000000000000 wei of native and the account holds 25764375608889104",
+          "passed": true
+        },
+        {
+          "check": "gas_estimate",
+          "detail": "6 step(s), each limit at or above the gas its simulation step measured (total limit 445335 gas)",
+          "passed": true
+        },
+        {
+          "check": "fee_estimate",
+          "detail": "head block 37636365: eip1559 maxFeePerGas = baseFee(316) * 2 + tip(1000000) = 1000632, read at block 37636365; the transaction's own ceiling is max_fee_per_gas 1000632, and the two readings agree exactly — the sequence ceiling the balance and profit lines use is computed from 1000632, the worse of the two",
+          "passed": true
+        },
+        {
+          "check": "l1_fee_estimate",
+          "detail": "every step's ceiling includes an L1 estimate; sequence total 64219268969 wei (source: estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37636365 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37636365 over a 120-byte envelope); the charge itself was never read)",
+          "passed": true
+        },
+        {
+          "check": "real_state_funding",
+          "detail": "§34: rpc:chain-91342 — eth_getBalance and eth_call see the funding this plan spends, so nothing about this run depends on a state override",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "rejected_because": null,
+      "repriced_output_wei": "0x25d5d645c29c9",
+      "sequence_ceiling_wei": "0x5b69c50df7f1"
+    },
+    "preflight_latency_ms": 5736,
+    "priced_intent": {
+      "access_list": [],
+      "block_hash": "0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd",
+      "block_number": 37636354,
+      "calldata": "0xd0e30db0",
+      "chain_id": 91342,
+      "funding": {
+        "real_state": {
+          "source": "rpc:chain-91342"
+        }
+      },
+      "gas_limit": 30000000,
+      "ids": {
+        "opportunity_id": "m7-91342-37636354-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000",
+        "risk_decision_id": "0x5cee69db15a836981a1bd1e1c7c5aed7f63f23891ea1802008b2542815a3769a",
+        "simulation_id": "0xd68bb0a05ec9ff5e05a77e2dd6e638b5d67cae7be93b25819520c5b60b4490f4"
+      },
+      "max_fee_per_gas": "0xf44b8",
+      "max_priority_fee_per_gas": "0xf4240",
+      "minimum_required_profit_wei": "0x0",
+      "nonce": 7,
+      "sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "sequence": {
+        "count": 6,
+        "index": 0
+      },
+      "simulated_steps": 12,
+      "simulation_profit_wei": "0x2026a4bf20b91",
+      "state_fingerprint": "pinned-block-37636354-0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd",
+      "target": "0x4200000000000000000000000000000000000006",
+      "tx_type": "dynamic_fee",
+      "value": "0x5af3107a4000"
+    },
+    "sequence_ceiling_wei": "100509835720689",
+    "sequence_l1_estimate_wei": "64219268969",
+    "steps": [
+      {
+        "gas_limit": 64932,
+        "index": 0,
+        "l1_fee_estimate_wei": "8323614937",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37636365 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37636365 over a 120-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "100064973037024",
+        "max_fee_per_gas": "1000632",
+        "simulated_gas_used": 44932,
+        "to": "0x4200000000000000000000000000000000000006",
+        "total_ceiling_wei": "100073296651961",
+        "value_wei": "100000000000000"
+      },
+      {
+        "gas_limit": 51972,
+        "index": 1,
+        "l1_fee_estimate_wei": "10419406401",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37636365 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37636365 over a 179-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "52004846304",
+        "max_fee_per_gas": "1000632",
+        "simulated_gas_used": 31972,
+        "to": "0x4200000000000000000000000000000000000006",
+        "total_ceiling_wei": "62424252705",
+        "value_wei": "0"
+      },
+      {
+        "gas_limit": 113000,
+        "index": 2,
+        "l1_fee_estimate_wei": "12711678314",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37636365 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37636365 over a 277-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "113071416000",
+        "max_fee_per_gas": "1000632",
+        "simulated_gas_used": 93000,
+        "to": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "total_ceiling_wei": "125783094314",
+        "value_wei": "0"
+      },
+      {
+        "gas_limit": 49983,
+        "index": 3,
+        "l1_fee_estimate_wei": "11598289099",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37636365 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37636365 over a 179-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "50014589256",
+        "max_fee_per_gas": "1000632",
+        "simulated_gas_used": 29983,
+        "to": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "total_ceiling_wei": "61612878355",
+        "value_wei": "0"
+      },
+      {
+        "gas_limit": 115013,
+        "index": 4,
+        "l1_fee_estimate_wei": "12384210898",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37636365 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37636365 over a 277-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "115085688216",
+        "max_fee_per_gas": "1000632",
+        "simulated_gas_used": 95013,
+        "to": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "total_ceiling_wei": "127469899114",
+        "value_wei": "0"
+      },
+      {
+        "gas_limit": 50435,
+        "index": 5,
+        "l1_fee_estimate_wei": "8782069320",
+        "l1_fee_source": "estimate only — `getL1Fee(bytes)` read from the GasPriceOracle predeploy at block 37636365 (eth_call getL1Fee(bytes) on 0x420000000000000000000000000000000000000F at block 37636365 over a 146-byte envelope); the charge itself was never read",
+        "l2_ceiling_wei": "50466874920",
+        "max_fee_per_gas": "1000632",
+        "simulated_gas_used": 30435,
+        "to": "0x4200000000000000000000000000000000000006",
+        "total_ceiling_wei": "59248944240",
+        "value_wei": "0"
+      }
+    ]
+  },
+  "refusal": null,
+  "risk": {
+    "decision": "Accept: no broadcast: this crate only judges a simulation. An Accept here means the simulation satisfied the stated thresholds; deciding to build, sign, or send anything is the caller's execution mode (§32), not this answer. Completed on 37636354:0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd, measured 421394 of gas costing 133160504 wei, and netted 565605517364113 against a minimum of 0"
+  },
+  "route": {
+    "buy": {
+      "getReserves_blockTimestampLast": "1790908426",
+      "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "read_at_block": 37636354,
+      "reserve0": "909338910611985086842",
+      "reserve1": "1100000000000000",
+      "source": "eth_call token0(), token1(), getReserves() at 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 for block 37636354",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    "mid_demand": "75569800273414114493",
+    "out_demand": "665605650524617",
+    "priced_by": "getReserves(), token0() and token1() read at block 37636354 for 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 and 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E; the 997/1000 fee on both legs is the figure this candidate carries, proven by bisection against these pools' own deployed bytecode — data/evidence/m7/candidate-fee-measurement.json",
+    "sell": {
+      "getReserves_blockTimestampLast": "1790908438",
+      "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "read_at_block": 37636354,
+      "reserve0": "2090661089388014913158",
+      "reserve1": "19135193482828374",
+      "source": "eth_call token0(), token1(), getReserves() at 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E for block 37636354",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    }
+  },
+  "sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+  "session_id": "route-91342-37636354-1790981471347",
+  "simulation": {
+    "block": 37636354,
+    "block_hash": "0x3eddd93e63695449eafa281269bc03b8b8c1a97ef500ed4c9541fca4f79b21bd",
+    "chain_id": 91342,
+    "compared": {
+      "analytical": "0x25d5d645c29c9",
+      "simulated": "0x25d5d645c29c9"
+    },
+    "completed": true,
+    "fingerprint": "d68bb0a05ec9ff5e05a77e2dd6e638b5d67cae7be93b25819520c5b60b4490f4",
+    "gas_used": 421394,
+    "net_profit": "Gain { amount: 565605517364113, gross: 565605650524617, gas_cost: 133160504, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 665605650524617, native_start: 25764375608889104, native_end: 26329981126253217, native_spent: 100000000000000, gas_paid: 133160504, proved_by: \"withdraw(665605650524617) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+    "outcome": {
+      "Executed": {
+        "movement": {
+          "Increased": {
+            "by": "0x2026a53e1e9c9"
+          }
+        },
+        "output": "0x25d5d645c29c9"
+      }
+    },
+    "plan": {
+      "analytical_mid_amount": "0x418bddcf67410ccbd",
+      "analytical_output": "0x25d5d645c29c9",
+      "evm_rules": "prague",
+      "input_amount": "0x5af3107a4000",
+      "input_token": "0x4200000000000000000000000000000000000006",
+      "pools": [
+        "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+      ],
+      "priced_by": "getReserves(), token0() and token1() read at block 37636354 for 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 and 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E; the 997/1000 fee on both legs is the figure this candidate carries, proven by bisection against these pools' own deployed bytecode — data/evidence/m7/candidate-fee-measurement.json",
+      "steps": [
+        "native balance of 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, recorded as sender_native_start",
+        "balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on 0x4200000000000000000000000000000000000006, recorded as sender_input_start",
+        "deposit 100000000000000 native into 0x4200000000000000000000000000000000000006, msg.value = 100000000000000",
+        "transfer 100000000000000 of 0x4200000000000000000000000000000000000006 to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4",
+        "ask 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 to pay out 75569800273414114493 of 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4",
+        "balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f, recorded as sender_mid_received",
+        "transfer the measured mid delivery of 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E",
+        "ask 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E to pay out 665605650524617 of 0x4200000000000000000000000000000000000006 to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E",
+        "balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on 0x4200000000000000000000000000000000000006, recorded as sender_input_end",
+        "withdraw the measured final balance from 0x4200000000000000000000000000000000000006 into native",
+        "balanceOf(0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c) on 0x4200000000000000000000000000000000000006, recorded as sender_input_after_unwrap",
+        "native balance of 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c, recorded as sender_native_end"
+      ]
+    },
+    "sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+    "session_id": "",
+    "slippage": {
+      "expected_output": "0x25d5d645c29c9",
+      "minimum_output": "0x25d5d645c29c9",
+      "policy": "Exact"
+    },
+    "state_source": "rpc:chain-91342",
+    "status": "Completed",
+    "steps": 12
+  },
+  "state_read_concurrency": 2,
+  "state_read_reuse": true,
+  "successful_real_arbitrage": false
+}

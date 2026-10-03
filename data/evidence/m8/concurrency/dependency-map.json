@@ -1,0 +1,183 @@
+{
+  "assembled_from": [
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981304325,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "run": "c1-01",
+      "simulations": 1
+    },
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981409577,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "run": "c1-02",
+      "simulations": 1
+    },
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981431103,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "run": "c1-03",
+      "simulations": 1
+    },
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981451907,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "run": "c2-01",
+      "simulations": 1
+    },
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981471348,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "run": "c2-02",
+      "simulations": 1
+    },
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981493846,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "run": "c2-03",
+      "simulations": 1
+    },
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981513405,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "run": "c4-01",
+      "simulations": 1
+    },
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981535484,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "run": "c4-02",
+      "simulations": 1
+    },
+    {
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1790981554391,
+      "git_revision": "0a1d867f5e6141a06b2e50a46cc3066e70d7cbf6",
+      "run": "c4-03",
+      "simulations": 1
+    }
+  ],
+  "batch_descriptor_blocks": [
+    37636187,
+    37636292,
+    37636313,
+    37636334,
+    37636354,
+    37636376,
+    37636396,
+    37636418,
+    37636437
+  ],
+  "batch_descriptor_chain_ids": [
+    91342
+  ],
+  "batch_limits_seen": [
+    1,
+    2,
+    4
+  ],
+  "block_identity": {
+    "calls_naming_a_pinned_chain_and_block": 342,
+    "every_state_key_named_the_run_block": 9,
+    "rule": "§8: a state read taken on a concurrent path must name the same pinned block as the serial path it replaced. `latest`, `pending` and an absent block are not states this table grades — a key that does not carry the run's own number is listed, with the run and the key quoted. `wire_block_fields_seen` is every form the outgoing block parameter ever took, so a tag would appear here as text rather than be argued away",
+    "simulations_that_did_not": [],
+    "simulations_with_state_calls": 9,
+    "state_calls_in_those_simulations": 342,
+    "wire_block_fields_seen": [
+      "37636187",
+      "37636292",
+      "37636313",
+      "37636334",
+      "37636354",
+      "37636376",
+      "37636396",
+      "37636418",
+      "37636437"
+    ]
+  },
+  "dependency_states": [
+    "independent",
+    "unknown"
+  ],
+  "lines_without_a_dispatch_report": 0,
+  "per_method": [
+    {
+      "basis": "a balance at a pinned block is a fact about that block and answers nothing about any other read: the caller's own order is what the account triple is asked in, and no leg's params are built from another leg's answer (§5's analysis of `RpcStateProvider::account_triple`)",
+      "batch_kind": "balance",
+      "dependency": "independent",
+      "may_be_a_batch_member": true,
+      "measured": {
+        "batch_sites_seen": [
+          "account_triple"
+        ],
+        "batched_reads": 162,
+        "calls_in_the_runs": 54,
+        "simulations_where_two_of_this_method_were_outstanding": 0
+      },
+      "method": "eth_getBalance"
+    },
+    {
+      "basis": "as the balance: the nonce of an address at a pinned number does not depend on what its code or its balance is, and both are asked for the same address in one hand",
+      "batch_kind": "nonce",
+      "dependency": "independent",
+      "may_be_a_batch_member": true,
+      "measured": {
+        "batch_sites_seen": [
+          "account_triple"
+        ],
+        "batched_reads": 162,
+        "calls_in_the_runs": 54,
+        "simulations_where_two_of_this_method_were_outstanding": 0
+      },
+      "method": "eth_getTransactionCount"
+    },
+    {
+      "basis": "one bytecode per address, and the address set is decided by the plan before any of them is read (§6: `touched_contracts` is a second proved-independent hand)",
+      "batch_kind": "code",
+      "dependency": "independent",
+      "may_be_a_batch_member": true,
+      "measured": {
+        "batch_sites_seen": [
+          "account_triple",
+          "touched_contracts"
+        ],
+        "batched_reads": 198,
+        "calls_in_the_runs": 54,
+        "simulations_where_two_of_this_method_were_outstanding": 6
+      },
+      "method": "eth_getCode"
+    },
+    {
+      "basis": "the EVM demands a slot one at a time: REVM's async fiber holds a single outstanding database request, so a second slot cannot be asked before the first has been answered. Which slot is next is a function of the value just returned, so nothing in this build proves two storage reads independent — §7's answer is `unknown`, and §3's is that prefetching one is forbidden. Storage therefore keeps the order the caller decided",
+      "batch_kind": "storage",
+      "dependency": "unknown",
+      "may_be_a_batch_member": false,
+      "measured": {
+        "batch_sites_seen": [],
+        "batched_reads": 0,
+        "calls_in_the_runs": 180,
+        "simulations_where_two_of_this_method_were_outstanding": 0
+      },
+      "method": "eth_getStorageAt"
+    }
+  ],
+  "question": "§5–§7: which state reads may be outstanding together, and on what proof. What is not proved keeps the caller's order and is recorded as `unknown`",
+  "scheduler_bound_is_never_a_dependency_claim": "a batch member list says what was handed to the scheduler, not that two reads were independent; the `basis` beside each method is the proof, and the counts are the check that the code still matches it (§7)",
+  "simulations": 9
+}
