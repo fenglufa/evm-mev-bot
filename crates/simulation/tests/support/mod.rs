@@ -33,6 +33,10 @@ use evm_state::InMemoryStateStore;
 pub const CHAIN: ChainId = ChainId(91342);
 pub const BLOCK: u64 = 37_191_169;
 
+/// The JSON-RPC endpoint both M8.3.1's and M8.3.3's offline arms read through, so the two
+/// milestones are provably asking the same recorded state.
+pub mod stub;
+
 pub const TOKEN_WETH: Address = Address::new([
     0x42, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x06,

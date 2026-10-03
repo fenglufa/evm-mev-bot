@@ -2240,6 +2240,9 @@ pub fn concurrency_summary_assembled(runs: &[Value]) -> Value {
                 "simulation_duration_ns": stats(&samples(rows, "simulation_duration_ns")),
                 "rpc_wall_duration_ns": stats(&samples(rows, "rpc_wall_duration_ns")),
                 "rpc_union_duration_ns": stats(&samples(rows, "rpc_union_duration_ns")),
+                // §36's test is `union < sum`, and an arm that published only the union would
+                // leave a reader to take the sum out of the per-simulation rows by hand.
+                "rpc_sum_duration_ns": stats(&samples(rows, "rpc_sum_duration_ns")),
                 "rpc_overlap_duration_ns": stats(&overlaps),
                 "serial_wait_duration_ns": stats(&samples(rows, "serial_wait_duration_ns")),
                 "rpc_gap_duration_ns": stats(&samples(rows, "rpc_gap_duration_ns")),
@@ -2276,8 +2279,8 @@ pub fn concurrency_summary_assembled(runs: &[Value]) -> Value {
         "configured_is_never_observed": evm_simulation::CONCURRENCY_NOTE,
         "arms_are_not_subtracted": "§20 lets these runs sit on different blocks, so a \
              difference between two arms' published medians is a difference between two blocks \
-             as much as between two bounds. Each arm states its own integers and the reader is \
-             told which subtraction this evidence can carry",
+             as much as between two bounds. Each arm states its own integers and the reader is told \
+             which subtraction this evidence can carry.",
         "per_arm": per_arm,
         "per_simulation": per_run,
         "assembled_from": provenance,
@@ -2363,9 +2366,19 @@ pub fn dependency_map_assembled(runs: &[Value]) -> Value {
     let mut identity_named = 0_u64;
     let mut wire_block_fields: BTreeSet<String> = BTreeSet::new();
     let mut identity_mismatches: Vec<Value> = Vec::new();
+    let mut provenance: Vec<Value> = Vec::new();
     for run in runs {
         let name = run["run"].as_str().unwrap_or("?").to_string();
-        for line in run["lines"].as_array().into_iter().flatten() {
+        let lines: Vec<&Value> = run["lines"].as_array().into_iter().flatten().collect();
+        provenance.push(json!({
+            "run": name,
+            "git_revision": run["git_revision"].clone(),
+            "execution_mode": run["execution_mode"].clone(),
+            "endpoint_id": run["endpoint_id"].clone(),
+            "generated_at_unix_ms": run["generated_at_unix_ms"].clone(),
+            "simulations": lines.len(),
+        }));
+        for line in lines {
             simulations += 1;
             if line["state_read_concurrency"].is_null() {
                 lines_without_a_report += 1;
@@ -2534,6 +2547,9 @@ pub fn dependency_map_assembled(runs: &[Value]) -> Value {
         },
         "simulations": simulations,
         "lines_without_a_dispatch_report": lines_without_a_report,
+        // §30: the map is a claim about nine runs, so it names them and the build they came from
+        // rather than leaving a reader to match it against another file.
+        "assembled_from": provenance,
     })
 }
 

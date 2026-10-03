@@ -9,33 +9,20 @@
 //! looked up. If reuse avoided a read, all three move together; if it silently changed
 //! an answer, the result fingerprint moves and the test says so.
 //!
-//! ```text
-//! what the stub is        std::net::TcpListener on 127.0.0.1:0, one thread, answering
-//!                         only from the committed M4 dump — the answers a real archive
-//!                         node gave at block 37 191 169, recorded once by
-//!                         crates/simulation/tests/real_chain.rs
-//! why it is not a mock    it stands in for a node's wire behaviour. The route is the
-//!                         detector's, the state is the node's own recorded answers, and
-//!                         nothing here invents a pool, a reserve or an opportunity
-//! what it costs           no new dependency: plain std for the server, the tokio
-//!                         runtime the workspace already has for the client
-//! ```
-//!
-//! Two properties the stub is built to enforce rather than merely to provide:
-//!
-//! - it holds one block. A read for any other height is answered with a JSON-RPC error,
-//!   so a cache keyed wrongly across heights (§10) fails this test loudly instead of
-//!   being served the pinned state and looking correct.
-//! - it answers only what the dump recorded. A read for an account or slot the fixture
-//!   never saw is an error too — a fabricated zero would let a wrong key pass as a hit.
+//! The endpoint is `support::stub` — the same one M8.3.3's concurrency fixture reads
+//! through, so the two milestones provably run against the same recorded snapshot. This
+//! suite asks a reuse question, so it takes the shape that answers one request at a time
+//! on one thread ([`Stub::spawn`]): an arrival list whose order *is* the run's order, so a
+//! cached arm's calls can be checked to be the baseline's with some removed and none
+//! reordered. The two properties that make the endpoint an instrument rather than a
+//! convenience — it holds only the pinned block, and it answers only what the dump
+//! recorded — are stated there.
 
 use std::collections::BTreeMap;
-use std::io::{BufRead, BufReader, Read, Write};
-use std::net::{TcpListener, TcpStream};
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 
-use alloy_primitives::{B256, U256};
+use alloy_primitives::U256;
 use serde_json::{json, Value};
 
 use evm_chain::{BlockContext, ChainAdapter, HttpChainAdapter, RpcTraceSink, RpcTraceSource};
@@ -46,7 +33,8 @@ use evm_simulation::{
 };
 
 mod support;
-use support::{dump_path, request, BLOCK, CHAIN};
+use support::stub::{ServedState, Stub};
+use support::{request, BLOCK, CHAIN};
 
 /// The four methods §3 allows this milestone to reuse, in §7's reporting order. The
 /// header read is listed apart because §1 keeps its behaviour untouched.
@@ -56,267 +44,6 @@ const STATE_METHODS: [&str; 4] = [
     "eth_getTransactionCount",
     "eth_getStorageAt",
 ];
-
-/// What a stub holds: one block's state, in the exact quantity forms a node answers in.
-struct ServedState {
-    /// The height as this build's adapter sends it: `0x`-prefixed, no padding.
-    height: String,
-    block: Value,
-    block_hash: B256,
-    /// lowercase address -> (balance, nonce, code), all hex quantities.
-    accounts: BTreeMap<String, (String, String, String)>,
-    /// (lowercase address, `0x` + 64 hex digits) -> hex quantity.
-    storage: BTreeMap<(String, String), String>,
-}
-
-impl ServedState {
-    /// Read the committed dump. Every answer below is a field of that file, so the state
-    /// this test runs against is the state the live node served, not a fixture of mine.
-    fn load() -> Self {
-        let path = dump_path();
-        assert!(
-            path.exists(),
-            "{} is missing. It is written by the live run:
-    cargo test -p evm-simulation --test real_chain -- --ignored --nocapture
-    This suite replays those recorded answers over a wire, so it cannot stand without it.",
-            path.display()
-        );
-        let raw = std::fs::read_to_string(&path)
-            .unwrap_or_else(|error| panic!("{}: {error}", path.display()));
-        let dump: Value = serde_json::from_str(&raw).expect("the dump is JSON");
-        let header = &dump["header"];
-        let hex = |value: &Value| -> String {
-            let number = value
-                .as_u64()
-                .expect("the dump records header numbers as integers");
-            format!("{number:#x}")
-        };
-        let quantity = |text: &str| -> String {
-            let value: U256 = text
-                .parse()
-                .unwrap_or_else(|error| panic!("{} is not a quantity: {error}", text));
-            format!("{value:#x}")
-        };
-
-        let mut accounts = BTreeMap::new();
-        for (address, account) in dump["accounts"]
-            .as_object()
-            .expect("the dump records accounts as an object")
-        {
-            accounts.insert(
-                address.to_ascii_lowercase(),
-                (
-                    quantity(account["balance"].as_str().expect("a balance")),
-                    format!("{:#x}", account["nonce"].as_u64().expect("a nonce")),
-                    account["code"].as_str().expect("code").to_ascii_lowercase(),
-                ),
-            );
-        }
-        let mut storage = BTreeMap::new();
-        for (address, slots) in dump["storage"]
-            .as_object()
-            .expect("the dump records storage as an object")
-        {
-            for (slot, value) in slots
-                .as_object()
-                .expect("each address's storage is an object of slot to value")
-            {
-                storage.insert(
-                    (
-                        address.to_ascii_lowercase(),
-                        normalize_slot(slot).expect("a 0x-prefixed slot"),
-                    ),
-                    quantity(value.as_str().expect("a storage value")),
-                );
-            }
-        }
-
-        Self {
-            height: format!("{BLOCK:#x}"),
-            block: json!({
-                "number": format!("{BLOCK:#x}"),
-                "hash": dump["block_hash"].as_str(),
-                "timestamp": hex(&header["timestamp"]),
-                "gasLimit": hex(&header["gas_limit"]),
-                "miner": header["beneficiary"],
-                "baseFeePerGas": hex(&header["base_fee_per_gas"]),
-                "excessBlobGas": hex(&header["excess_blob_gas"]),
-                "mixHash": header["prevrandao"],
-            }),
-            block_hash: dump["block_hash"]
-                .as_str()
-                .expect("the dump names the block it recorded")
-                .parse()
-                .expect("a block hash"),
-            accounts,
-            storage,
-        }
-    }
-
-    /// The JSON-RPC `result` for one call, or the reason this endpoint has no answer.
-    fn answer(&self, method: &str, params: &Value) -> Result<Value, String> {
-        let text = |index: usize| -> Result<String, String> {
-            params
-                .get(index)
-                .and_then(Value::as_str)
-                .map(str::to_owned)
-                .ok_or_else(|| format!("{method} param {index} is not a string"))
-        };
-        let at_pinned_height = |sent: &str| -> Result<(), String> {
-            if sent == self.height {
-                return Ok(());
-            }
-            Err(format!(
-                "this endpoint holds block {BLOCK} only and was asked for `{sent}`"
-            ))
-        };
-        match method {
-            "eth_chainId" => Ok(json!(format!("{:#x}", CHAIN.0))),
-            "eth_getBlockByNumber" => {
-                let sent = text(0)?;
-                at_pinned_height(&sent)?;
-                Ok(self.block.clone())
-            }
-            "eth_getCode" | "eth_getBalance" | "eth_getTransactionCount" => {
-                let address = text(0)?.to_ascii_lowercase();
-                at_pinned_height(&text(1)?)?;
-                let account = self.accounts.get(&address).ok_or_else(|| {
-                    format!(
-                        "the recorded dump holds no account {address}, so this endpoint has \
-                         no real answer to give and says so rather than serving a zero"
-                    )
-                })?;
-                let value = match method {
-                    "eth_getCode" => account.2.clone(),
-                    "eth_getBalance" => account.0.clone(),
-                    _ => account.1.clone(),
-                };
-                Ok(json!(value))
-            }
-            "eth_getStorageAt" => {
-                let address = text(0)?.to_ascii_lowercase();
-                let slot = normalize_slot(&text(1)?)?;
-                at_pinned_height(&text(2)?)?;
-                let value = self
-                    .storage
-                    .get(&(address.clone(), slot.clone()))
-                    .ok_or_else(|| {
-                        format!(
-                            "the recorded dump holds no storage at {address} slot {slot}, so \
-                             this endpoint answers nothing rather than a zero nobody read"
-                        )
-                    })?
-                    .clone();
-                Ok(json!(value))
-            }
-            other => Err(format!("this endpoint serves no {other}")),
-        }
-    }
-}
-
-/// One slot written two ways is one slot: the adapter sends 64 hex digits, the dump keys
-/// the same way, and a test that compared strings loosely would hide a keying bug.
-fn normalize_slot(text: &str) -> Result<String, String> {
-    let digits = text
-        .strip_prefix("0x")
-        .or_else(|| text.strip_prefix("0X"))
-        .ok_or_else(|| format!("`{text}` is not a hex slot"))?;
-    let value = U256::from_str_radix(digits, 16).map_err(|error| format!("`{text}`: {error}"))?;
-    Ok(format!("0x{value:064x}"))
-}
-
-/// A stub endpoint and its own account of what arrived.
-struct Stub {
-    url: String,
-    /// `(method, params)` in arrival order — the endpoint's account, which no part of
-    /// the reuse boundary can edit.
-    arrivals: Arc<Mutex<Vec<(String, Value)>>>,
-}
-
-impl Stub {
-    fn spawn(state: Arc<ServedState>) -> Self {
-        let listener = TcpListener::bind("127.0.0.1:0").expect("an ephemeral port is available");
-        let url = format!(
-            "http://127.0.0.1:{}",
-            listener.local_addr().expect("addr").port()
-        );
-        let arrivals = Arc::new(Mutex::new(Vec::new()));
-        let counted = Arc::clone(&arrivals);
-        std::thread::spawn(move || {
-            for stream in listener.incoming().flatten() {
-                if let Some(call) = Self::serve(stream, &state) {
-                    counted.lock().expect("the tally").push(call);
-                }
-            }
-        });
-        Self { url, arrivals }
-    }
-
-    fn calls(&self) -> Vec<(String, Value)> {
-        self.arrivals.lock().expect("the tally").clone()
-    }
-
-    /// The methods answered, connect included — `eth_chainId` first in every arm, since
-    /// each arm opens its own connection to its own endpoint.
-    fn methods(&self) -> Vec<String> {
-        self.calls().into_iter().map(|(method, _)| method).collect()
-    }
-
-    /// Read one JSON-RPC request, answer it, report what it asked for.
-    ///
-    /// Every reply says `connection: close`: a test that counts requests has to be sure
-    /// a keep-alive connection cannot make two logical calls look like one arrival — and
-    /// §13 keeps any keep-alive redesign out of this milestone anyway.
-    fn serve(stream: TcpStream, state: &ServedState) -> Option<(String, Value)> {
-        let mut reader = BufReader::new(stream.try_clone().expect("a second handle"));
-        let mut length = 0usize;
-        loop {
-            let mut line = String::new();
-            if reader.read_line(&mut line).unwrap_or(0) == 0 {
-                return None;
-            }
-            if let Some(rest) = line.to_ascii_lowercase().strip_prefix("content-length:") {
-                length = rest.trim().parse().unwrap_or(0);
-            }
-            if line == "\r\n" {
-                break;
-            }
-        }
-        let mut body = vec![0u8; length];
-        if reader.read_exact(&mut body).is_err() {
-            return None;
-        }
-        let request: Value = match serde_json::from_slice(&body) {
-            Ok(request) => request,
-            Err(_) => return None,
-        };
-        let method = request
-            .get("method")
-            .and_then(Value::as_str)
-            .unwrap_or("unknown")
-            .to_string();
-        let params = request.get("params").cloned().unwrap_or_else(|| json!([]));
-        let id = request.get("id").cloned().unwrap_or(json!(1));
-        let payload = match state.answer(&method, &params) {
-            Ok(result) => json!({"jsonrpc": "2.0", "id": id, "result": result}).to_string(),
-            Err(reason) => json!({
-                "jsonrpc": "2.0",
-                "id": id,
-                "error": {"code": -32000, "message": reason}
-            })
-            .to_string(),
-        };
-        let response = format!(
-            "HTTP/1.1 200 OK\r\ncontent-type: application/json\r\ncontent-length: {}\
-             \r\nconnection: close\r\n\r\n{payload}",
-            payload.len()
-        );
-        let mut stream = stream;
-        let _ = stream.write_all(response.as_bytes());
-        let _ = stream.flush();
-        Some((method, params))
-    }
-}
 
 /// One arm of the A/B: the same simulation, the same endpoint shape, one switch apart.
 struct Arm {
@@ -430,7 +157,7 @@ impl Arm {
 async fn run_arm(header: BlockContext, route: PricedRoute, reuse: bool) -> Arm {
     let state = Arc::new(ServedState::load());
     let stub = Stub::spawn(Arc::clone(&state));
-    let base = HttpChainAdapter::connect(&stub.url)
+    let base = HttpChainAdapter::connect(stub.url())
         .await
         .expect("the stub answers eth_chainId, which is all a connect does");
     assert_eq!(

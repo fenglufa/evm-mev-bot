@@ -23,7 +23,8 @@ use std::process::Output;
 use alloy_primitives::Address;
 use evm_cli::{
     default_registry_dirs, parse_arbitrage, parse_live, parse_validate, ArbitrageArgs,
-    DEFAULT_DIAGNOSIS_DIR, DEFAULT_LATENCY_DIR,
+    DEFAULT_DIAGNOSIS_DIR, DEFAULT_LATENCY_DIR, DEFAULT_STATE_READ_CONCURRENCY,
+    MAX_STATE_READ_CONCURRENCY,
 };
 use evm_execution::{ExecutionMode, MarketKind};
 use evm_pipeline::ArbitrageConfig;
@@ -713,4 +714,103 @@ fn binary(args: &[&str]) -> Output {
     .env_remove("GIWA_EXECUTION_PRIVATE_KEY")
     .output()
     .expect("the binary runs")
+}
+/// §27 and §28 in flag form: the state-read bound has one default, and that default is the
+/// serial arm the experiment measures itself against.
+#[test]
+fn the_state_read_bound_defaults_to_serial_and_refuses_the_values_with_no_meaning() {
+    // Absent is not "unspecified" on this flag. §10 makes concurrency 1 the arm that has to
+    // reproduce M8.3.2's 39-call run, so a run that typed nothing must BE that arm — and the
+    // number it gets has to be the one the parser's own constant says, not one here typed.
+    let plain = build(&complete()).expect("the complete line describes a run");
+    assert_eq!(
+        plain.state_read_concurrency, DEFAULT_STATE_READ_CONCURRENCY as usize,
+        "a run that types no bound does not get the default the constant advertises"
+    );
+    assert_eq!(
+        plain.state_read_concurrency, 1,
+        "§28: the default has to be the serial arm, stated as a number rather than as a word"
+    );
+
+    // §2's four arms, each accepted as it would be typed. Three and five are here because
+    // what this flag refuses is a set with reasons attached (0, anything above the largest
+    // arm, anything that does not fit), not a whitelist of the four the milestone names: a
+    // bound of 5 is a smaller version of the same experiment and refusing it would be a
+    // policy this task book does not ask for.
+    for (typed, expected) in [
+        ("1", 1usize),
+        ("2", 2),
+        ("3", 3),
+        ("4", 4),
+        ("5", 5),
+        ("8", 8),
+    ] {
+        let flags = replaced(&complete(), "--state-read-concurrency", typed);
+        let arm = build(&flags)
+            .unwrap_or_else(|error| panic!("--state-read-concurrency {typed} is a bound: {error}"));
+        assert_eq!(arm.state_read_concurrency, expected, "typed {typed}");
+        // §3: one variable. A bound says how already-decided reads are sent; it does not
+        // decide which. Every other field this command line describes has to survive the
+        // flag unchanged, or the experiment's "only difference" is not one difference.
+        assert_eq!(arm.sender, plain.sender, "typed {typed}");
+        assert_eq!(arm.tolerance, plain.tolerance, "typed {typed}");
+        assert_eq!(arm.evidence_dir, plain.evidence_dir, "typed {typed}");
+        assert_eq!(arm.latency_dir, plain.latency_dir, "typed {typed}");
+        assert_eq!(arm.diagnosis_dir, plain.diagnosis_dir, "typed {typed}");
+        assert_eq!(
+            arm.state_read_reuse, plain.state_read_reuse,
+            "typed {typed}"
+        );
+    }
+
+    // §27's three refusals, each named by the flag the caller typed rather than rounded
+    // into something they did not type. `0` is the one worth the sentence: under it no read
+    // could ever be outstanding, and a run that quietly became 1 would be the serial arm
+    // wearing a number nobody asked for.
+    // `9` is one above the largest bound the command line takes, and the line above that
+    // keeps the literal honest: if the constant ever moves, this test says so instead of
+    // refusing a value that is now valid.
+    assert_eq!(
+        MAX_STATE_READ_CONCURRENCY + 1,
+        9,
+        "the refused value no longer sits one above the accepted maximum"
+    );
+    // A negative number is the interesting case, and it is refused by a different part of
+    // the command line than the bound checker: typed as its own token, clap's argument
+    // tokenizer never hands `-1` to this option at all, so the message names the token the
+    // shell produced rather than the flag that wanted it. Spelled with an `=`, the same
+    // value does reach the option and is refused as one of its values. Both are refusals
+    // with exit code 2 and no run behind them, which is what §27 asks for; only the second
+    // is §27's checker speaking, and the test says so instead of pretending otherwise.
+    let negative = {
+        let mut flags = without(&complete(), "--state-read-concurrency");
+        flags.push("--state-read-concurrency=-1");
+        flags
+    };
+    let refused = build(&negative)
+        .expect_err("--state-read-concurrency=-1 describes no bound, and was accepted");
+    assert!(
+        refused.contains("--state-read-concurrency") && refused.contains("-1"),
+        "the refusal has to name both the flag and the value typed: {refused}"
+    );
+    for bad in ["0", "9", "16", "18446744073709551616"] {
+        let flags = replaced(&complete(), "--state-read-concurrency", bad);
+        let refused = build(&flags).err().unwrap_or_else(|| {
+            panic!("--state-read-concurrency {bad} describes no bound, and was accepted")
+        });
+        assert!(
+            refused.contains("--state-read-concurrency"),
+            "the refusal for `{bad}` has to name the flag: {refused}"
+        );
+        assert!(
+            refused.contains(bad),
+            "a caller who typed `{bad}` should see the value they typed in the refusal: \
+             {refused}"
+        );
+    }
+
+    // §40, checked from the outside: nothing on this path panics on bad input, so a refused
+    // command line is a returned String rather than an `unwrap` reaching for a value that is
+    // not there. The loop above is the test — an `expect`/`unwrap` in the parser would have
+    // aborted the binary on the first bad value instead of answering with a message.
 }
