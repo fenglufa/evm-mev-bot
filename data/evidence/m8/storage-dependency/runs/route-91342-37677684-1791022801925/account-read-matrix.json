@@ -1,0 +1,672 @@
+{
+  "address_count": 6,
+  "addresses": [
+    {
+      "address": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "all_three_legs": true,
+      "balance": 1,
+      "blocks": [
+        "37677684"
+      ],
+      "code": 1,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 251260542,
+          "measured": true,
+          "min_ns": 251260542,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 255223250,
+          "measured": true,
+          "min_ns": 255223250,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 254723459,
+          "measured": true,
+          "min_ns": 254723459,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 761207251,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 1,
+      "reads": 3,
+      "simulations": [
+        "m7-91342-37677684-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "all_three_legs": true,
+      "balance": 1,
+      "blocks": [
+        "37677684"
+      ],
+      "code": 1,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 245991500,
+          "measured": true,
+          "min_ns": 245991500,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 448188834,
+          "measured": true,
+          "min_ns": 448188834,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 256361542,
+          "measured": true,
+          "min_ns": 256361542,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 950541876,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 1,
+      "reads": 3,
+      "simulations": [
+        "m7-91342-37677684-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "all_three_legs": true,
+      "balance": 1,
+      "blocks": [
+        "37677684"
+      ],
+      "code": 1,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 249629458,
+          "measured": true,
+          "min_ns": 249629458,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 703588208,
+          "measured": true,
+          "min_ns": 703588208,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 241202458,
+          "measured": true,
+          "min_ns": 241202458,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 1194420124,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 1,
+      "reads": 3,
+      "simulations": [
+        "m7-91342-37677684-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000011",
+      "all_three_legs": true,
+      "balance": 1,
+      "blocks": [
+        "37677684"
+      ],
+      "code": 1,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 255615416,
+          "measured": true,
+          "min_ns": 255615416,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 262068000,
+          "measured": true,
+          "min_ns": 262068000,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 250489875,
+          "measured": true,
+          "min_ns": 250489875,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 768173291,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 1,
+      "reads": 3,
+      "simulations": [
+        "m7-91342-37677684-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "all_three_legs": true,
+      "balance": 1,
+      "blocks": [
+        "37677684"
+      ],
+      "code": 1,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 238752875,
+          "measured": true,
+          "min_ns": 238752875,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 296182417,
+          "measured": true,
+          "min_ns": 296182417,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 256717709,
+          "measured": true,
+          "min_ns": 256717709,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 791653001,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 1,
+      "reads": 3,
+      "simulations": [
+        "m7-91342-37677684-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    },
+    {
+      "address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "all_three_legs": true,
+      "balance": 1,
+      "blocks": [
+        "37677684"
+      ],
+      "code": 1,
+      "duration_by_kind_ns": {
+        "balance": {
+          "max_ns": 241799292,
+          "measured": true,
+          "min_ns": 241799292,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "code": {
+          "max_ns": 255802666,
+          "measured": true,
+          "min_ns": 255802666,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "nonce": {
+          "max_ns": 237501333,
+          "measured": true,
+          "min_ns": 237501333,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        }
+      },
+      "duration_total_ns": 735103291,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "nonce": 1,
+      "reads": 3,
+      "simulations": [
+        "m7-91342-37677684-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ]
+    }
+  ],
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_only": "§9 says do not optimize; this table is the measurement, and no read in it was reordered, merged, or avoided to produce it",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791022801927,
+  "generated_at_used_for_durations": false,
+  "git_revision": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+  "grouping": "§9: by normalized address, one row per address, one column per leg (code / balance / nonce), over every simulation's rows merged",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "reads_total": 18,
+  "reads_without_address": 0,
+  "required_by": {
+    "simulation": 18
+  },
+  "same_account_all_three_legs": {
+    "addresses": 6,
+    "question": "§9: are these reads still mostly the same accounts asked three things each? A count of addresses holding all three legs, against the addresses that appear at all",
+    "with_all_three_legs": 6
+  },
+  "sources_are_never_blended": true,
+  "totals": {
+    "balance": {
+      "duration_ns": 1483049083,
+      "reads": 6
+    },
+    "code": {
+      "duration_ns": 2221053375,
+      "reads": 6
+    },
+    "nonce": {
+      "duration_ns": 1496996376,
+      "reads": 6
+    }
+  },
+  "unit": "ns"
+}

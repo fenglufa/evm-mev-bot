@@ -1,0 +1,1208 @@
+{
+  "assembled_from": [
+    {
+      "endpoint_id": "rpc-8bb31a7a5b129b37",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791022752549,
+      "git_revision": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+      "run": "run-02",
+      "simulations": 1
+    }
+  ],
+  "classification_rules": {
+    "different_legs": "undecidable — the legs are sequenced by two statements of the engine, and nothing here traces one leg's return value into the other's parameters. §5 is explicit that a sequence of code is not a proof about values, in either direction",
+    "same_leg_fiber_overlapped": "neither — the leg's proof and the stamps disagree, so the pair is a `contradiction` and both nodes read `unknown`. This is the only way a wrong proof shows up in this file, which is why it is not resolved by preferring the code",
+    "same_leg_fiber_serial": "ordered — asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler ; and the stamps show the earlier read closed before this one opened",
+    "same_leg_materialised": "independent — asked by the §36 state-change audit: state_changes() materialises and sorts slot_reads(touched) — every (address, slot) pair — before the leg's first await (crates/simulation/src/engine.rs), and then asks every key in that list whether or not an earlier answer changes anything, so no read in this leg takes an address, a slot or its own existence from another read's return value",
+    "unknown_is_never_promoted": "a read classified `unknown` is not a read that is assumed independent: §3 forbids the derivation and §28 restates it. The worst thing this file can do is make an unproven pair look decided, so the rule is applied in the direction that loses information rather than the one that gains a category — an unrecognized phase name, a missing stamp, or an ambiguity note all land on `unknown`, and the counts below would have to be re-read before any of them could change",
+    "unstamped_or_ambiguous": "unknown — §4's stamp rule: a label that could belong to another call is not this call's label"
+  },
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "decoding_refusals": [],
+  "dependency_states": [
+    "independent",
+    "ordered",
+    "unknown"
+  ],
+  "diagnosis_schema": 2,
+  "edges": [
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc12",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc16",
+      "wait_before_start_ns": 1396750
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc16",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc19",
+      "wait_before_start_ns": 1190792
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc19",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc20",
+      "wait_before_start_ns": 79708
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc20",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc21",
+      "wait_before_start_ns": 75625
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc21",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc22",
+      "wait_before_start_ns": 81833
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc22",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc25",
+      "wait_before_start_ns": 1473541
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc25",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc26",
+      "wait_before_start_ns": 479750
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc26",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc27",
+      "wait_before_start_ns": 74375
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc27",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc28",
+      "wait_before_start_ns": 625041
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc28",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc31",
+      "wait_before_start_ns": 1188000
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc31",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc32",
+      "wait_before_start_ns": 58500
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc32",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc33",
+      "wait_before_start_ns": 57875
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc33",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc34",
+      "wait_before_start_ns": 192625
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc34",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc35",
+      "wait_before_start_ns": 177500
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc35",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc36",
+      "wait_before_start_ns": 88833
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc36",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc37",
+      "wait_before_start_ns": 513125
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc37",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc38",
+      "wait_before_start_ns": 115292
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc38",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc39",
+      "wait_before_start_ns": 674708
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc39",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc40",
+      "wait_before_start_ns": 118375
+    },
+    {
+      "basis": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+      "from": "run-02:m8.4.1-run-02-37191169:rpc40",
+      "kind": "ordered",
+      "leg": "fiber",
+      "to": "run-02:m8.4.1-run-02-37191169:rpc41",
+      "wait_before_start_ns": 80875
+    }
+  ],
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791022752549,
+  "generated_at_used_for_durations": false,
+  "git_revision": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+  "instrumentation_issues_no_requests": true,
+  "leg_vocabulary": {
+    "phases_seen": [
+      "execute: step 1 (nonce 0) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+      "execute: step 3 (nonce 2) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "execute: step 6 (nonce 5) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "execute: step 7 (nonce 6) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x5bef6275607901dCd58160356660151BE0637440: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "views: getReserves()",
+      "views: token0()",
+      "views: token1()"
+    ],
+    "proofs": [
+      {
+        "leg": "fiber",
+        "proof": "asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler"
+      },
+      {
+        "leg": "materialised_audit",
+        "proof": "asked by the §36 state-change audit: state_changes() materialises and sorts slot_reads(touched) — every (address, slot) pair — before the leg's first await (crates/simulation/src/engine.rs), and then asks every key in that list whether or not an earlier answer changes anything, so no read in this leg takes an address, a slot or its own existence from another read's return value"
+      },
+      {
+        "leg": "unstamped",
+        "proof": "no caller was stamped when this call went out, so the site that issued it is not known to this analysis. §5 forbids inferring one from the slot number or from the order the calls happen to appear in"
+      },
+      {
+        "leg": "ambiguous_label",
+        "proof": "this record carries a context_note: the sink had another call outstanding, or was relabelled while this call was in flight, so the stage and caller written on it are not established to be this call's (§4's stamp rule). The measurement fields below still come from this call's own stamps"
+      },
+      {
+        "leg": "unattributed_site",
+        "proof": "the caller names a site this file has no dependency proof for. Either a later edit renamed a phase or a test stamped one by hand; the name is published in `leg_vocabulary` so the disagreement is visible instead of being read as a proven relation"
+      }
+    ],
+    "reads_per_leg": [
+      {
+        "leg": "fiber",
+        "reads": 21
+      }
+    ],
+    "source": "the `caller` string the issuing site stamped (M8.4.1 §4/§9), matched against evm_simulation::engine's own phase constants — INTERPRETER_PHASE_PREFIXES and SLOT_AUDIT_PHASE — so a rename is one edit and one failing test rather than a table that silently degrades"
+  },
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "nodes": [
+    {
+      "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "views: token0()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "unknown",
+      "depends_on": [],
+      "duration_ns": 297084,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: token0()`",
+        "0 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference"
+      ],
+      "finished_ns": 8712209,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc16"
+      ],
+      "index": 0,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#12",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc12",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 12,
+      "run": "run-02",
+      "same_leg_reads_before": 0,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000004",
+      "stage": "simulation",
+      "started_ns": 8415125,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "not_determined"
+    },
+    {
+      "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "views: token1()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc12"
+      ],
+      "duration_ns": 280958,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: token1()`",
+        "1 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "1 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12"
+      ],
+      "finished_ns": 10389917,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc19"
+      ],
+      "index": 1,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#16",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc16",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 16,
+      "run": "run-02",
+      "same_leg_reads_before": 1,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000005",
+      "stage": "simulation",
+      "started_ns": 10108959,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5bef6275607901dcd58160356660151be0637440",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "views: token0()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc16"
+      ],
+      "duration_ns": 280875,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: token0()`",
+        "2 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "7 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "2 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16"
+      ],
+      "finished_ns": 11861584,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc20"
+      ],
+      "index": 2,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#19",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc19",
+      "non_storage_reads_in_same_leg_before": 7,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 19,
+      "run": "run-02",
+      "same_leg_reads_before": 2,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000004",
+      "stage": "simulation",
+      "started_ns": 11580709,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5bef6275607901dcd58160356660151be0637440",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "views: token1()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc19"
+      ],
+      "duration_ns": 258958,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: token1()`",
+        "3 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "3 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19"
+      ],
+      "finished_ns": 12200250,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc21"
+      ],
+      "index": 3,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#20",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc20",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 20,
+      "run": "run-02",
+      "same_leg_reads_before": 3,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000005",
+      "stage": "simulation",
+      "started_ns": 11941292,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "views: getReserves()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc20"
+      ],
+      "duration_ns": 272917,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: getReserves()`",
+        "4 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "4 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20"
+      ],
+      "finished_ns": 12548792,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc22"
+      ],
+      "index": 4,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#21",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc21",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 21,
+      "run": "run-02",
+      "same_leg_reads_before": 4,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000006",
+      "stage": "simulation",
+      "started_ns": 12275875,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5bef6275607901dcd58160356660151be0637440",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "views: getReserves()",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc21"
+      ],
+      "duration_ns": 260459,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `views: getReserves()`",
+        "5 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "5 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21"
+      ],
+      "finished_ns": 12891084,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc25"
+      ],
+      "index": 5,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#22",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc22",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 22,
+      "run": "run-02",
+      "same_leg_reads_before": 5,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000006",
+      "stage": "simulation",
+      "started_ns": 12630625,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 1 (nonce 0) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc22"
+      ],
+      "duration_ns": 337417,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 1 (nonce 0) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231`",
+        "6 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "6 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22"
+      ],
+      "finished_ns": 14702042,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc26"
+      ],
+      "index": 6,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#25",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc25",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 25,
+      "run": "run-02",
+      "same_leg_reads_before": 6,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x3dcd1bbf51bed62485dd5002bd66a381fb249f19e61826241c1acbd70116c6b6",
+      "stage": "simulation",
+      "started_ns": 14364625,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 3 (nonce 2) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc25"
+      ],
+      "duration_ns": 332833,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 3 (nonce 2) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb`",
+        "7 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "7 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25"
+      ],
+      "finished_ns": 15514625,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc27"
+      ],
+      "index": 7,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#26",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc26",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 26,
+      "run": "run-02",
+      "same_leg_reads_before": 7,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0xdb414acbea58d444a45b0ad3a47bab9ccb87f8977e77cb30c01674da6e200680",
+      "stage": "simulation",
+      "started_ns": 15181792,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 3 (nonce 2) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc26"
+      ],
+      "duration_ns": 255334,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 3 (nonce 2) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb`",
+        "8 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "8 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26"
+      ],
+      "finished_ns": 15844334,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc28"
+      ],
+      "index": 8,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#27",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc27",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 27,
+      "run": "run-02",
+      "same_leg_reads_before": 8,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0xf5ea15fe968ef8a3ad04d31f6aa663506a2de5526827ce086979683d3bfb0e6a",
+      "stage": "simulation",
+      "started_ns": 15589000,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc27"
+      ],
+      "duration_ns": 350917,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "9 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "9 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27"
+      ],
+      "finished_ns": 16820292,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc31"
+      ],
+      "index": 9,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#28",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc28",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 28,
+      "run": "run-02",
+      "same_leg_reads_before": 9,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000007",
+      "stage": "simulation",
+      "started_ns": 16469375,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc28"
+      ],
+      "duration_ns": 269625,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "10 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "10 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28"
+      ],
+      "finished_ns": 18277917,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc32"
+      ],
+      "index": 10,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#31",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc31",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 31,
+      "run": "run-02",
+      "same_leg_reads_before": 10,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000006",
+      "stage": "simulation",
+      "started_ns": 18008292,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc31"
+      ],
+      "duration_ns": 248708,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "11 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "11 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31"
+      ],
+      "finished_ns": 18585125,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc33"
+      ],
+      "index": 11,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#32",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc32",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 32,
+      "run": "run-02",
+      "same_leg_reads_before": 11,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0xf57e767672a45531668024be26f403407712ec9fb218db3112826b8bad95c3c4",
+      "stage": "simulation",
+      "started_ns": 18336417,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc32"
+      ],
+      "duration_ns": 626250,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "12 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "12 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31, run-02:m8.4.1-run-02-37191169:rpc32"
+      ],
+      "finished_ns": 19269250,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc34"
+      ],
+      "index": 12,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#33",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc33",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 33,
+      "run": "run-02",
+      "same_leg_reads_before": 12,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x96c6ece38e917e56b07b762375dea8e7ea86038fa9e5bd46a2396a3931880d47",
+      "stage": "simulation",
+      "started_ns": 18643000,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc33"
+      ],
+      "duration_ns": 913209,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "13 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "13 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31, run-02:m8.4.1-run-02-37191169:rpc32, run-02:m8.4.1-run-02-37191169:rpc33"
+      ],
+      "finished_ns": 20375084,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc35"
+      ],
+      "index": 13,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#34",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc34",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 34,
+      "run": "run-02",
+      "same_leg_reads_before": 13,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x13dc2030bb1d0c64c53cc9eb7a04f48508c8f5bbd8110dbc22da0af80bc6c37a",
+      "stage": "simulation",
+      "started_ns": 19461875,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc34"
+      ],
+      "duration_ns": 457708,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "14 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "14 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31, run-02:m8.4.1-run-02-37191169:rpc32, run-02:m8.4.1-run-02-37191169:rpc33, run-02:m8.4.1-run-02-37191169:rpc34"
+      ],
+      "finished_ns": 21010292,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc36"
+      ],
+      "index": 14,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#35",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc35",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 35,
+      "run": "run-02",
+      "same_leg_reads_before": 14,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0xacd433052f431aa65a72e6dfbb1d6d72510bedf716a0dcea60222f4089318417",
+      "stage": "simulation",
+      "started_ns": 20552584,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc35"
+      ],
+      "duration_ns": 482250,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "15 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "2 non-storage state read(s) carrying this same caller name were issued before this call — §5's implicit dependency (an account or bytecode the interpreter needed mid-leg) stated as a count, not as an inference",
+        "15 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31, run-02:m8.4.1-run-02-37191169:rpc32, run-02:m8.4.1-run-02-37191169:rpc33, run-02:m8.4.1-run-02-37191169:rpc34, run-02:m8.4.1-run-02-37191169:rpc35"
+      ],
+      "finished_ns": 21581375,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc37"
+      ],
+      "index": 15,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#36",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc36",
+      "non_storage_reads_in_same_leg_before": 2,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 36,
+      "run": "run-02",
+      "same_leg_reads_before": 15,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000002",
+      "stage": "simulation",
+      "started_ns": 21099125,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 6 (nonce 5) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc36"
+      ],
+      "duration_ns": 341417,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 6 (nonce 5) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62: transfer(address,uint256), value 0, selector 0xa9059cbb`",
+        "16 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "16 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31, run-02:m8.4.1-run-02-37191169:rpc32, run-02:m8.4.1-run-02-37191169:rpc33, run-02:m8.4.1-run-02-37191169:rpc34, run-02:m8.4.1-run-02-37191169:rpc35, run-02:m8.4.1-run-02-37191169:rpc36"
+      ],
+      "finished_ns": 22435917,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc38"
+      ],
+      "index": 16,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#37",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc37",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 37,
+      "run": "run-02",
+      "same_leg_reads_before": 16,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0xea6593d2d29302c1093c2d25789fb7a12573fb251a567ae45853d96e4530386a",
+      "stage": "simulation",
+      "started_ns": 22094500,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 6 (nonce 5) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62: transfer(address,uint256), value 0, selector 0xa9059cbb",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc37"
+      ],
+      "duration_ns": 336708,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 6 (nonce 5) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62: transfer(address,uint256), value 0, selector 0xa9059cbb`",
+        "17 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "17 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31, run-02:m8.4.1-run-02-37191169:rpc32, run-02:m8.4.1-run-02-37191169:rpc33, run-02:m8.4.1-run-02-37191169:rpc34, run-02:m8.4.1-run-02-37191169:rpc35, run-02:m8.4.1-run-02-37191169:rpc36, run-02:m8.4.1-run-02-37191169:rpc37"
+      ],
+      "finished_ns": 22887917,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc39"
+      ],
+      "index": 17,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#38",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc38",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 38,
+      "run": "run-02",
+      "same_leg_reads_before": 17,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x4d439b391baff2670c911dfd87d7df0b39f60be876f063e90dbcf74b91bb9a49",
+      "stage": "simulation",
+      "started_ns": 22551209,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x5bef6275607901dcd58160356660151be0637440",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 7 (nonce 6) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x5bef6275607901dCd58160356660151BE0637440: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc38"
+      ],
+      "duration_ns": 397500,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 7 (nonce 6) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x5bef6275607901dCd58160356660151BE0637440: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "18 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "18 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31, run-02:m8.4.1-run-02-37191169:rpc32, run-02:m8.4.1-run-02-37191169:rpc33, run-02:m8.4.1-run-02-37191169:rpc34, run-02:m8.4.1-run-02-37191169:rpc35, run-02:m8.4.1-run-02-37191169:rpc36, run-02:m8.4.1-run-02-37191169:rpc37, run-02:m8.4.1-run-02-37191169:rpc38"
+      ],
+      "finished_ns": 23960125,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc40"
+      ],
+      "index": 18,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#39",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc39",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 39,
+      "run": "run-02",
+      "same_leg_reads_before": 18,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0x0000000000000000000000000000000000000000000000000000000000000007",
+      "stage": "simulation",
+      "started_ns": 23562625,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 7 (nonce 6) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x5bef6275607901dCd58160356660151BE0637440: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc39"
+      ],
+      "duration_ns": 396209,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 7 (nonce 6) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x5bef6275607901dCd58160356660151BE0637440: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "19 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "19 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31, run-02:m8.4.1-run-02-37191169:rpc32, run-02:m8.4.1-run-02-37191169:rpc33, run-02:m8.4.1-run-02-37191169:rpc34, run-02:m8.4.1-run-02-37191169:rpc35, run-02:m8.4.1-run-02-37191169:rpc36, run-02:m8.4.1-run-02-37191169:rpc37, run-02:m8.4.1-run-02-37191169:rpc38, run-02:m8.4.1-run-02-37191169:rpc39"
+      ],
+      "finished_ns": 24474709,
+      "followed_by": [
+        "run-02:m8.4.1-run-02-37191169:rpc41"
+      ],
+      "index": 19,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#40",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc40",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 40,
+      "run": "run-02",
+      "same_leg_reads_before": 19,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0xfee57dac7002bde641e2526e8c893902691fefd0bc03347f33a670de7ef6aaf2",
+      "stage": "simulation",
+      "started_ns": 24078500,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "attempts": 1,
+      "block_number": 37191169,
+      "block_tag": "37191169",
+      "caller": "execute: step 7 (nonce 6) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x5bef6275607901dCd58160356660151BE0637440: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+      "calls_outstanding_at_start": 0,
+      "chain_id": 91342,
+      "context_note": null,
+      "dependency": "ordered",
+      "depends_on": [
+        "run-02:m8.4.1-run-02-37191169:rpc40"
+      ],
+      "duration_ns": 352916,
+      "evidence": [
+        "leg `fiber`: asked by the REVM interpreter: AsyncDb's Database impl passes one future to block_on_runtime_result, and block_on_current polls that single pinned future and suspends the fiber while it is pending (revm-database-interface-43.0.1/src/async_db.rs), so the leg holds exactly one outstanding state request and its next word is the interpreter's next instruction — which account initialization, a nested call frame or a lazily loaded account can change. This is also why storage was never a batch member in M8.3.3's scheduler",
+        "caller stamped by the issuing code: `execute: step 7 (nonce 6) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x5bef6275607901dCd58160356660151BE0637440: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f`",
+        "20 storage read(s) of this leg were recorded before this one, in this simulation's own order; 0 read(s) belong to other legs and are counted as undecidable pairs (§5: the sequence of two engine statements is not a proof about values)",
+        "20 read(s) of this leg this one cannot precede: run-02:m8.4.1-run-02-37191169:rpc12, run-02:m8.4.1-run-02-37191169:rpc16, run-02:m8.4.1-run-02-37191169:rpc19, run-02:m8.4.1-run-02-37191169:rpc20, run-02:m8.4.1-run-02-37191169:rpc21, run-02:m8.4.1-run-02-37191169:rpc22, run-02:m8.4.1-run-02-37191169:rpc25, run-02:m8.4.1-run-02-37191169:rpc26, run-02:m8.4.1-run-02-37191169:rpc27, run-02:m8.4.1-run-02-37191169:rpc28, run-02:m8.4.1-run-02-37191169:rpc31, run-02:m8.4.1-run-02-37191169:rpc32, run-02:m8.4.1-run-02-37191169:rpc33, run-02:m8.4.1-run-02-37191169:rpc34, run-02:m8.4.1-run-02-37191169:rpc35, run-02:m8.4.1-run-02-37191169:rpc36, run-02:m8.4.1-run-02-37191169:rpc37, run-02:m8.4.1-run-02-37191169:rpc38, run-02:m8.4.1-run-02-37191169:rpc39, run-02:m8.4.1-run-02-37191169:rpc40"
+      ],
+      "finished_ns": 24908500,
+      "followed_by": [],
+      "index": 20,
+      "leg": "fiber",
+      "logical_request_id": "m8.4.1-run-02-37191169#41",
+      "method": "eth_getStorageAt",
+      "node_id": "run-02:m8.4.1-run-02-37191169:rpc41",
+      "non_storage_reads_in_same_leg_before": 0,
+      "other_leg_reads_before": 0,
+      "retries": 0,
+      "rpc_id": 41,
+      "run": "run-02",
+      "same_leg_reads_before": 20,
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "slot": "0xd206c404274c956cf372814bbaa04c01dc54453cb1a37e119c9bcf5624798a4a",
+      "stage": "simulation",
+      "started_ns": 24555584,
+      "undecidable_pairs_before": 0,
+      "uses_prior_response": "possible_not_determined"
+    }
+  ],
+  "pair_states": [
+    "ordered",
+    "independent",
+    "undecidable",
+    "contradiction"
+  ],
+  "pair_summary": [
+    {
+      "pairs": 210,
+      "relation": "ordered"
+    },
+    {
+      "pairs": 0,
+      "relation": "independent"
+    },
+    {
+      "pairs": 0,
+      "relation": "undecidable"
+    },
+    {
+      "pairs": 0,
+      "relation": "contradiction"
+    }
+  ],
+  "per_simulation": [
+    {
+      "all_calls_in_the_simulation": 41,
+      "block_number": 37191169,
+      "chain_id": 91342,
+      "dependency_counts": {
+        "independent": 0,
+        "ordered": 20,
+        "unknown": 1
+      },
+      "endpoint_id": "rpc-8bb31a7a5b129b37",
+      "legs": [
+        {
+          "callers": [
+            "execute: step 1 (nonce 0) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+            "execute: step 3 (nonce 2) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+            "execute: step 4 (nonce 3) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "execute: step 6 (nonce 5) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62: transfer(address,uint256), value 0, selector 0xa9059cbb",
+            "execute: step 7 (nonce 6) from 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f to 0x5bef6275607901dCd58160356660151BE0637440: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "views: getReserves()",
+            "views: token0()",
+            "views: token1()"
+          ],
+          "class": "one at a time by the interpreter, so this leg is the serial part of the answer to §0's first question",
+          "first_node": "run-02:m8.4.1-run-02-37191169:rpc12",
+          "last_node": "run-02:m8.4.1-run-02-37191169:rpc41",
+          "leg": "fiber",
+          "pairs_within": 210,
+          "reads": 21
+        }
+      ],
+      "run": "run-02",
+      "simulation_id": "m8.4.1-run-02-37191169",
+      "source": "fixture",
+      "storage_reads": 21
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "§3–§6: for every eth_getStorageAt a simulation made — who issued it, at which address, slot and height, what it waited for, what waited on it, and on what proof that ordering is the right word",
+  "reading_rules": [
+    "§5: two different slots are not two independent reads. Every word in this file is a statement about the code that issued the read, and `slot` is carried here as an identifying field and never as a reason",
+    "§20: no row of this file says the provider is the bottleneck, that these reads could be batched, or that running them together would be faster. §1 forbids the change, and an `independent` word here is a statement about parameters, not a licence to reorder",
+    "§18 and §3: `ordered` means the later read could not have been issued before the earlier answered. It does not mean the earlier read's *value* was used — that is `uses_prior_response`, and for an interpreter leg it is not determined here",
+    "pairs are counted within one simulation only. Two simulations of one run are two sinks, two windows and two answers"
+  ],
+  "sources_are_never_blended": true,
+  "summary": {
+    "independent": 0,
+    "ordered": 20,
+    "total": 21,
+    "unknown": 1
+  },
+  "unit": "ns"
+}

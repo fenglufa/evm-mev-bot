@@ -1,0 +1,232 @@
+{
+  "arm": "baseline",
+  "block_number": 37191169,
+  "calls": [
+    "eth_chainId",
+    "eth_getBlockByNumber",
+    "eth_getCode",
+    "eth_getCode",
+    "eth_getCode",
+    "eth_getCode",
+    "eth_getCode",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getStorageAt",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getCode",
+    "eth_getStorageAt",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt",
+    "eth_getStorageAt"
+  ],
+  "chain_id": 91342,
+  "commit": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+  "execution_mode": "build-only",
+  "fields": {
+    "block_chain": "91342:37191169",
+    "block_hash": "0x56c628d7102131d35d5bdf6a0ed2c6ec3d4d00edc4419a20641c7b396c48d670",
+    "block_number": 37191169,
+    "chain_id": 91342,
+    "compared": "OutputComparison { analytical: 744486240802, simulated: Some(1) }",
+    "fingerprint": "0xd54891737d934871622ce879b55c67a90bba5b343a7954821b20d138ad9dbf67",
+    "gas_charge": "Priced { gas_used: 423502, effective_gas_price: 300, base_fee_per_gas: Some(300), wei: 127050600, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37191169's own base fee as the header reports it, with no tip: §44 takes the bidding question off the table, and a hypothetical transaction on a historical block is not competing to be included in it\" } }",
+    "gas_used": 423502,
+    "gross_loss": "714844720991",
+    "gross_profit": null,
+    "log_count": 12,
+    "logs": [
+      [],
+      [],
+      [
+        "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x000000000000000000000000000000000000000000000000000000a67010cf60 }"
+      ],
+      [
+        "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578], data: 0x000000000000000000000000000000000000000000000000000000a67010cf60 }"
+      ],
+      [
+        "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x0000000000000000000000000000000000000000000000000c3b18a8ad697711 }",
+        "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578, 0x0000000000000000000000000000000000000000000000000000000000000000], data: 0x0000000000000000000000000000000000000000000000000060d6892cf36d3f }",
+        "ExecutedLog { address: 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, topics: [0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1], data: 0x00000000000000000000000000000000000000000000000000002092c526e2b00000000000000000000000000000000000000000000000026cfd1f45e2d80263 }",
+        "ExecutedLog { address: 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, topics: [0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x000000000000000000000000000000000000000000000000000000a67010cf60000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c9bef31da5ce450 }"
+      ],
+      [],
+      [
+        "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x0000000000000000000000005bef6275607901dcd58160356660151be0637440], data: 0x0000000000000000000000000000000000000000000000000b9e8aa03e576451 }",
+        "ExecutedLog { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x0000000000000000000000000000000000000000000000000000000000000000], data: 0x000000000000000000000000000000000000000000000000009c8e086f1212c0 }"
+      ],
+      [
+        "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef, 0x0000000000000000000000005bef6275607901dcd58160356660151be0637440, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x0000000000000000000000000000000000000000000000000000000000000001 }",
+        "ExecutedLog { address: 0x5bef6275607901dcd58160356660151be0637440, topics: [0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1], data: 0x00000000000000000000000000000000000000000000000000002153378e5e5e00000000000000000000000000000000000000000000000269c493c2747a798f }",
+        "ExecutedLog { address: 0x5bef6275607901dcd58160356660151be0637440, topics: [0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b9e8aa03e57645100000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000 }"
+      ],
+      [],
+      [
+        "ExecutedLog { address: 0x4200000000000000000000000000000000000006, topics: [0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65, 0x000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f], data: 0x0000000000000000000000000000000000000000000000000000000000000001 }"
+      ],
+      [],
+      []
+    ],
+    "measurements": [
+      "sender_input_start=0",
+      "sender_mid_received=881325264824006417",
+      "sender_input_end=1",
+      "sender_input_after_unwrap=0",
+      "sender_native_start=822844720992",
+      "sender_native_end=107872949401"
+    ],
+    "net_profit": "Shortfall { before_gas: 714844720991, gas_cost: 127050600, amount: 714971771591, denomination: Denomination { token: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, converted: 1, native_start: 822844720992, native_end: 107872949401, native_spent: 714844720992, gas_paid: 127050600, proved_by: \"withdraw(1) executed on 0x4200000000000000000000000000000000000006 at step 9 of a 12-step plan, between the native balance reads that open and close it; the sequence was funded by an executed deposit() of the input amount\" } }",
+    "outcome": "Executed { output: 1, movement: Decreased { by: 714844720991 } }",
+    "plan": "PlanSummary { steps: [\"native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f, recorded as sender_native_start\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0x4200000000000000000000000000000000000006, recorded as sender_input_start\", \"deposit 714844720992 native into 0x4200000000000000000000000000000000000006, msg.value = 714844720992\", \"transfer 714844720992 of 0x4200000000000000000000000000000000000006 to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578\", \"ask 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578 to pay out 908582747241243728 of 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62 to 0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62, recorded as sender_mid_received\", \"transfer the measured mid delivery of 0xcFfE7472A7a1A6947f56233854Ae91a54C862F62 to 0x5bef6275607901dCd58160356660151BE0637440\", \"ask 0x5bef6275607901dCd58160356660151BE0637440 to pay out 1 of 0x4200000000000000000000000000000000000006 to 0x5bef6275607901dCd58160356660151BE0637440\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0x4200000000000000000000000000000000000006, recorded as sender_input_end\", \"withdraw the measured final balance from 0x4200000000000000000000000000000000000006 into native\", \"balanceOf(0x953E7e98562714C23BC22c7D186cdF516F9dfa6f) on 0x4200000000000000000000000000000000000006, recorded as sender_input_after_unwrap\", \"native balance of 0x953E7e98562714C23BC22c7D186cdF516F9dfa6f, recorded as sender_native_end\"], evm_rules: \"prague\", pools: [0xf487d533cae6cddd0c7e7bbbac084dd04d876578, 0x5bef6275607901dcd58160356660151be0637440], input_token: 0x4200000000000000000000000000000000000006, input_amount: 714844720992, analytical_mid_amount: 908582747241243728, analytical_output: 744486240802, priced_by: \"evm-opportunity::detect_opportunities on block 37191169, search BoundedTernary\" }",
+    "return_data": "not recorded by this build: a step keeps the decoded value it matched as `measurements` and its logs as `logs`; the bytes behind them are compared by `whole_result`",
+    "revert": "None",
+    "reverted": false,
+    "route": {
+      "executed_steps": [
+        {
+          "calldata": "",
+          "index": 0,
+          "selector": "",
+          "status": "Success",
+          "to": "0x0000000000000000000000000000000000000000",
+          "value": "0"
+        },
+        {
+          "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "index": 1,
+          "selector": "0x70a08231",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "d0e30db0",
+          "index": 2,
+          "selector": "0xd0e30db0",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "714844720992"
+        },
+        {
+          "calldata": "a9059cbb000000000000000000000000f487d533cae6cddd0c7e7bbbac084dd04d876578000000000000000000000000000000000000000000000000000000a67010cf60",
+          "index": 3,
+          "selector": "0xa9059cbb",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "022c0d9f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c9bef31da5ce450000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000",
+          "index": 4,
+          "selector": "0x022c0d9f",
+          "status": "Success",
+          "to": "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578",
+          "value": "0"
+        },
+        {
+          "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "index": 5,
+          "selector": "0x70a08231",
+          "status": "Success",
+          "to": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62",
+          "value": "0"
+        },
+        {
+          "calldata": "a9059cbb0000000000000000000000005bef6275607901dcd58160356660151be06374400000000000000000000000000000000000000000000000000c3b18a8ad697711",
+          "index": 6,
+          "selector": "0xa9059cbb",
+          "status": "Success",
+          "to": "0xcFfE7472A7a1A6947f56233854Ae91a54C862F62",
+          "value": "0"
+        },
+        {
+          "calldata": "022c0d9f00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000",
+          "index": 7,
+          "selector": "0x022c0d9f",
+          "status": "Success",
+          "to": "0x5bef6275607901dCd58160356660151BE0637440",
+          "value": "0"
+        },
+        {
+          "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "index": 8,
+          "selector": "0x70a08231",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "2e1a7d4d0000000000000000000000000000000000000000000000000000000000000001",
+          "index": 9,
+          "selector": "0x2e1a7d4d",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "70a08231000000000000000000000000953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "index": 10,
+          "selector": "0x70a08231",
+          "status": "Success",
+          "to": "0x4200000000000000000000000000000000000006",
+          "value": "0"
+        },
+        {
+          "calldata": "",
+          "index": 11,
+          "selector": "",
+          "status": "Success",
+          "to": "0x0000000000000000000000000000000000000000",
+          "value": "0"
+        }
+      ],
+      "requested_pools": [
+        "0xf487D533Cae6cddd0C7E7BBbAc084DD04d876578",
+        "0x5bef6275607901dCd58160356660151BE0637440"
+      ]
+    },
+    "state_changes": "StateChanges { accounts: [AccountChange { address: 0x4200000000000000000000000000000000000006, balance_before: 2084778439103401326576, balance_after: 2084778439818246047567, nonce_before: 0, nonce_after: 0 }, AccountChange { address: 0x953e7e98562714c23bc22c7d186cdf516f9dfa6f, balance_before: 822844720992, balance_after: 107872949401, nonce_before: 0, nonce_after: 10 }], slots: [SlotChange { address: 0x4200000000000000000000000000000000000006, slot: 111230241916413801852802404525255989888638871658492296319230567282535617465962, before: 35099900253008, after: 35814744974000 }, SlotChange { address: 0x4200000000000000000000000000000000000006, slot: 115292938885184192804478688147898716132836732221383717148840385900270088268530, before: 36641298079327, after: 36641298079326 }, SlotChange { address: 0x5bef6275607901dcd58160356660151be0637440, slot: 6, before: 48272762749198038113316466793058296272251452815442286869463868227151786303071, after: 48272762749198038113316471140355579970661823374128770258072965416838990028382 }, SlotChange { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, slot: 2, before: 999999686714884239468723, after: 999999615391138581031092 }, SlotChange { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, slot: 8982872646999191618737118203114263780923041410745226281479866996961910899578, before: 45655538604883371699, after: 44746955857642127971 }, SlotChange { address: 0xcffe7472a7a1a6947f56233854ae91a54c862f62, slot: 34947539404568188445091736781444510114788718204011688031312298989286181280329, before: 43677608078641141054, after: 44514867080223947151 }, SlotChange { address: 0xf487d533cae6cddd0c7e7bbbac084dd04d876578, slot: 6, before: 48272762749198038113316477063060754079924070508464549787600047273222589518672, after: 48272762749198038113316472345429409860270937571100186767292759838854142681776 }] }"
+  },
+  "instrumented": false,
+  "metrics": {
+    "calls_on_the_wire": 41,
+    "calls_recorded": 0,
+    "configured_concurrency": 1,
+    "header_reads": 1,
+    "observed_max_concurrency": 1,
+    "rpc_sum_duration_ns": 0,
+    "run_wall_ns": 27355125,
+    "state_read_reuse": true,
+    "state_reads": 39,
+    "storage_reads": 21
+  },
+  "milestone": "M8.4.1 §16",
+  "note": "no sink was attached to this arm's adapter, so it recorded nothing and wrote no directory; `calls` is what the endpoint saw",
+  "schema": "m8.4.1-correctness/v1",
+  "state_read_concurrency": 1,
+  "state_read_reuse": true
+}

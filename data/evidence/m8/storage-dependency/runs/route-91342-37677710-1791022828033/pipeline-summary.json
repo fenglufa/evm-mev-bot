@@ -1,0 +1,4903 @@
+{
+  "assembled_from": [
+    {
+      "block_number": 37677710,
+      "calls": 82,
+      "chain_id": 91342,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791022828035,
+      "git_revision": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+      "run": "route-91342-37677710-1791022828033",
+      "source": "live",
+      "stage_spans": [
+        {
+          "ended_ns": 1145301708,
+          "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+          "outcome": "completed",
+          "stage": "observation",
+          "started_ns": 644306375,
+          "usable_for_classification": true
+        },
+        {
+          "ended_ns": null,
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "state_update",
+          "started_ns": null,
+          "usable_for_classification": false
+        },
+        {
+          "ended_ns": null,
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "graph_update",
+          "started_ns": null,
+          "usable_for_classification": false
+        },
+        {
+          "ended_ns": 3574478917,
+          "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+          "outcome": "completed",
+          "stage": "opportunity_detection",
+          "started_ns": 1145301708,
+          "usable_for_classification": true
+        },
+        {
+          "ended_ns": 14504131708,
+          "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+          "outcome": "completed",
+          "stage": "simulation",
+          "started_ns": 3575091042,
+          "usable_for_classification": true
+        },
+        {
+          "ended_ns": 14505848250,
+          "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+          "outcome": "completed",
+          "stage": "risk",
+          "started_ns": 14505836583,
+          "usable_for_classification": true
+        },
+        {
+          "ended_ns": 20741641417,
+          "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+          "outcome": "completed",
+          "stage": "preflight",
+          "started_ns": 14512810667,
+          "usable_for_classification": true
+        },
+        {
+          "ended_ns": null,
+          "note": "this span's duration was read off millisecond stamps the run took for its own reasons, so it is not claimed to hold a nanosecond-stamped call",
+          "outcome": "completed",
+          "stage": "build",
+          "started_ns": null,
+          "usable_for_classification": false
+        },
+        {
+          "ended_ns": null,
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "sign",
+          "started_ns": null,
+          "usable_for_classification": false
+        },
+        {
+          "ended_ns": null,
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "submit",
+          "started_ns": null,
+          "usable_for_classification": false
+        },
+        {
+          "ended_ns": null,
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "inclusion",
+          "started_ns": null,
+          "usable_for_classification": false
+        },
+        {
+          "ended_ns": null,
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "receipt",
+          "started_ns": null,
+          "usable_for_classification": false
+        },
+        {
+          "ended_ns": null,
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "settlement",
+          "started_ns": null,
+          "usable_for_classification": false
+        },
+        {
+          "ended_ns": null,
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "profit_verification",
+          "started_ns": null,
+          "usable_for_classification": false
+        }
+      ]
+    }
+  ],
+  "block_pin": {
+    "every_run_pinned": false,
+    "per_run": [
+      false
+    ],
+    "rule": "§13, checked per run and ANDed across them: a run that made no state read reports false here rather than an empty truth, because nothing was pinned"
+  },
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791022828035,
+  "generated_at_used_for_durations": false,
+  "git_revision": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "not_observed": [
+    {
+      "surface": "market event stream",
+      "why": "findings arrive as WebSocket notifications, not as JSON-RPC calls this build makes, so no sink of this run holds one. A run that consumed hundreds of events can and does show no rows for them, and that absence is this line, not a count of zero reads"
+    },
+    {
+      "surface": "the node's own queueing and the network between here and there",
+      "why": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration"
+    },
+    {
+      "surface": "a state answer that cost no request",
+      "why": "a read the reuse boundary held, or one a recorded dump answered, is absent from this timeline by construction — it issued nothing. It is tallied in `duplicate-reads.json` and in the cache stats, so `rpc_count` here is not a count of state reads made"
+    },
+    {
+      "surface": "a stage the run's mode never reached",
+      "why": "a build-only run skips `sign`, `submit`, `receipt` and the rest; the lifecycle records them as skipped and they appear in `stages_not_completed` below with that outcome, which is a statement about the mode rather than a measured zero-duration read"
+    }
+  ],
+  "per_run": [
+    {
+      "attribution_accounts": {
+        "compared": 71,
+        "contained": "the run's own lifecycle span that holds the call's `started_ns` (M8.3.2's account, re-read here from the published `stage_spans`)",
+        "disagreements": [
+          {
+            "held_by_stage_span": "preflight",
+            "held_span_outcome": "completed",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc9",
+            "stamped_stage": null,
+            "started_ns": 14512908917
+          }
+        ],
+        "inside_no_span": 11,
+        "rule": "a call the ladder holds in a stage other than the one stamped on it is reported as a pair and not resolved: either the stamp is wrong or the socket is wired to the wrong leg, and both are findings §11 would rather see than a table that agrees with itself",
+        "stamped": "the `stage` the issuing code set on the sink before it made the call (M8.4.1 §4/§9) — one per call, and the key the tables above group by"
+      },
+      "block_pin": {
+        "all_state_reads_pinned": false,
+        "block_number": 37677710,
+        "chain_id": 91342,
+        "heights_seen": [
+          "37677710",
+          "37677725",
+          "37677726",
+          "37677731"
+        ],
+        "off_pin_state_reads": [
+          {
+            "block_tag": "pending",
+            "caller": "pending and latest nonces",
+            "context_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc17",
+            "method": "eth_getTransactionCount",
+            "stage": "preflight"
+          },
+          {
+            "block_tag": "pending",
+            "caller": "step 1: pending and latest nonces",
+            "context_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc40",
+            "method": "eth_getTransactionCount",
+            "stage": "build"
+          }
+        ],
+        "reads_at_a_tag_outside_the_state_methods": [
+          {
+            "block_tag": "latest",
+            "caller": "head at latest",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc10",
+            "method": "eth_getBlockByNumber",
+            "stage": "preflight"
+          },
+          {
+            "block_tag": "latest",
+            "caller": "pending and latest nonces",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc15",
+            "method": "eth_getBlockByNumber",
+            "stage": "preflight"
+          },
+          {
+            "block_tag": "latest",
+            "caller": "step 1: pending and latest nonces",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc38",
+            "method": "eth_getBlockByNumber",
+            "stage": "build"
+          }
+        ],
+        "rule": "§13: no `latest`, `pending` or absent height on a state read. A height is the decimal number the run sent, and one set of them across every state read of a run is what `true` means here; zero state reads is not `true`, it is the `state_read_calls` count saying so",
+        "state_read_calls": 45,
+        "state_read_calls_at_a_tag_that_is_not_a_height": 2,
+        "state_read_calls_at_another_height": 4,
+        "state_read_calls_at_this_runs_block": 39,
+        "state_read_methods_checked": [
+          "eth_getBalance",
+          "eth_getCode",
+          "eth_getStorageAt",
+          "eth_getTransactionCount"
+        ]
+      },
+      "calls_by_sink": {
+        "lifecycle": 43,
+        "simulation": 39
+      },
+      "calls_recorded": 82,
+      "methods": [
+        {
+          "count": 1,
+          "distribution_ns": {
+            "max_ns": 238441417,
+            "measured": true,
+            "min_ns": 238441417,
+            "note": "a single sample: this row is one measurement, not a distribution",
+            "p50_ns": null,
+            "p50_reason": {
+              "minimum_samples": 2,
+              "reason": "insufficient_sample"
+            },
+            "p90_ns": null,
+            "p90_reason": {
+              "minimum_samples": 10,
+              "reason": "insufficient_sample"
+            },
+            "p95_ns": null,
+            "p95_reason": {
+              "minimum_samples": 20,
+              "reason": "insufficient_sample"
+            },
+            "p99_ns": null,
+            "p99_reason": {
+              "minimum_samples": 100,
+              "reason": "insufficient_sample"
+            },
+            "samples": 1,
+            "unit": "ns"
+          },
+          "failed_calls": 0,
+          "max_duration_ns": 238441417,
+          "median_duration_ns": null,
+          "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+          "method": "eth_blockNumber",
+          "min_duration_ns": 238441417,
+          "p95_duration_ns": null,
+          "p99_duration_ns": null,
+          "retried_calls": 0,
+          "rpc_sum_duration_ns": 238441417,
+          "sinks": [
+            "lifecycle"
+          ]
+        },
+        {
+          "count": 20,
+          "distribution_ns": {
+            "max_ns": 656627041,
+            "measured": true,
+            "min_ns": 226227000,
+            "p50_ns": 243975833,
+            "p90_ns": 401968708,
+            "p95_ns": 543811500,
+            "p99_ns": null,
+            "p99_reason": {
+              "minimum_samples": 100,
+              "reason": "insufficient_sample"
+            },
+            "samples": 20,
+            "unit": "ns"
+          },
+          "failed_calls": 0,
+          "max_duration_ns": 656627041,
+          "median_duration_ns": 243975833,
+          "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+          "method": "eth_call",
+          "min_duration_ns": 226227000,
+          "p95_duration_ns": 543811500,
+          "p99_duration_ns": null,
+          "retried_calls": 0,
+          "rpc_sum_duration_ns": 5809751083,
+          "sinks": [
+            "lifecycle"
+          ]
+        },
+        {
+          "count": 3,
+          "distribution_ns": {
+            "max_ns": 634768958,
+            "measured": true,
+            "min_ns": 244258291,
+            "p50_ns": 256729625,
+            "p90_ns": null,
+            "p90_reason": {
+              "minimum_samples": 10,
+              "reason": "insufficient_sample"
+            },
+            "p95_ns": null,
+            "p95_reason": {
+              "minimum_samples": 20,
+              "reason": "insufficient_sample"
+            },
+            "p99_ns": null,
+            "p99_reason": {
+              "minimum_samples": 100,
+              "reason": "insufficient_sample"
+            },
+            "samples": 3,
+            "unit": "ns"
+          },
+          "failed_calls": 0,
+          "max_duration_ns": 634768958,
+          "median_duration_ns": 256729625,
+          "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+          "method": "eth_chainId",
+          "min_duration_ns": 244258291,
+          "p95_duration_ns": null,
+          "p99_duration_ns": null,
+          "retried_calls": 0,
+          "rpc_sum_duration_ns": 1135756874,
+          "sinks": [
+            "lifecycle"
+          ]
+        },
+        {
+          "count": 9,
+          "distribution_ns": {
+            "max_ns": 250833167,
+            "measured": true,
+            "min_ns": 221354667,
+            "p50_ns": 243842667,
+            "p90_ns": null,
+            "p90_reason": {
+              "minimum_samples": 10,
+              "reason": "insufficient_sample"
+            },
+            "p95_ns": null,
+            "p95_reason": {
+              "minimum_samples": 20,
+              "reason": "insufficient_sample"
+            },
+            "p99_ns": null,
+            "p99_reason": {
+              "minimum_samples": 100,
+              "reason": "insufficient_sample"
+            },
+            "samples": 9,
+            "unit": "ns"
+          },
+          "failed_calls": 0,
+          "max_duration_ns": 250833167,
+          "median_duration_ns": 243842667,
+          "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+          "method": "eth_getBalance",
+          "min_duration_ns": 221354667,
+          "p95_duration_ns": null,
+          "p99_duration_ns": null,
+          "retried_calls": 0,
+          "rpc_sum_duration_ns": 2170550708,
+          "sinks": [
+            "lifecycle",
+            "simulation"
+          ]
+        },
+        {
+          "count": 10,
+          "distribution_ns": {
+            "max_ns": 456798500,
+            "measured": true,
+            "min_ns": 224991083,
+            "p50_ns": 246645125,
+            "p90_ns": 281820042,
+            "p95_ns": null,
+            "p95_reason": {
+              "minimum_samples": 20,
+              "reason": "insufficient_sample"
+            },
+            "p99_ns": null,
+            "p99_reason": {
+              "minimum_samples": 100,
+              "reason": "insufficient_sample"
+            },
+            "samples": 10,
+            "unit": "ns"
+          },
+          "failed_calls": 0,
+          "max_duration_ns": 456798500,
+          "median_duration_ns": 246645125,
+          "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+          "method": "eth_getBlockByNumber",
+          "min_duration_ns": 224991083,
+          "p95_duration_ns": null,
+          "p99_duration_ns": null,
+          "retried_calls": 0,
+          "rpc_sum_duration_ns": 2682943875,
+          "sinks": [
+            "lifecycle",
+            "simulation"
+          ]
+        },
+        {
+          "count": 6,
+          "distribution_ns": {
+            "max_ns": 886929625,
+            "measured": true,
+            "min_ns": 234672000,
+            "p50_ns": 256019083,
+            "p90_ns": null,
+            "p90_reason": {
+              "minimum_samples": 10,
+              "reason": "insufficient_sample"
+            },
+            "p95_ns": null,
+            "p95_reason": {
+              "minimum_samples": 20,
+              "reason": "insufficient_sample"
+            },
+            "p99_ns": null,
+            "p99_reason": {
+              "minimum_samples": 100,
+              "reason": "insufficient_sample"
+            },
+            "samples": 6,
+            "unit": "ns"
+          },
+          "failed_calls": 0,
+          "max_duration_ns": 886929625,
+          "median_duration_ns": 256019083,
+          "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+          "method": "eth_getCode",
+          "min_duration_ns": 234672000,
+          "p95_duration_ns": null,
+          "p99_duration_ns": null,
+          "retried_calls": 0,
+          "rpc_sum_duration_ns": 2316201041,
+          "sinks": [
+            "simulation"
+          ]
+        },
+        {
+          "count": 20,
+          "distribution_ns": {
+            "max_ns": 521218833,
+            "measured": true,
+            "min_ns": 224479250,
+            "p50_ns": 247656500,
+            "p90_ns": 257904583,
+            "p95_ns": 293231042,
+            "p99_ns": null,
+            "p99_reason": {
+              "minimum_samples": 100,
+              "reason": "insufficient_sample"
+            },
+            "samples": 20,
+            "unit": "ns"
+          },
+          "failed_calls": 0,
+          "max_duration_ns": 521218833,
+          "median_duration_ns": 247656500,
+          "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+          "method": "eth_getStorageAt",
+          "min_duration_ns": 224479250,
+          "p95_duration_ns": 293231042,
+          "p99_duration_ns": null,
+          "retried_calls": 0,
+          "rpc_sum_duration_ns": 5198345625,
+          "sinks": [
+            "simulation"
+          ]
+        },
+        {
+          "count": 10,
+          "distribution_ns": {
+            "max_ns": 268600958,
+            "measured": true,
+            "min_ns": 226743291,
+            "p50_ns": 240434292,
+            "p90_ns": 248839125,
+            "p95_ns": null,
+            "p95_reason": {
+              "minimum_samples": 20,
+              "reason": "insufficient_sample"
+            },
+            "p99_ns": null,
+            "p99_reason": {
+              "minimum_samples": 100,
+              "reason": "insufficient_sample"
+            },
+            "samples": 10,
+            "unit": "ns"
+          },
+          "failed_calls": 0,
+          "max_duration_ns": 268600958,
+          "median_duration_ns": 240434292,
+          "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+          "method": "eth_getTransactionCount",
+          "min_duration_ns": 226743291,
+          "p95_duration_ns": null,
+          "p99_duration_ns": null,
+          "retried_calls": 0,
+          "rpc_sum_duration_ns": 2419952040,
+          "sinks": [
+            "lifecycle",
+            "simulation"
+          ]
+        },
+        {
+          "count": 3,
+          "distribution_ns": {
+            "max_ns": 239166584,
+            "measured": true,
+            "min_ns": 230394459,
+            "p50_ns": 236874375,
+            "p90_ns": null,
+            "p90_reason": {
+              "minimum_samples": 10,
+              "reason": "insufficient_sample"
+            },
+            "p95_ns": null,
+            "p95_reason": {
+              "minimum_samples": 20,
+              "reason": "insufficient_sample"
+            },
+            "p99_ns": null,
+            "p99_reason": {
+              "minimum_samples": 100,
+              "reason": "insufficient_sample"
+            },
+            "samples": 3,
+            "unit": "ns"
+          },
+          "failed_calls": 0,
+          "max_duration_ns": 239166584,
+          "median_duration_ns": 236874375,
+          "median_is_p50": "§17's `median` is this row's `p50_ns`, nearest-rank",
+          "method": "eth_maxPriorityFeePerGas",
+          "min_duration_ns": 230394459,
+          "p95_duration_ns": null,
+          "p99_duration_ns": null,
+          "retried_calls": 0,
+          "rpc_sum_duration_ns": 706435418,
+          "sinks": [
+            "lifecycle"
+          ]
+        }
+      ],
+      "not_observed": [
+        {
+          "surface": "market event stream",
+          "why": "findings arrive as WebSocket notifications, not as JSON-RPC calls this build makes, so no sink of this run holds one. A run that consumed hundreds of events can and does show no rows for them, and that absence is this line, not a count of zero reads"
+        },
+        {
+          "surface": "the node's own queueing and the network between here and there",
+          "why": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration"
+        },
+        {
+          "surface": "a state answer that cost no request",
+          "why": "a read the reuse boundary held, or one a recorded dump answered, is absent from this timeline by construction — it issued nothing. It is tallied in `duplicate-reads.json` and in the cache stats, so `rpc_count` here is not a count of state reads made"
+        },
+        {
+          "surface": "a stage the run's mode never reached",
+          "why": "a build-only run skips `sign`, `submit`, `receipt` and the rest; the lifecycle records them as skipped and they appear in `stages_not_completed` below with that outcome, which is a statement about the mode rather than a measured zero-duration read"
+        }
+      ],
+      "pipeline_buckets": [
+        {
+          "bucket": "detection",
+          "code_stage_names": [
+            "opportunity_detection"
+          ],
+          "measured": {
+            "gap_count": 5,
+            "gap_distribution_ns": {
+              "max_ns": 219625,
+              "measured": true,
+              "min_ns": 54667,
+              "p50_ns": 65916,
+              "p90_ns": null,
+              "p90_reason": {
+                "minimum_samples": 10,
+                "reason": "insufficient_sample"
+              },
+              "p95_ns": null,
+              "p95_reason": {
+                "minimum_samples": 20,
+                "reason": "insufficient_sample"
+              },
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 5,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 219625,
+            "gap_median_duration_ns": 65916,
+            "gap_min_duration_ns": 54667,
+            "gap_total_duration_ns": 539750,
+            "max_concurrency": 1,
+            "rpc_count": 6,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 2426581791,
+            "rpc_sum_duration_ns": 2426581791,
+            "rpc_union_duration_ns": 2426581791
+          },
+          "rpc_count": 6,
+          "rpc_union_duration_ns": 2426581791,
+          "why": "§7's first rung after the block is detected: this build prices both venues and produces the candidate inside one stage, `opportunity_detection`, and every read of that leg is stamped with it"
+        },
+        {
+          "bucket": "state_update",
+          "code_stage_names": [
+            "state_update",
+            "graph_update"
+          ],
+          "measured": {
+            "gap_count": 0,
+            "gap_distribution_ns": {
+              "measured": false,
+              "note": "no run in this baseline produced this figure",
+              "samples": 0,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": null,
+            "gap_median_duration_ns": null,
+            "gap_min_duration_ns": null,
+            "gap_total_duration_ns": 0,
+            "max_concurrency": 0,
+            "rpc_count": 0,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 0,
+            "rpc_sum_duration_ns": 0,
+            "rpc_union_duration_ns": 0
+          },
+          "rpc_count": 0,
+          "rpc_union_duration_ns": 0,
+          "why": "§7's second and third rungs are two stage names here, `state_update` and `graph_update`, and both are folded into this one bucket because §19 asks for one"
+        },
+        {
+          "bucket": "opportunity",
+          "code_stage_names": [],
+          "measured": {
+            "gap_count": 0,
+            "gap_distribution_ns": {
+              "measured": false,
+              "note": "no run in this baseline produced this figure",
+              "samples": 0,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": null,
+            "gap_median_duration_ns": null,
+            "gap_min_duration_ns": null,
+            "gap_total_duration_ns": 0,
+            "max_concurrency": 0,
+            "rpc_count": 0,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 0,
+            "rpc_sum_duration_ns": 0,
+            "rpc_union_duration_ns": 0
+          },
+          "rpc_count": 0,
+          "rpc_union_duration_ns": 0,
+          "why": "EMPTY BY THE MAPPING, NOT BY MEASUREMENT: §8's list separates detection from opportunity and this build does not — the one stage `opportunity_detection` covers both, so its calls are filed under `detection` and are deliberately not counted a second time here"
+        },
+        {
+          "bucket": "preflight",
+          "code_stage_names": [
+            "preflight",
+            "risk"
+          ],
+          "measured": {
+            "gap_count": 22,
+            "gap_distribution_ns": {
+              "max_ns": 362875,
+              "measured": true,
+              "min_ns": 30125,
+              "p50_ns": 129917,
+              "p90_ns": 255541,
+              "p95_ns": 359500,
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 22,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 362875,
+            "gap_median_duration_ns": 129917,
+            "gap_min_duration_ns": 30125,
+            "gap_total_duration_ns": 2995959,
+            "max_concurrency": 1,
+            "rpc_count": 23,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 5590785333,
+            "rpc_sum_duration_ns": 5590785333,
+            "rpc_union_duration_ns": 5590785333
+          },
+          "rpc_count": 23,
+          "rpc_union_duration_ns": 5590785333,
+          "why": "§26's gate, whose reads the lane stamps `preflight` at the site that issues them, together with `risk`, the other stage between the simulation and the build"
+        },
+        {
+          "bucket": "simulation",
+          "code_stage_names": [
+            "simulation"
+          ],
+          "measured": {
+            "gap_count": 38,
+            "gap_distribution_ns": {
+              "max_ns": 3271542,
+              "measured": true,
+              "min_ns": 62084,
+              "p50_ns": 404250,
+              "p90_ns": 2126833,
+              "p95_ns": 2427042,
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 38,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 3271542,
+            "gap_median_duration_ns": 404250,
+            "gap_min_duration_ns": 62084,
+            "gap_total_duration_ns": 28587084,
+            "max_concurrency": 1,
+            "rpc_count": 39,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 10895379249,
+            "rpc_sum_duration_ns": 10895379249,
+            "rpc_union_duration_ns": 10895379249
+          },
+          "rpc_count": 39,
+          "rpc_union_duration_ns": 10895379249,
+          "why": "the run's 39-odd state reads: every call the state-acquisition sink holds, all of them at the pin, all of them named by an engine phase (§4's vocabulary)"
+        },
+        {
+          "bucket": "build",
+          "code_stage_names": [
+            "build"
+          ],
+          "measured": {
+            "gap_count": 10,
+            "gap_distribution_ns": {
+              "max_ns": 239583,
+              "measured": true,
+              "min_ns": 23334,
+              "p50_ns": 72375,
+              "p90_ns": 153875,
+              "p95_ns": null,
+              "p95_reason": {
+                "minimum_samples": 20,
+                "reason": "insufficient_sample"
+              },
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 10,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 239583,
+            "gap_median_duration_ns": 72375,
+            "gap_min_duration_ns": 23334,
+            "gap_total_duration_ns": 914168,
+            "max_concurrency": 1,
+            "rpc_count": 11,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 2630034791,
+            "rpc_sum_duration_ns": 2630034791,
+            "rpc_union_duration_ns": 2630034791
+          },
+          "rpc_count": 11,
+          "rpc_union_duration_ns": 2630034791,
+          "why": "§7's `Build` *and* its `Execution preparation`: the lane's fee, nonce, balance, endpoint-chain-id and block-binding reads are stamped `build` (`crates/execution/src/sequence.rs`), because the run's ladder gives those pre-submission reads no span of their own. They are measured here, in this row, and not in the empty one below"
+        },
+        {
+          "bucket": "execution_preparation",
+          "code_stage_names": [],
+          "measured": {
+            "gap_count": 0,
+            "gap_distribution_ns": {
+              "measured": false,
+              "note": "no run in this baseline produced this figure",
+              "samples": 0,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": null,
+            "gap_median_duration_ns": null,
+            "gap_min_duration_ns": null,
+            "gap_total_duration_ns": 0,
+            "max_concurrency": 0,
+            "rpc_count": 0,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 0,
+            "rpc_sum_duration_ns": 0,
+            "rpc_union_duration_ns": 0
+          },
+          "rpc_count": 0,
+          "rpc_union_duration_ns": 0,
+          "why": "EMPTY BY THE MAPPING, NOT BY MEASUREMENT: the reads §7 means by this name exist and are counted — in `build`, which is the stage the issuing code stamps. §8 forbids renaming a stage to make a report read better, so this bucket keeps the absence of a separate name visible rather than moving calls into it"
+        },
+        {
+          "bucket": "stages_the_seven_do_not_name",
+          "code_stage_names": [
+            "observation",
+            "sign",
+            "submit",
+            "inclusion",
+            "receipt",
+            "settlement",
+            "profit_verification"
+          ],
+          "measured": {
+            "gap_count": 1,
+            "gap_distribution_ns": {
+              "max_ns": 65041,
+              "measured": true,
+              "min_ns": 65041,
+              "note": "a single sample: this row is one measurement, not a distribution",
+              "p50_ns": null,
+              "p50_reason": {
+                "minimum_samples": 2,
+                "reason": "insufficient_sample"
+              },
+              "p90_ns": null,
+              "p90_reason": {
+                "minimum_samples": 10,
+                "reason": "insufficient_sample"
+              },
+              "p95_ns": null,
+              "p95_reason": {
+                "minimum_samples": 20,
+                "reason": "insufficient_sample"
+              },
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 1,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 65041,
+            "gap_median_duration_ns": null,
+            "gap_min_duration_ns": 65041,
+            "gap_total_duration_ns": 65041,
+            "max_concurrency": 1,
+            "rpc_count": 2,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 500827959,
+            "rpc_sum_duration_ns": 500827959,
+            "rpc_union_duration_ns": 500827959
+          },
+          "rpc_count": 2,
+          "rpc_union_duration_ns": 500827959,
+          "why": "the stage names this build has and §8's seven do not: `observation`, which is where the pin was fixed (§13), and the six rungs after the build — `sign`, `submit`, `inclusion`, `receipt`, `settlement`, `profit_verification`. They get a key of their own instead of being folded into the nearest-looking of the seven, which would put post-submission calls inside `build`"
+        }
+      ],
+      "provenance": {
+        "block_number": 37677710,
+        "calls": [
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 456796042,
+                "finished_ns": 4031939500,
+                "outcome": "ok",
+                "started_ns": 3575143458
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "header at pin",
+            "context_note": null,
+            "dedup_key": "block|91342|37677710|hydrated|false",
+            "duration_ns": 456798500,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 4031941250,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc1",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 1,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 3575142750,
+            "success": true,
+            "target": "37677710",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 441381833,
+                "finished_ns": 4473728375,
+                "outcome": "ok",
+                "started_ns": 4032346542
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "codes: touched_contracts",
+            "context_note": null,
+            "dedup_key": "code|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "duration_ns": 441383792,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 4473729292,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc2",
+            "method": "eth_getCode",
+            "rpc_id": 2,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 4032345500,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 886927250,
+                "finished_ns": 5361331792,
+                "outcome": "ok",
+                "started_ns": 4474404542
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "codes: touched_contracts",
+            "context_note": null,
+            "dedup_key": "code|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "duration_ns": 886929625,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 5361333750,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc3",
+            "method": "eth_getCode",
+            "rpc_id": 3,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 4474404125,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 259196209,
+                "finished_ns": 5623802542,
+                "outcome": "ok",
+                "started_ns": 5364606333
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "codes: touched_contracts",
+            "context_note": null,
+            "dedup_key": "code|91342|37677710|0x4200000000000000000000000000000000000006",
+            "duration_ns": 259198958,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 5623804250,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc4",
+            "method": "eth_getCode",
+            "rpc_id": 4,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 5364605292,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000006",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 234670125,
+                "finished_ns": 5859182125,
+                "outcome": "ok",
+                "started_ns": 5624512000
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "codes: touched_contracts",
+            "context_note": null,
+            "dedup_key": "code|91342|37677710|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "duration_ns": 234672000,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 5859182958,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc5",
+            "method": "eth_getCode",
+            "rpc_id": 5,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 5624510958,
+            "success": true,
+            "target": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 237995334,
+                "finished_ns": 6097443792,
+                "outcome": "ok",
+                "started_ns": 5859448458
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "code: sender",
+            "context_note": null,
+            "dedup_key": "code|91342|37677710|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 237997583,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 6097445708,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc6",
+            "method": "eth_getCode",
+            "rpc_id": 6,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 5859448125,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 241451875,
+                "finished_ns": 6339194458,
+                "outcome": "ok",
+                "started_ns": 6097742583
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "account: sender",
+            "context_note": null,
+            "dedup_key": "balance|91342|37677710|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 241454041,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 6339195458,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc7",
+            "method": "eth_getBalance",
+            "rpc_id": 7,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 6097741417,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 240432167,
+                "finished_ns": 6579693250,
+                "outcome": "ok",
+                "started_ns": 6339261083
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "account: sender",
+            "context_note": null,
+            "dedup_key": "nonce|91342|37677710|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 240434292,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 6579695167,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc8",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 8,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 6339260875,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 246655375,
+                "finished_ns": 6827312375,
+                "outcome": "ok",
+                "started_ns": 6580657000
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token0()",
+            "context_note": null,
+            "dedup_key": "balance|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "duration_ns": 246657333,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 6827313208,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc9",
+            "method": "eth_getBalance",
+            "rpc_id": 9,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 6580655875,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 228085000,
+                "finished_ns": 7055460667,
+                "outcome": "ok",
+                "started_ns": 6827375667
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token0()",
+            "context_note": null,
+            "dedup_key": "nonce|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "duration_ns": 228086291,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 7055461583,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc10",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 10,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 6827375292,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 249212000,
+                "finished_ns": 7306078167,
+                "outcome": "ok",
+                "started_ns": 7056866167
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token0()",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0x0000000000000000000000000000000000000000000000000000000000000006",
+            "duration_ns": 249213250,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 7306079083,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc11",
+            "method": "eth_getStorageAt",
+            "rpc_id": 11,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x0000000000000000000000000000000000000000000000000000000000000006",
+            "stage": "simulation",
+            "started_ns": 7056865833,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 245186417,
+                "finished_ns": 7551432125,
+                "outcome": "ok",
+                "started_ns": 7306245708
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token0()",
+            "context_note": null,
+            "dedup_key": "balance|91342|37677710|0x4200000000000000000000000000000000000011",
+            "duration_ns": 245188417,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 7551433875,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc12",
+            "method": "eth_getBalance",
+            "rpc_id": 12,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 7306245458,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000011",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 248836708,
+                "finished_ns": 7800421875,
+                "outcome": "ok",
+                "started_ns": 7551585167
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token0()",
+            "context_note": null,
+            "dedup_key": "nonce|91342|37677710|0x4200000000000000000000000000000000000011",
+            "duration_ns": 248839125,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 7800423375,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc13",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 13,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 7551584250,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000011",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 256017417,
+                "finished_ns": 8056570000,
+                "outcome": "ok",
+                "started_ns": 7800552583
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token0()",
+            "context_note": null,
+            "dedup_key": "code|91342|37677710|0x4200000000000000000000000000000000000011",
+            "duration_ns": 256019083,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 8056570750,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc14",
+            "method": "eth_getCode",
+            "rpc_id": 14,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 7800551667,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000011",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 226826875,
+                "finished_ns": 8283842875,
+                "outcome": "ok",
+                "started_ns": 8057016000
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token1()",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0x0000000000000000000000000000000000000000000000000000000000000007",
+            "duration_ns": 226829208,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 8283844708,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc15",
+            "method": "eth_getStorageAt",
+            "rpc_id": 15,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x0000000000000000000000000000000000000000000000000000000000000007",
+            "stage": "simulation",
+            "started_ns": 8057015500,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 250830250,
+                "finished_ns": 8537103167,
+                "outcome": "ok",
+                "started_ns": 8286272917
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token0()",
+            "context_note": null,
+            "dedup_key": "balance|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "duration_ns": 250833167,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 8537104917,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc16",
+            "method": "eth_getBalance",
+            "rpc_id": 16,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 8286271750,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 236665208,
+                "finished_ns": 8773903250,
+                "outcome": "ok",
+                "started_ns": 8537238042
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token0()",
+            "context_note": null,
+            "dedup_key": "nonce|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "duration_ns": 236666917,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 8773904000,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc17",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 17,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 8537237083,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 253967334,
+                "finished_ns": 9029254042,
+                "outcome": "ok",
+                "started_ns": 8775286708
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token0()",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0x0000000000000000000000000000000000000000000000000000000000000006",
+            "duration_ns": 253969667,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 9029256042,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc18",
+            "method": "eth_getStorageAt",
+            "rpc_id": 18,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x0000000000000000000000000000000000000000000000000000000000000006",
+            "stage": "simulation",
+            "started_ns": 8775286375,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 245235916,
+                "finished_ns": 9274932958,
+                "outcome": "ok",
+                "started_ns": 9029697042
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: token1()",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0x0000000000000000000000000000000000000000000000000000000000000007",
+            "duration_ns": 245237584,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 9274933917,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc19",
+            "method": "eth_getStorageAt",
+            "rpc_id": 19,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x0000000000000000000000000000000000000000000000000000000000000007",
+            "stage": "simulation",
+            "started_ns": 9029696333,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 224478250,
+                "finished_ns": 9499591042,
+                "outcome": "ok",
+                "started_ns": 9275112792
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: getReserves()",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0x0000000000000000000000000000000000000000000000000000000000000008",
+            "duration_ns": 224479250,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 9499591917,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc20",
+            "method": "eth_getStorageAt",
+            "rpc_id": 20,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x0000000000000000000000000000000000000000000000000000000000000008",
+            "stage": "simulation",
+            "started_ns": 9275112667,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 247654334,
+                "finished_ns": 9747460292,
+                "outcome": "ok",
+                "started_ns": 9499805958
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "views: getReserves()",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0x0000000000000000000000000000000000000000000000000000000000000008",
+            "duration_ns": 247656500,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 9747462333,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc21",
+            "method": "eth_getStorageAt",
+            "rpc_id": 21,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x0000000000000000000000000000000000000000000000000000000000000008",
+            "stage": "simulation",
+            "started_ns": 9499805833,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 243839291,
+                "finished_ns": 9993662208,
+                "outcome": "ok",
+                "started_ns": 9749822917
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 1 (nonce 7) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+            "context_note": null,
+            "dedup_key": "balance|91342|37677710|0x4200000000000000000000000000000000000006",
+            "duration_ns": 243842667,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 9993664042,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc22",
+            "method": "eth_getBalance",
+            "rpc_id": 22,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 9749821375,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000006",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 245574875,
+                "finished_ns": 10239368542,
+                "outcome": "ok",
+                "started_ns": 9993793667
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 1 (nonce 7) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+            "context_note": null,
+            "dedup_key": "nonce|91342|37677710|0x4200000000000000000000000000000000000006",
+            "duration_ns": 245577334,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 10239370042,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc23",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 23,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 9993792708,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000006",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 246788083,
+                "finished_ns": 10487287458,
+                "outcome": "ok",
+                "started_ns": 10240499375
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 1 (nonce 7) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x4200000000000000000000000000000000000006|0x05822d3e2ebb7a872393b4558653ad1e9b65a460779e182fcc8ddaab7e9ffe43",
+            "duration_ns": 246790709,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 10487289292,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc24",
+            "method": "eth_getStorageAt",
+            "rpc_id": 24,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x05822d3e2ebb7a872393b4558653ad1e9b65a460779e182fcc8ddaab7e9ffe43",
+            "stage": "simulation",
+            "started_ns": 10240498583,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000006",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 225533292,
+                "finished_ns": 10714950625,
+                "outcome": "ok",
+                "started_ns": 10489417333
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 3 (nonce 9) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x4200000000000000000000000000000000000006|0x2e5fa5a20a968dad9e38de565071b24012ee3d83208e5aa1aff07e2ab55713ab",
+            "duration_ns": 225536458,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 10714952583,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc25",
+            "method": "eth_getStorageAt",
+            "rpc_id": 25,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x2e5fa5a20a968dad9e38de565071b24012ee3d83208e5aa1aff07e2ab55713ab",
+            "stage": "simulation",
+            "started_ns": 10489416125,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000006",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 521216875,
+                "finished_ns": 11236571750,
+                "outcome": "ok",
+                "started_ns": 10715354875
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 3 (nonce 9) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x4200000000000000000000000000000000000006|0x1b1bb8ff368a01a4515d946798f9ce83f922cd929f5f78345be8839b0a76b6b5",
+            "duration_ns": 521218833,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 11236572583,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc26",
+            "method": "eth_getStorageAt",
+            "rpc_id": 26,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x1b1bb8ff368a01a4515d946798f9ce83f922cd929f5f78345be8839b0a76b6b5",
+            "stage": "simulation",
+            "started_ns": 10715353750,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000006",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 251372792,
+                "finished_ns": 11489422292,
+                "outcome": "ok",
+                "started_ns": 11238049500
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0x000000000000000000000000000000000000000000000000000000000000000c",
+            "duration_ns": 251374958,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 11489424125,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc27",
+            "method": "eth_getStorageAt",
+            "rpc_id": 27,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x000000000000000000000000000000000000000000000000000000000000000c",
+            "stage": "simulation",
+            "started_ns": 11238049167,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 248354708,
+                "finished_ns": 11738270583,
+                "outcome": "ok",
+                "started_ns": 11489915875
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "balance|91342|37677710|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "duration_ns": 248356916,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 11738272083,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc28",
+            "method": "eth_getBalance",
+            "rpc_id": 28,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 11489915167,
+            "success": true,
+            "target": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 248094667,
+                "finished_ns": 11986501625,
+                "outcome": "ok",
+                "started_ns": 11738406958
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "nonce|91342|37677710|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "duration_ns": 248097583,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 11986503583,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc29",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 29,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": null,
+            "stage": "simulation",
+            "started_ns": 11738406000,
+            "success": true,
+            "target": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 228959125,
+                "finished_ns": 12217406208,
+                "outcome": "ok",
+                "started_ns": 11988447083
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|0xdfaea0954cbbd4bf3acdce7cdc235c914da8e1a0cc7b7edca8bea4342c7e7483",
+            "duration_ns": 228961500,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 12217407125,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc30",
+            "method": "eth_getStorageAt",
+            "rpc_id": 30,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0xdfaea0954cbbd4bf3acdce7cdc235c914da8e1a0cc7b7edca8bea4342c7e7483",
+            "stage": "simulation",
+            "started_ns": 11988445625,
+            "success": true,
+            "target": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 293229917,
+                "finished_ns": 12510779417,
+                "outcome": "ok",
+                "started_ns": 12217549500
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|0x2cd94663f0c2301aa845214efa861a070af8e70c2d96027534ab991c96129041",
+            "duration_ns": 293231042,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 12510780250,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc31",
+            "method": "eth_getStorageAt",
+            "rpc_id": 31,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x2cd94663f0c2301aa845214efa861a070af8e70c2d96027534ab991c96129041",
+            "stage": "simulation",
+            "started_ns": 12217549208,
+            "success": true,
+            "target": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 243539291,
+                "finished_ns": 12754669583,
+                "outcome": "ok",
+                "started_ns": 12511130292
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0x0000000000000000000000000000000000000000000000000000000000000009",
+            "duration_ns": 243540250,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 12754670417,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc32",
+            "method": "eth_getStorageAt",
+            "rpc_id": 32,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x0000000000000000000000000000000000000000000000000000000000000009",
+            "stage": "simulation",
+            "started_ns": 12511130167,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 251615416,
+                "finished_ns": 13006408833,
+                "outcome": "ok",
+                "started_ns": 12754793417
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0x000000000000000000000000000000000000000000000000000000000000000a",
+            "duration_ns": 251616459,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 13006409667,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc33",
+            "method": "eth_getStorageAt",
+            "rpc_id": 33,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x000000000000000000000000000000000000000000000000000000000000000a",
+            "stage": "simulation",
+            "started_ns": 12754793208,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 251050917,
+                "finished_ns": 13257946542,
+                "outcome": "ok",
+                "started_ns": 13006895625
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 6 (nonce 12) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f: transfer(address,uint256), value 0, selector 0xa9059cbb",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|0x4b1c689c92d22dbbfe367179bd99e043109f97f70bd4a1b451a2699bf9e9fae6",
+            "duration_ns": 251051917,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 13257947375,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc34",
+            "method": "eth_getStorageAt",
+            "rpc_id": 34,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x4b1c689c92d22dbbfe367179bd99e043109f97f70bd4a1b451a2699bf9e9fae6",
+            "stage": "simulation",
+            "started_ns": 13006895458,
+            "success": true,
+            "target": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 252793208,
+                "finished_ns": 13512220500,
+                "outcome": "ok",
+                "started_ns": 13259427292
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0x000000000000000000000000000000000000000000000000000000000000000c",
+            "duration_ns": 252795292,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 13512222125,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc35",
+            "method": "eth_getStorageAt",
+            "rpc_id": 35,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x000000000000000000000000000000000000000000000000000000000000000c",
+            "stage": "simulation",
+            "started_ns": 13259426833,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 257902333,
+                "finished_ns": 13770770583,
+                "outcome": "ok",
+                "started_ns": 13512868250
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x4200000000000000000000000000000000000006|0xcfa4c03372b9736c2488d7888e17ad65d25fce1f5f6b940ab060d3382ed42080",
+            "duration_ns": 257904583,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 13770772000,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc36",
+            "method": "eth_getStorageAt",
+            "rpc_id": 36,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0xcfa4c03372b9736c2488d7888e17ad65d25fce1f5f6b940ab060d3382ed42080",
+            "stage": "simulation",
+            "started_ns": 13512867417,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000006",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 248902083,
+                "finished_ns": 14020058125,
+                "outcome": "ok",
+                "started_ns": 13771156042
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x4200000000000000000000000000000000000006|0xb77ec4036e45e3fb60a35dbc31e61e5833c2d7087a9bf5e464ec2c8a1156943d",
+            "duration_ns": 248905041,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 14020059958,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc37",
+            "method": "eth_getStorageAt",
+            "rpc_id": 37,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0xb77ec4036e45e3fb60a35dbc31e61e5833c2d7087a9bf5e464ec2c8a1156943d",
+            "stage": "simulation",
+            "started_ns": 13771154917,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000006",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 233088042,
+                "finished_ns": 14254034375,
+                "outcome": "ok",
+                "started_ns": 14020946333
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0x0000000000000000000000000000000000000000000000000000000000000009",
+            "duration_ns": 233089083,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 14254035000,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc38",
+            "method": "eth_getStorageAt",
+            "rpc_id": 38,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x0000000000000000000000000000000000000000000000000000000000000009",
+            "stage": "simulation",
+            "started_ns": 14020945917,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 244942125,
+                "finished_ns": 14499107292,
+                "outcome": "ok",
+                "started_ns": 14254165167
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "context_note": null,
+            "dedup_key": "storage|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0x000000000000000000000000000000000000000000000000000000000000000a",
+            "duration_ns": 244944041,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 14499109083,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:simulation:rpc39",
+            "method": "eth_getStorageAt",
+            "rpc_id": 39,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "simulation",
+            "slot": "0x000000000000000000000000000000000000000000000000000000000000000a",
+            "stage": "simulation",
+            "started_ns": 14254165042,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 238439250,
+                "finished_ns": 882755750,
+                "outcome": "ok",
+                "started_ns": 644316500
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": null,
+            "caller": "head and header that fixed the pin",
+            "context_note": null,
+            "dedup_key": null,
+            "duration_ns": 238441417,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 882757542,
+            "key_note": "dedup_key_unavailable_for_method",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc1",
+            "method": "eth_blockNumber",
+            "rpc_id": 1,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "observation",
+            "started_ns": 644316125,
+            "success": true,
+            "target": null,
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 262383291,
+                "finished_ns": 1145206958,
+                "outcome": "ok",
+                "started_ns": 882823667
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "head and header that fixed the pin",
+            "context_note": null,
+            "dedup_key": "block|91342|37677710|hydrated|false",
+            "duration_ns": 262386542,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 1145209125,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc2",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 2,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "observation",
+            "started_ns": 882822583,
+            "success": true,
+            "target": "37677710",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 226225041,
+                "finished_ns": 1373206333,
+                "outcome": "ok",
+                "started_ns": 1146981292
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "reserves of both venues, at the pin",
+            "context_note": null,
+            "dedup_key": "call|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681",
+            "duration_ns": 226227000,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 1373207167,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc3",
+            "method": "eth_call",
+            "rpc_id": 3,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "opportunity_detection",
+            "started_ns": 1146980167,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 283083292,
+                "finished_ns": 1656356542,
+                "outcome": "ok",
+                "started_ns": 1373273250
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "reserves of both venues, at the pin",
+            "context_note": null,
+            "dedup_key": "call|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7",
+            "duration_ns": 283084250,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 1656357333,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc4",
+            "method": "eth_call",
+            "rpc_id": 4,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "opportunity_detection",
+            "started_ns": 1373273083,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 314861333,
+                "finished_ns": 1971273583,
+                "outcome": "ok",
+                "started_ns": 1656412250
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "reserves of both venues, at the pin",
+            "context_note": null,
+            "dedup_key": "call|91342|37677710|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac",
+            "duration_ns": 314863292,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 1971275292,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc5",
+            "method": "eth_call",
+            "rpc_id": 5,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "opportunity_detection",
+            "started_ns": 1656412000,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 543808958,
+                "finished_ns": 2515304625,
+                "outcome": "ok",
+                "started_ns": 1971495667
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "reserves of both venues, at the pin",
+            "context_note": null,
+            "dedup_key": "call|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681",
+            "duration_ns": 543811500,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 2515306417,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc6",
+            "method": "eth_call",
+            "rpc_id": 6,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "opportunity_detection",
+            "started_ns": 1971494917,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 656624125,
+                "finished_ns": 3172071667,
+                "outcome": "ok",
+                "started_ns": 2515447542
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "reserves of both venues, at the pin",
+            "context_note": null,
+            "dedup_key": "call|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7",
+            "duration_ns": 656627041,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 3172073708,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc7",
+            "method": "eth_call",
+            "rpc_id": 7,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "opportunity_detection",
+            "started_ns": 2515446667,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 401965291,
+                "finished_ns": 3574098583,
+                "outcome": "ok",
+                "started_ns": 3172133292
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "reserves of both venues, at the pin",
+            "context_note": null,
+            "dedup_key": "call|91342|37677710|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac",
+            "duration_ns": 401968708,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 3574101708,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc8",
+            "method": "eth_call",
+            "rpc_id": 8,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "opportunity_detection",
+            "started_ns": 3172133000,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 634766459,
+                "finished_ns": 15147676167,
+                "outcome": "ok",
+                "started_ns": 14512909708
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": null,
+            "caller": null,
+            "context_note": "context_not_stamped",
+            "dedup_key": null,
+            "duration_ns": 634768958,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 15147677875,
+            "key_note": "dedup_key_unavailable_for_method",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc9",
+            "method": "eth_chainId",
+            "rpc_id": 9,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": null,
+            "started_ns": 14512908917,
+            "success": true,
+            "target": null,
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 249800625,
+                "finished_ns": 15397566250,
+                "outcome": "ok",
+                "started_ns": 15147765625
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "latest",
+            "caller": "head at latest",
+            "context_note": null,
+            "dedup_key": "block|91342|latest|hydrated|false",
+            "duration_ns": 249802958,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 15397567583,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc10",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 10,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 15147764625,
+            "success": true,
+            "target": "latest",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 224988959,
+                "finished_ns": 15622656417,
+                "outcome": "ok",
+                "started_ns": 15397667458
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "fee at pinned block",
+            "context_note": null,
+            "dedup_key": "block|91342|37677710|hydrated|false",
+            "duration_ns": 224991083,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 15622657375,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc11",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 11,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 15397666292,
+            "success": true,
+            "target": "37677710",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 230393083,
+                "finished_ns": 15853086958,
+                "outcome": "ok",
+                "started_ns": 15622693875
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": null,
+            "caller": "fee at pinned block",
+            "context_note": null,
+            "dedup_key": null,
+            "duration_ns": 230394459,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 15853087917,
+            "key_note": "dedup_key_unavailable_for_method",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc12",
+            "method": "eth_maxPriorityFeePerGas",
+            "rpc_id": 12,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 15622693458,
+            "success": true,
+            "target": null,
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 248569083,
+                "finished_ns": 16101700958,
+                "outcome": "ok",
+                "started_ns": 15853131875
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "fee at head",
+            "context_note": null,
+            "dedup_key": "block|91342|37677725|hydrated|false",
+            "duration_ns": 248572584,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 16101704042,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc13",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 13,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 15853131458,
+            "success": true,
+            "target": "37677725",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 236872000,
+                "finished_ns": 16338833083,
+                "outcome": "ok",
+                "started_ns": 16101961083
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": null,
+            "caller": "fee at head",
+            "context_note": null,
+            "dedup_key": null,
+            "duration_ns": 236874375,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 16338833958,
+            "key_note": "dedup_key_unavailable_for_method",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc14",
+            "method": "eth_maxPriorityFeePerGas",
+            "rpc_id": 14,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 16101959583,
+            "success": true,
+            "target": null,
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 281818042,
+                "finished_ns": 16620682542,
+                "outcome": "ok",
+                "started_ns": 16338864500
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "latest",
+            "caller": "pending and latest nonces",
+            "context_note": null,
+            "dedup_key": "block|91342|latest|hydrated|false",
+            "duration_ns": 281820042,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 16620684125,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc15",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 15,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 16338864083,
+            "success": true,
+            "target": "latest",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 234417250,
+                "finished_ns": 16855235125,
+                "outcome": "ok",
+                "started_ns": 16620817875
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677726",
+            "caller": "pending and latest nonces",
+            "context_note": null,
+            "dedup_key": "nonce|91342|37677726|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 234420083,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 16855237000,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc16",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 16,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 16620816917,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 268598959,
+                "finished_ns": 17123958917,
+                "outcome": "ok",
+                "started_ns": 16855359958
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "pending",
+            "caller": "pending and latest nonces",
+            "context_note": null,
+            "dedup_key": "nonce|91342|pending|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 268600958,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 17123959750,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc17",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 17,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 16855358792,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 241689666,
+                "finished_ns": 17365767208,
+                "outcome": "ok",
+                "started_ns": 17124077542
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "cost ceiling per step",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007802f875830164ce07830f4240830f44a482fda4944200000000000000000000000000000000000006865af3107a400084d0e30db0c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000",
+            "duration_ns": 241692250,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 17365769250,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc18",
+            "method": "eth_call",
+            "rpc_id": 18,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 17124077000,
+            "success": true,
+            "target": "0x420000000000000000000000000000000000000f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 247930833,
+                "finished_ns": 17614060833,
+                "outcome": "ok",
+                "started_ns": 17366130000
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "cost ceiling per step",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce08830f4240830f44a482cb0494420000000000000000000000000000000000000680b844a9059cbb0000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a400000000000000000000000000000000000000000000000000005af3107a4000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000",
+            "duration_ns": 247933917,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 17614062667,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc19",
+            "method": "eth_call",
+            "rpc_id": 19,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 17366128750,
+            "success": true,
+            "target": "0x420000000000000000000000000000000000000f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 238246500,
+                "finished_ns": 17852673167,
+                "outcome": "ok",
+                "started_ns": 17614426667
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "cost ceiling per step",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce09830f4240830f44a48301b968942a3ceafba30f6626170cbb0cd67392efb94bd9a480b8a4022c0d9f00000000000000000000000000000000000000000000000418bddcf67410ccbd0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000",
+            "duration_ns": 238248583,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 17852674125,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc20",
+            "method": "eth_call",
+            "rpc_id": 20,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 17614425542,
+            "success": true,
+            "target": "0x420000000000000000000000000000000000000f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 245294834,
+                "finished_ns": 18098099167,
+                "outcome": "ok",
+                "started_ns": 17852804333
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "cost ceiling per step",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce0a830f4240830f44a482c33f9407d4af6e2bc8dd82beb06b4fd279df4c9028f26f80b844a9059cbb0000000000000000000000005b3c1e3fb6a97c0130ae015ff10f53a1a30c353e00000000000000000000000000000000000000000000000418bddcf67410ccbdc001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000",
+            "duration_ns": 245296041,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 18098100083,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc21",
+            "method": "eth_call",
+            "rpc_id": 21,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 17852804042,
+            "success": true,
+            "target": "0x420000000000000000000000000000000000000f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 249741625,
+                "finished_ns": 18347978125,
+                "outcome": "ok",
+                "started_ns": 18098236500
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "cost ceiling per step",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce0b830f4240830f44a48301c145945b3c1e3fb6a97c0130ae015ff10f53a1a30c353e80b8a4022c0d9f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025d5d645c29c9000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000",
+            "duration_ns": 249742834,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 18347978917,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc22",
+            "method": "eth_call",
+            "rpc_id": 22,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 18098236083,
+            "success": true,
+            "target": "0x420000000000000000000000000000000000000f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 243973792,
+                "finished_ns": 18592083792,
+                "outcome": "ok",
+                "started_ns": 18348110000
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "cost ceiling per step",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000009202f88f830164ce0c830f4240830f44a482c50394420000000000000000000000000000000000000680a42e1a7d4d00000000000000000000000000000000000000000000000000025d5d645c29c9c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000000000",
+            "duration_ns": 243975833,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 18592085375,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc23",
+            "method": "eth_call",
+            "rpc_id": 23,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 18348109542,
+            "success": true,
+            "target": "0x420000000000000000000000000000000000000f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 244033750,
+                "finished_ns": 18836308000,
+                "outcome": "ok",
+                "started_ns": 18592274250
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "reserves of leg 0",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681",
+            "duration_ns": 244036208,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 18836309625,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc24",
+            "method": "eth_call",
+            "rpc_id": 24,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 18592273417,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 229666000,
+                "finished_ns": 19066123250,
+                "outcome": "ok",
+                "started_ns": 18836457250
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "reserves of leg 0",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7",
+            "duration_ns": 229668667,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 19066124875,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc25",
+            "method": "eth_call",
+            "rpc_id": 25,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 18836456208,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 239991875,
+                "finished_ns": 19306268042,
+                "outcome": "ok",
+                "started_ns": 19066276167
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "reserves of leg 0",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac",
+            "duration_ns": 239993750,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 19306268792,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc26",
+            "method": "eth_call",
+            "rpc_id": 26,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 19066275042,
+            "success": true,
+            "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 235050458,
+                "finished_ns": 19541391750,
+                "outcome": "ok",
+                "started_ns": 19306341292
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "reserves of leg 1",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681",
+            "duration_ns": 235051417,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 19541392500,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc27",
+            "method": "eth_call",
+            "rpc_id": 27,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 19306341083,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 240048167,
+                "finished_ns": 19781499417,
+                "outcome": "ok",
+                "started_ns": 19541451250
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "reserves of leg 1",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7",
+            "duration_ns": 240050917,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 19781501750,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc28",
+            "method": "eth_call",
+            "rpc_id": 28,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 19541450833,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 243280000,
+                "finished_ns": 20024953375,
+                "outcome": "ok",
+                "started_ns": 19781673375
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "reserves of leg 1",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac",
+            "duration_ns": 243282625,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 20024954917,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc29",
+            "method": "eth_call",
+            "rpc_id": 29,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 19781672292,
+            "success": true,
+            "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 229887791,
+                "finished_ns": 20255012083,
+                "outcome": "ok",
+                "started_ns": 20025124292
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "native balance of the sender",
+            "context_note": null,
+            "dedup_key": "balance|91342|37677725|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 229889333,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 20255012708,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc30",
+            "method": "eth_getBalance",
+            "rpc_id": 30,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 20025123375,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 244256041,
+                "finished_ns": 20499312333,
+                "outcome": "ok",
+                "started_ns": 20255056292
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": null,
+            "caller": "endpoint chain id",
+            "context_note": null,
+            "dedup_key": null,
+            "duration_ns": 244258291,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 20499313958,
+            "key_note": "dedup_key_unavailable_for_method",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc31",
+            "method": "eth_chainId",
+            "rpc_id": 31,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 20255055667,
+            "success": true,
+            "target": null,
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 242186334,
+                "finished_ns": 20741545042,
+                "outcome": "ok",
+                "started_ns": 20499358708
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "block binding at pin",
+            "context_note": null,
+            "dedup_key": "block|91342|37677710|hydrated|false",
+            "duration_ns": 242188125,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 20741545917,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc32",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 32,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "preflight",
+            "started_ns": 20499357792,
+            "success": true,
+            "target": "37677710",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 221351958,
+                "finished_ns": 20972663958,
+                "outcome": "ok",
+                "started_ns": 20751312000
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "before-snapshot: native and input-token balances",
+            "context_note": null,
+            "dedup_key": "balance|91342|37677725|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 221354667,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 20972664750,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc33",
+            "method": "eth_getBalance",
+            "rpc_id": 33,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 20751310083,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 247124500,
+                "finished_ns": 21219861833,
+                "outcome": "ok",
+                "started_ns": 20972737333
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "before-snapshot: native and input-token balances",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 247126292,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 21219863417,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc34",
+            "method": "eth_call",
+            "rpc_id": 34,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 20972737125,
+            "success": true,
+            "target": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 237068250,
+                "finished_ns": 21457172208,
+                "outcome": "ok",
+                "started_ns": 21220103958
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677725",
+            "caller": "before-snapshot: native and input-token balances",
+            "context_note": null,
+            "dedup_key": "call|91342|37677725|0x4200000000000000000000000000000000000006|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 237069958,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 21457172958,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc35",
+            "method": "eth_call",
+            "rpc_id": 35,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 21220103000,
+            "success": true,
+            "target": "0x4200000000000000000000000000000000000006",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 234549375,
+                "finished_ns": 21691798917,
+                "outcome": "ok",
+                "started_ns": 21457249542
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "step 1: fee at pinned block",
+            "context_note": null,
+            "dedup_key": "block|91342|37677710|hydrated|false",
+            "duration_ns": 234551333,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 21691800500,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc36",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 36,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 21457249167,
+            "success": true,
+            "target": "37677710",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 239164958,
+                "finished_ns": 21931052083,
+                "outcome": "ok",
+                "started_ns": 21691887125
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": null,
+            "caller": "step 1: fee at pinned block",
+            "context_note": null,
+            "dedup_key": null,
+            "duration_ns": 239166584,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 21931052917,
+            "key_note": "dedup_key_unavailable_for_method",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc37",
+            "method": "eth_maxPriorityFeePerGas",
+            "rpc_id": 37,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 21691886333,
+            "success": true,
+            "target": null,
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 246643750,
+                "finished_ns": 22177735333,
+                "outcome": "ok",
+                "started_ns": 21931091583
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "latest",
+            "caller": "step 1: pending and latest nonces",
+            "context_note": null,
+            "dedup_key": "block|91342|latest|hydrated|false",
+            "duration_ns": 246645125,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 22177736042,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc38",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 38,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 21931090917,
+            "success": true,
+            "target": "latest",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 226740833,
+                "finished_ns": 22404530875,
+                "outcome": "ok",
+                "started_ns": 22177790042
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677731",
+            "caller": "step 1: pending and latest nonces",
+            "context_note": null,
+            "dedup_key": "nonce|91342|37677731|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 226743291,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 22404532958,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc39",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 39,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 22177789667,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 242483167,
+                "finished_ns": 22647127125,
+                "outcome": "ok",
+                "started_ns": 22404643958
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "pending",
+            "caller": "step 1: pending and latest nonces",
+            "context_note": null,
+            "dedup_key": "nonce|91342|pending|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 242486166,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 22647129208,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc40",
+            "method": "eth_getTransactionCount",
+            "rpc_id": 40,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 22404643042,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 256727709,
+                "finished_ns": 22904011792,
+                "outcome": "ok",
+                "started_ns": 22647284083
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": null,
+            "caller": "step 1: gate — endpoint chain id",
+            "context_note": null,
+            "dedup_key": null,
+            "duration_ns": 256729625,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 22904012708,
+            "key_note": "dedup_key_unavailable_for_method",
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc41",
+            "method": "eth_chainId",
+            "rpc_id": 41,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 22647283083,
+            "success": true,
+            "target": null,
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 235186167,
+                "finished_ns": 23139222625,
+                "outcome": "ok",
+                "started_ns": 22904036458
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "step 1: gate — block binding at pin",
+            "context_note": null,
+            "dedup_key": "block|91342|37677710|hydrated|false",
+            "duration_ns": 235187583,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 23139223625,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc42",
+            "method": "eth_getBlockByNumber",
+            "rpc_id": 42,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 22904036042,
+            "success": true,
+            "target": "37677710",
+            "trace_schema": 3
+          },
+          {
+            "attempt": 1,
+            "attempts": [
+              {
+                "duration_ns": 242972084,
+                "finished_ns": 23382257292,
+                "outcome": "ok",
+                "started_ns": 23139285208
+              }
+            ],
+            "attempts_recorded": true,
+            "block_tag": "37677710",
+            "caller": "step 1: gate — native balance",
+            "context_note": null,
+            "dedup_key": "balance|91342|37677710|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "duration_ns": 242974167,
+            "endpoint_id": "rpc-faa716cada04a9ef",
+            "error_class": null,
+            "error_detail": null,
+            "finished_ns": 23382259042,
+            "key_note": null,
+            "logical_request_id": "route-91342-37677710-1791022828033:lifecycle:rpc43",
+            "method": "eth_getBalance",
+            "rpc_id": 43,
+            "run": "route-91342-37677710-1791022828033",
+            "sink": "lifecycle",
+            "slot": null,
+            "stage": "build",
+            "started_ns": 23139284875,
+            "success": true,
+            "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+            "trace_schema": 3
+          }
+        ],
+        "chain_id": 91342,
+        "endpoint_id": "rpc-faa716cada04a9ef",
+        "execution_mode": "build-only",
+        "generated_at_unix_ms": 1791022828035,
+        "git_revision": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+        "run": "route-91342-37677710-1791022828033",
+        "source": "live",
+        "stage_spans": [
+          {
+            "ended_ns": 1145301708,
+            "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+            "outcome": "completed",
+            "stage": "observation",
+            "started_ns": 644306375,
+            "usable_for_classification": true
+          },
+          {
+            "ended_ns": null,
+            "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+            "outcome": "skipped",
+            "stage": "state_update",
+            "started_ns": null,
+            "usable_for_classification": false
+          },
+          {
+            "ended_ns": null,
+            "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+            "outcome": "skipped",
+            "stage": "graph_update",
+            "started_ns": null,
+            "usable_for_classification": false
+          },
+          {
+            "ended_ns": 3574478917,
+            "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+            "outcome": "completed",
+            "stage": "opportunity_detection",
+            "started_ns": 1145301708,
+            "usable_for_classification": true
+          },
+          {
+            "ended_ns": 14504131708,
+            "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+            "outcome": "completed",
+            "stage": "simulation",
+            "started_ns": 3575091042,
+            "usable_for_classification": true
+          },
+          {
+            "ended_ns": 14505848250,
+            "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+            "outcome": "completed",
+            "stage": "risk",
+            "started_ns": 14505836583,
+            "usable_for_classification": true
+          },
+          {
+            "ended_ns": 20741641417,
+            "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+            "outcome": "completed",
+            "stage": "preflight",
+            "started_ns": 14512810667,
+            "usable_for_classification": true
+          },
+          {
+            "ended_ns": null,
+            "note": "this span's duration was read off millisecond stamps the run took for its own reasons, so it is not claimed to hold a nanosecond-stamped call",
+            "outcome": "completed",
+            "stage": "build",
+            "started_ns": null,
+            "usable_for_classification": false
+          },
+          {
+            "ended_ns": null,
+            "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+            "outcome": "skipped",
+            "stage": "sign",
+            "started_ns": null,
+            "usable_for_classification": false
+          },
+          {
+            "ended_ns": null,
+            "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+            "outcome": "skipped",
+            "stage": "submit",
+            "started_ns": null,
+            "usable_for_classification": false
+          },
+          {
+            "ended_ns": null,
+            "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+            "outcome": "skipped",
+            "stage": "inclusion",
+            "started_ns": null,
+            "usable_for_classification": false
+          },
+          {
+            "ended_ns": null,
+            "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+            "outcome": "skipped",
+            "stage": "receipt",
+            "started_ns": null,
+            "usable_for_classification": false
+          },
+          {
+            "ended_ns": null,
+            "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+            "outcome": "skipped",
+            "stage": "settlement",
+            "started_ns": null,
+            "usable_for_classification": false
+          },
+          {
+            "ended_ns": null,
+            "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+            "outcome": "skipped",
+            "stage": "profit_verification",
+            "started_ns": null,
+            "usable_for_classification": false
+          }
+        ]
+      },
+      "question": "§7–§10: the run outside the simulation, on the same timeline as the calls inside it — which stage held which call, how long each leg's calls took together, and what part of the run's wall time no call covers",
+      "run": "route-91342-37677710-1791022828033",
+      "stages": [
+        {
+          "callers": [
+            "before-snapshot: native and input-token balances",
+            "step 1: fee at pinned block",
+            "step 1: gate — block binding at pin",
+            "step 1: gate — endpoint chain id",
+            "step 1: gate — native balance",
+            "step 1: pending and latest nonces"
+          ],
+          "measured": {
+            "gap_count": 10,
+            "gap_distribution_ns": {
+              "max_ns": 239583,
+              "measured": true,
+              "min_ns": 23334,
+              "p50_ns": 72375,
+              "p90_ns": 153875,
+              "p95_ns": null,
+              "p95_reason": {
+                "minimum_samples": 20,
+                "reason": "insufficient_sample"
+              },
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 10,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 239583,
+            "gap_median_duration_ns": 72375,
+            "gap_min_duration_ns": 23334,
+            "gap_total_duration_ns": 914168,
+            "max_concurrency": 1,
+            "rpc_count": 11,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 2630034791,
+            "rpc_sum_duration_ns": 2630034791,
+            "rpc_union_duration_ns": 2630034791
+          },
+          "rpc_share_of_pipeline_total": {
+            "denominator": 20097335042,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 2630034791,
+            "per_mille": 130
+          },
+          "rpc_share_of_run_union": {
+            "denominator": 22678378081,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 2630034791,
+            "per_mille": 115
+          },
+          "sinks": [
+            "lifecycle"
+          ],
+          "stage": "build",
+          "stage_duration_note": "this run wrote no closed nanosecond span named `build`, so the stage's own duration is not measured here; the call figures beside it are still this run's, read off their own stamps",
+          "stage_duration_ns": null,
+          "stage_span_count": 0
+        },
+        {
+          "callers": [
+            "head and header that fixed the pin"
+          ],
+          "measured": {
+            "gap_count": 1,
+            "gap_distribution_ns": {
+              "max_ns": 65041,
+              "measured": true,
+              "min_ns": 65041,
+              "note": "a single sample: this row is one measurement, not a distribution",
+              "p50_ns": null,
+              "p50_reason": {
+                "minimum_samples": 2,
+                "reason": "insufficient_sample"
+              },
+              "p90_ns": null,
+              "p90_reason": {
+                "minimum_samples": 10,
+                "reason": "insufficient_sample"
+              },
+              "p95_ns": null,
+              "p95_reason": {
+                "minimum_samples": 20,
+                "reason": "insufficient_sample"
+              },
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 1,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 65041,
+            "gap_median_duration_ns": null,
+            "gap_min_duration_ns": 65041,
+            "gap_total_duration_ns": 65041,
+            "max_concurrency": 1,
+            "rpc_count": 2,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 500827959,
+            "rpc_sum_duration_ns": 500827959,
+            "rpc_union_duration_ns": 500827959
+          },
+          "rpc_share_of_pipeline_total": {
+            "denominator": 20097335042,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 500827959,
+            "per_mille": 24
+          },
+          "rpc_share_of_run_union": {
+            "denominator": 22678378081,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 500827959,
+            "per_mille": 22
+          },
+          "sinks": [
+            "lifecycle"
+          ],
+          "stage": "observation",
+          "stage_duration_note": "the sum of this stage's closed intervals — equal to its span unless the run opened the same stage twice",
+          "stage_duration_ns": 500995333,
+          "stage_span_count": 1
+        },
+        {
+          "callers": [
+            "reserves of both venues, at the pin"
+          ],
+          "measured": {
+            "gap_count": 5,
+            "gap_distribution_ns": {
+              "max_ns": 219625,
+              "measured": true,
+              "min_ns": 54667,
+              "p50_ns": 65916,
+              "p90_ns": null,
+              "p90_reason": {
+                "minimum_samples": 10,
+                "reason": "insufficient_sample"
+              },
+              "p95_ns": null,
+              "p95_reason": {
+                "minimum_samples": 20,
+                "reason": "insufficient_sample"
+              },
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 5,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 219625,
+            "gap_median_duration_ns": 65916,
+            "gap_min_duration_ns": 54667,
+            "gap_total_duration_ns": 539750,
+            "max_concurrency": 1,
+            "rpc_count": 6,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 2426581791,
+            "rpc_sum_duration_ns": 2426581791,
+            "rpc_union_duration_ns": 2426581791
+          },
+          "rpc_share_of_pipeline_total": {
+            "denominator": 20097335042,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 2426581791,
+            "per_mille": 120
+          },
+          "rpc_share_of_run_union": {
+            "denominator": 22678378081,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 2426581791,
+            "per_mille": 106
+          },
+          "sinks": [
+            "lifecycle"
+          ],
+          "stage": "opportunity_detection",
+          "stage_duration_note": "the sum of this stage's closed intervals — equal to its span unless the run opened the same stage twice",
+          "stage_duration_ns": 2429177209,
+          "stage_span_count": 1
+        },
+        {
+          "callers": [
+            "block binding at pin",
+            "cost ceiling per step",
+            "endpoint chain id",
+            "fee at head",
+            "fee at pinned block",
+            "head at latest",
+            "native balance of the sender",
+            "pending and latest nonces",
+            "reserves of leg 0",
+            "reserves of leg 1"
+          ],
+          "measured": {
+            "gap_count": 22,
+            "gap_distribution_ns": {
+              "max_ns": 362875,
+              "measured": true,
+              "min_ns": 30125,
+              "p50_ns": 129917,
+              "p90_ns": 255541,
+              "p95_ns": 359500,
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 22,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 362875,
+            "gap_median_duration_ns": 129917,
+            "gap_min_duration_ns": 30125,
+            "gap_total_duration_ns": 2995959,
+            "max_concurrency": 1,
+            "rpc_count": 23,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 5590785333,
+            "rpc_sum_duration_ns": 5590785333,
+            "rpc_union_duration_ns": 5590785333
+          },
+          "rpc_share_of_pipeline_total": {
+            "denominator": 20097335042,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 5590785333,
+            "per_mille": 278
+          },
+          "rpc_share_of_run_union": {
+            "denominator": 22678378081,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 5590785333,
+            "per_mille": 246
+          },
+          "sinks": [
+            "lifecycle"
+          ],
+          "stage": "preflight",
+          "stage_duration_note": "the sum of this stage's closed intervals — equal to its span unless the run opened the same stage twice",
+          "stage_duration_ns": 6228830750,
+          "stage_span_count": 1
+        },
+        {
+          "callers": [
+            "account: sender",
+            "code: sender",
+            "codes: touched_contracts",
+            "execute: step 1 (nonce 7) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: balanceOf(address), value 0, selector 0x70a08231",
+            "execute: step 3 (nonce 9) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x4200000000000000000000000000000000000006: transfer(address,uint256), value 0, selector 0xa9059cbb",
+            "execute: step 4 (nonce 10) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "execute: step 6 (nonce 12) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f: transfer(address,uint256), value 0, selector 0xa9059cbb",
+            "execute: step 7 (nonce 13) from 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c to 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E: swap(uint256,uint256,address,bytes), value 0, selector 0x022c0d9f",
+            "header at pin",
+            "views: getReserves()",
+            "views: token0()",
+            "views: token1()"
+          ],
+          "measured": {
+            "gap_count": 38,
+            "gap_distribution_ns": {
+              "max_ns": 3271542,
+              "measured": true,
+              "min_ns": 62084,
+              "p50_ns": 404250,
+              "p90_ns": 2126833,
+              "p95_ns": 2427042,
+              "p99_ns": null,
+              "p99_reason": {
+                "minimum_samples": 100,
+                "reason": "insufficient_sample"
+              },
+              "samples": 38,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": 3271542,
+            "gap_median_duration_ns": 404250,
+            "gap_min_duration_ns": 62084,
+            "gap_total_duration_ns": 28587084,
+            "max_concurrency": 1,
+            "rpc_count": 39,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 10895379249,
+            "rpc_sum_duration_ns": 10895379249,
+            "rpc_union_duration_ns": 10895379249
+          },
+          "rpc_share_of_pipeline_total": {
+            "denominator": 20097335042,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 10895379249,
+            "per_mille": 542
+          },
+          "rpc_share_of_run_union": {
+            "denominator": 22678378081,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 10895379249,
+            "per_mille": 480
+          },
+          "sinks": [
+            "simulation"
+          ],
+          "stage": "simulation",
+          "stage_duration_note": "the sum of this stage's closed intervals — equal to its span unless the run opened the same stage twice",
+          "stage_duration_ns": 10929040666,
+          "stage_span_count": 1
+        },
+        {
+          "callers": [],
+          "measured": {
+            "gap_count": 0,
+            "gap_distribution_ns": {
+              "measured": false,
+              "note": "no run in this baseline produced this figure",
+              "samples": 0,
+              "unit": "ns"
+            },
+            "gap_max_duration_ns": null,
+            "gap_median_duration_ns": null,
+            "gap_min_duration_ns": null,
+            "gap_total_duration_ns": 0,
+            "max_concurrency": 1,
+            "rpc_count": 1,
+            "rpc_overlap_duration_ns": 0,
+            "rpc_serial_wait_duration_ns": 634768958,
+            "rpc_sum_duration_ns": 634768958,
+            "rpc_union_duration_ns": 634768958
+          },
+          "rpc_share_of_pipeline_total": {
+            "denominator": 20097335042,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 634768958,
+            "per_mille": 31
+          },
+          "rpc_share_of_run_union": {
+            "denominator": 22678378081,
+            "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+            "numerator": 634768958,
+            "per_mille": 27
+          },
+          "sinks": [
+            "lifecycle"
+          ],
+          "stage": "unstamped",
+          "stage_duration_note": "this run wrote no closed nanosecond span named `unstamped`, so the stage's own duration is not measured here; the call figures beside it are still this run's, read off their own stamps",
+          "stage_duration_ns": null,
+          "stage_span_count": 0
+        }
+      ],
+      "stages_no_bucket_covers": [],
+      "stages_no_bucket_covers_rule": "a stamped stage name [`PIPELINE_BUCKETS`] does not fold. The eight keys cover every name `evm_metrics::Stage::as_str` writes, so a row here means that table is out of date — and the calls are still in every total and every per-stage row above, just in no §19 bucket. `unstamped` is not listed here, because it is not a stage name the code ever said",
+      "stages_not_completed": [
+        {
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "state_update"
+        },
+        {
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "graph_update"
+        },
+        {
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "sign"
+        },
+        {
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "submit"
+        },
+        {
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "inclusion"
+        },
+        {
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "receipt"
+        },
+        {
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "settlement"
+        },
+        {
+          "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+          "outcome": "skipped",
+          "stage": "profit_verification"
+        }
+      ],
+      "totals": {
+        "attempts_total": 82,
+        "call_window_ns": 22737942917,
+        "calls_with_an_ambiguous_label": 0,
+        "calls_without_a_stamped_stage": 1,
+        "failed_calls": 0,
+        "gap_count": 81,
+        "gap_distribution_ns": {
+          "max_ns": 13799834,
+          "measured": true,
+          "min_ns": 23334,
+          "p50_ns": 153875,
+          "p90_ns": 1479458,
+          "p95_ns": 2359042,
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 81,
+          "unit": "ns"
+        },
+        "gap_inside_call_window_ns": 59564836,
+        "gap_max_duration_ns": 13799834,
+        "gap_median_duration_ns": 153875,
+        "gap_min_duration_ns": 23334,
+        "gap_total_duration_ns": 59564836,
+        "ladder_window_ns": [
+          644306375,
+          20741641417
+        ],
+        "max_concurrency": 1,
+        "non_rpc_duration_ns": 0,
+        "non_rpc_rule": "§11: total − union, never total − sum. Two calls in flight are one stretch of covered time, and subtracting the sum would bill the overlap twice as local work",
+        "pipeline_total_duration_basis": "the first and last instants of this run's own closed nanosecond stage spans — the ladder the run recorded, not a sum of its stages",
+        "pipeline_total_duration_ns": 20097335042,
+        "retried_calls": 0,
+        "rpc_count": 82,
+        "rpc_overlap_duration_ns": 0,
+        "rpc_serial_wait_duration_ns": 22678378081,
+        "rpc_sum_duration_ns": 22678378081,
+        "rpc_union_duration_ns": 22678378081,
+        "union_extends_past_the_ladder_window_ns": 2581043039,
+        "union_past_the_ladder_rule": "where this is not null, the calls cover more time than the ladder's first and last closed instants span, so `non_rpc_duration_ns` is the clamped 0 of a subtraction that would go negative and says nothing about how much local work this run did: the run's own wall time is at least the ladder plus this many nanoseconds of calls that landed outside it"
+      },
+      "unit": "ns"
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "pooled": {
+    "buckets": [
+      {
+        "bucket": "detection",
+        "code_stage_names": [
+          "opportunity_detection"
+        ],
+        "rpc_count_total": 6,
+        "rpc_union_duration_ns_per_run": {
+          "max_ns": 2426581791,
+          "measured": true,
+          "min_ns": 2426581791,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "rpc_union_duration_ns_total": 2426581791,
+        "runs_reporting_it": 1,
+        "why": "§7's first rung after the block is detected: this build prices both venues and produces the candidate inside one stage, `opportunity_detection`, and every read of that leg is stamped with it"
+      },
+      {
+        "bucket": "state_update",
+        "code_stage_names": [
+          "state_update",
+          "graph_update"
+        ],
+        "rpc_count_total": 0,
+        "rpc_union_duration_ns_per_run": {
+          "max_ns": 0,
+          "measured": true,
+          "min_ns": 0,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "rpc_union_duration_ns_total": 0,
+        "runs_reporting_it": 1,
+        "why": "§7's second and third rungs are two stage names here, `state_update` and `graph_update`, and both are folded into this one bucket because §19 asks for one"
+      },
+      {
+        "bucket": "opportunity",
+        "code_stage_names": [],
+        "rpc_count_total": 0,
+        "rpc_union_duration_ns_per_run": {
+          "max_ns": 0,
+          "measured": true,
+          "min_ns": 0,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "rpc_union_duration_ns_total": 0,
+        "runs_reporting_it": 1,
+        "why": "EMPTY BY THE MAPPING, NOT BY MEASUREMENT: §8's list separates detection from opportunity and this build does not — the one stage `opportunity_detection` covers both, so its calls are filed under `detection` and are deliberately not counted a second time here"
+      },
+      {
+        "bucket": "preflight",
+        "code_stage_names": [
+          "preflight",
+          "risk"
+        ],
+        "rpc_count_total": 23,
+        "rpc_union_duration_ns_per_run": {
+          "max_ns": 5590785333,
+          "measured": true,
+          "min_ns": 5590785333,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "rpc_union_duration_ns_total": 5590785333,
+        "runs_reporting_it": 1,
+        "why": "§26's gate, whose reads the lane stamps `preflight` at the site that issues them, together with `risk`, the other stage between the simulation and the build"
+      },
+      {
+        "bucket": "simulation",
+        "code_stage_names": [
+          "simulation"
+        ],
+        "rpc_count_total": 39,
+        "rpc_union_duration_ns_per_run": {
+          "max_ns": 10895379249,
+          "measured": true,
+          "min_ns": 10895379249,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "rpc_union_duration_ns_total": 10895379249,
+        "runs_reporting_it": 1,
+        "why": "the run's 39-odd state reads: every call the state-acquisition sink holds, all of them at the pin, all of them named by an engine phase (§4's vocabulary)"
+      },
+      {
+        "bucket": "build",
+        "code_stage_names": [
+          "build"
+        ],
+        "rpc_count_total": 11,
+        "rpc_union_duration_ns_per_run": {
+          "max_ns": 2630034791,
+          "measured": true,
+          "min_ns": 2630034791,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "rpc_union_duration_ns_total": 2630034791,
+        "runs_reporting_it": 1,
+        "why": "§7's `Build` *and* its `Execution preparation`: the lane's fee, nonce, balance, endpoint-chain-id and block-binding reads are stamped `build` (`crates/execution/src/sequence.rs`), because the run's ladder gives those pre-submission reads no span of their own. They are measured here, in this row, and not in the empty one below"
+      },
+      {
+        "bucket": "execution_preparation",
+        "code_stage_names": [],
+        "rpc_count_total": 0,
+        "rpc_union_duration_ns_per_run": {
+          "max_ns": 0,
+          "measured": true,
+          "min_ns": 0,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "rpc_union_duration_ns_total": 0,
+        "runs_reporting_it": 1,
+        "why": "EMPTY BY THE MAPPING, NOT BY MEASUREMENT: the reads §7 means by this name exist and are counted — in `build`, which is the stage the issuing code stamps. §8 forbids renaming a stage to make a report read better, so this bucket keeps the absence of a separate name visible rather than moving calls into it"
+      },
+      {
+        "bucket": "stages_the_seven_do_not_name",
+        "code_stage_names": [
+          "observation",
+          "sign",
+          "submit",
+          "inclusion",
+          "receipt",
+          "settlement",
+          "profit_verification"
+        ],
+        "rpc_count_total": 2,
+        "rpc_union_duration_ns_per_run": {
+          "max_ns": 500827959,
+          "measured": true,
+          "min_ns": 500827959,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "rpc_union_duration_ns_total": 500827959,
+        "runs_reporting_it": 1,
+        "why": "the stage names this build has and §8's seven do not: `observation`, which is where the pin was fixed (§13), and the six rungs after the build — `sign`, `submit`, `inclusion`, `receipt`, `settlement`, `profit_verification`. They get a key of their own instead of being folded into the nearest-looking of the seven, which would put post-submission calls inside `build`"
+      }
+    ],
+    "methods_by_source": [
+      {
+        "count": 1,
+        "distribution_ns": {
+          "max_ns": 238441417,
+          "measured": true,
+          "min_ns": 238441417,
+          "note": "a single sample: this row is one measurement, not a distribution",
+          "p50_ns": null,
+          "p50_reason": {
+            "minimum_samples": 2,
+            "reason": "insufficient_sample"
+          },
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 1,
+          "unit": "ns"
+        },
+        "max_duration_ns": 238441417,
+        "median_duration_ns": null,
+        "method": "eth_blockNumber",
+        "min_duration_ns": 238441417,
+        "p95_duration_ns": null,
+        "p99_duration_ns": null,
+        "source": "live"
+      },
+      {
+        "count": 20,
+        "distribution_ns": {
+          "max_ns": 656627041,
+          "measured": true,
+          "min_ns": 226227000,
+          "p50_ns": 243975833,
+          "p90_ns": 401968708,
+          "p95_ns": 543811500,
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 20,
+          "unit": "ns"
+        },
+        "max_duration_ns": 656627041,
+        "median_duration_ns": 243975833,
+        "method": "eth_call",
+        "min_duration_ns": 226227000,
+        "p95_duration_ns": 543811500,
+        "p99_duration_ns": null,
+        "source": "live"
+      },
+      {
+        "count": 3,
+        "distribution_ns": {
+          "max_ns": 634768958,
+          "measured": true,
+          "min_ns": 244258291,
+          "p50_ns": 256729625,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "max_duration_ns": 634768958,
+        "median_duration_ns": 256729625,
+        "method": "eth_chainId",
+        "min_duration_ns": 244258291,
+        "p95_duration_ns": null,
+        "p99_duration_ns": null,
+        "source": "live"
+      },
+      {
+        "count": 9,
+        "distribution_ns": {
+          "max_ns": 250833167,
+          "measured": true,
+          "min_ns": 221354667,
+          "p50_ns": 243842667,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 9,
+          "unit": "ns"
+        },
+        "max_duration_ns": 250833167,
+        "median_duration_ns": 243842667,
+        "method": "eth_getBalance",
+        "min_duration_ns": 221354667,
+        "p95_duration_ns": null,
+        "p99_duration_ns": null,
+        "source": "live"
+      },
+      {
+        "count": 10,
+        "distribution_ns": {
+          "max_ns": 456798500,
+          "measured": true,
+          "min_ns": 224991083,
+          "p50_ns": 246645125,
+          "p90_ns": 281820042,
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 10,
+          "unit": "ns"
+        },
+        "max_duration_ns": 456798500,
+        "median_duration_ns": 246645125,
+        "method": "eth_getBlockByNumber",
+        "min_duration_ns": 224991083,
+        "p95_duration_ns": null,
+        "p99_duration_ns": null,
+        "source": "live"
+      },
+      {
+        "count": 6,
+        "distribution_ns": {
+          "max_ns": 886929625,
+          "measured": true,
+          "min_ns": 234672000,
+          "p50_ns": 256019083,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 6,
+          "unit": "ns"
+        },
+        "max_duration_ns": 886929625,
+        "median_duration_ns": 256019083,
+        "method": "eth_getCode",
+        "min_duration_ns": 234672000,
+        "p95_duration_ns": null,
+        "p99_duration_ns": null,
+        "source": "live"
+      },
+      {
+        "count": 20,
+        "distribution_ns": {
+          "max_ns": 521218833,
+          "measured": true,
+          "min_ns": 224479250,
+          "p50_ns": 247656500,
+          "p90_ns": 257904583,
+          "p95_ns": 293231042,
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 20,
+          "unit": "ns"
+        },
+        "max_duration_ns": 521218833,
+        "median_duration_ns": 247656500,
+        "method": "eth_getStorageAt",
+        "min_duration_ns": 224479250,
+        "p95_duration_ns": 293231042,
+        "p99_duration_ns": null,
+        "source": "live"
+      },
+      {
+        "count": 10,
+        "distribution_ns": {
+          "max_ns": 268600958,
+          "measured": true,
+          "min_ns": 226743291,
+          "p50_ns": 240434292,
+          "p90_ns": 248839125,
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 10,
+          "unit": "ns"
+        },
+        "max_duration_ns": 268600958,
+        "median_duration_ns": 240434292,
+        "method": "eth_getTransactionCount",
+        "min_duration_ns": 226743291,
+        "p95_duration_ns": null,
+        "p99_duration_ns": null,
+        "source": "live"
+      },
+      {
+        "count": 3,
+        "distribution_ns": {
+          "max_ns": 239166584,
+          "measured": true,
+          "min_ns": 230394459,
+          "p50_ns": 236874375,
+          "p90_ns": null,
+          "p90_reason": {
+            "minimum_samples": 10,
+            "reason": "insufficient_sample"
+          },
+          "p95_ns": null,
+          "p95_reason": {
+            "minimum_samples": 20,
+            "reason": "insufficient_sample"
+          },
+          "p99_ns": null,
+          "p99_reason": {
+            "minimum_samples": 100,
+            "reason": "insufficient_sample"
+          },
+          "samples": 3,
+          "unit": "ns"
+        },
+        "max_duration_ns": 239166584,
+        "median_duration_ns": 236874375,
+        "method": "eth_maxPriorityFeePerGas",
+        "min_duration_ns": 230394459,
+        "p95_duration_ns": null,
+        "p99_duration_ns": null,
+        "source": "live"
+      }
+    ],
+    "non_rpc_duration_ns_per_run": {
+      "max_ns": 0,
+      "measured": true,
+      "min_ns": 0,
+      "note": "a single sample: this row is one measurement, not a distribution",
+      "p50_ns": null,
+      "p50_reason": {
+        "minimum_samples": 2,
+        "reason": "insufficient_sample"
+      },
+      "p90_ns": null,
+      "p90_reason": {
+        "minimum_samples": 10,
+        "reason": "insufficient_sample"
+      },
+      "p95_ns": null,
+      "p95_reason": {
+        "minimum_samples": 20,
+        "reason": "insufficient_sample"
+      },
+      "p99_ns": null,
+      "p99_reason": {
+        "minimum_samples": 100,
+        "reason": "insufficient_sample"
+      },
+      "samples": 1,
+      "unit": "ns"
+    },
+    "pipeline_total_duration_ns_per_run": {
+      "max_ns": 20097335042,
+      "measured": true,
+      "min_ns": 20097335042,
+      "note": "a single sample: this row is one measurement, not a distribution",
+      "p50_ns": null,
+      "p50_reason": {
+        "minimum_samples": 2,
+        "reason": "insufficient_sample"
+      },
+      "p90_ns": null,
+      "p90_reason": {
+        "minimum_samples": 10,
+        "reason": "insufficient_sample"
+      },
+      "p95_ns": null,
+      "p95_reason": {
+        "minimum_samples": 20,
+        "reason": "insufficient_sample"
+      },
+      "p99_ns": null,
+      "p99_reason": {
+        "minimum_samples": 100,
+        "reason": "insufficient_sample"
+      },
+      "samples": 1,
+      "unit": "ns"
+    },
+    "rpc_count_per_run": {
+      "max": 82,
+      "measured": true,
+      "min": 82,
+      "note": "a single sample: this row is one measurement, not a distribution",
+      "p50": null,
+      "p50_reason": {
+        "minimum_samples": 2,
+        "reason": "insufficient_sample"
+      },
+      "p90": null,
+      "p90_reason": {
+        "minimum_samples": 10,
+        "reason": "insufficient_sample"
+      },
+      "p95": null,
+      "p95_reason": {
+        "minimum_samples": 20,
+        "reason": "insufficient_sample"
+      },
+      "p99": null,
+      "p99_reason": {
+        "minimum_samples": 100,
+        "reason": "insufficient_sample"
+      },
+      "samples": 1,
+      "unit": "count"
+    },
+    "rpc_union_duration_ns_per_run": {
+      "max_ns": 22678378081,
+      "measured": true,
+      "min_ns": 22678378081,
+      "note": "a single sample: this row is one measurement, not a distribution",
+      "p50_ns": null,
+      "p50_reason": {
+        "minimum_samples": 2,
+        "reason": "insufficient_sample"
+      },
+      "p90_ns": null,
+      "p90_reason": {
+        "minimum_samples": 10,
+        "reason": "insufficient_sample"
+      },
+      "p95_ns": null,
+      "p95_reason": {
+        "minimum_samples": 20,
+        "reason": "insufficient_sample"
+      },
+      "p99_ns": null,
+      "p99_reason": {
+        "minimum_samples": 100,
+        "reason": "insufficient_sample"
+      },
+      "samples": 1,
+      "unit": "ns"
+    },
+    "rule": "durations pool because a duration is a difference of one clock; instants do not pool across runs, so no union, overlap or gap below is a cross-run measurement — each is one run's own figure, listed as one sample",
+    "runs": 1
+  },
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "§10 and §17 across the runs of this experiment: where a run's RPC time went, per stage and per method, with every figure traceable to the one run it was measured in",
+  "reading_rules": [
+    "§10's split is `stages[].measured.rpc_union_duration_ns` read against `totals.pipeline_total_duration_ns`: the union is the part of the run a call was in flight, the difference is the part none of these calls covers. Neither is a claim about *why* — §20 forbids calling the first one network latency and the second one local compute without a measurement that separates them",
+    "§8: the per-stage table is keyed on the code's own stage names. The eight bucket rows are §19's required summary keys and nothing else; two of them are empty by the mapping and say so in their own `why`",
+    "a run's `attribution_accounts.disagreements` is the one column that would show a stamp landing on the wrong call, so an empty list there is a check that ran, not an assumption that the labels are right"
+  ],
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}

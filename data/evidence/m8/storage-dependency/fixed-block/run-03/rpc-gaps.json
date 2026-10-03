@@ -1,0 +1,165 @@
+{
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "definitions": "a gap is a maximal stretch inside one simulation's call window — between its first call's start and its last call's end — with no call in flight (§12). Time before the first call and after the last is not a gap: it is in `non_rpc_duration_ns` or outside the window, and counting it here would let one call at the end of a stage read as a long wait.",
+  "diagnosis_only": "§12 and §18: a gap is reported, not filled. Nothing in this build prefetches, batches or overlaps a call to shorten one",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "gap_count": 40,
+  "gap_max_ns": 778417,
+  "gap_median_is_p50": "the same nearest-rank p50 every other table in this directory uses. A population of one stretch has a min and a max and no median, and says `null` with `insufficient_sample` beside it rather than reprinting its single sample under a second name.",
+  "gap_median_ns": 93459,
+  "gap_min_ns": 21292,
+  "gap_total_ns": 7998250,
+  "gap_total_over_call_window_per_mille": {
+    "denominator": 23692083,
+    "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+    "numerator": 7998250,
+    "per_mille": 337
+  },
+  "gap_total_over_simulation_span_per_mille": {
+    "denominator": 25498750,
+    "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+    "numerator": 7998250,
+    "per_mille": 313
+  },
+  "gap_width_distribution_ns": {
+    "max_ns": 778417,
+    "measured": true,
+    "min_ns": 21292,
+    "p50_ns": 93459,
+    "p90_ns": 520750,
+    "p95_ns": 632583,
+    "p99_ns": null,
+    "p99_reason": {
+      "minimum_samples": 100,
+      "reason": "insufficient_sample"
+    },
+    "samples": 40,
+    "unit": "ns"
+  },
+  "gaps_per_simulation_distribution": {
+    "max": 40,
+    "measured": true,
+    "min": 40,
+    "note": "a single sample: this row is one measurement, not a distribution",
+    "p50": null,
+    "p50_reason": {
+      "minimum_samples": 2,
+      "reason": "insufficient_sample"
+    },
+    "p90": null,
+    "p90_reason": {
+      "minimum_samples": 10,
+      "reason": "insufficient_sample"
+    },
+    "p95": null,
+    "p95_reason": {
+      "minimum_samples": 20,
+      "reason": "insufficient_sample"
+    },
+    "p99": null,
+    "p99_reason": {
+      "minimum_samples": 100,
+      "reason": "insufficient_sample"
+    },
+    "samples": 1,
+    "unit": "count"
+  },
+  "generated_at_unix_ms": 1791022752621,
+  "generated_at_used_for_durations": false,
+  "git_revision": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+  "instrumentation_issues_no_requests": true,
+  "measured_at": "the same one sweep that produced `rpc_union_duration_ns` in each simulation's line (`crates/pipeline/src/diagnosis.rs::scan`); this file merges the widths those lines publish and takes no new clock reading",
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "per_simulation": [
+    {
+      "block_number": 37191169,
+      "chain_id": 91342,
+      "endpoint_id": "rpc-2bf23dcb048f3dd0",
+      "gap_share_of_call_window_per_mille": {
+        "denominator": 23692083,
+        "notation": "per mille: part × 1000 ÷ whole, integer division, both in ns",
+        "numerator": 7998250,
+        "per_mille": 337
+      },
+      "own_gap_distribution_ns": {
+        "max_ns": 778417,
+        "measured": true,
+        "min_ns": 21292,
+        "p50_ns": 93459,
+        "p90_ns": 520750,
+        "p95_ns": 632583,
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 40,
+        "unit": "ns"
+      },
+      "rpc_gap_count": 40,
+      "rpc_gap_duration_ns": 7998250,
+      "rpc_gap_widths_ns": [
+        42625,
+        83958,
+        258959,
+        255042,
+        146125,
+        275083,
+        64208,
+        25667,
+        201625,
+        21541,
+        546834,
+        90625,
+        22833,
+        21292,
+        363708,
+        95125,
+        21750,
+        520750,
+        78000,
+        75125,
+        81833,
+        466458,
+        21542,
+        328333,
+        778417,
+        108667,
+        676458,
+        114708,
+        27375,
+        485917,
+        61292,
+        60292,
+        93459,
+        68833,
+        65125,
+        425875,
+        109708,
+        632583,
+        111292,
+        69208
+      ],
+      "rpc_union_duration_ns": 15693833,
+      "rpc_wall_duration_ns": 23692083,
+      "simulation_duration_ns": 25498750,
+      "simulation_id": "m8.4.1-run-03-37191169",
+      "source": "fixture",
+      "total_calls": 41
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "simulations": 1,
+  "simulations_with_calls": 1,
+  "simulations_with_idle_stretches": 1,
+  "simulations_without_calls": 0,
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}

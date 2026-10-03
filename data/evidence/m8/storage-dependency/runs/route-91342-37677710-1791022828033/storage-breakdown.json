@@ -1,0 +1,359 @@
+{
+  "address_count": 4,
+  "addresses": [
+    {
+      "address": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "blocks": [
+        "37677710"
+      ],
+      "chain_ids": [
+        91342
+      ],
+      "duration_distribution_ns": {
+        "max_ns": 293231042,
+        "measured": true,
+        "min_ns": 228961500,
+        "p50_ns": 251051917,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "duration_total_ns": 773244459,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "reads": 3,
+      "semantic": "unknown",
+      "simulations": [
+        "m7-91342-37677710-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ],
+      "slot_count": 3,
+      "slots": [
+        {
+          "reads": 1,
+          "slot": "0x2cd94663f0c2301aa845214efa861a070af8e70c2d96027534ab991c96129041",
+          "total_duration_ns": 293231042
+        },
+        {
+          "reads": 1,
+          "slot": "0x4b1c689c92d22dbbfe367179bd99e043109f97f70bd4a1b451a2699bf9e9fae6",
+          "total_duration_ns": 251051917
+        },
+        {
+          "reads": 1,
+          "slot": "0xdfaea0954cbbd4bf3acdce7cdc235c914da8e1a0cc7b7edca8bea4342c7e7483",
+          "total_duration_ns": 228961500
+        }
+      ],
+      "slots_without_word": 0
+    },
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "blocks": [
+        "37677710"
+      ],
+      "chain_ids": [
+        91342
+      ],
+      "duration_distribution_ns": {
+        "max_ns": 251616459,
+        "measured": true,
+        "min_ns": 224479250,
+        "p50_ns": 243540250,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 6,
+        "unit": "ns"
+      },
+      "duration_total_ns": 1447053375,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "reads": 6,
+      "semantic": "unknown",
+      "simulations": [
+        "m7-91342-37677710-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ],
+      "slot_count": 6,
+      "slots": [
+        {
+          "reads": 1,
+          "slot": "0x0000000000000000000000000000000000000000000000000000000000000006",
+          "total_duration_ns": 249213250
+        },
+        {
+          "reads": 1,
+          "slot": "0x0000000000000000000000000000000000000000000000000000000000000007",
+          "total_duration_ns": 226829208
+        },
+        {
+          "reads": 1,
+          "slot": "0x0000000000000000000000000000000000000000000000000000000000000008",
+          "total_duration_ns": 224479250
+        },
+        {
+          "reads": 1,
+          "slot": "0x0000000000000000000000000000000000000000000000000000000000000009",
+          "total_duration_ns": 243540250
+        },
+        {
+          "reads": 1,
+          "slot": "0x000000000000000000000000000000000000000000000000000000000000000a",
+          "total_duration_ns": 251616459
+        },
+        {
+          "reads": 1,
+          "slot": "0x000000000000000000000000000000000000000000000000000000000000000c",
+          "total_duration_ns": 251374958
+        }
+      ],
+      "slots_without_word": 0
+    },
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "blocks": [
+        "37677710"
+      ],
+      "chain_ids": [
+        91342
+      ],
+      "duration_distribution_ns": {
+        "max_ns": 521218833,
+        "measured": true,
+        "min_ns": 225536458,
+        "p50_ns": 248905041,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 5,
+        "unit": "ns"
+      },
+      "duration_total_ns": 1500355624,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "reads": 5,
+      "semantic": "unknown",
+      "simulations": [
+        "m7-91342-37677710-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ],
+      "slot_count": 5,
+      "slots": [
+        {
+          "reads": 1,
+          "slot": "0x05822d3e2ebb7a872393b4558653ad1e9b65a460779e182fcc8ddaab7e9ffe43",
+          "total_duration_ns": 246790709
+        },
+        {
+          "reads": 1,
+          "slot": "0x1b1bb8ff368a01a4515d946798f9ce83f922cd929f5f78345be8839b0a76b6b5",
+          "total_duration_ns": 521218833
+        },
+        {
+          "reads": 1,
+          "slot": "0x2e5fa5a20a968dad9e38de565071b24012ee3d83208e5aa1aff07e2ab55713ab",
+          "total_duration_ns": 225536458
+        },
+        {
+          "reads": 1,
+          "slot": "0xb77ec4036e45e3fb60a35dbc31e61e5833c2d7087a9bf5e464ec2c8a1156943d",
+          "total_duration_ns": 248905041
+        },
+        {
+          "reads": 1,
+          "slot": "0xcfa4c03372b9736c2488d7888e17ad65d25fce1f5f6b940ab060d3382ed42080",
+          "total_duration_ns": 257904583
+        }
+      ],
+      "slots_without_word": 0
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "blocks": [
+        "37677710"
+      ],
+      "chain_ids": [
+        91342
+      ],
+      "duration_distribution_ns": {
+        "max_ns": 253969667,
+        "measured": true,
+        "min_ns": 233089083,
+        "p50_ns": 245237584,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 6,
+        "unit": "ns"
+      },
+      "duration_total_ns": 1477692167,
+      "endpoint_ids": [
+        "rpc-faa716cada04a9ef"
+      ],
+      "reads": 6,
+      "semantic": "unknown",
+      "simulations": [
+        "m7-91342-37677710-0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4-0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E-100000000000000"
+      ],
+      "slot_count": 6,
+      "slots": [
+        {
+          "reads": 1,
+          "slot": "0x0000000000000000000000000000000000000000000000000000000000000006",
+          "total_duration_ns": 253969667
+        },
+        {
+          "reads": 1,
+          "slot": "0x0000000000000000000000000000000000000000000000000000000000000007",
+          "total_duration_ns": 245237584
+        },
+        {
+          "reads": 1,
+          "slot": "0x0000000000000000000000000000000000000000000000000000000000000008",
+          "total_duration_ns": 247656500
+        },
+        {
+          "reads": 1,
+          "slot": "0x0000000000000000000000000000000000000000000000000000000000000009",
+          "total_duration_ns": 233089083
+        },
+        {
+          "reads": 1,
+          "slot": "0x000000000000000000000000000000000000000000000000000000000000000a",
+          "total_duration_ns": 244944041
+        },
+        {
+          "reads": 1,
+          "slot": "0x000000000000000000000000000000000000000000000000000000000000000c",
+          "total_duration_ns": 252795292
+        }
+      ],
+      "slots_without_word": 0
+    }
+  ],
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791022828035,
+  "generated_at_used_for_durations": false,
+  "git_revision": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+  "grouping": "§6: by normalized address; a group's slots listed with their counts",
+  "instrumentation_issues_no_requests": true,
+  "mergeability": {
+    "answer_scope": "one simulation at a time: a batch candidate is a simulation's own reads, so a group spanning several runs counts as not batchable here even when each run's reads were batchable on their own",
+    "note": "batch JSON-RPC is recorded as a candidate direction and is not built in M8.3.2 (§8, §18)",
+    "per_address": [
+      {
+        "address": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+        "distinct_blocks": 1,
+        "distinct_endpoints": 1,
+        "distinct_simulations": 1,
+        "per_simulation_batchable": true,
+        "reads": 3,
+        "same_block": true,
+        "same_endpoint": true,
+        "same_simulation": true
+      },
+      {
+        "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "distinct_blocks": 1,
+        "distinct_endpoints": 1,
+        "distinct_simulations": 1,
+        "per_simulation_batchable": true,
+        "reads": 6,
+        "same_block": true,
+        "same_endpoint": true,
+        "same_simulation": true
+      },
+      {
+        "address": "0x4200000000000000000000000000000000000006",
+        "distinct_blocks": 1,
+        "distinct_endpoints": 1,
+        "distinct_simulations": 1,
+        "per_simulation_batchable": true,
+        "reads": 5,
+        "same_block": true,
+        "same_endpoint": true,
+        "same_simulation": true
+      },
+      {
+        "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "distinct_blocks": 1,
+        "distinct_endpoints": 1,
+        "distinct_simulations": 1,
+        "per_simulation_batchable": true,
+        "reads": 6,
+        "same_block": true,
+        "same_endpoint": true,
+        "same_simulation": true
+      }
+    ],
+    "question": "§8: do one address's storage reads share endpoint, block and simulation?",
+    "reads_total": 20,
+    "status": "candidate_only_not_implemented"
+  },
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "reads_total": 20,
+  "reads_without_address": 0,
+  "semantic": "no slot-to-name mapping exists in this build: the names reserve0 / reserve1 / blockTimestampLast appear only as fields decoded from a pool's Sync event log and from an eth_call of getReserves(), and neither is the storage word a getStorageAt asked for, so §7 forbids labelling this row from its slot number",
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}

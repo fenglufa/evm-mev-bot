@@ -1,0 +1,114 @@
+{
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791022752549,
+  "generated_at_used_for_durations": false,
+  "git_revision": "ba10d58edafaac8afc0bf2e546f6e74a480f2f23",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "per_source": [
+    {
+      "duplicate_ratio": {
+        "denominator": 40,
+        "notation": "integer terms, no float (§13)",
+        "numerator": 0
+      },
+      "duplicate_state_reads": 0,
+      "per_simulation_duplicate_reads": {
+        "max": 0,
+        "measured": true,
+        "min": 0,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "per_simulation_unique_reads": {
+        "max": 40,
+        "measured": true,
+        "min": 40,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "simulations": 1,
+      "source": "fixture",
+      "state_read_cache": {
+        "balance": {
+          "hits": 12,
+          "misses": 6
+        },
+        "cache_hits": 78,
+        "cache_misses": 39,
+        "code": {
+          "hits": 27,
+          "misses": 6
+        },
+        "nonce": {
+          "hits": 12,
+          "misses": 6
+        },
+        "simulations_with_reuse": 1,
+        "simulations_without_reuse": 0,
+        "simulations_without_tally": 0,
+        "storage": {
+          "hits": 27,
+          "misses": 21
+        },
+        "tally_scope": "state_read_cache: a hit is a state read this simulation answered from what it had already read at its own pinned block, so it cost no request; a miss is a read it had to ask for. With reuse off, the account kinds (balance, nonce, and the bytecode an account asks for) are never looked up and so carry neither number — only the kinds this boundary reused before M8.3.1 (code on a direct read, storage) are tallied. Nothing here is derived from the call list; it is counted at the lookup that made it true."
+      },
+      "total_state_reads": 40,
+      "unique_state_reads": 40,
+      "unkeyed_calls": 1
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "sources_are_never_blended": true,
+  "unit": "ns"
+}
