@@ -779,19 +779,27 @@ static CONTRACTS: [StateContract; 11] = [
         freshness: Rule {
             id: "no_rule_declared",
             status: ProofStatus::Unknown,
-            text: "preflight asks the head and the build asks the pinned block; in the three \
-                   measured runs both names happened to land on the same height, and no code \
-                   compares the two answers, so nothing states how old a balance may be",
+            text: "the measured pairs come in two shapes, and in both the build asks again at \
+                   the height the earlier stage used: preflight reads the sender's balance at \
+                   the head it has just read and the build's before-snapshot asks that same \
+                   height, while the simulation reads at the pinned block and the build's gate \
+                   leg asks that same height. Nothing compares the two answers and nothing \
+                   states how old a balance may be",
             anchors: &[
                 code(
                     "crates/execution/src/giwa/preflight_facts.rs",
                     "fn read_head",
-                    "the head the balance is asked at",
+                    "the head the preflight balance is asked at",
+                ),
+                code(
+                    "crates/execution/src/sequence.rs",
+                    "before-snapshot: native",
+                    "the build's second balance ask, at preflight's height",
                 ),
                 code(
                     "crates/execution/src/sequence.rs",
                     "gate — native balance",
-                    "the build-side read, at the intent's own block",
+                    "the build's funding leg, at the intent's pinned height",
                 ),
             ],
         },
@@ -825,9 +833,11 @@ static CONTRACTS: [StateContract; 11] = [
             semantically_equivalent: tier(
                 Some(false),
                 ProofStatus::Unknown,
-                "the two asks share a height and a method and do not share a question: one \
-                 asks what the wallet can pay now, the other what it could pay at the pinned \
-                 block. §10's 「same value != same state identity」 is this row",
+                "each measured pair shares a method, an address and a height, and the two sides \
+                 do not ask the same question: the earlier answer decides whether the attempt \
+                 may go on, the later one is the before-half of a diff that measures what the \
+                 sequence actually moved. §10's 「same value != same state identity」 is this \
+                 row",
             ),
             reusable_in_principle: tier(
                 Some(false),
