@@ -1,0 +1,2492 @@
+{
+  "anchors": [
+    {
+      "file": "crates/state/src/store.rs",
+      "line": 28,
+      "matches": 1,
+      "note": "InMemoryStateStore is declared here",
+      "source": "code",
+      "token": "pub struct InMemoryStateStore"
+    },
+    {
+      "file": "crates/graph/src/snapshot.rs",
+      "line": 17,
+      "matches": 1,
+      "note": "GraphSnapshot is declared here",
+      "source": "code",
+      "token": "pub struct GraphSnapshot {"
+    },
+    {
+      "file": "crates/opportunity/src/detector.rs",
+      "line": 102,
+      "matches": 1,
+      "note": "Opportunity is declared here",
+      "source": "code",
+      "token": "pub struct Opportunity {"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 370,
+      "matches": 1,
+      "note": "PreflightFacts is declared here",
+      "source": "code",
+      "token": "pub struct PreflightFacts<'a>"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 407,
+      "matches": 1,
+      "note": "PreflightReport is declared here",
+      "source": "code",
+      "token": "pub struct PreflightReport"
+    },
+    {
+      "file": "crates/execution/src/block_context.rs",
+      "line": 161,
+      "matches": 1,
+      "note": "VerifiedBlockContext is declared here",
+      "source": "code",
+      "token": "pub struct VerifiedBlockContext"
+    },
+    {
+      "file": "crates/execution/src/intent.rs",
+      "line": 138,
+      "matches": 1,
+      "note": "TransactionIntent is declared here",
+      "source": "code",
+      "token": "pub struct TransactionIntent"
+    },
+    {
+      "file": "crates/simulation/src/state.rs",
+      "line": 45,
+      "matches": 1,
+      "note": "BlockPin is declared here",
+      "source": "code",
+      "token": "pub struct BlockPin"
+    },
+    {
+      "file": "crates/simulation/src/state.rs",
+      "line": 342,
+      "matches": 1,
+      "note": "StateReadCache is declared here",
+      "source": "code",
+      "token": "struct StateReadCache {"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 35,
+      "matches": 1,
+      "note": "HttpChainAdapter is declared here",
+      "source": "code",
+      "token": "pub struct HttpChainAdapter"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_blockNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 513,
+      "matches": 1,
+      "note": "site observation.eth_blockNumber.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "BlockPin::new(head"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 460,
+      "matches": 1,
+      "note": "site opportunity_detection.eth_call.reserves stamps its caller label here",
+      "source": "code",
+      "token": "reserves of both venues, at the pin"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site opportunity_detection.eth_call.reserves's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 251,
+      "matches": 1,
+      "note": "site preflight.eth_call.l1_fee stamps its caller label here",
+      "source": "code",
+      "token": "cost ceiling per step"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 338,
+      "matches": 1,
+      "note": "site preflight.eth_call.l1_fee's answer first meets a decision here",
+      "source": "code",
+      "token": "fn l1_line"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 259,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg0 stamps its caller label here",
+      "source": "code",
+      "token": "reserves of leg 0"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 888,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg0's answer first meets a decision here",
+      "source": "code",
+      "token": "expected_output(&facts.reserves"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 261,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg1 stamps its caller label here",
+      "source": "code",
+      "token": "reserves of leg 1"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 888,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg1's answer first meets a decision here",
+      "source": "code",
+      "token": "expected_output(&facts.reserves"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 223,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.head_latest stamps its caller label here",
+      "source": "code",
+      "token": "head at latest"
+    },
+    {
+      "file": "crates/execution/src/block_context.rs",
+      "line": 176,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.head_latest's answer first meets a decision here",
+      "source": "code",
+      "token": "two calls can straddle a block"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 235,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_pin stamps its caller label here",
+      "source": "code",
+      "token": "fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 199,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_pin's answer first meets a decision here",
+      "source": "code",
+      "token": "max_tip > max_fee"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 243,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_head stamps its caller label here",
+      "source": "code",
+      "token": "fee at head"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 798,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_head's answer first meets a decision here",
+      "source": "code",
+      "token": "facts.fee.max_fee_per_gas.is_zero"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 279,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.binding_pin stamps its caller label here",
+      "source": "code",
+      "token": "block binding at pin"
+    },
+    {
+      "file": "crates/execution/src/chain_read.rs",
+      "line": 44,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.binding_pin's answer first meets a decision here",
+      "source": "code",
+      "token": "hash == pinned"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 248,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.nonce_pair_head stamps its caller label here",
+      "source": "code",
+      "token": "pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 49,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.nonce_pair_head's answer first meets a decision here",
+      "source": "code",
+      "token": "pending < self.confirmed"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 248,
+      "matches": 1,
+      "note": "site preflight.eth_getTransactionCount.pair stamps its caller label here",
+      "source": "code",
+      "token": "pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 49,
+      "matches": 1,
+      "note": "site preflight.eth_getTransactionCount.pair's answer first meets a decision here",
+      "source": "code",
+      "token": "pending < self.confirmed"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 269,
+      "matches": 1,
+      "note": "site preflight.eth_getBalance.sender stamps its caller label here",
+      "source": "code",
+      "token": "native balance of the sender"
+    },
+    {
+      "file": "crates/execution/src/gate.rs",
+      "line": 74,
+      "matches": 1,
+      "note": "site preflight.eth_getBalance.sender's answer first meets a decision here",
+      "source": "code",
+      "token": "pub enum BlockBinding"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 277,
+      "matches": 1,
+      "note": "site preflight.eth_chainId.endpoint stamps its caller label here",
+      "source": "code",
+      "token": "endpoint chain id"
+    },
+    {
+      "file": "crates/execution/src/gate.rs",
+      "line": 74,
+      "matches": 1,
+      "note": "site preflight.eth_chainId.endpoint's answer first meets a decision here",
+      "source": "code",
+      "token": "pub enum BlockBinding"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 235,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.pin stamps its caller label here",
+      "source": "code",
+      "token": "fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 170,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "the endpoint gave no suggested priority fee"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 243,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.head stamps its caller label here",
+      "source": "code",
+      "token": "fee at head"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 798,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.head's answer first meets a decision here",
+      "source": "code",
+      "token": "facts.fee.max_fee_per_gas.is_zero"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 449,
+      "matches": 1,
+      "note": "site simulation.eth_getBlockByNumber.header stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"header at pin\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBlockByNumber.header's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 514,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.touched stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"codes: touched_contracts\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.touched's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 528,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.sender stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"code: sender\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.sender's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 537,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.sender_account stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"account: sender\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.sender_account's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 537,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.sender_account stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"account: sender\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.sender_account's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1790,
+      "matches": 1,
+      "note": "site build.eth_chainId.gate stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: gate — endpoint chain id"
+    },
+    {
+      "file": "crates/execution/src/gate.rs",
+      "line": 74,
+      "matches": 1,
+      "note": "site build.eth_chainId.gate's answer first meets a decision here",
+      "source": "code",
+      "token": "pub enum BlockBinding"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1795,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.binding stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: gate — block binding at pin"
+    },
+    {
+      "file": "crates/execution/src/chain_read.rs",
+      "line": 44,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.binding's answer first meets a decision here",
+      "source": "code",
+      "token": "hash == pinned"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1736,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.fee_pin stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 199,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.fee_pin's answer first meets a decision here",
+      "source": "code",
+      "token": "max_tip > max_fee"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1760,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.nonce_pair_head stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 106,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.nonce_pair_head's answer first meets a decision here",
+      "source": "code",
+      "token": "could duplicate a live transaction"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1760,
+      "matches": 1,
+      "note": "site build.eth_getTransactionCount.pair stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 106,
+      "matches": 1,
+      "note": "site build.eth_getTransactionCount.pair's answer first meets a decision here",
+      "source": "code",
+      "token": "could duplicate a live transaction"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1853,
+      "matches": 1,
+      "note": "site build.eth_getBalance.gate stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: gate — native balance"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1856,
+      "matches": 1,
+      "note": "site build.eth_getBalance.gate's answer first meets a decision here",
+      "source": "code",
+      "token": "maximum_cost_wei"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1736,
+      "matches": 1,
+      "note": "site build.eth_maxPriorityFeePerGas.pin stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 170,
+      "matches": 1,
+      "note": "site build.eth_maxPriorityFeePerGas.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "the endpoint gave no suggested priority fee"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1625,
+      "matches": 1,
+      "note": "site build.eth_call.before_snapshot stamps its caller label here",
+      "source": "code",
+      "token": "before-snapshot: native and input-token balances"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1856,
+      "matches": 1,
+      "note": "site build.eth_call.before_snapshot's answer first meets a decision here",
+      "source": "code",
+      "token": "maximum_cost_wei"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1625,
+      "matches": 1,
+      "note": "site build.eth_getBalance.before_snapshot stamps its caller label here",
+      "source": "code",
+      "token": "before-snapshot: native and input-token balances"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1856,
+      "matches": 1,
+      "note": "site build.eth_getBalance.before_snapshot's answer first meets a decision here",
+      "source": "code",
+      "token": "maximum_cost_wei"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 102,
+      "matches": 1,
+      "note": "site connect.eth_chainId.unstamped stamps its caller label here",
+      "source": "code",
+      "token": "request_with(&http, url, \"eth_chainId\""
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 344,
+      "matches": 1,
+      "note": "site connect.eth_chainId.unstamped's answer first meets a decision here",
+      "source": "code",
+      "token": "if chain_id != expected"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.views_token0 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.views_token0's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.views_token0 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.views_token0's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.views_token0 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.views_token0's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_getreserves stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_getreserves's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_token0 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_token0's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_token1 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_token1's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_swap stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_swap's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_transfer stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_transfer's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_balanceof stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_balanceof's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.execute_balanceof stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.execute_balanceof's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.execute_swap stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.execute_swap's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.execute_balanceof stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.execute_balanceof's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.execute_swap stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.execute_swap's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    }
+  ],
+  "assembly_module": "crates/pipeline/tests/m86_census/tables.rs",
+  "boundary_claims": [
+    {
+      "claim": "StateStore / GraphSnapshot != REVM canonical state",
+      "consequence_for_the_census": "no candidate may claim a saved RPC on the strength of a projection that was never canonical state to begin with",
+      "evidence": "M8.4.3's pool_reserves row, safe_to_reuse_now.reason, quoted in the containers table; and the census's own storage/code/balance/nonce sites, whose owner is the simulation's state provider rather than the store",
+      "status": "held"
+    },
+    {
+      "claim": "propagation != reuse",
+      "consequence_for_the_census": "the five Pattern C rows are REJECT here rather than counted as candidates that failed",
+      "evidence": "§2.3, and M8.4.4's measured rpc_count_reduction of 0",
+      "status": "held"
+    },
+    {
+      "claim": "DERIVABLE != SAFE_TO_DERIVE",
+      "consequence_for_the_census": "one site, no saving, and a named reason instead of a quiet omission",
+      "evidence": "the block_number row's Pattern F: the height is also available from the header read that follows it",
+      "status": "held"
+    }
+  ],
+  "chain_id": 91342,
+  "containers": [
+    {
+      "carrier_const": "no_carrier_in_code",
+      "crosses_a_stage_boundary": false,
+      "declared_at": "crates/state/src/store.rs:28",
+      "file": "crates/state/src/store.rs",
+      "holds_revm_canonical_state": false,
+      "line": 28,
+      "note": "the discovery half's projection: pool metadata and the reserves restated from logs. §4 of M8.4.3's own text forbids reading it as REVM canonical state, and it is not a carrier for any of the 78 measured pairs — nothing in it is handed to a later stage's read.",
+      "sites_carried": [
+        "preflight.eth_call.leg0",
+        "preflight.eth_call.leg1",
+        "preflight.eth_getBlockByNumber.fee_pin",
+        "preflight.eth_getBlockByNumber.fee_head",
+        "preflight.eth_getBlockByNumber.nonce_pair_head",
+        "preflight.eth_getTransactionCount.pair",
+        "preflight.eth_getBalance.sender",
+        "preflight.eth_maxPriorityFeePerGas.pin",
+        "preflight.eth_maxPriorityFeePerGas.head",
+        "build.eth_getBlockByNumber.fee_pin",
+        "build.eth_getBlockByNumber.nonce_pair_head",
+        "build.eth_getTransactionCount.pair",
+        "build.eth_getBalance.gate",
+        "build.eth_maxPriorityFeePerGas.pin"
+      ],
+      "type": "InMemoryStateStore"
+    },
+    {
+      "carrier_const": "no_carrier_in_code",
+      "crosses_a_stage_boundary": false,
+      "declared_at": "crates/graph/src/snapshot.rs:17",
+      "file": "crates/graph/src/snapshot.rs",
+      "holds_revm_canonical_state": false,
+      "line": 17,
+      "note": "a projection with a block number and no block hash, so it cannot even show which block it describes; the same §4 boundary applies.",
+      "sites_carried": [
+        "preflight.eth_call.leg0",
+        "preflight.eth_call.leg1",
+        "preflight.eth_getBlockByNumber.fee_pin",
+        "preflight.eth_getBlockByNumber.fee_head",
+        "preflight.eth_getBlockByNumber.nonce_pair_head",
+        "preflight.eth_getTransactionCount.pair",
+        "preflight.eth_getBalance.sender",
+        "preflight.eth_maxPriorityFeePerGas.pin",
+        "preflight.eth_maxPriorityFeePerGas.head",
+        "build.eth_getBlockByNumber.fee_pin",
+        "build.eth_getBlockByNumber.nonce_pair_head",
+        "build.eth_getTransactionCount.pair",
+        "build.eth_getBalance.gate",
+        "build.eth_maxPriorityFeePerGas.pin"
+      ],
+      "type": "GraphSnapshot"
+    },
+    {
+      "carrier_const": "execution_sequence_report_after_the_fact",
+      "crosses_a_stage_boundary": true,
+      "declared_at": "crates/opportunity/src/detector.rs:102",
+      "file": "crates/opportunity/src/detector.rs",
+      "holds_revm_canonical_state": false,
+      "line": 102,
+      "note": "the *claim* that travels from detection to the stages that check it. It carries reserves as data to be re-read, not as an answer to be served.",
+      "sites_carried": [
+        "opportunity_detection.eth_call.reserves",
+        "build.eth_call.before_snapshot",
+        "build.eth_getBalance.before_snapshot"
+      ],
+      "type": "Opportunity"
+    },
+    {
+      "carrier_const": "preflight_facts_within_one_stage",
+      "crosses_a_stage_boundary": false,
+      "declared_at": "crates/execution/src/preflight.rs:370",
+      "file": "crates/execution/src/preflight.rs",
+      "holds_revm_canonical_state": false,
+      "line": 370,
+      "note": "one stage's own gathering: it does not cross a boundary, which is why a candidate that wanted it to needs a new carrier.",
+      "sites_carried": [
+        "preflight.eth_call.l1_fee",
+        "preflight.eth_getBlockByNumber.head_latest"
+      ],
+      "type": "PreflightFacts"
+    },
+    {
+      "carrier_const": "no_carrier_in_code",
+      "crosses_a_stage_boundary": true,
+      "declared_at": "crates/execution/src/preflight.rs:407",
+      "file": "crates/execution/src/preflight.rs",
+      "holds_revm_canonical_state": false,
+      "line": 407,
+      "note": "the only type that crosses Preflight → Build today, and it has no block field — M8.4.3 names this as the missing carrier for a header answer.",
+      "sites_carried": [
+        "preflight.eth_call.leg0",
+        "preflight.eth_call.leg1",
+        "preflight.eth_getBlockByNumber.fee_pin",
+        "preflight.eth_getBlockByNumber.fee_head",
+        "preflight.eth_getBlockByNumber.nonce_pair_head",
+        "preflight.eth_getTransactionCount.pair",
+        "preflight.eth_getBalance.sender",
+        "preflight.eth_maxPriorityFeePerGas.pin",
+        "preflight.eth_maxPriorityFeePerGas.head",
+        "build.eth_getBlockByNumber.fee_pin",
+        "build.eth_getBlockByNumber.nonce_pair_head",
+        "build.eth_getTransactionCount.pair",
+        "build.eth_getBalance.gate",
+        "build.eth_maxPriorityFeePerGas.pin"
+      ],
+      "type": "PreflightReport"
+    },
+    {
+      "carrier_const": "verified_block_context_preflight_to_build",
+      "crosses_a_stage_boundary": true,
+      "declared_at": "crates/execution/src/block_context.rs:161",
+      "file": "crates/execution/src/block_context.rs",
+      "holds_revm_canonical_state": false,
+      "line": 161,
+      "note": "M8.4.4's contract: produced by a verified read, checked again by the consumer, and measured to save no RPC, because the consumer's read replaces nothing.",
+      "sites_carried": [
+        "preflight.eth_getBlockByNumber.binding_pin",
+        "build.eth_getBlockByNumber.binding"
+      ],
+      "type": "VerifiedBlockContext"
+    },
+    {
+      "carrier_const": "execution_intent_being_built",
+      "crosses_a_stage_boundary": true,
+      "declared_at": "crates/execution/src/intent.rs:138",
+      "file": "crates/execution/src/intent.rs",
+      "holds_revm_canonical_state": false,
+      "line": 138,
+      "note": "the transaction being built holds its own fee fields. §10 named an ExecutionIntent: no such type exists in this workspace (see the searched-and-absent row), and this is the type that carries the fields it was asking about.",
+      "sites_carried": [],
+      "type": "TransactionIntent"
+    },
+    {
+      "carrier_const": "block_pin_height_and_hash",
+      "crosses_a_stage_boundary": true,
+      "declared_at": "crates/simulation/src/state.rs:45",
+      "file": "crates/simulation/src/state.rs",
+      "holds_revm_canonical_state": false,
+      "line": 45,
+      "note": "a height and a hash, carried from the observation stage and checked by the simulation's own header read.",
+      "sites_carried": [
+        "observation.eth_blockNumber.pin",
+        "observation.eth_getBlockByNumber.pin"
+      ],
+      "type": "BlockPin"
+    },
+    {
+      "carrier_const": "state_read_cache_within_one_simulation",
+      "crosses_a_stage_boundary": false,
+      "declared_at": "crates/simulation/src/state.rs:342",
+      "file": "crates/simulation/src/state.rs",
+      "holds_revm_canonical_state": false,
+      "line": 342,
+      "note": "M8.3.1's real cache, and the reason no REVM-side read appears in the census as an avoidable duplicate: its scope is one simulation, which is what its own documentation says.",
+      "sites_carried": [
+        "simulation.eth_getBlockByNumber.header",
+        "simulation.eth_getCode.touched",
+        "simulation.eth_getCode.sender",
+        "simulation.eth_getBalance.sender_account",
+        "simulation.eth_getTransactionCount.sender_account",
+        "simulation.eth_getBalance.views_token0",
+        "simulation.eth_getCode.views_token0",
+        "simulation.eth_getTransactionCount.views_token0",
+        "simulation.eth_getStorageAt.views_getreserves",
+        "simulation.eth_getStorageAt.views_token0",
+        "simulation.eth_getStorageAt.views_token1",
+        "simulation.eth_getStorageAt.execute_swap",
+        "simulation.eth_getStorageAt.execute_transfer",
+        "simulation.eth_getStorageAt.execute_balanceof",
+        "simulation.eth_getBalance.execute_balanceof",
+        "simulation.eth_getBalance.execute_swap",
+        "simulation.eth_getTransactionCount.execute_balanceof",
+        "simulation.eth_getTransactionCount.execute_swap"
+      ],
+      "type": "StateReadCache"
+    },
+    {
+      "carrier_const": "chain_adapter_field",
+      "crosses_a_stage_boundary": true,
+      "declared_at": "crates/chain/src/rpc.rs:35",
+      "file": "crates/chain/src/rpc.rs",
+      "holds_revm_canonical_state": false,
+      "line": 35,
+      "note": "the connection, which holds the chain id from connect to drop. The census's only proven owner-and-scope pair — and still a safe saving of 0, because the later asks are each a named leg of a check.",
+      "sites_carried": [
+        "preflight.eth_chainId.endpoint",
+        "build.eth_chainId.gate",
+        "connect.eth_chainId.unstamped"
+      ],
+      "type": "HttpChainAdapter"
+    }
+  ],
+  "endpoint_id": "rpc-faa716cada04a9ef",
+  "evidence_first_rule": "§2.4: every figure here was folded out of records this repository had committed before M8.6 started. No table in this directory was produced by an RPC this milestone made.",
+  "file": "information_flow.json",
+  "flows": [
+    {
+      "answer_state_kind": "block_header",
+      "asked_at": "crates/pipeline/src/arbitrage.rs:406",
+      "asked_by": "head and header that fixed the pin",
+      "authority": "node_at_height",
+      "block_semantics": "names no height: the ask is the head at the instant of asking",
+      "carrier": "block_pin_height_and_hash",
+      "carrier_evidence": "the height it learns travels as the run's pin; the hash leg comes from the header read that follows it",
+      "consumer": "fixes the pin every later read has to name",
+      "decision_evidence": "crates/pipeline/src/arbitrage.rs: the answer is `head`, and the first comparison it meets is `BlockPin::new(head, header.hash)` downstream at the simulation's `check_pin`, which verifies the hash this call never returned",
+      "decoded_into": "node",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/pipeline/src/arbitrage.rs:513",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_blockNumber|endpoint=rpc-faa716cada04a9ef|method_kind=eth_blockNumber",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_blockNumber at observation",
+      "site": "observation.eth_blockNumber.pin",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "block_header",
+      "asked_at": "crates/pipeline/src/arbitrage.rs:406",
+      "asked_by": "head and header that fixed the pin",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height, resolved from the height the run just fixed",
+      "carrier": "block_pin_height_and_hash",
+      "carrier_evidence": "height and hash are read out of this one header, which is why the producer of a block context never mixes two calls",
+      "consumer": "the header that fixes the pin, and the base fee and env the run prices from",
+      "decision_evidence": "crates/pipeline/src/arbitrage.rs: `header.hash` is the pin's identity leg; `check_pin` refuses a simulation whose own header read disagrees, so the hash is a check's operand and not a value passed along",
+      "decoded_into": "node",
+      "derivable_is_not_safe_to_derive": true,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [
+        {
+          "candidate": "header.observation_to_preflight_binding",
+          "consumer": "preflight.eth_getBlockByNumber.binding_pin",
+          "consumer_stage": "preflight",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        },
+        {
+          "candidate": "header.observation_to_build_binding",
+          "consumer": "build.eth_getBlockByNumber.binding",
+          "consumer_stage": "build",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        },
+        {
+          "candidate": "header.observation_to_simulation_header",
+          "consumer": "simulation.eth_getBlockByNumber.header",
+          "consumer_stage": "simulation",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        },
+        {
+          "candidate": "header.observation_to_preflight_fee",
+          "consumer": "preflight.eth_getBlockByNumber.fee_pin",
+          "consumer_stage": "preflight",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        },
+        {
+          "candidate": "header.observation_to_build_fee",
+          "consumer": "build.eth_getBlockByNumber.fee_pin",
+          "consumer_stage": "build",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        },
+        {
+          "candidate": "block_number.observation_redundant_with_header",
+          "consumer": "observation.eth_blockNumber.pin",
+          "consumer_stage": "observation",
+          "crosses_a_stage_boundary": false,
+          "priority": "REJECT",
+          "safe_saving": 0
+        }
+      ],
+      "recorded_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_getBlockByNumber at observation",
+      "site": "observation.eth_getBlockByNumber.pin",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "pool_reserves",
+      "asked_at": "crates/pipeline/src/arbitrage.rs:460",
+      "asked_by": "reserves of both venues, at the pin",
+      "authority": "node_canonical_logs",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "execution_sequence_report_after_the_fact",
+      "carrier_evidence": "the claim travels inside the opportunity and is compared against, never served from: `Repricing::expected_output` and the simulation's `check_reserves` both re-read what this site read",
+      "consumer": "quotes both venues and writes the reserves the run later re-reads",
+      "decision_evidence": "crates/pipeline/src/arbitrage.rs: the reserves become `Venue` quotes and a `RouteLeg`, and the run's first refusal is a zero mid, not a comparison against an earlier answer — this site is the *claimed side* that two later reads check",
+      "decoded_into": "state_store",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [
+        {
+          "candidate": "eth_call.detection_to_preflight_reserves_leg0",
+          "consumer": "preflight.eth_call.leg0",
+          "consumer_stage": "preflight",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        },
+        {
+          "candidate": "eth_call.detection_to_preflight_reserves_leg1",
+          "consumer": "preflight.eth_call.leg1",
+          "consumer_stage": "preflight",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        }
+      ],
+      "recorded_identity": "method=eth_call|block=37700740|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "the graph snapshot carries a block number and no block hash, so a snapshot cannot show its block is the canonical one",
+          "no code path rewinds the store's position, so a same-height rival block leaves the projection in place"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_call at opportunity_detection",
+      "site": "opportunity_detection.eth_call.reserves",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "eth_call_result",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:251",
+      "asked_by": "cost ceiling per step",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the head, per step",
+      "carrier": "preflight_facts_within_one_stage",
+      "carrier_evidence": "",
+      "consumer": "the L1 half of the sequence ceiling the balance and profit lines spend",
+      "decision_evidence": "crates/execution/src/preflight.rs: `fn l1_line` turns an unreadable oracle into a failed `L1FeeEstimate` line rather than a smaller bill, and §35 forbids reading a bill without the L1 leg as the whole bill",
+      "decoded_into": "no_owner_in_code",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/preflight.rs:338",
+      "flows_onward_to": [
+        {
+          "candidate": "l1fee.preflight_oracle",
+          "consumer": "preflight.eth_call.l1_fee",
+          "consumer_stage": "preflight",
+          "crosses_a_stage_boundary": false,
+          "priority": "P1",
+          "safe_saving": 0
+        }
+      ],
+      "recorded_identity": "method=eth_call|block=37700753|chain=91342|data=49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007802f875830164ce07830f4240830f44a882fda4944200000000000000000000000000000000000006865af3107a400084d0e30db0c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000|to=0x420000000000000000000000000000000000000f",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a state-identity field the answer could carry; only the height travels"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_call at preflight",
+      "site": "preflight.eth_call.l1_fee",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "pool_reserves",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:259",
+      "asked_by": "reserves of leg 0",
+      "authority": "node_canonical_logs",
+      "block_semantics": "numbered height at the head",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the head's own first-leg reserves, re-priced against the finding",
+      "decision_evidence": "crates/execution/src/preflight.rs: `expected_output` refuses when the head's reserves are missing (`not re-read at the head`) rather than falling back to the finding's numbers, so this read is the second opinion of the detection claim",
+      "decoded_into": "state_store",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/preflight.rs:888",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "the graph snapshot carries a block number and no block hash, so a snapshot cannot show its block is the canonical one",
+          "no code path rewinds the store's position, so a same-height rival block leaves the projection in place"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_call at preflight",
+      "site": "preflight.eth_call.leg0",
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "answer_state_kind": "pool_reserves",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:261",
+      "asked_by": "reserves of leg 1",
+      "authority": "node_canonical_logs",
+      "block_semantics": "numbered height at the head",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the head's own second-leg reserves",
+      "decision_evidence": "crates/execution/src/preflight.rs: `expected_output` needs both legs at the head, and §27's verdict cannot be formed from one side",
+      "decoded_into": "state_store",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/preflight.rs:888",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "the graph snapshot carries a block number and no block hash, so a snapshot cannot show its block is the canonical one",
+          "no code path rewinds the store's position, so a same-height rival block leaves the projection in place"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_call at preflight",
+      "site": "preflight.eth_call.leg1",
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "answer_state_kind": "block_header",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:223",
+      "asked_by": "head at latest",
+      "authority": "node_at_height",
+      "block_semantics": "a tag: `latest`, deliberately asked for now",
+      "carrier": "preflight_facts_within_one_stage",
+      "carrier_evidence": "number and hash come out of this one header, which is what makes it a `VerifiedBlockContext` producer rather than a height to be filled in",
+      "consumer": "the head the staleness, fee and chain legs are all measured against",
+      "decision_evidence": "crates/execution/src/preflight.rs: a head below the intent's block is a `StaleOpportunity` refusal, and the same answer is the height the fee, balance and binding legs are gathered at",
+      "decoded_into": "node",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/block_context.rs:176",
+      "flows_onward_to": [
+        {
+          "candidate": "header.preflight_head_to_preflight_nonce_pair",
+          "consumer": "preflight.eth_getBlockByNumber.nonce_pair_head",
+          "consumer_stage": "preflight",
+          "crosses_a_stage_boundary": false,
+          "priority": "REJECT",
+          "safe_saving": 0
+        },
+        {
+          "candidate": "header.preflight_head_to_build_nonce_pair",
+          "consumer": "build.eth_getBlockByNumber.nonce_pair_head",
+          "consumer_stage": "build",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        }
+      ],
+      "recorded_identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_getBlockByNumber at preflight",
+      "site": "preflight.eth_getBlockByNumber.head_latest",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "fee_parameters",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:235",
+      "asked_by": "fee at pinned block",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the priced intent's fee fields and the pin half of the pin-versus-head line",
+      "decision_evidence": "crates/execution/src/fee.rs: `max_tip > max_fee` and a missing base fee are refusals, and the reading's `max_fee_per_gas` is what the balance ceiling is computed from",
+      "decoded_into": "chain_adapter",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/fee.rs:199",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBlockByNumber at preflight",
+      "site": "preflight.eth_getBlockByNumber.fee_pin",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "fee_parameters",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:243",
+      "asked_by": "fee at head",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the head",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the head half of the fee line, and the height that leg must agree with",
+      "decision_evidence": "crates/execution/src/preflight.rs: `facts.fee.max_fee_per_gas` is the operand of the `FeeEstimate` line that refuses an underpriced run",
+      "decoded_into": "chain_adapter",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/preflight.rs:798",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBlockByNumber|block=37700753|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBlockByNumber at preflight",
+      "site": "preflight.eth_getBlockByNumber.fee_head",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "block_header",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:279",
+      "asked_by": "block binding at pin",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin, with the hash asked alongside it",
+      "carrier": "verified_block_context_preflight_to_build",
+      "carrier_evidence": "",
+      "consumer": "the `BlockBinding` leg of the gate and the block context build later re-checks",
+      "decision_evidence": "crates/execution/src/chain_read.rs: `hash == pinned` is the whole decision, and a binding that never ran arrives as `Unverified` rather than as a pass",
+      "decoded_into": "node",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/chain_read.rs:44",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_getBlockByNumber at preflight",
+      "site": "preflight.eth_getBlockByNumber.binding_pin",
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "answer_state_kind": "block_header",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:248",
+      "asked_by": "pending and latest nonces",
+      "authority": "node_at_height",
+      "block_semantics": "a tag: `latest`, asked as the second read of a pair",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the height label the pending-versus-confirmed pair is stamped with",
+      "decision_evidence": "crates/execution/src/nonce.rs: the comparison is `pending` against `confirmed`, and this answer only labels which height the confirmed half describes — no line reads it as a check",
+      "decoded_into": "node",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/nonce.rs:49",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_getBlockByNumber at preflight",
+      "site": "preflight.eth_getBlockByNumber.nonce_pair_head",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "nonce",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:248",
+      "asked_by": "pending and latest nonces",
+      "authority": "node_at_height",
+      "block_semantics": "a tag for the pending leg, the head's number for the confirmed leg",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the intent's nonce and the `NonceValid` leg of the gate",
+      "decision_evidence": "crates/execution/src/gate.rs: `NonceValid` refuses when the intent's nonce is not the pending view, and `pending < confirmed` is an error in itself",
+      "decoded_into": "execution_lane",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/nonce.rs:49",
+      "flows_onward_to": [
+        {
+          "candidate": "nonce.preflight_to_build",
+          "consumer": "build.eth_getTransactionCount.pair",
+          "consumer_stage": "build",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        }
+      ],
+      "recorded_identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700755|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getTransactionCount at preflight",
+      "site": "preflight.eth_getTransactionCount.pair",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "native_balance",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:269",
+      "asked_by": "native balance of the sender",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the head",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the balance leg of the gate, on the sequence-wide ceiling",
+      "decision_evidence": "crates/execution/src/gate.rs: `BalanceSufficient` refuses an insufficient or unread balance, and preflight's own ceiling line re-reads the same figure against the whole sequence",
+      "decoded_into": "no_owner_in_code",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/gate.rs:74",
+      "flows_onward_to": [
+        {
+          "candidate": "balance.preflight_to_build_snapshot",
+          "consumer": "build.eth_getBalance.before_snapshot",
+          "consumer_stage": "build",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        }
+      ],
+      "recorded_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700753|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBalance at preflight",
+      "site": "preflight.eth_getBalance.sender",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "chain_identity",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:277",
+      "asked_by": "endpoint chain id",
+      "authority": "first_answer_at_connect",
+      "block_semantics": "no block term: the method asks none",
+      "carrier": "chain_adapter_field",
+      "carrier_evidence": "the adapter already holds a chain id from connect, which is exactly why this leg is a re-read rather than a lookup",
+      "consumer": "the `ChainMatches` leg and the chain id inside the block context",
+      "decision_evidence": "crates/execution/src/gate.rs: intent, configuration and endpoint must all agree, and the file's own words for the leg are that it is read rather than remembered",
+      "decoded_into": "chain_adapter_connection",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/gate.rs:74",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_chainId at preflight",
+      "site": "preflight.eth_chainId.endpoint",
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "answer_state_kind": "fee_parameters",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:235",
+      "asked_by": "fee at pinned block",
+      "authority": "node_at_height",
+      "block_semantics": "no block term, asked under the pin's stamp",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the pin reading's tip, ceiling and provenance",
+      "decision_evidence": "crates/execution/src/fee.rs: a headroom policy with no suggestion is refused — \"defaulting a tip to zero would be a decision about the transaction, not a read\" — and a tip above the ceiling is refused too",
+      "decoded_into": "chain_adapter",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/fee.rs:170",
+      "flows_onward_to": [
+        {
+          "candidate": "tip.preflight_pin_to_preflight_head",
+          "consumer": "preflight.eth_maxPriorityFeePerGas.head",
+          "consumer_stage": "preflight",
+          "crosses_a_stage_boundary": false,
+          "priority": "REJECT",
+          "safe_saving": 0
+        },
+        {
+          "candidate": "tip.preflight_pin_to_build",
+          "consumer": "build.eth_maxPriorityFeePerGas.pin",
+          "consumer_stage": "build",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        }
+      ],
+      "recorded_identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_maxPriorityFeePerGas at preflight",
+      "site": "preflight.eth_maxPriorityFeePerGas.pin",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "fee_parameters",
+      "asked_at": "crates/execution/src/giwa/preflight_facts.rs:243",
+      "asked_by": "fee at head",
+      "authority": "node_at_height",
+      "block_semantics": "no block term, asked under the head's stamp",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the head reading's tip, inside the fee line's ceiling",
+      "decision_evidence": "crates/execution/src/preflight.rs: the `FeeEstimate` operand is the head reading's `max_fee_per_gas`, and the headroom policy builds that number out of the base fee *and* this tip, so the read is inside the comparison and not beside it",
+      "decoded_into": "chain_adapter",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/preflight.rs:798",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_maxPriorityFeePerGas at preflight",
+      "site": "preflight.eth_maxPriorityFeePerGas.head",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "block_header",
+      "asked_at": "crates/simulation/src/engine.rs:449",
+      "asked_by": "header at pin",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the pin check, the fee ceiling and REVM's block env",
+      "decision_evidence": "crates/simulation/src/engine.rs: the read answers its own chain id check and then `check_pin`, whose refusal is `StateMismatch` — the state is not the state the opportunity was found on",
+      "decoded_into": "node",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_getBlockByNumber at simulation",
+      "site": "simulation.eth_getBlockByNumber.header",
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "answer_state_kind": "contract_code",
+      "asked_at": "crates/simulation/src/engine.rs:514",
+      "asked_by": "codes: touched_contracts",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "M8.3.1's cache is why this site shows no duplicate in the records at all: repeated code reads inside one simulation are answered from it",
+      "consumer": "REVM's journal for the route's contracts",
+      "decision_evidence": "crates/simulation/src/engine.rs: an empty `eth_getCode` is `MissingCode` — a refusal, not a bytecode to be filled in",
+      "decoded_into": "simulation_state_provider",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getCode|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "no component outside one simulation can hold a code answer, so cross-stage reuse has no owner to delegate to",
+          "code cannot be fetched by hash at all, so a hash-verified identity is unavailable on this path"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_getCode at simulation",
+      "site": "simulation.eth_getCode.touched",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "contract_code",
+      "asked_at": "crates/simulation/src/engine.rs:528",
+      "asked_by": "code: sender",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "a hard refusal if the simulated sender is a contract",
+      "decision_evidence": "crates/simulation/src/engine.rs: bytecode on the sender is a refusal — §58's account signs nothing and runs nothing",
+      "decoded_into": "simulation_state_provider",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getCode|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "no component outside one simulation can hold a code answer, so cross-stage reuse has no owner to delegate to",
+          "code cannot be fetched by hash at all, so a hash-verified identity is unavailable on this path"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_getCode at simulation",
+      "site": "simulation.eth_getCode.sender",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "native_balance",
+      "asked_at": "crates/simulation/src/engine.rs:537",
+      "asked_by": "account: sender",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the sender's account as REVM sees it at the pin",
+      "decision_evidence": "crates/simulation/src/engine.rs: the triple seeds REVM's journal; no line compares it against another stage's reading",
+      "decoded_into": "no_owner_in_code",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [
+        {
+          "candidate": "balance.simulation_to_build_gate",
+          "consumer": "build.eth_getBalance.gate",
+          "consumer_stage": "build",
+          "crosses_a_stage_boundary": true,
+          "priority": "REJECT",
+          "safe_saving": 0
+        }
+      ],
+      "recorded_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBalance at simulation",
+      "site": "simulation.eth_getBalance.sender_account",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "nonce",
+      "asked_at": "crates/simulation/src/engine.rs:537",
+      "asked_by": "account: sender",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "REVM's starting nonce for the simulated sequence",
+      "decision_evidence": "crates/simulation/src/engine.rs: the journal's start nonce comes from this value, and an absent account degrades to 0 rather than refusing",
+      "decoded_into": "execution_lane",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getTransactionCount at simulation",
+      "site": "simulation.eth_getTransactionCount.sender_account",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "chain_identity",
+      "asked_at": "crates/execution/src/sequence.rs:1790",
+      "asked_by": "step N: gate — endpoint chain id",
+      "authority": "first_answer_at_connect",
+      "block_semantics": "no block term",
+      "carrier": "chain_adapter_field",
+      "carrier_evidence": "",
+      "consumer": "the `ChainMatches` leg and the chain id inside the block identity",
+      "decision_evidence": "crates/execution/src/sequence.rs: the three-way equality runs on this step's own read and a failed gate halts the step before a signature exists",
+      "decoded_into": "chain_adapter_connection",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/gate.rs:74",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_chainId at build",
+      "site": "build.eth_chainId.gate",
+      "verification_role": "FINAL_EXECUTION_GUARD"
+    },
+    {
+      "answer_state_kind": "block_header",
+      "asked_at": "crates/execution/src/sequence.rs:1795",
+      "asked_by": "step N: gate — block binding at pin",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin, with the hash asked alongside it",
+      "carrier": "verified_block_context_preflight_to_build",
+      "carrier_evidence": "M8.4.4's `VerifiedBlockContext` is the carrier and was measured to be safe to propagate with zero net RPC saving; it does not replace this read, it is what this read is checked against",
+      "consumer": "the binding leg, and the cross-stage comparison against preflight's verdict",
+      "decision_evidence": "crates/execution/src/sequence.rs: the step compares its own read against the context preflight verified, and the code says the read replaces no read — nothing is skipped, so no RPC is saved here",
+      "decoded_into": "node",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/chain_read.rs:44",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_getBlockByNumber at build",
+      "site": "build.eth_getBlockByNumber.binding",
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "answer_state_kind": "fee_parameters",
+      "asked_at": "crates/execution/src/sequence.rs:1736",
+      "asked_by": "step N: fee at pinned block",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the intent's fee fields for the step being built",
+      "decision_evidence": "crates/execution/src/sequence.rs: `fields_for(tx_type)` is a refusal path, and the ceiling this reading yields is what the balance leg is computed against",
+      "decoded_into": "chain_adapter",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/fee.rs:199",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBlockByNumber at build",
+      "site": "build.eth_getBlockByNumber.fee_pin",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "block_header",
+      "asked_at": "crates/execution/src/sequence.rs:1760",
+      "asked_by": "step N: pending and latest nonces",
+      "authority": "node_at_height",
+      "block_semantics": "a tag: `latest`, read as the pair's label",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the height label on the nonce pair this step allocates against",
+      "decision_evidence": "crates/execution/src/nonce.rs: the decisions read `pending` against `confirmed` and the lane's own outstanding count; the height is a label on the pair",
+      "decoded_into": "node",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/nonce.rs:106",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_getBlockByNumber at build",
+      "site": "build.eth_getBlockByNumber.nonce_pair_head",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "nonce",
+      "asked_at": "crates/execution/src/sequence.rs:1760",
+      "asked_by": "step N: pending and latest nonces",
+      "authority": "node_at_height",
+      "block_semantics": "a tag for the pending leg, the head's number for the confirmed leg",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the lane's allocation and the last nonce check before signing",
+      "decision_evidence": "crates/execution/src/nonce.rs: an in-flight lane refuses — the transaction \"could duplicate a live transaction\" — and the gate's `NonceValid` leg re-affirms the intent against the same reading",
+      "decoded_into": "execution_lane",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/nonce.rs:106",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700761|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getTransactionCount at build",
+      "site": "build.eth_getTransactionCount.pair",
+      "verification_role": "FINAL_EXECUTION_GUARD"
+    },
+    {
+      "answer_state_kind": "native_balance",
+      "asked_at": "crates/execution/src/sequence.rs:1853",
+      "asked_by": "step N: gate — native balance",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the balance leg of the gate this step signs behind",
+      "decision_evidence": "crates/execution/src/sequence.rs: the comparison is this step's `maximum_cost_wei`, a different basis from preflight's estimate, and a failure halts the step",
+      "decoded_into": "no_owner_in_code",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/sequence.rs:1856",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBalance at build",
+      "site": "build.eth_getBalance.gate",
+      "verification_role": "FINAL_EXECUTION_GUARD"
+    },
+    {
+      "answer_state_kind": "fee_parameters",
+      "asked_at": "crates/execution/src/sequence.rs:1736",
+      "asked_by": "step N: fee at pinned block",
+      "authority": "node_at_height",
+      "block_semantics": "no block term, asked under the pin's stamp",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "consumer": "the intent's priority fee and the ceiling's tip half",
+      "decision_evidence": "crates/execution/src/fee.rs: the policy refusals run on this step's own reading, and the codec refuses a priority above the ceiling a second time",
+      "decoded_into": "chain_adapter",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/fee.rs:170",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_maxPriorityFeePerGas at build",
+      "site": "build.eth_maxPriorityFeePerGas.pin",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "eth_call_result",
+      "asked_at": "crates/execution/src/sequence.rs:1625",
+      "asked_by": "before-snapshot: native and input-token balances",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "execution_sequence_report_after_the_fact",
+      "carrier_evidence": "",
+      "consumer": "the accounting baseline of the sequence report",
+      "decision_evidence": "crates/execution/src/sequence.rs: the before/after pair becomes a `BalanceDelta` reconciled against the receipt's logs, and a disagreement is recorded as a mismatch rather than stopping anything",
+      "decoded_into": "no_owner_in_code",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/sequence.rs:1856",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_call|block=37700753|chain=91342|data=70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c|to=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a state-identity field the answer could carry; only the height travels"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_call at build",
+      "site": "build.eth_call.before_snapshot",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "native_balance",
+      "asked_at": "crates/execution/src/sequence.rs:1625",
+      "asked_by": "before-snapshot: native and input-token balances",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "execution_sequence_report_after_the_fact",
+      "carrier_evidence": "",
+      "consumer": "the native half of the delta the report reconciles against the receipts",
+      "decision_evidence": "crates/execution/src/sequence.rs: the snapshot's first decision is a binding sanity check on which snapshot it is, not on how much is there",
+      "decoded_into": "no_owner_in_code",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/execution/src/sequence.rs:1856",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700753|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBalance at build",
+      "site": "build.eth_getBalance.before_snapshot",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "chain_identity",
+      "asked_at": "crates/chain/src/rpc.rs:102",
+      "asked_by": "<unstamped>",
+      "authority": "first_answer_at_connect",
+      "block_semantics": "no block term",
+      "carrier": "chain_adapter_field",
+      "carrier_evidence": "`HttpChainAdapter` holds the value it read, which is why the two later legs are re-reads of the same ask rather than first answers",
+      "consumer": "the adapter's chain id, the run's first mismatch refusal, the sink's note",
+      "decision_evidence": "crates/pipeline/src/arbitrage.rs: the stored answer is compared against the configured chain at the start of every run, and it keys every later decode",
+      "decoded_into": "chain_adapter_connection",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/pipeline/src/arbitrage.rs:344",
+      "flows_onward_to": [
+        {
+          "candidate": "chainid.connect_to_preflight",
+          "consumer": "preflight.eth_chainId.endpoint",
+          "consumer_stage": "preflight",
+          "crosses_a_stage_boundary": true,
+          "priority": "P1",
+          "safe_saving": 0
+        },
+        {
+          "candidate": "chainid.connect_to_build",
+          "consumer": "build.eth_chainId.gate",
+          "consumer_stage": "build",
+          "crosses_a_stage_boundary": true,
+          "priority": "P1",
+          "safe_saving": 0
+        }
+      ],
+      "recorded_identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": true
+      },
+      "rpc": "eth_chainId at <unstamped>",
+      "site": "connect.eth_chainId.unstamped",
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "answer_state_kind": "native_balance",
+      "asked_at": "crates/simulation/src/engine.rs:1043",
+      "asked_by": "views: token0()",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the account state behind one read-only call",
+      "decision_evidence": "crates/simulation/src/engine.rs: a view's companion reads enter the journal as the call's input; the check is the call's own answer",
+      "decoded_into": "no_owner_in_code",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBalance|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBalance at simulation",
+      "site": "simulation.eth_getBalance.views_token0",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "contract_code",
+      "asked_at": "crates/simulation/src/engine.rs:1043",
+      "asked_by": "views: token0()",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the code REVM executes for one view call",
+      "decision_evidence": "crates/simulation/src/engine.rs: this site has no emptiness rule of its own; the `MissingCode` refusal belongs to the batch site",
+      "decoded_into": "simulation_state_provider",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getCode|address=0x4200000000000000000000000000000000000011|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "no component outside one simulation can hold a code answer, so cross-stage reuse has no owner to delegate to",
+          "code cannot be fetched by hash at all, so a hash-verified identity is unavailable on this path"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_getCode at simulation",
+      "site": "simulation.eth_getCode.views_token0",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "nonce",
+      "asked_at": "crates/simulation/src/engine.rs:1043",
+      "asked_by": "views: token0()",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the journal's account state for one view call",
+      "decision_evidence": "crates/simulation/src/engine.rs: nothing compares this nonce against another stage's; the signing nonce is read in build",
+      "decoded_into": "execution_lane",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getTransactionCount|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getTransactionCount at simulation",
+      "site": "simulation.eth_getTransactionCount.views_token0",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "storage_slot",
+      "asked_at": "crates/simulation/src/engine.rs:1043",
+      "asked_by": "views: getReserves()",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the reserve slots behind one executed view",
+      "decision_evidence": "crates/simulation/src/engine.rs: the executed view's answer is what `check_reserves` compares against the claim, and this site only supplies the state the view ran on",
+      "decoded_into": "simulation_state_provider",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getStorageAt|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342|slot=0x0000000000000000000000000000000000000000000000000000000000000008",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "no owner exists outside one simulation",
+          "the dependency order M8.4.1 measured is not a field a consumer could check"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_getStorageAt at simulation",
+      "site": "simulation.eth_getStorageAt.views_getreserves",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "storage_slot",
+      "asked_at": "crates/simulation/src/engine.rs:1043",
+      "asked_by": "views: token0()",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "one storage slot of one pool, for one view",
+      "decision_evidence": "",
+      "decoded_into": "simulation_state_provider",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getStorageAt|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342|slot=0x0000000000000000000000000000000000000000000000000000000000000006",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "no owner exists outside one simulation",
+          "the dependency order M8.4.1 measured is not a field a consumer could check"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_getStorageAt at simulation",
+      "site": "simulation.eth_getStorageAt.views_token0",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "storage_slot",
+      "asked_at": "crates/simulation/src/engine.rs:1043",
+      "asked_by": "views: token1()",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "one storage slot of one pool, for one view",
+      "decision_evidence": "",
+      "decoded_into": "simulation_state_provider",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getStorageAt|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342|slot=0x0000000000000000000000000000000000000000000000000000000000000007",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "no owner exists outside one simulation",
+          "the dependency order M8.4.1 measured is not a field a consumer could check"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_getStorageAt at simulation",
+      "site": "simulation.eth_getStorageAt.views_token1",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "storage_slot",
+      "asked_at": "crates/simulation/src/engine.rs:621",
+      "asked_by": "execute: step N (nonce N) from <addr> to <addr>: swap(uint256,uint256,address,bytes), value 0, selector <addr>",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the state one executed step read",
+      "decision_evidence": "crates/simulation/src/engine.rs: journal input — the only decisions made from an executed step are its own success, revert or out-of-gas status",
+      "decoded_into": "simulation_state_provider",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getStorageAt|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342|slot=0x2cd94663f0c2301aa845214efa861a070af8e70c2d96027534ab991c96129041",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "no owner exists outside one simulation",
+          "the dependency order M8.4.1 measured is not a field a consumer could check"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_getStorageAt at simulation",
+      "site": "simulation.eth_getStorageAt.execute_swap",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "storage_slot",
+      "asked_at": "crates/simulation/src/engine.rs:621",
+      "asked_by": "execute: step N (nonce N) from <addr> to <addr>: transfer(address,uint256), value 0, selector <addr>",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the state one executed step read",
+      "decision_evidence": "",
+      "decoded_into": "simulation_state_provider",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getStorageAt|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342|slot=0x4b1c689c92d22dbbfe367179bd99e043109f97f70bd4a1b451a2699bf9e9fae6",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "no owner exists outside one simulation",
+          "the dependency order M8.4.1 measured is not a field a consumer could check"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_getStorageAt at simulation",
+      "site": "simulation.eth_getStorageAt.execute_transfer",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "storage_slot",
+      "asked_at": "crates/simulation/src/engine.rs:621",
+      "asked_by": "execute: step N (nonce N) from <addr> to <addr>: balanceOf(address), value 0, selector <addr>",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the state one executed step read",
+      "decision_evidence": "",
+      "decoded_into": "simulation_state_provider",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getStorageAt|address=0x4200000000000000000000000000000000000006|block=37700740|chain=91342|slot=0x05822d3e2ebb7a872393b4558653ad1e9b65a460779e182fcc8ddaab7e9ffe43",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": false,
+        "missing_proof": [
+          "no owner exists outside one simulation",
+          "the dependency order M8.4.1 measured is not a field a consumer could check"
+        ],
+        "reusable_in_principle": true,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null
+      },
+      "rpc": "eth_getStorageAt at simulation",
+      "site": "simulation.eth_getStorageAt.execute_balanceof",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "native_balance",
+      "asked_at": "crates/simulation/src/engine.rs:621",
+      "asked_by": "execute: step N (nonce N) from <addr> to <addr>: balanceOf(address), value 0, selector <addr>",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the native balance in REVM's journal for one step",
+      "decision_evidence": "",
+      "decoded_into": "no_owner_in_code",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBalance|address=0x4200000000000000000000000000000000000006|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBalance at simulation",
+      "site": "simulation.eth_getBalance.execute_balanceof",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "native_balance",
+      "asked_at": "crates/simulation/src/engine.rs:621",
+      "asked_by": "execute: step N (nonce N) from <addr> to <addr>: swap(uint256,uint256,address,bytes), value 0, selector <addr>",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the native balance in REVM's journal for one step",
+      "decision_evidence": "",
+      "decoded_into": "no_owner_in_code",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getBalance|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getBalance at simulation",
+      "site": "simulation.eth_getBalance.execute_swap",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "nonce",
+      "asked_at": "crates/simulation/src/engine.rs:621",
+      "asked_by": "execute: step N (nonce N) from <addr> to <addr>: balanceOf(address), value 0, selector <addr>",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the nonce in REVM's journal for one step",
+      "decision_evidence": "",
+      "decoded_into": "execution_lane",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getTransactionCount|address=0x4200000000000000000000000000000000000006|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getTransactionCount at simulation",
+      "site": "simulation.eth_getTransactionCount.execute_balanceof",
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "answer_state_kind": "nonce",
+      "asked_at": "crates/simulation/src/engine.rs:621",
+      "asked_by": "execute: step N (nonce N) from <addr> to <addr>: swap(uint256,uint256,address,bytes), value 0, selector <addr>",
+      "authority": "node_at_height",
+      "block_semantics": "numbered height at the pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "consumer": "the nonce in REVM's journal for one step",
+      "decision_evidence": "",
+      "decoded_into": "execution_lane",
+      "derivable_is_not_safe_to_derive": false,
+      "first_decision": "crates/simulation/src/engine.rs:1099",
+      "flows_onward_to": [],
+      "recorded_identity": "method=eth_getTransactionCount|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342",
+      "reuse_status_inherited": {
+        "check_would_stop_existing": true,
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false
+      },
+      "rpc": "eth_getTransactionCount at simulation",
+      "site": "simulation.eth_getTransactionCount.execute_swap",
+      "verification_role": "INFORMATION_ONLY"
+    }
+  ],
+  "generated_by": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+  "milestone": "M8.6",
+  "model": "crates/pipeline/tests/m86_census/mod.rs",
+  "new_rpc": 0,
+  "provenance": [
+    {
+      "block_number": 37700740,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700740-1791045857463",
+      "source": "live"
+    },
+    {
+      "block_number": 37700778,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045896095,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700778-1791045896094",
+      "source": "live"
+    },
+    {
+      "block_number": 37700806,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045924234,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700806-1791045924232",
+      "source": "live"
+    }
+  ],
+  "question": "§10: for every read, what the answer becomes, which type holds it, and which stage meets it — the check behind the claim that a value can only be saved if something already holds it",
+  "recompute": "one row per [`SITES`] entry, joined to M8.4.3's ownership row by `state_kind` and to the candidates that name the site as a producer; the container rows are anchor-resolved declarations in this repository",
+  "runs": [
+    "route-91342-37700740-1791045857463",
+    "route-91342-37700778-1791045896094",
+    "route-91342-37700806-1791045924232"
+  ],
+  "schema": "m8.6.v1",
+  "searched_and_absent": [
+    {
+      "looked_for": "ExecutionIntent",
+      "result": "no declaration in this workspace",
+      "rule": "a negative published with its scope and its substitute, so the absence is a checked fact rather than a sentence — §10 asked about ExecutionIntent by name.",
+      "scope": "crates/*/src and crates/*/tests",
+      "the_type_that_carries_those_fields": "TransactionIntent (crates/execution/src/intent.rs)"
+    }
+  ],
+  "unit": "call sites, plus the container types §10 names"
+}

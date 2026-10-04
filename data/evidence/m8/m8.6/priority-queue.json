@@ -1,0 +1,835 @@
+{
+  "anchors": [],
+  "assembly_module": "crates/pipeline/tests/m86_census/tables.rs",
+  "by_priority": {
+    "P1": 3,
+    "REJECT": 15
+  },
+  "chain_id": 91342,
+  "endpoint_id": "rpc-faa716cada04a9ef",
+  "evidence_first_rule": "§2.4: every figure here was folded out of records this repository had committed before M8.6 started. No table in this directory was produced by an RPC this milestone made.",
+  "file": "priority-queue.json",
+  "generated_by": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+  "milestone": "M8.6",
+  "model": "crates/pipeline/tests/m86_census/mod.rs",
+  "new_rpc": 0,
+  "provenance": [
+    {
+      "block_number": 37700740,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700740-1791045857463",
+      "source": "live"
+    },
+    {
+      "block_number": 37700778,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045896095,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700778-1791045896094",
+      "source": "live"
+    },
+    {
+      "block_number": 37700806,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045924234,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700806-1791045924232",
+      "source": "live"
+    }
+  ],
+  "question": "§21: the queue the evidence produces when the five labels are ordered by saving, then by how much new machinery a candidate needs, then by how far its evidence reaches",
+  "recompute": "the order is `queue_sort_key` over `reduction-matrix.json`'s rows; no duration appears at any position of the tuple, and the published `sort_key` lets a reader reproduce the order from the fields rather than from this file",
+  "rows": [
+    {
+      "avoidable_count": 3,
+      "candidate": "chainid.connect_to_build",
+      "current_count": 3,
+      "evidence_strength": "proven",
+      "implementation_risk": "needs_a_new_ownership_rule",
+      "implementation_risk_rank": 1,
+      "missing_proof": [
+        {
+          "measured": "NEW_CHECK_REQUIRED",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "A_physical_duplicate",
+      "priority": "P1",
+      "queue_position": 1,
+      "safe_saving": 0,
+      "sort_key": [
+        1,
+        18446744073709551615,
+        1,
+        0,
+        "chainid.connect_to_build"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "SAFE_RPC_REDUCTION_CANDIDATE_FOUND",
+      "why_here": "the leg runs seconds before a signature, which is the moment an answer four stages stale is least able to carry"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "chainid.connect_to_preflight",
+      "current_count": 3,
+      "evidence_strength": "proven",
+      "implementation_risk": "needs_a_new_ownership_rule",
+      "implementation_risk_rank": 1,
+      "missing_proof": [
+        {
+          "measured": "NEW_CHECK_REQUIRED",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "A_physical_duplicate",
+      "priority": "P1",
+      "queue_position": 2,
+      "safe_saving": 0,
+      "sort_key": [
+        1,
+        18446744073709551615,
+        1,
+        0,
+        "chainid.connect_to_preflight"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "SAFE_RPC_REDUCTION_CANDIDATE_FOUND",
+      "why_here": "the only family in the census whose ownership is proven, whose scope is proven, and whose answer provably does not depend on the block — and therefore the one where a reduction is a design problem rather than a semantic impossibility"
+    },
+    {
+      "avoidable_count": 0,
+      "candidate": "l1fee.preflight_oracle",
+      "current_count": 18,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "needs_a_real_chain_experiment",
+      "implementation_risk_rank": 4,
+      "missing_proof": [
+        {
+          "measured": 0,
+          "missing": "an_exact_duplicate_pair",
+          "would_need": "two asks of one identity, which the records do not contain for this shape"
+        },
+        {
+          "measured": "unproven",
+          "missing": "freshness_preserved"
+        },
+        {
+          "measured": "NEW_CHECK_REQUIRED",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "a_chain_experiment",
+          "next_step": "EXPERIMENT_REQUIRED",
+          "rule": "§26: marked, not run — this milestone spends no RPC on a hypothesis it could settle with one"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "EXPERIMENT_REQUIRED",
+      "pattern": "D_protocol_oracle",
+      "priority": "P1",
+      "queue_position": 3,
+      "safe_saving": 0,
+      "sort_key": [
+        1,
+        18446744073709551615,
+        4,
+        1,
+        "l1fee.preflight_oracle"
+      ],
+      "theoretical_saving": 0,
+      "verdict": "NOT_ENOUGH_EVIDENCE",
+      "why_here": "18 asks and 18 different calldata: there is no duplicate to reduce, and the question §17 asks — whether the same calldata at a different height is one answer — is not in any committed record"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "header.observation_to_build_binding",
+      "current_count": 3,
+      "evidence_strength": "proven",
+      "implementation_risk": "none",
+      "implementation_risk_rank": 0,
+      "missing_proof": [
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "queue_position": 4,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        0,
+        0,
+        "header.observation_to_build_binding"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "the consumer verification M8.4.4 built the contract for, and the code says plainly that the read replaces no read"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "header.observation_to_preflight_binding",
+      "current_count": 3,
+      "evidence_strength": "proven",
+      "implementation_risk": "none",
+      "implementation_risk_rank": 0,
+      "missing_proof": [
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "queue_position": 5,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        0,
+        0,
+        "header.observation_to_preflight_binding"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "§16's inherited row: the context travels, the read stays, and M8.4.4's own aggregate measured the net saving at zero"
+    },
+    {
+      "avoidable_count": 0,
+      "candidate": "block_number.observation_redundant_with_header",
+      "current_count": 3,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "none",
+      "implementation_risk_rank": 0,
+      "missing_proof": [
+        {
+          "measured": 0,
+          "missing": "an_exact_duplicate_pair",
+          "would_need": "two asks of one identity, which the records do not contain for this shape"
+        },
+        {
+          "measured": "unproven",
+          "missing": "freshness_preserved"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "F_information_already_held",
+      "priority": "REJECT",
+      "queue_position": 6,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        0,
+        1,
+        "block_number.observation_redundant_with_header"
+      ],
+      "theoretical_saving": 0,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "§9's DERIVABLE case: the height the run fixes is also the height the following header read names, so one of the two asks could in principle go — and the one that would go is the ask that converts the moving head into a fixed height for everything downstream, which is a semantic change, not a saving"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "header.observation_to_simulation_header",
+      "current_count": 3,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "none",
+      "implementation_risk_rank": 0,
+      "missing_proof": [
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "queue_position": 7,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        0,
+        1,
+        "header.observation_to_simulation_header"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "the pin check is the reason the simulation's numbers describe the block the opportunity was found on; serving it the observation's header would delete the check"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "header.preflight_head_to_build_nonce_pair",
+      "current_count": 3,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "none",
+      "implementation_risk_rank": 0,
+      "missing_proof": [
+        {
+          "measured": "not_preserved",
+          "missing": "freshness_preserved"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "E_preparation_read",
+      "priority": "REJECT",
+      "queue_position": 8,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        0,
+        1,
+        "header.preflight_head_to_build_nonce_pair"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "the same tag pair across a stage boundary, one block-time further apart"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "header.preflight_head_to_preflight_nonce_pair",
+      "current_count": 3,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "none",
+      "implementation_risk_rank": 0,
+      "missing_proof": [
+        {
+          "measured": "not_preserved",
+          "missing": "freshness_preserved"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "E_preparation_read",
+      "priority": "REJECT",
+      "queue_position": 9,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        0,
+        1,
+        "header.preflight_head_to_preflight_nonce_pair"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "both asks name `latest`, and the code's reason for reading number and hash out of one header is that two calls can straddle a block; the record cannot say whether they did (§4.2 forbids guessing what a tag resolved to)"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "tip.preflight_pin_to_preflight_head",
+      "current_count": 3,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "none",
+      "implementation_risk_rank": 0,
+      "missing_proof": [
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "A_physical_duplicate",
+      "priority": "REJECT",
+      "queue_position": 10,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        0,
+        1,
+        "tip.preflight_pin_to_preflight_head"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "the census's most tempting row and its clearest refusal: one parameterless ask twice inside one stage, and the head reading's ceiling — which this tip is arithmetic inside of — is the operand of the fee line"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "header.observation_to_build_fee",
+      "current_count": 3,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "needs_a_new_ownership_rule",
+      "implementation_risk_rank": 1,
+      "missing_proof": [
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "queue_position": 11,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        1,
+        1,
+        "header.observation_to_build_fee"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "the build prices the transaction it is about to hand over, on its own adapter, at its own moment"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "header.observation_to_preflight_fee",
+      "current_count": 3,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "needs_a_new_ownership_rule",
+      "implementation_risk_rank": 1,
+      "missing_proof": [
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "queue_position": 12,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        1,
+        1,
+        "header.observation_to_preflight_fee"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "same height, same answer, and the answer is inside a price the run is responsible for"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "nonce.preflight_to_build",
+      "current_count": 6,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "needs_a_new_ownership_rule",
+      "implementation_risk_rank": 1,
+      "missing_proof": [
+        {
+          "measured": "not_preserved",
+          "missing": "freshness_preserved"
+        },
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "E_preparation_read",
+      "priority": "REJECT",
+      "queue_position": 13,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        1,
+        1,
+        "nonce.preflight_to_build"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "the one category the build deliberately owns on a moving target: anything between the two reads — a mined transaction, the lane's own allocation — is a different answer, not a duplicate one"
+    },
+    {
+      "avoidable_count": 0,
+      "candidate": "eth_call.detection_to_preflight_reserves_leg0",
+      "current_count": 9,
+      "evidence_strength": "proven",
+      "implementation_risk": "needs_a_new_carrier_and_ownership_rule",
+      "implementation_risk_rank": 3,
+      "missing_proof": [
+        {
+          "measured": 9,
+          "missing": "an_exact_duplicate_pair",
+          "would_need": "two asks of one identity, which the records do not contain for this shape"
+        },
+        {
+          "measured": "not_preserved",
+          "missing": "freshness_preserved"
+        },
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "a_carrier_across_the_boundary"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "B_cross_stage_canonical_read",
+      "priority": "REJECT",
+      "queue_position": 14,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        3,
+        0,
+        "eth_call.detection_to_preflight_reserves_leg0"
+      ],
+      "theoretical_saving": 0,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "§14 names this family explicitly and forbids reading it as a P1: M8.5.1 settled it as an independent recheck whose every blocker is `read_is_the_check`, and the two asks answer for different heights, so it is not even a duplicate of the kind §4.1 counts. Recorded here so no later agent re-asks it"
+    },
+    {
+      "avoidable_count": 0,
+      "candidate": "eth_call.detection_to_preflight_reserves_leg1",
+      "current_count": 9,
+      "evidence_strength": "proven",
+      "implementation_risk": "needs_a_new_carrier_and_ownership_rule",
+      "implementation_risk_rank": 3,
+      "missing_proof": [
+        {
+          "measured": 9,
+          "missing": "an_exact_duplicate_pair",
+          "would_need": "two asks of one identity, which the records do not contain for this shape"
+        },
+        {
+          "measured": "not_preserved",
+          "missing": "freshness_preserved"
+        },
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "a_carrier_across_the_boundary"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "B_cross_stage_canonical_read",
+      "priority": "REJECT",
+      "queue_position": 15,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        3,
+        0,
+        "eth_call.detection_to_preflight_reserves_leg1"
+      ],
+      "theoretical_saving": 0,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "the second leg of the same recheck, with the same verdict for the same reason: the exit pool's reserves are asked to be re-read, not to be remembered"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "balance.simulation_to_build_gate",
+      "current_count": 3,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "needs_a_new_carrier_and_ownership_rule",
+      "implementation_risk_rank": 3,
+      "missing_proof": [
+        {
+          "measured": "not_preserved",
+          "missing": "freshness_preserved"
+        },
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "a_carrier_across_the_boundary"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "B_cross_stage_canonical_read",
+      "priority": "REJECT",
+      "queue_position": 16,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        3,
+        1,
+        "balance.simulation_to_build_gate"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "M8.4.3's own words for this category: duplicate in the record, different in purpose, and deliberately re-read"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "tip.preflight_pin_to_build",
+      "current_count": 3,
+      "evidence_strength": "code_derived",
+      "implementation_risk": "needs_a_new_carrier_and_ownership_rule",
+      "implementation_risk_rank": 3,
+      "missing_proof": [
+        {
+          "measured": "NO_ALTERNATIVE",
+          "missing": "another_check_that_would_still_answer"
+        },
+        {
+          "missing": "a_carrier_across_the_boundary"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "E_preparation_read",
+      "priority": "REJECT",
+      "queue_position": 17,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        3,
+        1,
+        "tip.preflight_pin_to_build"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "a step of a sequence is not a weaker transaction than a lone one, which is the code's stated reason for asking again"
+    },
+    {
+      "avoidable_count": 3,
+      "candidate": "balance.preflight_to_build_snapshot",
+      "current_count": 3,
+      "evidence_strength": "record_only",
+      "implementation_risk": "needs_a_new_carrier_and_ownership_rule",
+      "implementation_risk_rank": 3,
+      "missing_proof": [
+        {
+          "measured": "not_preserved",
+          "missing": "freshness_preserved"
+        },
+        {
+          "missing": "a_carrier_across_the_boundary"
+        },
+        {
+          "missing": "an_owner_that_declares_a_lifecycle"
+        },
+        {
+          "crediting_kinds": [
+            "every_reuse_condition_met_in_the_record",
+            "the_record_itself_marks_the_pair_safe_to_reuse"
+          ],
+          "measured": 0,
+          "missing": "a_safe_reuse_proof"
+        }
+      ],
+      "next_step": "none",
+      "pattern": "B_cross_stage_canonical_read",
+      "priority": "REJECT",
+      "queue_position": 18,
+      "safe_saving": 0,
+      "sort_key": [
+        4,
+        18446744073709551615,
+        3,
+        2,
+        "balance.preflight_to_build_snapshot"
+      ],
+      "theoretical_saving": 3,
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "why_here": "the only exact-duplicate family whose consumer carries no verification, so it is the one candidate the §12 rule does not kill outright — and the reason it still saves nothing is that three runs cannot show whether the head and the pin are the same height in general"
+    }
+  ],
+  "runs": [
+    "route-91342-37700740-1791045857463",
+    "route-91342-37700778-1791045896094",
+    "route-91342-37700806-1791045924232"
+  ],
+  "schema": "m8.6.v1",
+  "sort": {
+    "duration_used_as_sort_key": false,
+    "keys_in_order": [
+      "priority band (§14, derived)",
+      "safe_saving (down)",
+      "implementation_risk (up)",
+      "evidence_strength (proven > code_derived > record_only > absent)",
+      "candidate id (for a total order)"
+    ],
+    "nothing_is_written_first": "§21's 禁止预先写死: this file contains no literal order. Change a measured field and the order changes, which §25's controls exercise."
+  },
+  "unit": "candidates"
+}

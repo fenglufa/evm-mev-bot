@@ -1,0 +1,257 @@
+{
+  "all_green": true,
+  "anchors": [],
+  "assembly_module": "crates/pipeline/tests/m86_census/tables.rs",
+  "chain_id": 91342,
+  "endpoint_id": "rpc-faa716cada04a9ef",
+  "evidence_first_rule": "§2.4: every figure here was folded out of records this repository had committed before M8.6 started. No table in this directory was produced by an RPC this milestone made.",
+  "file": "negative-controls.json",
+  "generated_by": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+  "milestone": "M8.6",
+  "model": "crates/pipeline/tests/m86_census/mod.rs",
+  "new_rpc": 0,
+  "provenance": [
+    {
+      "block_number": 37700740,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700740-1791045857463",
+      "source": "live"
+    },
+    {
+      "block_number": 37700778,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045896095,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700778-1791045896094",
+      "source": "live"
+    },
+    {
+      "block_number": 37700806,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045924234,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700806-1791045924232",
+      "source": "live"
+    }
+  ],
+  "question": "§25: the six mutations that have to break the gate, run against the assembled rows rather than described",
+  "recompute": "every control is computed here from the same functions the gates assert over, so the published `fired` flags and the gate's own assertions are two reads of one derivation",
+  "rows": [
+    {
+      "control": "NC1",
+      "expectation": "every one of the five mutations changes the published identity, and the sixth row shows which fields the key builder does not read",
+      "fired": true,
+      "mutates": "method, to, calldata, block, chain — each on a copy of one recorded ask, then re-keyed through RpcReadKey. The last four move the recorded key's own segments, because that is where the identity's terms are read from; moving a row column instead is what the published integrity guard shows does not change an identity.",
+      "observed": {
+        "all_changed": true,
+        "integrity_guard": {
+          "identity_changed": true,
+          "mutation": "the row's own `target` column, with the recorded key left alone",
+          "row_matches_key": false,
+          "rule": "published so this control does not overclaim: RpcReadKey takes its terms from the recorded `dedup_key` and then *compares* the row's own columns against them, so a `to` that moves only the column is an integrity finding about the record, not a new identity. The `to` mutation above moves the recorded key, which is what a candidate actually reads."
+        },
+        "mutations": [
+          {
+            "changed": true,
+            "field": "method",
+            "identity_after": "paramless|eth_getBalance|rpc-faa716cada04a9ef",
+            "identity_before": "method=eth_call|block=37700740|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "value_after": "eth_getBalance",
+            "value_before": "eth_call"
+          },
+          {
+            "changed": true,
+            "field": "to",
+            "identity_after": "method=eth_call|block=37700740|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a0",
+            "identity_before": "method=eth_call|block=37700740|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "value_after": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a0",
+            "value_before": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+          },
+          {
+            "changed": true,
+            "field": "calldata",
+            "identity_after": "method=eth_call|block=37700740|chain=91342|data=0902f1a0|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "identity_before": "method=eth_call|block=37700740|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "value_after": "0902f1a0",
+            "value_before": "0902f1ac"
+          },
+          {
+            "changed": true,
+            "field": "block",
+            "identity_after": "method=eth_call|block=37700741|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "identity_before": "method=eth_call|block=37700740|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "value_after": "37700741",
+            "value_before": "37700740"
+          },
+          {
+            "changed": true,
+            "field": "chain",
+            "identity_after": "method=eth_call|block=37700740|chain=91343|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "identity_before": "method=eth_call|block=37700740|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "value_after": "91343",
+            "value_before": "91342"
+          }
+        ]
+      },
+      "rule_it_must_trip": "§24's eleventh and twelfth rules: a semantic identity is made of business fields, and changing a business field has to change the candidate that reads it",
+      "target": {
+        "identity_before": "method=eth_call|block=37700740|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "key_anchor": {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 954,
+          "matches": 36,
+          "note": "NC1: the pair identity grammar is the same `identity.method` plus terms the census reads",
+          "source": "run_record",
+          "token": "method=eth_call"
+        },
+        "recorded_dedup_key": "call|91342|37700740|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac",
+        "rpc_id": 5,
+        "run": "route-91342-37700740-1791045857463",
+        "site": "opportunity_detection.eth_call.reserves"
+      }
+    },
+    {
+      "control": "NC2",
+      "expectation": "at least two independent refusals, and the unmutated row publishes zero errors",
+      "fired": true,
+      "mutates": "verification_role: a check role -> NONE, with the blocker that names the read as the check left in place and role_none_reason blanked",
+      "observed": {
+        "clean_row_errors": [],
+        "errors": [
+          "balance.simulation_to_build_gate: role NONE with no reason named. §24's eighth rule is that a verification role cannot be ignored, and the way to answer it for a read that verifies nothing is to say what the read is for instead — which is also why §25's NC2 fails: blanking `read_is_the_check` to NONE leaves the reason empty",
+          "balance.simulation_to_build_gate: a blocker says the read IS the check while NONE says the read verifies nothing. §25's NC2 is this row: blanking `read_is_the_check` to NONE does not delete the decision line it names"
+        ]
+      },
+      "rule_it_must_trip": "the empty reason (§24's eighth rule) and a blocker claiming the read is the check while the role says it verifies nothing",
+      "target": {
+        "blockers": [
+          "consumer_check_has_no_other_bearer",
+          "freshness_not_preserved",
+          "no_alternative_verification_exists",
+          "no_carrier_holds_the_answer_across_the_boundary",
+          "no_owner_declares_a_lifecycle_for_it",
+          "no_owner_in_code",
+          "read_is_the_check",
+          "removal_would_stop_an_existing_check",
+          "safe_saving_zero"
+        ],
+        "candidate": "balance.simulation_to_build_gate",
+        "role_after": "NONE",
+        "role_before": "FINAL_EXECUTION_GUARD"
+      }
+    },
+    {
+      "control": "NC3",
+      "expectation": "the proof rule fires, and the unmutated row publishes zero errors",
+      "fired": true,
+      "mutates": "safe_saving: 0 -> 1, with no proof added and no record row changed",
+      "observed": {
+        "clean_row_errors": [],
+        "errors": [
+          "chainid.connect_to_preflight: safe_saving 1 with proof \"none\". §24's sixth figure has to be recomputable, and the only two kinds that credit a saving are [\"every_reuse_condition_met_in_the_record\", \"the_record_itself_marks_the_pair_safe_to_reuse\"] — which is what §25's NC3 fires on: raising `safe_saving` from 0 to 1 without adding one of them, and the record rows behind it, changes nothing but the arithmetic's honesty",
+          "chainid.connect_to_preflight: safe_saving 1 while the consumer's role is INDEPENDENT_RECHECK and its alternative is NEW_CHECK_REQUIRED. §11's default is that this is the check, and §25's NC4 is exactly this row"
+        ]
+      },
+      "rule_it_must_trip": "§24's sixth figure: a credited saving has to name one of the two crediting proof kinds, and the row still carries `none`",
+      "target": {
+        "candidate": "chainid.connect_to_preflight",
+        "proof_kind": "none",
+        "safe_saving_after": 1,
+        "safe_saving_before": 0,
+        "theoretical_saving": 3
+      }
+    },
+    {
+      "control": "NC4",
+      "expectation": "the §11/§12 refusal fires even with a proof kind asserted, because a proof of reuse is not a proof that the check survives",
+      "fired": true,
+      "mutates": "theoretical_saving = safe_saving = the census's whole physical duplicate count, while the consumer keeps an INDEPENDENT_RECHECK role and a crediting proof kind is asserted",
+      "observed": {
+        "clean_row_errors": [],
+        "errors": [
+          "chainid.connect_to_preflight: safe_saving 42 while the consumer's role is INDEPENDENT_RECHECK and its alternative is NEW_CHECK_REQUIRED. §11's default is that this is the check, and §25's NC4 is exactly this row"
+        ]
+      },
+      "rule_it_must_trip": "§11's default: a saving credited on a read that is itself the check is refused unless §12's other bearer exists",
+      "target": {
+        "alternative_verification": "NEW_CHECK_REQUIRED",
+        "both_after": 42,
+        "candidate": "chainid.connect_to_preflight",
+        "safe_saving_before": 0,
+        "theoretical_saving_before": 3,
+        "verification_role": "INDEPENDENT_RECHECK"
+      }
+    },
+    {
+      "control": "NC5",
+      "expectation": "must still PASS: identical semantic columns, no invariant error",
+      "fired": true,
+      "mutates": "the order of the input records: every ask row and every pair row reversed before the census is re-derived",
+      "observed": {
+        "census_invariant_errors_after_reversal": [],
+        "first_candidate_after": "chainid.connect_to_preflight",
+        "first_candidate_before": "chainid.connect_to_preflight",
+        "semantic_columns_identical": true
+      },
+      "rule_it_must_trip": "§24's twelfth rule: presentation must not decide a verdict — the groups fold through BTreeMap keys and no count reads a position",
+      "target": {
+        "groups_after": 44,
+        "groups_before": 44,
+        "pairs": 78,
+        "rows": 246
+      }
+    },
+    {
+      "control": "NC6",
+      "expectation": "the semantic columns identical while the timing columns demonstrably move — a control that cannot see the clock moving proves nothing",
+      "fired": true,
+      "mutates": "every duration and stamp in the corpus multiplied by 1000, and every run's generated_at moved a day",
+      "observed": {
+        "census_total_rpc_sum_duration_ms_after": 74841982.83,
+        "census_total_rpc_sum_duration_ms_before": 74841.98,
+        "five_saving_measures_identical": true,
+        "safe_saving_before_and_after": [
+          0,
+          0
+        ],
+        "semantic_columns_identical": true,
+        "the_clock_actually_moved": true,
+        "verdict_before_and_after": [
+          "NO_SAFE_RPC_REDUCTION_FOUND",
+          "NO_SAFE_RPC_REDUCTION_FOUND"
+        ]
+      },
+      "rule_it_must_trip": "§25's last control: a clock may describe a call, it may not decide what to do about it",
+      "target": {
+        "duration_field_sum_after": 6624892249364000,
+        "duration_field_sum_before": 6624892249364,
+        "generated_at_shift_ms": 86400000,
+        "scaled_by": 1000
+      }
+    }
+  ],
+  "runs": [
+    "route-91342-37700740-1791045857463",
+    "route-91342-37700778-1791045896094",
+    "route-91342-37700806-1791045924232"
+  ],
+  "schema": "m8.6.v1",
+  "unit": "controls, each with the row it mutated and the rule it tripped"
+}

@@ -1,0 +1,547 @@
+{
+  "anchors": [],
+  "assembly_module": "crates/pipeline/tests/m86_census/tables.rs",
+  "chain_id": 91342,
+  "counts": {
+    "pseudo_optimizations_excluded": 15,
+    "rejected": 15,
+    "rule": "§23: the milestone is judged on how many pseudo-optimizations it excluded, not on how many candidates it opened."
+  },
+  "endpoint_id": "rpc-faa716cada04a9ef",
+  "evidence_first_rule": "§2.4: every figure here was folded out of records this repository had committed before M8.6 started. No table in this directory was produced by an RPC this milestone made.",
+  "file": "rejected-opportunities.json",
+  "generated_by": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+  "milestone": "M8.6",
+  "model": "crates/pipeline/tests/m86_census/mod.rs",
+  "new_rpc": 0,
+  "provenance": [
+    {
+      "block_number": 37700740,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700740-1791045857463",
+      "source": "live"
+    },
+    {
+      "block_number": 37700778,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045896095,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700778-1791045896094",
+      "source": "live"
+    },
+    {
+      "block_number": 37700806,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045924234,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700806-1791045924232",
+      "source": "live"
+    }
+  ],
+  "question": "§20: the reduction ideas this census refuses, each with the reasons a field supports, so no later agent has to ask the same question again",
+  "recompute": "every row is a `priority_of` result of REJECT, and every reason is either a declared blocker on the candidate or one `derived_blockers` computed from a measured field",
+  "rows": [
+    {
+      "alternative_verification": "NOT_APPLICABLE",
+      "candidate": "preflight.eth_getBalance.sender -> build.eth_getBalance.before_snapshot",
+      "candidate_id": "balance.preflight_to_build_snapshot",
+      "freshness": "not_preserved",
+      "inherited_verdict": null,
+      "pattern": "B_cross_stage_canonical_read",
+      "reason": [
+        "freshness_not_preserved",
+        "head_equals_pin_in_these_runs_only",
+        "no_carrier_across_stages",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it",
+        "no_owner_in_code",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "the only exact-duplicate family whose consumer carries no verification, so it is the one candidate the §12 rule does not kill outright — and the reason it still saves nothing is that three runs cannot show whether the head and the pin are the same height in general",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "INFORMATION_ONLY",
+      "who_would_bear_the_duty": {
+        "answer": "NOT_APPLICABLE",
+        "blocks_the_reduction": false,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "simulation.eth_getBalance.sender_account -> build.eth_getBalance.gate",
+      "candidate_id": "balance.simulation_to_build_gate",
+      "freshness": "not_preserved",
+      "inherited_verdict": null,
+      "pattern": "B_cross_stage_canonical_read",
+      "reason": [
+        "consumer_check_has_no_other_bearer",
+        "freshness_not_preserved",
+        "no_alternative_verification_exists",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it",
+        "no_owner_in_code",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "M8.4.3's own words for this category: duplicate in the record, different in purpose, and deliberately re-read",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "FINAL_EXECUTION_GUARD",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "preflight.eth_maxPriorityFeePerGas.pin -> preflight.eth_maxPriorityFeePerGas.head",
+      "candidate_id": "tip.preflight_pin_to_preflight_head",
+      "freshness": "preserved",
+      "inherited_verdict": null,
+      "pattern": "A_physical_duplicate",
+      "reason": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero",
+        "tip_enters_the_gate_operand"
+      ],
+      "reason_prose": "the census's most tempting row and its clearest refusal: one parameterless ask twice inside one stage, and the head reading's ceiling — which this tip is arithmetic inside of — is the operand of the fee line",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "SAFETY_GATE",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "measured, not assumed: `GiwaSequencerDirect::fee_reading` asks the tip on every call, so the head reading carries a head tip into the refusal line, and serving it the pin's tip would move an operand of the gate",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "preflight.eth_maxPriorityFeePerGas.pin -> build.eth_maxPriorityFeePerGas.pin",
+      "candidate_id": "tip.preflight_pin_to_build",
+      "freshness": "preserved",
+      "inherited_verdict": null,
+      "pattern": "E_preparation_read",
+      "reason": [
+        "consumer_check_has_no_other_bearer",
+        "each_step_prices_its_own_transaction",
+        "no_alternative_verification_exists",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "a step of a sequence is not a weaker transaction than a lone one, which is the code's stated reason for asking again",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "SAFETY_GATE",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "preflight.eth_getTransactionCount.pair -> build.eth_getTransactionCount.pair",
+      "candidate_id": "nonce.preflight_to_build",
+      "freshness": "not_preserved",
+      "inherited_verdict": null,
+      "pattern": "E_preparation_read",
+      "reason": [
+        "consumer_check_has_no_other_bearer",
+        "freshness_not_preserved",
+        "lane_allocation_advances_the_nonce",
+        "moving_target_is_the_point",
+        "no_alternative_verification_exists",
+        "no_owner_declares_a_lifecycle_for_it",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "the one category the build deliberately owns on a moving target: anything between the two reads — a mined transaction, the lane's own allocation — is a different answer, not a duplicate one",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "FINAL_EXECUTION_GUARD",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "observation.eth_getBlockByNumber.pin -> preflight.eth_getBlockByNumber.binding_pin",
+      "candidate_id": "header.observation_to_preflight_binding",
+      "freshness": "preserved",
+      "inherited_verdict": {
+        "aggregate_net_rpc_saved": 0,
+        "label": "SAFE_PROPAGATION_PROVEN_NO_NET_RPC_SAVING",
+        "label_recorded_in": "docs/v0.1/M8.4.4 Completion Report.md",
+        "milestone": "M8.4.4",
+        "rpc_count_reduction": 0,
+        "rule": "§16: the propagation contract is settled and measured; §8's Pattern C says a block-context row cannot be re-listed as a candidate.",
+        "source": "data/evidence/m8/m8.4.4/summary.json",
+        "status": "safe_but_no_rpc_saving"
+      },
+      "pattern": "C_block_context_propagation",
+      "reason": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "safe_propagation_already_measured_no_saving",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "§16's inherited row: the context travels, the read stays, and M8.4.4's own aggregate measured the net saving at zero",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "INDEPENDENT_RECHECK",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "the verification is that this stage read the hash itself; serving it from another stage's header would make the comparison one value against itself",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "observation.eth_getBlockByNumber.pin -> build.eth_getBlockByNumber.binding",
+      "candidate_id": "header.observation_to_build_binding",
+      "freshness": "preserved",
+      "inherited_verdict": {
+        "aggregate_net_rpc_saved": 0,
+        "label": "SAFE_PROPAGATION_PROVEN_NO_NET_RPC_SAVING",
+        "label_recorded_in": "docs/v0.1/M8.4.4 Completion Report.md",
+        "milestone": "M8.4.4",
+        "rpc_count_reduction": 0,
+        "rule": "§16: the propagation contract is settled and measured; §8's Pattern C says a block-context row cannot be re-listed as a candidate.",
+        "source": "data/evidence/m8/m8.4.4/summary.json",
+        "status": "safe_but_no_rpc_saving"
+      },
+      "pattern": "C_block_context_propagation",
+      "reason": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "safe_propagation_already_measured_no_saving",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "the consumer verification M8.4.4 built the contract for, and the code says plainly that the read replaces no read",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "INDEPENDENT_RECHECK",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "observation.eth_getBlockByNumber.pin -> simulation.eth_getBlockByNumber.header",
+      "candidate_id": "header.observation_to_simulation_header",
+      "freshness": "preserved",
+      "inherited_verdict": {
+        "aggregate_net_rpc_saved": 0,
+        "label": "SAFE_PROPAGATION_PROVEN_NO_NET_RPC_SAVING",
+        "label_recorded_in": "docs/v0.1/M8.4.4 Completion Report.md",
+        "milestone": "M8.4.4",
+        "rpc_count_reduction": 0,
+        "rule": "§16: the propagation contract is settled and measured; §8's Pattern C says a block-context row cannot be re-listed as a candidate.",
+        "source": "data/evidence/m8/m8.4.4/summary.json",
+        "status": "safe_but_no_rpc_saving"
+      },
+      "pattern": "C_block_context_propagation",
+      "reason": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "safe_propagation_already_measured_no_saving",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "the pin check is the reason the simulation's numbers describe the block the opportunity was found on; serving it the observation's header would delete the check",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "INDEPENDENT_RECHECK",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "observation.eth_getBlockByNumber.pin -> preflight.eth_getBlockByNumber.fee_pin",
+      "candidate_id": "header.observation_to_preflight_fee",
+      "freshness": "preserved",
+      "inherited_verdict": {
+        "aggregate_net_rpc_saved": 0,
+        "label": "SAFE_PROPAGATION_PROVEN_NO_NET_RPC_SAVING",
+        "label_recorded_in": "docs/v0.1/M8.4.4 Completion Report.md",
+        "milestone": "M8.4.4",
+        "rpc_count_reduction": 0,
+        "rule": "§16: the propagation contract is settled and measured; §8's Pattern C says a block-context row cannot be re-listed as a candidate.",
+        "source": "data/evidence/m8/m8.4.4/summary.json",
+        "status": "safe_but_no_rpc_saving"
+      },
+      "pattern": "C_block_context_propagation",
+      "reason": [
+        "base_fee_priced_at_the_moment_of_pricing",
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "no_owner_declares_a_lifecycle_for_it",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "same height, same answer, and the answer is inside a price the run is responsible for",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "SAFETY_GATE",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "observation.eth_getBlockByNumber.pin -> build.eth_getBlockByNumber.fee_pin",
+      "candidate_id": "header.observation_to_build_fee",
+      "freshness": "preserved",
+      "inherited_verdict": {
+        "aggregate_net_rpc_saved": 0,
+        "label": "SAFE_PROPAGATION_PROVEN_NO_NET_RPC_SAVING",
+        "label_recorded_in": "docs/v0.1/M8.4.4 Completion Report.md",
+        "milestone": "M8.4.4",
+        "rpc_count_reduction": 0,
+        "rule": "§16: the propagation contract is settled and measured; §8's Pattern C says a block-context row cannot be re-listed as a candidate.",
+        "source": "data/evidence/m8/m8.4.4/summary.json",
+        "status": "safe_but_no_rpc_saving"
+      },
+      "pattern": "C_block_context_propagation",
+      "reason": [
+        "base_fee_priced_at_the_moment_of_pricing",
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "no_owner_declares_a_lifecycle_for_it",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "the build prices the transaction it is about to hand over, on its own adapter, at its own moment",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "SAFETY_GATE",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NOT_APPLICABLE",
+      "candidate": "preflight.eth_getBlockByNumber.head_latest -> preflight.eth_getBlockByNumber.nonce_pair_head",
+      "candidate_id": "header.preflight_head_to_preflight_nonce_pair",
+      "freshness": "not_preserved",
+      "inherited_verdict": null,
+      "pattern": "E_preparation_read",
+      "reason": [
+        "freshness_not_preserved",
+        "safe_saving_zero",
+        "tag_freshness_unproven",
+        "two_calls_can_straddle_a_block"
+      ],
+      "reason_prose": "both asks name `latest`, and the code's reason for reading number and hash out of one header is that two calls can straddle a block; the record cannot say whether they did (§4.2 forbids guessing what a tag resolved to)",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "INFORMATION_ONLY",
+      "who_would_bear_the_duty": {
+        "answer": "NOT_APPLICABLE",
+        "blocks_the_reduction": false,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NOT_APPLICABLE",
+      "candidate": "preflight.eth_getBlockByNumber.head_latest -> build.eth_getBlockByNumber.nonce_pair_head",
+      "candidate_id": "header.preflight_head_to_build_nonce_pair",
+      "freshness": "not_preserved",
+      "inherited_verdict": null,
+      "pattern": "E_preparation_read",
+      "reason": [
+        "freshness_not_preserved",
+        "safe_saving_zero",
+        "tag_freshness_unproven",
+        "two_calls_can_straddle_a_block"
+      ],
+      "reason_prose": "the same tag pair across a stage boundary, one block-time further apart",
+      "safe_saving": 0,
+      "theoretical_saving": 3,
+      "verification_role": "INFORMATION_ONLY",
+      "who_would_bear_the_duty": {
+        "answer": "NOT_APPLICABLE",
+        "blocks_the_reduction": false,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "opportunity_detection.eth_call.reserves -> preflight.eth_call.leg0",
+      "candidate_id": "eth_call.detection_to_preflight_reserves_leg0",
+      "freshness": "not_preserved",
+      "inherited_verdict": {
+        "label": "REUSE_BLOCKED",
+        "matching_pairs": [],
+        "milestone": "M8.5.1",
+        "net_rpc_saving": 0,
+        "rule": "§15: the two eth_call conclusions are inherited, not re-asked — no new experiment and no re-graded site.",
+        "source": "data/evidence/m8/m8.5.1/reuse-verdicts.json"
+      },
+      "pattern": "B_cross_stage_canonical_read",
+      "reason": [
+        "block_changes_the_answer",
+        "consumer_check_has_no_other_bearer",
+        "freshness_not_preserved",
+        "no_alternative_verification_exists",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_exact_duplicate_pair_in_the_records",
+        "no_owner_declares_a_lifecycle_for_it",
+        "read_is_the_check",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "§14 names this family explicitly and forbids reading it as a P1: M8.5.1 settled it as an independent recheck whose every blocker is `read_is_the_check`, and the two asks answer for different heights, so it is not even a duplicate of the kind §4.1 counts. Recorded here so no later agent re-asks it",
+      "safe_saving": 0,
+      "theoretical_saving": 0,
+      "verification_role": "INDEPENDENT_RECHECK",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "the reserve line is a difference between the priced route and the head; feeding it the priced side's own value leaves the gate comparing a number with a copy of itself",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NO_ALTERNATIVE",
+      "candidate": "opportunity_detection.eth_call.reserves -> preflight.eth_call.leg1",
+      "candidate_id": "eth_call.detection_to_preflight_reserves_leg1",
+      "freshness": "not_preserved",
+      "inherited_verdict": {
+        "label": "REUSE_BLOCKED",
+        "matching_pairs": [],
+        "milestone": "M8.5.1",
+        "net_rpc_saving": 0,
+        "rule": "§15: the two eth_call conclusions are inherited, not re-asked — no new experiment and no re-graded site.",
+        "source": "data/evidence/m8/m8.5.1/reuse-verdicts.json"
+      },
+      "pattern": "B_cross_stage_canonical_read",
+      "reason": [
+        "block_changes_the_answer",
+        "consumer_check_has_no_other_bearer",
+        "freshness_not_preserved",
+        "no_alternative_verification_exists",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_exact_duplicate_pair_in_the_records",
+        "no_owner_declares_a_lifecycle_for_it",
+        "read_is_the_check",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "the second leg of the same recheck, with the same verdict for the same reason: the exit pool's reserves are asked to be re-read, not to be remembered",
+      "safe_saving": 0,
+      "theoretical_saving": 0,
+      "verification_role": "INDEPENDENT_RECHECK",
+      "who_would_bear_the_duty": {
+        "answer": "NO_ALTERNATIVE",
+        "blocks_the_reduction": true,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    },
+    {
+      "alternative_verification": "NOT_APPLICABLE",
+      "candidate": "observation.eth_getBlockByNumber.pin -> observation.eth_blockNumber.pin",
+      "candidate_id": "block_number.observation_redundant_with_header",
+      "freshness": "unproven",
+      "inherited_verdict": null,
+      "pattern": "F_information_already_held",
+      "reason": [
+        "freshness_unproven_by_these_runs",
+        "no_exact_duplicate_pair_in_the_records",
+        "not_a_measured_duplicate",
+        "removal_would_replace_a_named_height_with_a_tag",
+        "safe_saving_zero"
+      ],
+      "reason_prose": "§9's DERIVABLE case: the height the run fixes is also the height the following header read names, so one of the two asks could in principle go — and the one that would go is the ask that converts the moving head into a fixed height for everything downstream, which is a semantic change, not a saving",
+      "safe_saving": 0,
+      "theoretical_saving": 0,
+      "verification_role": "INFORMATION_ONLY",
+      "who_would_bear_the_duty": {
+        "answer": "NOT_APPLICABLE",
+        "blocks_the_reduction": false,
+        "evidence": "",
+        "question": "if this RPC went away, who would bear the verification duty it carries today?",
+        "rule": "§12's closing rule, applied inside the evidence gate: a check with NO_ALTERNATIVE cannot be reduced at all, and `census_invariant_errors` refuses a check-role row that answers NOT_APPLICABLE."
+      }
+    }
+  ],
+  "runs": [
+    "route-91342-37700740-1791045857463",
+    "route-91342-37700778-1791045896094",
+    "route-91342-37700806-1791045924232"
+  ],
+  "schema": "m8.6.v1",
+  "unit": "rejected candidates"
+}

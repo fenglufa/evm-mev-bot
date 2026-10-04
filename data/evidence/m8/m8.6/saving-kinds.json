@@ -1,0 +1,161 @@
+{
+  "anchors": [],
+  "arithmetic": {
+    "is_the_fifth_the_sum_of_the_first_four": false,
+    "measured_here": {
+      "parallel_wall_time_saving": 0,
+      "physical_duplicate_saving": 42,
+      "semantic_reuse_saving": 0,
+      "total_safe_rpc_saving": 0,
+      "verification_removal_saving": 0
+    },
+    "sum_of_the_first_four": 42,
+    "the_task_books_example": {
+      "parallel_wall_time_saving": 0,
+      "physical_duplicate_saving": 41,
+      "semantic_reuse_saving": 0,
+      "total_safe_rpc_saving": 0,
+      "verification_removal_saving": 0
+    },
+    "why": "the fifth is a subset of the first, not an addition to it: every safe saving is already inside the duplicate count it could come from. §13."
+  },
+  "assembly_module": "crates/pipeline/tests/m86_census/tables.rs",
+  "chain_id": 91342,
+  "diagnostics": {
+    "exact_pairs_behind_a_check_role": 33,
+    "pairs_the_record_itself_marks_safe_to_reuse": 0,
+    "pairs_with_every_reuse_condition_met_in_the_record": 0,
+    "theoretical_saving_over_all_candidates": 42
+  },
+  "endpoint_id": "rpc-faa716cada04a9ef",
+  "evidence_first_rule": "§2.4: every figure here was folded out of records this repository had committed before M8.6 started. No table in this directory was produced by an RPC this milestone made.",
+  "file": "saving-kinds.json",
+  "generated_by": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+  "inherited_verdicts": [
+    {
+      "aggregate_net_rpc_saved": 0,
+      "label": "SAFE_PROPAGATION_PROVEN_NO_NET_RPC_SAVING",
+      "label_recorded_in": "docs/v0.1/M8.4.4 Completion Report.md",
+      "milestone": "M8.4.4",
+      "pipeline_wall_clock_reduction": "not measured by this tree, for the same reason",
+      "rpc_count_reduction": 0,
+      "source": "data/evidence/m8/m8.4.4/summary.json",
+      "status_this_census_uses": "category=propagation, status=safe_but_no_rpc_saving (§16)"
+    },
+    {
+      "label": "REUSE_BLOCKED",
+      "milestone": "M8.5.1",
+      "net_rpc_saving": 0,
+      "source": "data/evidence/m8/m8.5.1/reuse-verdicts.json",
+      "status_this_census_uses": "REUSE_BLOCKED, inherited and not re-graded (§15)"
+    },
+    {
+      "duplicate_pairs": 78,
+      "exact_duplicate_pairs": 42,
+      "milestone": "M8.4.2",
+      "safe_to_reuse": 0,
+      "source": "data/evidence/m8/cross-stage/duplicate-summary.json",
+      "status_this_census_uses": "the 78 pairs and their 42 exact duplicates are the corpus the census counts, and `safe_to_reuse` is the level-C field it reads instead of inferring"
+    }
+  ],
+  "measures": [
+    {
+      "how_computed": "the sum of `exact_pairs` over the 18 candidates. [`shape_completeness_errors`] refuses a census in which a measured exact-duplicate shape lacks a candidate or a candidate names a shape the records never produced, so the sum is the record's own 42 and not a number this milestone chose.",
+      "measure": "physical_duplicate_saving",
+      "reconciles_with": "data/evidence/m8/cross-stage/duplicate-summary.json's exact_duplicate_pairs",
+      "unit": "asks (one logical request, retries folded in)",
+      "value": 42,
+      "what_it_does_not_mean": "it is not a saving. It is the count of asks that asked something an earlier ask had already asked — which is §2.2's first layer, and nothing above it.",
+      "what_would_have_to_change_to_earn_it": "nothing: it is already spent. M8.3.1's cache removed the duplicates it was allowed to remove inside one simulation, and these 42 are the ones a cache cannot reach."
+    },
+    {
+      "how_computed": "the sum of `reusable_in_principle_pairs` over the candidates, each of which is `conditions_all_met` over the pair rows in M8.4.2's record — five condition fields, every one `checked_met`.",
+      "measure": "semantic_reuse_saving",
+      "reconciles_with": "the corpus-wide count published beside this table",
+      "unit": "pairs whose five reuse conditions are all resolved met",
+      "value": 0,
+      "what_it_does_not_mean": "a pair with one condition `not_checkable_from_a_record` is not a reusable pair: §2.4 forbids reading a missing field as a pass.",
+      "what_would_have_to_change_to_earn_it": "a lifecycle and an owner for the value, so the condition becomes checkable at all — which is what §19's requires_new_lifecycle column counts."
+    },
+    {
+      "how_computed": "there is no way to compute a non-zero figure for this measure without deleting a verification, and §3 forbids the act. The diagnostic count beside it is the number a naive plan would have claimed.",
+      "measure": "verification_removal_saving",
+      "reconciles_with": "§11's default and §12's hard block",
+      "unit": "asks removed by weakening a check",
+      "value": 0,
+      "what_it_does_not_mean": "the diagnostic is not a plan. It is the size of the mistake someone would make.",
+      "what_would_have_to_change_to_earn_it": "an existing other check that answers the same question — EXISTING_OTHER_CHECK in §12's vocabulary, read per site, and today none of the check-role sites has one for the duty it carries."
+    },
+    {
+      "how_computed": "inherited, not re-measured: M8.3.3 runs the state-read path at the configured concurrency of 1 and §3 forbids changing it here; M8.4.4 published rpc_count_reduction of 0 for the propagation contract.",
+      "measure": "parallel_wall_time_saving",
+      "reconciles_with": "this table's inherited_verdicts rows",
+      "unit": "asks (always zero: this measure is wall-time, and it is reported as 0 asks so it cannot be added to a count of requests)",
+      "value": 0,
+      "what_it_does_not_mean": "wall-time is not RPC count. §7's whole point in keeping five fields is that M8.3.3's timing result and M8.4.2's duplicate count are different quantities, and a table that folds them reports a parallelism result as a saving.",
+      "what_would_have_to_change_to_earn_it": "a concurrency decision, which is §3's prohibition in this milestone and M8.3.3's in the last one."
+    },
+    {
+      "how_computed": "the sum of `safe_saving_of` over the candidates — each of which returns 0 unless the theoretical ceiling is positive, verification is preserved, freshness is preserved, no new carrier, lifecycle or experiment is required, safe reuse is proven, no existing check would stop, and the consumer carries no check role.",
+      "measure": "total_safe_rpc_saving",
+      "reconciles_with": "reduction-matrix.json's totals.safe_saving and rpc-census.json's totals.safe_saving",
+      "unit": "asks this build may stop making today",
+      "value": 0,
+      "what_it_does_not_mean": "it is not the other four added together, and §24's seventh rule is what keeps that sentence true in both directions.",
+      "what_would_have_to_change_to_earn_it": "a proof, named in [`CREDITING_PROOFS`], carried by record rows. Not a re-reading of the same 42."
+    }
+  ],
+  "milestone": "M8.6",
+  "model": "crates/pipeline/tests/m86_census/mod.rs",
+  "new_rpc": 0,
+  "provenance": [
+    {
+      "block_number": 37700740,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700740-1791045857463",
+      "source": "live"
+    },
+    {
+      "block_number": 37700778,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045896095,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700778-1791045896094",
+      "source": "live"
+    },
+    {
+      "block_number": 37700806,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045924234,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700806-1791045924232",
+      "source": "live"
+    }
+  ],
+  "question": "§7: the five ways to count a saving, computed separately, because the way they get mixed up is by reporting one of them as another",
+  "recompute": "the first two measures and the fifth are sums over [`CANDIDATES`] of counts folded out of `reuse-candidates.json`; the fourth is inherited from two published verdicts and is 0 by that inheritance",
+  "runs": [
+    "route-91342-37700740-1791045857463",
+    "route-91342-37700778-1791045896094",
+    "route-91342-37700806-1791045924232"
+  ],
+  "schema": "m8.6.v1",
+  "unit": "asks, except the wall-time measure, which is a duration wearing an asks label so it cannot be summed with them"
+}

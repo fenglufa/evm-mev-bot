@@ -1,0 +1,2758 @@
+{
+  "anchors": [
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_blockNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 513,
+      "matches": 1,
+      "note": "site observation.eth_blockNumber.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "BlockPin::new(head"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1625,
+      "matches": 1,
+      "note": "site build.eth_call.before_snapshot stamps its caller label here",
+      "source": "code",
+      "token": "before-snapshot: native and input-token balances"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1856,
+      "matches": 1,
+      "note": "site build.eth_call.before_snapshot's answer first meets a decision here",
+      "source": "code",
+      "token": "maximum_cost_wei"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 460,
+      "matches": 1,
+      "note": "site opportunity_detection.eth_call.reserves stamps its caller label here",
+      "source": "code",
+      "token": "reserves of both venues, at the pin"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site opportunity_detection.eth_call.reserves's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 251,
+      "matches": 1,
+      "note": "site preflight.eth_call.l1_fee stamps its caller label here",
+      "source": "code",
+      "token": "cost ceiling per step"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 338,
+      "matches": 1,
+      "note": "site preflight.eth_call.l1_fee's answer first meets a decision here",
+      "source": "code",
+      "token": "fn l1_line"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 259,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg0 stamps its caller label here",
+      "source": "code",
+      "token": "reserves of leg 0"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 888,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg0's answer first meets a decision here",
+      "source": "code",
+      "token": "expected_output(&facts.reserves"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 261,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg1 stamps its caller label here",
+      "source": "code",
+      "token": "reserves of leg 1"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 888,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg1's answer first meets a decision here",
+      "source": "code",
+      "token": "expected_output(&facts.reserves"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 102,
+      "matches": 1,
+      "note": "site connect.eth_chainId.unstamped stamps its caller label here",
+      "source": "code",
+      "token": "request_with(&http, url, \"eth_chainId\""
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 344,
+      "matches": 1,
+      "note": "site connect.eth_chainId.unstamped's answer first meets a decision here",
+      "source": "code",
+      "token": "if chain_id != expected"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1790,
+      "matches": 1,
+      "note": "site build.eth_chainId.gate stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: gate — endpoint chain id"
+    },
+    {
+      "file": "crates/execution/src/gate.rs",
+      "line": 74,
+      "matches": 1,
+      "note": "site build.eth_chainId.gate's answer first meets a decision here",
+      "source": "code",
+      "token": "pub enum BlockBinding"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 277,
+      "matches": 1,
+      "note": "site preflight.eth_chainId.endpoint stamps its caller label here",
+      "source": "code",
+      "token": "endpoint chain id"
+    },
+    {
+      "file": "crates/execution/src/gate.rs",
+      "line": 74,
+      "matches": 1,
+      "note": "site preflight.eth_chainId.endpoint's answer first meets a decision here",
+      "source": "code",
+      "token": "pub enum BlockBinding"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1625,
+      "matches": 1,
+      "note": "site build.eth_getBalance.before_snapshot stamps its caller label here",
+      "source": "code",
+      "token": "before-snapshot: native and input-token balances"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1856,
+      "matches": 1,
+      "note": "site build.eth_getBalance.before_snapshot's answer first meets a decision here",
+      "source": "code",
+      "token": "maximum_cost_wei"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1853,
+      "matches": 1,
+      "note": "site build.eth_getBalance.gate stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: gate — native balance"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1856,
+      "matches": 1,
+      "note": "site build.eth_getBalance.gate's answer first meets a decision here",
+      "source": "code",
+      "token": "maximum_cost_wei"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 269,
+      "matches": 1,
+      "note": "site preflight.eth_getBalance.sender stamps its caller label here",
+      "source": "code",
+      "token": "native balance of the sender"
+    },
+    {
+      "file": "crates/execution/src/gate.rs",
+      "line": 74,
+      "matches": 1,
+      "note": "site preflight.eth_getBalance.sender's answer first meets a decision here",
+      "source": "code",
+      "token": "pub enum BlockBinding"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 537,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.sender_account stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"account: sender\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.sender_account's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.execute_balanceof stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.execute_balanceof's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.execute_swap stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.execute_swap's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.views_token0 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.views_token0's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1736,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.fee_pin stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 199,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.fee_pin's answer first meets a decision here",
+      "source": "code",
+      "token": "max_tip > max_fee"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1795,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.binding stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: gate — block binding at pin"
+    },
+    {
+      "file": "crates/execution/src/chain_read.rs",
+      "line": 44,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.binding's answer first meets a decision here",
+      "source": "code",
+      "token": "hash == pinned"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1760,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.nonce_pair_head stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 106,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.nonce_pair_head's answer first meets a decision here",
+      "source": "code",
+      "token": "could duplicate a live transaction"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 279,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.binding_pin stamps its caller label here",
+      "source": "code",
+      "token": "block binding at pin"
+    },
+    {
+      "file": "crates/execution/src/chain_read.rs",
+      "line": 44,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.binding_pin's answer first meets a decision here",
+      "source": "code",
+      "token": "hash == pinned"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 243,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_head stamps its caller label here",
+      "source": "code",
+      "token": "fee at head"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 798,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_head's answer first meets a decision here",
+      "source": "code",
+      "token": "facts.fee.max_fee_per_gas.is_zero"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 235,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_pin stamps its caller label here",
+      "source": "code",
+      "token": "fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 199,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_pin's answer first meets a decision here",
+      "source": "code",
+      "token": "max_tip > max_fee"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 223,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.head_latest stamps its caller label here",
+      "source": "code",
+      "token": "head at latest"
+    },
+    {
+      "file": "crates/execution/src/block_context.rs",
+      "line": 176,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.head_latest's answer first meets a decision here",
+      "source": "code",
+      "token": "two calls can straddle a block"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 248,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.nonce_pair_head stamps its caller label here",
+      "source": "code",
+      "token": "pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 49,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.nonce_pair_head's answer first meets a decision here",
+      "source": "code",
+      "token": "pending < self.confirmed"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 449,
+      "matches": 1,
+      "note": "site simulation.eth_getBlockByNumber.header stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"header at pin\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBlockByNumber.header's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 528,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.sender stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"code: sender\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.sender's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 514,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.touched stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"codes: touched_contracts\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.touched's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.views_token0 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getCode.views_token0's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_balanceof stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_balanceof's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_swap stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_swap's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_transfer stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.execute_transfer's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_getreserves stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_getreserves's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_token0 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_token0's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_token1 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getStorageAt.views_token1's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1760,
+      "matches": 1,
+      "note": "site build.eth_getTransactionCount.pair stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 106,
+      "matches": 1,
+      "note": "site build.eth_getTransactionCount.pair's answer first meets a decision here",
+      "source": "code",
+      "token": "could duplicate a live transaction"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 248,
+      "matches": 1,
+      "note": "site preflight.eth_getTransactionCount.pair stamps its caller label here",
+      "source": "code",
+      "token": "pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 49,
+      "matches": 1,
+      "note": "site preflight.eth_getTransactionCount.pair's answer first meets a decision here",
+      "source": "code",
+      "token": "pending < self.confirmed"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 537,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.sender_account stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"account: sender\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.sender_account's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.execute_balanceof stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.execute_balanceof's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 621,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.execute_swap stamps its caller label here",
+      "source": "code",
+      "token": "interpreter_phase(EXECUTE_PHASE_PREFIX, &step.describe())"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.execute_swap's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1043,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.views_token0 stamps its caller label here",
+      "source": "code",
+      "token": "let signature = call.signature();"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getTransactionCount.views_token0's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1736,
+      "matches": 1,
+      "note": "site build.eth_maxPriorityFeePerGas.pin stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 170,
+      "matches": 1,
+      "note": "site build.eth_maxPriorityFeePerGas.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "the endpoint gave no suggested priority fee"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 243,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.head stamps its caller label here",
+      "source": "code",
+      "token": "fee at head"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 798,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.head's answer first meets a decision here",
+      "source": "code",
+      "token": "facts.fee.max_fee_per_gas.is_zero"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 235,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.pin stamps its caller label here",
+      "source": "code",
+      "token": "fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 170,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "the endpoint gave no suggested priority fee"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 541,
+      "matches": 1,
+      "note": "eth_blockNumber reaches the wire through this adapter leg",
+      "source": "code",
+      "token": "async fn latest_block(&self"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 559,
+      "matches": 1,
+      "note": "eth_getBlockByNumber reaches the wire through this adapter leg",
+      "source": "code",
+      "token": "async fn get_block_context(&self"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 722,
+      "matches": 1,
+      "note": "eth_call reaches the wire through this adapter leg",
+      "source": "code",
+      "token": "async fn call(&self"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 739,
+      "matches": 1,
+      "note": "eth_getBalance reaches the wire through this adapter leg",
+      "source": "code",
+      "token": "async fn get_balance(&self"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 749,
+      "matches": 1,
+      "note": "eth_getStorageAt reaches the wire through this adapter leg",
+      "source": "code",
+      "token": "async fn get_storage_at(&self"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 732,
+      "matches": 1,
+      "note": "eth_getCode reaches the wire through this adapter leg",
+      "source": "code",
+      "token": "fn get_code("
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 763,
+      "matches": 1,
+      "note": "eth_getTransactionCount reaches the wire through this adapter leg",
+      "source": "code",
+      "token": "async fn get_nonce(&self"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 102,
+      "matches": 1,
+      "note": "eth_chainId reaches the wire through this adapter leg",
+      "source": "code",
+      "token": "request_with(&http, url, \"eth_chainId\""
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 199,
+      "matches": 1,
+      "note": "eth_maxPriorityFeePerGas reaches the wire through this adapter leg",
+      "source": "code",
+      "token": "async fn suggested_tip_raw"
+    }
+  ],
+  "assembly_module": "crates/pipeline/tests/m86_census/tables.rs",
+  "by_method": [
+    {
+      "asks": 3,
+      "method": "eth_blockNumber"
+    },
+    {
+      "asks": 60,
+      "method": "eth_call"
+    },
+    {
+      "asks": 9,
+      "method": "eth_chainId"
+    },
+    {
+      "asks": 27,
+      "method": "eth_getBalance"
+    },
+    {
+      "asks": 30,
+      "method": "eth_getBlockByNumber"
+    },
+    {
+      "asks": 18,
+      "method": "eth_getCode"
+    },
+    {
+      "asks": 60,
+      "method": "eth_getStorageAt"
+    },
+    {
+      "asks": 30,
+      "method": "eth_getTransactionCount"
+    },
+    {
+      "asks": 9,
+      "method": "eth_maxPriorityFeePerGas"
+    }
+  ],
+  "by_stage": [
+    {
+      "asks": 3,
+      "stage": "<unstamped>"
+    },
+    {
+      "asks": 33,
+      "stage": "build"
+    },
+    {
+      "asks": 6,
+      "stage": "observation"
+    },
+    {
+      "asks": 18,
+      "stage": "opportunity_detection"
+    },
+    {
+      "asks": 69,
+      "stage": "preflight"
+    },
+    {
+      "asks": 117,
+      "stage": "simulation"
+    }
+  ],
+  "chain_id": 91342,
+  "counts": {
+    "asks_per_run": [
+      {
+        "asks": 82,
+        "run": "route-91342-37700740-1791045857463"
+      },
+      {
+        "asks": 82,
+        "run": "route-91342-37700778-1791045896094"
+      },
+      {
+        "asks": 82,
+        "run": "route-91342-37700806-1791045924232"
+      }
+    ],
+    "asks_total": 246,
+    "methods_traced": 9,
+    "physical_http_attempts": 246,
+    "sites": 44,
+    "stages": 6
+  },
+  "endpoint_id": "rpc-faa716cada04a9ef",
+  "evidence_first_rule": "§2.4: every figure here was folded out of records this repository had committed before M8.6 started. No table in this directory was produced by an RPC this milestone made.",
+  "file": "rpc_surface.json",
+  "generated_by": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+  "milestone": "M8.6",
+  "model": "crates/pipeline/tests/m86_census/mod.rs",
+  "new_rpc": 0,
+  "not_in_the_records": {
+    "classified_but_never_called": [
+      "eth_gasPrice",
+      "eth_estimateGas"
+    ],
+    "coded_but_never_traced": [
+      "eth_getBlockByHash",
+      "eth_getBlockReceipts",
+      "eth_getLogs",
+      "eth_getTransactionReceipt",
+      "eth_sendRawTransaction",
+      "eth_subscribe"
+    ],
+    "rule": "§4: an RPC with no actual call site is not written here as a hot-path RPC, so no later milestone can claim a saving on it. Both lists are published instead of being left out, because a silent absence is how a phantom row gets re-added."
+  },
+  "provenance": [
+    {
+      "block_number": 37700740,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700740-1791045857463",
+      "source": "live"
+    },
+    {
+      "block_number": 37700778,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045896095,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700778-1791045896094",
+      "source": "live"
+    },
+    {
+      "block_number": 37700806,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045924234,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700806-1791045924232",
+      "source": "live"
+    }
+  ],
+  "question": "§4: which RPCs the production hot path actually makes, where each one is called, and what consumes the answer",
+  "recompute": "the rows are `SITES` matched group by group against `group_rows(records)`; a group with no site and a site with no group both abort the assembly, so the table cannot fall behind the records",
+  "rows": [
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "names no height: the ask is the head at the instant of asking",
+      "caller": "head and header that fixed the pin",
+      "carrier": "block_pin_height_and_hash",
+      "class_basis": "its consumer is the pin: the answer becomes the height every later read in the run must name, which is §5's block context by role rather than by method",
+      "consumer": "fixes the pin every later read has to name",
+      "decision_file": "crates/pipeline/src/arbitrage.rs",
+      "decision_line": 513,
+      "identity_source": "identity_from_a_parameterless_request",
+      "m842_category": "block_read",
+      "m842_category_rule": "no account is named and no state is read: the answer is a height, which is a property of the head at the instant of asking, so it is a block read with no block term of its own",
+      "method": "eth_blockNumber",
+      "request_identity": "method=eth_blockNumber|endpoint=rpc-faa716cada04a9ef|method_kind=eth_blockNumber",
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "observation.eth_blockNumber.pin",
+      "source_file": "crates/pipeline/src/arbitrage.rs",
+      "source_line": 406,
+      "stage": "observation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 729.42,
+        "union_duration_ms": 729.42
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 2,
+        "route-91342-37700778-1791045896094": 2,
+        "route-91342-37700806-1791045924232": 2
+      },
+      "asks_total": 6,
+      "block_semantics": "numbered height at the pin",
+      "caller": "before-snapshot: native and input-token balances",
+      "carrier": "execution_sequence_report_after_the_fact",
+      "class_basis": "an audit snapshot of the sender's token balance: §5's observation, because the only comparison it enters happens after the transactions are already sent",
+      "consumer": "the accounting baseline of the sequence report",
+      "decision_file": "crates/execution/src/sequence.rs",
+      "decision_line": 1856,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "transaction_preparation",
+      "m842_category_rule": "the execution lane's own audit snapshot: a balance read taken to describe what a transaction will do, not to decide whether to do it",
+      "method": "eth_call",
+      "request_identity": "method=eth_call|block=37700753|chain=91342|data=70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c|to=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "semantic_class": "G_OBSERVATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 6
+      },
+      "site_id": "build.eth_call.before_snapshot",
+      "source_file": "crates/execution/src/sequence.rs",
+      "source_line": 1625,
+      "stage": "build",
+      "timing": {
+        "asks": 6,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 6,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1562.13,
+        "union_duration_ms": 1562.13
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 6,
+        "route-91342-37700778-1791045896094": 6,
+        "route-91342-37700806-1791045924232": 6
+      },
+      "asks_total": 18,
+      "block_semantics": "numbered height at the pin",
+      "caller": "reserves of both venues, at the pin",
+      "carrier": "execution_sequence_report_after_the_fact",
+      "class_basis": "detection prices a route from reserves: it reads state to build a claim, and the checks come later and elsewhere (§5's note that the same method splits by caller)",
+      "consumer": "quotes both venues and writes the reserves the run later re-reads",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "a pool's reserves, read at a block in order to price the pair: §9's state_read by the call's actual semantics, which is what §9 asks the eth_call rule to do",
+      "method": "eth_call",
+      "request_identity": "method=eth_call|block=37700740|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 18
+      },
+      "site_id": "opportunity_detection.eth_call.reserves",
+      "source_file": "crates/pipeline/src/arbitrage.rs",
+      "source_line": 460,
+      "stage": "opportunity_detection",
+      "timing": {
+        "asks": 18,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 18,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 5269.48,
+        "union_duration_ms": 5269.48
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 6,
+        "route-91342-37700778-1791045896094": 6,
+        "route-91342-37700806-1791045924232": 6
+      },
+      "asks_total": 18,
+      "block_semantics": "numbered height at the head, per step",
+      "caller": "cost ceiling per step",
+      "carrier": "preflight_facts_within_one_stage",
+      "class_basis": "the sequencer's own fee oracle answering a question about a transaction, which is §5's protocol oracle by name",
+      "consumer": "the L1 half of the sequence ceiling the balance and profit lines spend",
+      "decision_file": "crates/execution/src/preflight.rs",
+      "decision_line": 338,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "transaction_preparation",
+      "m842_category_rule": "preflight's per-step cost ceiling: the call is asked to price a step, not to read a market",
+      "method": "eth_call",
+      "request_identity": "method=eth_call|block=37700753|chain=91342|data=49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007802f875830164ce07830f4240830f44a882fda4944200000000000000000000000000000000000006865af3107a400084d0e30db0c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000|to=0x420000000000000000000000000000000000000f",
+      "semantic_class": "C_PROTOCOL_ORACLE",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 18
+      },
+      "site_id": "preflight.eth_call.l1_fee",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 251,
+      "stage": "preflight",
+      "timing": {
+        "asks": 18,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 18,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 4444.73,
+        "union_duration_ms": 4444.73
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 3,
+        "route-91342-37700778-1791045896094": 3,
+        "route-91342-37700806-1791045924232": 3
+      },
+      "asks_total": 9,
+      "block_semantics": "numbered height at the head",
+      "caller": "reserves of leg 0",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the same method as detection's pricing read, and a different site: this answer's consumer is the difference between two readings",
+      "consumer": "the head's own first-leg reserves, re-priced against the finding",
+      "decision_file": "crates/execution/src/preflight.rs",
+      "decision_line": 888,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "a pool's reserves, read at a block in order to price the pair: §9's state_read by the call's actual semantics, which is what §9 asks the eth_call rule to do",
+      "method": "eth_call",
+      "request_identity": "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "semantic_class": "D_EXECUTION_VERIFICATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 9
+      },
+      "site_id": "preflight.eth_call.leg0",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 259,
+      "stage": "preflight",
+      "timing": {
+        "asks": 9,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 9,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 2922.13,
+        "union_duration_ms": 2922.13
+      },
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 3,
+        "route-91342-37700778-1791045896094": 3,
+        "route-91342-37700806-1791045924232": 3
+      },
+      "asks_total": 9,
+      "block_semantics": "numbered height at the head",
+      "caller": "reserves of leg 1",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the second half of the same comparison as leg 0",
+      "consumer": "the head's own second-leg reserves",
+      "decision_file": "crates/execution/src/preflight.rs",
+      "decision_line": 888,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "a pool's reserves, read at a block in order to price the pair: §9's state_read by the call's actual semantics, which is what §9 asks the eth_call rule to do",
+      "method": "eth_call",
+      "request_identity": "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "semantic_class": "D_EXECUTION_VERIFICATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 9
+      },
+      "site_id": "preflight.eth_call.leg1",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 261,
+      "stage": "preflight",
+      "timing": {
+        "asks": 9,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 9,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 2236.36,
+        "union_duration_ms": 2236.36
+      },
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "no block term",
+      "caller": "<unstamped>",
+      "carrier": "chain_adapter_field",
+      "class_basis": "the read that learns which chain the endpoint is on before an adapter exists to be watched",
+      "consumer": "the adapter's chain id, the run's first mismatch refusal, the sink's note",
+      "decision_file": "crates/pipeline/src/arbitrage.rs",
+      "decision_line": 344,
+      "identity_source": "identity_from_a_parameterless_request",
+      "m842_category": "chain_identity",
+      "m842_category_rule": "§9 names eth_chainId as not a state read; it asks which chain an endpoint answers for and carries no block term",
+      "method": "eth_chainId",
+      "request_identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+      "semantic_class": "F_IDENTITY_CONNECTION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "connect.eth_chainId.unstamped",
+      "source_file": "crates/chain/src/rpc.rs",
+      "source_line": 102,
+      "stage": null,
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 2992.35,
+        "union_duration_ms": 2992.35
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "no block term",
+      "caller": "step N: gate — endpoint chain id",
+      "carrier": "chain_adapter_field",
+      "class_basis": "the lane asks the endpoint which chain it is on, seconds before signing",
+      "consumer": "the `ChainMatches` leg and the chain id inside the block identity",
+      "decision_file": "crates/execution/src/gate.rs",
+      "decision_line": 74,
+      "identity_source": "identity_from_a_parameterless_request",
+      "m842_category": "chain_identity",
+      "m842_category_rule": "§9 names eth_chainId as not a state read; it asks which chain an endpoint answers for and carries no block term",
+      "method": "eth_chainId",
+      "request_identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+      "semantic_class": "F_IDENTITY_CONNECTION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "build.eth_chainId.gate",
+      "source_file": "crates/execution/src/sequence.rs",
+      "source_line": 1790,
+      "stage": "build",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 715.47,
+        "union_duration_ms": 715.47
+      },
+      "verification_role": "FINAL_EXECUTION_GUARD"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "no block term: the method asks none",
+      "caller": "endpoint chain id",
+      "carrier": "chain_adapter_field",
+      "class_basis": "the ask is which chain this endpoint answers for, and its consumer is the three-way equality",
+      "consumer": "the `ChainMatches` leg and the chain id inside the block context",
+      "decision_file": "crates/execution/src/gate.rs",
+      "decision_line": 74,
+      "identity_source": "identity_from_a_parameterless_request",
+      "m842_category": "chain_identity",
+      "m842_category_rule": "§9 names eth_chainId as not a state read; it asks which chain an endpoint answers for and carries no block term",
+      "method": "eth_chainId",
+      "request_identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+      "semantic_class": "F_IDENTITY_CONNECTION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "preflight.eth_chainId.endpoint",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 277,
+      "stage": "preflight",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 731.02,
+        "union_duration_ms": 731.02
+      },
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "before-snapshot: native and input-token balances",
+      "carrier": "execution_sequence_report_after_the_fact",
+      "class_basis": "the native half of the same accounting baseline",
+      "consumer": "the native half of the delta the report reconciles against the receipts",
+      "decision_file": "crates/execution/src/sequence.rs",
+      "decision_line": 1856,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getBalance",
+      "request_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700753|chain=91342",
+      "semantic_class": "G_OBSERVATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "build.eth_getBalance.before_snapshot",
+      "source_file": "crates/execution/src/sequence.rs",
+      "source_line": 1625,
+      "stage": "build",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 747.35,
+        "union_duration_ms": 747.35
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "step N: gate — native balance",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the balance is spent against this built transaction's own ceiling",
+      "consumer": "the balance leg of the gate this step signs behind",
+      "decision_file": "crates/execution/src/sequence.rs",
+      "decision_line": 1856,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getBalance",
+      "request_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "build.eth_getBalance.gate",
+      "source_file": "crates/execution/src/sequence.rs",
+      "source_line": 1853,
+      "stage": "build",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1077.93,
+        "union_duration_ms": 1077.93
+      },
+      "verification_role": "FINAL_EXECUTION_GUARD"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the head",
+      "caller": "native balance of the sender",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the answer is spent against the sequence ceiling: §5 puts a read that decides whether the money is there in preparation, not in verification",
+      "consumer": "the balance leg of the gate, on the sequence-wide ceiling",
+      "decision_file": "crates/execution/src/gate.rs",
+      "decision_line": 74,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getBalance",
+      "request_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700753|chain=91342",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "preflight.eth_getBalance.sender",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 269,
+      "stage": "preflight",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 739.98,
+        "union_duration_ms": 739.98
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "account: sender",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the same method as the gate's balance read, and a different site: this answer seeds a local execution",
+      "consumer": "the sender's account as REVM sees it at the pin",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getBalance",
+      "request_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getBalance.sender_account",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 537,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 737.99,
+        "union_duration_ms": 737.99
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "execute: step N (nonce N) from <addr> to <addr>: balanceOf(address), value 0, selector <addr>",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "an account balance the interpreter demanded mid-step",
+      "consumer": "the native balance in REVM's journal for one step",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getBalance",
+      "request_identity": "method=eth_getBalance|address=0x4200000000000000000000000000000000000006|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getBalance.execute_balanceof",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 621,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1087.51,
+        "union_duration_ms": 1087.51
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "execute: step N (nonce N) from <addr> to <addr>: swap(uint256,uint256,address,bytes), value 0, selector <addr>",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "an account balance the interpreter demanded mid-step",
+      "consumer": "the native balance in REVM's journal for one step",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getBalance",
+      "request_identity": "method=eth_getBalance|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getBalance.execute_swap",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 621,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 763.11,
+        "union_duration_ms": 763.11
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 3,
+        "route-91342-37700778-1791045896094": 3,
+        "route-91342-37700806-1791045924232": 3
+      },
+      "asks_total": 9,
+      "block_semantics": "numbered height at the pin",
+      "caller": "views: token0()",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "an account read the EVM demanded while running a view, so its role is to answer for the call and not for a check",
+      "consumer": "the account state behind one read-only call",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getBalance",
+      "request_identity": "method=eth_getBalance|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 9
+      },
+      "site_id": "simulation.eth_getBalance.views_token0",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 1043,
+      "stage": "simulation",
+      "timing": {
+        "asks": 9,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 9,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 2219.64,
+        "union_duration_ms": 2219.64
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "step N: fee at pinned block",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the header's base fee becomes this step's ceiling",
+      "consumer": "the intent's fee fields for the step being built",
+      "decision_file": "crates/execution/src/fee.rs",
+      "decision_line": 199,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "build.eth_getBlockByNumber.fee_pin",
+      "source_file": "crates/execution/src/sequence.rs",
+      "source_line": 1736,
+      "stage": "build",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1393.3,
+        "union_duration_ms": 1393.3
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin, with the hash asked alongside it",
+      "caller": "step N: gate — block binding at pin",
+      "carrier": "verified_block_context_preflight_to_build",
+      "class_basis": "the header re-read to check the pin the intent names still resolves to its hash",
+      "consumer": "the binding leg, and the cross-stage comparison against preflight's verdict",
+      "decision_file": "crates/execution/src/chain_read.rs",
+      "decision_line": 44,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "build.eth_getBlockByNumber.binding",
+      "source_file": "crates/execution/src/sequence.rs",
+      "source_line": 1795,
+      "stage": "build",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 770.18,
+        "union_duration_ms": 770.18
+      },
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "a tag: `latest`, read as the pair's label",
+      "caller": "step N: pending and latest nonces",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the header names the height the lane's confirmed nonce view describes",
+      "consumer": "the height label on the nonce pair this step allocates against",
+      "decision_file": "crates/execution/src/nonce.rs",
+      "decision_line": 106,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "build.eth_getBlockByNumber.nonce_pair_head",
+      "source_file": "crates/execution/src/sequence.rs",
+      "source_line": 1760,
+      "stage": "build",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1450.88,
+        "union_duration_ms": 1450.88
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height, resolved from the height the run just fixed",
+      "caller": "head and header that fixed the pin",
+      "carrier": "block_pin_height_and_hash",
+      "class_basis": "the header is the canonical block, and this is the read that says which one",
+      "consumer": "the header that fixes the pin, and the base fee and env the run prices from",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "observation.eth_getBlockByNumber.pin",
+      "source_file": "crates/pipeline/src/arbitrage.rs",
+      "source_line": 406,
+      "stage": "observation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1201.35,
+        "union_duration_ms": 1201.35
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin, with the hash asked alongside it",
+      "caller": "block binding at pin",
+      "carrier": "verified_block_context_preflight_to_build",
+      "class_basis": "the same header as the pin's read, asked again to check the pin still exists",
+      "consumer": "the `BlockBinding` leg of the gate and the block context build later re-checks",
+      "decision_file": "crates/execution/src/chain_read.rs",
+      "decision_line": 44,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "preflight.eth_getBlockByNumber.binding_pin",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 279,
+      "stage": "preflight",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 914.17,
+        "union_duration_ms": 914.17
+      },
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the head",
+      "caller": "fee at head",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the head's ceiling is the other half of the fee line's comparison",
+      "consumer": "the head half of the fee line, and the height that leg must agree with",
+      "decision_file": "crates/execution/src/preflight.rs",
+      "decision_line": 798,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=37700753|chain=91342|hydrated=false",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "preflight.eth_getBlockByNumber.fee_head",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 243,
+      "stage": "preflight",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 761.14,
+        "union_duration_ms": 761.14
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "fee at pinned block",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the base fee this read carries becomes the ceiling the transaction will carry: the consumer is a price, not a check of someone else's price",
+      "consumer": "the priced intent's fee fields and the pin half of the pin-versus-head line",
+      "decision_file": "crates/execution/src/fee.rs",
+      "decision_line": 199,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "preflight.eth_getBlockByNumber.fee_pin",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 235,
+      "stage": "preflight",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 905.83,
+        "union_duration_ms": 905.83
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "a tag: `latest`, deliberately asked for now",
+      "caller": "head at latest",
+      "carrier": "preflight_facts_within_one_stage",
+      "class_basis": "the head is a block context, and the checks that use it are staleness checks",
+      "consumer": "the head the staleness, fee and chain legs are all measured against",
+      "decision_file": "crates/execution/src/block_context.rs",
+      "decision_line": 176,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "preflight.eth_getBlockByNumber.head_latest",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 223,
+      "stage": "preflight",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 935.24,
+        "union_duration_ms": 935.24
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "a tag: `latest`, asked as the second read of a pair",
+      "caller": "pending and latest nonces",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the header is read to name the height the confirmed nonce view describes (class by consumer role, §5)",
+      "consumer": "the height label the pending-versus-confirmed pair is stamped with",
+      "decision_file": "crates/execution/src/nonce.rs",
+      "decision_line": 49,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "preflight.eth_getBlockByNumber.nonce_pair_head",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 248,
+      "stage": "preflight",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1223.29,
+        "union_duration_ms": 1223.29
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "header at pin",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the header is read to check the state being executed is the block the run named",
+      "consumer": "the pin check, the fee ceiling and REVM's block env",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "block_read",
+      "m842_category_rule": "a header (or a header with its transactions) at a named height or hash: §9's block_read",
+      "method": "eth_getBlockByNumber",
+      "request_identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getBlockByNumber.header",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 449,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 757.88,
+        "union_duration_ms": 757.88
+      },
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "code: sender",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "an inverted existence check on the same method: the answer's role is to be empty",
+      "consumer": "a hard refusal if the simulated sender is a contract",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getCode",
+      "request_identity": "method=eth_getCode|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getCode.sender",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 528,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 804.48,
+        "union_duration_ms": 804.48
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 4,
+        "route-91342-37700778-1791045896094": 4,
+        "route-91342-37700806-1791045924232": 4
+      },
+      "asks_total": 12,
+      "block_semantics": "numbered height at the pin",
+      "caller": "codes: touched_contracts",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "bytecode is canonical state, and §5's note about consumer role makes the existence check a gate on top of it",
+      "consumer": "REVM's journal for the route's contracts",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getCode",
+      "request_identity": "method=eth_getCode|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 12
+      },
+      "site_id": "simulation.eth_getCode.touched",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 514,
+      "stage": "simulation",
+      "timing": {
+        "asks": 12,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 12,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 5123.48,
+        "union_duration_ms": 5123.48
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "views: token0()",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the bytecode the view call needed, fetched by the same mechanism as the §5 batch",
+      "consumer": "the code REVM executes for one view call",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getCode",
+      "request_identity": "method=eth_getCode|address=0x4200000000000000000000000000000000000011|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getCode.views_token0",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 1043,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1363.62,
+        "union_duration_ms": 1363.62
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "execute: step N (nonce N) from <addr> to <addr>: balanceOf(address), value 0, selector <addr>",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the SLOADs one executed `balanceOf` demanded",
+      "consumer": "the state one executed step read",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getStorageAt",
+      "request_identity": "method=eth_getStorageAt|address=0x4200000000000000000000000000000000000006|block=37700740|chain=91342|slot=0x05822d3e2ebb7a872393b4558653ad1e9b65a460779e182fcc8ddaab7e9ffe43",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getStorageAt.execute_balanceof",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 621,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 722.63,
+        "union_duration_ms": 722.63
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 10,
+        "route-91342-37700778-1791045896094": 10,
+        "route-91342-37700806-1791045924232": 10
+      },
+      "asks_total": 30,
+      "block_semantics": "numbered height at the pin",
+      "caller": "execute: step N (nonce N) from <addr> to <addr>: swap(uint256,uint256,address,bytes), value 0, selector <addr>",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the SLOADs one executed swap demanded",
+      "consumer": "the state one executed step read",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getStorageAt",
+      "request_identity": "method=eth_getStorageAt|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342|slot=0x2cd94663f0c2301aa845214efa861a070af8e70c2d96027534ab991c96129041",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 30
+      },
+      "site_id": "simulation.eth_getStorageAt.execute_swap",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 621,
+      "stage": "simulation",
+      "timing": {
+        "asks": 30,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 30,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 7823.83,
+        "union_duration_ms": 7823.83
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 3,
+        "route-91342-37700778-1791045896094": 3,
+        "route-91342-37700806-1791045924232": 3
+      },
+      "asks_total": 9,
+      "block_semantics": "numbered height at the pin",
+      "caller": "execute: step N (nonce N) from <addr> to <addr>: transfer(address,uint256), value 0, selector <addr>",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the SLOADs one executed token transfer demanded",
+      "consumer": "the state one executed step read",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getStorageAt",
+      "request_identity": "method=eth_getStorageAt|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342|slot=0x4b1c689c92d22dbbfe367179bd99e043109f97f70bd4a1b451a2699bf9e9fae6",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 9
+      },
+      "site_id": "simulation.eth_getStorageAt.execute_transfer",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 621,
+      "stage": "simulation",
+      "timing": {
+        "asks": 9,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 9,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 2692.43,
+        "union_duration_ms": 2692.43
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 2,
+        "route-91342-37700778-1791045896094": 2,
+        "route-91342-37700806-1791045924232": 2
+      },
+      "asks_total": 6,
+      "block_semantics": "numbered height at the pin",
+      "caller": "views: getReserves()",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the slots REVM reads to answer the pool's own `getReserves()` — note that the reserve check is a local execution, not an `eth_call`",
+      "consumer": "the reserve slots behind one executed view",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getStorageAt",
+      "request_identity": "method=eth_getStorageAt|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342|slot=0x0000000000000000000000000000000000000000000000000000000000000008",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 6
+      },
+      "site_id": "simulation.eth_getStorageAt.views_getreserves",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 1043,
+      "stage": "simulation",
+      "timing": {
+        "asks": 6,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 6,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1498.55,
+        "union_duration_ms": 1498.55
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 2,
+        "route-91342-37700778-1791045896094": 2,
+        "route-91342-37700806-1791045924232": 2
+      },
+      "asks_total": 6,
+      "block_semantics": "numbered height at the pin",
+      "caller": "views: token0()",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the slot behind the executed `token0()`",
+      "consumer": "one storage slot of one pool, for one view",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getStorageAt",
+      "request_identity": "method=eth_getStorageAt|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342|slot=0x0000000000000000000000000000000000000000000000000000000000000006",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 6
+      },
+      "site_id": "simulation.eth_getStorageAt.views_token0",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 1043,
+      "stage": "simulation",
+      "timing": {
+        "asks": 6,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 6,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1515.99,
+        "union_duration_ms": 1515.99
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 2,
+        "route-91342-37700778-1791045896094": 2,
+        "route-91342-37700806-1791045924232": 2
+      },
+      "asks_total": 6,
+      "block_semantics": "numbered height at the pin",
+      "caller": "views: token1()",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the slot behind the executed `token1()`",
+      "consumer": "one storage slot of one pool, for one view",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "§9's own example: an account's balance, code, or a named storage word at a block is state",
+      "method": "eth_getStorageAt",
+      "request_identity": "method=eth_getStorageAt|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342|slot=0x0000000000000000000000000000000000000000000000000000000000000007",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 6
+      },
+      "site_id": "simulation.eth_getStorageAt.views_token1",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 1043,
+      "stage": "simulation",
+      "timing": {
+        "asks": 6,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 6,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1485.45,
+        "union_duration_ms": 1485.45
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 2,
+        "route-91342-37700778-1791045896094": 2,
+        "route-91342-37700806-1791045924232": 2
+      },
+      "asks_total": 6,
+      "block_semantics": "a tag for the pending leg, the head's number for the confirmed leg",
+      "caller": "step N: pending and latest nonces",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the pair that both allocates the lane's nonce and checks the intent against it",
+      "consumer": "the lane's allocation and the last nonce check before signing",
+      "decision_file": "crates/execution/src/nonce.rs",
+      "decision_line": 106,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "transaction_preparation",
+      "m842_category_rule": "the nonce a transaction needs to be addressed with: §9's transaction_preparation, not a read of market state",
+      "method": "eth_getTransactionCount",
+      "request_identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700761|chain=91342",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 6
+      },
+      "site_id": "build.eth_getTransactionCount.pair",
+      "source_file": "crates/execution/src/sequence.rs",
+      "source_line": 1760,
+      "stage": "build",
+      "timing": {
+        "asks": 6,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 6,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 2903.47,
+        "union_duration_ms": 2903.47
+      },
+      "verification_role": "FINAL_EXECUTION_GUARD"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 2,
+        "route-91342-37700778-1791045896094": 2,
+        "route-91342-37700806-1791045924232": 2
+      },
+      "asks_total": 6,
+      "block_semantics": "a tag for the pending leg, the head's number for the confirmed leg",
+      "caller": "pending and latest nonces",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the pending view becomes the nonce the intent carries, and the confirmed view is its contradiction check",
+      "consumer": "the intent's nonce and the `NonceValid` leg of the gate",
+      "decision_file": "crates/execution/src/nonce.rs",
+      "decision_line": 49,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "transaction_preparation",
+      "m842_category_rule": "the nonce a transaction needs to be addressed with: §9's transaction_preparation, not a read of market state",
+      "method": "eth_getTransactionCount",
+      "request_identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700755|chain=91342",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 6
+      },
+      "site_id": "preflight.eth_getTransactionCount.pair",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 248,
+      "stage": "preflight",
+      "timing": {
+        "asks": 6,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 6,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1817.68,
+        "union_duration_ms": 1817.68
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "account: sender",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the nonce as of the pin, for a local execution: preparation happens in build, not here",
+      "consumer": "REVM's starting nonce for the simulated sequence",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "the simulation's provider asks for an account's nonce as part of warming the state the EVM runs against, which is the same kind of read as its balance and code reads",
+      "method": "eth_getTransactionCount",
+      "request_identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getTransactionCount.sender_account",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 537,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 774.95,
+        "union_duration_ms": 774.95
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "execute: step N (nonce N) from <addr> to <addr>: balanceOf(address), value 0, selector <addr>",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "an account nonce the interpreter demanded mid-step",
+      "consumer": "the nonce in REVM's journal for one step",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "the simulation's provider asks for an account's nonce as part of warming the state the EVM runs against, which is the same kind of read as its balance and code reads",
+      "method": "eth_getTransactionCount",
+      "request_identity": "method=eth_getTransactionCount|address=0x4200000000000000000000000000000000000006|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getTransactionCount.execute_balanceof",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 621,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 727.41,
+        "union_duration_ms": 727.41
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "numbered height at the pin",
+      "caller": "execute: step N (nonce N) from <addr> to <addr>: swap(uint256,uint256,address,bytes), value 0, selector <addr>",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "an account nonce the interpreter demanded mid-step",
+      "consumer": "the nonce in REVM's journal for one step",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "the simulation's provider asks for an account's nonce as part of warming the state the EVM runs against, which is the same kind of read as its balance and code reads",
+      "method": "eth_getTransactionCount",
+      "request_identity": "method=eth_getTransactionCount|address=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 3
+      },
+      "site_id": "simulation.eth_getTransactionCount.execute_swap",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 621,
+      "stage": "simulation",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 737.71,
+        "union_duration_ms": 737.71
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 3,
+        "route-91342-37700778-1791045896094": 3,
+        "route-91342-37700806-1791045924232": 3
+      },
+      "asks_total": 9,
+      "block_semantics": "numbered height at the pin",
+      "caller": "views: token0()",
+      "carrier": "state_read_cache_within_one_simulation",
+      "class_basis": "the sender's nonce as the view's journal needs it",
+      "consumer": "the journal's account state for one view call",
+      "decision_file": "crates/simulation/src/engine.rs",
+      "decision_line": 1099,
+      "identity_source": "identity_from_the_recorded_dedup_key",
+      "m842_category": "state_read",
+      "m842_category_rule": "the simulation's provider asks for an account's nonce as part of warming the state the EVM runs against, which is the same kind of read as its balance and code reads",
+      "method": "eth_getTransactionCount",
+      "request_identity": "method=eth_getTransactionCount|address=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|block=37700740|chain=91342",
+      "semantic_class": "A_CANONICAL_STATE_READ",
+      "sink": "simulation",
+      "sinks_recorded": {
+        "simulation": 9
+      },
+      "site_id": "simulation.eth_getTransactionCount.views_token0",
+      "source_file": "crates/simulation/src/engine.rs",
+      "source_line": 1043,
+      "stage": "simulation",
+      "timing": {
+        "asks": 9,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 9,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 2246.78,
+        "union_duration_ms": 2246.78
+      },
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "no block term, asked under the pin's stamp",
+      "caller": "step N: fee at pinned block",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the tip that enters this step's ceiling and the transaction's priority field",
+      "consumer": "the intent's priority fee and the ceiling's tip half",
+      "decision_file": "crates/execution/src/fee.rs",
+      "decision_line": 170,
+      "identity_source": "identity_from_a_parameterless_request",
+      "m842_category": "transaction_preparation",
+      "m842_category_rule": "§19's `fee` and `gas`: what the next transaction will have to pay, asked of the head rather than of a pinned block",
+      "method": "eth_maxPriorityFeePerGas",
+      "request_identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "build.eth_maxPriorityFeePerGas.pin",
+      "source_file": "crates/execution/src/sequence.rs",
+      "source_line": 1736,
+      "stage": "build",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 1846.88,
+        "union_duration_ms": 1846.88
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "no block term, asked under the head's stamp",
+      "caller": "fee at head",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the same parameterless method under the head's stamp, and part of the head reading the fee line compares with",
+      "consumer": "the head reading's tip, inside the fee line's ceiling",
+      "decision_file": "crates/execution/src/preflight.rs",
+      "decision_line": 798,
+      "identity_source": "identity_from_a_parameterless_request",
+      "m842_category": "transaction_preparation",
+      "m842_category_rule": "§19's `fee` and `gas`: what the next transaction will have to pay, asked of the head rather than of a pinned block",
+      "method": "eth_maxPriorityFeePerGas",
+      "request_identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "preflight.eth_maxPriorityFeePerGas.head",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 243,
+      "stage": "preflight",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 747.98,
+        "union_duration_ms": 747.98
+      },
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "asks_per_run": {
+        "route-91342-37700740-1791045857463": 1,
+        "route-91342-37700778-1791045896094": 1,
+        "route-91342-37700806-1791045924232": 1
+      },
+      "asks_total": 3,
+      "block_semantics": "no block term, asked under the pin's stamp",
+      "caller": "fee at pinned block",
+      "carrier": "no_carrier_in_code",
+      "class_basis": "the tip enters the ceiling the intent carries",
+      "consumer": "the pin reading's tip, ceiling and provenance",
+      "decision_file": "crates/execution/src/fee.rs",
+      "decision_line": 170,
+      "identity_source": "identity_from_a_parameterless_request",
+      "m842_category": "transaction_preparation",
+      "m842_category_rule": "§19's `fee` and `gas`: what the next transaction will have to pay, asked of the head rather than of a pinned block",
+      "method": "eth_maxPriorityFeePerGas",
+      "request_identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "sink": "lifecycle",
+      "sinks_recorded": {
+        "lifecycle": 3
+      },
+      "site_id": "preflight.eth_maxPriorityFeePerGas.pin",
+      "source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "source_line": 235,
+      "stage": "preflight",
+      "timing": {
+        "asks": 3,
+        "clock_note": "per run, then added across runs: each run's stamps are on their own monotonic origin, so two runs' intervals are never merged",
+        "overlap_rows": 0,
+        "physical_attempts": 3,
+        "rows_without_interval": 0,
+        "rpc_sum_duration_ms": 718.79,
+        "union_duration_ms": 718.79
+      },
+      "verification_role": "SAFETY_GATE"
+    }
+  ],
+  "runs": [
+    "route-91342-37700740-1791045857463",
+    "route-91342-37700778-1791045896094",
+    "route-91342-37700806-1791045924232"
+  ],
+  "schema": "m8.6.v1",
+  "surface_rule": {
+    "caller_family_masks": [
+      "step <digits> -> step N",
+      "nonce <digits> -> nonce N",
+      "0x + >= 8 hex digits -> <addr>"
+    ],
+    "census_key": "(method, stage, caller_family)",
+    "class_rule": "a site's class is decided by the decision its answer feeds, not by its method name",
+    "identity_is_read_through": "evm_pipeline::canonicalization::RpcReadKey",
+    "masks_are_presentation_only": true
+  },
+  "transports": [
+    {
+      "adapter_file": "crates/chain/src/rpc.rs",
+      "adapter_line": 541,
+      "adapter_token": "async fn latest_block(&self",
+      "method": "eth_blockNumber",
+      "note": "one ask per run, at the observation stage, and it is the ask that fixes the pin",
+      "traced_in_the_records": true
+    },
+    {
+      "adapter_file": "crates/chain/src/rpc.rs",
+      "adapter_line": 559,
+      "adapter_token": "async fn get_block_context(&self",
+      "method": "eth_getBlockByNumber",
+      "note": "the largest family in the census; two of its three wire paths are raw requests (`giwa/preflight_facts.rs`'s head read and `giwa/sequencer_direct.rs`'s nonce-pair head), which is why the surface table keys a method to more than one adapter leg",
+      "traced_in_the_records": true
+    },
+    {
+      "adapter_file": "crates/chain/src/rpc.rs",
+      "adapter_line": 722,
+      "adapter_token": "async fn call(&self",
+      "method": "eth_call",
+      "note": "60 asks in the corpus, graded site by site in M8.5.1",
+      "traced_in_the_records": true
+    },
+    {
+      "adapter_file": "crates/chain/src/rpc.rs",
+      "adapter_line": 739,
+      "adapter_token": "async fn get_balance(&self",
+      "method": "eth_getBalance",
+      "note": "read by the gate, by the lane, by the snapshot and by REVM",
+      "traced_in_the_records": true
+    },
+    {
+      "adapter_file": "crates/chain/src/rpc.rs",
+      "adapter_line": 749,
+      "adapter_token": "async fn get_storage_at(&self",
+      "method": "eth_getStorageAt",
+      "note": "every ask is a REVM demand inside one simulation, which is the scope M8.3.1's cache already serves",
+      "traced_in_the_records": true
+    },
+    {
+      "adapter_file": "crates/chain/src/rpc.rs",
+      "adapter_line": 732,
+      "adapter_token": "fn get_code(",
+      "method": "eth_getCode",
+      "note": "same as storage: no pair among the 78, because the cache is asked first",
+      "traced_in_the_records": true
+    },
+    {
+      "adapter_file": "crates/chain/src/rpc.rs",
+      "adapter_line": 763,
+      "adapter_token": "async fn get_nonce(&self",
+      "method": "eth_getTransactionCount",
+      "note": "always read as a pair, pending and confirmed",
+      "traced_in_the_records": true
+    },
+    {
+      "adapter_file": "crates/chain/src/rpc.rs",
+      "adapter_line": 102,
+      "adapter_token": "request_with(&http, url, \"eth_chainId\"",
+      "method": "eth_chainId",
+      "note": "three asks per run and no block term on any of them; the connect leg is recorded with `context_not_stamped` because no stage exists yet to name it",
+      "traced_in_the_records": true
+    },
+    {
+      "adapter_file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "adapter_line": 199,
+      "adapter_token": "async fn suggested_tip_raw",
+      "method": "eth_maxPriorityFeePerGas",
+      "note": "asked from inside `fee_reading`, so a pin-and-head fee gather asks it twice",
+      "traced_in_the_records": true
+    },
+    {
+      "adapter_file": "",
+      "adapter_line": null,
+      "adapter_token": "",
+      "method": "eth_gasPrice",
+      "note": "§5 names it as an example and no code path in this workspace calls it: not a hot-path RPC (§4), so it is absent from the census totals",
+      "traced_in_the_records": false
+    },
+    {
+      "adapter_file": "",
+      "adapter_line": null,
+      "adapter_token": "",
+      "method": "eth_estimateGas",
+      "note": "the same: a classification rule mentions it, no call site exists",
+      "traced_in_the_records": false
+    }
+  ],
+  "unit": "call sites, one row per (method, stage, caller_family) the records produced"
+}

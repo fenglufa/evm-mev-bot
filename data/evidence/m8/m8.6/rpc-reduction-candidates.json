@@ -1,0 +1,4444 @@
+{
+  "anchors": [
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 277,
+      "matches": 1,
+      "note": "site preflight.eth_chainId.endpoint stamps its caller label here",
+      "source": "code",
+      "token": "endpoint chain id"
+    },
+    {
+      "file": "crates/execution/src/gate.rs",
+      "line": 74,
+      "matches": 1,
+      "note": "site preflight.eth_chainId.endpoint's answer first meets a decision here",
+      "source": "code",
+      "token": "pub enum BlockBinding"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 102,
+      "matches": 1,
+      "note": "site connect.eth_chainId.unstamped stamps its caller label here",
+      "source": "code",
+      "token": "request_with(&http, url, \"eth_chainId\""
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1790,
+      "matches": 1,
+      "note": "site build.eth_chainId.gate stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: gate — endpoint chain id"
+    },
+    {
+      "file": "crates/execution/src/gate.rs",
+      "line": 74,
+      "matches": 1,
+      "note": "site build.eth_chainId.gate's answer first meets a decision here",
+      "source": "code",
+      "token": "pub enum BlockBinding"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 102,
+      "matches": 1,
+      "note": "site connect.eth_chainId.unstamped stamps its caller label here",
+      "source": "code",
+      "token": "request_with(&http, url, \"eth_chainId\""
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1625,
+      "matches": 1,
+      "note": "site build.eth_getBalance.before_snapshot stamps its caller label here",
+      "source": "code",
+      "token": "before-snapshot: native and input-token balances"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1856,
+      "matches": 1,
+      "note": "site build.eth_getBalance.before_snapshot's answer first meets a decision here",
+      "source": "code",
+      "token": "maximum_cost_wei"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 269,
+      "matches": 1,
+      "note": "site preflight.eth_getBalance.sender stamps its caller label here",
+      "source": "code",
+      "token": "native balance of the sender"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1853,
+      "matches": 1,
+      "note": "site build.eth_getBalance.gate stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: gate — native balance"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1856,
+      "matches": 1,
+      "note": "site build.eth_getBalance.gate's answer first meets a decision here",
+      "source": "code",
+      "token": "maximum_cost_wei"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 537,
+      "matches": 1,
+      "note": "site simulation.eth_getBalance.sender_account stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"account: sender\")"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 243,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.head stamps its caller label here",
+      "source": "code",
+      "token": "fee at head"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 798,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.head's answer first meets a decision here",
+      "source": "code",
+      "token": "facts.fee.max_fee_per_gas.is_zero"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 235,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.pin stamps its caller label here",
+      "source": "code",
+      "token": "fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1736,
+      "matches": 1,
+      "note": "site build.eth_maxPriorityFeePerGas.pin stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 170,
+      "matches": 1,
+      "note": "site build.eth_maxPriorityFeePerGas.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "the endpoint gave no suggested priority fee"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 235,
+      "matches": 1,
+      "note": "site preflight.eth_maxPriorityFeePerGas.pin stamps its caller label here",
+      "source": "code",
+      "token": "fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1760,
+      "matches": 1,
+      "note": "site build.eth_getTransactionCount.pair stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 106,
+      "matches": 1,
+      "note": "site build.eth_getTransactionCount.pair's answer first meets a decision here",
+      "source": "code",
+      "token": "could duplicate a live transaction"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 248,
+      "matches": 1,
+      "note": "site preflight.eth_getTransactionCount.pair stamps its caller label here",
+      "source": "code",
+      "token": "pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 279,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.binding_pin stamps its caller label here",
+      "source": "code",
+      "token": "block binding at pin"
+    },
+    {
+      "file": "crates/execution/src/chain_read.rs",
+      "line": 44,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.binding_pin's answer first meets a decision here",
+      "source": "code",
+      "token": "hash == pinned"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1795,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.binding stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: gate — block binding at pin"
+    },
+    {
+      "file": "crates/execution/src/chain_read.rs",
+      "line": 44,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.binding's answer first meets a decision here",
+      "source": "code",
+      "token": "hash == pinned"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 449,
+      "matches": 1,
+      "note": "site simulation.eth_getBlockByNumber.header stamps its caller label here",
+      "source": "code",
+      "token": "note_read_phase(\"header at pin\")"
+    },
+    {
+      "file": "crates/simulation/src/engine.rs",
+      "line": 1099,
+      "matches": 1,
+      "note": "site simulation.eth_getBlockByNumber.header's answer first meets a decision here",
+      "source": "code",
+      "token": "claimed != found"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 235,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_pin stamps its caller label here",
+      "source": "code",
+      "token": "fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 199,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.fee_pin's answer first meets a decision here",
+      "source": "code",
+      "token": "max_tip > max_fee"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1736,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.fee_pin stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: fee at pinned block"
+    },
+    {
+      "file": "crates/execution/src/fee.rs",
+      "line": 199,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.fee_pin's answer first meets a decision here",
+      "source": "code",
+      "token": "max_tip > max_fee"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 248,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.nonce_pair_head stamps its caller label here",
+      "source": "code",
+      "token": "pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 49,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.nonce_pair_head's answer first meets a decision here",
+      "source": "code",
+      "token": "pending < self.confirmed"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 223,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.head_latest stamps its caller label here",
+      "source": "code",
+      "token": "head at latest"
+    },
+    {
+      "file": "crates/execution/src/sequence.rs",
+      "line": 1760,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.nonce_pair_head stamps its caller label here",
+      "source": "code",
+      "token": "step {step_number}: pending and latest nonces"
+    },
+    {
+      "file": "crates/execution/src/nonce.rs",
+      "line": 106,
+      "matches": 1,
+      "note": "site build.eth_getBlockByNumber.nonce_pair_head's answer first meets a decision here",
+      "source": "code",
+      "token": "could duplicate a live transaction"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 223,
+      "matches": 1,
+      "note": "site preflight.eth_getBlockByNumber.head_latest stamps its caller label here",
+      "source": "code",
+      "token": "head at latest"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 259,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg0 stamps its caller label here",
+      "source": "code",
+      "token": "reserves of leg 0"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 888,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg0's answer first meets a decision here",
+      "source": "code",
+      "token": "expected_output(&facts.reserves"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 460,
+      "matches": 1,
+      "note": "site opportunity_detection.eth_call.reserves stamps its caller label here",
+      "source": "code",
+      "token": "reserves of both venues, at the pin"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 261,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg1 stamps its caller label here",
+      "source": "code",
+      "token": "reserves of leg 1"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 888,
+      "matches": 1,
+      "note": "site preflight.eth_call.leg1's answer first meets a decision here",
+      "source": "code",
+      "token": "expected_output(&facts.reserves"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 460,
+      "matches": 1,
+      "note": "site opportunity_detection.eth_call.reserves stamps its caller label here",
+      "source": "code",
+      "token": "reserves of both venues, at the pin"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 251,
+      "matches": 1,
+      "note": "site preflight.eth_call.l1_fee stamps its caller label here",
+      "source": "code",
+      "token": "cost ceiling per step"
+    },
+    {
+      "file": "crates/execution/src/preflight.rs",
+      "line": 338,
+      "matches": 1,
+      "note": "site preflight.eth_call.l1_fee's answer first meets a decision here",
+      "source": "code",
+      "token": "fn l1_line"
+    },
+    {
+      "file": "crates/execution/src/giwa/preflight_facts.rs",
+      "line": 251,
+      "matches": 1,
+      "note": "site preflight.eth_call.l1_fee stamps its caller label here",
+      "source": "code",
+      "token": "cost ceiling per step"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_blockNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 513,
+      "matches": 1,
+      "note": "site observation.eth_blockNumber.pin's answer first meets a decision here",
+      "source": "code",
+      "token": "BlockPin::new(head"
+    },
+    {
+      "file": "crates/pipeline/src/arbitrage.rs",
+      "line": 406,
+      "matches": 1,
+      "note": "site observation.eth_getBlockByNumber.pin stamps its caller label here",
+      "source": "code",
+      "token": "head and header that fixed the pin"
+    }
+  ],
+  "assembly_module": "crates/pipeline/tests/m86_census/tables.rs",
+  "chain_id": 91342,
+  "endpoint_id": "rpc-faa716cada04a9ef",
+  "evidence_first_rule": "§2.4: every figure here was folded out of records this repository had committed before M8.6 started. No table in this directory was produced by an RPC this milestone made.",
+  "file": "rpc-reduction-candidates.json",
+  "generated_by": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+  "milestone": "M8.6",
+  "model": "crates/pipeline/tests/m86_census/mod.rs",
+  "new_rpc": 0,
+  "provenance": [
+    {
+      "block_number": 37700740,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700740-1791045857463",
+      "source": "live"
+    },
+    {
+      "block_number": 37700778,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045896095,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700778-1791045896094",
+      "source": "live"
+    },
+    {
+      "block_number": 37700806,
+      "chain_id": 91342,
+      "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+      "diagnosis_schema": 2,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045924234,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "rows": 82,
+      "run": "route-91342-37700806-1791045924232",
+      "source": "live"
+    }
+  ],
+  "question": "§6: every reduction question the hot path raises, one row each, with its measured counts and its judgement kept apart from both",
+  "recompute": "`measured()` folds M8.4.2's published pairs onto each candidate, and `freshness_of`, `theoretical_saving_of`, `safe_saving_of` and `priority_of` derive every verdict column; §24's rules run over the rows through `candidate_invariant_errors`",
+  "rows": [
+    {
+      "alternative_evidence": "M8.4.3's `chain_identity` row already says what is missing: a per-check field distinguishing a fresh answer from a shared one, and any detection of a chain change after connect. Without them the endpoint's live claim disappears",
+      "alternative_verification": "NEW_CHECK_REQUIRED",
+      "authority": "first_answer_at_connect",
+      "authority_basis": "proven",
+      "authority_preserved": true,
+      "authority_reason_inherited": "the answer is not a function of a block or a moment: the chain id is a property of the endpoint connection, and every later normalized value in this build carries it",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "no block term: the method asks none",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "endpoint_claim_would_stop_being_live",
+        "no_owner_declares_a_lifecycle_for_it",
+        "no_per_check_freshness_field",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "caller": "endpoint chain id",
+      "candidate": "chainid.connect_to_preflight",
+      "carrier": "chain_adapter_field",
+      "carrier_evidence": "the adapter already holds a chain id from connect, which is exactly why this leg is a re-read rather than a lookup",
+      "class_basis": "the ask is which chain this endpoint answers for, and its consumer is the three-way equality",
+      "consumer": "preflight.eth_chainId.endpoint",
+      "consumer_decision_line": "crates/execution/src/gate.rs:74",
+      "consumer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "consumer_source_line": 277,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "removal_would_stop_an_existing_check",
+        "no_owner_declares_a_lifecycle_for_it",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "no_block_in_either_request": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "endpoint",
+            "method_kind"
+          ],
+          "identity_source": "identity_from_a_parameterless_request",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 1632,
+            "matches": 1,
+            "note": "chainid.connect_to_preflight: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc31"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 4266,
+            "matches": 1,
+            "note": "chainid.connect_to_preflight: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc31"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 6900,
+            "matches": 1,
+            "note": "chainid.connect_to_preflight: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc31"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc31",
+          "route-91342-37700778-1791045896094:rpc31",
+          "route-91342-37700806-1791045924232:rpc31"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checkable_not_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 3
+          },
+          "same_block": {
+            "checkable_not_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "proven",
+      "freshness": "preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "none",
+        "identity": "not_block_scoped",
+        "measured_block_relations": {
+          "no_block_in_either_request": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+      "identity_fields": [
+        "endpoint",
+        "method_kind"
+      ],
+      "implementation_risk_rank": 1,
+      "invalidation": "none_until_reconnect (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_chainId",
+      "next_step": "none",
+      "owner": "chain_adapter_connection",
+      "pattern": "A_physical_duplicate",
+      "priority": "P1",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": false,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority P1"
+        }
+      ],
+      "producer": "connect.eth_chainId.unstamped",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/chain/src/rpc.rs",
+      "producer_source_line": 102,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_ownership_rule",
+      "role_evidence": "crates/execution/src/gate.rs: intent, configuration and endpoint must all agree, and the file's own words for the leg are that it is read rather than remembered",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "F_IDENTITY_CONNECTION",
+      "stage": "preflight",
+      "state_kind": "chain_identity",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 731.02,
+        "rpc_sum_duration_ms": 731.02,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 731.02
+      },
+      "verdict": "SAFE_RPC_REDUCTION_CANDIDATE_FOUND",
+      "verdict_note": "the only family in the census whose ownership is proven, whose scope is proven, and whose answer provably does not depend on the block — and therefore the one where a reduction is a design problem rather than a semantic impossibility",
+      "verification_preserved": false,
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "alternative_evidence": "same missing mechanism as preflight's leg: a per-check field and a chain-change detector, which M8.4.3 lists as this category's open proof",
+      "alternative_verification": "NEW_CHECK_REQUIRED",
+      "authority": "first_answer_at_connect",
+      "authority_basis": "proven",
+      "authority_preserved": true,
+      "authority_reason_inherited": "the answer is not a function of a block or a moment: the chain id is a property of the endpoint connection, and every later normalized value in this build carries it",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "no block term",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "endpoint_claim_would_stop_being_live",
+        "no_owner_declares_a_lifecycle_for_it",
+        "no_per_check_freshness_field",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "caller": "step N: gate — endpoint chain id",
+      "candidate": "chainid.connect_to_build",
+      "carrier": "chain_adapter_field",
+      "carrier_evidence": "",
+      "class_basis": "the lane asks the endpoint which chain it is on, seconds before signing",
+      "consumer": "build.eth_chainId.gate",
+      "consumer_decision_line": "crates/execution/src/gate.rs:74",
+      "consumer_source_file": "crates/execution/src/sequence.rs",
+      "consumer_source_line": 1790,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "removal_would_stop_an_existing_check",
+        "no_owner_declares_a_lifecycle_for_it",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "no_block_in_either_request": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "endpoint",
+            "method_kind"
+          ],
+          "identity_source": "identity_from_a_parameterless_request",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 2432,
+            "matches": 1,
+            "note": "chainid.connect_to_build: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc41"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 5066,
+            "matches": 1,
+            "note": "chainid.connect_to_build: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc41"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 7700,
+            "matches": 1,
+            "note": "chainid.connect_to_build: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc41"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc41",
+          "route-91342-37700778-1791045896094:rpc41",
+          "route-91342-37700806-1791045924232:rpc41"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checkable_not_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 3
+          },
+          "same_block": {
+            "checkable_not_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "proven",
+      "freshness": "preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "none",
+        "identity": "not_block_scoped",
+        "measured_block_relations": {
+          "no_block_in_either_request": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_chainId|endpoint=rpc-faa716cada04a9ef|method_kind=eth_chainId",
+      "identity_fields": [
+        "endpoint",
+        "method_kind"
+      ],
+      "implementation_risk_rank": 1,
+      "invalidation": "none_until_reconnect (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_chainId",
+      "next_step": "none",
+      "owner": "chain_adapter_connection",
+      "pattern": "A_physical_duplicate",
+      "priority": "P1",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": false,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority P1"
+        }
+      ],
+      "producer": "connect.eth_chainId.unstamped",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/chain/src/rpc.rs",
+      "producer_source_line": 102,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_ownership_rule",
+      "role_evidence": "crates/execution/src/sequence.rs: the three-way equality runs on this step's own read and a failed gate halts the step before a signature exists",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "F_IDENTITY_CONNECTION",
+      "stage": "build",
+      "state_kind": "chain_identity",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 715.47,
+        "rpc_sum_duration_ms": 715.47,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 715.47
+      },
+      "verdict": "SAFE_RPC_REDUCTION_CANDIDATE_FOUND",
+      "verdict_note": "the leg runs seconds before a signature, which is the moment an answer four stages stale is least able to carry",
+      "verification_preserved": false,
+      "verification_role": "FINAL_EXECUTION_GUARD"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NOT_APPLICABLE",
+      "authority": "node_at_height",
+      "authority_basis": "unknown",
+      "authority_preserved": false,
+      "authority_reason_inherited": "each measured pair shares a method, an address and a height, and the two sides do not ask the same question: the earlier answer decides whether the attempt may go on, the later one is the before-half of a diff that measures what the sequence actually moved. §10's 「same value != same state identity」 is this row",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "numbered height at the pin",
+      "blockers": [
+        "freshness_not_preserved",
+        "head_equals_pin_in_these_runs_only",
+        "no_carrier_across_stages",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it",
+        "no_owner_in_code",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "caller": "before-snapshot: native and input-token balances",
+      "candidate": "balance.preflight_to_build_snapshot",
+      "carrier": "execution_sequence_report_after_the_fact",
+      "carrier_evidence": "",
+      "class_basis": "the native half of the same accounting baseline",
+      "consumer": "build.eth_getBalance.before_snapshot",
+      "consumer_decision_line": "crates/execution/src/sequence.rs:1856",
+      "consumer_source_file": "crates/execution/src/sequence.rs",
+      "consumer_source_line": 1625,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "freshness_not_preserved",
+        "removal_would_stop_an_existing_check",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "same_block": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "address",
+            "block",
+            "chain"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700753|chain=91342"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 1830,
+            "matches": 1,
+            "note": "balance.preflight_to_build_snapshot: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc33"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 4464,
+            "matches": 1,
+            "note": "balance.preflight_to_build_snapshot: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc33"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 7098,
+            "matches": 1,
+            "note": "balance.preflight_to_build_snapshot: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc33"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc33",
+          "route-91342-37700778-1791045896094:rpc33",
+          "route-91342-37700806-1791045924232:rpc33"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checked_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 3
+          },
+          "same_block": {
+            "checked_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "record_only",
+      "freshness": "not_preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "tag",
+        "identity": "tag",
+        "measured_block_relations": {
+          "same_block": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700753|chain=91342",
+      "identity_fields": [
+        "address",
+        "block",
+        "chain"
+      ],
+      "implementation_risk_rank": 3,
+      "invalidation": "re_read_per_send (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getBalance",
+      "next_step": "none",
+      "owner": "no_owner_in_code",
+      "pattern": "B_cross_stage_canonical_read",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": false,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": true,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "preflight.eth_getBalance.sender",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "producer_source_line": 269,
+      "requires_new_carrier": true,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_carrier_and_ownership_rule",
+      "role_evidence": "crates/execution/src/sequence.rs: the snapshot's first decision is a binding sanity check on which snapshot it is, not on how much is there",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "G_OBSERVATION",
+      "stage": "build",
+      "state_kind": "native_balance",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 747.35,
+        "rpc_sum_duration_ms": 747.35,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 747.35
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "the only exact-duplicate family whose consumer carries no verification, so it is the one candidate the §12 rule does not kill outright — and the reason it still saves nothing is that three runs cannot show whether the head and the pin are the same height in general",
+      "verification_preserved": true,
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_at_height",
+      "authority_basis": "unknown",
+      "authority_preserved": false,
+      "authority_reason_inherited": "each measured pair shares a method, an address and a height, and the two sides do not ask the same question: the earlier answer decides whether the attempt may go on, the later one is the before-half of a diff that measures what the sequence actually moved. §10's 「same value != same state identity」 is this row",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "numbered height at the pin",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "freshness_not_preserved",
+        "no_alternative_verification_exists",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it",
+        "no_owner_in_code",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "caller": "step N: gate — native balance",
+      "candidate": "balance.simulation_to_build_gate",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the balance is spent against this built transaction's own ceiling",
+      "consumer": "build.eth_getBalance.gate",
+      "consumer_decision_line": "crates/execution/src/sequence.rs:1856",
+      "consumer_source_file": "crates/execution/src/sequence.rs",
+      "consumer_source_line": 1853,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "freshness_not_preserved",
+        "removal_would_stop_an_existing_check",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "same_block": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "address",
+            "block",
+            "chain"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 2630,
+            "matches": 1,
+            "note": "balance.simulation_to_build_gate: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc43"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 5264,
+            "matches": 1,
+            "note": "balance.simulation_to_build_gate: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc43"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 7898,
+            "matches": 1,
+            "note": "balance.simulation_to_build_gate: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc43"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc43",
+          "route-91342-37700778-1791045896094:rpc43",
+          "route-91342-37700806-1791045924232:rpc43"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checked_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 3
+          },
+          "same_block": {
+            "checked_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "not_preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "tag",
+        "identity": "tag",
+        "measured_block_relations": {
+          "same_block": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
+      "identity_fields": [
+        "address",
+        "block",
+        "chain"
+      ],
+      "implementation_risk_rank": 3,
+      "invalidation": "re_read_per_send (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getBalance",
+      "next_step": "none",
+      "owner": "no_owner_in_code",
+      "pattern": "B_cross_stage_canonical_read",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": true,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "simulation.eth_getBalance.sender_account",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/simulation/src/engine.rs",
+      "producer_source_line": 537,
+      "requires_new_carrier": true,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_carrier_and_ownership_rule",
+      "role_evidence": "crates/execution/src/sequence.rs: the comparison is this step's `maximum_cost_wei`, a different basis from preflight's estimate, and a failure halts the step",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "stage": "build",
+      "state_kind": "native_balance",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 1077.93,
+        "rpc_sum_duration_ms": 1077.93,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 1077.93
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "M8.4.3's own words for this category: duplicate in the record, different in purpose, and deliberately re-read",
+      "verification_preserved": false,
+      "verification_role": "FINAL_EXECUTION_GUARD"
+    },
+    {
+      "alternative_evidence": "measured, not assumed: `GiwaSequencerDirect::fee_reading` asks the tip on every call, so the head reading carries a head tip into the refusal line, and serving it the pin's tip would move an operand of the gate",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_at_height",
+      "authority_basis": "proven",
+      "authority_preserved": false,
+      "authority_reason_inherited": "the method carries no block term at all, so the answer is a function of the moment the node served it; two identical asks are two samples",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "no block term, asked under the head's stamp",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero",
+        "tip_enters_the_gate_operand"
+      ],
+      "caller": "fee at head",
+      "candidate": "tip.preflight_pin_to_preflight_head",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the same parameterless method under the head's stamp, and part of the head reading the fee line compares with",
+      "consumer": "preflight.eth_maxPriorityFeePerGas.head",
+      "consumer_decision_line": "crates/execution/src/preflight.rs:798",
+      "consumer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "consumer_source_line": 243,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "no_block_in_either_request": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "endpoint",
+            "method_kind"
+          ],
+          "identity_source": "identity_from_a_parameterless_request",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 501,
+            "matches": 1,
+            "note": "tip.preflight_pin_to_preflight_head: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc14"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 3135,
+            "matches": 1,
+            "note": "tip.preflight_pin_to_preflight_head: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc14"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 5769,
+            "matches": 1,
+            "note": "tip.preflight_pin_to_preflight_head: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc14"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc14",
+          "route-91342-37700778-1791045896094:rpc14",
+          "route-91342-37700806-1791045924232:rpc14"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checkable_not_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "checkable_not_met": 3
+          },
+          "same_block": {
+            "checkable_not_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "absent",
+        "identity": "no_block_term",
+        "measured_block_relations": {
+          "no_block_in_either_request": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+      "identity_fields": [
+        "endpoint",
+        "method_kind"
+      ],
+      "implementation_risk_rank": 0,
+      "invalidation": "next_block_base_fee (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_maxPriorityFeePerGas",
+      "next_step": "none",
+      "owner": "chain_adapter",
+      "pattern": "A_physical_duplicate",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": false,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "preflight.eth_maxPriorityFeePerGas.pin",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "producer_source_line": 235,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": false,
+      "reusable_in_principle": 0,
+      "risk": "none",
+      "role_evidence": "crates/execution/src/preflight.rs: the `FeeEstimate` operand is the head reading's `max_fee_per_gas`, and the headroom policy builds that number out of the base fee *and* this tip, so the read is inside the comparison and not beside it",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "stage": "preflight",
+      "state_kind": "fee_parameters",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 747.98,
+        "rpc_sum_duration_ms": 747.98,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 747.98
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "the census's most tempting row and its clearest refusal: one parameterless ask twice inside one stage, and the head reading's ceiling — which this tip is arithmetic inside of — is the operand of the fee line",
+      "verification_preserved": false,
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_at_height",
+      "authority_basis": "proven",
+      "authority_preserved": false,
+      "authority_reason_inherited": "the method carries no block term at all, so the answer is a function of the moment the node served it; two identical asks are two samples",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "no block term, asked under the pin's stamp",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "each_step_prices_its_own_transaction",
+        "no_alternative_verification_exists",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "caller": "step N: fee at pinned block",
+      "candidate": "tip.preflight_pin_to_build",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the tip that enters this step's ceiling and the transaction's priority field",
+      "consumer": "build.eth_maxPriorityFeePerGas.pin",
+      "consumer_decision_line": "crates/execution/src/fee.rs:170",
+      "consumer_source_file": "crates/execution/src/sequence.rs",
+      "consumer_source_line": 1736,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "removal_would_stop_an_existing_check",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "no_block_in_either_request": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "endpoint",
+            "method_kind"
+          ],
+          "identity_source": "identity_from_a_parameterless_request",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 2032,
+            "matches": 1,
+            "note": "tip.preflight_pin_to_build: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc37"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 4666,
+            "matches": 1,
+            "note": "tip.preflight_pin_to_build: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc37"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 7300,
+            "matches": 1,
+            "note": "tip.preflight_pin_to_build: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc37"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc37",
+          "route-91342-37700778-1791045896094:rpc37",
+          "route-91342-37700806-1791045924232:rpc37"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checkable_not_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "checkable_not_met": 3
+          },
+          "same_block": {
+            "checkable_not_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "absent",
+        "identity": "no_block_term",
+        "measured_block_relations": {
+          "no_block_in_either_request": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_maxPriorityFeePerGas|endpoint=rpc-faa716cada04a9ef|method_kind=eth_maxPriorityFeePerGas",
+      "identity_fields": [
+        "endpoint",
+        "method_kind"
+      ],
+      "implementation_risk_rank": 3,
+      "invalidation": "next_block_base_fee (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_maxPriorityFeePerGas",
+      "next_step": "none",
+      "owner": "chain_adapter",
+      "pattern": "E_preparation_read",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "preflight.eth_maxPriorityFeePerGas.pin",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "producer_source_line": 235,
+      "requires_new_carrier": true,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_carrier_and_ownership_rule",
+      "role_evidence": "crates/execution/src/fee.rs: the policy refusals run on this step's own reading, and the codec refuses a priority above the ceiling a second time",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "stage": "build",
+      "state_kind": "fee_parameters",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 1846.88,
+        "rpc_sum_duration_ms": 1846.88,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 1846.88
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "a step of a sequence is not a weaker transaction than a lone one, which is the code's stated reason for asking again",
+      "verification_preserved": false,
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_at_height",
+      "authority_basis": "proven",
+      "authority_preserved": false,
+      "authority_reason_inherited": "both sides ask a tag, and a tag names whichever head the node has when it answers: two identical asks are not two reads of one state",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "a tag for the pending leg, the head's number for the confirmed leg",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "freshness_not_preserved",
+        "lane_allocation_advances_the_nonce",
+        "moving_target_is_the_point",
+        "no_alternative_verification_exists",
+        "no_owner_declares_a_lifecycle_for_it",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "caller": "step N: pending and latest nonces",
+      "candidate": "nonce.preflight_to_build",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the pair that both allocates the lane's nonce and checks the intent against it",
+      "consumer": "build.eth_getTransactionCount.pair",
+      "consumer_decision_line": "crates/execution/src/nonce.rs:106",
+      "consumer_source_file": "crates/execution/src/sequence.rs",
+      "consumer_source_line": 1760,
+      "current_rpc_count": 6,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "freshness_not_preserved",
+        "removal_would_stop_an_existing_check",
+        "no_owner_declares_a_lifecycle_for_it",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "both_ask_a_tag": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 6,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "address",
+            "block",
+            "chain"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700761|chain=91342"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 2331,
+            "matches": 1,
+            "note": "nonce.preflight_to_build: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc40"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 4965,
+            "matches": 1,
+            "note": "nonce.preflight_to_build: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc40"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 7599,
+            "matches": 1,
+            "note": "nonce.preflight_to_build: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc40"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc40",
+          "route-91342-37700778-1791045896094:rpc40",
+          "route-91342-37700806-1791045924232:rpc40"
+        ],
+        "pairs": 3,
+        "producer_asks": 6,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checkable_not_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "checkable_not_met": 3
+          },
+          "same_block": {
+            "checkable_not_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "not_preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "tag",
+        "identity": "tag",
+        "measured_block_relations": {
+          "both_ask_a_tag": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getTransactionCount|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700761|chain=91342",
+      "identity_fields": [
+        "address",
+        "block",
+        "chain"
+      ],
+      "implementation_risk_rank": 1,
+      "invalidation": "any_mined_or_accepted_transaction (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getTransactionCount",
+      "next_step": "none",
+      "owner": "execution_lane",
+      "pattern": "E_preparation_read",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": true,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "preflight.eth_getTransactionCount.pair",
+      "producer_rpc_count": 6,
+      "producer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "producer_source_line": 248,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_ownership_rule",
+      "role_evidence": "crates/execution/src/nonce.rs: an in-flight lane refuses — the transaction \"could duplicate a live transaction\" — and the gate's `NonceValid` leg re-affirms the intent against the same reading",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "stage": "build",
+      "state_kind": "nonce",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 2903.47,
+        "rpc_sum_duration_ms": 2903.47,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 2903.47
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "the one category the build deliberately owns on a moving target: anything between the two reads — a mined transaction, the lane's own allocation — is a different answer, not a duplicate one",
+      "verification_preserved": false,
+      "verification_role": "FINAL_EXECUTION_GUARD"
+    },
+    {
+      "alternative_evidence": "the verification is that this stage read the hash itself; serving it from another stage's header would make the comparison one value against itself",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_at_height",
+      "authority_basis": "partially_proven",
+      "authority_preserved": true,
+      "authority_reason_inherited": "for the 15 numbered asks: one height names one block, and every one of them was measured at the same height on both sides; the hash that would make it unambiguous is verified by the consumers but is not carried in the shared value",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "numbered height at the pin, with the hash asked alongside it",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "safe_propagation_already_measured_no_saving",
+        "safe_saving_zero"
+      ],
+      "caller": "block binding at pin",
+      "candidate": "header.observation_to_preflight_binding",
+      "carrier": "verified_block_context_preflight_to_build",
+      "carrier_evidence": "",
+      "class_basis": "the same header as the pin's read, asked again to check the pin still exists",
+      "consumer": "preflight.eth_getBlockByNumber.binding_pin",
+      "consumer_decision_line": "crates/execution/src/chain_read.rs:44",
+      "consumer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "consumer_source_line": 279,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "same_block": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "hydrated"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 1729,
+            "matches": 1,
+            "note": "header.observation_to_preflight_binding: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc32"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 4363,
+            "matches": 1,
+            "note": "header.observation_to_preflight_binding: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc32"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 6997,
+            "matches": 1,
+            "note": "header.observation_to_preflight_binding: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc32"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc32",
+          "route-91342-37700778-1791045896094:rpc32",
+          "route-91342-37700806-1791045924232:rpc32"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checked_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 3
+          },
+          "same_block": {
+            "checked_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "proven",
+      "freshness": "preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "number",
+        "identity": "height_hash",
+        "measured_block_relations": {
+          "same_block": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "identity_fields": [
+        "block",
+        "chain",
+        "hydrated"
+      ],
+      "implementation_risk_rank": 0,
+      "invalidation": "same_height_different_hash (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getBlockByNumber",
+      "next_step": "none",
+      "owner": "node",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": true,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": false,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "observation.eth_getBlockByNumber.pin",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/pipeline/src/arbitrage.rs",
+      "producer_source_line": 406,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": false,
+      "reusable_in_principle": 0,
+      "risk": "none",
+      "role_evidence": "crates/execution/src/chain_read.rs: `hash == pinned` is the whole decision, and a binding that never ran arrives as `Unverified` rather than as a pass",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "stage": "preflight",
+      "state_kind": "block_header",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 914.17,
+        "rpc_sum_duration_ms": 914.17,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 914.17
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "§16's inherited row: the context travels, the read stays, and M8.4.4's own aggregate measured the net saving at zero",
+      "verification_preserved": false,
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_at_height",
+      "authority_basis": "partially_proven",
+      "authority_preserved": true,
+      "authority_reason_inherited": "for the 15 numbered asks: one height names one block, and every one of them was measured at the same height on both sides; the hash that would make it unambiguous is verified by the consumers but is not carried in the shared value",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "numbered height at the pin, with the hash asked alongside it",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "safe_propagation_already_measured_no_saving",
+        "safe_saving_zero"
+      ],
+      "caller": "step N: gate — block binding at pin",
+      "candidate": "header.observation_to_build_binding",
+      "carrier": "verified_block_context_preflight_to_build",
+      "carrier_evidence": "M8.4.4's `VerifiedBlockContext` is the carrier and was measured to be safe to propagate with zero net RPC saving; it does not replace this read, it is what this read is checked against",
+      "class_basis": "the header re-read to check the pin the intent names still resolves to its hash",
+      "consumer": "build.eth_getBlockByNumber.binding",
+      "consumer_decision_line": "crates/execution/src/chain_read.rs:44",
+      "consumer_source_file": "crates/execution/src/sequence.rs",
+      "consumer_source_line": 1795,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "same_block": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "hydrated"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 2529,
+            "matches": 1,
+            "note": "header.observation_to_build_binding: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc42"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 5163,
+            "matches": 1,
+            "note": "header.observation_to_build_binding: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc42"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 7797,
+            "matches": 1,
+            "note": "header.observation_to_build_binding: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc42"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc42",
+          "route-91342-37700778-1791045896094:rpc42",
+          "route-91342-37700806-1791045924232:rpc42"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checked_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 3
+          },
+          "same_block": {
+            "checked_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "proven",
+      "freshness": "preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "number",
+        "identity": "height_hash",
+        "measured_block_relations": {
+          "same_block": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "identity_fields": [
+        "block",
+        "chain",
+        "hydrated"
+      ],
+      "implementation_risk_rank": 0,
+      "invalidation": "same_height_different_hash (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getBlockByNumber",
+      "next_step": "none",
+      "owner": "node",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": true,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": false,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "observation.eth_getBlockByNumber.pin",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/pipeline/src/arbitrage.rs",
+      "producer_source_line": 406,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": false,
+      "reusable_in_principle": 0,
+      "risk": "none",
+      "role_evidence": "crates/execution/src/sequence.rs: the step compares its own read against the context preflight verified, and the code says the read replaces no read — nothing is skipped, so no RPC is saved here",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "stage": "build",
+      "state_kind": "block_header",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 770.18,
+        "rpc_sum_duration_ms": 770.18,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 770.18
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "the consumer verification M8.4.4 built the contract for, and the code says plainly that the read replaces no read",
+      "verification_preserved": false,
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_at_height",
+      "authority_basis": "partially_proven",
+      "authority_preserved": true,
+      "authority_reason_inherited": "for the 15 numbered asks: one height names one block, and every one of them was measured at the same height on both sides; the hash that would make it unambiguous is verified by the consumers but is not carried in the shared value",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "numbered height at the pin",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "safe_propagation_already_measured_no_saving",
+        "safe_saving_zero"
+      ],
+      "caller": "header at pin",
+      "candidate": "header.observation_to_simulation_header",
+      "carrier": "state_read_cache_within_one_simulation",
+      "carrier_evidence": "",
+      "class_basis": "the header is read to check the state being executed is the block the run named",
+      "consumer": "simulation.eth_getBlockByNumber.header",
+      "consumer_decision_line": "crates/simulation/src/engine.rs:1099",
+      "consumer_source_file": "crates/simulation/src/engine.rs",
+      "consumer_source_line": 449,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "same_block": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "hydrated"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 97,
+            "matches": 8,
+            "note": "header.observation_to_simulation_header: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc1"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 2731,
+            "matches": 8,
+            "note": "header.observation_to_simulation_header: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc1"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 5365,
+            "matches": 8,
+            "note": "header.observation_to_simulation_header: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc1"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc1",
+          "route-91342-37700778-1791045896094:rpc1",
+          "route-91342-37700806-1791045924232:rpc1"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checked_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 3
+          },
+          "same_block": {
+            "checked_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "number",
+        "identity": "height_hash",
+        "measured_block_relations": {
+          "same_block": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "identity_fields": [
+        "block",
+        "chain",
+        "hydrated"
+      ],
+      "implementation_risk_rank": 0,
+      "invalidation": "same_height_different_hash (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getBlockByNumber",
+      "next_step": "none",
+      "owner": "node",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": true,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": false,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "observation.eth_getBlockByNumber.pin",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/pipeline/src/arbitrage.rs",
+      "producer_source_line": 406,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": false,
+      "reusable_in_principle": 0,
+      "risk": "none",
+      "role_evidence": "crates/simulation/src/engine.rs: the read answers its own chain id check and then `check_pin`, whose refusal is `StateMismatch` — the state is not the state the opportunity was found on",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "stage": "simulation",
+      "state_kind": "block_header",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 757.88,
+        "rpc_sum_duration_ms": 757.88,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 757.88
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "the pin check is the reason the simulation's numbers describe the block the opportunity was found on; serving it the observation's header would delete the check",
+      "verification_preserved": false,
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_at_height",
+      "authority_basis": "proven",
+      "authority_preserved": false,
+      "authority_reason_inherited": "the method carries no block term at all, so the answer is a function of the moment the node served it; two identical asks are two samples",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "numbered height at the pin",
+      "blockers": [
+        "base_fee_priced_at_the_moment_of_pricing",
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "no_owner_declares_a_lifecycle_for_it",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "caller": "fee at pinned block",
+      "candidate": "header.observation_to_preflight_fee",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the base fee this read carries becomes the ceiling the transaction will carry: the consumer is a price, not a check of someone else's price",
+      "consumer": "preflight.eth_getBlockByNumber.fee_pin",
+      "consumer_decision_line": "crates/execution/src/fee.rs:199",
+      "consumer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "consumer_source_line": 235,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "removal_would_stop_an_existing_check",
+        "no_owner_declares_a_lifecycle_for_it",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "same_block": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "hydrated"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 299,
+            "matches": 1,
+            "note": "header.observation_to_preflight_fee: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc11"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 2933,
+            "matches": 1,
+            "note": "header.observation_to_preflight_fee: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc11"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 5567,
+            "matches": 1,
+            "note": "header.observation_to_preflight_fee: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc11"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc11",
+          "route-91342-37700778-1791045896094:rpc11",
+          "route-91342-37700806-1791045924232:rpc11"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checked_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 3
+          },
+          "same_block": {
+            "checked_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "absent",
+        "identity": "no_block_term",
+        "measured_block_relations": {
+          "same_block": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "identity_fields": [
+        "block",
+        "chain",
+        "hydrated"
+      ],
+      "implementation_risk_rank": 1,
+      "invalidation": "next_block_base_fee (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getBlockByNumber",
+      "next_step": "none",
+      "owner": "chain_adapter",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": true,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "observation.eth_getBlockByNumber.pin",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/pipeline/src/arbitrage.rs",
+      "producer_source_line": 406,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_ownership_rule",
+      "role_evidence": "crates/execution/src/fee.rs: `max_tip > max_fee` and a missing base fee are refusals, and the reading's `max_fee_per_gas` is what the balance ceiling is computed from",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "stage": "preflight",
+      "state_kind": "fee_parameters",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 905.83,
+        "rpc_sum_duration_ms": 905.83,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 905.83
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "same height, same answer, and the answer is inside a price the run is responsible for",
+      "verification_preserved": false,
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_at_height",
+      "authority_basis": "proven",
+      "authority_preserved": false,
+      "authority_reason_inherited": "the method carries no block term at all, so the answer is a function of the moment the node served it; two identical asks are two samples",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "numbered height at the pin",
+      "blockers": [
+        "base_fee_priced_at_the_moment_of_pricing",
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "no_owner_declares_a_lifecycle_for_it",
+        "propagation_already_measured_to_save_no_rpc",
+        "read_is_the_check",
+        "removal_would_stop_an_existing_check",
+        "safe_saving_zero"
+      ],
+      "caller": "step N: fee at pinned block",
+      "candidate": "header.observation_to_build_fee",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the header's base fee becomes this step's ceiling",
+      "consumer": "build.eth_getBlockByNumber.fee_pin",
+      "consumer_decision_line": "crates/execution/src/fee.rs:199",
+      "consumer_source_file": "crates/execution/src/sequence.rs",
+      "consumer_source_line": 1736,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "propagation_already_measured_to_save_no_rpc",
+        "removal_would_stop_an_existing_check",
+        "no_owner_declares_a_lifecycle_for_it",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "same_block": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "hydrated"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 1931,
+            "matches": 1,
+            "note": "header.observation_to_build_fee: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc36"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 4565,
+            "matches": 1,
+            "note": "header.observation_to_build_fee: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc36"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 7199,
+            "matches": 1,
+            "note": "header.observation_to_build_fee: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc36"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc36",
+          "route-91342-37700778-1791045896094:rpc36",
+          "route-91342-37700806-1791045924232:rpc36"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checked_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 3
+          },
+          "same_block": {
+            "checked_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "absent",
+        "identity": "no_block_term",
+        "measured_block_relations": {
+          "same_block": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getBlockByNumber|block=37700740|chain=91342|hydrated=false",
+      "identity_fields": [
+        "block",
+        "chain",
+        "hydrated"
+      ],
+      "implementation_risk_rank": 1,
+      "invalidation": "next_block_base_fee (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getBlockByNumber",
+      "next_step": "none",
+      "owner": "chain_adapter",
+      "pattern": "C_block_context_propagation",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": true,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "observation.eth_getBlockByNumber.pin",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/pipeline/src/arbitrage.rs",
+      "producer_source_line": 406,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_ownership_rule",
+      "role_evidence": "crates/execution/src/sequence.rs: `fields_for(tx_type)` is a refusal path, and the ceiling this reading yields is what the balance leg is computed against",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "E_EXECUTION_PREPARATION",
+      "stage": "build",
+      "state_kind": "fee_parameters",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 1393.3,
+        "rpc_sum_duration_ms": 1393.3,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 1393.3
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "the build prices the transaction it is about to hand over, on its own adapter, at its own moment",
+      "verification_preserved": false,
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NOT_APPLICABLE",
+      "authority": "node_at_height",
+      "authority_basis": "partially_proven",
+      "authority_preserved": true,
+      "authority_reason_inherited": "for the 15 numbered asks: one height names one block, and every one of them was measured at the same height on both sides; the hash that would make it unambiguous is verified by the consumers but is not carried in the shared value",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "a tag: `latest`, asked as the second read of a pair",
+      "blockers": [
+        "freshness_not_preserved",
+        "safe_saving_zero",
+        "tag_freshness_unproven",
+        "two_calls_can_straddle_a_block"
+      ],
+      "caller": "pending and latest nonces",
+      "candidate": "header.preflight_head_to_preflight_nonce_pair",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the header is read to name the height the confirmed nonce view describes (class by consumer role, §5)",
+      "consumer": "preflight.eth_getBlockByNumber.nonce_pair_head",
+      "consumer_decision_line": "crates/execution/src/nonce.rs:49",
+      "consumer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "consumer_source_line": 248,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "freshness_not_preserved",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "both_ask_a_tag": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "hydrated"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 598,
+            "matches": 1,
+            "note": "header.preflight_head_to_preflight_nonce_pair: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc15"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 3232,
+            "matches": 1,
+            "note": "header.preflight_head_to_preflight_nonce_pair: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc15"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 5866,
+            "matches": 1,
+            "note": "header.preflight_head_to_preflight_nonce_pair: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc15"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc15",
+          "route-91342-37700778-1791045896094:rpc15",
+          "route-91342-37700806-1791045924232:rpc15"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checkable_not_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "checkable_not_met": 3
+          },
+          "same_block": {
+            "checkable_not_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "not_preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "number",
+        "identity": "height_hash",
+        "measured_block_relations": {
+          "both_ask_a_tag": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+      "identity_fields": [
+        "block",
+        "chain",
+        "hydrated"
+      ],
+      "implementation_risk_rank": 0,
+      "invalidation": "same_height_different_hash (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getBlockByNumber",
+      "next_step": "none",
+      "owner": "node",
+      "pattern": "E_preparation_read",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": false,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": true,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": false,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "preflight.eth_getBlockByNumber.head_latest",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "producer_source_line": 223,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": false,
+      "reusable_in_principle": 0,
+      "risk": "none",
+      "role_evidence": "crates/execution/src/nonce.rs: the comparison is `pending` against `confirmed`, and this answer only labels which height the confirmed half describes — no line reads it as a check",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "stage": "preflight",
+      "state_kind": "block_header",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 1223.29,
+        "rpc_sum_duration_ms": 1223.29,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 1223.29
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "both asks name `latest`, and the code's reason for reading number and hash out of one header is that two calls can straddle a block; the record cannot say whether they did (§4.2 forbids guessing what a tag resolved to)",
+      "verification_preserved": true,
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NOT_APPLICABLE",
+      "authority": "node_at_height",
+      "authority_basis": "partially_proven",
+      "authority_preserved": true,
+      "authority_reason_inherited": "for the 15 numbered asks: one height names one block, and every one of them was measured at the same height on both sides; the hash that would make it unambiguous is verified by the consumers but is not carried in the shared value",
+      "avoidable_rpc_count": 3,
+      "block_semantics": "a tag: `latest`, read as the pair's label",
+      "blockers": [
+        "freshness_not_preserved",
+        "safe_saving_zero",
+        "tag_freshness_unproven",
+        "two_calls_can_straddle_a_block"
+      ],
+      "caller": "step N: pending and latest nonces",
+      "candidate": "header.preflight_head_to_build_nonce_pair",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the header names the height the lane's confirmed nonce view describes",
+      "consumer": "build.eth_getBlockByNumber.nonce_pair_head",
+      "consumer_decision_line": "crates/execution/src/nonce.rs:106",
+      "consumer_source_file": "crates/execution/src/sequence.rs",
+      "consumer_source_line": 1760,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "freshness_not_preserved",
+        "safe_saving_zero"
+      ],
+      "duplicate_count_exact": 3,
+      "duplicate_status": {
+        "block_relations": {
+          "both_ask_a_tag": 3
+        },
+        "by_duplicate_class": {
+          "exact_duplicate": 3
+        },
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 3,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "hydrated"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false"
+        },
+        "other_classes": 0,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 2129,
+            "matches": 1,
+            "note": "header.preflight_head_to_build_nonce_pair: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc38"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 4763,
+            "matches": 1,
+            "note": "header.preflight_head_to_build_nonce_pair: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700778-1791045896094:rpc38"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 7397,
+            "matches": 1,
+            "note": "header.preflight_head_to_build_nonce_pair: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700806-1791045924232:rpc38"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc38",
+          "route-91342-37700778-1791045896094:rpc38",
+          "route-91342-37700806-1791045924232:rpc38"
+        ],
+        "pairs": 3,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checkable_not_met": 3
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 3
+          },
+          "no_freshness_requirement": {
+            "checkable_not_met": 3
+          },
+          "same_block": {
+            "checkable_not_met": 3
+          },
+          "state_semantics": {
+            "checked_met": 3
+          }
+        }
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "not_preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "number",
+        "identity": "height_hash",
+        "measured_block_relations": {
+          "both_ask_a_tag": 3
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_getBlockByNumber|block=latest|chain=91342|hydrated=false",
+      "identity_fields": [
+        "block",
+        "chain",
+        "hydrated"
+      ],
+      "implementation_risk_rank": 0,
+      "invalidation": "same_height_different_hash (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 3,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_getBlockByNumber",
+      "next_step": "none",
+      "owner": "node",
+      "pattern": "E_preparation_read",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": false,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": true,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": false,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "preflight.eth_getBlockByNumber.head_latest",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "producer_source_line": 223,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": false,
+      "reusable_in_principle": 0,
+      "risk": "none",
+      "role_evidence": "crates/execution/src/nonce.rs: the decisions read `pending` against `confirmed` and the lane's own outstanding count; the height is a label on the pair",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "stage": "build",
+      "state_kind": "block_header",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 3,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 3
+      },
+      "theoretical_saving": 3,
+      "three_layers": {
+        "physical_duplicate": 3,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 1450.88,
+        "rpc_sum_duration_ms": 1450.88,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 1450.88
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "the same tag pair across a stage boundary, one block-time further apart",
+      "verification_preserved": true,
+      "verification_role": "INFORMATION_ONLY"
+    },
+    {
+      "alternative_evidence": "the reserve line is a difference between the priced route and the head; feeding it the priced side's own value leaves the gate comparing a number with a copy of itself",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_canonical_logs",
+      "authority_basis": "not_applicable",
+      "authority_preserved": false,
+      "authority_reason_inherited": "no cross-stage duplicate exists to compare, so the question has no referent in these runs",
+      "avoidable_rpc_count": 0,
+      "block_semantics": "numbered height at the head",
+      "blockers": [
+        "block_changes_the_answer",
+        "consumer_check_has_no_other_bearer",
+        "freshness_not_preserved",
+        "no_alternative_verification_exists",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_exact_duplicate_pair_in_the_records",
+        "no_owner_declares_a_lifecycle_for_it",
+        "read_is_the_check",
+        "safe_saving_zero"
+      ],
+      "caller": "reserves of leg 0",
+      "candidate": "eth_call.detection_to_preflight_reserves_leg0",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the same method as detection's pricing read, and a different site: this answer's consumer is the difference between two readings",
+      "consumer": "preflight.eth_call.leg0",
+      "consumer_decision_line": "crates/execution/src/preflight.rs:888",
+      "consumer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "consumer_source_line": 259,
+      "current_rpc_count": 9,
+      "derived_blockers": [
+        "no_exact_duplicate_pair_in_the_records",
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "freshness_not_preserved",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it"
+      ],
+      "duplicate_count_exact": 0,
+      "duplicate_status": {
+        "block_relations": {
+          "different_block": 9
+        },
+        "by_duplicate_class": {
+          "same_target_different_block": 9
+        },
+        "consumer_asks": 9,
+        "exact_duplicate_pairs": 0,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "data",
+            "to"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+        },
+        "other_classes": 9,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 901,
+            "matches": 1,
+            "note": "eth_call.detection_to_preflight_reserves_leg0: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc24"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 1006,
+            "matches": 1,
+            "note": "eth_call.detection_to_preflight_reserves_leg0: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc25"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 1111,
+            "matches": 1,
+            "note": "eth_call.detection_to_preflight_reserves_leg0: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc26"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc24",
+          "route-91342-37700740-1791045857463:rpc25",
+          "route-91342-37700740-1791045857463:rpc26",
+          "route-91342-37700778-1791045896094:rpc24",
+          "route-91342-37700778-1791045896094:rpc25",
+          "route-91342-37700778-1791045896094:rpc26",
+          "route-91342-37700806-1791045924232:rpc24",
+          "route-91342-37700806-1791045924232:rpc25",
+          "route-91342-37700806-1791045924232:rpc26"
+        ],
+        "pairs": 9,
+        "producer_asks": 18,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checkable_not_met": 9
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 9
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 9
+          },
+          "same_block": {
+            "checked_violated": 9
+          },
+          "state_semantics": {
+            "checked_met": 9
+          }
+        }
+      },
+      "evidence_strength": "proven",
+      "freshness": "not_preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "number",
+        "identity": "height_number",
+        "measured_block_relations": {
+          "different_block": 9
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "identity_fields": [
+        "block",
+        "chain",
+        "data",
+        "to"
+      ],
+      "implementation_risk_rank": 3,
+      "invalidation": "newer_position_replaces_older (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 0,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_call",
+      "next_step": "none",
+      "owner": "state_store",
+      "pattern": "B_cross_stage_canonical_read",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": true,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": true,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "opportunity_detection.eth_call.reserves",
+      "producer_rpc_count": 18,
+      "producer_source_file": "crates/pipeline/src/arbitrage.rs",
+      "producer_source_line": 460,
+      "requires_new_carrier": true,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_carrier_and_ownership_rule",
+      "role_evidence": "crates/execution/src/preflight.rs: `expected_output` refuses when the head's reserves are missing (`not re-read at the head`) rather than falling back to the finding's numbers, so this read is the second opinion of the detection claim",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "D_EXECUTION_VERIFICATION",
+      "stage": "preflight",
+      "state_kind": "pool_reserves",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 0,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 0
+      },
+      "theoretical_saving": 0,
+      "three_layers": {
+        "physical_duplicate": 0,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 2922.13,
+        "rpc_sum_duration_ms": 2922.13,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 2922.13
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "§14 names this family explicitly and forbids reading it as a P1: M8.5.1 settled it as an independent recheck whose every blocker is `read_is_the_check`, and the two asks answer for different heights, so it is not even a duplicate of the kind §4.1 counts. Recorded here so no later agent re-asks it",
+      "verification_preserved": false,
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NO_ALTERNATIVE",
+      "authority": "node_canonical_logs",
+      "authority_basis": "not_applicable",
+      "authority_preserved": false,
+      "authority_reason_inherited": "no cross-stage duplicate exists to compare, so the question has no referent in these runs",
+      "avoidable_rpc_count": 0,
+      "block_semantics": "numbered height at the head",
+      "blockers": [
+        "block_changes_the_answer",
+        "consumer_check_has_no_other_bearer",
+        "freshness_not_preserved",
+        "no_alternative_verification_exists",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_exact_duplicate_pair_in_the_records",
+        "no_owner_declares_a_lifecycle_for_it",
+        "read_is_the_check",
+        "safe_saving_zero"
+      ],
+      "caller": "reserves of leg 1",
+      "candidate": "eth_call.detection_to_preflight_reserves_leg1",
+      "carrier": "no_carrier_in_code",
+      "carrier_evidence": "",
+      "class_basis": "the second half of the same comparison as leg 0",
+      "consumer": "preflight.eth_call.leg1",
+      "consumer_decision_line": "crates/execution/src/preflight.rs:888",
+      "consumer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "consumer_source_line": 261,
+      "current_rpc_count": 9,
+      "derived_blockers": [
+        "no_exact_duplicate_pair_in_the_records",
+        "consumer_check_has_no_other_bearer",
+        "no_alternative_verification_exists",
+        "freshness_not_preserved",
+        "no_carrier_holds_the_answer_across_the_boundary",
+        "no_owner_declares_a_lifecycle_for_it"
+      ],
+      "duplicate_count_exact": 0,
+      "duplicate_status": {
+        "block_relations": {
+          "different_block": 9
+        },
+        "by_duplicate_class": {
+          "same_target_different_block": 9
+        },
+        "consumer_asks": 9,
+        "exact_duplicate_pairs": 0,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "data",
+            "to"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+        },
+        "other_classes": 9,
+        "pair_anchors": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 1216,
+            "matches": 1,
+            "note": "eth_call.detection_to_preflight_reserves_leg1: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc27"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 1321,
+            "matches": 1,
+            "note": "eth_call.detection_to_preflight_reserves_leg1: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc28"
+          },
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 1426,
+            "matches": 1,
+            "note": "eth_call.detection_to_preflight_reserves_leg1: this pair of asks is the row the count was folded from",
+            "source": "run_record",
+            "token": "route-91342-37700740-1791045857463:rpc29"
+          }
+        ],
+        "pair_ids": [
+          "route-91342-37700740-1791045857463:rpc27",
+          "route-91342-37700740-1791045857463:rpc28",
+          "route-91342-37700740-1791045857463:rpc29",
+          "route-91342-37700778-1791045896094:rpc27",
+          "route-91342-37700778-1791045896094:rpc28",
+          "route-91342-37700778-1791045896094:rpc29",
+          "route-91342-37700806-1791045924232:rpc27",
+          "route-91342-37700806-1791045924232:rpc28",
+          "route-91342-37700806-1791045924232:rpc29"
+        ],
+        "pairs": 9,
+        "producer_asks": 18,
+        "reuse_condition_outcomes": {
+          "block_identity": {
+            "checkable_not_met": 9
+          },
+          "lifecycle_ownership": {
+            "not_checkable_from_a_record": 9
+          },
+          "no_freshness_requirement": {
+            "not_checkable_from_a_record": 9
+          },
+          "same_block": {
+            "checked_violated": 9
+          },
+          "state_semantics": {
+            "checked_met": 9
+          }
+        }
+      },
+      "evidence_strength": "proven",
+      "freshness": "not_preserved",
+      "freshness_basis": {
+        "block_tag_semantics": "number",
+        "identity": "height_number",
+        "measured_block_relations": {
+          "different_block": 9
+        },
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_call|block=37700753|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "identity_fields": [
+        "block",
+        "chain",
+        "data",
+        "to"
+      ],
+      "implementation_risk_rank": 3,
+      "invalidation": "newer_position_replaces_older (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 0,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_call",
+      "next_step": "none",
+      "owner": "state_store",
+      "pattern": "B_cross_stage_canonical_read",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": true,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": true,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": true,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "opportunity_detection.eth_call.reserves",
+      "producer_rpc_count": 18,
+      "producer_source_file": "crates/pipeline/src/arbitrage.rs",
+      "producer_source_line": 460,
+      "requires_new_carrier": true,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": true,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_new_carrier_and_ownership_rule",
+      "role_evidence": "crates/execution/src/preflight.rs: `expected_output` needs both legs at the head, and §27's verdict cannot be formed from one side",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "D_EXECUTION_VERIFICATION",
+      "stage": "preflight",
+      "state_kind": "pool_reserves",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 0,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 0
+      },
+      "theoretical_saving": 0,
+      "three_layers": {
+        "physical_duplicate": 0,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 2236.36,
+        "rpc_sum_duration_ms": 2236.36,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 2236.36
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "the second leg of the same recheck, with the same verdict for the same reason: the exit pool's reserves are asked to be re-read, not to be remembered",
+      "verification_preserved": false,
+      "verification_role": "INDEPENDENT_RECHECK"
+    },
+    {
+      "alternative_evidence": "nothing committed bears this duty today: the receipt's own `l1Fee` settles the figure only after the transaction exists, so a reduction here would need a NEW check (a derivation the census cannot yet prove) before the read could go — which is §17's Candidate 1 as `EXPERIMENT_REQUIRED`, not a blocked opportunity",
+      "alternative_verification": "NEW_CHECK_REQUIRED",
+      "authority": "node_at_height",
+      "authority_basis": "proven",
+      "authority_preserved": false,
+      "authority_reason_inherited": "by construction: two calls that name different heights are different questions about a market",
+      "avoidable_rpc_count": 0,
+      "block_semantics": "numbered height at the head, per step",
+      "blockers": [
+        "consumer_check_has_no_other_bearer",
+        "freshness_unproven_by_these_runs",
+        "no_duplicate_to_remove",
+        "no_exact_duplicate_pair_in_the_records",
+        "oracle_block_dependency_unproven",
+        "removal_would_stop_an_existing_check"
+      ],
+      "caller": "cost ceiling per step",
+      "candidate": "l1fee.preflight_oracle",
+      "carrier": "preflight_facts_within_one_stage",
+      "carrier_evidence": "",
+      "class_basis": "the sequencer's own fee oracle answering a question about a transaction, which is §5's protocol oracle by name",
+      "consumer": "preflight.eth_call.l1_fee",
+      "consumer_decision_line": "crates/execution/src/preflight.rs:338",
+      "consumer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "consumer_source_line": 251,
+      "current_rpc_count": 18,
+      "derived_blockers": [
+        "no_exact_duplicate_pair_in_the_records",
+        "consumer_check_has_no_other_bearer",
+        "freshness_unproven_by_these_runs",
+        "removal_would_stop_an_existing_check"
+      ],
+      "duplicate_count_exact": 0,
+      "duplicate_status": {
+        "block_relations": {},
+        "by_duplicate_class": {},
+        "consumer_asks": 18,
+        "exact_duplicate_pairs": 0,
+        "identity": {
+          "fields": [
+            "block",
+            "chain",
+            "data",
+            "to"
+          ],
+          "identity_source": "identity_from_the_recorded_dedup_key",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_call|block=37700753|chain=91342|data=49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007802f875830164ce07830f4240830f44a882fda4944200000000000000000000000000000000000006865af3107a400084d0e30db0c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000|to=0x420000000000000000000000000000000000000f"
+        },
+        "other_classes": 0,
+        "pair_anchors": [],
+        "pair_ids": [],
+        "pairs": 0,
+        "producer_asks": 18,
+        "reuse_condition_outcomes": {}
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "unproven",
+      "freshness_basis": {
+        "block_tag_semantics": "number",
+        "identity": "height_number",
+        "measured_block_relations": {},
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_call|block=37700753|chain=91342|data=49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007802f875830164ce07830f4240830f44a882fda4944200000000000000000000000000000000000006865af3107a400084d0e30db0c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000|to=0x420000000000000000000000000000000000000f",
+      "identity_fields": [
+        "block",
+        "chain",
+        "data",
+        "to"
+      ],
+      "implementation_risk_rank": 4,
+      "invalidation": "different_block_at_the_same_slot (proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 0,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_call",
+      "next_step": "EXPERIMENT_REQUIRED",
+      "owner": "no_owner_in_code",
+      "pattern": "D_protocol_oracle",
+      "priority": "P1",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": false,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": false,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": true,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority P1"
+        }
+      ],
+      "producer": "preflight.eth_call.l1_fee",
+      "producer_rpc_count": 18,
+      "producer_source_file": "crates/execution/src/giwa/preflight_facts.rs",
+      "producer_source_line": 251,
+      "requires_new_carrier": false,
+      "requires_new_experiment": true,
+      "requires_new_lifecycle": false,
+      "reusable_in_principle": 0,
+      "risk": "needs_a_real_chain_experiment",
+      "role_evidence": "crates/execution/src/preflight.rs: `fn l1_line` turns an unreadable oracle into a failed `L1FeeEstimate` line rather than a smaller bill, and §35 forbids reading a bill without the L1 leg as the whole bill",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": true,
+      "semantic_class": "C_PROTOCOL_ORACLE",
+      "stage": "preflight",
+      "state_kind": "eth_call_result",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 0,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 0
+      },
+      "theoretical_saving": 0,
+      "three_layers": {
+        "physical_duplicate": 0,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 4444.73,
+        "rpc_sum_duration_ms": 4444.73,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 4444.73
+      },
+      "verdict": "NOT_ENOUGH_EVIDENCE",
+      "verdict_note": "18 asks and 18 different calldata: there is no duplicate to reduce, and the question §17 asks — whether the same calldata at a different height is one answer — is not in any committed record",
+      "verification_preserved": false,
+      "verification_role": "SAFETY_GATE"
+    },
+    {
+      "alternative_evidence": "",
+      "alternative_verification": "NOT_APPLICABLE",
+      "authority": "node_at_height",
+      "authority_basis": "partially_proven",
+      "authority_preserved": true,
+      "authority_reason_inherited": "for the 15 numbered asks: one height names one block, and every one of them was measured at the same height on both sides; the hash that would make it unambiguous is verified by the consumers but is not carried in the shared value",
+      "avoidable_rpc_count": 0,
+      "block_semantics": "names no height: the ask is the head at the instant of asking",
+      "blockers": [
+        "freshness_unproven_by_these_runs",
+        "no_exact_duplicate_pair_in_the_records",
+        "not_a_measured_duplicate",
+        "removal_would_replace_a_named_height_with_a_tag"
+      ],
+      "caller": "head and header that fixed the pin",
+      "candidate": "block_number.observation_redundant_with_header",
+      "carrier": "block_pin_height_and_hash",
+      "carrier_evidence": "the height it learns travels as the run's pin; the hash leg comes from the header read that follows it",
+      "class_basis": "its consumer is the pin: the answer becomes the height every later read in the run must name, which is §5's block context by role rather than by method",
+      "consumer": "observation.eth_blockNumber.pin",
+      "consumer_decision_line": "crates/pipeline/src/arbitrage.rs:513",
+      "consumer_source_file": "crates/pipeline/src/arbitrage.rs",
+      "consumer_source_line": 406,
+      "current_rpc_count": 3,
+      "derived_blockers": [
+        "no_exact_duplicate_pair_in_the_records",
+        "freshness_unproven_by_these_runs"
+      ],
+      "duplicate_count_exact": 0,
+      "duplicate_status": {
+        "block_relations": {},
+        "by_duplicate_class": {},
+        "consumer_asks": 3,
+        "exact_duplicate_pairs": 0,
+        "identity": {
+          "fields": [
+            "endpoint",
+            "method_kind"
+          ],
+          "identity_source": "identity_from_a_parameterless_request",
+          "rule": "the identity is M8.4.2's business key, read through the published `RpcReadKey`, and never a position in a table",
+          "uses_duration": false,
+          "uses_row_index": false,
+          "value": "method=eth_blockNumber|endpoint=rpc-faa716cada04a9ef|method_kind=eth_blockNumber"
+        },
+        "other_classes": 0,
+        "pair_anchors": [],
+        "pair_ids": [],
+        "pairs": 0,
+        "producer_asks": 3,
+        "reuse_condition_outcomes": {}
+      },
+      "evidence_strength": "code_derived",
+      "freshness": "unproven",
+      "freshness_basis": {
+        "block_tag_semantics": "number",
+        "identity": "height_hash",
+        "measured_block_relations": {},
+        "rule": "§9/§10: preserved only when the category carries no block term, or when every measured pair of this candidate names one answer on both sides. A tag is never resolved by guessing."
+      },
+      "identity": "method=eth_blockNumber|endpoint=rpc-faa716cada04a9ef|method_kind=eth_blockNumber",
+      "identity_fields": [
+        "endpoint",
+        "method_kind"
+      ],
+      "implementation_risk_rank": 0,
+      "invalidation": "same_height_different_hash (partially_proven)",
+      "measures_this_candidate_contributes": {
+        "physical_duplicate_saving": 0,
+        "total_census_physical_duplicate_saving": 42
+      },
+      "method": "eth_blockNumber",
+      "next_step": "none",
+      "owner": "node",
+      "pattern": "F_information_already_held",
+      "priority": "REJECT",
+      "priority_derivation": [
+        {
+          "clause": "p0",
+          "holds": false,
+          "text": "saving already credited, a duplicate measured, verification preserved, no new mechanism"
+        },
+        {
+          "clause": "reject_no_alternative",
+          "holds": false,
+          "text": "§12: nothing else would bear the duty if this read went"
+        },
+        {
+          "clause": "reject_theoretical_zero",
+          "holds": true,
+          "text": "§14: no duplicate measured and no experiment that could still measure one"
+        },
+        {
+          "clause": "reject_freshness",
+          "holds": false,
+          "text": "§14: the block changes the answer and these runs cannot show it does not"
+        },
+        {
+          "clause": "reject_propagation",
+          "holds": false,
+          "text": "§16: M8.4.4 already measured this family's net saving at zero"
+        },
+        {
+          "clause": "needs_new_machinery",
+          "holds": false,
+          "text": "P1 when the evidence reaches (proven or code-derived), P2 when it does not"
+        },
+        {
+          "clause": "reached",
+          "holds": true,
+          "text": "priority REJECT"
+        }
+      ],
+      "producer": "observation.eth_getBlockByNumber.pin",
+      "producer_rpc_count": 3,
+      "producer_source_file": "crates/pipeline/src/arbitrage.rs",
+      "producer_source_line": 406,
+      "requires_new_carrier": false,
+      "requires_new_experiment": false,
+      "requires_new_lifecycle": false,
+      "reusable_in_principle": 0,
+      "risk": "none",
+      "role_evidence": "crates/pipeline/src/arbitrage.rs: the answer is `head`, and the first comparison it meets is `BlockPin::new(head, header.hash)` downstream at the simulation's `check_pin`, which verifies the hash this call never returned",
+      "role_none_reason": "",
+      "safe_reuse_proof": {
+        "crediting_kinds": [
+          "every_reuse_condition_met_in_the_record",
+          "the_record_itself_marks_the_pair_safe_to_reuse"
+        ],
+        "kind": "none",
+        "pairs": [],
+        "statement": "§13: a safe saving is credited only from a proof this table can name. In this corpus no pair of asks has all five of M8.4.2's reuse conditions resolved met, and no pair is marked safe by the record itself, so every candidate carries `none` and every safe saving is 0."
+      },
+      "safe_reuse_proven": false,
+      "safe_saving": 0,
+      "safe_to_reuse_now": 0,
+      "same_site_twice": false,
+      "semantic_class": "B_CANONICAL_BLOCK_CONTEXT",
+      "stage": "observation",
+      "state_kind": "block_header",
+      "theoretical_and_safe_are_two_questions": {
+        "difference": 0,
+        "rule": "§24's seventh rule: the ceiling answers 「if every question about identity, ownership, freshness and authority went this candidate's way」 and the credit answers 「which of those questions this corpus has actually answered」. Adding the second to the first, or reporting the first as a plan, is the confusion §25's NC4 is built to catch.",
+        "safe": 0,
+        "theoretical": 0
+      },
+      "theoretical_saving": 0,
+      "three_layers": {
+        "physical_duplicate": 0,
+        "reusable_in_principle": 0,
+        "rule": "§2.2: three different questions, three different numbers. A pair of asks being one ask says nothing about whether one answer can serve two consumers, and neither says nothing about whether this build may act on it today.",
+        "safe_to_reuse_now": 0
+      },
+      "timing_is_diagnostic_only": {
+        "consumer_duration_ms": 729.42,
+        "rpc_sum_duration_ms": 729.42,
+        "rule": "§24's tenth rule: no column above this one reads a duration, and the priority was derived before this object was built.",
+        "union_duration_ms": 729.42
+      },
+      "verdict": "NO_SAFE_RPC_REDUCTION_FOUND",
+      "verdict_note": "§9's DERIVABLE case: the height the run fixes is also the height the following header read names, so one of the two asks could in principle go — and the one that would go is the ask that converts the moving head into a fixed height for everything downstream, which is a semantic change, not a saving",
+      "verification_preserved": true,
+      "verification_role": "INFORMATION_ONLY"
+    }
+  ],
+  "runs": [
+    "route-91342-37700740-1791045857463",
+    "route-91342-37700778-1791045896094",
+    "route-91342-37700806-1791045924232"
+  ],
+  "schema": "m8.6.v1",
+  "totals": {
+    "by_pattern": {
+      "A_physical_duplicate": 3,
+      "B_cross_stage_canonical_read": 4,
+      "C_block_context_propagation": 5,
+      "D_protocol_oracle": 1,
+      "E_preparation_read": 4,
+      "F_information_already_held": 1
+    },
+    "by_priority": {
+      "P1": 3,
+      "REJECT": 15
+    },
+    "by_verdict": {
+      "NOT_ENOUGH_EVIDENCE": 1,
+      "NO_SAFE_RPC_REDUCTION_FOUND": 15,
+      "SAFE_RPC_REDUCTION_CANDIDATE_FOUND": 2
+    },
+    "candidates": 18,
+    "safe_saving": 0,
+    "theoretical_saving": 42
+  },
+  "unit": "candidates, and asks within them"
+}

@@ -1,0 +1,105 @@
+{
+  "assembly_module": "crates/pipeline/tests/m86_census/tables.rs",
+  "candidates_found": [],
+  "counts": {
+    "asks_without_recorded_identity": 21,
+    "by_priority": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 0,
+      "P3": 0,
+      "REJECT": 15
+    },
+    "candidates": 18,
+    "methods_traced": 9,
+    "rejected_pseudo_optimizations": 15,
+    "sites_on_the_hot_path": 44
+  },
+  "file": "final-verdict.json",
+  "five_measures": {
+    "diagnostics": {
+      "exact_pairs_behind_a_check_role": 33,
+      "pairs_the_record_itself_marks_safe_to_reuse": 0,
+      "pairs_with_every_reuse_condition_met_in_the_record": 0,
+      "theoretical_saving_over_all_candidates": 42
+    },
+    "parallel_wall_time_saving": 0,
+    "physical_duplicate_saving": 42,
+    "semantic_reuse_saving": 0,
+    "total_safe_rpc_saving": 0,
+    "verification_removal_saving": 0
+  },
+  "gates": {
+    "evidence": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+    "recompute": "crates/pipeline/tests/rpc_reduction_recompute.rs",
+    "rules": "§24's fourteen, one test each, over the files in this directory"
+  },
+  "generated_by": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+  "if_the_label_changes_someone_must_first": [
+    "produce record rows in which one pair of asks has all five of M8.4.2's reuse conditions resolved met, or a `safe_to_reuse` true in the published candidate record — the two kinds in `CREDITING_PROOFS`",
+    "name the check that would still bear each duty §12 assigns, for every consumer whose read is itself the check",
+    "show a numbered height and a tag resolving to the same answer for one site, which §4.2 of M8.4.2's rules currently refuses by construction",
+    "settle the oracle's cross-height question by the controlled experiment §26 defers to M8.6.x / M8.7"
+  ],
+  "insufficient_evidence": [
+    {
+      "candidate": "l1fee.preflight_oracle",
+      "next_step": "EXPERIMENT_REQUIRED",
+      "priority": "P1",
+      "the_question": "§17's Candidate 1: does the same calldata at a different height answer the same question?",
+      "why_not_enough": "no committed record asks one calldata at two heights, and §2.4/§26 forbid asking it here",
+      "would_cost": 18
+    }
+  ],
+  "label": "NO_SAFE_RPC_REDUCTION_FOUND",
+  "label_rationale": "safe_reducible_rpc = 0, and no candidate reaches a credited saving. The label is not NOT_ENOUGH_EVIDENCE: the census is computable from committed records and is recomputable — 246 asks over 3 runs and 78 published pairs. 1 open question(s) are marked EXPERIMENT_REQUIRED rather than folded into the verdict.",
+  "milestone": "M8.6",
+  "not_re_asked_here": [
+    "§15's eth_call families, already graded by M8.5.1 as REUSE_BLOCKED",
+    "§16's block-context propagation, already measured by M8.4.4 as safe with a net RPC saving of 0",
+    "the protocol oracle's cross-height question, marked EXPERIMENT_REQUIRED and not run (§26)",
+    "the simulation's own REVM reads, already served by M8.3.1's cache within its documented scope"
+  ],
+  "production_changes": "crates/*/src functional changes = 0: the model and the assembly are test-only modules under crates/pipeline/tests/, which §30 prefers to a diagnostic production module.",
+  "prohibitions_honoured": [
+    "no new cache, and StateReadCache untouched",
+    "no RPC client behaviour change",
+    "no eth_call removed",
+    "no Preflight read deleted",
+    "no change to Detection / Opportunity / Simulation / Risk / Build / Execution / Fee / Nonce / Submission / transaction semantics / the real arbitrage flow",
+    "no signing, no broadcast, no real arbitrage",
+    "no RPC spent to test a hypothesis — the one question that needs one is marked EXPERIMENT_REQUIRED and left unrun",
+    "no batch, no multicall, no prefetch, no speculative read",
+    "no change to M8.3.3's default concurrency of 1",
+    "no change to M8.4.4's propagation contract",
+    "no existing safety gate relaxed to make evidence easier to pass"
+  ],
+  "question": "§22: is there an RPC left on this hot path that M8.6 can show is safe to stop making?",
+  "regression_scope": [
+    "M8.3.1",
+    "M8.3.2",
+    "M8.3.3",
+    "M8.4.1",
+    "M8.4.2",
+    "M8.4.3",
+    "M8.4.4",
+    "M8.5.1"
+  ],
+  "schema": "m8.6.v1",
+  "verdict_block": {
+    "M8.6 RESULT": "NO_SAFE_RPC_REDUCTION_FOUND",
+    "P0": 0,
+    "P1": 3,
+    "P2": 0,
+    "P3": 0,
+    "REJECT": 15,
+    "broadcasts": 0,
+    "current_hot_path_rpc_count": 246,
+    "label": "NO_SAFE_RPC_REDUCTION_FOUND",
+    "new_rpc": 0,
+    "real_arbitrage": 0,
+    "safe_reducible_rpc": 0,
+    "signatures": 0,
+    "theoretical_reducible_rpc": 42
+  }
+}
