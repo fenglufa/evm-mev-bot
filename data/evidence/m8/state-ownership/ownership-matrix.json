@@ -260,7 +260,7 @@
         },
         "safe_to_reuse_now": {
           "holds": false,
-          "reason": "safe inside one simulation, which is where it is reused today; unsafe across stages, because the only owner the code gives it dies with that simulation",
+          "reason": "safe inside one simulation, which is where it is reused today; not safe across stages, because the only owner the code gives it dies with that simulation",
           "status": "partially_proven"
         },
         "semantically_equivalent": {

@@ -795,7 +795,7 @@ fn reuse_verdicts(tree: &mut Tree) -> Value {
                 .count(),
             "record_and_verdict_disagreements": disagree,
             "by_state_kind": count_by(&carried, "state_kind"),
-            "by_producer_consumer": count_by(&carried, "consumer_stage"),
+            "by_consumer_stage": count_by(&carried, "consumer_stage"),
             "blockers": blockers,
             "blockers_at_the_top": {
                 "rows": top_rows,
@@ -1792,7 +1792,7 @@ fn the_aggregates_are_the_published_rows_counted() {
         json!(count_by(&verdict_rows, "state_kind")),
         "the per-category split is not the rows counted"
     );
-    for key in ["by_state_kind", "by_producer_consumer"] {
+    for key in ["by_state_kind", "by_consumer_stage"] {
         let split = verdicts["aggregate"][key]
             .as_object()
             .cloned()

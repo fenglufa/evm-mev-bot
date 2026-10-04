@@ -30,17 +30,17 @@
       "count": 7,
       "rows": 42
     },
-    "by_producer_consumer": {
-      "build": 48,
-      "preflight": 30,
-      "simulation": 6
+    "by_consumer_stage": {
+      "build": 24,
+      "preflight": 15,
+      "simulation": 3
     },
     "by_state_kind": {
-      "block_header": 42,
-      "chain_identity": 12,
-      "fee_parameters": 12,
-      "native_balance": 12,
-      "nonce": 6
+      "block_header": 21,
+      "chain_identity": 6,
+      "fee_parameters": 6,
+      "native_balance": 6,
+      "nonce": 3
     },
     "candidates": 42,
     "duplicate": {

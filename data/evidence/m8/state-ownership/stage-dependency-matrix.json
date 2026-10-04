@@ -777,12 +777,12 @@
           "token": "maximum_gas_limit: 60_000_000"
         },
         {
-          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/rpc-summary.json",
-          "line": 128,
+          "file": "data/evidence/m8/cross-stage/duplicate-summary.json",
+          "line": 420,
           "matches": 1,
-          "note": "one run's method list; the gate test asserts this list holds no estimate and no gas price",
+          "note": "the three runs' merged ask count, with each run's own directory named in the provenance block beside it; the recompute gate reads those directories' call rows and asserts the nine methods they name hold no estimate and no gas price",
           "source": "run_record",
-          "token": "\"eth_getCode\""
+          "token": "\"total_asks\""
         }
       ],
       "id": "s6.gas_limit.not_a_chain_read",
@@ -850,10 +850,10 @@
           "token": "state_version_mismatch"
         },
         {
-          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/rpc-summary.json",
-          "line": 158,
+          "file": "data/evidence/m8/cross-stage/fixed-block/run-01/rpc-summary.json",
+          "line": 201,
           "matches": 1,
-          "note": "the bulk of one simulation's 39 calls",
+          "note": "the fixed-block arm's one simulation recorded 41 calls, every row labelled `fixture` by the summary's own source column; 21 of them read storage slots, the largest single group",
           "source": "run_record",
           "token": "\"eth_getStorageAt\""
         }
