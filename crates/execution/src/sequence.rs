@@ -38,18 +38,21 @@ use alloy_primitives::{Address, B256, I256, U256};
 use async_trait::async_trait;
 
 use evm_chain::{ChainLog, RpcTraceSink};
-use evm_core::BlockNumber;
+use evm_core::{BlockNumber, ChainId};
 use evm_metrics::{Clock, Metrics, Stage};
 use evm_protocol::signatures::{topic_address, word, V2Topics, Weth9Topics};
 use evm_simulation::{Binding, ExecutedStep, SimulationResult};
 
+use crate::block_context::{consumer_check, BlockIdentity, ContextOutcome, VerifiedBlockContext};
 use crate::builder::{GasPolicy, TransactionBuilder};
 use crate::chain_read::read_binding;
 use crate::cost::{ExecutionCostEvidence, SequenceCost};
 use crate::error::{ExecutionError, Result};
 use crate::evidence::{SignedTransactionEvidence, SubmissionEvidence};
 use crate::fee::FeeSource;
-use crate::gate::{BalanceEvidence, GateAttempt, GateFacts, NonceEvidence, PreSubmitGate};
+use crate::gate::{
+    BalanceEvidence, BlockBinding, GateAttempt, GateFacts, NonceEvidence, PreSubmitGate,
+};
 use crate::intent::{SenderFunding, SequencePosition, TransactionIntent};
 use crate::lifecycle::{
     meter, Claim, ExecutionLane, ExecutionOutcome, ExecutionStatus, LaneRelease, Ledger,
@@ -648,6 +651,84 @@ impl DeltaAudit {
     }
 }
 
+/// §12's build row: everything one step's `Build` produced, recorded the moment the step
+/// reaches Built.
+///
+/// [`SequenceReport::transactions`] only exists for a step that was signed, so a build-only
+/// route — every route M8.4.4 runs — left no build fields in its evidence at all. M8.4.4 §19
+/// asks whether two arms that differ only in a propagated block context produce *the same
+/// transaction*, and that question cannot be answered from a record which holds none of the
+/// transaction. This row is the record; it copies what is already in hand and asks the node
+/// for nothing.
+///
+/// `fingerprint` is [`crate::builder::Build::signing_hash`] — keccak over `serialization_bytes`
+/// of the signing payload — so byte equality of the two arms' serializations is what that one
+/// field proves, and the nested `unsigned` is what names which field it would have been.
+#[derive(Clone, Debug)]
+pub struct StepBuild {
+    /// 0-based, the same index [`TransactionStep::position`] uses; the `sources` lines call the
+    /// same step by its 1-based number.
+    pub position: usize,
+    pub identity: BlockIdentity,
+    pub unsigned: crate::tx::UnsignedTransaction,
+    pub serialization_bytes: usize,
+    pub fingerprint: B256,
+    pub sender_expected: Address,
+}
+
+impl StepBuild {
+    fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "position": self.position,
+            "chain_id": self.identity.chain_id.0,
+            "block_number": self.identity.number.0,
+            "block_hash": format!("{:#x}", self.identity.hash),
+            "unsigned": serde_json::to_value(&self.unsigned).ok(),
+            "serialization_bytes": self.serialization_bytes,
+            "fingerprint": format!("{:#x}", self.fingerprint),
+            "sender_expected": format!("{}", self.sender_expected),
+        })
+    }
+}
+
+/// M8.4.4 §31's consumer row: the step's own pin, and the verdict the propagated context got
+/// against it, as fields rather than as a sentence.
+///
+/// The `sources` line says the same thing for a human; this says it for [`crate::block_context`]'s
+/// own §17 requirement that a reader recompute *which* refusal fired from the raw record. Prose is
+/// where a name like `block_hash_mismatch` goes to become a paragraph nobody can count.
+///
+/// `reused` is §31's `reused = true`, and it is false on every path this crate has today: §2 keeps
+/// the step's binding read in place, so `consumer_read` is `true` and the value that served the step
+/// was the step's own. The field is published rather than inferred because that is the sentence the
+/// milestone is being asked to earn — with a number in the record saying `false`, the report cannot
+/// quietly state a saving it did not make.
+#[derive(Clone, Debug)]
+pub struct StepContextCheck {
+    /// 0-based, the index [`StepBuild`] uses for the same step.
+    pub position: usize,
+    /// What this step pins — the identity the propagated context was checked against.
+    pub expected: BlockIdentity,
+    pub outcome: ContextOutcome,
+}
+
+impl StepContextCheck {
+    fn to_json(&self) -> serde_json::Value {
+        let mut row = self.outcome.to_row();
+        row["position"] = serde_json::json!(self.position);
+        row["expected_chain_id"] = serde_json::json!(self.expected.chain_id.0);
+        row["expected_block_number"] = serde_json::json!(self.expected.number.0);
+        row["expected_block_hash"] = serde_json::json!(format!("{:#x}", self.expected.hash));
+        row["reused"] = serde_json::json!(matches!(
+            &self.outcome,
+            ContextOutcome::Accepted {
+                consumer_read: false
+            }
+        ));
+        row
+    }
+}
+
 /// What the sequence left behind, in the order the evidence was produced.
 #[derive(Clone, Debug)]
 pub struct SequenceReport {
@@ -665,6 +746,11 @@ pub struct SequenceReport {
     pub reached: Option<ExecutionStatus>,
     pub stopped_at: Option<usize>,
     pub transactions: Vec<TransactionStep>,
+    /// Every step that reached Built, with the transaction it built, in step order.
+    pub builds: Vec<StepBuild>,
+    /// Every step that ran the consumer leg, with the verdict its propagated context got, in step
+    /// order. A step that was given no context is in here too — §51 counts the silence.
+    pub context_checks: Vec<StepContextCheck>,
     pub before: Option<AssetSnapshot>,
     pub after: Option<AssetSnapshot>,
     pub flows: Vec<TokenFlow>,
@@ -694,6 +780,8 @@ impl SequenceReport {
             reached: None,
             stopped_at: None,
             transactions: Vec::new(),
+            builds: Vec::new(),
+            context_checks: Vec::new(),
             before: None,
             after: None,
             flows: Vec::new(),
@@ -762,6 +850,12 @@ impl SequenceReport {
             "status": self.reached.map_or("no-record".to_string(), |status| status.name().to_string()),
             "stopped_at": self.stopped_at,
             "transactions": self.transactions.iter().map(TransactionStep::to_json).collect::<Vec<_>>(),
+            "builds": self.builds.iter().map(StepBuild::to_json).collect::<Vec<_>>(),
+            "context_checks": self
+                .context_checks
+                .iter()
+                .map(StepContextCheck::to_json)
+                .collect::<Vec<_>>(),
             "before": self.before.as_ref().and_then(|s| serde_json::to_value(s).ok()),
             "after": self.after.as_ref().and_then(|s| serde_json::to_value(s).ok()),
             "flows": self.flows.iter().map(|flow| serde_json::json!({
@@ -1543,10 +1637,23 @@ impl SequenceStage {
             }
         };
 
+        // M8.4.4 §6: what the previous stage verified about the block this route pins. A
+        // non-arbitrage attempt has no preflight to take it from, and an arbitrage whose
+        // producer refused to issue a context propagates `None` — both arrive at the same
+        // `no_context` outcome downstream rather than at an assumed agreement (§30).
+        let propagated = preflight.and_then(|verdict| verdict.block_context.context());
         let mut halted = false;
         for position in 0..plan.len() {
             match self
-                .drive_step(plan, position, attempt, &execution_id, &mut report, metrics)
+                .drive_step(
+                    plan,
+                    position,
+                    attempt,
+                    &execution_id,
+                    propagated,
+                    &mut report,
+                    metrics,
+                )
                 .await
             {
                 Ok(step) => report.transactions.push(step),
@@ -1583,12 +1690,25 @@ impl SequenceStage {
     /// One transaction of the route, end to end: price → nonce → build → gate → sign →
     /// round-trip → submit → receipt. This is [`crate::stage`]'s recipe, deliberately: a step
     /// of a sequence is not a weaker transaction than a lone one.
+    ///
+    /// `propagated` is M8.4.4's consumer input: what the previous stage verified about the
+    /// block this step pins. It replaces no read — `Build` still asks the endpoint for the
+    /// block at its own pin below, which is what makes the comparison an independent one
+    /// rather than a copy. This stage deliberately passes no head to the freshness rule: it
+    /// reads the block at its pin by number and never asks the endpoint for `latest` (the ban
+    /// `crates/pipeline/tests/state_is_always_pinned.rs` enforces), so a live-head context
+    /// from upstream has no honest answer here and is refused by name, not accepted on the
+    /// producer's timing.
+    // The eight arguments are one step's whole recipe; bundling the three run-level ones into a
+    // struct would rename every use site without changing what this function reads or judges.
+    #[allow(clippy::too_many_arguments)]
     async fn drive_step(
         &mut self,
         plan: &SequencePlan,
         position: usize,
         attempt: &GateAttempt,
         execution_id: &str,
+        propagated: Option<&VerifiedBlockContext>,
         report: &mut SequenceReport,
         metrics: &mut Metrics,
     ) -> std::result::Result<TransactionStep, Halt> {
@@ -1651,6 +1771,18 @@ impl SequenceStage {
         policy.simulated_gas_used = Some(step.simulated_gas_used);
         let build = TransactionBuilder::build(&intent, &policy)?;
         self.rung(execution_id, ExecutionStatus::Built, metrics);
+        report.builds.push(StepBuild {
+            position,
+            identity: BlockIdentity {
+                chain_id: ChainId(intent.chain_id),
+                number: intent.block_number,
+                hash: intent.block_hash,
+            },
+            serialization_bytes: build.signing_payload.len(),
+            fingerprint: build.signing_hash,
+            sender_expected: build.sender_expected,
+            unsigned: build.unsigned.clone(),
+        });
 
         let chain = self.abilities.chain.clone();
         self.stamp(
@@ -1663,6 +1795,57 @@ impl SequenceStage {
             &format!("step {step_number}: gate — block binding at pin"),
         );
         let binding = read_binding(&*chain, intent.block_number, intent.block_hash).await;
+
+        // M8.4.4 §6: the consumer's leg, run beside the read above and not instead of it. The
+        // three names that have to agree are the propagated context, this step's own pin, and
+        // what the endpoint just answered at that height — and the third is the reason this is
+        // a verification rather than a receipt of the producer's word (§2 forbids deleting the
+        // read that produces it). Nothing is skipped, so no RPC is saved here; what this buys
+        // is the disagreement between two stages about one block becoming a named fact
+        // (`rejected / block_hash_mismatch`) before a signature, which it was not before.
+        let observed = match &binding {
+            BlockBinding::Confirmed { number, hash } => Some(BlockIdentity {
+                chain_id: ChainId(endpoint_chain_id),
+                number: BlockNumber(*number),
+                hash: *hash,
+            }),
+            BlockBinding::Reorged { number, found, .. } => Some(BlockIdentity {
+                chain_id: ChainId(endpoint_chain_id),
+                number: BlockNumber(*number),
+                hash: *found,
+            }),
+            BlockBinding::Unverified(_) => None,
+        };
+        let expected = BlockIdentity {
+            chain_id: ChainId(intent.chain_id),
+            number: intent.block_number,
+            hash: intent.block_hash,
+        };
+        let context_outcome = consumer_check(propagated, &expected, observed.as_ref(), None);
+        metrics.bump(&format!(
+            "execution_block_context_{}",
+            context_outcome.name()
+        ));
+        report.context_checks.push(StepContextCheck {
+            position,
+            expected,
+            outcome: context_outcome.clone(),
+        });
+        // §29's named error, on the line that records it: `describe()` is the sentence a reader
+        // parses, `name()` is the token a program re-groups by. A record carrying only the
+        // sentence cannot be asked *which* refusal fired, and §17 forbids answering that from
+        // anything but the raw row.
+        let refusal = match &context_outcome {
+            ContextOutcome::Rejected { reason, .. } => format!("{}: ", reason.name()),
+            _ => String::new(),
+        };
+        report.sources.push(format!(
+            "step {step_number}: block context {} for {}: {}{}",
+            context_outcome.name(),
+            expected.describe(),
+            refusal,
+            context_outcome.describe()
+        ));
 
         let fees = self.abilities.fees.clone();
         self.stamp(

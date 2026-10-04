@@ -283,6 +283,18 @@ impl LivePreflightReads<'_> {
             self.plan.block_hash,
         )
         .await;
+        // M8.4.4 §27: the read that answers for the pin's identity is the pair above — the
+        // block the lane's chain reader holds at this height, and the chain that reader answers
+        // for. Named here because this gather is the only place that knows which leg made them;
+        // `preflight` stamps the context it verifies with it and reads nothing itself. The URL
+        // is deliberately absent: `dyn ChainReader` has no accessor for it, and a provenance
+        // string invented at the label site would be a claim about a socket, not a fact.
+        let block_context_source = format!(
+            "eth_getBlockByNumber({}) and eth_chainId, both answered by the execution lane's \
+             chain reader in this preflight gather",
+            self.plan.block_number
+        );
+        let block_context_verified_at_ms = self.clock.now_ms();
         // The verdict below is pure, so nothing reads after this point; `gather` still takes the
         // label off on its way out, because a leg that errored never reaches here.
         self.clear_stamp();
@@ -315,6 +327,8 @@ impl LivePreflightReads<'_> {
             fee: &fee_at_head,
             input_asset: input_asset.clone(),
             signed_max_fee_per_gas: priced_intent.max_fee_per_gas,
+            block_context_source,
+            block_context_verified_at_ms,
         };
         let report = ExecutionPreflight::run(&facts);
         let latency_ms = self.clock.since_ms(started);

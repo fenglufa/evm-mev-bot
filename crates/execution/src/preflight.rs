@@ -29,8 +29,11 @@
 use alloy_primitives::{Address, B256, I256, U256};
 use serde::Serialize;
 
-use evm_core::{Fee, PoolId};
+use evm_core::{BlockNumber, ChainId, Fee, PoolId};
 
+use crate::block_context::{
+    BlockContextScope, BlockIdentity, ContextRefusal, ProducerOutcome, VerifiedBlockContext,
+};
 use crate::cost::EstimatedCost;
 use crate::error::{ExecutionError, Result};
 use crate::fee::FeeReading;
@@ -380,6 +383,15 @@ pub struct PreflightFacts<'a> {
     /// What the transaction will actually carry, so the fee line can compare the signed
     /// number against the priced one instead of trusting that the stage copied it.
     pub signed_max_fee_per_gas: Option<U256>,
+    /// M8.4.4 §27: which read answered for the block this preflight's pin names. The gather
+    /// that made the read is the only place that knows its provenance, so it fills this in;
+    /// [`ExecutionPreflight::run`] uses it as a label on the context it verifies, never as
+    /// evidence of the identity itself.
+    pub block_context_source: String,
+    /// §28's diagnostic stamp: when this gather finished the read behind the pin's identity.
+    /// It cannot be an identity, cannot stand in for a hash and cannot prove freshness, and it
+    /// is deliberately absent from every evidence row.
+    pub block_context_verified_at_ms: u64,
 }
 
 /// One line's answer, with the read that produced it.
@@ -403,6 +415,16 @@ pub struct PreflightReport {
     /// The first failing line's reason, in §39's taxonomy words.
     pub rejected_because: Option<String>,
     pub sequence_ceiling_wei: U256,
+    /// M8.4.4 §4/§5: the block identity this stage verified from its own read — the one value
+    /// in this report that is allowed to cross into the next stage — or the named reason it
+    /// refused to issue one.
+    ///
+    /// This is the carrier M8.4.3 recorded as missing: before it, the only thing that travelled
+    /// from `Preflight` to `Build` was
+    /// [`crate::sequence::SnapshotPin`], which names the *head* and proves nothing about it.
+    /// The field cannot be a bare number (§25) and cannot be a timestamp (§28); it is chain,
+    /// height, hash, and the read that proved them together.
+    pub block_context: ProducerOutcome,
 }
 
 impl PreflightReport {
@@ -905,6 +927,7 @@ impl ExecutionPreflight {
         };
         push(PreflightCheck::PoolReserves, reserves_ok, reserves_detail);
 
+        let block_context = verify_block_context(facts);
         findings.sort_by_key(|finding| finding.check);
         let failed: Vec<&PreflightFinding> = findings.iter().filter(|f| !f.passed).collect();
         PreflightReport {
@@ -915,8 +938,64 @@ impl ExecutionPreflight {
             repriced_output_wei: repriced,
             expected_net_after_costs_wei: expected_net,
             sequence_ceiling_wei: facts.pricing.total_ceiling_wei,
+            block_context,
         }
     }
+}
+
+/// M8.4.4 §5: the producer's leg, run on the reads this gather already paid for.
+///
+/// Three facts have to line up before anything may be propagated: which chain the intent is
+/// for, which chain the endpoint answers for, and whether the block the endpoint holds at the
+/// pinned height is the pinned block. The first two are what `gate`'s `chain_matches` leg
+/// already compares and the third is what `opportunity_block_hash` already answers — this
+/// function does not add a read or re-decide a leg, it turns the answers that are already in
+/// `facts` into the one value that may cross the stage boundary, and records the named refusal
+/// when they do not line up (§30: a rejection is a fact, not an empty field).
+///
+/// The scope is read off the head rather than declared: a pin the endpoint still calls head is
+/// §8's live-head case, and a pin the chain has moved past is a fixed historical block, and
+/// the two have different freshness rules downstream.
+fn verify_block_context(facts: &PreflightFacts) -> ProducerOutcome {
+    let head = match &facts.head {
+        HeadReading::Read { number, .. } => *number,
+        HeadReading::Unread(why) => {
+            return ProducerOutcome::Refused(ContextRefusal::UnverifiableBlockContext(format!(
+                "the head was never read, so this pin cannot even be said to be historical or \
+                 live: {why}"
+            )))
+        }
+    };
+    let (number, hash) = match &facts.gate.binding {
+        BlockBinding::Confirmed { number, hash } => (*number, *hash),
+        BlockBinding::Reorged { number, found, .. } => (*number, *found),
+        BlockBinding::Unverified(why) => {
+            return ProducerOutcome::Refused(ContextRefusal::UnverifiableBlockContext(why.clone()))
+        }
+    };
+    let expected = BlockIdentity {
+        chain_id: ChainId(facts.gate.intent_chain_id),
+        number: facts.intent.block_number,
+        hash: facts.intent.block_hash,
+    };
+    let observed = BlockIdentity {
+        chain_id: ChainId(facts.gate.endpoint_chain_id),
+        number: BlockNumber(number),
+        hash,
+    };
+    VerifiedBlockContext::verify(
+        &expected,
+        &observed,
+        if head == facts.intent.block_number.0 {
+            BlockContextScope::LiveHead
+        } else {
+            BlockContextScope::FixedHistorical
+        },
+        facts.block_context_source.clone(),
+        "preflight §26 `block binding at pin` and `eth_chainId` legs".to_string(),
+        facts.block_context_verified_at_ms,
+    )
+    .map_or_else(ProducerOutcome::Refused, ProducerOutcome::Verified)
 }
 
 /// The magnitude of a signed total. `I256::abs` is not available for the value range used
@@ -1138,6 +1217,10 @@ mod tests {
                 source: "eth_getBalance(pending)".to_string(),
             },
             signed_max_fee_per_gas: intent.max_fee_per_gas,
+            block_context_source: "eth_getBlockByNumber(37530593) and eth_chainId, read as the \
+                                   `block binding at pin` leg"
+                .to_string(),
+            block_context_verified_at_ms: 1_700_000_000_000,
         }
     }
 
@@ -1545,6 +1628,240 @@ mod tests {
         let line = line(&report, PreflightCheck::InputAssetBalance);
         assert!(!line.passed, "{}", line.detail);
         assert!(line.detail.contains("holds 999999"), "{}", line.detail);
+    }
+
+    #[test]
+    fn the_producer_attaches_the_identity_its_own_read_verified() {
+        // §5's six steps, run by the preflight itself: the header read, its number, its hash,
+        // the identity check against the pin and the chain, and the context on the report. The
+        // assertion is on the *values the reads answered*, not on the type's name — §5 warns
+        // that a struct called Verified proves nothing.
+        let intent = intent();
+        let fee = fee_reading(37_530_600);
+        let facts = build_facts(&intent, clearing_reserves(), priced_steps(), &fee);
+        let report = ExecutionPreflight::run(&facts);
+        let context = match &report.block_context {
+            ProducerOutcome::Verified(context) => context,
+            other => panic!("the pin's read confirmed, so a context was expected: {other:?}"),
+        };
+        assert_eq!(context.number(), BlockNumber(37_530_593));
+        assert_eq!(context.hash(), intent.block_hash);
+        assert_eq!(context.chain_id(), ChainId(91_342));
+        assert_eq!(context.scope(), BlockContextScope::FixedHistorical);
+        // §27's provenance questions, answered in the value rather than in prose beside it.
+        assert!(
+            context.source().contains("eth_getBlockByNumber(37530593)"),
+            "{}",
+            context.source()
+        );
+        assert!(
+            context.verified_by().contains("block binding at pin"),
+            "{}",
+            context.verified_by()
+        );
+        // §28: the timestamp is a process fact and has no place in the row the evidence is
+        // built from — and the row is what the report serializes.
+        let row = report.block_context.to_row();
+        assert_eq!(row["outcome"].as_str(), Some("verified"));
+        assert_eq!(
+            row["verified_block"]["block_number"].as_u64(),
+            Some(37_530_593)
+        );
+        assert!(
+            row["verified_block"].get("verified_at_ms").is_none(),
+            "{row}"
+        );
+        assert_eq!(context.verified_at_ms(), 1_700_000_000_000);
+    }
+
+    /// §35's header test: the context is the header this stage *read*, copied out of that read,
+    /// and not the pin restated. The positive half compares the context with the same
+    /// `gate.binding` the §26 lines judged, field for field; the negative half edits that very
+    /// binding to a hash the intent does not pin, where the producer must refuse rather than
+    /// hand the consumer a context that agrees with the intent by construction. A context built
+    /// from the intent would pass the first half and fail the second.
+    #[test]
+    fn the_context_copies_the_header_that_was_read_and_refuses_one_that_disagrees() {
+        let intent = intent();
+        let fee = fee_reading(37_530_600);
+        let facts = build_facts(&intent, clearing_reserves(), priced_steps(), &fee);
+        let report = ExecutionPreflight::run(&facts);
+        let context = match &report.block_context {
+            ProducerOutcome::Verified(context) => context,
+            other => panic!("the binding confirmed, so a context was expected: {other:?}"),
+        };
+        match &facts.gate.binding {
+            BlockBinding::Confirmed { number, hash } => {
+                assert_eq!(context.number(), BlockNumber(*number));
+                assert_eq!(context.hash(), *hash);
+            }
+            other => panic!("the fixture's binding is a confirmed header: {other:?}"),
+        }
+        assert_eq!(
+            context.chain_id(),
+            ChainId(facts.gate.endpoint_chain_id),
+            "the chain the endpoint answered for, not the chain the config hoped for"
+        );
+
+        let read_hash = B256::repeat_byte(0x77);
+        let mut facts = build_facts(&intent, clearing_reserves(), priced_steps(), &fee);
+        facts.gate.binding = BlockBinding::Confirmed {
+            number: 37_530_593,
+            hash: read_hash,
+        };
+        let report = ExecutionPreflight::run(&facts);
+        let reason = match &report.block_context {
+            ProducerOutcome::Refused(reason) => reason,
+            other => {
+                panic!("a header that is not the pin must not produce a context: {other:?}")
+            }
+        };
+        assert_eq!(reason.name(), "block_hash_mismatch");
+        let detail = reason.describe();
+        assert!(detail.contains(&format!("{:#x}", read_hash)), "{detail}");
+        assert!(
+            detail.contains(&format!("{:#x}", intent.block_hash)),
+            "{detail}"
+        );
+        assert!(report.block_context.context().is_none());
+        // §2: the new refusal is one more fact, not a replacement — §26's own hash line still
+        // runs over the same read and still fails on it.
+        assert!(
+            !line(&report, PreflightCheck::OpportunityBlockHash).passed,
+            "{}",
+            failures(&report)
+        );
+    }
+
+    #[test]
+    fn a_reorg_at_the_pin_refuses_the_context_and_names_the_hash_that_replaced_it() {
+        // NC1 at the producer: the height is right and the block is not. The gate already fails
+        // §26's two block lines over the same read; this is the refusal that stops the identity
+        // from crossing into the next stage.
+        let intent = intent();
+        let fee = fee_reading(37_530_600);
+        let mut facts = build_facts(&intent, clearing_reserves(), priced_steps(), &fee);
+        facts.gate.binding = BlockBinding::Reorged {
+            number: 37_530_593,
+            pinned: intent.block_hash,
+            found: B256::repeat_byte(0x55),
+        };
+        let report = ExecutionPreflight::run(&facts);
+        let reason = match &report.block_context {
+            ProducerOutcome::Refused(reason) => reason,
+            other => panic!("a reorged pin must not produce a context: {other:?}"),
+        };
+        assert_eq!(reason.name(), "block_hash_mismatch");
+        assert!(
+            reason.describe().contains("0x5555"),
+            "{}",
+            reason.describe()
+        );
+        assert!(report.block_context.context().is_none());
+    }
+
+    #[test]
+    fn a_read_about_a_different_height_refuses_the_context_rather_than_renumbering_it() {
+        // NC2 at the producer: same hash, another height. A bare number would have sailed
+        // through; the pair cannot, because the hash the read answered belongs to a different
+        // height than the pin's claim.
+        let intent = intent();
+        let fee = fee_reading(37_530_600);
+        let mut facts = build_facts(&intent, clearing_reserves(), priced_steps(), &fee);
+        facts.gate.binding = BlockBinding::Confirmed {
+            number: 37_530_594,
+            hash: intent.block_hash,
+        };
+        let report = ExecutionPreflight::run(&facts);
+        assert!(matches!(
+            &report.block_context,
+            ProducerOutcome::Refused(ContextRefusal::BlockNumberMismatch {
+                expected: 37_530_593,
+                held: 37_530_594
+            })
+        ));
+    }
+
+    #[test]
+    fn another_chain_at_the_same_height_refuses_the_context() {
+        // NC3 at the producer, and the reason §25 refuses to share a bare number: 37530593 with
+        // this hash is a real block somewhere, just not on the chain the intent is for.
+        let intent = intent();
+        let fee = fee_reading(37_530_600);
+        let mut facts = build_facts(&intent, clearing_reserves(), priced_steps(), &fee);
+        facts.gate.endpoint_chain_id = 91_343;
+        let report = ExecutionPreflight::run(&facts);
+        assert!(matches!(
+            &report.block_context,
+            ProducerOutcome::Refused(ContextRefusal::ChainMismatch {
+                expected: 91_342,
+                held: 91_343
+            })
+        ));
+        // The refusal is about the identity carrier only; §26's own chain line still carries
+        // its own answer, and no leg of the gate was rewritten to make room for this milestone.
+        assert!(!line(&report, PreflightCheck::ChainId).passed);
+    }
+
+    #[test]
+    fn a_read_that_never_answered_leaves_no_context_and_says_so_by_name() {
+        // NC4's shape at the producer, and §30's requirement that an absence be reported: an
+        // unverified binding and an unread head are two different refusals with two different
+        // reasons, and neither arrives as a `null` a reader has to guess about.
+        let intent = intent();
+        let fee = fee_reading(37_530_600);
+
+        let mut facts = build_facts(&intent, clearing_reserves(), priced_steps(), &fee);
+        facts.gate.binding = BlockBinding::Unverified("the endpoint did not answer".to_string());
+        let report = ExecutionPreflight::run(&facts);
+        let reason = match &report.block_context {
+            ProducerOutcome::Refused(ContextRefusal::UnverifiableBlockContext(reason)) => reason,
+            other => panic!("an unverified binding must refuse: {other:?}"),
+        };
+        assert!(reason.contains("did not answer"), "{reason}");
+
+        let mut facts = build_facts(&intent, clearing_reserves(), priced_steps(), &fee);
+        facts.head = HeadReading::Unread("eth_getBlockByNumber timed out".to_string());
+        let report = ExecutionPreflight::run(&facts);
+        let reason = match &report.block_context {
+            ProducerOutcome::Refused(ContextRefusal::UnverifiableBlockContext(reason)) => reason,
+            other => panic!("an unread head must refuse: {other:?}"),
+        };
+        assert!(reason.contains("head was never read"), "{reason}");
+    }
+
+    #[test]
+    fn the_scope_is_read_off_the_head_and_never_declared() {
+        // §8's two cases are not a caller's choice: the same pin is a live head while the chain
+        // is on it and a fixed historical block one header later. Both answers come from the
+        // head read, and the freshness rule that follows each is different downstream.
+        let intent = intent();
+        let fee = fee_reading(37_530_600);
+
+        let mut facts = build_facts(&intent, clearing_reserves(), priced_steps(), &fee);
+        facts.head = HeadReading::Read {
+            number: 37_530_593,
+            hash: B256::repeat_byte(0x33),
+            source: "eth_getBlockByNumber(canonical head)".to_string(),
+        };
+        let report = ExecutionPreflight::run(&facts);
+        assert_eq!(
+            report.block_context.context().map(|c| c.scope()),
+            Some(BlockContextScope::LiveHead),
+            "§21's Case A: the pin is still the head"
+        );
+
+        facts.head = HeadReading::Read {
+            number: 37_530_594,
+            hash: B256::repeat_byte(0x44),
+            source: "eth_getBlockByNumber(canonical head)".to_string(),
+        };
+        let report = ExecutionPreflight::run(&facts);
+        assert_eq!(
+            report.block_context.context().map(|c| c.scope()),
+            Some(BlockContextScope::FixedHistorical),
+            "§21's Case B: one header later, the same pin is history"
+        );
     }
 
     #[test]

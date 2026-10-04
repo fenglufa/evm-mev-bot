@@ -34,6 +34,7 @@
 //! intent and lifecycle modules are chain-agnostic and would compile against any
 //! EIP-1559 chain.
 
+pub mod block_context;
 pub mod builder;
 pub mod chain_read;
 pub mod cost;
@@ -57,6 +58,10 @@ pub mod stage;
 pub mod submitter;
 pub mod tx;
 
+pub use block_context::{
+    BlockContextScope, BlockIdentity, ContextOutcome, ContextRefusal, ProducerOutcome,
+    VerifiedBlockContext,
+};
 pub use builder::{Build, BuildPolicy, GasPolicy, RoundTrip, TransactionBuilder};
 pub use chain_read::{read_binding, ChainReader};
 pub use cost::{EstimatedCost, ExecutionCostEvidence, L1FeeSource, SequenceCost};
@@ -94,8 +99,8 @@ pub use receipt::{
 pub use sequence::{
     audit_route, broadcastable, read_snapshot, reconcile_flows, swap_observations, transfer_flows,
     wrap_moves, AssetReader, AssetReading, DeltaAudit, DeltaLine, FlowCheck, PlannedStep,
-    RouteAudit, RouteLeg, SequencePlan, SequenceReport, SequenceStage, SnapshotPin, SwapObserved,
-    TokenFlow, Tolerance, TransactionStep, WrapMove,
+    RouteAudit, RouteLeg, SequencePlan, SequenceReport, SequenceStage, SnapshotPin, StepBuild,
+    StepContextCheck, SwapObserved, TokenFlow, Tolerance, TransactionStep, WrapMove,
 };
 pub use signer::{recover_sender, signing_hash_for_chain, ExecutionKey, Signer, PRIVATE_KEY_ENV};
 pub use stage::{Abilities, AttemptProvenance, ExecutionSetup, ExecutionStage, StageReport};
