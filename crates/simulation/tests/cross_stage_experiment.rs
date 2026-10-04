@@ -37,7 +37,14 @@
 //! * **§3** — that this milestone *adds* tables and rewrites none. The 14 data files M8.4.1's
 //!   arms write are compared between the baseline and instrumented arms on their field paths and
 //!   on every count in them ([`adding_the_cross_stage_tables_left_m841s_shape_and_counts_alone`]),
-//!   and no duration is collected, because two arms are two clocks.
+//!   and no duration is collected, because two arms are two clocks. Each list element is reached
+//!   through what its row is about rather than through its index, so the cost order a writer
+//!   sorted two tables into cannot decide whether this gate is green, and the fields whose
+//!   contents a duration decides — the headline of the most expensive method and the two
+//!   category-membership lists — are checked inside each arm against the rows beside them rather
+//!   than compared across the arms. [`duration_ranking_order_is_not_an_answer`],
+//!   [`a_membership_list_a_second_clock_shortened_is_still_green`] and
+//!   [`a_count_that_really_moved_is_still_red`] hold those directions apart.
 //!
 //! ## The number this corpus cannot produce, and why that is reported rather than fixed
 //!
@@ -85,9 +92,9 @@ use evm_pipeline::canonicalization::{
 };
 use evm_pipeline::diagnosis::{
     DiagnosisEvidence, SimulationDiagnosis, SimulationWindow, ACCOUNT_MATRIX_FILE, BOTTLENECK_FILE,
-    CROSS_STAGE_FILES, DEPENDENCY_FILES, DEPENDENCY_MAP_FILE, DUPLICATES_FILE, OUTSIDE_FILE,
-    PIPELINE_CALLS_FILE, README_FILE, RPC_GAPS_FILE, RPC_SUMMARY_FILE, SIMULATION_SUMMARY_FILE,
-    STORAGE_BREAKDOWN_FILE, STORAGE_READS_FILE, TRACES_FILE,
+    CROSS_STAGE_FILES, DEPENDENCY_FILES, DEPENDENCY_MAP_FILE, DOMINANT, DUPLICATES_FILE, MATERIAL,
+    OUTSIDE_FILE, PIPELINE_CALLS_FILE, README_FILE, RPC_GAPS_FILE, RPC_SUMMARY_FILE,
+    SIMULATION_SUMMARY_FILE, STORAGE_BREAKDOWN_FILE, STORAGE_READS_FILE, TRACES_FILE,
 };
 use evm_pipeline::latency::git_revision;
 use evm_simulation::{
@@ -1011,6 +1018,15 @@ async fn three_fixed_block_arms_publish_the_same_cross_stage_tables() {
 /// count rather than a duration. What is deliberately not compared is any duration; two arms are
 /// two processes, and M8.4.1 §7's rule is that its monotonic clock restarts with each run, so
 /// `duration_ns` is expected to differ and is not collected here at all.
+///
+/// A list element is named by what the row is *about* ([`IDENTITY_FIELDS`]), never by the index
+/// the writer emitted it at, so a table whose rows come out in a different order cannot turn
+/// this gate red — the order of a duration-sorted list is that arm's clock, not an answer. The
+/// fields whose *contents* a duration decides are excluded from the compare and re-derived inside
+/// each arm instead ([`headline_mismatches`], [`classification_mismatches`]);
+/// [`duration_ranking_order_is_not_an_answer`],
+/// [`a_membership_list_a_second_clock_shortened_is_still_green`] and
+/// [`a_count_that_really_moved_is_still_red`] hold those three directions apart.
 #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
 async fn adding_the_cross_stage_tables_left_m841s_shape_and_counts_alone() {
     let fixture = support::Fixture::load().await;
@@ -1044,7 +1060,7 @@ async fn adding_the_cross_stage_tables_left_m841s_shape_and_counts_alone() {
         let right = read_table(&instrumented_dir.join(name));
         let (left_shape, left_numbers) = shape_and_counts(&left);
         let (right_shape, right_numbers) = shape_and_counts(&right);
-        collected += left_numbers.len();
+        collected += left_numbers.values().map(Vec::len).sum::<usize>();
         assert_eq!(
             left_shape,
             right_shape,
@@ -1053,11 +1069,7 @@ async fn adding_the_cross_stage_tables_left_m841s_shape_and_counts_alone() {
                 .symmetric_difference(&right_shape)
                 .collect::<Vec<_>>()
         );
-        let moved: Vec<(&String, Option<i128>, Option<i128>)> = left_numbers
-            .iter()
-            .filter(|(path, value)| right_numbers.get(*path) != Some(*value))
-            .map(|(path, value)| (path, Some(*value), right_numbers.get(path).copied()))
-            .collect();
+        let moved = moved_counts(&left_numbers, &right_numbers);
         assert!(
             moved.is_empty(),
             "{name}: a count moved between the two arms: {moved:?}"
@@ -1067,6 +1079,113 @@ async fn adding_the_cross_stage_tables_left_m841s_shape_and_counts_alone() {
         collected > 40,
         "the two arms agreed on {collected} counts, which is not enough fields for that to mean \
          anything — the collector is reading a shape it should not be"
+    );
+
+    // The three fields in these tables whose contents a duration decides — the headline the
+    // ranking puts first, and the two membership lists the per-mille lines cut — are not compared
+    // across the arms, because two arms are two clocks and they would let a timing decide whether
+    // this gate is green. What is checked instead is each arm's own claim: the headline must name
+    // the row its own ranking sorts first, and each list must name exactly the rows whose own
+    // published verdicts earned a place in it.
+    for (dir, which) in [
+        (&baseline_dir, "baseline"),
+        (&instrumented_dir, "instrumented"),
+    ] {
+        let table = read_json(&dir.join(BOTTLENECK_FILE));
+        let mut problems = headline_mismatches(&table, which);
+        problems.extend(classification_mismatches(&table, which));
+        assert!(
+            problems.is_empty(),
+            "the duration ranking and the membership lists it feeds are diagnostics only if \
+             they say so: {problems:?}"
+        );
+    }
+
+    // §29's rule, run on the real pair rather than only on the fixtures below: a count that moves
+    // has to be seen, and only that one. The two arms' tables agree (that is the assert above), so
+    // the single difference a collector reports after one hand-edited integer is that integer.
+    // The row to edit is read out of the table rather than named here, so this discriminator does
+    // not depend on which method happened to cost most.
+    let baseline_table = read_json(&baseline_dir.join(BOTTLENECK_FILE));
+    let instrumented_table = read_json(&instrumented_dir.join(BOTTLENECK_FILE));
+    let (claimed, calls_were) = {
+        let ranking = instrumented_table["per_source"][0]["method_ranking_by_summed_duration"]
+            .as_array()
+            .expect("a method ranking");
+        assert!(
+            ranking.len() > 1,
+            "the isolation arm ranked {} methods, which is not enough to edit one and leave \
+             another for the compare to notice",
+            ranking.len()
+        );
+        let row = ranking.first().expect("a ranked method");
+        (
+            row["method"].as_str().expect("a named method").to_string(),
+            row["calls"].as_u64().expect("a call count"),
+        )
+    };
+    let mut edited = instrumented_table.clone();
+    edited["per_source"][0]["method_ranking_by_summed_duration"][0]["calls"] =
+        json!(calls_were + 1);
+    let (_, baseline_numbers) = shape_and_counts(&baseline_table);
+    let (_, edited_numbers) = shape_and_counts(&edited);
+    let moved = moved_counts(&baseline_numbers, &edited_numbers);
+    assert_eq!(
+        moved.len(),
+        1,
+        "one edited count produced {moved:?} — the compare is either blind to the edit or blind \
+         to everything else"
+    );
+    assert!(
+        moved[0].0.ends_with(&format!("[method={claimed}].calls")),
+        "the edit was seen somewhere else entirely: {}",
+        moved[0].0
+    );
+
+    // And the membership lists are checked the same way: an id a table published beside verdicts
+    // that earned it is contradicted by dropping it, whoever that id turned out to be.
+    let secondary = instrumented_table["per_source"][0]["secondary"]
+        .as_array()
+        .expect("a secondary list");
+    assert!(
+        !secondary.is_empty(),
+        "the isolation arm published no secondary categories, so there is no id here to drop"
+    );
+    let dropped = secondary[0].clone();
+    let mut shortened = instrumented_table.clone();
+    shortened["per_source"][0]["secondary"]
+        .as_array_mut()
+        .expect("a secondary list")
+        .retain(|id| *id != dropped);
+    let problems = classification_mismatches(&shortened, "instrumented, with one id dropped");
+    assert_eq!(
+        problems.len(),
+        1,
+        "a secondary list that contradicts its own verdicts was not flagged: {problems:?}"
+    );
+
+    // And the headline check can fail too: point a real headline at one of the *other* methods its
+    // own ranking lists, which is a claim the table contradicts whatever the clock did.
+    let other = {
+        let ranking = instrumented_table["per_source"][0]["method_ranking_by_summed_duration"]
+            .as_array()
+            .expect("a method ranking");
+        let top = instrumented_table["per_source"][0]["most_time_by_summed_call_duration"]
+            ["method"]
+            .clone();
+        ranking
+            .iter()
+            .find(|row| row["method"] != top)
+            .expect("a method besides the one the headline names")["method"]
+            .clone()
+    };
+    let mut retargeted = instrumented_table.clone();
+    retargeted["per_source"][0]["most_time_by_summed_call_duration"]["method"] = other;
+    let problems = headline_mismatches(&retargeted, "instrumented, with a retargeted headline");
+    assert_eq!(
+        problems.len(),
+        1,
+        "a headline that does not name its own first-ranked method was not flagged: {problems:?}"
     );
 
     // The positive controls, on the numbers M8.4.1 published for this same fixture: a comparison
@@ -1124,6 +1243,266 @@ async fn adding_the_cross_stage_tables_left_m841s_shape_and_counts_alone() {
     }
 }
 
+/// The ranking rows of `bottleneck-classification.json` in the shape the writer publishes them:
+/// one row per method carrying that method's own counts and its own summed duration, and beside
+/// the list a headline naming whichever row the durations sort first. Only the three facts a
+/// fixture needs to state are here — method, count, duration — so a test that reads this table is
+/// reading ordering and counting and nothing else.
+fn ranking_table(rows: &[(&str, u64, u64)]) -> Value {
+    let mut ordered: Vec<&(&str, u64, u64)> = rows.iter().collect();
+    ordered.sort_by(|a, b| b.2.cmp(&a.2).then_with(|| a.0.cmp(b.0)));
+    let ranking: Vec<Value> = ordered
+        .iter()
+        .map(|(method, calls, total_ns)| {
+            json!({
+                "method": method,
+                "calls": calls,
+                "total_duration_ns": total_ns,
+                "mean_call_ns": total_ns / *calls,
+                "failed_calls": 0,
+                "retried_calls": 0,
+                "attempts": calls,
+            })
+        })
+        .collect();
+    let top = ordered[0];
+    json!({
+        "per_source": [{
+            "source": "fixture",
+            "simulations": 1,
+            "method_ranking_by_summed_duration": ranking,
+            "most_time_by_summed_call_duration": {
+                "method": top.0,
+                "calls": top.1,
+                "total_duration_ns": top.2,
+                "field": "sum of this method's recorded call durations",
+                "method_ranking_field": "the same integers, in \
+                                         method_ranking_by_summed_duration",
+            },
+        }],
+    })
+}
+
+/// The classification half of `bottleneck-classification.json`: category rows, each with its own
+/// verdict and its own share of the measured span, and the two membership lists the writer builds
+/// out of those verdicts beside the primary it chose.
+fn classification_table(primary: &str, categories: &[(&str, &str, u64)]) -> Value {
+    let rows: Vec<Value> = categories
+        .iter()
+        .map(|(id, verdict, per_mille)| {
+            json!({
+                "id": id,
+                "name": format!("category {id}"),
+                "verdict": verdict,
+                "denominator": "simulation_span_ns",
+                "share_per_mille": { "per_mille": per_mille },
+            })
+        })
+        .collect();
+    let span: Vec<&str> = categories
+        .iter()
+        .filter(|(_, verdict, _)| *verdict == DOMINANT)
+        .map(|(id, _, _)| *id)
+        .collect();
+    let secondary: Vec<&str> = categories
+        .iter()
+        .filter(|(id, verdict, _)| *id != primary && (*verdict == DOMINANT || *verdict == MATERIAL))
+        .map(|(id, _, _)| *id)
+        .collect();
+    json!({
+        "per_source": [{
+            "source": "fixture",
+            "simulations": 1,
+            "primary": primary,
+            "categories": rows,
+            "dominant_span_categories": span,
+            "secondary": secondary,
+        }],
+    })
+}
+
+/// The path one method's own count is collected under, spelled the way [`shape_and_counts`]
+/// spells it: through the method, never through an index.
+fn method_calls_path(method: &str) -> String {
+    format!(".per_source[source=fixture].method_ranking_by_summed_duration[method={method}].calls")
+}
+
+/// A gate that cannot go red is not a gate, and a gate that goes red on a clock is worse than no
+/// gate. This is the first half of that pair: three methods, each keeping its own count, with the
+/// durations rotated onto different methods so the cost order moves — which is precisely what two
+/// processes do to a duration ranking, and what a comparison keyed on position cannot survive.
+#[test]
+fn duration_ranking_order_is_not_an_answer() {
+    let left = ranking_table(&[
+        ("eth_call", 5, 900),
+        ("eth_getStorageAt", 21, 800),
+        ("eth_getCode", 4, 100),
+    ]);
+    let right = ranking_table(&[
+        ("eth_call", 5, 100),
+        ("eth_getStorageAt", 21, 900),
+        ("eth_getCode", 4, 800),
+    ]);
+
+    // The fixture really does move the thing the gate must ignore, three ways: the row each
+    // ranking puts first names a different method, the headline's integer moves with it, and the
+    // last row of the two lists carries different counts. That last one is the leaf this file's
+    // collector used to read — every element of a list wrote its counts onto one collapsed path,
+    // so whichever element was walked last set the answer, and a clock could set the gate.
+    let l = left["per_source"][0]["method_ranking_by_summed_duration"]
+        .as_array()
+        .expect("a ranking");
+    let r = right["per_source"][0]["method_ranking_by_summed_duration"]
+        .as_array()
+        .expect("a ranking");
+    assert_eq!(l.len(), r.len());
+    assert_ne!(l[0]["method"], r[0]["method"]);
+    assert_ne!(l[l.len() - 1]["calls"], r[r.len() - 1]["calls"]);
+    assert_ne!(
+        left["per_source"][0]["most_time_by_summed_call_duration"]["calls"],
+        right["per_source"][0]["most_time_by_summed_call_duration"]["calls"],
+        "the headline's count moved, so a gate that compared headlines across arms would be \
+         reading a timing"
+    );
+
+    // Neither fixture is a broken table: each headline names the row its own ranking sorts first.
+    for (table, which) in [(&left, "left"), (&right, "right")] {
+        let problems = headline_mismatches(table, which);
+        assert!(problems.is_empty(), "{which}: {problems:?}");
+    }
+
+    // And the two arms' answers are the same answer.
+    let (left_shape, left_counts) = shape_and_counts(&left);
+    let (right_shape, right_counts) = shape_and_counts(&right);
+    assert_eq!(
+        left_shape, right_shape,
+        "a reshuffled ranking changed which fields the table publishes"
+    );
+    let moved = moved_counts(&left_counts, &right_counts);
+    assert!(
+        moved.is_empty(),
+        "the count comparison read the order instead of the method: {moved:?}"
+    );
+    // The claim is only worth anything if the counts really were compared. Each of the three
+    // methods has its own leaf here, not one collapsed leaf holding whichever row came last.
+    for (method, calls) in [
+        ("eth_call", 5i128),
+        ("eth_getStorageAt", 21),
+        ("eth_getCode", 4),
+    ] {
+        let path = method_calls_path(method);
+        assert_eq!(
+            left_counts.get(&path).map(Vec::as_slice),
+            Some([calls].as_slice()),
+            "{path} was not collected, so the two tables above agreeing means nothing"
+        );
+    }
+}
+
+/// The other half: a count that genuinely moves has to be red, and red on the field that moved
+/// rather than on the list's order. One method asked one call fewer and nothing else changed.
+#[test]
+fn a_count_that_really_moved_is_still_red() {
+    let left = ranking_table(&[
+        ("eth_call", 5, 900),
+        ("eth_getStorageAt", 21, 800),
+        ("eth_getCode", 4, 100),
+    ]);
+    let mut right = left.clone();
+    right["per_source"][0]["method_ranking_by_summed_duration"][1]["calls"] = json!(20);
+
+    let (left_shape, left_numbers) = shape_and_counts(&left);
+    let (right_shape, right_numbers) = shape_and_counts(&right);
+    assert_eq!(
+        left_shape, right_shape,
+        "one count changing must not change which fields the table publishes"
+    );
+    let moved = moved_counts(&left_numbers, &right_numbers);
+    assert_eq!(
+        moved.len(),
+        1,
+        "the gate saw {moved:?}; a comparison that flags everything flags nothing"
+    );
+    let (path, before, after) = &moved[0];
+    assert_eq!(**path, method_calls_path("eth_getStorageAt"));
+    assert_eq!(**before, [21i128]);
+    assert_eq!(*after, Some([20i128].as_slice()));
+}
+
+/// The second form the same clock takes in this table, and the one the isolation pair actually
+/// published on the run these tests were written for: its two `bottleneck-classification.json`
+/// files disagreed on both membership lists' lengths — `dominant_span_categories` 2 ids against 1,
+/// `secondary` 3 against 2 (`target/m842_gate_run_1.log:19`, the red this repair answers). The
+/// per-mille figures below are this fixture's own, chosen to reproduce that flip: category `A`
+/// clears the dominant line at 518‰ in one arm and misses it at 368‰ in the other. The lists stay
+/// published — they are this milestone's answer to 「where does the time go」, read out of the
+/// arm's own verdicts — and what is checked is that each matches the verdicts beside it, never that
+/// the two clocks agreed.
+#[test]
+fn a_membership_list_a_second_clock_shortened_is_still_green() {
+    let left = classification_table(
+        "G",
+        &[
+            ("A", "dominant", 518),
+            ("C", "dominant", 671),
+            ("F", "material", 328),
+        ],
+    );
+    let right = classification_table(
+        "C",
+        &[
+            ("A", "material", 368),
+            ("C", "dominant", 623),
+            ("F", "material", 376),
+        ],
+    );
+    // The fixture moves the thing the gate must ignore: the two membership lists really are
+    // different lengths, and one arm's primary is not the other's.
+    for field in ["dominant_span_categories", "secondary"] {
+        assert_ne!(
+            left["per_source"][0][field].as_array().map(Vec::len),
+            right["per_source"][0][field].as_array().map(Vec::len),
+            "{field} did not change length, so this fixture tests nothing"
+        );
+    }
+    assert_ne!(
+        left["per_source"][0]["primary"],
+        right["per_source"][0]["primary"]
+    );
+    // Each list says what its own rows say.
+    for (table, which) in [(&left, "left"), (&right, "right")] {
+        let problems = classification_mismatches(table, which);
+        assert!(problems.is_empty(), "{which}: {problems:?}");
+    }
+    // And the two arms' answers are the same answer.
+    let (left_shape, left_counts) = shape_and_counts(&left);
+    let (right_shape, right_counts) = shape_and_counts(&right);
+    assert_eq!(left_shape, right_shape);
+    let moved = moved_counts(&left_counts, &right_counts);
+    assert!(
+        moved.is_empty(),
+        "the count comparison read a membership list's length, which is this arm's clock: \
+         {moved:?}"
+    );
+    // A list that contradicts its own verdicts is caught, and caught on the list that moved.
+    let mut short = left.clone();
+    short["per_source"][0]["secondary"]
+        .as_array_mut()
+        .expect("a secondary list")
+        .retain(|id| *id != json!("F"));
+    let problems = classification_mismatches(&short, "left, with one id dropped");
+    assert_eq!(
+        problems.len(),
+        1,
+        "a secondary list missing a material row was not flagged: {problems:?}"
+    );
+    assert!(
+        problems[0].contains("secondary"),
+        "the flag named something else: {}",
+        problems[0]
+    );
+}
+
 /// The field names that hold counts. A key is collected if it names a count outright or ends in
 /// one of the count suffixes the writers use; anything that ends `_ns` or `_ms`, or is a
 /// percentile, a ratio term, or an endpoint digest is *not* collected, because those are the
@@ -1163,36 +1542,139 @@ fn is_count_key(key: &str) -> bool {
         || key.ends_with("_addresses")
 }
 
+/// The fields a reader uses to say which element of a list a fact belongs to. Each names the read
+/// the row describes — its method, its stage, the word it asked for — and none of them names the
+/// process that described it: no timing, no endpoint digest, no sequence counter, and no string
+/// carrying an arm's own label appears here, which is what lets one identity match the same
+/// element in both arms' tables.
+const IDENTITY_FIELDS: [&str; 14] = [
+    "dedup_key",
+    "method",
+    "stage",
+    "caller",
+    "address",
+    "slot",
+    "target",
+    "source",
+    "leg",
+    "bucket",
+    "id",
+    "name",
+    "relation",
+    "surface",
+];
+
+/// Fields whose published contents are chosen by a threshold or an order over durations.
+///
+/// `most_time_by_summed_call_duration` copies `method`, `calls` and `total_duration_ns` out of
+/// whichever row `method_ranking_by_summed_duration` happens to put first, and
+/// `dominant_span_categories` and `secondary` list the category rows whose share of the measured
+/// span clears a per-mille line. Two arms' durations differ, so *which* row is first and *how
+/// many* rows clear the line are not the two arms' answers — they are one process's clock. Each
+/// of the three stays published as the diagnostic it is and is checked inside its own arm
+/// instead: [`headline_mismatches`] re-derives the headline from the ranking beside it, and
+/// [`classification_mismatches`] re-derives the two lists from the verdicts published in the same
+/// rows. Their integers and their lengths do not enter the cross-arm compare, because a gate that
+/// goes red on a timing is worse than no gate.
+const CLOCK_DERIVED_ANSWERS: [&str; 3] = [
+    "most_time_by_summed_call_duration",
+    "dominant_span_categories",
+    "secondary",
+];
+
+/// An element's semantic identity: the [`IDENTITY_FIELDS`] it carries, in that fixed order. `None`
+/// for an element with none of them — a list of bare strings or numbers, whose elements a reader
+/// cannot name — and those lists stay collapsed, which compares their contents as a set of paths
+/// rather than pretending a position means something.
+fn element_identity(element: &Value) -> Option<String> {
+    let map = element.as_object()?;
+    let mut parts: Vec<String> = Vec::new();
+    for field in IDENTITY_FIELDS {
+        match map.get(field) {
+            Some(Value::String(text)) => parts.push(format!("{field}={text}")),
+            Some(Value::Number(number)) => parts.push(format!("{field}={number}")),
+            Some(Value::Bool(flag)) => parts.push(format!("{field}={flag}")),
+            _ => {}
+        }
+    }
+    (!parts.is_empty()).then(|| parts.join("|"))
+}
+
+/// Every integer collected under one path, sorted so the order a writer emitted rows in cannot
+/// decide whether two arms match.
+type CountLeaf = Vec<i128>;
+
+/// A count that moved: the path, the left's values, and the right's values when it publishes one.
+type MovedCount<'a> = (&'a String, &'a [i128], Option<&'a [i128]>);
+
+/// The counts that differ between two tables: every path the left publishes whose values the
+/// right does not carry identically, plus every left path the right does not publish at all.
+fn moved_counts<'a>(
+    left: &'a BTreeMap<String, CountLeaf>,
+    right: &'a BTreeMap<String, CountLeaf>,
+) -> Vec<MovedCount<'a>> {
+    left.iter()
+        .filter_map(|(path, values)| match right.get(path).map(Vec::as_slice) {
+            Some(seen) if seen == values.as_slice() => None,
+            other => Some((path, values.as_slice(), other)),
+        })
+        .collect()
+}
+
 /// One table, reduced to (a) the set of field paths it publishes, at every depth, and (b) every
-/// count in it: the length of every list, indexed by position so two lists of different lengths
-/// cannot agree by overwriting each other's entry, and every integer leaf [`is_count_key`]
-/// accepts.
-fn shape_and_counts(value: &Value) -> (BTreeSet<String>, BTreeMap<String, i128>) {
+/// count in it: the length of every list and every integer leaf whose name says it is a count
+/// rather than a duration. What is deliberately not compared is any duration; two arms are two
+/// processes, and M8.4.1 §7's rule is that its monotonic clock restarts with each run.
+///
+/// A list's elements are reached through their [`element_identity`], never through their index,
+/// and every value is kept in a sorted list under its path rather than overwritten — so the
+/// answer depends on *which read* a number describes, not on the order the writer happened to
+/// emit them in. Two elements that share an identity (the same method asked twice by the same
+/// caller) contribute their counts to one aggregated list, which is compared as a multiset: a
+/// count that really moved still shows up, and a clock that reordered two equal-keyed rows does
+/// not.
+fn shape_and_counts(value: &Value) -> (BTreeSet<String>, BTreeMap<String, CountLeaf>) {
     fn walk(
         value: &Value,
         path: &str,
         shape: &mut BTreeSet<String>,
-        counts: &mut BTreeMap<String, i128>,
+        counts: &mut BTreeMap<String, CountLeaf>,
+        opaque: bool,
     ) {
         match value {
             Value::Object(map) => {
                 for (key, child) in map {
                     let here = format!("{path}.{key}");
                     shape.insert(here.clone());
-                    walk(child, &here, shape, counts);
+                    walk(
+                        child,
+                        &here,
+                        shape,
+                        counts,
+                        opaque || CLOCK_DERIVED_ANSWERS.contains(&key.as_str()),
+                    );
                 }
             }
             Value::Array(values) => {
-                for (index, child) in values.iter().enumerate() {
-                    counts.insert(format!("{path}[{index}]"), values.len() as i128);
-                    walk(child, &format!("{path}[]"), shape, counts);
+                if !opaque {
+                    counts
+                        .entry(format!("{path}#len"))
+                        .or_default()
+                        .push(values.len() as i128);
+                }
+                for child in values {
+                    let here = match element_identity(child) {
+                        Some(identity) => format!("{path}[{identity}]"),
+                        None => format!("{path}[]"),
+                    };
+                    walk(child, &here, shape, counts, opaque);
                 }
             }
             Value::Number(number) => {
                 let key = path.rsplit('.').next().unwrap_or(path);
-                if is_count_key(key) {
+                if !opaque && is_count_key(key) {
                     if let Some(integer) = number.as_i128() {
-                        counts.insert(path.to_string(), integer);
+                        counts.entry(path.to_string()).or_default().push(integer);
                     }
                 }
             }
@@ -1201,8 +1683,144 @@ fn shape_and_counts(value: &Value) -> (BTreeSet<String>, BTreeMap<String, i128>)
     }
     let mut shape = BTreeSet::new();
     let mut counts = BTreeMap::new();
-    walk(value, "", &mut shape, &mut counts);
+    walk(value, "", &mut shape, &mut counts, false);
+    for values in counts.values_mut() {
+        values.sort_unstable();
+    }
     (shape, counts)
+}
+
+/// Every way in which a table's duration-derived headlines fail to name the row their own
+/// ranking sorts first. Empty means each headline is the diagnostic it claims to be.
+///
+/// This is the check that replaces comparing the headlines across arms: recomputing an order
+/// inside one arm from that arm's own durations is deterministic, and it is the only form of the
+/// claim that is — `which method cost most` is a fact about one process's clock, so a cross-arm
+/// version of it would turn a gate green or red on a timing.
+fn headline_mismatches(table: &Value, origin: &str) -> Vec<String> {
+    let mut problems = Vec::new();
+    let Value::Array(sources) = &table["per_source"] else {
+        problems.push(format!("{origin}: per_source is not a list"));
+        return problems;
+    };
+    for (index, source) in sources.iter().enumerate() {
+        let Some(ranking) = source["method_ranking_by_summed_duration"].as_array() else {
+            problems.push(format!(
+                "{origin}: per_source[{index}] has no method ranking"
+            ));
+            continue;
+        };
+        let headline = &source["most_time_by_summed_call_duration"];
+        if ranking.is_empty() {
+            if !headline.is_null() {
+                problems.push(format!(
+                    "{origin}: per_source[{index}] ranks no method but publishes a headline \
+                     {headline} — an empty ranking does not get a row of zeros"
+                ));
+            }
+            continue;
+        }
+        let mut ordered: Vec<&Value> = ranking.iter().collect();
+        ordered.sort_by(|a, b| {
+            b["total_duration_ns"]
+                .as_u64()
+                .unwrap_or_default()
+                .cmp(&a["total_duration_ns"].as_u64().unwrap_or_default())
+                .then_with(|| {
+                    a["method"]
+                        .as_str()
+                        .unwrap_or_default()
+                        .cmp(b["method"].as_str().unwrap_or_default())
+                })
+        });
+        let top = ordered[0].as_object().expect("a ranking row");
+        let Some(headline) = headline.as_object() else {
+            problems.push(format!(
+                "{origin}: per_source[{index}] ranks {} methods and publishes no headline",
+                ranking.len()
+            ));
+            continue;
+        };
+        for field in ["method", "calls", "total_duration_ns"] {
+            if headline.get(field) != top.get(field) {
+                problems.push(format!(
+                    "{origin}: per_source[{index}]'s headline says {field} = {:?} while its own \
+                     ranking puts {:?} first",
+                    headline.get(field),
+                    top.get(field)
+                ));
+            }
+        }
+    }
+    problems
+}
+
+/// Every way in which a table's two duration-thresholded membership lists disagree with the
+/// verdicts published in the rows beside them.
+///
+/// `dominant_span_categories` names the category rows that came out `dominant` over the measured
+/// span and `secondary` names the rows that came out `dominant` or `material` besides the primary.
+/// Both lines are per-mille thresholds on a duration share, so on this fixture one arm put two
+/// categories over the line and its twin put one — the *number* of ids is each process's own
+/// clock, and comparing it across arms would be reading a timing as an answer. What is not the
+/// clock's business is whether a list matches the verdicts in the table that carries it, and that
+/// is the check which replaces the cross-arm one.
+fn classification_mismatches(table: &Value, origin: &str) -> Vec<String> {
+    let mut problems = Vec::new();
+    let Value::Array(sources) = &table["per_source"] else {
+        problems.push(format!("{origin}: per_source is not a list"));
+        return problems;
+    };
+    for (index, source) in sources.iter().enumerate() {
+        let Some(categories) = source["categories"].as_array() else {
+            problems.push(format!(
+                "{origin}: per_source[{index}] publishes no category rows"
+            ));
+            continue;
+        };
+        let id = |row: &Value| row["id"].as_str().unwrap_or_default().to_string();
+        let is_dominant = |row: &Value| row["verdict"] == json!(DOMINANT);
+        let is_material = |row: &Value| row["verdict"] == json!(MATERIAL);
+        let over_the_span = |row: &Value| row["denominator"] == json!("simulation_span_ns");
+        let share_measured = |row: &Value| row["share_per_mille"]["per_mille"].as_u64().is_some();
+        let published = |name: &str| -> BTreeSet<String> {
+            source[name]
+                .as_array()
+                .map(|rows| {
+                    rows.iter()
+                        .filter_map(|row| row.as_str().map(ToString::to_string))
+                        .collect()
+                })
+                .unwrap_or_default()
+        };
+        let expected: BTreeSet<String> = categories
+            .iter()
+            .filter(|row| is_dominant(row) && over_the_span(row) && share_measured(row))
+            .map(id)
+            .collect();
+        let got = published("dominant_span_categories");
+        if expected != got {
+            problems.push(format!(
+                "{origin}: per_source[{index}] labels these rows {DOMINANT} over \
+                 simulation_span_ns — {expected:?} — and publishes dominant_span_categories as \
+                 {got:?}"
+            ));
+        }
+        let primary = source["primary"].as_str().unwrap_or_default();
+        let expected: BTreeSet<String> = categories
+            .iter()
+            .filter(|row| (is_dominant(row) || is_material(row)) && id(row) != primary)
+            .map(id)
+            .collect();
+        let got = published("secondary");
+        if expected != got {
+            problems.push(format!(
+                "{origin}: per_source[{index}] names these rows dominant or material besides \
+                 its primary {primary:?} — {expected:?} — and publishes secondary as {got:?}"
+            ));
+        }
+    }
+    problems
 }
 
 /// The fields of these tables a replay of the same input cannot reproduce, each because it is
