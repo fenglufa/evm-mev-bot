@@ -61,6 +61,7 @@ pub mod history;
 pub mod latency;
 pub mod runner;
 pub mod sim;
+pub mod state_ownership;
 
 pub use arbitrage::{
     run_once, ArbitrageConfig, ArbitrageRun, PricedLegs, Refusal, RouteCandidate, Venue,
