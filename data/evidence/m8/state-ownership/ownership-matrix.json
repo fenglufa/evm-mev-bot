@@ -1,0 +1,1269 @@
+{
+  "aggregate": {
+    "categories_declaring_a_check_would_stop_existing": 5,
+    "categories_without_a_named_owner": 2,
+    "freshness_rules_proven": 7,
+    "invalidation_rules_proven": 3,
+    "ownership_status": {
+      "partially_proven": 7,
+      "proven": 4
+    },
+    "safe_to_reuse_now_tiers_holding_true": 0
+  },
+  "categories": 11,
+  "file": "ownership-matrix.json",
+  "generated_by": "crates/pipeline/tests/state_ownership_evidence.rs",
+  "identity_words": [
+    "pinned_chain",
+    "is_the_value",
+    "pinned_height",
+    "not_pinned",
+    "not_applicable",
+    "carried_and_verified",
+    "not_carried",
+    "number",
+    "tag",
+    "absent",
+    "none"
+  ],
+  "model": "crates/pipeline/src/state_ownership.rs",
+  "proven_never_comes_from_prose_alone": "every row, rule and step whose status is `proven` carries at least one evidence_ref, and the gate resolves each ref to one line of a real file or to a committed record",
+  "question": "§4: 谁产生这块链上状态，谁在运行中拥有它，它属于哪个生命周期阶段，失效条件是什么，下游能消费什么",
+  "root": "data/evidence/m8/state-ownership/",
+  "rows": [
+    {
+      "authority": "node_canonical_logs",
+      "block_hash": "not_carried",
+      "block_number": "pinned_height",
+      "block_tag_semantics": "number",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "opportunity_ledger",
+        "graph_snapshot"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/core/src/pool.rs",
+          "line": 26,
+          "matches": 1,
+          "note": "what the store actually holds: reserve0, reserve1, block_number, log_index",
+          "source": "code",
+          "token": "pub struct PoolState"
+        },
+        {
+          "file": "crates/state/src/update.rs",
+          "line": 33,
+          "matches": 1,
+          "note": "replay and live feed the store through the same door",
+          "source": "code",
+          "token": "The only way anything may enter the store."
+        },
+        {
+          "file": "crates/pipeline/src/engine.rs",
+          "line": 191,
+          "matches": 1,
+          "note": "the single entry point that turns a canonical block into store updates",
+          "source": "code",
+          "token": "fn on_canonical"
+        },
+        {
+          "file": "crates/graph/src/snapshot.rs",
+          "line": 17,
+          "matches": 1,
+          "note": "a snapshot's identity is its chain id and a block number — the fields on this definition, and no hash",
+          "source": "code",
+          "token": "pub struct GraphSnapshot {"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/duplicate-summary.json",
+          "line": 264,
+          "matches": 1,
+          "note": "the measured pair counts this row reports as zero for this category",
+          "source": "run_record",
+          "token": "\"cross_stage_pairs\""
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/graph/src/builder.rs",
+            "line": 70,
+            "matches": 1,
+            "note": "the same-block rule's own statement",
+            "source": "code",
+            "token": "The target block is the snapshot's own applied position"
+          },
+          {
+            "file": "crates/state/src/store.rs",
+            "line": 28,
+            "matches": 1,
+            "note": "the store that owns the projection",
+            "source": "code",
+            "token": "pub struct InMemoryStateStore"
+          }
+        ],
+        "id": "restated_at_the_snapshot_block",
+        "status": "proven",
+        "text": "a pool whose reserves were not restated at the snapshot's own applied position is skipped rather than priced, so a stale reserve cannot reach a candidate"
+      },
+      "identity": "height_number",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/live/src/event.rs",
+            "line": 186,
+            "matches": 1,
+            "note": "v0.1 records the conflict instead of resolving it",
+            "source": "code",
+            "token": "does not resolve reorgs"
+          },
+          {
+            "file": "crates/live/src/tracker.rs",
+            "line": 233,
+            "matches": 1,
+            "note": "the detection that does exist: a rival hash is kept next to the rejected one",
+            "source": "code",
+            "token": "kept: format!(\"{hash:?}\"),"
+          }
+        ],
+        "id": "newer_position_replaces_older",
+        "status": "partially_proven",
+        "text": "a strictly later (block, log) position replaces the value, which is proven; a rival block at the *same* height is detected as a canonicality conflict and recorded, never rolled back, so invalidation by reorganization is not implemented"
+      },
+      "owner": "state_store",
+      "ownership_status": "partially_proven",
+      "producer": "chain_adapter",
+      "reason": "a projection of the node's canonical logs, owned by the store, valid at the position it was last restated at, and uninvalidated by a reorganization",
+      "reuse_status": {
+        "check_would_stop_existing": false,
+        "duplicate": {
+          "holds": false,
+          "reason": "measured: none of M8.4.2's 78 pairs is a reserves read, because reserves are never fetched per stage — the pair count for this category is zero by the runs' own rows",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "the graph snapshot carries a block number and no block hash, so a snapshot cannot show its block is the canonical one",
+          "no code path rewinds the store's position, so a same-height rival block leaves the projection in place"
+        ],
+        "reusable_in_principle": {
+          "holds": true,
+          "reason": "the store already serves several consumers of one projection: detection reads the graph the store produced, and nothing re-reads reserves per stage",
+          "status": "proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "sharing already happens inside the discovery half, and §4 asks not to call it a substitute for REVM state: the store holds pool metadata and reserves, and no balance, code, nonce or storage",
+          "status": "partially_proven"
+        },
+        "semantically_equivalent": {
+          "holds": null,
+          "reason": "no cross-stage duplicate exists to compare, so the question has no referent in these runs",
+          "status": "not_applicable"
+        }
+      },
+      "scope": "update_position",
+      "state_kind": "pool_reserves"
+    },
+    {
+      "authority": "node_at_height",
+      "block_hash": "not_carried",
+      "block_number": "pinned_height",
+      "block_tag_semantics": "number",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "simulation_state_provider"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 1068,
+          "matches": 1,
+          "note": "the code read names the block carried by the canonical key, and nothing else",
+          "source": "code",
+          "token": "get_code(key.block, key.address)"
+        },
+        {
+          "file": "crates/simulation/src/engine.rs",
+          "line": 176,
+          "matches": 1,
+          "note": "the REVM hook this build refuses to serve",
+          "source": "code",
+          "token": "code_by_hash_async"
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/simulation/src/state.rs",
+            "line": 218,
+            "matches": 1,
+            "note": "the key that fixes the scope",
+            "source": "code",
+            "token": "pub struct StateReadKey"
+          }
+        ],
+        "id": "keyed_by_chain_block_address",
+        "status": "proven",
+        "text": "a cached code answer is keyed by chain, height and address, so it can only be served for the same block it was fetched at; there is no expiry and none is needed inside one simulation"
+      },
+      "identity": "height_number",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/simulation/src/state.rs",
+            "line": 339,
+            "matches": 1,
+            "note": "the boundary M8.3.1 wrote and this row cites",
+            "source": "code",
+            "token": "no process-wide map"
+          },
+          {
+            "file": "crates/simulation/src/state.rs",
+            "line": 342,
+            "matches": 1,
+            "note": "the cache itself",
+            "source": "code",
+            "token": "struct StateReadCache {"
+          },
+          {
+            "file": "crates/simulation/tests/state_reuse_ab.rs",
+            "line": 501,
+            "matches": 1,
+            "note": "the isolation that makes the scope a claim rather than a hope",
+            "source": "test",
+            "token": "a_second_simulation_over_the_same_endpoint_pays_for_its_own_reads"
+          }
+        ],
+        "id": "dropped_with_the_provider",
+        "status": "proven",
+        "text": "the cache is a field of one `RpcStateProvider` and there is no process-wide map for a later run to find; entries are never evicted because the scope ends before expiry could matter"
+      },
+      "owner": "simulation_state_provider",
+      "ownership_status": "proven",
+      "producer": "chain_adapter",
+      "reason": "the cache's identity is the key, the owner is one provider, and both end when the simulation ends",
+      "reuse_status": {
+        "check_would_stop_existing": false,
+        "duplicate": {
+          "holds": false,
+          "reason": "measured: no `eth_getCode` pair is among M8.4.2's 78 — every code read in these runs came from inside one simulation, where the cache already serves it",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "no component outside one simulation can hold a code answer, so cross-stage reuse has no owner to delegate to",
+          "code cannot be fetched by hash at all, so a hash-verified identity is unavailable on this path"
+        ],
+        "reusable_in_principle": {
+          "holds": true,
+          "reason": "reused within its owner already, and provably not outside it",
+          "status": "proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "safe inside one simulation, which is where it is reused today; unsafe across stages, because the only owner the code gives it dies with that simulation",
+          "status": "partially_proven"
+        },
+        "semantically_equivalent": {
+          "holds": null,
+          "reason": "no cross-stage pair to compare",
+          "status": "not_applicable"
+        }
+      },
+      "scope": "simulation",
+      "state_kind": "contract_code"
+    },
+    {
+      "authority": "node_at_height",
+      "block_hash": "not_carried",
+      "block_number": "pinned_height",
+      "block_tag_semantics": "number",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "simulation_state_provider"
+      ],
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/storage-dependency/dependency-map.json",
+          "line": 128,
+          "matches": 121,
+          "note": "the dependency classes this row's ordering claim comes from",
+          "source": "run_record",
+          "token": "\"ordered\""
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/simulation/src/state.rs",
+            "line": 237,
+            "matches": 1,
+            "note": "chain, block, address, slot",
+            "source": "code",
+            "token": "pub struct StorageCacheKey"
+          },
+          {
+            "file": "crates/simulation/src/state.rs",
+            "line": 2258,
+            "matches": 1,
+            "note": "the test that pins the key's necessity",
+            "source": "test",
+            "token": "storage_reuse_needs_every_field_of_its_key"
+          }
+        ],
+        "id": "keyed_by_chain_block_address_slot",
+        "status": "proven",
+        "text": "the storage key adds the slot to the account key, and reuse needs every field of it"
+      },
+      "identity": "height_number",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/simulation/src/state.rs",
+            "line": 1218,
+            "matches": 1,
+            "note": "the read names the pinned height, not a tag",
+            "source": "code",
+            "token": "get_storage_at(self.pin.number"
+          }
+        ],
+        "id": "dropped_with_the_provider",
+        "status": "proven",
+        "text": "as code: no eviction, and the scope ends with one simulation"
+      },
+      "owner": "simulation_state_provider",
+      "ownership_status": "proven",
+      "producer": "chain_adapter",
+      "reason": "identity is proven and ownership is proven narrow; cross-stage reuse fails on the order the reads were taken in, not on the value",
+      "reuse_status": {
+        "check_would_stop_existing": false,
+        "duplicate": {
+          "holds": false,
+          "reason": "measured: no `eth_getStorageAt` pair among the 78, for the same reason as code",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "no owner exists outside one simulation",
+          "the dependency order M8.4.1 measured is not a field a consumer could check"
+        ],
+        "reusable_in_principle": {
+          "holds": true,
+          "reason": "reusable within one simulation, and M8.4.1 measured the reads inside one simulation as almost entirely ordered rather than independent — 19 of 20 per run — so an ordered chain has few repeats to remove",
+          "status": "partially_proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "the ordering dependency is the other half of the answer: a slot read that a later read depends on cannot be answered from a different stage's memory without re-deriving the order",
+          "status": "partially_proven"
+        },
+        "semantically_equivalent": {
+          "holds": null,
+          "reason": "no cross-stage pair to compare",
+          "status": "not_applicable"
+        }
+      },
+      "scope": "simulation",
+      "state_kind": "storage_slot"
+    },
+    {
+      "authority": "node_at_height",
+      "block_hash": "not_carried",
+      "block_number": "not_pinned",
+      "block_tag_semantics": "tag",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "live_preflight_reads",
+        "sequence_stage",
+        "simulation_state_provider"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/stage.rs",
+          "line": 380,
+          "matches": 1,
+          "note": "the lane's own statement of what it re-confirms",
+          "source": "code",
+          "token": "re-reads nothing about pools"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2659,
+          "matches": 3,
+          "note": "the measured consumer role this row hangs on",
+          "source": "run_record",
+          "token": "\"step 1: gate — native balance\""
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/execution/src/giwa/preflight_facts.rs",
+            "line": 364,
+            "matches": 1,
+            "note": "the head the preflight balance is asked at",
+            "source": "code",
+            "token": "fn read_head"
+          },
+          {
+            "file": "crates/execution/src/sequence.rs",
+            "line": 1531,
+            "matches": 1,
+            "note": "the build's second balance ask, at preflight's height",
+            "source": "code",
+            "token": "before-snapshot: native"
+          },
+          {
+            "file": "crates/execution/src/sequence.rs",
+            "line": 1670,
+            "matches": 1,
+            "note": "the build's funding leg, at the intent's pinned height",
+            "source": "code",
+            "token": "gate — native balance"
+          }
+        ],
+        "id": "no_rule_declared",
+        "status": "unknown",
+        "text": "the measured pairs come in two shapes, and in both the build asks again at the height the earlier stage used: preflight reads the sender's balance at the head it has just read and the build's before-snapshot asks that same height, while the simulation reads at the pinned block and the build's gate leg asks that same height. Nothing compares the two answers and nothing states how old a balance may be"
+      },
+      "identity": "tag",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/execution/src/sequence.rs",
+            "line": 168,
+            "matches": 1,
+            "note": "the code's own words for this rule",
+            "source": "code",
+            "token": "re-read per send"
+          },
+          {
+            "file": "crates/execution/src/gate.rs",
+            "line": 90,
+            "matches": 1,
+            "note": "a per-step verdict, not a held value",
+            "source": "code",
+            "token": "pub enum BalanceEvidence"
+          }
+        ],
+        "id": "re_read_per_send",
+        "status": "partially_proven",
+        "text": "invalidation is handled by refusing to rely on an earlier answer at all — the balance is re-read per send rather than assumed — which detects a change without modelling it"
+      },
+      "owner": "no_owner_in_code",
+      "ownership_status": "partially_proven",
+      "producer": "chain_adapter",
+      "reason": "duplicate in the record, different in purpose, and deliberately re-read",
+      "reuse_status": {
+        "check_would_stop_existing": true,
+        "duplicate": {
+          "holds": true,
+          "reason": "measured: 6 of M8.4.2's 42 exact candidates are `eth_getBalance` — preflight to build and simulation to build, three runs each",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "reusable_in_principle": {
+          "holds": false,
+          "reason": "no owner holds a balance between stages, and §6 forbids removing a pre-submission check to make the value shareable",
+          "status": "proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "refused: the build-side read is a named gate leg, and sharing would delete the check rather than the cost",
+          "status": "partially_proven"
+        },
+        "semantically_equivalent": {
+          "holds": false,
+          "reason": "each measured pair shares a method, an address and a height, and the two sides do not ask the same question: the earlier answer decides whether the attempt may go on, the later one is the before-half of a diff that measures what the sequence actually moved. §10's 「same value != same state identity」 is this row",
+          "status": "unknown"
+        }
+      },
+      "scope": "head_moment",
+      "state_kind": "native_balance"
+    },
+    {
+      "authority": "node_at_height",
+      "block_hash": "not_carried",
+      "block_number": "not_pinned",
+      "block_tag_semantics": "tag",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "live_preflight_reads",
+        "sequence_stage",
+        "execution_lane"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/nonce.rs",
+          "line": 41,
+          "matches": 1,
+          "note": "the accessor that turns a view into a nonce",
+          "source": "code",
+          "token": "pub fn next(&self) -> u64 {"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2158,
+          "matches": 9,
+          "note": "the measured caller label both sides of the pair carry",
+          "source": "run_record",
+          "token": "\"step 1: pending and latest nonces\""
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/execution/src/nonce.rs",
+            "line": 4,
+            "matches": 1,
+            "note": "the pending-versus-confirmed rule in the module's own words",
+            "source": "code",
+            "token": "the pending count is wha"
+          },
+          {
+            "file": "crates/execution/src/giwa/sequencer_direct.rs",
+            "line": 297,
+            "matches": 1,
+            "note": "the read that returns both views",
+            "source": "code",
+            "token": "fn nonce"
+          }
+        ],
+        "id": "pending_view_is_the_next_nonce",
+        "status": "proven",
+        "text": "the next nonce is the pending count, and the confirmed count is what the chain has executed; the two are read as a pair so a moved account is visible to the reader rather than inferred"
+      },
+      "identity": "tag",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/execution/src/lifecycle.rs",
+            "line": 740,
+            "matches": 1,
+            "note": "the only in-process nonce advance",
+            "source": "code",
+            "token": "fn allocate"
+          }
+        ],
+        "id": "any_mined_or_accepted_transaction",
+        "status": "partially_proven",
+        "text": "the lane allocates the next nonce itself, so within a sequence the value is owned and advanced in one place; outside it, another transaction from the same sender moves the pending count and the build notices only because it asks again"
+      },
+      "owner": "execution_lane",
+      "ownership_status": "partially_proven",
+      "producer": "chain_adapter",
+      "reason": "the one category this build deliberately owns on a moving target, and the reason it re-reads is that the target is the point",
+      "reuse_status": {
+        "check_would_stop_existing": true,
+        "duplicate": {
+          "holds": true,
+          "reason": "measured: 3 of 42 exact candidates are `eth_getTransactionCount`, preflight to build, plus 6 `eth_getBlockByNumber` asks whose consumer role is the nonce track, so the nonce path is 9 of 42",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "reusable_in_principle": {
+          "holds": false,
+          "reason": "the lane's own allocation makes the value advance between steps by design, so an answer held across steps is wrong for the next step",
+          "status": "proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "refused: a stale nonce is not a cheaper transaction, it is a different transaction",
+          "status": "proven"
+        },
+        "semantically_equivalent": {
+          "holds": false,
+          "reason": "both sides ask a tag, and a tag names whichever head the node has when it answers: two identical asks are not two reads of one state",
+          "status": "proven"
+        }
+      },
+      "scope": "pending_account",
+      "state_kind": "nonce"
+    },
+    {
+      "authority": "node_at_height",
+      "block_hash": "not_carried",
+      "block_number": "not_pinned",
+      "block_tag_semantics": "absent",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "live_preflight_reads",
+        "sequence_stage"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "the only block term this build sends on the state path: a number",
+          "source": "code",
+          "token": "fn block_param"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 429,
+          "matches": 6,
+          "note": "the second measured fee flow inside one stage",
+          "source": "run_record",
+          "token": "\"fee at head\""
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/execution/src/fee.rs",
+            "line": 36,
+            "matches": 1,
+            "note": "the value that does carry an identity",
+            "source": "code",
+            "token": "pub struct FeeReading"
+          },
+          {
+            "file": "crates/execution/src/giwa/sequencer_direct.rs",
+            "line": 220,
+            "matches": 1,
+            "note": "the pinned half of the pair",
+            "source": "code",
+            "token": "fn base_fee_at"
+          }
+        ],
+        "id": "compared_at_head_not_expired",
+        "status": "partially_proven",
+        "text": "a fee reading carries the block number and hash it was taken at, and the preflight gate compares the fee at the pin against the fee at the head, so a moved base fee is a finding; no expiry or deadline exists anywhere in the build"
+      },
+      "identity": "no_block_term",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/execution/src/sequence.rs",
+            "line": 1616,
+            "matches": 1,
+            "note": "the re-read this row is about",
+            "source": "code",
+            "token": "fee at pinned block"
+          }
+        ],
+        "id": "next_block_base_fee",
+        "status": "partially_proven",
+        "text": "invalidation is the head comparison, which detects a moved base fee inside preflight; the build re-reads the fee at the pin and never checks the preflight value against it"
+      },
+      "owner": "chain_adapter",
+      "ownership_status": "partially_proven",
+      "producer": "chain_adapter",
+      "reason": "the value is versioned by the block it names, the ask is not, and the second read is the check",
+      "reuse_status": {
+        "check_would_stop_existing": true,
+        "duplicate": {
+          "holds": true,
+          "reason": "measured: 6 of 42 exact candidates are `eth_maxPriorityFeePerGas` — preflight to build, and preflight to itself at the head — three runs each",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "reusable_in_principle": {
+          "holds": false,
+          "reason": "a fee reading could in principle be carried with its block identity, and the build does not do that: it asks for its own number because the number is a pre-submission check",
+          "status": "partially_proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "refused: the fee leg of §26 exists to catch a moved fee, and sharing the value would leave the leg with nothing to compare",
+          "status": "partially_proven"
+        },
+        "semantically_equivalent": {
+          "holds": false,
+          "reason": "the method carries no block term at all, so the answer is a function of the moment the node served it; two identical asks are two samples",
+          "status": "proven"
+        }
+      },
+      "scope": "head_moment",
+      "state_kind": "fee_parameters"
+    },
+    {
+      "authority": "node_at_height",
+      "block_hash": "carried_and_verified",
+      "block_number": "pinned_height",
+      "block_tag_semantics": "number",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "opportunity_ledger",
+        "live_preflight_reads",
+        "sequence_stage",
+        "simulation_state_provider"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1229,
+          "matches": 1,
+          "note": "the three checks the build actually performs on that report",
+          "source": "code",
+          "token": "fn preflight_cleared"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 45,
+          "matches": 1,
+          "note": "the number-plus-hash the simulation already uses as an identity",
+          "source": "code",
+          "token": "pub struct BlockPin"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1758,
+          "matches": 3,
+          "note": "the measured consumer role on the preflight side of the pair",
+          "source": "run_record",
+          "token": "\"block binding at pin\""
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/pipeline/src/runner.rs",
+            "line": 447,
+            "matches": 1,
+            "note": "the dispatch check: hash of the announced block against the ledger's",
+            "source": "code",
+            "token": "state_unavailable"
+          },
+          {
+            "file": "crates/pipeline/src/sim.rs",
+            "line": 340,
+            "matches": 1,
+            "note": "the plan check: header height against the finding's own state version",
+            "source": "code",
+            "token": "state_version_mismatch"
+          },
+          {
+            "file": "crates/simulation/src/request.rs",
+            "line": 436,
+            "matches": 1,
+            "note": "the provider round trip, comparing number and hash",
+            "source": "code",
+            "token": "fn check_pin"
+          }
+        ],
+        "id": "number_and_hash_must_both_match",
+        "status": "proven",
+        "text": "a pinned block is verified by height and by hash at three separate production points — dispatch, plan, and the provider round trip — so a header answer that belongs to a different block is refused rather than noticed later"
+      },
+      "identity": "height_hash",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/execution/src/gate.rs",
+            "line": 74,
+            "matches": 1,
+            "note": "Confirmed, Reorged, Unverified",
+            "source": "code",
+            "token": "pub enum BlockBinding"
+          },
+          {
+            "file": "crates/execution/src/chain_read.rs",
+            "line": 38,
+            "matches": 1,
+            "note": "the read that produces it",
+            "source": "code",
+            "token": "fn read_binding"
+          }
+        ],
+        "id": "same_height_different_hash",
+        "status": "partially_proven",
+        "text": "a reorganization is detected — the binding read returns a distinct `Reorged` case — and the response is to stop, not to re-resolve, so invalidation is proven as a decision and not as a recovery"
+      },
+      "owner": "node",
+      "ownership_status": "proven",
+      "producer": "chain_adapter",
+      "reason": "the best-founded reuse case in the model, and still not safe today because nothing that crosses stages can hold the value",
+      "reuse_status": {
+        "check_would_stop_existing": false,
+        "duplicate": {
+          "holds": true,
+          "reason": "measured: the largest family in M8.4.2 — 21 of 42 exact candidates are `eth_getBlockByNumber`, 15 with a numbered height, 6 on the nonce track's tags",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "reusable_in_principle": {
+          "holds": true,
+          "reason": "a header at a pinned height is immutable once the height is settled, and this build already proves it can verify the settlement; the missing piece is a value that carries both number and hash to the next consumer",
+          "status": "proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "refused today: each of the 15 reads is a different consumer's own leg (fee at the pin, the block-binding gate leg, the simulation's header at pin), and `PreflightReport` — the only type that crosses the boundary — has no block field to put the answer in",
+          "status": "partially_proven"
+        },
+        "semantically_equivalent": {
+          "holds": true,
+          "reason": "for the 15 numbered asks: one height names one block, and every one of them was measured at the same height on both sides; the hash that would make it unambiguous is verified by the consumers but is not carried in the shared value",
+          "status": "partially_proven"
+        }
+      },
+      "scope": "block",
+      "state_kind": "block_header"
+    },
+    {
+      "authority": "first_answer_at_connect",
+      "block_hash": "not_applicable",
+      "block_number": "not_applicable",
+      "block_tag_semantics": "none",
+      "chain_id": "is_the_value",
+      "consumers": [
+        "config_startup",
+        "live_preflight_reads",
+        "sequence_stage"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the accessor the preflight leg calls instead of a fresh ask",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 689,
+          "matches": 1,
+          "note": "where the legs are assembled into one gate attempt",
+          "source": "code",
+          "token": "let attempt = GateAttempt::Arbitrage"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/duplicate-matrix.json",
+          "line": 591,
+          "matches": 4,
+          "note": "the read category that keeps this out of the state-read buckets",
+          "source": "run_record",
+          "token": "\"chain_identity\""
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/chain/src/rpc.rs",
+            "line": 84,
+            "matches": 1,
+            "note": "the connect-time exception the module documents",
+            "source": "code",
+            "token": "before this type"
+          }
+        ],
+        "id": "learned_once_per_connection",
+        "status": "proven",
+        "text": "the adapter asks `eth_chainId` before it can answer anything else and keeps the value for the connection; that is a proven freshness rule with one consequence — a node that changed its chain mid-connection would not be noticed by the adapter"
+      },
+      "identity": "not_block_scoped",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/cli/src/lib.rs",
+            "line": 559,
+            "matches": 1,
+            "note": "startup refusal when the registry and the node disagree",
+            "source": "code",
+            "token": "ChainMismatch"
+          },
+          {
+            "file": "crates/execution/src/builder.rs",
+            "line": 70,
+            "matches": 1,
+            "note": "the build leg, in its own words",
+            "source": "code",
+            "token": "mismatch stops"
+          }
+        ],
+        "id": "none_until_reconnect",
+        "status": "partially_proven",
+        "text": "nothing invalidates the held value inside a connection, and the defense the code actually uses is repetition: five separate components compare their own configured chain against an answer and refuse, so a mismatch stops the run even though the cached value never changed"
+      },
+      "owner": "chain_adapter_connection",
+      "ownership_status": "proven",
+      "producer": "chain_adapter",
+      "reason": "the only category with a proven owner, a proven scope and a proven non-dependence on the block — and therefore the one §17 option A would start with, as a contract that keeps every check and shares only the value",
+      "reuse_status": {
+        "check_would_stop_existing": true,
+        "duplicate": {
+          "holds": true,
+          "reason": "measured: 6 of 42 exact candidates are `eth_chainId`, both flows reaching the preflight leg and the build gate leg",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "reusable_in_principle": {
+          "holds": true,
+          "reason": "an owner exists (`RpcChainAdapter`'s connection), it holds the value from connect to drop, and its scope covers every consumer in the run",
+          "status": "proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "refused: the second and third asks are each a named leg of a check, and §6 forbids trading them for a saved call; the honest statement is that the value is shareable and the verification is not",
+          "status": "partially_proven"
+        },
+        "semantically_equivalent": {
+          "holds": true,
+          "reason": "the answer is not a function of a block or a moment: the chain id is a property of the endpoint connection, and every later normalized value in this build carries it",
+          "status": "proven"
+        }
+      },
+      "scope": "chain",
+      "state_kind": "chain_identity"
+    },
+    {
+      "authority": "node_at_height",
+      "block_hash": "not_carried",
+      "block_number": "pinned_height",
+      "block_tag_semantics": "number",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "live_preflight_reads",
+        "sequence_stage"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/pipeline/src/canonicalization.rs",
+          "line": 913,
+          "matches": 1,
+          "note": "the refusal this row is about, as the code writes it",
+          "source": "code",
+          "token": "Self::RefusedByBlockIdentity =>"
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/execution/src/giwa/reads.rs",
+            "line": 137,
+            "matches": 1,
+            "note": "the preflight leg's own eth_call reads",
+            "source": "code",
+            "token": "fn read_pool"
+          }
+        ],
+        "id": "pinned_height_no_state_root",
+        "status": "partially_proven",
+        "text": "the ask names a height and the result is a function of the whole state at that height, which the build never receives: no field carries a state root, so two answers at one height are the same question with an unverifiable premise"
+      },
+      "identity": "height_number",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+            "line": 446,
+            "matches": 30,
+            "note": "the measured class this row reports",
+            "source": "run_record",
+            "token": "\"same_target_different_block\""
+          }
+        ],
+        "id": "different_block_at_the_same_slot",
+        "status": "proven",
+        "text": "M8.4.2's §23 rule already does this work: a duplicate pair whose two sides name different heights is refused with the reason 「different block identity」, which is where 30 of the 78 pairs ended"
+      },
+      "owner": "no_owner_in_code",
+      "ownership_status": "partially_proven",
+      "producer": "chain_adapter",
+      "reason": "the category where the duplicate was never a candidate at all: the §23 refusal and the purpose of the second read agree",
+      "reuse_status": {
+        "check_would_stop_existing": true,
+        "duplicate": {
+          "holds": false,
+          "reason": "measured: none of the 42 exact candidates is an `eth_call`; the `eth_call` pairs are the 30 refused for naming different heights, the largest single flow being opportunity detection to preflight",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "a state-identity field the answer could carry; only the height travels"
+        ],
+        "reusable_in_principle": {
+          "holds": false,
+          "reason": "the two calls exist at different heights *because* the second is meant to see a moved market — detection prices a candidate, preflight re-prices it before spending",
+          "status": "partially_proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "refused by §23 today and by this row for the same reason: the re-read is the re-pricing",
+          "status": "proven"
+        },
+        "semantically_equivalent": {
+          "holds": false,
+          "reason": "by construction: two calls that name different heights are different questions about a market",
+          "status": "proven"
+        }
+      },
+      "scope": "block",
+      "state_kind": "eth_call_result"
+    },
+    {
+      "authority": "not_applicable",
+      "block_hash": "carried_and_verified",
+      "block_number": "pinned_height",
+      "block_tag_semantics": "number",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "sequence_stage",
+        "opportunity_ledger"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/execution/tests/sequence.rs",
+          "line": 582,
+          "matches": 1,
+          "note": "the binding that does exist",
+          "source": "test",
+          "token": "the_plan_is_the_run_s_transactions_in_order_and_nothing_else"
+        },
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 111,
+          "matches": 1,
+          "note": "the caller-supplied declaration this row reports as a gap",
+          "source": "code",
+          "token": "pub enum SenderFunding"
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/simulation/src/result.rs",
+            "line": 753,
+            "matches": 1,
+            "note": "the value, with its pin",
+            "source": "code",
+            "token": "pub struct SimulationResult"
+          },
+          {
+            "file": "crates/execution/src/chain_read.rs",
+            "line": 38,
+            "matches": 1,
+            "note": "the verification a later stage performs on it",
+            "source": "code",
+            "token": "fn read_binding"
+          }
+        ],
+        "id": "pinned_block_carried",
+        "status": "proven",
+        "text": "the result carries its own `BlockPin` — number and hash — and the plan built from it re-verifies the hash by a binding read, so a result is tied to the block it ran against"
+      },
+      "identity": "height_hash",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/simulation/src/request.rs",
+            "line": 57,
+            "matches": 1,
+            "note": "the declaration that decides reproducibility",
+            "source": "code",
+            "token": "pub enum Endowment {"
+          },
+          {
+            "file": "crates/simulation/src/state.rs",
+            "line": 425,
+            "matches": 1,
+            "note": "what a run can override, and what the result does not list",
+            "source": "code",
+            "token": "pub struct StateOverride"
+          },
+          {
+            "file": "crates/pipeline/src/arbitrage.rs",
+            "line": 29,
+            "matches": 1,
+            "note": "the live path's refusal of an overridden run",
+            "source": "code",
+            "token": "must return an empty setup vect"
+          }
+        ],
+        "id": "inputs_not_reproducible",
+        "status": "partially_proven",
+        "text": "the result does not record which state overrides the run used, so whether a run was reproducible on the real chain is a declaration made by its caller rather than a property of the result"
+      },
+      "owner": "simulation_state_provider",
+      "ownership_status": "partially_proven",
+      "producer": "simulation_state_provider",
+      "reason": "one owner, one consumer, a carried identity, and an unrecorded premise",
+      "reuse_status": {
+        "check_would_stop_existing": false,
+        "duplicate": {
+          "holds": false,
+          "reason": "not applicable in the RPC sense: a simulation result is computed, not fetched, and no pair in M8.4.2 is one",
+          "status": "proven"
+        },
+        "missing_proof": [
+          "an override list recorded in the result, so reproducibility does not depend on a caller's declaration"
+        ],
+        "reusable_in_principle": {
+          "holds": true,
+          "reason": "it is reused: the plan is built from the one result of the one run, and §12's 「the plan is the run's transactions in order and nothing else» is the test that says so",
+          "status": "proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "not the question this category answers; §14 forbids reading 「结果一致」 as 「生产可安全复用」, and the honest limit is that the fields the build re-derives — nonce, both fee fields, gas limit, transaction type, access list — are not checked against the simulation",
+          "status": "partially_proven"
+        },
+        "semantically_equivalent": {
+          "holds": null,
+          "reason": "the comparison §10 asks for is between fetched values",
+          "status": "not_applicable"
+        }
+      },
+      "scope": "simulation",
+      "state_kind": "simulation_result"
+    },
+    {
+      "authority": "configuration",
+      "block_hash": "carried_and_verified",
+      "block_number": "pinned_height",
+      "block_tag_semantics": "number",
+      "chain_id": "pinned_chain",
+      "consumers": [
+        "execution_lane",
+        "sequence_stage"
+      ],
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 138,
+          "matches": 1,
+          "note": "the carrier",
+          "source": "code",
+          "token": "pub struct TransactionIntent"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "what crosses today",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        },
+        {
+          "file": "crates/opportunity/src/lifecycle.rs",
+          "line": 142,
+          "matches": 1,
+          "note": "the hash that is kept on the finding and not on the verdict",
+          "source": "code",
+          "token": "pub pinned_block_hash: B256,"
+        }
+      ],
+      "freshness_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/execution/src/sequence.rs",
+            "line": 1229,
+            "matches": 1,
+            "note": "the three checks, in order, in one function",
+            "source": "code",
+            "token": "fn preflight_cleared"
+          },
+          {
+            "file": "crates/execution/src/gate.rs",
+            "line": 63,
+            "matches": 1,
+            "note": "a freshness leg the gate can fail — and that both production paths fill in with a constant",
+            "source": "code",
+            "token": "pub enum Freshness"
+          }
+        ],
+        "id": "attempt_id_is_the_only_binding",
+        "status": "partially_proven",
+        "text": "what the build verifies about the preflight verdict is that one exists, that it passed, and that its attempt id equals this route's — three checks, none of them a height, a hash or a moment"
+      },
+      "identity": "height_hash",
+      "invalidation_rule": {
+        "evidence_refs": [
+          {
+            "file": "crates/opportunity/src/lifecycle.rs",
+            "line": 319,
+            "matches": 1,
+            "note": "the filter that cannot yield a stale entry",
+            "source": "code",
+            "token": "pub fn simmable("
+          },
+          {
+            "file": "crates/pipeline/src/runner.rs",
+            "line": 798,
+            "matches": 1,
+            "note": "the constant, with the comment above it explaining why the author considers it established",
+            "source": "code",
+            "token": "freshness: Freshness::Active"
+          }
+        ],
+        "id": "lifecycle_staleness_decided_earlier",
+        "status": "partially_proven",
+        "text": "staleness is real and enforced, but at a different point: the ledger moves a moved finding out of its active set, and the dispatch path returns before an inactive finding is ever built — the gate's own freshness leg is then stated rather than measured"
+      },
+      "owner": "sequence_stage",
+      "ownership_status": "partially_proven",
+      "producer": "sequence_stage",
+      "reason": "the type where a contract would have to live, and the place the missing fields are provable rather than arguable",
+      "reuse_status": {
+        "check_would_stop_existing": false,
+        "duplicate": {
+          "holds": null,
+          "reason": "an intent is not a fetched state; §4 lists it because its *inputs* are the reuse question, not because it duplicates anything",
+          "status": "not_applicable"
+        },
+        "missing_proof": [
+          "no version, epoch, validity token or deadline exists on any type that crosses from preflight to build",
+          "the gate's freshness leg is a constant on both production paths, so it cannot be the evidence for a shared value"
+        ],
+        "reusable_in_principle": {
+          "holds": true,
+          "reason": "the intent is itself the shared carrier between simulation and build, and it already carries a hash-bound risk decision id",
+          "status": "proven"
+        },
+        "safe_to_reuse_now": {
+          "holds": false,
+          "reason": "the carrier exists; what it does not carry is any of the preflight facts, and that is the concrete gap §6 asks about",
+          "status": "partially_proven"
+        },
+        "semantically_equivalent": {
+          "holds": null,
+          "reason": "as above",
+          "status": "not_applicable"
+        }
+      },
+      "scope": "attempt",
+      "state_kind": "transaction_intent"
+    }
+  ],
+  "status_vocabulary": [
+    "proven",
+    "partially_proven",
+    "unknown",
+    "not_applicable"
+  ],
+  "tier_inequalities": [
+    "same value != same state identity",
+    "same state identity != same lifecycle ownership",
+    "reusable in principle != safe to reuse now"
+  ],
+  "tier_order": [
+    "duplicate",
+    "semantically_equivalent",
+    "reusable_in_principle",
+    "safe_to_reuse_now"
+  ],
+  "tiers_are_four_questions": true,
+  "unit": "state category"
+}

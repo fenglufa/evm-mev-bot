@@ -1,0 +1,1271 @@
+{
+  "aggregate": {
+    "by_step": {
+      "acquired": 11,
+      "consumed": 11,
+      "invalidated_or_expired": 11,
+      "published": 11,
+      "validated": 11
+    },
+    "rows_without_an_anchor": 10,
+    "status": {
+      "not_applicable": 3,
+      "partially_proven": 11,
+      "proven": 33,
+      "unknown": 8
+    }
+  },
+  "categories": 11,
+  "file": "lifecycle-contracts.json",
+  "generated_by": "crates/pipeline/tests/state_ownership_evidence.rs",
+  "model": "crates/pipeline/src/state_ownership.rs",
+  "question": "§5: Acquired → Validated → Published → Consumed → Invalidated / Expired, one row per category and step, graded on that step's own basis",
+  "root": "data/evidence/m8/state-ownership/",
+  "rows": [
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/core/src/pool.rs",
+          "line": 26,
+          "matches": 1,
+          "note": "what the store actually holds: reserve0, reserve1, block_number, log_index",
+          "source": "code",
+          "token": "pub struct PoolState"
+        },
+        {
+          "file": "crates/state/src/update.rs",
+          "line": 33,
+          "matches": 1,
+          "note": "replay and live feed the store through the same door",
+          "source": "code",
+          "token": "The only way anything may enter the store."
+        },
+        {
+          "file": "crates/pipeline/src/engine.rs",
+          "line": 191,
+          "matches": 1,
+          "note": "the single entry point that turns a canonical block into store updates",
+          "source": "code",
+          "token": "fn on_canonical"
+        },
+        {
+          "file": "crates/graph/src/snapshot.rs",
+          "line": 17,
+          "matches": 1,
+          "note": "a snapshot's identity is its chain id and a block number — the fields on this definition, and no hash",
+          "source": "code",
+          "token": "pub struct GraphSnapshot {"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/duplicate-summary.json",
+          "line": 264,
+          "matches": 1,
+          "note": "the measured pair counts this row reports as zero for this category",
+          "source": "run_record",
+          "token": "\"cross_stage_pairs\""
+        }
+      ],
+      "state_kind": "pool_reserves",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/graph/src/builder.rs",
+          "line": 70,
+          "matches": 1,
+          "note": "the same-block rule's own statement",
+          "source": "code",
+          "token": "The target block is the snapshot's own applied position"
+        },
+        {
+          "file": "crates/state/src/store.rs",
+          "line": 28,
+          "matches": 1,
+          "note": "the store that owns the projection",
+          "source": "code",
+          "token": "pub struct InMemoryStateStore"
+        }
+      ],
+      "state_kind": "pool_reserves",
+      "status": "proven",
+      "step": "validated"
+    },
+    {
+      "basis": "published inside the process: a later component reads the same store, snapshot or ledger entry rather than a second copy",
+      "evidence_refs": [
+        {
+          "file": "crates/core/src/pool.rs",
+          "line": 26,
+          "matches": 1,
+          "note": "what the store actually holds: reserve0, reserve1, block_number, log_index",
+          "source": "code",
+          "token": "pub struct PoolState"
+        },
+        {
+          "file": "crates/state/src/update.rs",
+          "line": 33,
+          "matches": 1,
+          "note": "replay and live feed the store through the same door",
+          "source": "code",
+          "token": "The only way anything may enter the store."
+        },
+        {
+          "file": "crates/pipeline/src/engine.rs",
+          "line": 191,
+          "matches": 1,
+          "note": "the single entry point that turns a canonical block into store updates",
+          "source": "code",
+          "token": "fn on_canonical"
+        },
+        {
+          "file": "crates/graph/src/snapshot.rs",
+          "line": 17,
+          "matches": 1,
+          "note": "a snapshot's identity is its chain id and a block number — the fields on this definition, and no hash",
+          "source": "code",
+          "token": "pub struct GraphSnapshot {"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/duplicate-summary.json",
+          "line": 264,
+          "matches": 1,
+          "note": "the measured pair counts this row reports as zero for this category",
+          "source": "run_record",
+          "token": "\"cross_stage_pairs\""
+        }
+      ],
+      "state_kind": "pool_reserves",
+      "status": "proven",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/core/src/pool.rs",
+          "line": 26,
+          "matches": 1,
+          "note": "what the store actually holds: reserve0, reserve1, block_number, log_index",
+          "source": "code",
+          "token": "pub struct PoolState"
+        },
+        {
+          "file": "crates/state/src/update.rs",
+          "line": 33,
+          "matches": 1,
+          "note": "replay and live feed the store through the same door",
+          "source": "code",
+          "token": "The only way anything may enter the store."
+        },
+        {
+          "file": "crates/pipeline/src/engine.rs",
+          "line": 191,
+          "matches": 1,
+          "note": "the single entry point that turns a canonical block into store updates",
+          "source": "code",
+          "token": "fn on_canonical"
+        },
+        {
+          "file": "crates/graph/src/snapshot.rs",
+          "line": 17,
+          "matches": 1,
+          "note": "a snapshot's identity is its chain id and a block number — the fields on this definition, and no hash",
+          "source": "code",
+          "token": "pub struct GraphSnapshot {"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/duplicate-summary.json",
+          "line": 264,
+          "matches": 1,
+          "note": "the measured pair counts this row reports as zero for this category",
+          "source": "run_record",
+          "token": "\"cross_stage_pairs\""
+        }
+      ],
+      "state_kind": "pool_reserves",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/live/src/event.rs",
+          "line": 186,
+          "matches": 1,
+          "note": "v0.1 records the conflict instead of resolving it",
+          "source": "code",
+          "token": "does not resolve reorgs"
+        },
+        {
+          "file": "crates/live/src/tracker.rs",
+          "line": 233,
+          "matches": 1,
+          "note": "the detection that does exist: a rival hash is kept next to the rejected one",
+          "source": "code",
+          "token": "kept: format!(\"{hash:?}\"),"
+        }
+      ],
+      "state_kind": "pool_reserves",
+      "status": "partially_proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 1068,
+          "matches": 1,
+          "note": "the code read names the block carried by the canonical key, and nothing else",
+          "source": "code",
+          "token": "get_code(key.block, key.address)"
+        },
+        {
+          "file": "crates/simulation/src/engine.rs",
+          "line": 176,
+          "matches": 1,
+          "note": "the REVM hook this build refuses to serve",
+          "source": "code",
+          "token": "code_by_hash_async"
+        }
+      ],
+      "state_kind": "contract_code",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 218,
+          "matches": 1,
+          "note": "the key that fixes the scope",
+          "source": "code",
+          "token": "pub struct StateReadKey"
+        }
+      ],
+      "state_kind": "contract_code",
+      "status": "proven",
+      "step": "validated"
+    },
+    {
+      "basis": "nothing publishes it: the value's scope is the component that fetched it, and no other component can ask for it",
+      "evidence_refs": [],
+      "state_kind": "contract_code",
+      "status": "not_applicable",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 1068,
+          "matches": 1,
+          "note": "the code read names the block carried by the canonical key, and nothing else",
+          "source": "code",
+          "token": "get_code(key.block, key.address)"
+        },
+        {
+          "file": "crates/simulation/src/engine.rs",
+          "line": 176,
+          "matches": 1,
+          "note": "the REVM hook this build refuses to serve",
+          "source": "code",
+          "token": "code_by_hash_async"
+        }
+      ],
+      "state_kind": "contract_code",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 339,
+          "matches": 1,
+          "note": "the boundary M8.3.1 wrote and this row cites",
+          "source": "code",
+          "token": "no process-wide map"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 342,
+          "matches": 1,
+          "note": "the cache itself",
+          "source": "code",
+          "token": "struct StateReadCache {"
+        },
+        {
+          "file": "crates/simulation/tests/state_reuse_ab.rs",
+          "line": 501,
+          "matches": 1,
+          "note": "the isolation that makes the scope a claim rather than a hope",
+          "source": "test",
+          "token": "a_second_simulation_over_the_same_endpoint_pays_for_its_own_reads"
+        }
+      ],
+      "state_kind": "contract_code",
+      "status": "proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/storage-dependency/dependency-map.json",
+          "line": 128,
+          "matches": 121,
+          "note": "the dependency classes this row's ordering claim comes from",
+          "source": "run_record",
+          "token": "\"ordered\""
+        }
+      ],
+      "state_kind": "storage_slot",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 237,
+          "matches": 1,
+          "note": "chain, block, address, slot",
+          "source": "code",
+          "token": "pub struct StorageCacheKey"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 2258,
+          "matches": 1,
+          "note": "the test that pins the key's necessity",
+          "source": "test",
+          "token": "storage_reuse_needs_every_field_of_its_key"
+        }
+      ],
+      "state_kind": "storage_slot",
+      "status": "proven",
+      "step": "validated"
+    },
+    {
+      "basis": "nothing publishes it: the value's scope is the component that fetched it, and no other component can ask for it",
+      "evidence_refs": [],
+      "state_kind": "storage_slot",
+      "status": "not_applicable",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/storage-dependency/dependency-map.json",
+          "line": 128,
+          "matches": 121,
+          "note": "the dependency classes this row's ordering claim comes from",
+          "source": "run_record",
+          "token": "\"ordered\""
+        }
+      ],
+      "state_kind": "storage_slot",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 1218,
+          "matches": 1,
+          "note": "the read names the pinned height, not a tag",
+          "source": "code",
+          "token": "get_storage_at(self.pin.number"
+        }
+      ],
+      "state_kind": "storage_slot",
+      "status": "proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/stage.rs",
+          "line": 380,
+          "matches": 1,
+          "note": "the lane's own statement of what it re-confirms",
+          "source": "code",
+          "token": "re-reads nothing about pools"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2659,
+          "matches": 3,
+          "note": "the measured consumer role this row hangs on",
+          "source": "run_record",
+          "token": "\"step 1: gate — native balance\""
+        }
+      ],
+      "state_kind": "native_balance",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 364,
+          "matches": 1,
+          "note": "the head the preflight balance is asked at",
+          "source": "code",
+          "token": "fn read_head"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1531,
+          "matches": 1,
+          "note": "the build's second balance ask, at preflight's height",
+          "source": "code",
+          "token": "before-snapshot: native"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1670,
+          "matches": 1,
+          "note": "the build's funding leg, at the intent's pinned height",
+          "source": "code",
+          "token": "gate — native balance"
+        }
+      ],
+      "state_kind": "native_balance",
+      "status": "unknown",
+      "step": "validated"
+    },
+    {
+      "basis": "no component hands this value to another one, so the step has no code to point at",
+      "evidence_refs": [],
+      "state_kind": "native_balance",
+      "status": "unknown",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/stage.rs",
+          "line": 380,
+          "matches": 1,
+          "note": "the lane's own statement of what it re-confirms",
+          "source": "code",
+          "token": "re-reads nothing about pools"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2659,
+          "matches": 3,
+          "note": "the measured consumer role this row hangs on",
+          "source": "run_record",
+          "token": "\"step 1: gate — native balance\""
+        }
+      ],
+      "state_kind": "native_balance",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 168,
+          "matches": 1,
+          "note": "the code's own words for this rule",
+          "source": "code",
+          "token": "re-read per send"
+        },
+        {
+          "file": "crates/execution/src/gate.rs",
+          "line": 90,
+          "matches": 1,
+          "note": "a per-step verdict, not a held value",
+          "source": "code",
+          "token": "pub enum BalanceEvidence"
+        }
+      ],
+      "state_kind": "native_balance",
+      "status": "partially_proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/nonce.rs",
+          "line": 41,
+          "matches": 1,
+          "note": "the accessor that turns a view into a nonce",
+          "source": "code",
+          "token": "pub fn next(&self) -> u64 {"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2158,
+          "matches": 9,
+          "note": "the measured caller label both sides of the pair carry",
+          "source": "run_record",
+          "token": "\"step 1: pending and latest nonces\""
+        }
+      ],
+      "state_kind": "nonce",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/nonce.rs",
+          "line": 4,
+          "matches": 1,
+          "note": "the pending-versus-confirmed rule in the module's own words",
+          "source": "code",
+          "token": "the pending count is wha"
+        },
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 297,
+          "matches": 1,
+          "note": "the read that returns both views",
+          "source": "code",
+          "token": "fn nonce"
+        }
+      ],
+      "state_kind": "nonce",
+      "status": "proven",
+      "step": "validated"
+    },
+    {
+      "basis": "no component hands this value to another one, so the step has no code to point at",
+      "evidence_refs": [],
+      "state_kind": "nonce",
+      "status": "unknown",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/nonce.rs",
+          "line": 41,
+          "matches": 1,
+          "note": "the accessor that turns a view into a nonce",
+          "source": "code",
+          "token": "pub fn next(&self) -> u64 {"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2158,
+          "matches": 9,
+          "note": "the measured caller label both sides of the pair carry",
+          "source": "run_record",
+          "token": "\"step 1: pending and latest nonces\""
+        }
+      ],
+      "state_kind": "nonce",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/lifecycle.rs",
+          "line": 740,
+          "matches": 1,
+          "note": "the only in-process nonce advance",
+          "source": "code",
+          "token": "fn allocate"
+        }
+      ],
+      "state_kind": "nonce",
+      "status": "partially_proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "the only block term this build sends on the state path: a number",
+          "source": "code",
+          "token": "fn block_param"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 429,
+          "matches": 6,
+          "note": "the second measured fee flow inside one stage",
+          "source": "run_record",
+          "token": "\"fee at head\""
+        }
+      ],
+      "state_kind": "fee_parameters",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/fee.rs",
+          "line": 36,
+          "matches": 1,
+          "note": "the value that does carry an identity",
+          "source": "code",
+          "token": "pub struct FeeReading"
+        },
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 220,
+          "matches": 1,
+          "note": "the pinned half of the pair",
+          "source": "code",
+          "token": "fn base_fee_at"
+        }
+      ],
+      "state_kind": "fee_parameters",
+      "status": "partially_proven",
+      "step": "validated"
+    },
+    {
+      "basis": "no component hands this value to another one, so the step has no code to point at",
+      "evidence_refs": [],
+      "state_kind": "fee_parameters",
+      "status": "unknown",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "the only block term this build sends on the state path: a number",
+          "source": "code",
+          "token": "fn block_param"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 429,
+          "matches": 6,
+          "note": "the second measured fee flow inside one stage",
+          "source": "run_record",
+          "token": "\"fee at head\""
+        }
+      ],
+      "state_kind": "fee_parameters",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1616,
+          "matches": 1,
+          "note": "the re-read this row is about",
+          "source": "code",
+          "token": "fee at pinned block"
+        }
+      ],
+      "state_kind": "fee_parameters",
+      "status": "partially_proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1229,
+          "matches": 1,
+          "note": "the three checks the build actually performs on that report",
+          "source": "code",
+          "token": "fn preflight_cleared"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 45,
+          "matches": 1,
+          "note": "the number-plus-hash the simulation already uses as an identity",
+          "source": "code",
+          "token": "pub struct BlockPin"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1758,
+          "matches": 3,
+          "note": "the measured consumer role on the preflight side of the pair",
+          "source": "run_record",
+          "token": "\"block binding at pin\""
+        }
+      ],
+      "state_kind": "block_header",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/pipeline/src/runner.rs",
+          "line": 447,
+          "matches": 1,
+          "note": "the dispatch check: hash of the announced block against the ledger's",
+          "source": "code",
+          "token": "state_unavailable"
+        },
+        {
+          "file": "crates/pipeline/src/sim.rs",
+          "line": 340,
+          "matches": 1,
+          "note": "the plan check: header height against the finding's own state version",
+          "source": "code",
+          "token": "state_version_mismatch"
+        },
+        {
+          "file": "crates/simulation/src/request.rs",
+          "line": 436,
+          "matches": 1,
+          "note": "the provider round trip, comparing number and hash",
+          "source": "code",
+          "token": "fn check_pin"
+        }
+      ],
+      "state_kind": "block_header",
+      "status": "proven",
+      "step": "validated"
+    },
+    {
+      "basis": "no component hands this value to another one, so the step has no code to point at",
+      "evidence_refs": [],
+      "state_kind": "block_header",
+      "status": "unknown",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1229,
+          "matches": 1,
+          "note": "the three checks the build actually performs on that report",
+          "source": "code",
+          "token": "fn preflight_cleared"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 45,
+          "matches": 1,
+          "note": "the number-plus-hash the simulation already uses as an identity",
+          "source": "code",
+          "token": "pub struct BlockPin"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1758,
+          "matches": 3,
+          "note": "the measured consumer role on the preflight side of the pair",
+          "source": "run_record",
+          "token": "\"block binding at pin\""
+        }
+      ],
+      "state_kind": "block_header",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/gate.rs",
+          "line": 74,
+          "matches": 1,
+          "note": "Confirmed, Reorged, Unverified",
+          "source": "code",
+          "token": "pub enum BlockBinding"
+        },
+        {
+          "file": "crates/execution/src/chain_read.rs",
+          "line": 38,
+          "matches": 1,
+          "note": "the read that produces it",
+          "source": "code",
+          "token": "fn read_binding"
+        }
+      ],
+      "state_kind": "block_header",
+      "status": "partially_proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the accessor the preflight leg calls instead of a fresh ask",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 689,
+          "matches": 1,
+          "note": "where the legs are assembled into one gate attempt",
+          "source": "code",
+          "token": "let attempt = GateAttempt::Arbitrage"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/duplicate-matrix.json",
+          "line": 591,
+          "matches": 4,
+          "note": "the read category that keeps this out of the state-read buckets",
+          "source": "run_record",
+          "token": "\"chain_identity\""
+        }
+      ],
+      "state_kind": "chain_identity",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 84,
+          "matches": 1,
+          "note": "the connect-time exception the module documents",
+          "source": "code",
+          "token": "before this type"
+        }
+      ],
+      "state_kind": "chain_identity",
+      "status": "proven",
+      "step": "validated"
+    },
+    {
+      "basis": "no component hands this value to another one, so the step has no code to point at",
+      "evidence_refs": [],
+      "state_kind": "chain_identity",
+      "status": "unknown",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the accessor the preflight leg calls instead of a fresh ask",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 689,
+          "matches": 1,
+          "note": "where the legs are assembled into one gate attempt",
+          "source": "code",
+          "token": "let attempt = GateAttempt::Arbitrage"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/duplicate-matrix.json",
+          "line": 591,
+          "matches": 4,
+          "note": "the read category that keeps this out of the state-read buckets",
+          "source": "run_record",
+          "token": "\"chain_identity\""
+        }
+      ],
+      "state_kind": "chain_identity",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/cli/src/lib.rs",
+          "line": 559,
+          "matches": 1,
+          "note": "startup refusal when the registry and the node disagree",
+          "source": "code",
+          "token": "ChainMismatch"
+        },
+        {
+          "file": "crates/execution/src/builder.rs",
+          "line": 70,
+          "matches": 1,
+          "note": "the build leg, in its own words",
+          "source": "code",
+          "token": "mismatch stops"
+        }
+      ],
+      "state_kind": "chain_identity",
+      "status": "partially_proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/pipeline/src/canonicalization.rs",
+          "line": 913,
+          "matches": 1,
+          "note": "the refusal this row is about, as the code writes it",
+          "source": "code",
+          "token": "Self::RefusedByBlockIdentity =>"
+        }
+      ],
+      "state_kind": "eth_call_result",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 137,
+          "matches": 1,
+          "note": "the preflight leg's own eth_call reads",
+          "source": "code",
+          "token": "fn read_pool"
+        }
+      ],
+      "state_kind": "eth_call_result",
+      "status": "partially_proven",
+      "step": "validated"
+    },
+    {
+      "basis": "no component hands this value to another one, so the step has no code to point at",
+      "evidence_refs": [],
+      "state_kind": "eth_call_result",
+      "status": "unknown",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/pipeline/src/canonicalization.rs",
+          "line": 913,
+          "matches": 1,
+          "note": "the refusal this row is about, as the code writes it",
+          "source": "code",
+          "token": "Self::RefusedByBlockIdentity =>"
+        }
+      ],
+      "state_kind": "eth_call_result",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 446,
+          "matches": 30,
+          "note": "the measured class this row reports",
+          "source": "run_record",
+          "token": "\"same_target_different_block\""
+        }
+      ],
+      "state_kind": "eth_call_result",
+      "status": "proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/tests/sequence.rs",
+          "line": 582,
+          "matches": 1,
+          "note": "the binding that does exist",
+          "source": "test",
+          "token": "the_plan_is_the_run_s_transactions_in_order_and_nothing_else"
+        },
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 111,
+          "matches": 1,
+          "note": "the caller-supplied declaration this row reports as a gap",
+          "source": "code",
+          "token": "pub enum SenderFunding"
+        }
+      ],
+      "state_kind": "simulation_result",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/result.rs",
+          "line": 753,
+          "matches": 1,
+          "note": "the value, with its pin",
+          "source": "code",
+          "token": "pub struct SimulationResult"
+        },
+        {
+          "file": "crates/execution/src/chain_read.rs",
+          "line": 38,
+          "matches": 1,
+          "note": "the verification a later stage performs on it",
+          "source": "code",
+          "token": "fn read_binding"
+        }
+      ],
+      "state_kind": "simulation_result",
+      "status": "proven",
+      "step": "validated"
+    },
+    {
+      "basis": "nothing publishes it: the value's scope is the component that fetched it, and no other component can ask for it",
+      "evidence_refs": [],
+      "state_kind": "simulation_result",
+      "status": "not_applicable",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/tests/sequence.rs",
+          "line": 582,
+          "matches": 1,
+          "note": "the binding that does exist",
+          "source": "test",
+          "token": "the_plan_is_the_run_s_transactions_in_order_and_nothing_else"
+        },
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 111,
+          "matches": 1,
+          "note": "the caller-supplied declaration this row reports as a gap",
+          "source": "code",
+          "token": "pub enum SenderFunding"
+        }
+      ],
+      "state_kind": "simulation_result",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/request.rs",
+          "line": 57,
+          "matches": 1,
+          "note": "the declaration that decides reproducibility",
+          "source": "code",
+          "token": "pub enum Endowment {"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 425,
+          "matches": 1,
+          "note": "what a run can override, and what the result does not list",
+          "source": "code",
+          "token": "pub struct StateOverride"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 29,
+          "matches": 1,
+          "note": "the live path's refusal of an overridden run",
+          "source": "code",
+          "token": "must return an empty setup vect"
+        }
+      ],
+      "state_kind": "simulation_result",
+      "status": "partially_proven",
+      "step": "invalidated_or_expired"
+    },
+    {
+      "basis": "the producer names it: the ask or the computation that first brings the value into this run",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 138,
+          "matches": 1,
+          "note": "the carrier",
+          "source": "code",
+          "token": "pub struct TransactionIntent"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "what crosses today",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        },
+        {
+          "file": "crates/opportunity/src/lifecycle.rs",
+          "line": 142,
+          "matches": 1,
+          "note": "the hash that is kept on the finding and not on the verdict",
+          "source": "code",
+          "token": "pub pinned_block_hash: B256,"
+        }
+      ],
+      "state_kind": "transaction_intent",
+      "status": "proven",
+      "step": "acquired"
+    },
+    {
+      "basis": "the validation is the freshness rule itself; where that rule has no enforcement, the step did not happen either",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1229,
+          "matches": 1,
+          "note": "the three checks, in order, in one function",
+          "source": "code",
+          "token": "fn preflight_cleared"
+        },
+        {
+          "file": "crates/execution/src/gate.rs",
+          "line": 63,
+          "matches": 1,
+          "note": "a freshness leg the gate can fail — and that both production paths fill in with a constant",
+          "source": "code",
+          "token": "pub enum Freshness"
+        }
+      ],
+      "state_kind": "transaction_intent",
+      "status": "partially_proven",
+      "step": "validated"
+    },
+    {
+      "basis": "no component hands this value to another one, so the step has no code to point at",
+      "evidence_refs": [],
+      "state_kind": "transaction_intent",
+      "status": "unknown",
+      "step": "published"
+    },
+    {
+      "basis": "each consumer in the contract's list is a place the value is read, and the pair counts in §11 are the measured form of that reading",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 138,
+          "matches": 1,
+          "note": "the carrier",
+          "source": "code",
+          "token": "pub struct TransactionIntent"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "what crosses today",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        },
+        {
+          "file": "crates/opportunity/src/lifecycle.rs",
+          "line": 142,
+          "matches": 1,
+          "note": "the hash that is kept on the finding and not on the verdict",
+          "source": "code",
+          "token": "pub pinned_block_hash: B256,"
+        }
+      ],
+      "state_kind": "transaction_intent",
+      "status": "proven",
+      "step": "consumed"
+    },
+    {
+      "basis": "the invalidation rule is the transition; a rule with no enforcement leaves the value in place",
+      "evidence_refs": [
+        {
+          "file": "crates/opportunity/src/lifecycle.rs",
+          "line": 319,
+          "matches": 1,
+          "note": "the filter that cannot yield a stale entry",
+          "source": "code",
+          "token": "pub fn simmable("
+        },
+        {
+          "file": "crates/pipeline/src/runner.rs",
+          "line": 798,
+          "matches": 1,
+          "note": "the constant, with the comment above it explaining why the author considers it established",
+          "source": "code",
+          "token": "freshness: Freshness::Active"
+        }
+      ],
+      "state_kind": "transaction_intent",
+      "status": "partially_proven",
+      "step": "invalidated_or_expired"
+    }
+  ],
+  "rows_declared": 55,
+  "status_vocabulary": [
+    "proven",
+    "partially_proven",
+    "unknown",
+    "not_applicable"
+  ],
+  "steps": [
+    "acquired",
+    "validated",
+    "published",
+    "consumed",
+    "invalidated_or_expired"
+  ],
+  "unit": "category × step"
+}

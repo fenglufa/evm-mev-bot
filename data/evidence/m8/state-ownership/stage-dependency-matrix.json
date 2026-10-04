@@ -1,0 +1,1366 @@
+{
+  "aggregate": {
+    "contract_status": {
+      "not_applicable": 1,
+      "partially_proven": 5,
+      "proven": 17
+    },
+    "decision": {
+      "contract_design_first": 5,
+      "controlled_experiment_definable": 2,
+      "must_refetch": 16
+    },
+    "decision_letter": {
+      "A": 2,
+      "B": 5,
+      "C": 16
+    },
+    "edges_where_the_consumer_carries_its_own_duty": 19,
+    "edges_with_no_measured_pair": 9,
+    "section": {
+      "6": 13,
+      "7": 4,
+      "8": 2,
+      "9": 4
+    }
+  },
+  "decision_meanings": {
+    "A": "controlled_experiment_definable — a next-phase controlled experiment is definable; this says nothing about sharing the value today",
+    "B": "contract_design_first — the shape to design is a contract, not a cache",
+    "C": "must_refetch — the consumer's read is its own duty",
+    "D": "insufficient_evidence — this build cannot answer the question yet"
+  },
+  "decision_vocabulary": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "edges": 23,
+  "file": "stage-dependency-matrix.json",
+  "generated_by": "crates/pipeline/tests/state_ownership_evidence.rs",
+  "measured_pairs_preflight_to_build": 12,
+  "measured_pairs_total": 42,
+  "model": "crates/pipeline/src/state_ownership.rs",
+  "question": "§6–§9: 哪些值可能复用，但哪些验证动作仍然必须保留；每条边的判决只能取 §17 的四个选项之一",
+  "root": "data/evidence/m8/state-ownership/",
+  "rows": [
+    {
+      "consumer_caller": "endpoint chain id",
+      "consumer_stage": "preflight",
+      "contract_status": "partially_proven",
+      "decision": "contract_design_first",
+      "decision_letter": "B",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the connection's own ask, read rather than remembered",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        },
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 277,
+          "matches": 1,
+          "note": "the preflight stamp that makes this pair measurable",
+          "source": "code",
+          "token": "endpoint chain id"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1713,
+          "matches": 6,
+          "note": "the spelling a run record uses for the stage-less producer",
+          "source": "run_record",
+          "token": "\"unstamped\""
+        }
+      ],
+      "id": "s6.chain_id.connection_to_preflight",
+      "measured_pairs": 3,
+      "method": "eth_chainId",
+      "producer_caller": null,
+      "producer_stage": "unstamped",
+      "question": "can preflight's chain leg consume the answer the connection already took?",
+      "reasons": [
+        "the answer belongs to a connection and cannot move inside one, which is why a contract is designable here at all",
+        "no type that crosses into preflight carries a chain id, so the value would have to be invented rather than found",
+        "preflight's leg stays whichever way this goes: comparing an answer against configuration is not a fetch"
+      ],
+      "section": "6",
+      "state_kind": "chain_identity",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": false,
+        "minimal_addition": "a field saying a connection has learned its chain id, and one saying which connection an answer came from",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the §26 chain leg — the endpoint answers as the chain the run was configured for",
+        "same_semantics": true,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "preflight's own eth_chainId, stamped `endpoint chain id`",
+        "what_the_producer_read": "one eth_chainId on the connection, before any stage is named: the record leaves its stage empty and labels it unstamped"
+      }
+    },
+    {
+      "consumer_caller": "step 1: gate — endpoint chain id",
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1658,
+          "matches": 1,
+          "note": "the leg, by the name the run records",
+          "source": "code",
+          "token": "gate — endpoint chain id"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2461,
+          "matches": 3,
+          "note": "the measured consumer role on the build side",
+          "source": "run_record",
+          "token": "\"step 1: gate — endpoint chain id\""
+        }
+      ],
+      "id": "s6.chain_id.connection_to_build",
+      "measured_pairs": 3,
+      "method": "eth_chainId",
+      "producer_caller": null,
+      "producer_stage": "unstamped",
+      "question": "does the build's chain leg need its own ask, or a carried answer?",
+      "reasons": [
+        "this read is a named gate leg, and §6's last line forbids deleting a pre-submission check to make a value shareable",
+        "the state itself is the best-founded in the model: chain identity is the one category whose ownership this build proves",
+        "so the refusal is about the check, not about the state — which is exactly the distinction §6 asks for"
+      ],
+      "section": "6",
+      "state_kind": "chain_identity",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": false,
+        "minimal_addition": "none this milestone may make: keeping the leg costs the ask, and §6 forbids trading the leg away",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the same chain id checked again at the moment a build starts, against what the run was configured for",
+        "same_semantics": true,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "the build's gate leg, stamped `step 1: gate — endpoint chain id`",
+        "what_the_producer_read": "the connection's eth_chainId, the same single ask as the row above"
+      }
+    },
+    {
+      "consumer_caller": "step 1: pending and latest nonces",
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 248,
+          "matches": 1,
+          "note": "the preflight half of the pair",
+          "source": "code",
+          "token": "pending and latest nonces"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1640,
+          "matches": 1,
+          "note": "the build half, at its own step",
+          "source": "code",
+          "token": "pending and latest nonces"
+        },
+        {
+          "file": "crates/execution/src/nonce.rs",
+          "line": 41,
+          "matches": 1,
+          "note": "the pending view this leg reads",
+          "source": "code",
+          "token": "pub fn next(&self) -> u64 {"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2158,
+          "matches": 9,
+          "note": "the measured pair",
+          "source": "run_record",
+          "token": "\"step 1: pending and latest nonces\""
+        }
+      ],
+      "id": "s6.nonce.preflight_to_build",
+      "measured_pairs": 3,
+      "method": "eth_getTransactionCount",
+      "producer_caller": "pending and latest nonces",
+      "producer_stage": "preflight",
+      "question": "is preflight's nonce a snapshot the build may spend?",
+      "reasons": [
+        "the code states its own rule: re-read per send",
+        "any mined or accepted transaction moves the answer between the two asks, and nothing detects that except asking",
+        "the nonce an intent carries is the simulation's assumption about the account, not the node's next number"
+      ],
+      "section": "6",
+      "state_kind": "nonce",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "an attempt-scoped nonce reservation, which this build does not have and §3 forbids adding",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the §26 nonce leg — the number the node will accept next",
+        "same_semantics": true,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "the same ask again at the step it is about to send, stamped `step 1: pending and latest nonces`",
+        "what_the_producer_read": "eth_getTransactionCount for the sender, pending and latest in one call, stamped `pending and latest nonces`"
+      }
+    },
+    {
+      "consumer_caller": "before-snapshot: native and input-token balances",
+      "consumer_stage": "build",
+      "contract_status": "partially_proven",
+      "decision": "contract_design_first",
+      "decision_letter": "B",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 269,
+          "matches": 1,
+          "note": "the preflight stamp",
+          "source": "code",
+          "token": "native balance of the sender"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1531,
+          "matches": 1,
+          "note": "the build-side half of a diff, not a check",
+          "source": "code",
+          "token": "before-snapshot: native"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1560,
+          "matches": 6,
+          "note": "the measured producer caller",
+          "source": "run_record",
+          "token": "\"native balance of the sender\""
+        }
+      ],
+      "id": "s6.native_balance.preflight_to_before_snapshot",
+      "measured_pairs": 3,
+      "method": "eth_getBalance",
+      "producer_caller": "native balance of the sender",
+      "producer_stage": "preflight",
+      "question": "the build asks the balance twice; may the preflight answer serve either?",
+      "reasons": [
+        "in all three runs both asks name the same height, and they still ask different questions: can it pay, versus what did it hold",
+        "nothing holds a balance after its read returns, so sharing would mean inventing a holder rather than reading one",
+        "this row is not covered by §6's ban — the before-snapshot is an audit baseline, not a pre-submission check — which is why it lands on B while the gate row below lands on C"
+      ],
+      "section": "6",
+      "state_kind": "native_balance",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "an owner for a balance between stages, plus a field saying which question an answer answers — §4's balance row names both",
+        "producer_result_carried": false,
+        "safety_constraint_served": "not a gate: the before-snapshot is the baseline the real asset delta is measured against afterwards",
+        "same_semantics": false,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "eth_getBalance again inside the before-snapshot — one of the build's two balance asks, the other being the gate leg below — stamped `before-snapshot: native and input-token balances`",
+        "what_the_producer_read": "eth_getBalance for the sender at the head preflight had just read, stamped `native balance of the sender`"
+      }
+    },
+    {
+      "consumer_caller": "step 1: fee at pinned block",
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 235,
+          "matches": 1,
+          "note": "the preflight half of the pair",
+          "source": "code",
+          "token": "fee at pinned block"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1616,
+          "matches": 1,
+          "note": "the build half, inside the leg",
+          "source": "code",
+          "token": "fee at pinned block"
+        },
+        {
+          "file": "crates/execution/src/fee.rs",
+          "line": 36,
+          "matches": 1,
+          "note": "the value that does carry a block identity, next to the ask that does not",
+          "source": "code",
+          "token": "pub struct FeeReading"
+        }
+      ],
+      "id": "s6.fee.preflight_to_build",
+      "measured_pairs": 3,
+      "method": "eth_maxPriorityFeePerGas",
+      "producer_caller": "fee at pinned block",
+      "producer_stage": "preflight",
+      "question": "may the build price itself from preflight's fee answer?",
+      "reasons": [
+        "the method carries no block term at all, so an answer is a sample of the moment the node served it",
+        "the leg exists to catch a moved fee; handing it the moved number leaves it nothing to compare",
+        "this is a proven negative, not an unknown: the asks are identical and the conclusion is that the second one is the check"
+      ],
+      "section": "6",
+      "state_kind": "fee_parameters",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "a stated validity window — no expiry, deadline or TTL field exists in any crate",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the §26 fee leg — a moved fee changes the profit the sequence is being sent for",
+        "same_semantics": true,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "eth_maxPriorityFeePerGas again at the step, stamped `step 1: fee at pinned block`",
+        "what_the_producer_read": "eth_maxPriorityFeePerGas, stamped `fee at pinned block`"
+      }
+    },
+    {
+      "consumer_caller": "fee at head",
+      "consumer_stage": "preflight",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 243,
+          "matches": 1,
+          "note": "the head half of the comparison",
+          "source": "code",
+          "token": "fee at head"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 429,
+          "matches": 6,
+          "note": "the measured same-stage pair",
+          "source": "run_record",
+          "token": "\"fee at head\""
+        }
+      ],
+      "id": "s6.fee.intra_preflight_head_pair",
+      "measured_pairs": 3,
+      "method": "eth_maxPriorityFeePerGas",
+      "producer_caller": "fee at pinned block",
+      "producer_stage": "preflight",
+      "question": "two identical asks inside one stage — is one of them wasted?",
+      "reasons": [
+        "the two reads are the two halves of one check; removing either removes the check",
+        "M8.4.2 counted this as a duplicate because the asks are identical, not because they are redundant — the record cannot tell the two apart and this row says which is which",
+        "a same-stage pair is the cheapest reuse question in the model and still comes out as C, which is the clearest evidence that duplicate counts do not imply waste"
+      ],
+      "section": "6",
+      "state_kind": "fee_parameters",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "nothing: the pair is the mechanism, and §6 asks that it not be traded away",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the head-versus-pin fee comparison inside preflight",
+        "same_semantics": false,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "eth_maxPriorityFeePerGas for the head, stamped `fee at head`",
+        "what_the_producer_read": "eth_maxPriorityFeePerGas for the pinned block"
+      }
+    },
+    {
+      "consumer_caller": "step 1: pending and latest nonces",
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 223,
+          "matches": 1,
+          "note": "the tag the preflight side asks",
+          "source": "code",
+          "token": "head at latest"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "where a tag becomes the term the node sees",
+          "source": "code",
+          "token": "fn block_param"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 227,
+          "matches": 9,
+          "note": "the measured tag-against-tag pair",
+          "source": "run_record",
+          "token": "\"head at latest\""
+        }
+      ],
+      "id": "s6.header.nonce_track_tag_preflight_to_build",
+      "measured_pairs": 3,
+      "method": "eth_getBlockByNumber",
+      "producer_caller": "head at latest",
+      "producer_stage": "preflight",
+      "question": "the header asks on the nonce track: does a carried `latest` mean the same block?",
+      "reasons": [
+        "both sides ask a tag, and a tag is a moment rather than an identity — §10's `latest is not an explicit height` is this row",
+        "the height `latest` named at preflight can be a different height at the build, and neither record says which it got",
+        "these are 6 of M8.4.2's 21 header candidates, and they are not the family the header rows below decide about"
+      ],
+      "section": "6",
+      "state_kind": "block_header",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "a record of which height a tag resolved to — neither ask names a height, so no shared value would carry an identity a consumer could check",
+        "producer_result_carried": false,
+        "safety_constraint_served": "resolving the tags the nonce leg speaks, at the moment that leg runs",
+        "same_semantics": false,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "eth_getBlockByNumber for `latest` and `pending` again at the step, to resolve the tags its nonce leg asks in",
+        "what_the_producer_read": "eth_getBlockByNumber for `latest`, stamped `head at latest`"
+      }
+    },
+    {
+      "consumer_caller": "pending and latest nonces",
+      "consumer_stage": "preflight",
+      "contract_status": "partially_proven",
+      "decision": "contract_design_first",
+      "decision_letter": "B",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 248,
+          "matches": 1,
+          "note": "the second ask, in the same stage",
+          "source": "code",
+          "token": "pending and latest nonces"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 342,
+          "matches": 1,
+          "note": "the cache whose scope §3 forbids changing",
+          "source": "code",
+          "token": "struct StateReadCache {"
+        }
+      ],
+      "id": "s6.header.nonce_track_tag_intra_preflight",
+      "measured_pairs": 3,
+      "method": "eth_getBlockByNumber",
+      "producer_caller": "head at latest",
+      "producer_stage": "preflight",
+      "question": "inside preflight, could one resolved height serve both asks?",
+      "reasons": [
+        "inside one stage's own run the ownership question does not arise, so this is the one measured pair in the table whose blocker is purely a missing record",
+        "it is still not safe today: two asks a few calls apart can straddle a block, and nothing says which height either got",
+        "§3 forbids widening M8.3.1's cache to cover it, so the finding stays a design item"
+      ],
+      "section": "6",
+      "state_kind": "block_header",
+      "sub_questions": {
+        "consumer_has_own_duty": false,
+        "external_change_between": true,
+        "minimal_addition": "a per-run note of the height `latest` resolved to, kept by whoever stamps the ask — that one field would make the second ask checkable rather than merely equal",
+        "producer_result_carried": false,
+        "safety_constraint_served": "nothing of its own: the second ask is the same question asked again a few calls later",
+        "same_semantics": true,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "the same tag asked again for the nonce leg, stamped `pending and latest nonces`",
+        "what_the_producer_read": "eth_getBlockByNumber for `latest`, the head preflight reports its other reads at"
+      }
+    },
+    {
+      "consumer_caller": "step 1: fee at pinned block",
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "controlled_experiment_definable",
+      "decision_letter": "A",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 45,
+          "matches": 1,
+          "note": "the number-plus-hash a carrier would move",
+          "source": "code",
+          "token": "pub struct BlockPin"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, and why it cannot hold the value today",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1616,
+          "matches": 1,
+          "note": "the consumer that would receive it",
+          "source": "code",
+          "token": "fee at pinned block"
+        }
+      ],
+      "id": "s6.header.observation_to_build_fee_input",
+      "measured_pairs": 3,
+      "method": "eth_getBlockByNumber",
+      "producer_caller": "head and header that fixed the pin",
+      "producer_stage": "observation",
+      "question": "may the build's fee input be handed over instead of re-read?",
+      "reasons": [
+        "this is the only family in the model where identity, freshness and ownership are all proven: a numbered block is settled, and §4's header row shows three production points that verify it",
+        "what is missing is a field, not a rule — `PreflightReport`, the only type that crosses the boundary, carries a verdict and free text and no state value",
+        "A here is a decision about the next phase and not a claim of safety today: `safe_to_reuse_now` stays false for all 42 measured candidates"
+      ],
+      "section": "6",
+      "state_kind": "block_header",
+      "sub_questions": {
+        "consumer_has_own_duty": false,
+        "external_change_between": false,
+        "minimal_addition": "a carrier that moves number and hash together, and a consumer that verifies the hash against its pin before using the value",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the header here is an input to a computation, not a check — the check is the fee comparison and the binding leg, both separate rows",
+        "same_semantics": true,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "eth_getBlockByNumber at the same height, for the base fee the step prices against",
+        "what_the_producer_read": "eth_getBlockByNumber at the pinned height, the read that fixed the pin"
+      }
+    },
+    {
+      "consumer_caller": "step 1: gate — block binding at pin",
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1663,
+          "matches": 1,
+          "note": "the leg",
+          "source": "code",
+          "token": "gate — block binding at pin"
+        },
+        {
+          "file": "crates/execution/src/gate.rs",
+          "line": 74,
+          "matches": 1,
+          "note": "Confirmed, Reorged, Unverified — the verdict the leg produces",
+          "source": "code",
+          "token": "pub enum BlockBinding"
+        },
+        {
+          "file": "crates/execution/src/chain_read.rs",
+          "line": 38,
+          "matches": 1,
+          "note": "the read that produces it",
+          "source": "code",
+          "token": "fn read_binding"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2558,
+          "matches": 3,
+          "note": "the measured consumer role",
+          "source": "run_record",
+          "token": "\"step 1: gate — block binding at pin\""
+        }
+      ],
+      "id": "s6.header.observation_to_build_binding_gate",
+      "measured_pairs": 3,
+      "method": "eth_getBlockByNumber",
+      "producer_caller": "head and header that fixed the pin",
+      "producer_stage": "observation",
+      "question": "same state, same height — so may the binding leg consume it?",
+      "reasons": [
+        "a handed-over header would make the comparison check the pin against an answer taken before the pin was questioned",
+        "§6's ban on deleting a pre-submission check decides this row whatever the row above concludes — and the two rows differ only in which consumer asked",
+        "this is §6's clearest demonstration that one state can be shareable for one consumer and unshareable for another"
+      ],
+      "section": "6",
+      "state_kind": "block_header",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "none: the leg's authority is that it is an independent read at the moment it guards",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the §26 block-binding leg: a reorganisation between the pin and the build",
+        "same_semantics": true,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "eth_getBlockByNumber at the same height again, to learn whether the node still calls that height the same block",
+        "what_the_producer_read": "eth_getBlockByNumber at the pinned height, once, when the pin was fixed"
+      }
+    },
+    {
+      "consumer_caller": "block binding at pin",
+      "consumer_stage": "preflight",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 279,
+          "matches": 1,
+          "note": "preflight's binding stamp",
+          "source": "code",
+          "token": "block binding at pin"
+        },
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 220,
+          "matches": 1,
+          "note": "the sibling read taken at the same pin",
+          "source": "code",
+          "token": "fn base_fee_at"
+        }
+      ],
+      "id": "s6.header.observation_to_preflight_binding",
+      "measured_pairs": 3,
+      "method": "eth_getBlockByNumber",
+      "producer_caller": "head and header that fixed the pin",
+      "producer_stage": "observation",
+      "question": "preflight binds the pin too; is that a second check or a duplicate read?",
+      "reasons": [
+        "preflight and the build each bind the pin at their own moment, and those moments are the point of the two legs",
+        "the pair is identical in the record and different in purpose, so §6's per-item rule keeps this row separate from the fee-input row"
+      ],
+      "section": "6",
+      "state_kind": "block_header",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "nothing on this edge either: a check that consumes an earlier copy of its own answer is not a check",
+        "producer_result_carried": false,
+        "safety_constraint_served": "preflight's §26 binding leg — the pin is still the block it was when the finding was priced",
+        "same_semantics": true,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "eth_getBlockByNumber at the same height, as preflight's own binding fact, stamped `block binding at pin`",
+        "what_the_producer_read": "eth_getBlockByNumber at the pinned height, when the pin was fixed"
+      }
+    },
+    {
+      "consumer_caller": "fee at pinned block",
+      "consumer_stage": "preflight",
+      "contract_status": "proven",
+      "decision": "controlled_experiment_definable",
+      "decision_letter": "A",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 235,
+          "matches": 1,
+          "note": "the preflight consumer of the same header",
+          "source": "code",
+          "token": "fee at pinned block"
+        },
+        {
+          "file": "crates/pipeline/src/sim.rs",
+          "line": 340,
+          "matches": 1,
+          "note": "the plan-side check that a height and a hash must both still agree",
+          "source": "code",
+          "token": "state_version_mismatch"
+        }
+      ],
+      "id": "s6.header.observation_to_preflight_fee_input",
+      "measured_pairs": 3,
+      "method": "eth_getBlockByNumber",
+      "producer_caller": "head and header that fixed the pin",
+      "producer_stage": "observation",
+      "question": "the same header feeds preflight's fee pair; same conclusion as the build's?",
+      "reasons": [
+        "with the fee-input leg in both stages, the experiment's shape is fixed: one header per pinned height, verified by whichever consumer uses it",
+        "the binding legs stay independent reads, so the experiment never touches a check",
+        "the pair is 3 of the 15 numbered-height header candidates M8.4.2 measured"
+      ],
+      "section": "6",
+      "state_kind": "block_header",
+      "sub_questions": {
+        "consumer_has_own_duty": false,
+        "external_change_between": false,
+        "minimal_addition": "the same carrier the build-side row names — one field serving both consumers",
+        "producer_result_carried": false,
+        "safety_constraint_served": "none by itself: the fee comparison is the check, and this read is an input to it",
+        "same_semantics": true,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "eth_getBlockByNumber at the same height for the base fee the fee pair compares",
+        "what_the_producer_read": "eth_getBlockByNumber at the pinned height, once"
+      }
+    },
+    {
+      "consumer_caller": "header at pin",
+      "consumer_stage": "simulation",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/request.rs",
+          "line": 436,
+          "matches": 1,
+          "note": "the round trip that compares number and hash",
+          "source": "code",
+          "token": "fn check_pin"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 126,
+          "matches": 3,
+          "note": "the measured simulation caller",
+          "source": "run_record",
+          "token": "\"header at pin\""
+        }
+      ],
+      "id": "s7.header.observation_to_simulation_pin_read",
+      "measured_pairs": 3,
+      "method": "eth_getBlockByNumber",
+      "producer_caller": "head and header that fixed the pin",
+      "producer_stage": "observation",
+      "question": "the simulation's own header at pin: an extra read or the pin's evidence?",
+      "reasons": [
+        "the check compares the pin the request carries against what the node answers at that height now; a handed-over answer removes the second half",
+        "§7 asks whether the simulation re-fetches canonical state: this row is one of the 39 calls that are the answer",
+        "the header family therefore splits three ways on this edge: A for a fee input, C for two binding legs, C for the simulation's pin"
+      ],
+      "section": "7",
+      "state_kind": "block_header",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "nothing: this read is how the simulation learns its pin held",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the provider round trip's pin check: the run is about the block it claims to be about",
+        "same_semantics": true,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "eth_getBlockByNumber at the same height, as the first of the 39 calls one simulation makes, stamped `header at pin`",
+        "what_the_producer_read": "eth_getBlockByNumber at the pinned height, from the observation that fixed the pin"
+      }
+    },
+    {
+      "consumer_caller": null,
+      "consumer_stage": "build",
+      "contract_status": "not_applicable",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/builder.rs",
+          "line": 200,
+          "matches": 1,
+          "note": "the limit comes from this run's own measurement",
+          "source": "code",
+          "token": "policy.gas.resolve(policy.simulated_gas_used)"
+        },
+        {
+          "file": "crates/execution/src/builder.rs",
+          "line": 94,
+          "matches": 1,
+          "note": "the ceiling, a configured number from one measured real block",
+          "source": "code",
+          "token": "maximum_gas_limit: 60_000_000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/rpc-summary.json",
+          "line": 128,
+          "matches": 1,
+          "note": "one run's method list; the gate test asserts this list holds no estimate and no gas price",
+          "source": "run_record",
+          "token": "\"eth_getCode\""
+        }
+      ],
+      "id": "s6.gas_limit.not_a_chain_read",
+      "measured_pairs": 0,
+      "method": null,
+      "producer_caller": null,
+      "producer_stage": "preflight",
+      "question": "does either stage pay the node for a gas limit or an estimate?",
+      "reasons": [
+        "§6 lists gas limit or gas estimate as an item to analyse, and the analysis is that it is not a state read here — that is a conclusion, not a gap",
+        "the three runs asked nine methods in 246 calls; no eth_estimateGas and no eth_gasPrice is among them, which the recompute gate re-derives rather than quotes",
+        "C on this row means there is nothing on the edge to reuse, not that a read has to be kept: §17 offers no not-applicable option, so the row says which half of C it means"
+      ],
+      "section": "6",
+      "state_kind": "fee_parameters",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": null,
+        "minimal_addition": "nothing: there is no chain answer on this edge to carry",
+        "producer_result_carried": null,
+        "safety_constraint_served": "the ceiling keeps a limit inside a block a node could actually include",
+        "same_semantics": null,
+        "version_or_token_exists": null,
+        "what_the_consumer_read": "nothing from the node: the limit is resolved from the simulation's measured gas plus a margin, then bounded by a configured ceiling and re-checked against the measurement",
+        "what_the_producer_read": "nothing: preflight stamps no gas ask in any of the three runs"
+      }
+    },
+    {
+      "consumer_caller": null,
+      "consumer_stage": "simulation",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/state/src/store.rs",
+          "line": 28,
+          "matches": 1,
+          "note": "where the log-derived view lives",
+          "source": "code",
+          "token": "pub struct InMemoryStateStore"
+        },
+        {
+          "file": "crates/graph/src/snapshot.rs",
+          "line": 17,
+          "matches": 1,
+          "note": "the view a finding is priced from, with no state root in it",
+          "source": "code",
+          "token": "pub struct GraphSnapshot {"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 1068,
+          "matches": 1,
+          "note": "the canonical read that replaces it",
+          "source": "code",
+          "token": "get_code(key.block, key.address)"
+        },
+        {
+          "file": "crates/pipeline/src/sim.rs",
+          "line": 340,
+          "matches": 1,
+          "note": "the check that keeps the two views from being confused",
+          "source": "code",
+          "token": "state_version_mismatch"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/rpc-summary.json",
+          "line": 158,
+          "matches": 1,
+          "note": "the bulk of one simulation's 39 calls",
+          "source": "run_record",
+          "token": "\"eth_getStorageAt\""
+        }
+      ],
+      "id": "s7.pool_reserves.finding_to_simulation",
+      "measured_pairs": 0,
+      "method": null,
+      "producer_caller": null,
+      "producer_stage": "opportunity",
+      "question": "may the simulation run on the reserves the finding was priced from?",
+      "reasons": [
+        "a GraphSnapshot is built from logs the store applied; it carries an applied position and no state root, no storage, no code",
+        "one block number does not prove one state — §10's first inequality is this row, and the finding does carry the hash that closes it",
+        "what crosses the edge is the identity and the path, never the state itself"
+      ],
+      "section": "7",
+      "state_kind": "pool_reserves",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "nothing: §7 forbids treating the graph as a REVM state source, and the pin check that guards the difference already exists",
+        "producer_result_carried": true,
+        "safety_constraint_served": "the simulation must be about the state a real node holds at the pin, not about a view derived from logs",
+        "same_semantics": false,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "code, storage slots, balances and nonces for itself at the pinned height — 38 of the 39 calls one simulation makes",
+        "what_the_producer_read": "no RPC: a finding is priced from pool states the graph holds, each restated at an applied position"
+      }
+    },
+    {
+      "consumer_caller": null,
+      "consumer_stage": "simulation",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/opportunity/src/lifecycle.rs",
+          "line": 142,
+          "matches": 1,
+          "note": "the hash a finding carries, not only its height",
+          "source": "code",
+          "token": "pub pinned_block_hash: B256,"
+        },
+        {
+          "file": "crates/pipeline/src/runner.rs",
+          "line": 447,
+          "matches": 1,
+          "note": "the dispatch check",
+          "source": "code",
+          "token": "state_unavailable"
+        },
+        {
+          "file": "crates/simulation/src/request.rs",
+          "line": 436,
+          "matches": 1,
+          "note": "the provider round trip's check",
+          "source": "code",
+          "token": "fn check_pin"
+        }
+      ],
+      "id": "s7.block_identity.finding_pin_is_verified",
+      "measured_pairs": 0,
+      "method": null,
+      "producer_caller": null,
+      "producer_stage": "opportunity",
+      "question": "is the identity a finding carries enough to describe the state it came from?",
+      "reasons": [
+        "a height alone is not an identity — a reorganisation replaces one block with another at the same number; a height plus a hash is, and the code enforces the pair",
+        "this is the finding that licenses §6's two header rows: an experiment may share a header, never a bare height",
+        "C on this row is the half of §7 that says the pin's own read stays wherever a consumer verifies it — the carrier question is already recorded on the edges that have a shareable consumer"
+      ],
+      "section": "7",
+      "state_kind": "block_header",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "nothing for the identity; the open item is a value that carries number and hash together to a consumer that wants a header",
+        "producer_result_carried": true,
+        "safety_constraint_served": "the pin is what makes a simulation about a past block a claim about that block",
+        "same_semantics": null,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "a pin verified by number and by hash at three separate points — dispatch, plan, provider round trip",
+        "what_the_producer_read": "an applied position: the height the ledger stopped at, and the hash recorded beside it"
+      }
+    },
+    {
+      "consumer_caller": null,
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/opportunity/src/lifecycle.rs",
+          "line": 319,
+          "matches": 1,
+          "note": "the ledger's own decision point",
+          "source": "code",
+          "token": "pub fn simmable("
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1229,
+          "matches": 1,
+          "note": "the three checks the build performs on preflight's verdict",
+          "source": "code",
+          "token": "fn preflight_cleared"
+        },
+        {
+          "file": "crates/execution/src/gate.rs",
+          "line": 63,
+          "matches": 1,
+          "note": "the vocabulary for still-good-at-submission",
+          "source": "code",
+          "token": "pub enum Freshness"
+        }
+      ],
+      "id": "s7.opportunity_staleness.decided_before_repricing",
+      "measured_pairs": 0,
+      "method": null,
+      "producer_caller": null,
+      "producer_stage": "opportunity",
+      "question": "after a finding, does a state change mean expiry, re-simulation or re-detection?",
+      "reasons": [
+        "expiry is decided by the ledger before a simulation is even asked for, so a stale finding never reaches the edge that could be tempted to reuse it",
+        "a re-simulation is a new run with a new fingerprint, not a reuse of the old one",
+        "still favourable at submission is what the gate legs answer, which is why they stay — §7's question is answered by keeping the stages' separate answers"
+      ],
+      "section": "7",
+      "state_kind": "transaction_intent",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "nothing: expiry, re-simulation and re-detection are already three separate decisions in code",
+        "producer_result_carried": true,
+        "safety_constraint_served": "§7's distinction between favourable at detection and still favourable at submission",
+        "same_semantics": null,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "preflight and the gate legs re-read at their own moments, and the intent carries the identities of the run it came from",
+        "what_the_producer_read": "the finding's state version against the ledger's applied position"
+      }
+    },
+    {
+      "consumer_caller": null,
+      "consumer_stage": "graph",
+      "contract_status": "partially_proven",
+      "decision": "contract_design_first",
+      "decision_letter": "B",
+      "evidence_refs": [
+        {
+          "file": "crates/state/src/update.rs",
+          "line": 33,
+          "matches": 1,
+          "note": "the single entry point",
+          "source": "code",
+          "token": "The only way anything may enter the store."
+        },
+        {
+          "file": "crates/graph/src/builder.rs",
+          "line": 70,
+          "matches": 1,
+          "note": "the position a snapshot names",
+          "source": "code",
+          "token": "The target block is the snapshot's own applied position"
+        },
+        {
+          "file": "crates/pipeline/src/engine.rs",
+          "line": 191,
+          "matches": 1,
+          "note": "where replay and live meet",
+          "source": "code",
+          "token": "fn on_canonical"
+        },
+        {
+          "file": "crates/graph/src/snapshot.rs",
+          "line": 17,
+          "matches": 1,
+          "note": "the type that has a height and no hash",
+          "source": "code",
+          "token": "pub struct GraphSnapshot {"
+        },
+        {
+          "file": "data/evidence/m8/storage-dependency/dependency-map.json",
+          "line": 128,
+          "matches": 121,
+          "note": "the recorded ordering of one run's reads",
+          "source": "run_record",
+          "token": "\"ordered\""
+        }
+      ],
+      "id": "s8.pool_reserves.snapshot_lacks_a_hash",
+      "measured_pairs": 0,
+      "method": null,
+      "producer_caller": null,
+      "producer_stage": "state_store",
+      "question": "does the path from an event to a snapshot produce something a consumer can bind to, and do replay and live travel it together?",
+      "reasons": [
+        "the store has exactly one way in and the builder states the position it applied to, and replay and live meet at the same canonical function",
+        "what is missing is not determinism but identity: a height with no hash cannot be checked against a node, and the snapshot type has no hash field",
+        "so §8's authority matrix records this edge as designable and not yet written down — which is a finding, not a refusal"
+      ],
+      "section": "8",
+      "state_kind": "pool_reserves",
+      "sub_questions": {
+        "consumer_has_own_duty": false,
+        "external_change_between": false,
+        "minimal_addition": "a block hash beside the applied position, so a consumer of a snapshot can state which block it means",
+        "producer_result_carried": true,
+        "safety_constraint_served": "ordering: a snapshot only means something as the position it stopped at",
+        "same_semantics": null,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "a snapshot carrying the position it applied to, rebuilt each block",
+        "what_the_producer_read": "an event applied to the store through the one entry point the store has, ordered by the update path"
+      }
+    },
+    {
+      "consumer_caller": null,
+      "consumer_stage": "simulation",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 342,
+          "matches": 1,
+          "note": "the per-simulation scope",
+          "source": "code",
+          "token": "struct StateReadCache {"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 339,
+          "matches": 1,
+          "note": "the code's own words for the boundary",
+          "source": "code",
+          "token": "no process-wide map"
+        },
+        {
+          "file": "data/evidence/m8/storage-dependency/dependency-map.json",
+          "line": 128,
+          "matches": 121,
+          "note": "one run's read order, the evidence for its self-containedness",
+          "source": "run_record",
+          "token": "\"ordered\""
+        }
+      ],
+      "id": "s8.canonical_state.store_is_not_an_evm_source",
+      "measured_pairs": 0,
+      "method": null,
+      "producer_caller": null,
+      "producer_stage": "graph",
+      "question": "which of the states this path maintains may be a simulation input?",
+      "reasons": [
+        "the store answers what the pools did; REVM asks what the chain holds — the two questions have different producers, owners and authorities",
+        "a simulation's reads are one run's own: the cache is scoped to it and no process-wide map exists, which is what the dependency evidence records",
+        "this row is the §8 statement of §7's, seen from the source side rather than the finding side"
+      ],
+      "section": "8",
+      "state_kind": "storage_slot",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "nothing: §8 asks for the authority matrix as the output, and the matrix's answer is that the two sources are not interchangeable",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the simulation must execute against what the chain holds, so its reads go to the node",
+        "same_semantics": false,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "REVM's canonical reads: code, storage slots, balances and nonces at a height, each keyed by that height",
+        "what_the_producer_read": "reserves and fee figures derived from logs, and the pool states the graph rebuilt from them"
+      }
+    },
+    {
+      "consumer_caller": "step 1: gate — native balance",
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 1670,
+          "matches": 1,
+          "note": "the leg",
+          "source": "code",
+          "token": "gate — native balance"
+        },
+        {
+          "file": "crates/execution/src/gate.rs",
+          "line": 90,
+          "matches": 1,
+          "note": "a per-step verdict rather than a held value",
+          "source": "code",
+          "token": "pub enum BalanceEvidence"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2659,
+          "matches": 3,
+          "note": "the measured consumer role",
+          "source": "run_record",
+          "token": "\"step 1: gate — native balance\""
+        }
+      ],
+      "id": "s9.native_balance.build_gate_leg",
+      "measured_pairs": 3,
+      "method": "eth_getBalance",
+      "producer_caller": "account: sender",
+      "producer_stage": "simulation",
+      "question": "the simulation already read the sender's balance; may the gate consume it?",
+      "reasons": [
+        "the simulation's read answered whether an endowment could pay inside a run; the gate answers whether the real wallet can pay before sending",
+        "§6's ban on deleting a pre-submission check decides this row directly",
+        "this is the balance family's third shape: B for the audit baseline, C for the gate leg, C for the nonce track's sibling — three conclusions, one category"
+      ],
+      "section": "9",
+      "state_kind": "native_balance",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": true,
+        "minimal_addition": "none that §6 would allow: the leg is a pre-submission check",
+        "producer_result_carried": false,
+        "safety_constraint_served": "the pre-submission balance check: the real wallet can pay for this sequence",
+        "same_semantics": false,
+        "version_or_token_exists": false,
+        "what_the_consumer_read": "eth_getBalance again at the pinned height as the §26 balance leg, stamped `step 1: gate — native balance`",
+        "what_the_producer_read": "eth_getBalance for the sender as one of the simulation's canonical reads, stamped `account: sender`"
+      }
+    },
+    {
+      "consumer_caller": null,
+      "consumer_stage": "build",
+      "contract_status": "partially_proven",
+      "decision": "contract_design_first",
+      "decision_letter": "B",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/builder.rs",
+          "line": 248,
+          "matches": 1,
+          "note": "the nine-field comparison, intent against bytes",
+          "source": "code",
+          "token": "pub fn round_trip"
+        },
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 41,
+          "matches": 1,
+          "note": "the fingerprint that binds an intent to one run",
+          "source": "code",
+          "token": "pub simulation_id: B256,"
+        },
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 293,
+          "matches": 1,
+          "note": "the construction that makes agreement automatic rather than verified",
+          "source": "code",
+          "token": "pub fn from_simulated_step("
+        },
+        {
+          "file": "crates/execution/tests/sequence.rs",
+          "line": 582,
+          "matches": 1,
+          "note": "the existing test that a plan carries only what the run decided",
+          "source": "test",
+          "token": "the_plan_is_the_run_s_transactions_in_order_and_nothing_else"
+        }
+      ],
+      "id": "s9.transaction_intent.fields_agree_by_construction",
+      "measured_pairs": 0,
+      "method": null,
+      "producer_caller": null,
+      "producer_stage": "simulation",
+      "question": "which simulation-to-build fields are bound by a check rather than by the code that wrote them?",
+      "reasons": [
+        "chain id, target, value, calldata, nonce, gas limit, fee parameters and the sender are carried from the run by construction — `from_simulated_step` is the only way an intent is made — so their agreement is a property of one function, not of a check",
+        "the identities that do get compared are the opportunity, the simulation fingerprint and the risk decision, which is what makes an intent evidence about a run rather than a claim",
+        "B because the missing mechanism is a field and a comparison, not an RPC question"
+      ],
+      "section": "9",
+      "state_kind": "transaction_intent",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": false,
+        "minimal_addition": "a check that re-derives the intent's fields from the simulation result it names: today nine fields are compared after the build, against the intent, and none against the simulation",
+        "producer_result_carried": true,
+        "safety_constraint_served": "§14's round trip: the bytes that get signed must describe the intent that was approved",
+        "same_semantics": null,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "an intent naming that fingerprint and the simulation's nonce, gas, calldata and target; the build then compares nine fields of its own bytes against the intent",
+        "what_the_producer_read": "a simulation result, fingerprinted over its own serialised fields"
+      }
+    },
+    {
+      "consumer_caller": null,
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/builder.rs",
+          "line": 172,
+          "matches": 1,
+          "note": "the refusal",
+          "source": "code",
+          "token": "policy.require_unoverridden_state && intent.funding.derived_from_overridden_state()"
+        },
+        {
+          "file": "crates/simulation/src/state.rs",
+          "line": 425,
+          "matches": 1,
+          "note": "the environment the run may have leaned on",
+          "source": "code",
+          "token": "pub struct StateOverride"
+        },
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 111,
+          "matches": 1,
+          "note": "the declaration the refusal reads",
+          "source": "code",
+          "token": "pub enum SenderFunding"
+        }
+      ],
+      "id": "s9.simulation_result.override_dependence_is_refused",
+      "measured_pairs": 0,
+      "method": null,
+      "producer_caller": null,
+      "producer_stage": "simulation",
+      "question": "if the run needed a state override, can the real chain reproduce it?",
+      "reasons": [
+        "the refusal is in the builder, names the funding it refused, and fires before any signature is taken",
+        "a run that needed an override is evidence about an environment, not about a block — which is exactly what §9 forbids confusing",
+        "the intent records its funding instead of inferring it, because a simulation result does not carry the sender's balance"
+      ],
+      "section": "9",
+      "state_kind": "simulation_result",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": false,
+        "minimal_addition": "nothing: the edge is closed by rule, and §9's demand that an override-dependent run not count as proof of executability is enforced rather than assumed",
+        "producer_result_carried": true,
+        "safety_constraint_served": "§33 and §34: no real account could send a transaction that only works inside an overridden environment",
+        "same_semantics": false,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "an intent that declares how its sender was funded, and a build that refuses an override-funded one before signing",
+        "what_the_producer_read": "whatever the provider was given: canonical reads at the pin, plus any override the request carried"
+      }
+    },
+    {
+      "consumer_caller": null,
+      "consumer_stage": "build",
+      "contract_status": "proven",
+      "decision": "must_refetch",
+      "decision_letter": "C",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/builder.rs",
+          "line": 166,
+          "matches": 1,
+          "note": "the refusal and the field it reads",
+          "source": "code",
+          "token": "describes step 1 of a {}-step sequence"
+        },
+        {
+          "file": "crates/execution/src/intent.rs",
+          "line": 178,
+          "matches": 1,
+          "note": "the count that makes the refusal possible",
+          "source": "code",
+          "token": "pub simulated_steps: usize,"
+        }
+      ],
+      "id": "s9.transaction_intent.multi_step_plan_is_refused",
+      "measured_pairs": 0,
+      "method": null,
+      "producer_caller": null,
+      "producer_stage": "simulation",
+      "question": "does a favourable multi-step run entitle one transaction?",
+      "reasons": [
+        "a simulation's profit is a property of the whole sequence, so a single transaction's buildability is not implied by it",
+        "the build refuses on the step count and the absent position, naming both",
+        "this is §9's field-by-field answer for route and swap steps: they are carried, and carrying them is not the same as being allowed to send one"
+      ],
+      "section": "9",
+      "state_kind": "transaction_intent",
+      "sub_questions": {
+        "consumer_has_own_duty": true,
+        "external_change_between": false,
+        "minimal_addition": "nothing here either: the refusal exists, and the remaining question is which executor contract a sequence needs — outside this milestone",
+        "producer_result_carried": true,
+        "safety_constraint_served": "§4: an intent that describes step 1 of a multi-step plan without a position has no executor committed to the rest",
+        "same_semantics": false,
+        "version_or_token_exists": true,
+        "what_the_consumer_read": "one transaction, carrying the step count it came from and a sequence position when one exists",
+        "what_the_producer_read": "a sequence of steps, each executed inside the same simulation, where step two only works if step one landed"
+      }
+    }
+  ],
+  "sections": [
+    "6",
+    "7",
+    "8",
+    "9"
+  ],
+  "unit": "stage edge"
+}

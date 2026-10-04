@@ -1,0 +1,3825 @@
+{
+  "aggregate": {
+    "blockers": {
+      "answer_bytes_not_recorded": 42,
+      "block_hash_not_recorded": 42,
+      "block_number_not_comparable": 21,
+      "consumer_names_no_height": 21,
+      "contract_check_would_stop_existing": 21,
+      "contract_declares_not_reusable": 15,
+      "contract_lists_missing_proof": 42,
+      "different_lifecycle_scope": 42,
+      "freshness_rule_not_proven": 12,
+      "invalidation_rule_not_proven": 42,
+      "no_owner_in_code": 6,
+      "ownership_not_proven": 15,
+      "producer_names_no_height": 21,
+      "same_value_different_source": 42,
+      "state_movement_not_detectable": 42
+    },
+    "blockers_at_the_top": {
+      "blockers": [
+        "answer_bytes_not_recorded",
+        "block_hash_not_recorded",
+        "contract_lists_missing_proof",
+        "different_lifecycle_scope",
+        "invalidation_rule_not_proven",
+        "same_value_different_source",
+        "state_movement_not_detectable"
+      ],
+      "count": 7,
+      "rows": 42
+    },
+    "by_producer_consumer": {
+      "build": 48,
+      "preflight": 30,
+      "simulation": 6
+    },
+    "by_state_kind": {
+      "block_header": 42,
+      "chain_identity": 12,
+      "fee_parameters": 12,
+      "native_balance": 12,
+      "nonce": 6
+    },
+    "candidates": 42,
+    "duplicate": {
+      "true": 42
+    },
+    "record_and_verdict_disagreements": [],
+    "reusable_in_principle": {
+      "false": 21,
+      "null": 21
+    },
+    "rows_without_a_blocker": 0,
+    "safe_to_reuse_now": {
+      "false": 42
+    },
+    "safe_to_reuse_now_true": 0,
+    "semantically_equivalent": {
+      "false": 21,
+      "null": 21
+    }
+  },
+  "assembled_from": [
+    {
+      "arm": "§11 live",
+      "asks": 82,
+      "block_number": 37700740,
+      "cache_hits": 77,
+      "call_rows": 82,
+      "chain_id": 91342,
+      "configured_concurrency": 1,
+      "directory": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045857467,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "pairs": 26,
+      "reuse_candidates": 14,
+      "route_mode": "build-only",
+      "run": "route-91342-37700740-1791045857463",
+      "safe_to_reuse": 0,
+      "simulations": 1,
+      "source": "live",
+      "state_read_reuse": true,
+      "successful_real_arbitrage": false
+    },
+    {
+      "arm": "§11 live",
+      "asks": 82,
+      "block_number": 37700778,
+      "cache_hits": 77,
+      "call_rows": 82,
+      "chain_id": 91342,
+      "configured_concurrency": 1,
+      "directory": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045896095,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "pairs": 26,
+      "reuse_candidates": 14,
+      "route_mode": "build-only",
+      "run": "route-91342-37700778-1791045896094",
+      "safe_to_reuse": 0,
+      "simulations": 1,
+      "source": "live",
+      "state_read_reuse": true,
+      "successful_real_arbitrage": false
+    },
+    {
+      "arm": "§11 live",
+      "asks": 82,
+      "block_number": 37700806,
+      "cache_hits": 77,
+      "call_rows": 82,
+      "chain_id": 91342,
+      "configured_concurrency": 1,
+      "directory": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/",
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_mode": "build-only",
+      "generated_at_unix_ms": 1791045924234,
+      "git_revision": "f0031ad8c74d8b2c0ed11ff45bfbec6d29b60805",
+      "pairs": 26,
+      "reuse_candidates": 14,
+      "route_mode": "build-only",
+      "run": "route-91342-37700806-1791045924232",
+      "safe_to_reuse": 0,
+      "simulations": 1,
+      "source": "live",
+      "state_read_reuse": true,
+      "successful_real_arbitrage": false
+    }
+  ],
+  "file": "reuse-verdicts.json",
+  "generated_by": "crates/pipeline/tests/state_ownership_evidence.rs",
+  "input": {
+    "carried": 42,
+    "duplicate_candidates": 42,
+    "duplicate_type_counts": {
+      "exact_duplicate": 42,
+      "same_target_block_undetermined": 6,
+      "same_target_different_block": 30
+    },
+    "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+    "pairs": 78,
+    "record_safe_to_reuse": 0,
+    "refused_by_block_identity": 30,
+    "unmapped_to_a_category": []
+  },
+  "model": "crates/pipeline/src/state_ownership.rs",
+  "question": "§10's four tiers applied to §11's measured arm: M8.4.2's exact-duplicate candidates, re-read as state-ownership questions",
+  "root": "data/evidence/m8/state-ownership/",
+  "rows": [
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc1",
+      "category": "block_read",
+      "consumer_stage": "simulation",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 97,
+          "matches": 8,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc1"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "simulation_input",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc1",
+        "consumer_block": "37700740",
+        "consumer_block_form": "number",
+        "consumer_caller": "header at pin",
+        "consumer_stage": "simulation",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700740",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc11",
+      "category": "block_read",
+      "consumer_stage": "preflight",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 299,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc11"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc11",
+        "consumer_block": "37700740",
+        "consumer_block_form": "number",
+        "consumer_caller": "fee at pinned block",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700740",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "fee_parameters"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc14",
+      "category": "transaction_preparation",
+      "consumer_stage": "preflight",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 501,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc14"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "the only block term this build sends on the state path: a number",
+          "source": "code",
+          "token": "fn block_param"
+        }
+      ],
+      "method": "eth_maxPriorityFeePerGas",
+      "producer_stage": "preflight",
+      "producer_term": "absent",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "intra_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc14",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "fee at head",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": "fee at pinned block",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "fee_parameters"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "block_header"
+      },
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc15",
+      "category": "block_read",
+      "consumer_stage": "preflight",
+      "consumer_term": "tag",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "tag",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "tag",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 598,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc15"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "preflight",
+      "producer_term": "tag",
+      "purpose": "nonce_track",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "intra_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc15",
+        "consumer_block": "latest",
+        "consumer_block_form": "tag",
+        "consumer_caller": "pending and latest nonces",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "latest",
+        "producer_block_form": "tag",
+        "producer_caller": "head at latest",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "chain_identity"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc31",
+      "category": "chain_identity",
+      "consumer_stage": "preflight",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1632,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc31"
+        },
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the accessor the preflight leg calls instead of a fresh ask",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        }
+      ],
+      "method": "eth_chainId",
+      "producer_stage": null,
+      "producer_term": "absent",
+      "purpose": "chain_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc31",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "endpoint chain id",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": null,
+        "producer_stage": null,
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "chain_identity"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc32",
+      "category": "block_read",
+      "consumer_stage": "preflight",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1729,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc32"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "block_binding",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc32",
+        "consumer_block": "37700740",
+        "consumer_block_form": "number",
+        "consumer_caller": "block binding at pin",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700740",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "no_owner_in_code",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "native_balance"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc33",
+      "category": "state_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1830,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc33"
+        },
+        {
+          "file": "crates/execution/src/stage.rs",
+          "line": 380,
+          "matches": 1,
+          "note": "the lane's own statement of what it re-confirms",
+          "source": "code",
+          "token": "re-reads nothing about pools"
+        }
+      ],
+      "method": "eth_getBalance",
+      "producer_stage": "preflight",
+      "producer_term": "number",
+      "purpose": "funding_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc33",
+        "consumer_block": "37700753",
+        "consumer_block_form": "number",
+        "consumer_caller": "before-snapshot: native and input-token balances",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700753",
+        "producer_block_form": "number",
+        "producer_caller": "native balance of the sender",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "native_balance"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc36",
+      "category": "block_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1931,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc36"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc36",
+        "consumer_block": "37700740",
+        "consumer_block_form": "number",
+        "consumer_caller": "step 1: fee at pinned block",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700740",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "fee_parameters"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc37",
+      "category": "transaction_preparation",
+      "consumer_stage": "build",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2032,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc37"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "the only block term this build sends on the state path: a number",
+          "source": "code",
+          "token": "fn block_param"
+        }
+      ],
+      "method": "eth_maxPriorityFeePerGas",
+      "producer_stage": "preflight",
+      "producer_term": "absent",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc37",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "step 1: fee at pinned block",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": "fee at pinned block",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "fee_parameters"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "block_header"
+      },
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc38",
+      "category": "block_read",
+      "consumer_stage": "build",
+      "consumer_term": "tag",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "tag",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "tag",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2129,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc38"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "preflight",
+      "producer_term": "tag",
+      "purpose": "nonce_track",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc38",
+        "consumer_block": "latest",
+        "consumer_block_form": "tag",
+        "consumer_caller": "step 1: pending and latest nonces",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "latest",
+        "producer_block_form": "tag",
+        "producer_caller": "head at latest",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "ownership_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "nonce"
+      },
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc40",
+      "category": "transaction_preparation",
+      "consumer_stage": "build",
+      "consumer_term": "tag",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "tag",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "tag",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2331,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc40"
+        },
+        {
+          "file": "crates/execution/src/nonce.rs",
+          "line": 41,
+          "matches": 1,
+          "note": "the accessor that turns a view into a nonce",
+          "source": "code",
+          "token": "pub fn next(&self) -> u64 {"
+        }
+      ],
+      "method": "eth_getTransactionCount",
+      "producer_stage": "preflight",
+      "producer_term": "tag",
+      "purpose": "nonce_track",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc40",
+        "consumer_block": "pending",
+        "consumer_block_form": "tag",
+        "consumer_caller": "step 1: pending and latest nonces",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "pending",
+        "producer_block_form": "tag",
+        "producer_caller": "pending and latest nonces",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "nonce"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "chain_identity"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc41",
+      "category": "chain_identity",
+      "consumer_stage": "build",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2432,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc41"
+        },
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the accessor the preflight leg calls instead of a fresh ask",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        }
+      ],
+      "method": "eth_chainId",
+      "producer_stage": null,
+      "producer_term": "absent",
+      "purpose": "chain_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc41",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "step 1: gate — endpoint chain id",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": null,
+        "producer_stage": null,
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "chain_identity"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc42",
+      "category": "block_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2529,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc42"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "block_binding",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc42",
+        "consumer_block": "37700740",
+        "consumer_block_form": "number",
+        "consumer_caller": "step 1: gate — block binding at pin",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700740",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "no_owner_in_code",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "native_balance"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700740-1791045857463:rpc43",
+      "category": "state_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2630,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc43"
+        },
+        {
+          "file": "crates/execution/src/stage.rs",
+          "line": 380,
+          "matches": 1,
+          "note": "the lane's own statement of what it re-confirms",
+          "source": "code",
+          "token": "re-reads nothing about pools"
+        }
+      ],
+      "method": "eth_getBalance",
+      "producer_stage": "simulation",
+      "producer_term": "number",
+      "purpose": "funding_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700740-1791045857463",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700740-1791045857463:rpc43",
+        "consumer_block": "37700740",
+        "consumer_block_form": "number",
+        "consumer_caller": "step 1: gate — native balance",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700740",
+        "producer_block_form": "number",
+        "producer_caller": "account: sender",
+        "producer_stage": "simulation",
+        "run": "route-91342-37700740-1791045857463"
+      },
+      "state_kind": "native_balance"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc1",
+      "category": "block_read",
+      "consumer_stage": "simulation",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2731,
+          "matches": 8,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc1"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "simulation_input",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc1",
+        "consumer_block": "37700778",
+        "consumer_block_form": "number",
+        "consumer_caller": "header at pin",
+        "consumer_stage": "simulation",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700778",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc11",
+      "category": "block_read",
+      "consumer_stage": "preflight",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 2933,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc11"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc11",
+        "consumer_block": "37700778",
+        "consumer_block_form": "number",
+        "consumer_caller": "fee at pinned block",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700778",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "fee_parameters"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc14",
+      "category": "transaction_preparation",
+      "consumer_stage": "preflight",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3135,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc14"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "the only block term this build sends on the state path: a number",
+          "source": "code",
+          "token": "fn block_param"
+        }
+      ],
+      "method": "eth_maxPriorityFeePerGas",
+      "producer_stage": "preflight",
+      "producer_term": "absent",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "intra_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc14",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "fee at head",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": "fee at pinned block",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "fee_parameters"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "block_header"
+      },
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc15",
+      "category": "block_read",
+      "consumer_stage": "preflight",
+      "consumer_term": "tag",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "tag",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "tag",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3232,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc15"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "preflight",
+      "producer_term": "tag",
+      "purpose": "nonce_track",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "intra_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc15",
+        "consumer_block": "latest",
+        "consumer_block_form": "tag",
+        "consumer_caller": "pending and latest nonces",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "latest",
+        "producer_block_form": "tag",
+        "producer_caller": "head at latest",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "chain_identity"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc31",
+      "category": "chain_identity",
+      "consumer_stage": "preflight",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 4266,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc31"
+        },
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the accessor the preflight leg calls instead of a fresh ask",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        }
+      ],
+      "method": "eth_chainId",
+      "producer_stage": null,
+      "producer_term": "absent",
+      "purpose": "chain_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc31",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "endpoint chain id",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": null,
+        "producer_stage": null,
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "chain_identity"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc32",
+      "category": "block_read",
+      "consumer_stage": "preflight",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 4363,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc32"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "block_binding",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc32",
+        "consumer_block": "37700778",
+        "consumer_block_form": "number",
+        "consumer_caller": "block binding at pin",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700778",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "no_owner_in_code",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "native_balance"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc33",
+      "category": "state_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 4464,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc33"
+        },
+        {
+          "file": "crates/execution/src/stage.rs",
+          "line": 380,
+          "matches": 1,
+          "note": "the lane's own statement of what it re-confirms",
+          "source": "code",
+          "token": "re-reads nothing about pools"
+        }
+      ],
+      "method": "eth_getBalance",
+      "producer_stage": "preflight",
+      "producer_term": "number",
+      "purpose": "funding_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc33",
+        "consumer_block": "37700793",
+        "consumer_block_form": "number",
+        "consumer_caller": "before-snapshot: native and input-token balances",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700793",
+        "producer_block_form": "number",
+        "producer_caller": "native balance of the sender",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "native_balance"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc36",
+      "category": "block_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 4565,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc36"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc36",
+        "consumer_block": "37700778",
+        "consumer_block_form": "number",
+        "consumer_caller": "step 1: fee at pinned block",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700778",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "fee_parameters"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc37",
+      "category": "transaction_preparation",
+      "consumer_stage": "build",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 4666,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc37"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "the only block term this build sends on the state path: a number",
+          "source": "code",
+          "token": "fn block_param"
+        }
+      ],
+      "method": "eth_maxPriorityFeePerGas",
+      "producer_stage": "preflight",
+      "producer_term": "absent",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc37",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "step 1: fee at pinned block",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": "fee at pinned block",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "fee_parameters"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "block_header"
+      },
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc38",
+      "category": "block_read",
+      "consumer_stage": "build",
+      "consumer_term": "tag",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "tag",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "tag",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 4763,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc38"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "preflight",
+      "producer_term": "tag",
+      "purpose": "nonce_track",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc38",
+        "consumer_block": "latest",
+        "consumer_block_form": "tag",
+        "consumer_caller": "step 1: pending and latest nonces",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "latest",
+        "producer_block_form": "tag",
+        "producer_caller": "head at latest",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "ownership_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "nonce"
+      },
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc40",
+      "category": "transaction_preparation",
+      "consumer_stage": "build",
+      "consumer_term": "tag",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "tag",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "tag",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 4965,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc40"
+        },
+        {
+          "file": "crates/execution/src/nonce.rs",
+          "line": 41,
+          "matches": 1,
+          "note": "the accessor that turns a view into a nonce",
+          "source": "code",
+          "token": "pub fn next(&self) -> u64 {"
+        }
+      ],
+      "method": "eth_getTransactionCount",
+      "producer_stage": "preflight",
+      "producer_term": "tag",
+      "purpose": "nonce_track",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc40",
+        "consumer_block": "pending",
+        "consumer_block_form": "tag",
+        "consumer_caller": "step 1: pending and latest nonces",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "pending",
+        "producer_block_form": "tag",
+        "producer_caller": "pending and latest nonces",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "nonce"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "chain_identity"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc41",
+      "category": "chain_identity",
+      "consumer_stage": "build",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 5066,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc41"
+        },
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the accessor the preflight leg calls instead of a fresh ask",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        }
+      ],
+      "method": "eth_chainId",
+      "producer_stage": null,
+      "producer_term": "absent",
+      "purpose": "chain_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc41",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "step 1: gate — endpoint chain id",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": null,
+        "producer_stage": null,
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "chain_identity"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc42",
+      "category": "block_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 5163,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc42"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "block_binding",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc42",
+        "consumer_block": "37700778",
+        "consumer_block_form": "number",
+        "consumer_caller": "step 1: gate — block binding at pin",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700778",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "no_owner_in_code",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "native_balance"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700778-1791045896094:rpc43",
+      "category": "state_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 5264,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc43"
+        },
+        {
+          "file": "crates/execution/src/stage.rs",
+          "line": 380,
+          "matches": 1,
+          "note": "the lane's own statement of what it re-confirms",
+          "source": "code",
+          "token": "re-reads nothing about pools"
+        }
+      ],
+      "method": "eth_getBalance",
+      "producer_stage": "simulation",
+      "producer_term": "number",
+      "purpose": "funding_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700778-1791045896094",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700778-1791045896094:rpc43",
+        "consumer_block": "37700778",
+        "consumer_block_form": "number",
+        "consumer_caller": "step 1: gate — native balance",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700778",
+        "producer_block_form": "number",
+        "producer_caller": "account: sender",
+        "producer_stage": "simulation",
+        "run": "route-91342-37700778-1791045896094"
+      },
+      "state_kind": "native_balance"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc1",
+      "category": "block_read",
+      "consumer_stage": "simulation",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 5365,
+          "matches": 8,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc1"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "simulation_input",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc1",
+        "consumer_block": "37700806",
+        "consumer_block_form": "number",
+        "consumer_caller": "header at pin",
+        "consumer_stage": "simulation",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700806",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc11",
+      "category": "block_read",
+      "consumer_stage": "preflight",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 5567,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc11"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc11",
+        "consumer_block": "37700806",
+        "consumer_block_form": "number",
+        "consumer_caller": "fee at pinned block",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700806",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "fee_parameters"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc14",
+      "category": "transaction_preparation",
+      "consumer_stage": "preflight",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 5769,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc14"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "the only block term this build sends on the state path: a number",
+          "source": "code",
+          "token": "fn block_param"
+        }
+      ],
+      "method": "eth_maxPriorityFeePerGas",
+      "producer_stage": "preflight",
+      "producer_term": "absent",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "intra_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc14",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "fee at head",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": "fee at pinned block",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "fee_parameters"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "block_header"
+      },
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc15",
+      "category": "block_read",
+      "consumer_stage": "preflight",
+      "consumer_term": "tag",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "tag",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "tag",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 5866,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc15"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "preflight",
+      "producer_term": "tag",
+      "purpose": "nonce_track",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "intra_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc15",
+        "consumer_block": "latest",
+        "consumer_block_form": "tag",
+        "consumer_caller": "pending and latest nonces",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "latest",
+        "producer_block_form": "tag",
+        "producer_caller": "head at latest",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "chain_identity"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc31",
+      "category": "chain_identity",
+      "consumer_stage": "preflight",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6900,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc31"
+        },
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the accessor the preflight leg calls instead of a fresh ask",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        }
+      ],
+      "method": "eth_chainId",
+      "producer_stage": null,
+      "producer_term": "absent",
+      "purpose": "chain_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc31",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "endpoint chain id",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": null,
+        "producer_stage": null,
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "chain_identity"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc32",
+      "category": "block_read",
+      "consumer_stage": "preflight",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6997,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc32"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "block_binding",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc32",
+        "consumer_block": "37700806",
+        "consumer_block_form": "number",
+        "consumer_caller": "block binding at pin",
+        "consumer_stage": "preflight",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700806",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "no_owner_in_code",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "native_balance"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc33",
+      "category": "state_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 7098,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc33"
+        },
+        {
+          "file": "crates/execution/src/stage.rs",
+          "line": 380,
+          "matches": 1,
+          "note": "the lane's own statement of what it re-confirms",
+          "source": "code",
+          "token": "re-reads nothing about pools"
+        }
+      ],
+      "method": "eth_getBalance",
+      "producer_stage": "preflight",
+      "producer_term": "number",
+      "purpose": "funding_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc33",
+        "consumer_block": "37700821",
+        "consumer_block_form": "number",
+        "consumer_caller": "before-snapshot: native and input-token balances",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700821",
+        "producer_block_form": "number",
+        "producer_caller": "native balance of the sender",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "native_balance"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc36",
+      "category": "block_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 7199,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc36"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc36",
+        "consumer_block": "37700806",
+        "consumer_block_form": "number",
+        "consumer_caller": "step 1: fee at pinned block",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700806",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a stated validity window: no expiry, deadline or TTL field exists in any crate",
+          "an owner that holds one reading for both the gate and the build"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "fee_parameters"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc37",
+      "category": "transaction_preparation",
+      "consumer_stage": "build",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 7300,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc37"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 396,
+          "matches": 1,
+          "note": "the only block term this build sends on the state path: a number",
+          "source": "code",
+          "token": "fn block_param"
+        }
+      ],
+      "method": "eth_maxPriorityFeePerGas",
+      "producer_stage": "preflight",
+      "producer_term": "absent",
+      "purpose": "fee_pricing",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc37",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "step 1: fee at pinned block",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": "fee at pinned block",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "fee_parameters"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "block_header"
+      },
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc38",
+      "category": "block_read",
+      "consumer_stage": "build",
+      "consumer_term": "tag",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "tag",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "tag",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 7397,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc38"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "preflight",
+      "producer_term": "tag",
+      "purpose": "nonce_track",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc38",
+        "consumer_block": "latest",
+        "consumer_block_form": "tag",
+        "consumer_caller": "step 1: pending and latest nonces",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "latest",
+        "producer_block_form": "tag",
+        "producer_caller": "head at latest",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "ownership_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "nothing that would let a held nonce be proved still current; the current design's answer is to ask again"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "nonce"
+      },
+      "block_relation": "both_ask_a_tag",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc40",
+      "category": "transaction_preparation",
+      "consumer_stage": "build",
+      "consumer_term": "tag",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "tag",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "tag",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 7599,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc40"
+        },
+        {
+          "file": "crates/execution/src/nonce.rs",
+          "line": 41,
+          "matches": 1,
+          "note": "the accessor that turns a view into a nonce",
+          "source": "code",
+          "token": "pub fn next(&self) -> u64 {"
+        }
+      ],
+      "method": "eth_getTransactionCount",
+      "producer_stage": "preflight",
+      "producer_term": "tag",
+      "purpose": "nonce_track",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc40",
+        "consumer_block": "pending",
+        "consumer_block_form": "tag",
+        "consumer_caller": "step 1: pending and latest nonces",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "pending",
+        "producer_block_form": "tag",
+        "producer_caller": "pending and latest nonces",
+        "producer_stage": "preflight",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "nonce"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_number_not_comparable",
+          "block_hash_not_recorded",
+          "producer_names_no_height",
+          "consumer_names_no_height",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field that records, per check, whether the leg was satisfied by a fresh read or by a shared value — nothing distinguishes them today",
+          "any detection of a chain change after connect, if a shared value were used"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": false,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": false,
+        "state_kind": "chain_identity"
+      },
+      "block_relation": "no_block_in_either_request",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc41",
+      "category": "chain_identity",
+      "consumer_stage": "build",
+      "consumer_term": "absent",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "absent",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "absent",
+        "same_block_hash": null,
+        "same_block_number": null,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 7700,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc41"
+        },
+        {
+          "file": "crates/execution/src/giwa/sequencer_direct.rs",
+          "line": 189,
+          "matches": 1,
+          "note": "the accessor the preflight leg calls instead of a fresh ask",
+          "source": "code",
+          "token": "pub async fn endpoint_chain_id"
+        }
+      ],
+      "method": "eth_chainId",
+      "producer_stage": null,
+      "producer_term": "absent",
+      "purpose": "chain_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc41",
+        "consumer_block": null,
+        "consumer_block_form": "absent",
+        "consumer_caller": "step 1: gate — endpoint chain id",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": null,
+        "producer_block_form": "absent",
+        "producer_caller": null,
+        "producer_stage": null,
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "chain_identity"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "state_movement_not_detectable",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a carrier: no type that crosses from preflight to build has a block number or hash field",
+          "a stated owner: the node owns the answer, and no component in this build holds a header for another stage to read"
+        ],
+        "ownership_status": "proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "block_header"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc42",
+      "category": "block_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 7797,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc42"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 395,
+          "matches": 1,
+          "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
+          "source": "code",
+          "token": "pub struct PreflightReport"
+        }
+      ],
+      "method": "eth_getBlockByNumber",
+      "producer_stage": "observation",
+      "producer_term": "number",
+      "purpose": "block_binding",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc42",
+        "consumer_block": "37700806",
+        "consumer_block_form": "number",
+        "consumer_caller": "step 1: gate — block binding at pin",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700806",
+        "producer_block_form": "number",
+        "producer_caller": "head and header that fixed the pin",
+        "producer_stage": "observation",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "block_header"
+    },
+    {
+      "assessment": {
+        "blockers": [
+          "answer_bytes_not_recorded",
+          "block_hash_not_recorded",
+          "same_value_different_source",
+          "different_lifecycle_scope",
+          "contract_declares_not_reusable",
+          "state_movement_not_detectable",
+          "contract_check_would_stop_existing",
+          "no_owner_in_code",
+          "ownership_not_proven",
+          "freshness_rule_not_proven",
+          "invalidation_rule_not_proven",
+          "contract_lists_missing_proof"
+        ],
+        "duplicate": true,
+        "missing_proof": [
+          "a field saying which question each balance answer answers",
+          "an owner that could invalidate a held balance when a transaction moves it"
+        ],
+        "ownership_status": "partially_proven",
+        "reusable_in_principle": null,
+        "safe_to_reuse_now": false,
+        "semantically_equivalent": null,
+        "state_kind": "native_balance"
+      },
+      "block_relation": "same_block",
+      "candidate_id": "route-91342-37700806-1791045924232:rpc43",
+      "category": "state_read",
+      "consumer_stage": "build",
+      "consumer_term": "number",
+      "evidence": {
+        "check_would_stop_existing": false,
+        "consumer_term": "number",
+        "depends_on_state_override": false,
+        "duplicate": true,
+        "producer_term": "number",
+        "same_block_hash": null,
+        "same_block_number": true,
+        "same_chain_id": true,
+        "same_endpoint": true,
+        "same_lifecycle_scope": false,
+        "same_producing_component": false,
+        "same_value": null,
+        "sim_and_build_fields_match": true,
+        "state_changed_in_between": null
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 7898,
+          "matches": 1,
+          "note": "the measured pair this verdict is about",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc43"
+        },
+        {
+          "file": "crates/execution/src/stage.rs",
+          "line": 380,
+          "matches": 1,
+          "note": "the lane's own statement of what it re-confirms",
+          "source": "code",
+          "token": "re-reads nothing about pools"
+        }
+      ],
+      "method": "eth_getBalance",
+      "producer_stage": "simulation",
+      "producer_term": "number",
+      "purpose": "funding_check",
+      "record_reusable": "unknown",
+      "record_safe_to_reuse": false,
+      "run": "route-91342-37700806-1791045924232",
+      "scope": "cross_stage",
+      "source_record": {
+        "candidate_id": "route-91342-37700806-1791045924232:rpc43",
+        "consumer_block": "37700806",
+        "consumer_block_form": "number",
+        "consumer_caller": "step 1: gate — native balance",
+        "consumer_stage": "build",
+        "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+        "producer_block": "37700806",
+        "producer_block_form": "number",
+        "producer_caller": "account: sender",
+        "producer_stage": "simulation",
+        "run": "route-91342-37700806-1791045924232"
+      },
+      "state_kind": "native_balance"
+    }
+  ],
+  "tier_inequalities": [
+    "same value != same state identity",
+    "same state identity != same lifecycle ownership",
+    "reusable in principle != safe to reuse now"
+  ],
+  "tiers": [
+    "duplicate",
+    "semantically_equivalent",
+    "reusable_in_principle",
+    "safe_to_reuse_now"
+  ],
+  "unit": "measured candidate"
+}
