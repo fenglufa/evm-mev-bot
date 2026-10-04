@@ -1,0 +1,284 @@
+{
+  "boundary_refs": [
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 725,
+      "matches": 1,
+      "note": "the eth_call branch that fixes the field set",
+      "source": "run_record",
+      "token": "\"eth_call\","
+    },
+    {
+      "file": "crates/chain/src/types.rs",
+      "line": 155,
+      "matches": 1,
+      "note": "the two-field request type",
+      "source": "run_record",
+      "token": "pub struct CallRequest"
+    }
+  ],
+  "controls": [
+    {
+      "field": "to",
+      "id": "NC1",
+      "measured": {
+        "ask_a": {
+          "identity": "eth_call|chain=91342|block=37700740|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|data=0dfe1681",
+          "rpc_id": 3,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "ask_b": {
+          "identity": "eth_call|chain=91342|block=37700740|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|data=0dfe1681",
+          "rpc_id": 6,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "block_free_identity_moved": true,
+        "identity_with_block_moved": true,
+        "pair_found": true
+      },
+      "participates_in_identity": true,
+      "run_against_the_corpus": true,
+      "why": "a different contract answers a different question"
+    },
+    {
+      "field": "calldata",
+      "id": "NC2",
+      "measured": {
+        "ask_a": {
+          "identity": "eth_call|chain=91342|block=37700740|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|data=0dfe1681",
+          "rpc_id": 3,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "ask_b": {
+          "identity": "eth_call|chain=91342|block=37700740|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|data=d21220a7",
+          "rpc_id": 4,
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "block_free_identity_moved": true,
+        "identity_with_block_moved": true,
+        "pair_found": true
+      },
+      "participates_in_identity": true,
+      "run_against_the_corpus": true,
+      "why": "the selector and its arguments are the question"
+    },
+    {
+      "field": "block",
+      "id": "NC3",
+      "measured": {
+        "asks_with_a_sibling_at_another_height": 42,
+        "block_free_identity_moved": false,
+        "directed_pairs_in_the_record": 18,
+        "identity_with_block_moved": true
+      },
+      "participates_in_identity": true,
+      "run_against_the_corpus": true,
+      "why": "measured load-bearing for getReserves and balanceOf in this corpus"
+    },
+    {
+      "field": "from",
+      "id": "NC4",
+      "measured": {
+        "asks": 60,
+        "rule": "CallRequest has two fields — to and data — so no caller in this build can name a sender; the node answers with its own default, which the record does not capture",
+        "settled": true,
+        "state": "proven_absent",
+        "which_is_a_measurement_not_an_absence_of_investigation": "every ask carries the state, so a single null in the corpus would fail this control rather than pass it quietly"
+      },
+      "participates_in_identity": false,
+      "run_against_the_corpus": true,
+      "why": "this build cannot send it, so no two asks here can differ by sender; §8 still refuses to delete it from the theoretical identity, which is why the field is recorded as an absence with a proof rather than left out"
+    },
+    {
+      "field": "value",
+      "id": "NC5",
+      "measured": {
+        "asks": 60,
+        "rule": "the same two-field request, and eth_call's params object is written with those two keys and no third",
+        "settled": true,
+        "state": "proven_absent",
+        "which_is_a_measurement_not_an_absence_of_investigation": "every ask carries the state, so a single null in the corpus would fail this control rather than pass it quietly"
+      },
+      "participates_in_identity": false,
+      "run_against_the_corpus": true,
+      "why": "the request type has no such field; the recorded key's optional value tail is never emitted by this build"
+    },
+    {
+      "field": "state_override",
+      "id": "NC6",
+      "measured": {
+        "asks": 60,
+        "rule": "the params array this build sends is exactly two elements — the call object and the block term — so there is no third element to carry a balance, nonce, code or storage override",
+        "settled": true,
+        "state": "proven_absent",
+        "which_is_a_measurement_not_an_absence_of_investigation": "every ask carries the state, so a single null in the corpus would fail this control rather than pass it quietly"
+      },
+      "participates_in_identity": false,
+      "run_against_the_corpus": true,
+      "why": "the params array is two elements, so there is no override object; §10 asked for code evidence rather than a sentence, and this is the sentence with the code beside it"
+    }
+  ],
+  "generated_by": "crates/pipeline/tests/eth_call_semantics_evidence.rs",
+  "key_control_same_target_same_calldata_different_block": {
+    "asked_by": "§41: this is the control that decides whether the identity may drop the block term, so it is measured rather than assumed",
+    "at_a_distance_where_the_chain_moved": [
+      {
+        "answer_equal": false,
+        "blocks_apart": 170147,
+        "calldata": "0902f1ac",
+        "earlier": {
+          "block_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+          "block_timestamp_last": "1757405620",
+          "height": "37530593",
+          "record": "data/evidence/m7/candidate-fee-measurement.json",
+          "reserve0": "1000000000000000000000",
+          "reserve1": "1000000000000000"
+        },
+        "later": {
+          "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+          "block_timestamp_last": "1790908426",
+          "height": 37700740,
+          "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+          "reserve0": "909338910611985086842",
+          "reserve1": "1100000000000000"
+        },
+        "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "signature": "getReserves()"
+      },
+      {
+        "answer_equal": false,
+        "blocks_apart": 170147,
+        "calldata": "0902f1ac",
+        "earlier": {
+          "block_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+          "block_timestamp_last": "1757403527",
+          "height": "37530593",
+          "record": "data/evidence/m7/candidate-fee-measurement.json",
+          "reserve0": "2000000000000000000000",
+          "reserve1": "20000000000000000"
+        },
+        "later": {
+          "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+          "block_timestamp_last": "1790908438",
+          "height": 37700740,
+          "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+          "reserve0": "2090661089388014913158",
+          "reserve1": "19135193482828374"
+        },
+        "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "signature": "getReserves()"
+      }
+    ],
+    "census": {
+      "candidate_pools": [
+        {
+          "census_record": "data/evidence/m7/live-pool-activity.json",
+          "in_census": false,
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+        },
+        {
+          "census_record": "data/evidence/m7/live-pool-activity.json",
+          "in_census": false,
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+        }
+      ],
+      "dual_venue_pools_with_activity": 0,
+      "finding": {
+        "actively_traded_pools": 34,
+        "actively_traded_pools_sharing_a_token_pair": 0,
+        "dual_venue_pools_in_window": 101,
+        "of_those_any_sync_or_swap": 0
+      },
+      "long_gap_measured": {
+        "comparisons": 2,
+        "min_blocks_apart": 170147
+      },
+      "pools_with_activity": 34,
+      "short_gap_measured": {
+        "comparisons": 6,
+        "max_blocks_apart": 15,
+        "min_blocks_apart": 13
+      },
+      "what_it_bounds": "neither candidate pool appears in this census, so a 13–15 block gap had no recorded reason to change either reserve; the within-run equality therefore does not show the answer is block-independent, and only the pair at 170147 blocks apart does",
+      "window_blocks": 20000
+    },
+    "identity_collapse_counterfactuals": {
+      "asks_in_the_corpus": 60,
+      "chains_in_the_corpus": 1,
+      "distinct_if_block_dropped": 26,
+      "distinct_if_calldata_dropped": 21,
+      "distinct_if_chain_dropped": 60,
+      "distinct_if_to_dropped": 39,
+      "distinct_with_every_term": 60,
+      "pair_groups_by_calldata_alone": 3,
+      "pair_groups_by_to_alone": 2,
+      "pair_groups_by_to_and_calldata": 6,
+      "pairs_in_the_corpus": 18,
+      "what_the_chain_term_cannot_be_shown_to_do": "every recorded ask in this corpus is on one chain, so dropping the chain term collapses nothing here — the term is kept because the model declares it, and this table says plainly that the corpus provides no control that would catch its absence"
+    },
+    "verdict": "the field is load-bearing: the same target and the same calldata answered differently in 2 of 2 pools at heights 170147 blocks apart, so a cross-block reuse of a reserve reading is NOT_SAFE_REUSE by measurement",
+    "why_the_short_gap_is_not_the_same_evidence": "neither candidate pool appears in this census, so a 13–15 block gap had no recorded reason to change either reserve; the within-run equality therefore does not show the answer is block-independent, and only the pair at 170147 blocks apart does",
+    "within_the_recorded_runs": [
+      {
+        "answer_equal": true,
+        "blocks_apart": 13,
+        "consumer_height": 37700753,
+        "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "producer_height": 37700740,
+        "run": "route-91342-37700740-1791045857463"
+      },
+      {
+        "answer_equal": true,
+        "blocks_apart": 13,
+        "consumer_height": 37700753,
+        "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "producer_height": 37700740,
+        "run": "route-91342-37700740-1791045857463"
+      },
+      {
+        "answer_equal": true,
+        "blocks_apart": 15,
+        "consumer_height": 37700793,
+        "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "producer_height": 37700778,
+        "run": "route-91342-37700778-1791045896094"
+      },
+      {
+        "answer_equal": true,
+        "blocks_apart": 15,
+        "consumer_height": 37700793,
+        "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "producer_height": 37700778,
+        "run": "route-91342-37700778-1791045896094"
+      },
+      {
+        "answer_equal": true,
+        "blocks_apart": 15,
+        "consumer_height": 37700821,
+        "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+        "producer_height": 37700806,
+        "run": "route-91342-37700806-1791045924232"
+      },
+      {
+        "answer_equal": true,
+        "blocks_apart": 15,
+        "consumer_height": 37700821,
+        "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+        "producer_height": 37700806,
+        "run": "route-91342-37700806-1791045924232"
+      }
+    ]
+  },
+  "milestone": "M8.5.1",
+  "model": "crates/pipeline/src/eth_call_semantics.rs",
+  "question": "§40's six controls, each run against a real parsed identity rather than asserted, plus §41's key control: same target, same calldata, different block",
+  "recompute": "NC1 and NC2 are pairs of rows inside `runs/*/pipeline-calls.json` chosen by the predicate printed with them; NC3's count is the pairs the same records form; NC4–NC6 are the request type and the params object, which is where those fields are decided",
+  "unit": "controls",
+  "what_a_passing_negative_control_would_have_caught": [
+    "a key that ignored `to` would have merged the 60 recorded asks into 39, so the two candidate pools would have answered for one another",
+    "a key that ignored calldata would have merged the 60 recorded asks into 21, so token0() and getReserves() would have shared one answer",
+    "a key that ignored the block would have merged the 60 recorded asks into 26 and grouped the 18 measured pairs into 6, which is precisely the error §41 exists to prevent",
+    "a key that ignored `chain_id` would have collapsed nothing in this corpus: the 60 recorded asks all sit on 1 chain value, so no control here could catch the term going missing — the term is kept because the model declares it, and the table says plainly that the corpus does not test it",
+    "an identity that wrote `from: null` instead of a proven absence would have read as investigated while answering nothing"
+  ]
+}

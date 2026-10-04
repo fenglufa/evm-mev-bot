@@ -1,0 +1,1916 @@
+{
+  "activity_census": {
+    "candidate_pools": [
+      {
+        "census_record": "data/evidence/m7/live-pool-activity.json",
+        "in_census": false,
+        "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+      },
+      {
+        "census_record": "data/evidence/m7/live-pool-activity.json",
+        "in_census": false,
+        "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+      }
+    ],
+    "dual_venue_pools_with_activity": 0,
+    "finding": {
+      "actively_traded_pools": 34,
+      "actively_traded_pools_sharing_a_token_pair": 0,
+      "dual_venue_pools_in_window": 101,
+      "of_those_any_sync_or_swap": 0
+    },
+    "long_gap_measured": {
+      "comparisons": 2,
+      "min_blocks_apart": 170147
+    },
+    "pools_with_activity": 34,
+    "short_gap_measured": {
+      "comparisons": 6,
+      "max_blocks_apart": 15,
+      "min_blocks_apart": 13
+    },
+    "what_it_bounds": "neither candidate pool appears in this census, so a 13–15 block gap had no recorded reason to change either reserve; the within-run equality therefore does not show the answer is block-independent, and only the pair at 170147 blocks apart does",
+    "window_blocks": 20000
+  },
+  "bytecode_scans": [
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "block_context_opcodes": {
+        "BLOBHASH": 21,
+        "COINBASE": 2,
+        "GASLIMIT": 7,
+        "NUMBER": 5,
+        "PREVRANDAO": 5,
+        "SELFBALANCE": 1,
+        "TIMESTAMP": 3
+      },
+      "block_context_reachable": true,
+      "code_bytes": 14954,
+      "dumped_at_hash": "0x402b44b165713d3d936e55d5b852f7c1215c75bc52c4f53b9fc5d045923796f6",
+      "dumped_at_height": 37529555,
+      "record": "fixtures/simulation-m7/dump-37529555-07D4af6E.json",
+      "scan_scope": "whole code, PUSH immediates skipped; the walk cannot attribute an opcode to the dispatched selector, so a non-empty block set is not_attributable and an empty one is a proof of independence",
+      "state_opcodes": {
+        "ADDRESS": 14,
+        "BALANCE": 1,
+        "EXTCODESIZE": 14,
+        "SLOAD": 79,
+        "SSTORE": 43
+      }
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "block_context_opcodes": {
+        "BLOBHASH": 21,
+        "COINBASE": 2,
+        "GASLIMIT": 8,
+        "NUMBER": 5,
+        "PREVRANDAO": 5,
+        "TIMESTAMP": 3
+      },
+      "block_context_reachable": true,
+      "code_bytes": 14954,
+      "dumped_at_hash": "0x402b44b165713d3d936e55d5b852f7c1215c75bc52c4f53b9fc5d045923796f6",
+      "dumped_at_height": 37529555,
+      "record": "fixtures/simulation-m7/dump-37529555-07D4af6E.json",
+      "scan_scope": "whole code, PUSH immediates skipped; the walk cannot attribute an opcode to the dispatched selector, so a non-empty block set is not_attributable and an empty one is a proof of independence",
+      "state_opcodes": {
+        "ADDRESS": 15,
+        "EXTCODEHASH": 1,
+        "EXTCODESIZE": 14,
+        "SLOAD": 78,
+        "SSTORE": 43
+      }
+    },
+    {
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "block_context_opcodes": {
+        "BLOBHASH": 21,
+        "COINBASE": 2,
+        "GASLIMIT": 7,
+        "NUMBER": 5,
+        "PREVRANDAO": 5,
+        "SELFBALANCE": 1,
+        "TIMESTAMP": 3
+      },
+      "block_context_reachable": true,
+      "code_bytes": 14954,
+      "dumped_at_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+      "dumped_at_height": 37530593,
+      "record": "fixtures/simulation-m7/dump-37530593-07D4af6E.json",
+      "scan_scope": "whole code, PUSH immediates skipped; the walk cannot attribute an opcode to the dispatched selector, so a non-empty block set is not_attributable and an empty one is a proof of independence",
+      "state_opcodes": {
+        "ADDRESS": 14,
+        "BALANCE": 1,
+        "EXTCODESIZE": 14,
+        "SLOAD": 79,
+        "SSTORE": 43
+      }
+    },
+    {
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "block_context_opcodes": {
+        "BLOBHASH": 21,
+        "COINBASE": 2,
+        "GASLIMIT": 8,
+        "NUMBER": 5,
+        "PREVRANDAO": 5,
+        "TIMESTAMP": 3
+      },
+      "block_context_reachable": true,
+      "code_bytes": 14954,
+      "dumped_at_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+      "dumped_at_height": 37530593,
+      "record": "fixtures/simulation-m7/dump-37530593-07D4af6E.json",
+      "scan_scope": "whole code, PUSH immediates skipped; the walk cannot attribute an opcode to the dispatched selector, so a non-empty block set is not_attributable and an empty one is a proof of independence",
+      "state_opcodes": {
+        "ADDRESS": 15,
+        "EXTCODEHASH": 1,
+        "EXTCODESIZE": 14,
+        "SLOAD": 78,
+        "SSTORE": 43
+      }
+    }
+  ],
+  "cross_height_control": [
+    {
+      "answer_equal": false,
+      "blocks_apart": 170147,
+      "calldata": "0902f1ac",
+      "earlier": {
+        "block_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+        "block_timestamp_last": "1757405620",
+        "height": "37530593",
+        "record": "data/evidence/m7/candidate-fee-measurement.json",
+        "reserve0": "1000000000000000000000",
+        "reserve1": "1000000000000000"
+      },
+      "later": {
+        "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+        "block_timestamp_last": "1790908426",
+        "height": 37700740,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+        "reserve0": "909338910611985086842",
+        "reserve1": "1100000000000000"
+      },
+      "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "signature": "getReserves()"
+    },
+    {
+      "answer_equal": false,
+      "blocks_apart": 170147,
+      "calldata": "0902f1ac",
+      "earlier": {
+        "block_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+        "block_timestamp_last": "1757403527",
+        "height": "37530593",
+        "record": "data/evidence/m7/candidate-fee-measurement.json",
+        "reserve0": "2000000000000000000000",
+        "reserve1": "20000000000000000"
+      },
+      "later": {
+        "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+        "block_timestamp_last": "1790908438",
+        "height": 37700740,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+        "reserve0": "2090661089388014913158",
+        "reserve1": "19135193482828374"
+      },
+      "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "signature": "getReserves()"
+    }
+  ],
+  "decoded_answers_within_a_run": [
+    {
+      "answer_equal": true,
+      "blocks_apart": 13,
+      "consumer": {
+        "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+        "block_timestamp_last": "1790908426",
+        "height": 37700753,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+        "reserve0": "909338910611985086842",
+        "reserve1": "1100000000000000",
+        "stage": "preflight"
+      },
+      "leg": "buy",
+      "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "producer": {
+        "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+        "block_timestamp_last": "1790908426",
+        "height": 37700740,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+        "reserve0": "909338910611985086842",
+        "reserve1": "1100000000000000",
+        "stage": "opportunity_detection"
+      },
+      "run": "route-91342-37700740-1791045857463"
+    },
+    {
+      "answer_equal": true,
+      "blocks_apart": 13,
+      "consumer": {
+        "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+        "block_timestamp_last": "1790908438",
+        "height": 37700753,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+        "reserve0": "2090661089388014913158",
+        "reserve1": "19135193482828374",
+        "stage": "preflight"
+      },
+      "leg": "sell",
+      "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "producer": {
+        "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+        "block_timestamp_last": "1790908438",
+        "height": 37700740,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+        "reserve0": "2090661089388014913158",
+        "reserve1": "19135193482828374",
+        "stage": "opportunity_detection"
+      },
+      "run": "route-91342-37700740-1791045857463"
+    },
+    {
+      "answer_equal": true,
+      "blocks_apart": 15,
+      "consumer": {
+        "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+        "block_timestamp_last": "1790908426",
+        "height": 37700793,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+        "reserve0": "909338910611985086842",
+        "reserve1": "1100000000000000",
+        "stage": "preflight"
+      },
+      "leg": "buy",
+      "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "producer": {
+        "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+        "block_timestamp_last": "1790908426",
+        "height": 37700778,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+        "reserve0": "909338910611985086842",
+        "reserve1": "1100000000000000",
+        "stage": "opportunity_detection"
+      },
+      "run": "route-91342-37700778-1791045896094"
+    },
+    {
+      "answer_equal": true,
+      "blocks_apart": 15,
+      "consumer": {
+        "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+        "block_timestamp_last": "1790908438",
+        "height": 37700793,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+        "reserve0": "2090661089388014913158",
+        "reserve1": "19135193482828374",
+        "stage": "preflight"
+      },
+      "leg": "sell",
+      "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "producer": {
+        "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+        "block_timestamp_last": "1790908438",
+        "height": 37700778,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+        "reserve0": "2090661089388014913158",
+        "reserve1": "19135193482828374",
+        "stage": "opportunity_detection"
+      },
+      "run": "route-91342-37700778-1791045896094"
+    },
+    {
+      "answer_equal": true,
+      "blocks_apart": 15,
+      "consumer": {
+        "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+        "block_timestamp_last": "1790908426",
+        "height": 37700821,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+        "reserve0": "909338910611985086842",
+        "reserve1": "1100000000000000",
+        "stage": "preflight"
+      },
+      "leg": "buy",
+      "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "producer": {
+        "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+        "block_timestamp_last": "1790908426",
+        "height": 37700806,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+        "reserve0": "909338910611985086842",
+        "reserve1": "1100000000000000",
+        "stage": "opportunity_detection"
+      },
+      "run": "route-91342-37700806-1791045924232"
+    },
+    {
+      "answer_equal": true,
+      "blocks_apart": 15,
+      "consumer": {
+        "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+        "block_timestamp_last": "1790908438",
+        "height": 37700821,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+        "reserve0": "2090661089388014913158",
+        "reserve1": "19135193482828374",
+        "stage": "preflight"
+      },
+      "leg": "sell",
+      "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "producer": {
+        "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+        "block_timestamp_last": "1790908438",
+        "height": 37700806,
+        "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+        "reserve0": "2090661089388014913158",
+        "reserve1": "19135193482828374",
+        "stage": "opportunity_detection"
+      },
+      "run": "route-91342-37700806-1791045924232"
+    }
+  ],
+  "dependency_vocabulary": [
+    "proven_load_bearing",
+    "not_attributable",
+    "not_applicable"
+  ],
+  "generated_by": "crates/pipeline/tests/eth_call_semantics_evidence.rs",
+  "milestone": "M8.5.1",
+  "model": "crates/pipeline/src/eth_call_semantics.rs",
+  "opcode_tables": {
+    "block_context": [
+      {
+        "byte": 64,
+        "name": "BLOCKHASH"
+      },
+      {
+        "byte": 65,
+        "name": "COINBASE"
+      },
+      {
+        "byte": 66,
+        "name": "TIMESTAMP"
+      },
+      {
+        "byte": 67,
+        "name": "NUMBER"
+      },
+      {
+        "byte": 68,
+        "name": "PREVRANDAO"
+      },
+      {
+        "byte": 69,
+        "name": "GASLIMIT"
+      },
+      {
+        "byte": 70,
+        "name": "CHAINID"
+      },
+      {
+        "byte": 71,
+        "name": "SELFBALANCE"
+      },
+      {
+        "byte": 72,
+        "name": "BASEFEE"
+      },
+      {
+        "byte": 73,
+        "name": "BLOBHASH"
+      },
+      {
+        "byte": 74,
+        "name": "BLOBBASEFEE"
+      }
+    ],
+    "state": [
+      {
+        "byte": 48,
+        "name": "ADDRESS"
+      },
+      {
+        "byte": 49,
+        "name": "BALANCE"
+      },
+      {
+        "byte": 59,
+        "name": "EXTCODESIZE"
+      },
+      {
+        "byte": 60,
+        "name": "EXTCODECOPY"
+      },
+      {
+        "byte": 63,
+        "name": "EXTCODEHASH"
+      },
+      {
+        "byte": 84,
+        "name": "SLOAD"
+      },
+      {
+        "byte": 85,
+        "name": "SSTORE"
+      }
+    ],
+    "why_a_linear_walk_is_enough": "an absent block-context opcode anywhere in the code proves the contract cannot read one on the dispatched path; a present one proves nothing, because the walk cannot attribute it to a selector. So the scan can grant independence and can never revoke it — which is why no site in this table is marked safe on the scan alone (§18's asymmetry)"
+  },
+  "pair_rows": [
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908426",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908426",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc24",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 24,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 901,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc24"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 3,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908426",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908426",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc25",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 25,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1006,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc25"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 4,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908426",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908426",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc26",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 26,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1111,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc26"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 5,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908438",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908438",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc27",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 27,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1216,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc27"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 6,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908438",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908438",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc28",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 28,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1321,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc28"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 7,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908438",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908438",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc29",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 29,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1426,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc29"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 8,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908426",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908426",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc24",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 24,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3535,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc24"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 3,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908426",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908426",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc25",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 25,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3640,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc25"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 4,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908426",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908426",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc26",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 26,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3745,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc26"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 5,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908438",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908438",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc27",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 27,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3850,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc27"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 6,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908438",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908438",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc28",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 28,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3955,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc28"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 7,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908438",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908438",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc29",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 29,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 4060,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc29"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 8,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908426",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908426",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc24",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 24,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6169,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc24"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 3,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908426",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908426",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc25",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 25,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6274,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc25"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 4,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908426",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908426",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc26",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 26,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6379,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc26"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 5,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908438",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908438",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc27",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 27,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6484,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc27"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 6,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908438",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908438",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc28",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 28,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6589,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc28"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 7,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908438",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908438",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc29",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 29,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6694,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc29"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 8,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    }
+  ],
+  "question": "§17's decisive question per selector and per measured pair: does the block term change the answer, and on what evidence is that said either way",
+  "recompute": "the pairs are `reuse-candidates.json`'s own rows filtered to eth_call; the per-pair answer comparison reads `route-runs/*/route-run.json` and `route-runs/*/preflight.json`, which hold the decoded values the two stages actually got; the cross-height control reads the M7 fee measurement, and the bytecode scan reads the M7 dumps",
+  "selector_facts": [
+    {
+      "artifact_class": "CANONICAL_STATE_READ",
+      "block_dependency": "not_attributable",
+      "evidence_refs": [
+        {
+          "file": "crates/protocol/src/calls.rs",
+          "line": 104,
+          "matches": 1,
+          "note": "the selector this build sends",
+          "source": "code",
+          "token": "fn encode"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 142,
+          "matches": 1,
+          "note": "the read that sends it",
+          "source": "code",
+          "token": "V2Call::Token0"
+        }
+      ],
+      "question": "which token this pair calls slot 0",
+      "returns": "one address, in the low 20 bytes of a word",
+      "selector": "0dfe1681",
+      "signature": "token0()",
+      "state_dependency": "the pair's two token slots, written once by initialize()"
+    },
+    {
+      "artifact_class": "CANONICAL_STATE_READ",
+      "block_dependency": "not_attributable",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 143,
+          "matches": 1,
+          "note": "the read that sends it",
+          "source": "code",
+          "token": "V2Call::Token1"
+        }
+      ],
+      "question": "which token this pair calls slot 1",
+      "returns": "one address, in the low 20 bytes of a word",
+      "selector": "d21220a7",
+      "signature": "token1()",
+      "state_dependency": "the pair's two token slots, written once by initialize()"
+    },
+    {
+      "artifact_class": "CANONICAL_STATE_READ",
+      "block_dependency": "proven_load_bearing",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 149,
+          "matches": 1,
+          "note": "the read that sends it",
+          "source": "code",
+          "token": "data: V2Call::GetReserves.encode(),"
+        },
+        {
+          "file": "data/evidence/m7/candidate-fee-measurement.json",
+          "line": 6,
+          "matches": 5,
+          "note": "the same pool at an earlier height, in this repository's own records",
+          "source": "run_record",
+          "token": "getReserves_blockTimestampLast"
+        }
+      ],
+      "question": "how much of each token the pool holds right now, and when it last synced",
+      "returns": "reserve0, reserve1, blockTimestampLast",
+      "selector": "0902f1ac",
+      "signature": "getReserves()",
+      "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+    },
+    {
+      "artifact_class": "FEE_ORACLE_ESTIMATE",
+      "block_dependency": "not_attributable",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 263,
+          "matches": 1,
+          "note": "the calldata this build assembles",
+          "source": "code",
+          "token": "fn get_l1_fee_calldata"
+        }
+      ],
+      "question": "what the chain will charge for exactly these transaction bytes",
+      "returns": "one uint256: the L1 data fee in wei",
+      "selector": "49948e0e",
+      "signature": "getL1Fee(bytes)",
+      "state_dependency": "the predeploy's oracle parameters, plus the bytes the caller supplied"
+    },
+    {
+      "artifact_class": "CANONICAL_STATE_READ",
+      "block_dependency": "proven_load_bearing",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 74,
+          "matches": 1,
+          "note": "the read that sends it",
+          "source": "code",
+          "token": "V2Call::BalanceOf"
+        }
+      ],
+      "question": "how many tokens one account holds",
+      "returns": "one uint256 balance",
+      "selector": "70a08231",
+      "signature": "balanceOf(address)",
+      "state_dependency": "one account's ERC-20 balance slot"
+    }
+  ],
+  "totals": {
+    "blocks_apart_histogram": {
+      "13": 6,
+      "15": 12
+    },
+    "cross_height_controls": 2,
+    "cross_height_controls_answering_differently": 2,
+    "pairs": 18,
+    "pairs_blocked": 18,
+    "pairs_compared_within_the_run": 6,
+    "pairs_with_equal_answers_within_the_run": 6,
+    "scans_with_a_block_context_opcode": 4
+  },
+  "unit": "pairs, selectors, runs and scans, each with its own rows",
+  "what_this_table_refuses_to_infer": "§42: a build result equal to another build result says nothing about whether two eth_call answers are equal, so every equality here is between two recorded answers of the same kind, read from the fields that hold them"
+}

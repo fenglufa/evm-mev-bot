@@ -1,0 +1,686 @@
+{
+  "artifact_classes": [
+    {
+      "class": "CANONICAL_STATE_READ",
+      "sites": [
+        "detection.tokens",
+        "preflight.tokens",
+        "preflight.reserves",
+        "build.asset_snapshot"
+      ]
+    },
+    {
+      "class": "PROTOCOL_DERIVED_RESULT",
+      "sites": [
+        "detection.reserves"
+      ]
+    },
+    {
+      "class": "FEE_ORACLE_ESTIMATE",
+      "sites": [
+        "preflight.l1_fee"
+      ]
+    },
+    {
+      "class": "EPHEMERAL_PROBE",
+      "sites": []
+    },
+    {
+      "class": "UNKNOWN",
+      "sites": []
+    }
+  ],
+  "axes": [
+    "ownership",
+    "identity",
+    "freshness",
+    "invalidation",
+    "authority",
+    "consumer_verification",
+    "determinism",
+    "carrier"
+  ],
+  "generated_by": "crates/pipeline/tests/eth_call_semantics_evidence.rs",
+  "milestone": "M8.5.1",
+  "model": "crates/pipeline/src/eth_call_semantics.rs",
+  "question": "§26's eight axes per eth_call site: who holds the answer, what identifies it, how long it is valid, what invalidates it, what authority it carries, what the consumer can verify, whether it is deterministic, and whether anything carries it across the stage boundary",
+  "recompute": "one row per `CallSite` in the model; each axis status is the model's own declaration and every `evidence_refs.line` is resolved against the source file at assembly time",
+  "rows": [
+    {
+      "artifact_class": "CANONICAL_STATE_READ",
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "no component holds the answer; Address values are copied into RouteLeg",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "unknown"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "unknown"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer could check the value, but only by making this reading again — which is the reading reuse was supposed to save",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "RouteLeg.token_in / token_out (TokenId, one address each)",
+          "status": "partially_proven"
+        }
+      ],
+      "block_dependency": "not_attributable",
+      "blockers": [
+        "read_is_the_check",
+        "BLOCK_DEPENDENCY_UNPROVEN",
+        "RESULT_NOT_RECORDED",
+        "OWNER_NOT_ESTABLISHED",
+        "FRESHNESS_RULE_NOT_PROVEN",
+        "INVALIDATION_NOT_ESTABLISHED"
+      ],
+      "caller_family": "reserves",
+      "carrier": "DERIVED_PROJECTION",
+      "carrier_fields": "RouteLeg.token_in / token_out (TokenId, one address each)",
+      "class": "REUSE_BLOCKED_BY_VERIFICATION",
+      "consumer_fn": "price_legs → PricedRoute::new",
+      "consumer_type": "free fn in evm_pipeline::arbitrage",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 309,
+          "matches": 1,
+          "note": "the producer",
+          "source": "code",
+          "token": "fn read_address"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 1465,
+          "matches": 1,
+          "note": "the consumer",
+          "source": "code",
+          "token": "async fn price_legs"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 120,
+          "matches": 1,
+          "note": "the guard that re-derives orientation from a fresh read and errors if the pair does not hold the route's tokens",
+          "source": "code",
+          "token": "pub fn in_out"
+        }
+      ],
+      "ownership_form": "projection_only",
+      "producer_fn": "read_address",
+      "producer_type": "free fn in evm_execution::giwa::reads",
+      "purpose": "decide which reserve belongs to which token, so a leg can be oriented",
+      "read_is_the_check": true,
+      "result_owner": "no component holds the answer; Address values are copied into RouteLeg",
+      "result_type": "alloy Bytes, decoded to Address",
+      "reusable_in_principle": false,
+      "rpc_boundary": "HttpChainAdapter::call → eth_call with a hex height",
+      "safe_to_reuse_now": false,
+      "selectors": [
+        "0dfe1681",
+        "d21220a7"
+      ],
+      "site": "detection.tokens",
+      "stage": "opportunity_detection"
+    },
+    {
+      "artifact_class": "PROTOCOL_DERIVED_RESULT",
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "PoolState is dropped at the end of price_legs; only the quoted integers survive",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "unknown"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "unknown"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer could check the value, but only by making this reading again — which is the reading reuse was supposed to save",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "RouteLeg.reserve_in / reserve_out (U256) + PricedRoute.block_number",
+          "status": "partially_proven"
+        }
+      ],
+      "block_dependency": "proven_load_bearing",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer",
+        "RESULT_NOT_RECORDED",
+        "OWNER_NOT_ESTABLISHED",
+        "FRESHNESS_RULE_NOT_PROVEN",
+        "INVALIDATION_NOT_ESTABLISHED"
+      ],
+      "caller_family": "reserves",
+      "carrier": "DERIVED_PROJECTION",
+      "carrier_fields": "RouteLeg.reserve_in / reserve_out (U256) + PricedRoute.block_number",
+      "class": "REUSE_BLOCKED_BY_VERIFICATION",
+      "consumer_fn": "price_legs → Venue::quote",
+      "consumer_type": "free fn in evm_pipeline::arbitrage",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 137,
+          "matches": 1,
+          "note": "the producer",
+          "source": "code",
+          "token": "pub async fn read_pool"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 105,
+          "matches": 1,
+          "note": "the answer type",
+          "source": "code",
+          "token": "pub struct PoolState"
+        },
+        {
+          "file": "crates/simulation/src/route.rs",
+          "line": 40,
+          "matches": 1,
+          "note": "the projection that survives into the route",
+          "source": "code",
+          "token": "pub reserve_in: U256"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 266,
+          "matches": 1,
+          "note": "the writer that publishes each leg's answer into that run's record: every run in the corpus goes through this line, so the anchor names the code rather than one run's directory",
+          "source": "code",
+          "token": "\"getReserves_blockTimestampLast\": self.last_synced.to_string(),"
+        }
+      ],
+      "ownership_form": "projection_only",
+      "producer_fn": "read_pool",
+      "producer_type": "free fn in evm_execution::giwa::reads",
+      "purpose": "price both legs of the pair at the pinned height, and decide which venue is the buy",
+      "read_is_the_check": true,
+      "result_owner": "PoolState is dropped at the end of price_legs; only the quoted integers survive",
+      "result_type": "PoolState { token0, token1, reserve0, reserve1, last_synced, read_at_block, source }",
+      "reusable_in_principle": false,
+      "rpc_boundary": "HttpChainAdapter::call → eth_call with a hex height",
+      "safe_to_reuse_now": false,
+      "selectors": [
+        "0902f1ac"
+      ],
+      "site": "detection.reserves",
+      "stage": "opportunity_detection"
+    },
+    {
+      "artifact_class": "CANONICAL_STATE_READ",
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "the gathered facts' local PoolState, dropped when reserve_reading returns",
+          "status": "unknown"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "not_applicable"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "unknown"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer could check the value, but only by making this reading again — which is the reading reuse was supposed to save",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "nothing: the addresses are used to pick which reserve is in and out",
+          "status": "unknown"
+        }
+      ],
+      "block_dependency": "not_attributable",
+      "blockers": [
+        "read_is_the_check",
+        "BLOCK_DEPENDENCY_UNPROVEN",
+        "NO_CARRIER",
+        "OWNER_NOT_ESTABLISHED",
+        "FRESHNESS_RULE_NOT_PROVEN",
+        "INVALIDATION_NOT_ESTABLISHED"
+      ],
+      "caller_family": "reserves",
+      "carrier": "NO_CARRIER",
+      "carrier_fields": "nothing: the addresses are used to pick which reserve is in and out",
+      "class": "REUSE_BLOCKED_BY_VERIFICATION",
+      "consumer_fn": "PoolState::in_out",
+      "consumer_type": "impl on evm_execution::giwa::reads::PoolState",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 441,
+          "matches": 1,
+          "note": "the producer, at the head this gather read",
+          "source": "code",
+          "token": "async fn read_leg"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 127,
+          "matches": 1,
+          "note": "the guard that consumes them",
+          "source": "code",
+          "token": "which is not the pair this route moves through"
+        }
+      ],
+      "ownership_form": "ephemeral_local",
+      "producer_fn": "read_leg → read_address",
+      "producer_type": "method on LivePreflightReads, evm_execution::giwa::preflight_facts",
+      "purpose": "order the head's reserves for the leg the route actually moves through",
+      "read_is_the_check": true,
+      "result_owner": "the gathered facts' local PoolState, dropped when reserve_reading returns",
+      "result_type": "alloy Bytes, decoded to Address",
+      "reusable_in_principle": false,
+      "rpc_boundary": "HttpChainAdapter::call → eth_call with a hex height",
+      "safe_to_reuse_now": false,
+      "selectors": [
+        "0dfe1681",
+        "d21220a7"
+      ],
+      "site": "preflight.tokens",
+      "stage": "preflight"
+    },
+    {
+      "artifact_class": "CANONICAL_STATE_READ",
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "PreflightFacts.reserves: [ReserveReading; 2], for the length of one gate run",
+          "status": "proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "proven"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "not_applicable"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer could check the value, but only by making this reading again — which is the reading reuse was supposed to save",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "ReserveReading.current_reserve_in / current_reserve_out (Option<U256>)",
+          "status": "proven"
+        }
+      ],
+      "block_dependency": "proven_load_bearing",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "caller_family": "reserves",
+      "carrier": "DIRECT_VALUE",
+      "carrier_fields": "ReserveReading.current_reserve_in / current_reserve_out (Option<U256>)",
+      "class": "REUSE_BLOCKED_BY_VERIFICATION",
+      "consumer_fn": "ExecutionPreflight::run",
+      "consumer_type": "evm_execution::preflight",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 145,
+          "matches": 1,
+          "note": "both halves of the comparison, kept side by side on purpose",
+          "source": "code",
+          "token": "pub struct ReserveReading"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 194,
+          "matches": 1,
+          "note": "the refusal when the head's answer is missing",
+          "source": "code",
+          "token": "verdict cannot be formed from"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 1361,
+          "matches": 1,
+          "note": "a regression that forbids the reuse this milestone was asked to assess",
+          "source": "test",
+          "token": "an_unread_reserve_blocks_instead_of_falling_back_to_the_priced_numbers"
+        },
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 223,
+          "matches": 1,
+          "note": "the head this read is pinned to",
+          "source": "code",
+          "token": "head at latest"
+        }
+      ],
+      "ownership_form": "held_by_struct_field",
+      "producer_fn": "read_leg → read_pool",
+      "producer_type": "method on LivePreflightReads, evm_execution::giwa::preflight_facts",
+      "purpose": "re-price the same route on the head's reserves and reject the attempt if the opportunity no longer clears the floor",
+      "read_is_the_check": true,
+      "result_owner": "PreflightFacts.reserves: [ReserveReading; 2], for the length of one gate run",
+      "result_type": "PoolState, projected into ReserveReading",
+      "reusable_in_principle": false,
+      "rpc_boundary": "HttpChainAdapter::call → eth_call with a hex height",
+      "safe_to_reuse_now": false,
+      "selectors": [
+        "0902f1ac"
+      ],
+      "site": "preflight.reserves",
+      "stage": "preflight"
+    },
+    {
+      "artifact_class": "FEE_ORACLE_ESTIMATE",
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "StepPricing.cost, for the length of the gather and the report built from it",
+          "status": "proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "unknown"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer has an independent check it can run on a handed-over value",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "L1FeeSource::OracleEstimate.amount + block_number, read_by provenance",
+          "status": "proven"
+        }
+      ],
+      "block_dependency": "not_attributable",
+      "blockers": [
+        "BLOCK_DEPENDENCY_UNPROVEN",
+        "FRESHNESS_RULE_NOT_PROVEN",
+        "INVALIDATION_NOT_ESTABLISHED",
+        "CONSUMER_CANNOT_VERIFY"
+      ],
+      "caller_family": "cost ceiling",
+      "carrier": "DIRECT_VALUE",
+      "carrier_fields": "L1FeeSource::OracleEstimate.amount + block_number, read_by provenance",
+      "class": "REUSE_BLOCKED_BY_DETERMINISM",
+      "consumer_fn": "price_steps → EstimatedCost::new",
+      "consumer_type": "evm_execution::cost",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 187,
+          "matches": 1,
+          "note": "producer",
+          "source": "code",
+          "token": "pub async fn estimate_l1_fee"
+        },
+        {
+          "file": "crates/execution/src/cost.rs",
+          "line": 56,
+          "matches": 1,
+          "note": "a failed read carries an absence rather than a zero",
+          "source": "code",
+          "token": "Unreadable { reason: String }"
+        }
+      ],
+      "ownership_form": "held_by_struct_field",
+      "producer_fn": "estimate_l1_fee",
+      "producer_type": "free fn in evm_execution::giwa::reads",
+      "purpose": "put the L1 data cost of the exact pre-signing envelope into each step's ceiling",
+      "read_is_the_check": false,
+      "result_owner": "StepPricing.cost, for the length of the gather and the report built from it",
+      "result_type": "L1FeeSource::OracleEstimate { amount, block_number, read_by }",
+      "reusable_in_principle": true,
+      "rpc_boundary": "HttpChainAdapter::call → eth_call with a hex height",
+      "safe_to_reuse_now": false,
+      "selectors": [
+        "49948e0e"
+      ],
+      "site": "preflight.l1_fee",
+      "stage": "preflight"
+    },
+    {
+      "artifact_class": "CANONICAL_STATE_READ",
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "AssetSnapshot, one per sequence, paired with its after-snapshot",
+          "status": "proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "proven"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "not_applicable"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer has an independent check it can run on a handed-over value",
+          "status": "proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "AssetSnapshot.token_balances: BTreeMap<Address, U256>",
+          "status": "proven"
+        }
+      ],
+      "block_dependency": "proven_load_bearing",
+      "blockers": [
+        "block_changes_the_answer"
+      ],
+      "caller_family": "before-snapshot",
+      "carrier": "DIRECT_VALUE",
+      "carrier_fields": "AssetSnapshot.token_balances: BTreeMap<Address, U256>",
+      "class": "REUSE_BLOCKED_BY_IDENTITY",
+      "consumer_fn": "snapshot_assets → AssetSnapshot.token_balances",
+      "consumer_type": "evm_execution::profit",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 68,
+          "matches": 1,
+          "note": "the producer",
+          "source": "code",
+          "token": "pub async fn token_balance"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 925,
+          "matches": 1,
+          "note": "the collector",
+          "source": "code",
+          "token": "let mut token_balances"
+        },
+        {
+          "file": "crates/execution/src/profit.rs",
+          "line": 48,
+          "matches": 1,
+          "note": "the holder",
+          "source": "code",
+          "token": "pub token_balances: BTreeMap"
+        }
+      ],
+      "ownership_form": "held_by_struct_field",
+      "producer_fn": "GiwaAssetReader::token_balance",
+      "producer_type": "impl AssetReader for evm_execution::giwa::reads::GiwaAssetReader",
+      "purpose": "state what the wallet holds before step 0, so the six executions afterwards can be audited against a number that was not remembered",
+      "read_is_the_check": false,
+      "result_owner": "AssetSnapshot, one per sequence, paired with its after-snapshot",
+      "result_type": "AssetReading { amount, source }",
+      "reusable_in_principle": false,
+      "rpc_boundary": "HttpChainAdapter::call → eth_call with a hex height",
+      "safe_to_reuse_now": false,
+      "selectors": [
+        "70a08231"
+      ],
+      "site": "build.asset_snapshot",
+      "stage": "build"
+    }
+  ],
+  "rules": {
+    "not_a_null": "a field this build cannot send is recorded with the rule that keeps it absent, which is a settled answer; not recorded and unknown are not (§36)",
+    "reusable_in_principle": "decided on the artifact's nature, never on the axes, and kept a separate field so a table cannot collapse 「能不能」 into 「现在能不能」 (§27)",
+    "safe_to_reuse_now": "all eight axes proven, and only that — a partially_proven carrier is not a carrier (§26)"
+  },
+  "status_vocabulary": [
+    "proven",
+    "partially_proven",
+    "unknown",
+    "not_applicable"
+  ],
+  "totals": {
+    "by_axis_status": {
+      "authority=proven": 6,
+      "carrier=partially_proven": 2,
+      "carrier=proven": 3,
+      "carrier=unknown": 1,
+      "consumer_verification=partially_proven": 5,
+      "consumer_verification=proven": 1,
+      "determinism=partially_proven": 4,
+      "determinism=proven": 2,
+      "freshness=not_applicable": 1,
+      "freshness=partially_proven": 1,
+      "freshness=proven": 2,
+      "freshness=unknown": 2,
+      "identity=partially_proven": 3,
+      "identity=proven": 3,
+      "invalidation=not_applicable": 2,
+      "invalidation=unknown": 4,
+      "ownership=partially_proven": 2,
+      "ownership=proven": 3,
+      "ownership=unknown": 1
+    },
+    "read_is_the_check": 4,
+    "reusable_in_principle": 1,
+    "safe_to_reuse_now": 0,
+    "sites": 6
+  },
+  "unit": "call sites"
+}

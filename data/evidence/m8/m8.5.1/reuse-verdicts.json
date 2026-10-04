@@ -1,0 +1,1952 @@
+{
+  "blocker_vocabulary": [
+    "NO_CARRIER",
+    "OWNER_NOT_ESTABLISHED",
+    "FRESHNESS_RULE_NOT_PROVEN",
+    "INVALIDATION_NOT_ESTABLISHED",
+    "BLOCK_DEPENDENCY_UNPROVEN",
+    "RESULT_NOT_RECORDED",
+    "CONSUMER_CANNOT_VERIFY",
+    "BLOCK_TAG_LATEST",
+    "block_changes_the_answer",
+    "read_is_the_check"
+  ],
+  "class_vocabulary": [
+    "REUSE_READY",
+    "PROPAGATION_POSSIBLE",
+    "REUSE_BLOCKED_BY_IDENTITY",
+    "REUSE_BLOCKED_BY_FRESHNESS",
+    "REUSE_BLOCKED_BY_OWNERSHIP",
+    "REUSE_BLOCKED_BY_INVALIDATION",
+    "REUSE_BLOCKED_BY_VERIFICATION",
+    "REUSE_BLOCKED_BY_DETERMINISM",
+    "REUSE_BLOCKED_BY_CARRIER",
+    "UNKNOWN"
+  ],
+  "cross_stage_carrier": [
+    {
+      "carrier": "DERIVED_PROJECTION",
+      "crosses_a_stage_boundary": true,
+      "fields": "RouteLeg.token_in / token_out (TokenId, one address each)",
+      "site": "detection.tokens"
+    },
+    {
+      "carrier": "DERIVED_PROJECTION",
+      "crosses_a_stage_boundary": true,
+      "fields": "RouteLeg.reserve_in / reserve_out (U256) + PricedRoute.block_number",
+      "site": "detection.reserves"
+    },
+    {
+      "carrier": "NO_CARRIER",
+      "crosses_a_stage_boundary": false,
+      "fields": "nothing: the addresses are used to pick which reserve is in and out",
+      "site": "preflight.tokens"
+    },
+    {
+      "carrier": "DIRECT_VALUE",
+      "crosses_a_stage_boundary": true,
+      "fields": "ReserveReading.current_reserve_in / current_reserve_out (Option<U256>)",
+      "site": "preflight.reserves"
+    },
+    {
+      "carrier": "DIRECT_VALUE",
+      "crosses_a_stage_boundary": true,
+      "fields": "L1FeeSource::OracleEstimate.amount + block_number, read_by provenance",
+      "site": "preflight.l1_fee"
+    },
+    {
+      "carrier": "DIRECT_VALUE",
+      "crosses_a_stage_boundary": true,
+      "fields": "AssetSnapshot.token_balances: BTreeMap<Address, U256>",
+      "site": "build.asset_snapshot"
+    }
+  ],
+  "generated_by": "crates/pipeline/tests/eth_call_semantics_evidence.rs",
+  "milestone": "M8.5.1",
+  "model": "crates/pipeline/src/eth_call_semantics.rs",
+  "outcome": {
+    "candidates_found": 18,
+    "candidates_safe": 0,
+    "label": "REUSE_BLOCKED",
+    "net_rpc_saving": 0,
+    "one_sentence_answer_to_66": "Preflight could not trust the handed-over reading, because the reading Preflight needs is the one at the head and its job is to be the second opinion: `Repricing::expected_output` refuses when the head's reserves are missing rather than falling back to the finding's numbers, so a copy of the finding's answer would leave the gate comparing a value with a copy of itself while the block term the records show is measured load-bearing",
+    "why_no_saving": "no eth_call could be removed without removing a check, and §31's stage forbids optimising anything, so this milestone publishes the eligibility answer and stops there",
+    "why_this_label": "§58 counts SAFE_CANDIDATE_FOUND, REUSE_BLOCKED and NOT_ENOUGH_EVIDENCE as successes; this is REUSE_BLOCKED because every measured pair is refused with a named cause the records support, not because the question is unanswerable"
+  },
+  "pairs": [
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908426",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908426",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc24",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 24,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 901,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc24"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 3,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908426",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908426",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc25",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 25,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1006,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc25"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 4,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908426",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908426",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc26",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 26,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1111,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc26"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 5,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908438",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908438",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc27",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 27,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1216,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc27"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 6,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908438",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908438",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc28",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 28,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1321,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc28"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 7,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 13,
+          "consumer": {
+            "block_hash": "0x383c7d91ded27a18592a83daae9c851d42bd47bf26f447125554b3b987e7818e",
+            "block_timestamp_last": "1790908438",
+            "height": 37700753,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0xefa05b24a3cc3c9e72ee1d34960cd7d02f8eda7b441db3b6908ee8006f2e1fac",
+            "block_timestamp_last": "1790908438",
+            "height": 37700740,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700740-1791045857463/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700740-1791045857463"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 13,
+      "candidate_id": "route-91342-37700740-1791045857463:rpc29",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700753",
+        "rpc_id": 29,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 1426,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700740-1791045857463:rpc29"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700740",
+        "rpc_id": 8,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700740-1791045857463",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908426",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908426",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc24",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 24,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3535,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc24"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 3,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908426",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908426",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc25",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 25,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3640,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc25"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 4,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908426",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908426",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc26",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 26,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3745,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc26"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 5,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908438",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908438",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc27",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 27,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3850,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc27"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 6,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908438",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908438",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc28",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 28,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 3955,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc28"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 7,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x53f3a9a5c566a1d5a887ccf4268ed5cffe0a1dd83e79df84ba71fbffe984e24d",
+            "block_timestamp_last": "1790908438",
+            "height": 37700793,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x31fefd381290162fdd3916445b6ba49696a23b077031e126d1338066f03874fe",
+            "block_timestamp_last": "1790908438",
+            "height": 37700778,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700778-1791045896094/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700778-1791045896094"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700778-1791045896094:rpc29",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700793",
+        "rpc_id": 29,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 4060,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700778-1791045896094:rpc29"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700778",
+        "rpc_id": 8,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700778-1791045896094",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908426",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908426",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc24",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 24,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6169,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc24"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 3,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908426",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908426",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc25",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 25,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6274,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc25"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 4,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908426",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "preflight"
+          },
+          "leg": "buy",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908426",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "909338910611985086842",
+            "reserve1": "1100000000000000",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc26",
+      "consumer": {
+        "caller": "reserves of leg 0",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 26,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6379,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc26"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 5,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908438",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908438",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc27",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 27,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6484,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc27"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 6,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0dfe1681|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908438",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908438",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "NO_CARRIER",
+        "FRESHNESS_RULE_NOT_PROVEN"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc28",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 28,
+        "site": "preflight.tokens",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6589,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc28"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 7,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=d21220a7|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    },
+    {
+      "artifact_layer_answer_comparison": {
+        "detail": {
+          "answer_equal": true,
+          "blocks_apart": 15,
+          "consumer": {
+            "block_hash": "0x37b71dc8b7307620d4684732cc6311ddd85891b7ed8a6d5f39eca5fab4b2a003",
+            "block_timestamp_last": "1790908438",
+            "height": 37700821,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/preflight.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "preflight"
+          },
+          "leg": "sell",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "producer": {
+            "block_hash": "0x2c28b5973e2b5519a21d8fdcdc10347261883d3495c4bbc07e7b6776559ea329",
+            "block_timestamp_last": "1790908438",
+            "height": 37700806,
+            "record": "data/evidence/m8/cross-stage/route-runs/route-91342-37700806-1791045924232/route-run.json",
+            "reserve0": "2090661089388014913158",
+            "reserve1": "19135193482828374",
+            "stage": "opportunity_detection"
+          },
+          "run": "route-91342-37700806-1791045924232"
+        },
+        "equal": true
+      },
+      "block_relation": "different_block",
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "blocks_apart": 15,
+      "candidate_id": "route-91342-37700806-1791045924232:rpc29",
+      "consumer": {
+        "caller": "reserves of leg 1",
+        "form": "number",
+        "height": "37700821",
+        "rpc_id": 29,
+        "site": "preflight.reserves",
+        "stage": "preflight"
+      },
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/reuse-candidates.json",
+          "line": 6694,
+          "matches": 1,
+          "note": "the directed pair this row is",
+          "source": "run_record",
+          "token": "route-91342-37700806-1791045924232:rpc29"
+        }
+      ],
+      "producer": {
+        "caller": "reserves of both venues, at the pin",
+        "form": "number",
+        "height": "37700806",
+        "rpc_id": 8,
+        "stage": "opportunity_detection"
+      },
+      "record_safe_to_reuse": false,
+      "record_verdict": "refused_different_block_identity",
+      "run": "route-91342-37700806-1791045924232",
+      "same_block_free_identity": "method=eth_call|chain=91342|data=0902f1ac|to=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "this_milestone_class": "REUSE_BLOCKED_BY_VERIFICATION"
+    }
+  ],
+  "question": "the answer to §66: if Opportunity Detection's eth_call result were handed to Preflight now, why could or could not Preflight trust it",
+  "recompute": "the six site rows are `verdicts()` with their anchors resolved; the 18 pair rows are `reuse-candidates.json`'s eth_call rows classified by the same declarations plus each pair's measured block distance",
+  "sites": [
+    {
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "no component holds the answer; Address values are copied into RouteLeg",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "unknown"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "unknown"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer could check the value, but only by making this reading again — which is the reading reuse was supposed to save",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "RouteLeg.token_in / token_out (TokenId, one address each)",
+          "status": "partially_proven"
+        }
+      ],
+      "blockers": [
+        "read_is_the_check",
+        "BLOCK_DEPENDENCY_UNPROVEN",
+        "RESULT_NOT_RECORDED",
+        "OWNER_NOT_ESTABLISHED",
+        "FRESHNESS_RULE_NOT_PROVEN",
+        "INVALIDATION_NOT_ESTABLISHED"
+      ],
+      "class": "REUSE_BLOCKED_BY_VERIFICATION",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 309,
+          "matches": 1,
+          "note": "the producer",
+          "source": "code",
+          "token": "fn read_address"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 1465,
+          "matches": 1,
+          "note": "the consumer",
+          "source": "code",
+          "token": "async fn price_legs"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 120,
+          "matches": 1,
+          "note": "the guard that re-derives orientation from a fresh read and errors if the pair does not hold the route's tokens",
+          "source": "code",
+          "token": "pub fn in_out"
+        }
+      ],
+      "reason": "the answers survive only as token ids inside the route, and the stage that consumes them re-reads them at a different height by design",
+      "reusable_in_principle": false,
+      "safe_to_reuse_now": false,
+      "site": "detection.tokens",
+      "what_would_be_required_to_unblock": "nothing short of a different gate: the consumer would have to verify staleness by a means other than re-reading, which would be a new check rather than an optimization of this one"
+    },
+    {
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "PoolState is dropped at the end of price_legs; only the quoted integers survive",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "unknown"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "unknown"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer could check the value, but only by making this reading again — which is the reading reuse was supposed to save",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "RouteLeg.reserve_in / reserve_out (U256) + PricedRoute.block_number",
+          "status": "partially_proven"
+        }
+      ],
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer",
+        "RESULT_NOT_RECORDED",
+        "OWNER_NOT_ESTABLISHED",
+        "FRESHNESS_RULE_NOT_PROVEN",
+        "INVALIDATION_NOT_ESTABLISHED"
+      ],
+      "class": "REUSE_BLOCKED_BY_VERIFICATION",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 137,
+          "matches": 1,
+          "note": "the producer",
+          "source": "code",
+          "token": "pub async fn read_pool"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 105,
+          "matches": 1,
+          "note": "the answer type",
+          "source": "code",
+          "token": "pub struct PoolState"
+        },
+        {
+          "file": "crates/simulation/src/route.rs",
+          "line": 40,
+          "matches": 1,
+          "note": "the projection that survives into the route",
+          "source": "code",
+          "token": "pub reserve_in: U256"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 266,
+          "matches": 1,
+          "note": "the writer that publishes each leg's answer into that run's record: every run in the corpus goes through this line, so the anchor names the code rather than one run's directory",
+          "source": "code",
+          "token": "\"getReserves_blockTimestampLast\": self.last_synced.to_string(),"
+        }
+      ],
+      "reason": "a state reading the run quotes immediately, kept as four integers with no field for the block they were read at, so the surviving projection cannot be defended as an answer about any particular state",
+      "reusable_in_principle": false,
+      "safe_to_reuse_now": false,
+      "site": "detection.reserves",
+      "what_would_be_required_to_unblock": "nothing short of a different gate: the consumer would have to verify staleness by a means other than re-reading, which would be a new check rather than an optimization of this one"
+    },
+    {
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "the gathered facts' local PoolState, dropped when reserve_reading returns",
+          "status": "unknown"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "not_applicable"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "unknown"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer could check the value, but only by making this reading again — which is the reading reuse was supposed to save",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "nothing: the addresses are used to pick which reserve is in and out",
+          "status": "unknown"
+        }
+      ],
+      "blockers": [
+        "read_is_the_check",
+        "BLOCK_DEPENDENCY_UNPROVEN",
+        "NO_CARRIER",
+        "OWNER_NOT_ESTABLISHED",
+        "FRESHNESS_RULE_NOT_PROVEN",
+        "INVALIDATION_NOT_ESTABLISHED"
+      ],
+      "class": "REUSE_BLOCKED_BY_VERIFICATION",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 441,
+          "matches": 1,
+          "note": "the producer, at the head this gather read",
+          "source": "code",
+          "token": "async fn read_leg"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 127,
+          "matches": 1,
+          "note": "the guard that consumes them",
+          "source": "code",
+          "token": "which is not the pair this route moves through"
+        }
+      ],
+      "reason": "the addresses order the reserves the head holds; reused, the guard at in_out() would compare detection's orientation against detection's orientation",
+      "reusable_in_principle": false,
+      "safe_to_reuse_now": false,
+      "site": "preflight.tokens",
+      "what_would_be_required_to_unblock": "nothing short of a different gate: the consumer would have to verify staleness by a means other than re-reading, which would be a new check rather than an optimization of this one"
+    },
+    {
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "PreflightFacts.reserves: [ReserveReading; 2], for the length of one gate run",
+          "status": "proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "proven"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "not_applicable"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer could check the value, but only by making this reading again — which is the reading reuse was supposed to save",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "ReserveReading.current_reserve_in / current_reserve_out (Option<U256>)",
+          "status": "proven"
+        }
+      ],
+      "blockers": [
+        "read_is_the_check",
+        "block_changes_the_answer"
+      ],
+      "class": "REUSE_BLOCKED_BY_VERIFICATION",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 145,
+          "matches": 1,
+          "note": "both halves of the comparison, kept side by side on purpose",
+          "source": "code",
+          "token": "pub struct ReserveReading"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 194,
+          "matches": 1,
+          "note": "the refusal when the head's answer is missing",
+          "source": "code",
+          "token": "verdict cannot be formed from"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 1361,
+          "matches": 1,
+          "note": "a regression that forbids the reuse this milestone was asked to assess",
+          "source": "test",
+          "token": "an_unread_reserve_blocks_instead_of_falling_back_to_the_priced_numbers"
+        },
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 223,
+          "matches": 1,
+          "note": "the head this read is pinned to",
+          "source": "code",
+          "token": "head at latest"
+        }
+      ],
+      "reason": "the head's reserves are what this stage is for: §27's verdict is the difference between the reserves the finding priced and the reserves the chain holds now, and a handed-over copy of the finding's own numbers cannot express a difference",
+      "reusable_in_principle": false,
+      "safe_to_reuse_now": false,
+      "site": "preflight.reserves",
+      "what_would_be_required_to_unblock": "nothing short of a different gate: the consumer would have to verify staleness by a means other than re-reading, which would be a new check rather than an optimization of this one"
+    },
+    {
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "StepPricing.cost, for the length of the gather and the report built from it",
+          "status": "proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "unknown"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer has an independent check it can run on a handed-over value",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "partially_proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "L1FeeSource::OracleEstimate.amount + block_number, read_by provenance",
+          "status": "proven"
+        }
+      ],
+      "blockers": [
+        "BLOCK_DEPENDENCY_UNPROVEN",
+        "FRESHNESS_RULE_NOT_PROVEN",
+        "INVALIDATION_NOT_ESTABLISHED",
+        "CONSUMER_CANNOT_VERIFY"
+      ],
+      "class": "REUSE_BLOCKED_BY_DETERMINISM",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 187,
+          "matches": 1,
+          "note": "producer",
+          "source": "code",
+          "token": "pub async fn estimate_l1_fee"
+        },
+        {
+          "file": "crates/execution/src/cost.rs",
+          "line": 56,
+          "matches": 1,
+          "note": "a failed read carries an absence rather than a zero",
+          "source": "code",
+          "token": "Unreadable { reason: String }"
+        }
+      ],
+      "reason": "an estimate about the bytes this caller built, not a market reading; it already carries its block number and its own read_by provenance, and it is the one artifact here a consumer could check without re-asking",
+      "reusable_in_principle": true,
+      "safe_to_reuse_now": false,
+      "site": "preflight.l1_fee",
+      "what_would_be_required_to_unblock": "a path analysis showing the dispatched selector reads no block-context opcode, or a recorded equality at two heights that a swap was known to have happened between"
+    },
+    {
+      "axes": [
+        {
+          "axis": "ownership",
+          "note": "AssetSnapshot, one per sequence, paired with its after-snapshot",
+          "status": "proven"
+        },
+        {
+          "axis": "identity",
+          "note": "chain, block, to and calldata are all recorded; whether block belongs in the identity is decided by determinism, not by this axis",
+          "status": "proven"
+        },
+        {
+          "axis": "freshness",
+          "note": "a validity window stated somewhere in code, or an explicit no-window rule",
+          "status": "proven"
+        },
+        {
+          "axis": "invalidation",
+          "note": "what makes the answer stale, and where that is enforced",
+          "status": "not_applicable"
+        },
+        {
+          "axis": "authority",
+          "note": "the endpoint's answer at a named height is canonical state for that height; the endpoint fingerprint is on every record",
+          "status": "proven"
+        },
+        {
+          "axis": "consumer_verification",
+          "note": "the consumer has an independent check it can run on a handed-over value",
+          "status": "proven"
+        },
+        {
+          "axis": "determinism",
+          "note": "same canonical block plus same identity ⇒ same answer, as far as this build can show",
+          "status": "proven"
+        },
+        {
+          "axis": "carrier",
+          "note": "AssetSnapshot.token_balances: BTreeMap<Address, U256>",
+          "status": "proven"
+        }
+      ],
+      "blockers": [
+        "block_changes_the_answer"
+      ],
+      "class": "REUSE_BLOCKED_BY_IDENTITY",
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 68,
+          "matches": 1,
+          "note": "the producer",
+          "source": "code",
+          "token": "pub async fn token_balance"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 925,
+          "matches": 1,
+          "note": "the collector",
+          "source": "code",
+          "token": "let mut token_balances"
+        },
+        {
+          "file": "crates/execution/src/profit.rs",
+          "line": 48,
+          "matches": 1,
+          "note": "the holder",
+          "source": "code",
+          "token": "pub token_balances: BTreeMap"
+        }
+      ],
+      "reason": "a balance read against one account at one height, already a named field of a named snapshot, and never asked twice for the same account in the recorded corpus",
+      "reusable_in_principle": false,
+      "safe_to_reuse_now": false,
+      "site": "build.asset_snapshot",
+      "what_would_be_required_to_unblock": "an invalidation rule that observes the state moving — the pair's Sync and Swap logs are the mechanism this chain offers, and no code in this build subscribes to them for the purpose of expiring a reading"
+    }
+  ],
+  "totals": {
+    "blockers": {
+      "FRESHNESS_RULE_NOT_PROVEN": 12,
+      "NO_CARRIER": 12,
+      "block_changes_the_answer": 6,
+      "read_is_the_check": 18
+    },
+    "pairs": 18,
+    "pairs_reuse_ready": 0,
+    "reusable_in_principle": 1,
+    "safe_to_reuse_now": 0,
+    "sites": 6
+  },
+  "unit": "sites and measured pairs, kept as two row sets because they answer two questions",
+  "why_the_class_and_the_record_verdict_name_different_things": "a record's own verdict names the rule it applies — M8.4.2 refuses a pair whose block term differs, because two asks that differ by height are not the same read — while this milestone's class names the blocker that would still hold if that rule were relaxed: for every pair measured here the consumer's check is itself a second reading of the same value, so handing over the producer's answer would move the refusal out of the gate and leave nothing in its place. Both are published per row, so the difference is shown rather than argued."
+}

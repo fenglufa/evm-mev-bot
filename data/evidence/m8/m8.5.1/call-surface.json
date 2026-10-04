@@ -1,0 +1,1164 @@
+{
+  "generated_by": "crates/pipeline/tests/eth_call_semantics_evidence.rs",
+  "milestone": "M8.5.1",
+  "model": "crates/pipeline/src/eth_call_semantics.rs",
+  "question": "every eth_call this build makes, from which code, asking what, at which height — recounted from the published records rather than tallied by hand",
+  "recompute": "group the rows of `data/evidence/m8/cross-stage/runs/*/pipeline-calls.json` whose method is eth_call by (stage, caller, selector, target); a row is one logical ask with its HTTP tries listed beside it",
+  "request_parameters": [
+    {
+      "detail": "CallRequest has two fields — to and data — so no caller in this build can name a sender; the node answers with its own default, which the record does not capture",
+      "evidence_refs": [
+        {
+          "file": "crates/chain/src/types.rs",
+          "line": 155,
+          "matches": 1,
+          "note": "the two-field request type",
+          "source": "run_record",
+          "token": "pub struct CallRequest"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 726,
+          "matches": 1,
+          "note": "the params object, written with those two keys and no third",
+          "source": "run_record",
+          "token": "\"data\": request.data.to_string()"
+        }
+      ],
+      "field": "from",
+      "not_sent_value": "0x0000000000000000000000000000000000000000",
+      "rule": "the params object this build writes has two keys, so the node applies its own default sender and the record does not capture what that default was",
+      "settled": true,
+      "state": "proven_absent",
+      "states_over_the_asks": {
+        "proven_absent": 60
+      }
+    },
+    {
+      "detail": "the same two-field request, and eth_call's params object is written with those two keys and no third",
+      "evidence_refs": [
+        {
+          "file": "crates/chain/src/types.rs",
+          "line": 155,
+          "matches": 1,
+          "note": "the two-field request type",
+          "source": "run_record",
+          "token": "pub struct CallRequest"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 726,
+          "matches": 1,
+          "note": "the params object, written with those two keys and no third",
+          "source": "run_record",
+          "token": "\"data\": request.data.to_string()"
+        }
+      ],
+      "field": "value",
+      "not_sent_value": "0",
+      "rule": "no field of CallRequest carries it, so no ask can move value",
+      "settled": true,
+      "state": "proven_absent",
+      "states_over_the_asks": {
+        "proven_absent": 60
+      }
+    },
+    {
+      "detail": "the params array this build sends is exactly two elements — the call object and the block term — so there is no third element to carry a balance, nonce, code or storage override",
+      "evidence_refs": [
+        {
+          "file": "crates/chain/src/types.rs",
+          "line": 155,
+          "matches": 1,
+          "note": "the two-field request type",
+          "source": "run_record",
+          "token": "pub struct CallRequest"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 726,
+          "matches": 1,
+          "note": "the params object, written with those two keys and no third",
+          "source": "run_record",
+          "token": "\"data\": request.data.to_string()"
+        }
+      ],
+      "field": "state_override",
+      "not_sent_value": "[]",
+      "rule": "the params array is two elements — the call object and the block term — so there is no third element to override balance, nonce, code or storage",
+      "settled": true,
+      "state": "proven_absent",
+      "states_over_the_asks": {
+        "proven_absent": 60
+      }
+    },
+    {
+      "detail": "no gas field in CallRequest and none in the params object: the node answers with its own call gas ceiling",
+      "evidence_refs": [
+        {
+          "file": "crates/chain/src/types.rs",
+          "line": 155,
+          "matches": 1,
+          "note": "the two-field request type",
+          "source": "run_record",
+          "token": "pub struct CallRequest"
+        },
+        {
+          "file": "crates/chain/src/rpc.rs",
+          "line": 726,
+          "matches": 1,
+          "note": "the params object, written with those two keys and no third",
+          "source": "run_record",
+          "token": "\"data\": request.data.to_string()"
+        }
+      ],
+      "field": "gas",
+      "not_sent_value": "node_default",
+      "rule": "no gas field in the request, so the node answers with its own call ceiling",
+      "settled": true,
+      "state": "proven_absent",
+      "states_over_the_asks": {
+        "proven_absent": 60
+      }
+    }
+  ],
+  "rows": [
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "before-snapshot",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2410,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2410,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2410,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+        }
+      ],
+      "heights": [
+        "37700753",
+        "37700793",
+        "37700821"
+      ],
+      "recorded_caller": "before-snapshot: native and input-token balances",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "70a08231",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "70a08231",
+        "signature": "balanceOf(address)",
+        "state_dependency": "one account's ERC-20 balance slot"
+      },
+      "site": "build.asset_snapshot",
+      "stage": "build",
+      "to": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "before-snapshot",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2443,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x4200000000000000000000000000000000000006|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2443,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x4200000000000000000000000000000000000006|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2443,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x4200000000000000000000000000000000000006|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+        }
+      ],
+      "heights": [
+        "37700753",
+        "37700793",
+        "37700821"
+      ],
+      "recorded_caller": "before-snapshot: native and input-token balances",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "70a08231",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "70a08231",
+        "signature": "balanceOf(address)",
+        "state_dependency": "one account's ERC-20 balance slot"
+      },
+      "site": "build.asset_snapshot",
+      "stage": "build",
+      "to": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1453,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700740|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1453,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700778|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1453,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700806|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac"
+        }
+      ],
+      "heights": [
+        "37700740",
+        "37700778",
+        "37700806"
+      ],
+      "recorded_caller": "reserves of both venues, at the pin",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "site": "detection.reserves",
+      "stage": "opportunity_detection",
+      "to": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1552,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700740|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1552,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700778|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1552,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700806|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac"
+        }
+      ],
+      "heights": [
+        "37700740",
+        "37700778",
+        "37700806"
+      ],
+      "recorded_caller": "reserves of both venues, at the pin",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "site": "detection.reserves",
+      "stage": "opportunity_detection",
+      "to": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1387,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700740|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1387,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700778|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1387,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700806|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681"
+        }
+      ],
+      "heights": [
+        "37700740",
+        "37700778",
+        "37700806"
+      ],
+      "recorded_caller": "reserves of both venues, at the pin",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "site": "detection.tokens",
+      "stage": "opportunity_detection",
+      "to": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1486,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700740|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1486,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700778|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1486,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700806|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681"
+        }
+      ],
+      "heights": [
+        "37700740",
+        "37700778",
+        "37700806"
+      ],
+      "recorded_caller": "reserves of both venues, at the pin",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "site": "detection.tokens",
+      "stage": "opportunity_detection",
+      "to": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1420,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700740|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1420,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700778|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1420,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700806|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7"
+        }
+      ],
+      "heights": [
+        "37700740",
+        "37700778",
+        "37700806"
+      ],
+      "recorded_caller": "reserves of both venues, at the pin",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "site": "detection.tokens",
+      "stage": "opportunity_detection",
+      "to": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1519,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700740|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1519,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700778|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1519,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700806|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7"
+        }
+      ],
+      "heights": [
+        "37700740",
+        "37700778",
+        "37700806"
+      ],
+      "recorded_caller": "reserves of both venues, at the pin",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "site": "detection.tokens",
+      "stage": "opportunity_detection",
+      "to": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "asks": 18,
+      "block_forms": {
+        "number": 18
+      },
+      "caller_family": "cost ceiling",
+      "distinct_identities_with_block": 18,
+      "distinct_identities_without_block": 18,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1882,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007802f875830164ce07830f4240830f44a882fda4944200000000000000000000000000000000000006865af3107a400084d0e30db0c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1915,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce08830f4240830f44a882cb0494420000000000000000000000000000000000000680b844a9059cbb0000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a400000000000000000000000000000000000000000000000000005af3107a4000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1948,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce09830f4240830f44a88301b968942a3ceafba30f6626170cbb0cd67392efb94bd9a480b8a4022c0d9f00000000000000000000000000000000000000000000000418bddcf67410ccbd0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 1981,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce0a830f4240830f44a882c33f9407d4af6e2bc8dd82beb06b4fd279df4c9028f26f80b844a9059cbb0000000000000000000000005b3c1e3fb6a97c0130ae015ff10f53a1a30c353e00000000000000000000000000000000000000000000000418bddcf67410ccbdc001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2014,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce0b830f4240830f44a88301c145945b3c1e3fb6a97c0130ae015ff10f53a1a30c353e80b8a4022c0d9f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025d5d645c29c9000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2047,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000009202f88f830164ce0c830f4240830f44a882c50394420000000000000000000000000000000000000680a42e1a7d4d00000000000000000000000000000000000000000000000000025d5d645c29c9c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1882,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007802f875830164ce07830f4240830f44ac82fda4944200000000000000000000000000000000000006865af3107a400084d0e30db0c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1915,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce08830f4240830f44ac82cb0494420000000000000000000000000000000000000680b844a9059cbb0000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a400000000000000000000000000000000000000000000000000005af3107a4000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1948,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce09830f4240830f44ac8301b968942a3ceafba30f6626170cbb0cd67392efb94bd9a480b8a4022c0d9f00000000000000000000000000000000000000000000000418bddcf67410ccbd0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 1981,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce0a830f4240830f44ac82c33f9407d4af6e2bc8dd82beb06b4fd279df4c9028f26f80b844a9059cbb0000000000000000000000005b3c1e3fb6a97c0130ae015ff10f53a1a30c353e00000000000000000000000000000000000000000000000418bddcf67410ccbdc001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2014,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce0b830f4240830f44ac8301c145945b3c1e3fb6a97c0130ae015ff10f53a1a30c353e80b8a4022c0d9f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025d5d645c29c9000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2047,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000009202f88f830164ce0c830f4240830f44ac82c50394420000000000000000000000000000000000000680a42e1a7d4d00000000000000000000000000000000000000000000000000025d5d645c29c9c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1882,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007802f875830164ce07830f4240830f44aa82fda4944200000000000000000000000000000000000006865af3107a400084d0e30db0c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1915,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce08830f4240830f44aa82cb0494420000000000000000000000000000000000000680b844a9059cbb0000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a400000000000000000000000000000000000000000000000000005af3107a4000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1948,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce09830f4240830f44aa8301b968942a3ceafba30f6626170cbb0cd67392efb94bd9a480b8a4022c0d9f00000000000000000000000000000000000000000000000418bddcf67410ccbd0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 1981,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce0a830f4240830f44aa82c33f9407d4af6e2bc8dd82beb06b4fd279df4c9028f26f80b844a9059cbb0000000000000000000000005b3c1e3fb6a97c0130ae015ff10f53a1a30c353e00000000000000000000000000000000000000000000000418bddcf67410ccbdc001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2014,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce0b830f4240830f44aa8301c145945b3c1e3fb6a97c0130ae015ff10f53a1a30c353e80b8a4022c0d9f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025d5d645c29c9000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2047,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000009202f88f830164ce0c830f4240830f44aa82c50394420000000000000000000000000000000000000680a42e1a7d4d00000000000000000000000000000000000000000000000000025d5d645c29c9c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000000000"
+        }
+      ],
+      "heights": [
+        "37700753",
+        "37700793",
+        "37700821"
+      ],
+      "recorded_caller": "cost ceiling per step",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "49948e0e",
+      "selector_knowledge": {
+        "artifact_class": "FEE_ORACLE_ESTIMATE",
+        "block_dependency": "not_attributable",
+        "selector": "49948e0e",
+        "signature": "getL1Fee(bytes)",
+        "state_dependency": "the predeploy's oracle parameters, plus the bytes the caller supplied"
+      },
+      "site": "preflight.l1_fee",
+      "stage": "preflight",
+      "to": "0x420000000000000000000000000000000000000f"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2146,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2146,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2146,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac"
+        }
+      ],
+      "heights": [
+        "37700753",
+        "37700793",
+        "37700821"
+      ],
+      "recorded_caller": "reserves of leg 0",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "site": "preflight.reserves",
+      "stage": "preflight",
+      "to": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2080,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2080,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2080,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681"
+        }
+      ],
+      "heights": [
+        "37700753",
+        "37700793",
+        "37700821"
+      ],
+      "recorded_caller": "reserves of leg 0",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "site": "preflight.tokens",
+      "stage": "preflight",
+      "to": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2113,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2113,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2113,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7"
+        }
+      ],
+      "heights": [
+        "37700753",
+        "37700793",
+        "37700821"
+      ],
+      "recorded_caller": "reserves of leg 0",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "site": "preflight.tokens",
+      "stage": "preflight",
+      "to": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2245,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2245,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2245,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac"
+        }
+      ],
+      "heights": [
+        "37700753",
+        "37700793",
+        "37700821"
+      ],
+      "recorded_caller": "reserves of leg 1",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "0902f1ac",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "proven_load_bearing",
+        "selector": "0902f1ac",
+        "signature": "getReserves()",
+        "state_dependency": "the pair's reserve0/reserve1/price0CumulativeLast storage, rewritten by every mint, burn and swap"
+      },
+      "site": "preflight.reserves",
+      "stage": "preflight",
+      "to": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2179,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2179,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2179,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681"
+        }
+      ],
+      "heights": [
+        "37700753",
+        "37700793",
+        "37700821"
+      ],
+      "recorded_caller": "reserves of leg 1",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "0dfe1681",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "0dfe1681",
+        "signature": "token0()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "site": "preflight.tokens",
+      "stage": "preflight",
+      "to": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "asks": 3,
+      "block_forms": {
+        "number": 3
+      },
+      "caller_family": "reserves",
+      "distinct_identities_with_block": 3,
+      "distinct_identities_without_block": 1,
+      "evidence_refs": [
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/pipeline-calls.json",
+          "line": 2212,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700753|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/pipeline-calls.json",
+          "line": 2212,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700793|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7"
+        },
+        {
+          "file": "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/pipeline-calls.json",
+          "line": 2212,
+          "matches": 1,
+          "note": "the recorded ask, by its own dedup key",
+          "source": "run_record",
+          "token": "call|91342|37700821|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7"
+        }
+      ],
+      "heights": [
+        "37700753",
+        "37700793",
+        "37700821"
+      ],
+      "recorded_caller": "reserves of leg 1",
+      "runs": [
+        "route-91342-37700740-1791045857463",
+        "route-91342-37700778-1791045896094",
+        "route-91342-37700806-1791045924232"
+      ],
+      "selector": "d21220a7",
+      "selector_knowledge": {
+        "artifact_class": "CANONICAL_STATE_READ",
+        "block_dependency": "not_attributable",
+        "selector": "d21220a7",
+        "signature": "token1()",
+        "state_dependency": "the pair's two token slots, written once by initialize()"
+      },
+      "site": "preflight.tokens",
+      "stage": "preflight",
+      "to": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    }
+  ],
+  "rpc_boundary": {
+    "evidence_refs": [
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 725,
+        "matches": 1,
+        "note": "the eth_call branch",
+        "source": "run_record",
+        "token": "\"eth_call\","
+      },
+      {
+        "file": "crates/chain/src/types.rs",
+        "line": 155,
+        "matches": 1,
+        "note": "CallRequest has exactly two fields, to and data",
+        "source": "run_record",
+        "token": "pub struct CallRequest"
+      }
+    ],
+    "file": "crates/chain/src/rpc.rs",
+    "note": "the one place a call becomes bytes on the wire, so the identity's field set is decided by the request type rather than by any caller's taste",
+    "token": "\"eth_call\","
+  },
+  "source_records": [
+    "data/evidence/m8/cross-stage/runs/*/pipeline-calls.json",
+    "data/evidence/m8/cross-stage/reuse-candidates.json"
+  ],
+  "totals": {
+    "asks_of_every_method_in_the_same_records": 246,
+    "block_forms": {
+      "number": 60
+    },
+    "by_caller": {
+      "before-snapshot: native and input-token balances": 6,
+      "cost ceiling per step": 18,
+      "reserves of both venues, at the pin": 18,
+      "reserves of leg 0": 9,
+      "reserves of leg 1": 9
+    },
+    "by_selector": {
+      "0902f1ac": 12,
+      "0dfe1681": 12,
+      "49948e0e": 18,
+      "70a08231": 6,
+      "d21220a7": 12
+    },
+    "by_stage": {
+      "build": 6,
+      "opportunity_detection": 18,
+      "preflight": 36
+    },
+    "call_sites_declared_by_the_model": 6,
+    "call_sites_observed_in_the_records": 6,
+    "distinct_identities_with_block": 60,
+    "distinct_identities_without_block": 26,
+    "distinct_selectors": 5,
+    "distinct_targets": 5,
+    "eth_call_asks": 60,
+    "selectors_not_in_the_table": 0
+  },
+  "unit": "asks",
+  "what_the_counts_exclude": "the simulation's own REVM reads are recorded in the same runs under a different sink; §12's eth_call surface is the pipeline's, and M8.4.2 already published the per-sink split, so this table adds none"
+}

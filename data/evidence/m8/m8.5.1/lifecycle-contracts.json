@@ -1,0 +1,429 @@
+{
+  "absent_step_rule": "the fifth step has no mechanism for these artifacts because nothing retains the answer to expire it; that is stated as not_applicable with the reason, which is a finding rather than a gap",
+  "generated_by": "crates/pipeline/tests/eth_call_semantics_evidence.rs",
+  "milestone": "M8.5.1",
+  "model": "crates/pipeline/src/eth_call_semantics.rs",
+  "question": "§24's five lifecycle steps per eth_call site, in M8.4.3's own vocabulary: acquired, validated, published, consumed, invalidated or expired",
+  "recompute": "one cell per site per step from `lifecycle_rows()`; a step with no mechanism says so in its note rather than reading as an unexamined `unknown`",
+  "sites": [
+    {
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 68,
+          "matches": 1,
+          "note": "the producer",
+          "source": "code",
+          "token": "pub async fn token_balance"
+        },
+        {
+          "file": "crates/execution/src/sequence.rs",
+          "line": 925,
+          "matches": 1,
+          "note": "the collector",
+          "source": "code",
+          "token": "let mut token_balances"
+        },
+        {
+          "file": "crates/execution/src/profit.rs",
+          "line": 48,
+          "matches": 1,
+          "note": "the holder",
+          "source": "code",
+          "token": "pub token_balances: BTreeMap"
+        }
+      ],
+      "site": "build.asset_snapshot",
+      "steps": [
+        {
+          "note": "bytes off the wire, parsed and returned as the call's only product",
+          "site": "build.asset_snapshot",
+          "status": "proven",
+          "step": "acquired",
+          "where_it_lives": "HttpChainAdapter::call → eth_call with a hex height"
+        },
+        {
+          "note": "the ABI word is decoded and a wrong shape is an error; nothing checks that the state behind the answer is the state anyone expected",
+          "site": "build.asset_snapshot",
+          "status": "partially_proven",
+          "step": "validated",
+          "where_it_lives": "AssetReading { amount, source }"
+        },
+        {
+          "note": "the value is a named field of a named struct",
+          "site": "build.asset_snapshot",
+          "status": "proven",
+          "step": "published",
+          "where_it_lives": "AssetSnapshot.token_balances: BTreeMap<Address, U256>"
+        },
+        {
+          "note": "state what the wallet holds before step 0, so the six executions afterwards can be audited against a number that was not remembered",
+          "site": "build.asset_snapshot",
+          "status": "proven",
+          "step": "consumed",
+          "where_it_lives": "snapshot_assets → AssetSnapshot.token_balances"
+        },
+        {
+          "note": "NOT_IMPLEMENTED as a rule, by design: a one-use reading has no lifetime to end",
+          "site": "build.asset_snapshot",
+          "status": "not_applicable",
+          "step": "invalidated_or_expired",
+          "where_it_lives": "no holder to invalidate"
+        }
+      ]
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 137,
+          "matches": 1,
+          "note": "the producer",
+          "source": "code",
+          "token": "pub async fn read_pool"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 105,
+          "matches": 1,
+          "note": "the answer type",
+          "source": "code",
+          "token": "pub struct PoolState"
+        },
+        {
+          "file": "crates/simulation/src/route.rs",
+          "line": 40,
+          "matches": 1,
+          "note": "the projection that survives into the route",
+          "source": "code",
+          "token": "pub reserve_in: U256"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 266,
+          "matches": 1,
+          "note": "the writer that publishes each leg's answer into that run's record: every run in the corpus goes through this line, so the anchor names the code rather than one run's directory",
+          "source": "code",
+          "token": "\"getReserves_blockTimestampLast\": self.last_synced.to_string(),"
+        }
+      ],
+      "site": "detection.reserves",
+      "steps": [
+        {
+          "note": "bytes off the wire, parsed and returned as the call's only product",
+          "site": "detection.reserves",
+          "status": "proven",
+          "step": "acquired",
+          "where_it_lives": "HttpChainAdapter::call → eth_call with a hex height"
+        },
+        {
+          "note": "the ABI word is decoded and a wrong shape is an error; nothing checks that the state behind the answer is the state anyone expected",
+          "site": "detection.reserves",
+          "status": "partially_proven",
+          "step": "validated",
+          "where_it_lives": "PoolState { token0, token1, reserve0, reserve1, last_synced, read_at_block, source }"
+        },
+        {
+          "note": "only a projection of the answer is kept, and the projection does not carry the block it was read at as part of its own value",
+          "site": "detection.reserves",
+          "status": "partially_proven",
+          "step": "published",
+          "where_it_lives": "RouteLeg.reserve_in / reserve_out (U256) + PricedRoute.block_number"
+        },
+        {
+          "note": "price both legs of the pair at the pinned height, and decide which venue is the buy",
+          "site": "detection.reserves",
+          "status": "proven",
+          "step": "consumed",
+          "where_it_lives": "price_legs → Venue::quote"
+        },
+        {
+          "note": "nothing in the repository expires or invalidates an eth_call answer: a new block is not observed by the artifact, because no component owns it",
+          "site": "detection.reserves",
+          "status": "unknown",
+          "step": "invalidated_or_expired",
+          "where_it_lives": "not in this build"
+        }
+      ]
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 309,
+          "matches": 1,
+          "note": "the producer",
+          "source": "code",
+          "token": "fn read_address"
+        },
+        {
+          "file": "crates/pipeline/src/arbitrage.rs",
+          "line": 1465,
+          "matches": 1,
+          "note": "the consumer",
+          "source": "code",
+          "token": "async fn price_legs"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 120,
+          "matches": 1,
+          "note": "the guard that re-derives orientation from a fresh read and errors if the pair does not hold the route's tokens",
+          "source": "code",
+          "token": "pub fn in_out"
+        }
+      ],
+      "site": "detection.tokens",
+      "steps": [
+        {
+          "note": "bytes off the wire, parsed and returned as the call's only product",
+          "site": "detection.tokens",
+          "status": "proven",
+          "step": "acquired",
+          "where_it_lives": "HttpChainAdapter::call → eth_call with a hex height"
+        },
+        {
+          "note": "the ABI word is decoded and a wrong shape is an error; nothing checks that the state behind the answer is the state anyone expected",
+          "site": "detection.tokens",
+          "status": "partially_proven",
+          "step": "validated",
+          "where_it_lives": "alloy Bytes, decoded to Address"
+        },
+        {
+          "note": "only a projection of the answer is kept, and the projection does not carry the block it was read at as part of its own value",
+          "site": "detection.tokens",
+          "status": "partially_proven",
+          "step": "published",
+          "where_it_lives": "RouteLeg.token_in / token_out (TokenId, one address each)"
+        },
+        {
+          "note": "decide which reserve belongs to which token, so a leg can be oriented",
+          "site": "detection.tokens",
+          "status": "proven",
+          "step": "consumed",
+          "where_it_lives": "price_legs → PricedRoute::new"
+        },
+        {
+          "note": "nothing in the repository expires or invalidates an eth_call answer: a new block is not observed by the artifact, because no component owns it",
+          "site": "detection.tokens",
+          "status": "unknown",
+          "step": "invalidated_or_expired",
+          "where_it_lives": "not in this build"
+        }
+      ]
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 187,
+          "matches": 1,
+          "note": "producer",
+          "source": "code",
+          "token": "pub async fn estimate_l1_fee"
+        },
+        {
+          "file": "crates/execution/src/cost.rs",
+          "line": 56,
+          "matches": 1,
+          "note": "a failed read carries an absence rather than a zero",
+          "source": "code",
+          "token": "Unreadable { reason: String }"
+        }
+      ],
+      "site": "preflight.l1_fee",
+      "steps": [
+        {
+          "note": "bytes off the wire, parsed and returned as the call's only product",
+          "site": "preflight.l1_fee",
+          "status": "proven",
+          "step": "acquired",
+          "where_it_lives": "HttpChainAdapter::call → eth_call with a hex height"
+        },
+        {
+          "note": "the ABI word is decoded and a wrong shape is an error; nothing checks that the state behind the answer is the state anyone expected",
+          "site": "preflight.l1_fee",
+          "status": "partially_proven",
+          "step": "validated",
+          "where_it_lives": "L1FeeSource::OracleEstimate { amount, block_number, read_by }"
+        },
+        {
+          "note": "the value is a named field of a named struct",
+          "site": "preflight.l1_fee",
+          "status": "proven",
+          "step": "published",
+          "where_it_lives": "L1FeeSource::OracleEstimate.amount + block_number, read_by provenance"
+        },
+        {
+          "note": "put the L1 data cost of the exact pre-signing envelope into each step's ceiling",
+          "site": "preflight.l1_fee",
+          "status": "proven",
+          "step": "consumed",
+          "where_it_lives": "price_steps → EstimatedCost::new"
+        },
+        {
+          "note": "nothing in the repository expires or invalidates an eth_call answer: a new block is not observed by the artifact, because no component owns it",
+          "site": "preflight.l1_fee",
+          "status": "unknown",
+          "step": "invalidated_or_expired",
+          "where_it_lives": "not in this build"
+        }
+      ]
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 145,
+          "matches": 1,
+          "note": "both halves of the comparison, kept side by side on purpose",
+          "source": "code",
+          "token": "pub struct ReserveReading"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 194,
+          "matches": 1,
+          "note": "the refusal when the head's answer is missing",
+          "source": "code",
+          "token": "verdict cannot be formed from"
+        },
+        {
+          "file": "crates/execution/src/preflight.rs",
+          "line": 1361,
+          "matches": 1,
+          "note": "a regression that forbids the reuse this milestone was asked to assess",
+          "source": "test",
+          "token": "an_unread_reserve_blocks_instead_of_falling_back_to_the_priced_numbers"
+        },
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 223,
+          "matches": 1,
+          "note": "the head this read is pinned to",
+          "source": "code",
+          "token": "head at latest"
+        }
+      ],
+      "site": "preflight.reserves",
+      "steps": [
+        {
+          "note": "bytes off the wire, parsed and returned as the call's only product",
+          "site": "preflight.reserves",
+          "status": "proven",
+          "step": "acquired",
+          "where_it_lives": "HttpChainAdapter::call → eth_call with a hex height"
+        },
+        {
+          "note": "the ABI word is decoded and a wrong shape is an error; nothing checks that the state behind the answer is the state anyone expected",
+          "site": "preflight.reserves",
+          "status": "partially_proven",
+          "step": "validated",
+          "where_it_lives": "PoolState, projected into ReserveReading"
+        },
+        {
+          "note": "the value is a named field of a named struct",
+          "site": "preflight.reserves",
+          "status": "proven",
+          "step": "published",
+          "where_it_lives": "ReserveReading.current_reserve_in / current_reserve_out (Option<U256>)"
+        },
+        {
+          "note": "re-price the same route on the head's reserves and reject the attempt if the opportunity no longer clears the floor",
+          "site": "preflight.reserves",
+          "status": "proven",
+          "step": "consumed",
+          "where_it_lives": "ExecutionPreflight::run"
+        },
+        {
+          "note": "NOT_IMPLEMENTED as a rule, by design: a one-use reading has no lifetime to end",
+          "site": "preflight.reserves",
+          "status": "not_applicable",
+          "step": "invalidated_or_expired",
+          "where_it_lives": "no holder to invalidate"
+        }
+      ]
+    },
+    {
+      "evidence_refs": [
+        {
+          "file": "crates/execution/src/giwa/preflight_facts.rs",
+          "line": 441,
+          "matches": 1,
+          "note": "the producer, at the head this gather read",
+          "source": "code",
+          "token": "async fn read_leg"
+        },
+        {
+          "file": "crates/execution/src/giwa/reads.rs",
+          "line": 127,
+          "matches": 1,
+          "note": "the guard that consumes them",
+          "source": "code",
+          "token": "which is not the pair this route moves through"
+        }
+      ],
+      "site": "preflight.tokens",
+      "steps": [
+        {
+          "note": "bytes off the wire, parsed and returned as the call's only product",
+          "site": "preflight.tokens",
+          "status": "proven",
+          "step": "acquired",
+          "where_it_lives": "HttpChainAdapter::call → eth_call with a hex height"
+        },
+        {
+          "note": "the ABI word is decoded and a wrong shape is an error; nothing checks that the state behind the answer is the state anyone expected",
+          "site": "preflight.tokens",
+          "status": "partially_proven",
+          "step": "validated",
+          "where_it_lives": "alloy Bytes, decoded to Address"
+        },
+        {
+          "note": "NOT_IMPLEMENTED: no field holds this answer, so there is no publication step to locate",
+          "site": "preflight.tokens",
+          "status": "not_applicable",
+          "step": "published",
+          "where_it_lives": "nowhere"
+        },
+        {
+          "note": "order the head's reserves for the leg the route actually moves through",
+          "site": "preflight.tokens",
+          "status": "proven",
+          "step": "consumed",
+          "where_it_lives": "PoolState::in_out"
+        },
+        {
+          "note": "nothing in the repository expires or invalidates an eth_call answer: a new block is not observed by the artifact, because no component owns it",
+          "site": "preflight.tokens",
+          "status": "unknown",
+          "step": "invalidated_or_expired",
+          "where_it_lives": "not in this build"
+        }
+      ]
+    }
+  ],
+  "status_vocabulary": [
+    "proven",
+    "partially_proven",
+    "unknown",
+    "not_applicable"
+  ],
+  "steps": [
+    "acquired",
+    "validated",
+    "published",
+    "consumed",
+    "invalidated_or_expired"
+  ],
+  "totals": {
+    "by_status": {
+      "not_applicable": 3,
+      "partially_proven": 8,
+      "proven": 15,
+      "unknown": 4
+    },
+    "cells": 30
+  },
+  "unit": "cells"
+}
