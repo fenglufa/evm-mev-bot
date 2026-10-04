@@ -140,12 +140,12 @@ fn same_target_at_two_heights_is_not_one_state() {
         .contains(&"block_number_differs"));
 }
 
-/// §12.4 — `latest` against an explicit height: a tag names whichever head the node held, so
-/// the identity tier can never be answered positively from it.
+/// §12.4 — a tag against an explicit height: a tag names whichever block the node chose, so the
+/// identity tier can never be answered positively from it.
 #[test]
-fn latest_is_not_an_explicit_height() {
+fn a_tag_is_not_an_explicit_height() {
     let evidence = ReuseEvidence {
-        producer_term: BlockTerm::Latest,
+        producer_term: BlockTerm::Tag,
         ..ReuseEvidence::default()
     };
     let assessment = assess(StateKind::FeeParameters, &evidence);
@@ -154,21 +154,21 @@ fn latest_is_not_an_explicit_height() {
         .blockers
         .contains(&Blocker::ProducerNamesNoHeight.as_str()));
     assert!(!assessment.safe_to_reuse_now);
-    assert!(!BlockTerm::Latest.names_a_height());
-    assert_eq!(
-        BlockTerm::from_record("tag", Some("latest")),
-        BlockTerm::Latest,
-        "the record's raw term is what distinguishes the two tags, so the mapping is part of \
-         the rule"
-    );
+    assert!(!BlockTerm::Tag.names_a_height());
+    assert_eq!(BlockTerm::from_form("tag"), BlockTerm::Tag);
+    assert_eq!(BlockTerm::from_form("number"), BlockTerm::Number);
+    assert!(BlockTerm::Number.names_a_height());
 }
 
-/// §12.5 — `pending` against an explicit height, kept a separate test because §5 lists it as a
-/// separate semantic: a pending head includes transactions in no canonical block yet.
+/// §12.5 — the head tag and `pending` are two words with one consequence. The consequence is what
+/// the rules read, from the record's `block_form` column; the words are what a reader needs to
+/// tell them apart, and they travel untouched in the row's echoed raw term. The model's own
+/// vocabulary never types the head word, because §20 forbids it anywhere under a crate's `src/`
+/// (`crates/pipeline/tests/state_is_always_pinned.rs`) and a diagnosis file is under `src/`.
 #[test]
-fn pending_is_not_an_explicit_height() {
+fn two_tag_words_one_kind_and_the_record_keeps_both() {
     let evidence = ReuseEvidence {
-        consumer_term: BlockTerm::Pending,
+        consumer_term: BlockTerm::Tag,
         ..ReuseEvidence::default()
     };
     let assessment = assess(StateKind::Nonce, &evidence);
@@ -176,18 +176,28 @@ fn pending_is_not_an_explicit_height() {
     assert!(assessment
         .blockers
         .contains(&Blocker::ConsumerNamesNoHeight.as_str()));
+
+    let mut head = measured_header();
+    head.producer_block_form = "tag".to_string();
+    head.producer_block = Some("latest".to_string());
+    let mut pending = head.clone();
+    pending.consumer_block_form = "tag".to_string();
+    pending.consumer_block = Some("pending".to_string());
+    assert_eq!(head.producer_block.as_deref(), Some("latest"));
+    assert_eq!(pending.consumer_block.as_deref(), Some("pending"));
+
+    let head = assess_measured(&head).expect("a header row maps to a category");
+    let pending = assess_measured(&pending).expect("a header row maps to a category");
+    assert_eq!(head.evidence.producer_term, BlockTerm::Tag);
+    assert_eq!(pending.evidence.consumer_term, BlockTerm::Tag);
     assert_eq!(
-        BlockTerm::from_record("tag", Some("pending")),
-        BlockTerm::Pending
+        head.evidence.producer_term, pending.evidence.consumer_term,
+        "two tag words, one consequence for the rules: neither names a height"
     );
 
-    // An unrecognised tag is not quietly read as `latest`: it is a tag, and a tag cannot name a
-    // height, so the refusal is the same shape with a different word.
-    assert_eq!(
-        BlockTerm::from_record("tag", Some("earliest")),
-        BlockTerm::Unknown
-    );
-    assert!(!BlockTerm::Unknown.names_a_height());
+    // A word this model has never seen is read as a tag too, which is the refusal-prone direction.
+    assert_eq!(BlockTerm::from_form("earliest"), BlockTerm::Tag);
+    assert!(!BlockTerm::Tag.names_a_height());
 }
 
 /// §12.6 — same value from two components: the identity tier survives (it is about the state,
@@ -681,4 +691,218 @@ fn each_decision_is_one_of_the_four_options_the_task_book_offers() {
             );
         }
     }
+}
+
+/// §10's 「枚举值必须有限、稳定、可校验」 checked once for all ten vocabularies: every variant
+/// serialises to exactly the word its `as_str` returns, and no two variants of one enum share
+/// a word. The evidence tables are assembled through serde, so this is what stops a table's
+/// status column from quietly disagreeing with the model that produced it.
+#[test]
+fn every_vocabulary_prints_its_own_word() {
+    fn check<T>(name: &str, variants: &[T], as_str: fn(T) -> &'static str)
+    where
+        T: Copy + PartialEq + std::fmt::Debug + serde::Serialize,
+    {
+        let mut printed: Vec<String> = Vec::new();
+        for &variant in variants {
+            let word = match serde_json::to_value(variant) {
+                Ok(serde_json::Value::String(word)) => word,
+                other => panic!("{name}: {variant:?} did not serialise to a string: {other:?}"),
+            };
+            assert_eq!(
+                word,
+                as_str(variant),
+                "{name}: {variant:?} reaches a table as `{word}` while the model's own word for \
+                 it is `{}` — a reader greps one of these and finds the other",
+                as_str(variant)
+            );
+            assert!(
+                !printed.contains(&word),
+                "{name}: two variants print `{word}`, so a table column stops identifying anything"
+            );
+            printed.push(word);
+        }
+    }
+
+    check("StateKind", ALL_KINDS.as_ref(), StateKind::as_str);
+    check(
+        "ProofStatus",
+        &[
+            ProofStatus::Proven,
+            ProofStatus::PartiallyProven,
+            ProofStatus::Unknown,
+            ProofStatus::NotApplicable,
+        ],
+        ProofStatus::as_str,
+    );
+    check(
+        "Owner",
+        &[
+            Owner::Node,
+            Owner::ChainAdapter,
+            Owner::ChainAdapterConnection,
+            Owner::SimulationStateProvider,
+            Owner::StateStore,
+            Owner::GraphSnapshot,
+            Owner::OpportunityLedger,
+            Owner::LivePreflightReads,
+            Owner::SequenceStage,
+            Owner::ExecutionLane,
+            Owner::ConfigStartup,
+            Owner::NoOwnerInCode,
+        ],
+        Owner::as_str,
+    );
+    check(
+        "Scope",
+        &[
+            Scope::Chain,
+            Scope::EndpointConnection,
+            Scope::Block,
+            Scope::HeadMoment,
+            Scope::PendingAccount,
+            Scope::Simulation,
+            Scope::Attempt,
+            Scope::ExecutionStep,
+            Scope::UpdatePosition,
+            Scope::Unknown,
+        ],
+        Scope::as_str,
+    );
+    check(
+        "Authority",
+        &[
+            Authority::NodeAtHeight,
+            Authority::NodeCanonicalLogs,
+            Authority::Configuration,
+            Authority::LatestAppliedPosition,
+            Authority::FirstAnswerAtConnect,
+            Authority::DisputedUnresolved,
+            Authority::NotApplicable,
+        ],
+        Authority::as_str,
+    );
+    check(
+        "IdentityForm",
+        &[
+            IdentityForm::HeightNumber,
+            IdentityForm::HeightHash,
+            IdentityForm::Tag,
+            IdentityForm::NoBlockTerm,
+            IdentityForm::NotBlockScoped,
+        ],
+        IdentityForm::as_str,
+    );
+    check(
+        "LifecycleStep",
+        &[
+            LifecycleStep::Acquired,
+            LifecycleStep::Validated,
+            LifecycleStep::Published,
+            LifecycleStep::Consumed,
+            LifecycleStep::InvalidatedOrExpired,
+        ],
+        LifecycleStep::as_str,
+    );
+    check(
+        "SourceKind",
+        &[SourceKind::Code, SourceKind::Test, SourceKind::RunRecord],
+        SourceKind::as_str,
+    );
+    check(
+        "BlockTerm",
+        &[BlockTerm::Number, BlockTerm::Tag, BlockTerm::Absent],
+        BlockTerm::as_str,
+    );
+    check(
+        "EdgeDecision",
+        &[
+            EdgeDecision::ControlledExperimentDefinable,
+            EdgeDecision::ContractDesignFirst,
+            EdgeDecision::MustRefetch,
+            EdgeDecision::InsufficientEvidence,
+        ],
+        EdgeDecision::as_str,
+    );
+
+    // §10 names four recommended statuses; the model's are those four words and nothing else.
+    let statuses: Vec<&str> = [
+        ProofStatus::Proven,
+        ProofStatus::PartiallyProven,
+        ProofStatus::Unknown,
+        ProofStatus::NotApplicable,
+    ]
+    .iter()
+    .map(|status| status.as_str())
+    .collect();
+    assert_eq!(
+        statuses,
+        vec!["proven", "partially_proven", "unknown", "not_applicable"]
+    );
+}
+
+/// §10 asks each contract to state `chain_id`, `block_number`, `block_hash` and
+/// `block_tag_semantics` by name. All four are derived from the one `identity` field rather
+/// than written per row, so this test is about the two claims that could otherwise drift:
+/// only a height-and-hash identity may say a hash is carried, and only a numbered one may
+/// say a height is pinned.
+#[test]
+fn the_four_identity_fields_agree_with_the_identity_form() {
+    const ALLOWED: [&str; 11] = [
+        "pinned_chain",
+        "is_the_value",
+        "pinned_height",
+        "not_pinned",
+        "not_applicable",
+        "carried_and_verified",
+        "not_carried",
+        "number",
+        "tag",
+        "absent",
+        "none",
+    ];
+    let mut forms: Vec<&str> = Vec::new();
+    for contract in contracts() {
+        let fields = contract.identity.identity_fields();
+        for word in [
+            fields.chain_id,
+            fields.block_number,
+            fields.block_hash,
+            fields.block_tag,
+        ] {
+            assert!(
+                ALLOWED.contains(&word),
+                "{}: `{word}` is not one of the fixed identity words",
+                contract.kind.as_str()
+            );
+        }
+        assert_eq!(
+            fields.block_hash == "carried_and_verified",
+            contract.identity == IdentityForm::HeightHash,
+            "{}: a carried hash is claimed without a height-and-hash identity (or the reverse)",
+            contract.kind.as_str()
+        );
+        assert_eq!(
+            fields.block_number == "pinned_height",
+            matches!(
+                contract.identity,
+                IdentityForm::HeightNumber | IdentityForm::HeightHash
+            ),
+            "{}: a pinned height is claimed for an ask that does not name one",
+            contract.kind.as_str()
+        );
+        // The one category that is not block-scoped at all is the one whose value IS the chain.
+        assert_eq!(
+            contract.identity == IdentityForm::NotBlockScoped,
+            fields.chain_id == "is_the_value",
+            "{}: `not_block_scoped` and `chain_id = is_the_value` have to say the same thing",
+            contract.kind.as_str()
+        );
+        forms.push(contract.identity.as_str());
+    }
+    assert_eq!(
+        forms.len(),
+        contracts().len(),
+        "one identity row per declared category"
+    );
 }

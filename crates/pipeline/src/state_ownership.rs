@@ -64,6 +64,7 @@ use serde::Serialize;
 /// distinction that matters is that `pool_reserves` and `block_header` have different owners,
 /// different scopes and different invalidation events even when one RPC method answers both.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum StateKind {
     PoolReserves,
     ContractCode,
@@ -118,6 +119,7 @@ impl StateKind {
 /// it says the question has no referent in this build — e.g. a published state that nothing
 /// holds — while `Unknown` says the build does not answer it yet.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum ProofStatus {
     Proven,
     PartiallyProven,
@@ -147,6 +149,7 @@ impl ProofStatus {
 /// from §2's review list rather than invented: a name here that no `Owner` type occupies
 /// would be a claim about an architecture this repository does not contain.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Owner {
     /// The node behind the endpoint: the answer to a chain-scoped question is the node's, and
     /// nothing in this build can overrule it.
@@ -199,6 +202,7 @@ impl Owner {
 
 /// §4's Scope: what a value is *about* in the versioned sense.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Scope {
     /// Constant for the chain; nothing in a run changes it.
     Chain,
@@ -219,8 +223,9 @@ pub enum Scope {
     ExecutionStep,
     /// One applied position in the store's own ordering.
     UpdatePosition,
-    /// Not determinable from the code.
-    Unscoped,
+    /// Not determinable from the code. The word the tables print is `unknown`, so a row that
+    /// ends up here is a gap the reader can find by grepping the tables.
+    Unknown,
 }
 
 impl Scope {
@@ -235,13 +240,14 @@ impl Scope {
             Scope::Attempt => "attempt",
             Scope::ExecutionStep => "execution_step",
             Scope::UpdatePosition => "update_position",
-            Scope::Unscoped => "unknown",
+            Scope::Unknown => "unknown",
         }
     }
 }
 
 /// §4's Authority: which source wins when two disagree.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Authority {
     /// The node's answer at the named height is authoritative, and the build has no second
     /// source to weigh against it.
@@ -282,6 +288,7 @@ impl Authority {
 /// when it answers", and an absent term names nothing at all. Two asks of identical identity
 /// are only the same *state* under the first of those.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum IdentityForm {
     /// The value is keyed by an exact height, and the code that reads it sends a number.
     HeightNumber,
@@ -305,10 +312,62 @@ impl IdentityForm {
             IdentityForm::NotBlockScoped => "not_block_scoped",
         }
     }
+
+    /// §10's four identity fields, spelled out per category.
+    ///
+    /// These are the same fact `identity` already states, spread across the four names the task
+    /// book asks for, so a table row shows each field on its own line instead of asking a reader
+    /// to decode one word. The values are from a fixed list of eleven:
+    /// `pinned_height`, `not_pinned`, `not_applicable`, `carried_and_verified`, `not_carried`,
+    /// `is_the_value`, `pinned_chain`, `number`, `tag`, `absent`, `none`.
+    pub const fn identity_fields(self) -> IdentityFields {
+        match self {
+            IdentityForm::HeightNumber => IdentityFields {
+                chain_id: "pinned_chain",
+                block_number: "pinned_height",
+                block_hash: "not_carried",
+                block_tag: "number",
+            },
+            IdentityForm::HeightHash => IdentityFields {
+                chain_id: "pinned_chain",
+                block_number: "pinned_height",
+                block_hash: "carried_and_verified",
+                block_tag: "number",
+            },
+            IdentityForm::Tag => IdentityFields {
+                chain_id: "pinned_chain",
+                block_number: "not_pinned",
+                block_hash: "not_carried",
+                block_tag: "tag",
+            },
+            IdentityForm::NoBlockTerm => IdentityFields {
+                chain_id: "pinned_chain",
+                block_number: "not_pinned",
+                block_hash: "not_carried",
+                block_tag: "absent",
+            },
+            IdentityForm::NotBlockScoped => IdentityFields {
+                chain_id: "is_the_value",
+                block_number: "not_applicable",
+                block_hash: "not_applicable",
+                block_tag: "none",
+            },
+        }
+    }
+}
+
+/// §10's identity fields for one category, as the tables print them.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+pub struct IdentityFields {
+    pub chain_id: &'static str,
+    pub block_number: &'static str,
+    pub block_hash: &'static str,
+    pub block_tag: &'static str,
 }
 
 /// §5's five lifecycle steps, in the order the task book writes them.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum LifecycleStep {
     Acquired,
     Validated,
@@ -343,6 +402,7 @@ impl LifecycleStep {
 /// a committed run record. §10 asks for 「实际代码位置或测试证据」; these are the three shapes
 /// this repository's evidence actually takes.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum SourceKind {
     Code,
     Test,
@@ -471,6 +531,23 @@ pub struct LifecycleRow {
 // ---------------------------------------------------------------------------
 // §4: the eleven declarations
 // ---------------------------------------------------------------------------
+
+/// §11's four tables, named. The names live here rather than in the gate so that the module
+/// that owns the vocabulary also owns the file set a reader is told to open.
+pub const OWNERSHIP_MATRIX_FILE: &str = "ownership-matrix.json";
+pub const LIFECYCLE_CONTRACTS_FILE: &str = "lifecycle-contracts.json";
+pub const STAGE_DEPENDENCY_MATRIX_FILE: &str = "stage-dependency-matrix.json";
+pub const REUSE_VERDICTS_FILE: &str = "reuse-verdicts.json";
+pub const README_FILE: &str = "README.md";
+
+/// Everything one assembly of this milestone's model writes.
+pub const STATE_OWNERSHIP_FILES: [&str; 5] = [
+    README_FILE,
+    OWNERSHIP_MATRIX_FILE,
+    LIFECYCLE_CONTRACTS_FILE,
+    STAGE_DEPENDENCY_MATRIX_FILE,
+    REUSE_VERDICTS_FILE,
+];
 
 /// The model. Everything a table prints is assembled from here and from committed run
 /// records, so there is exactly one place where a claim about the code is written down.
@@ -1750,32 +1827,33 @@ pub fn purpose_of(measured: &MeasuredCandidate) -> &'static str {
 // §10: the four tiers, as rules rather than as adjectives
 // ---------------------------------------------------------------------------
 
-/// The block term one side of a pair used. `Number` and `Absent` are M8.4.2's own two forms;
-/// the tag form is split here because §5 asks about `latest` and `pending` separately, and the
-/// record's raw term answers that even though its `block_form` column does not.
+/// Which *kind* of block term one side of a pair sent: the record's own `block_form` column,
+/// read as an enum. The classification stops at the kind on purpose. Which tag word a tag row
+/// used is echoed verbatim from that row's raw term into its `source_record`, because no file
+/// under a crate's `src/` may write the head tag as a string literal — that is the §20 ban
+/// `crates/pipeline/tests/state_is_always_pinned.rs` scans for, and a diagnosis of a recorded
+/// call is a file under `src/` like any other, not an exemption. The rules ask one question of a
+/// term anyway, `names_a_height`, and the kind answers it: only an explicit height can.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum BlockTerm {
     /// An explicit height: one number names one block, though not which of two rival blocks
     /// at that height the node considers canonical.
     Number,
-    /// `latest` — whichever head the node held when it answered.
-    Latest,
-    /// `pending` — a head that includes transactions not yet in any canonical block.
-    Pending,
+    /// A tag: the node chooses the block, so two asks can send the same word and name two
+    /// different heights. §5 asks about the head tag and about `pending` separately; the echoed
+    /// raw term is what keeps them apart here.
+    Tag,
     /// No block term at all: the answer is a property of the endpoint's current state.
     Absent,
-    /// A tag the record names but this model does not recognise; treated as a tag.
-    Unknown,
 }
 
 impl BlockTerm {
     pub const fn as_str(self) -> &'static str {
         match self {
             BlockTerm::Number => "number",
-            BlockTerm::Latest => "latest",
-            BlockTerm::Pending => "pending",
+            BlockTerm::Tag => "tag",
             BlockTerm::Absent => "absent",
-            BlockTerm::Unknown => "unknown_tag",
         }
     }
 
@@ -1783,17 +1861,14 @@ impl BlockTerm {
         matches!(self, BlockTerm::Number)
     }
 
-    /// The record's pair of columns, resolved: `block_form` says which *kind* of term was sent
-    /// and the raw term says which tag, when it was a tag.
-    pub fn from_record(form: &str, raw: Option<&str>) -> Self {
+    /// The record's `block_form` value. A word this model has never seen is read as a tag, which
+    /// is the refusal-prone direction: it cannot name a height, so no tier can be answered
+    /// positively from it.
+    pub fn from_form(form: &str) -> Self {
         match form {
             "number" => BlockTerm::Number,
             "absent" => BlockTerm::Absent,
-            _ => match raw {
-                Some("pending") => BlockTerm::Pending,
-                Some("latest") => BlockTerm::Latest,
-                Some(_) | None => BlockTerm::Unknown,
-            },
+            _ => BlockTerm::Tag,
         }
     }
 }
@@ -1866,14 +1941,8 @@ pub fn evidence_from_measured(measured: &MeasuredCandidate) -> ReuseEvidence {
         same_value: None,
         same_block_number: number_relation,
         same_block_hash: None,
-        producer_term: BlockTerm::from_record(
-            &measured.producer_block_form,
-            measured.producer_block.as_deref(),
-        ),
-        consumer_term: BlockTerm::from_record(
-            &measured.consumer_block_form,
-            measured.consumer_block.as_deref(),
-        ),
+        producer_term: BlockTerm::from_form(&measured.producer_block_form),
+        consumer_term: BlockTerm::from_form(&measured.consumer_block_form),
         // Whether an earlier stage's component is the one that owns the later stage's answer is
         // the question M8.4.2 could not check from a record, and a record still cannot check
         // it; the declaration answers it from code, and this field stays in the negative.
