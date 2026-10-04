@@ -56,6 +56,7 @@ pub mod config;
 pub mod diagnosis;
 pub mod engine;
 pub mod error;
+pub mod eth_call_semantics;
 pub mod evidence;
 pub mod history;
 pub mod latency;
