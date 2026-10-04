@@ -394,14 +394,20 @@ fn collect_strings(value: &Value, key: &str, out: &mut Vec<String>) {
     }
 }
 
+/// One row, one count: the aggregate is the rows grouped by their own field. `collect_strings`
+/// walks a whole row and is what the vocabulary gate needs, but a verdict row carries
+/// `state_kind` twice (its own and the assessment's), so a grouped count built that way would be
+/// twice the rows and the table would stop being a row count.
 fn count_by(rows: &[Value], key: &str) -> BTreeMap<String, u64> {
     let mut counts: BTreeMap<String, u64> = BTreeMap::new();
     for row in rows {
-        let mut words = Vec::new();
-        collect_strings(row, key, &mut words);
-        for word in words {
-            *counts.entry(word).or_insert(0) += 1;
-        }
+        let word = row[key].as_str().unwrap_or_else(|| {
+            panic!(
+                "a row has no top-level `{key}`, so this table cannot be grouped by it — the \
+                 field moved or one row is a different shape"
+            )
+        });
+        *counts.entry(word.to_string()).or_insert(0) += 1;
     }
     counts
 }
@@ -1786,6 +1792,20 @@ fn the_aggregates_are_the_published_rows_counted() {
         json!(count_by(&verdict_rows, "state_kind")),
         "the per-category split is not the rows counted"
     );
+    for key in ["by_state_kind", "by_producer_consumer"] {
+        let split = verdicts["aggregate"][key]
+            .as_object()
+            .cloned()
+            .unwrap_or_default();
+        let summed: u64 = split.values().filter_map(Value::as_u64).sum();
+        assert_eq!(
+            summed,
+            verdict_rows.len() as u64,
+            "the `{key}` split adds up to {summed} while the table has {} rows — a grouped \
+             count is a row count, not an occurrence count",
+            verdict_rows.len()
+        );
+    }
     assert_eq!(
         verdicts["aggregate"]["blockers"],
         json!(blocker_counts(&verdict_rows)),

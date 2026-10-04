@@ -15,8 +15,8 @@ use super::*;
 /// A measured header pair, preflight → build, the most common shape in M8.4.2's 42.
 fn measured_header() -> MeasuredCandidate {
     MeasuredCandidate {
-        run: "route-91342-37700740-1791045857463".to_string(),
-        candidate_id: "route-91342-37700740-1791045857463:rpc1".to_string(),
+        run: "route-fixture".to_string(),
+        candidate_id: "route-fixture:rpc1".to_string(),
         method: "eth_getBlockByNumber".to_string(),
         category: "block_read".to_string(),
         scope: "cross_stage".to_string(),

@@ -737,7 +737,7 @@ static CONTRACTS: [StateContract; 11] = [
             safe_to_reuse_now: tier(
                 Some(false),
                 ProofStatus::PartiallyProven,
-                "safe inside one simulation, which is where it is reused today; unsafe across \
+                "safe inside one simulation, which is where it is reused today; not safe across \
                  stages, because the only owner the code gives it dies with that simulation",
             ),
             check_would_stop_existing: false,
@@ -3056,10 +3056,11 @@ static EDGES: [StageEdge; 23] = [
                 "the ceiling, a configured number from one measured real block",
             ),
             record(
-                "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/rpc-summary.json",
-                "\"eth_getCode\"",
-                "one run's method list; the gate test asserts this list holds no estimate and \
-                 no gas price",
+                "data/evidence/m8/cross-stage/duplicate-summary.json",
+                "\"total_asks\"",
+                "the three runs' merged ask count, with each run's own directory named in the \
+                 provenance block beside it; the recompute gate reads those directories' call \
+                 rows and asserts the nine methods they name hold no estimate and no gas price",
             ),
         ],
     },
@@ -3121,9 +3122,11 @@ static EDGES: [StageEdge; 23] = [
                 "the check that keeps the two views from being confused",
             ),
             record(
-                "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/rpc-summary.json",
+                "data/evidence/m8/cross-stage/fixed-block/run-01/rpc-summary.json",
                 "\"eth_getStorageAt\"",
-                "the bulk of one simulation's 39 calls",
+                "the fixed-block arm's one simulation recorded 41 calls, every row labelled \
+                 `fixture` by the summary's own source column; 21 of them read storage slots, the \
+                 largest single group",
             ),
         ],
     },
