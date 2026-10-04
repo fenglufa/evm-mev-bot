@@ -53,6 +53,12 @@ pub struct SwapEvent {
 }
 
 /// Factory-level pool creation notice, if the chain has one.
+///
+/// This is a *claim by the emitter*, and nothing more: it names an address that
+/// was created, not an address that has been verified. M9.1 §6 makes that the
+/// central rule of discovery (`Raw Log -> PairCreated -> CandidatePool`), and
+/// `evm_discovery::CandidatePool` is what carries it forward into verification.
+/// Decoding this event writes nothing.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PoolCreatedEvent {
     pub position: LogPosition,
@@ -60,6 +66,8 @@ pub struct PoolCreatedEvent {
     pub pool: PoolId,
     pub token0: TokenId,
     pub token1: TokenId,
+    /// `pairIndex`, the factory's own counter of what it has created.
+    pub pair_index: U256,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]

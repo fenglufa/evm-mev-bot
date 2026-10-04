@@ -110,6 +110,55 @@ pub fn topic_address(topics: &[B256], index: usize) -> Result<alloy_primitives::
     Ok(alloy_primitives::Address::from_slice(&topic[12..]))
 }
 
+/// Address carried by one exact 32-byte ABI word, padding included.
+///
+/// The strict sibling of [`topic_address`]: an `address` occupies the low 20
+/// bytes of its word, so anything in the other 12 means this word is not an
+/// address at all. `topic_address` truncates and moves on, which is fine for a
+/// field nobody trusts, and wrong for one a candidate's identity will be built
+/// from — so discovery decodes through here (M9.1 §6: malformed input is a
+/// structured error, never a plausible-looking address).
+pub fn address_word(word: &[u8]) -> Result<alloy_primitives::Address> {
+    if word.len() != 32 {
+        return Err(ProtocolError::MalformedLog(format!(
+            "an ABI address word is 32 bytes, got {}",
+            word.len()
+        )));
+    }
+    if word[..32 - 20] != [0u8; 12] {
+        return Err(ProtocolError::MalformedLog(format!(
+            "address word is not left-padded: high 12 bytes are {:?}",
+            &word[..12]
+        )));
+    }
+    Ok(alloy_primitives::Address::from_slice(&word[12..]))
+}
+
+/// The 32-byte word at `index` of an ABI-encoded buffer, read as an address.
+pub fn data_address(data: &[u8], index: usize) -> Result<alloy_primitives::Address> {
+    let start = index * 32;
+    let end = start + 32;
+    if data.len() < end {
+        return Err(ProtocolError::MalformedLog(format!(
+            "log data is {} bytes, needs at least {end} for word {index}",
+            data.len()
+        )));
+    }
+    address_word(&data[start..end])
+}
+
+/// Address carried in a topic word, padding checked.
+///
+/// [`topic_address`] and [`address_word`] combined: a topic that exists but is
+/// not a left-padded address is a malformed log, not an address with an
+/// surprising prefix.
+pub fn padded_topic(topics: &[B256], index: usize) -> Result<alloy_primitives::Address> {
+    let topic = topics
+        .get(index)
+        .ok_or_else(|| ProtocolError::MalformedLog(format!("topic {index} is missing")))?;
+    address_word(&topic[..])
+}
+
 #[cfg(test)]
 mod tests {
     use alloy_primitives::b256;
@@ -261,6 +310,76 @@ mod tests {
             Weth9Topics::default().withdrawal,
             "a Withdrawal that also reported the remaining balance is a different event, and \
              the chain's 32-byte data rules it out"
+        );
+    }
+
+    fn word(bytes: [u8; 32]) -> B256 {
+        B256::from(bytes)
+    }
+
+    fn padded(address_last20: u8) -> [u8; 32] {
+        let mut bytes = [0u8; 32];
+        bytes[12..].fill(address_last20);
+        bytes
+    }
+
+    #[test]
+    fn a_left_padded_address_word_decodes() {
+        let address = address_word(&padded(0xab)).expect("padded");
+        assert_eq!(address.as_slice(), &[0xabu8; 20]);
+    }
+
+    #[test]
+    fn an_address_word_with_high_bytes_is_malformed() {
+        let mut bytes = padded(0xab);
+        bytes[11] = 0x01;
+        assert!(matches!(
+            address_word(&bytes),
+            Err(ProtocolError::MalformedLog(_))
+        ));
+
+        // `topic_address` is the lenient sibling and would hand back the low 20
+        // bytes anyway; the strict helper is what discovery decodes through.
+        let topic = word(bytes);
+        assert_eq!(
+            topic_address(&[topic], 0).expect("lenient read always succeeds"),
+            address_word(&padded(0xab)).expect("padded")
+        );
+    }
+
+    #[test]
+    fn an_address_word_has_to_be_a_whole_word() {
+        assert!(matches!(
+            address_word(&[0u8; 31]),
+            Err(ProtocolError::MalformedLog(_))
+        ));
+    }
+
+    #[test]
+    fn data_address_reads_the_word_at_its_index_and_no_further() {
+        let data = [padded(0xcd), padded(0xef)].concat();
+        assert_eq!(
+            data_address(&data, 1).expect("in range"),
+            address_word(&padded(0xef)).expect("padded")
+        );
+        // Asking for the third word of a two-word buffer is a bounds error, not a
+        // zero address.
+        assert!(matches!(
+            data_address(&data, 2),
+            Err(ProtocolError::MalformedLog(_))
+        ));
+    }
+
+    #[test]
+    fn padded_topic_rejects_a_missing_topic() {
+        let topics = [word(padded(0xab))];
+        assert!(matches!(
+            padded_topic(&topics, 1),
+            Err(ProtocolError::MalformedLog(_))
+        ));
+        assert_eq!(
+            padded_topic(&topics, 0).expect("present and padded"),
+            address_word(&padded(0xab)).expect("padded")
         );
     }
 }

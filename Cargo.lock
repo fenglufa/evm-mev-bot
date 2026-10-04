@@ -1478,6 +1478,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "evm-discovery"
+version = "0.1.0"
+dependencies = [
+ "alloy-primitives",
+ "async-trait",
+ "evm-chain",
+ "evm-core",
+ "evm-graph",
+ "evm-protocol",
+ "evm-replay",
+ "evm-state",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+]
+
+[[package]]
 name = "evm-execution"
 version = "0.1.0"
 dependencies = [

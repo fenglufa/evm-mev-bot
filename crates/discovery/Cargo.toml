@@ -1,0 +1,21 @@
+[package]
+name = "evm-discovery"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+evm-core.workspace = true
+evm-chain.workspace = true
+evm-protocol.workspace = true
+evm-state.workspace = true
+evm-graph.workspace = true
+alloy-primitives.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+async-trait.workspace = true
+evm-replay.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
