@@ -1,4 +1,4 @@
-//! §12's fifteen decision-rule tests.
+//! §12's fifteen decision-rule tests, plus the invariants the §6–§9 edge table has to hold.
 //!
 //! Each one changes exactly one condition and asserts which tier moved, because §12's point is
 //! that the four tiers are four different questions: a test that only asserted
@@ -484,4 +484,201 @@ fn verdicts_are_deterministic_and_aggregates_recompute_from_rows() {
         never_safe, 0,
         "some declared categories are safe even under the most favourable evidence"
     );
+}
+
+// -- §6 to §9: the stage-edge table ----------------------------------------------------
+
+fn edge_kind(edge: &StageEdge) -> StateKind {
+    ALL_KINDS
+        .iter()
+        .copied()
+        .find(|kind| kind.as_str() == edge.state_kind)
+        .unwrap_or_else(|| panic!("{} names a state kind no contract declares", edge.id))
+}
+
+/// §16's first line: all four edges the task book investigates are represented here, and each
+/// edge is listed once.
+#[test]
+fn every_section_is_investigated_and_no_edge_is_listed_twice() {
+    for section in ["6", "7", "8", "9"] {
+        assert!(
+            stage_edges().iter().any(|edge| edge.section == section),
+            "§{section} has no row, so it has not been investigated"
+        );
+    }
+    let mut ids: Vec<&str> = stage_edges().iter().map(|edge| edge.id).collect();
+    let listed = ids.len();
+    ids.sort();
+    ids.dedup();
+    assert_eq!(ids.len(), listed, "an edge id is used twice");
+    for edge in stage_edges() {
+        assert!(
+            edge.anchors.len() >= 2,
+            "{} rests on {} anchor",
+            edge.id,
+            edge.anchors.len()
+        );
+        assert!(
+            edge.reasons.len() >= 2,
+            "{} concludes without a second reason",
+            edge.id
+        );
+        assert!(!edge.question.is_empty(), "{} asks nothing", edge.id);
+        assert!(
+            !edge.answers.minimal_addition.is_empty(),
+            "{} reaches a decision without stating what is missing",
+            edge.id
+        );
+    }
+}
+
+/// The table has to account for M8.4.2's measurement, not merely comment on it: fourteen
+/// measured flows, three runs each, and §6's twelve pairs are exactly four of them.
+#[test]
+fn the_measured_edges_account_for_every_duplicate_m842_found() {
+    let measured: Vec<&StageEdge> = stage_edges()
+        .iter()
+        .filter(|edge| edge.method.is_some())
+        .collect();
+    assert_eq!(
+        measured.len(),
+        14,
+        "the table names a different number of measured flows than M8.4.2 recorded"
+    );
+    let total: u32 = measured.iter().map(|edge| edge.measured_pairs).sum();
+    assert_eq!(
+        total, 42,
+        "the measured rows add up to a number other than the 42 exact candidates"
+    );
+    for edge in &measured {
+        assert_eq!(
+            edge.measured_pairs % 3,
+            0,
+            "{}: three runs produced the same shape, so a partial count means the flow was \
+             not measured three times",
+            edge.id
+        );
+    }
+    for edge in stage_edges().iter().filter(|edge| edge.method.is_none()) {
+        assert_eq!(
+            edge.measured_pairs, 0,
+            "{} names no method and so claims no measured pair",
+            edge.id
+        );
+    }
+    let preflight_to_build: u32 = measured
+        .iter()
+        .filter(|edge| edge.producer_stage == "preflight" && edge.consumer_stage == "build")
+        .map(|edge| edge.measured_pairs)
+        .sum();
+    assert_eq!(
+        preflight_to_build, 12,
+        "§6 asks about twelve preflight-to-build pairs; the table accounts for another number"
+    );
+}
+
+/// §17's option A is the one that could be misread as a safety claim, so its preconditions are
+/// arithmetic: a proven contract, a category whose ownership and freshness are both proven, a
+/// consumer that is an input rather than a check, and the fourth tier still refusing.
+#[test]
+fn an_option_a_edge_needs_a_proven_contract_and_is_never_a_safety_claim() {
+    for edge in stage_edges()
+        .iter()
+        .filter(|edge| edge.decision == EdgeDecision::ControlledExperimentDefinable)
+    {
+        assert_eq!(
+            edge.contract,
+            ProofStatus::Proven,
+            "{} reaches A on an unproven contract",
+            edge.id
+        );
+        assert_eq!(
+            edge.answers.consumer_has_own_duty,
+            Some(false),
+            "{} reaches A for a consumer that carries its own duty — §6 keeps that read",
+            edge.id
+        );
+        let contract = contract_for(edge_kind(edge)).expect("a row names a declared kind");
+        assert_eq!(
+            contract.ownership_status,
+            ProofStatus::Proven,
+            "{}: A where the category's ownership is not proven",
+            edge.id
+        );
+        assert_eq!(
+            contract.freshness.status,
+            ProofStatus::Proven,
+            "{}: A where the category's freshness rule is not proven",
+            edge.id
+        );
+        assert_ne!(
+            contract.reuse.safe_to_reuse_now.holds,
+            Some(true),
+            "{} reaches A on a category this milestone already declares safe — A is a decision \
+             about the next phase, not a reuse claim",
+            edge.id
+        );
+    }
+}
+
+/// The mirror of that rule: a C on a measured pair is a claim that the read is a check, and a
+/// check is something a consumer owes at its own moment.
+#[test]
+fn every_measured_option_c_edge_is_an_independent_check() {
+    for edge in stage_edges().iter().filter(|edge| {
+        edge.method.is_some()
+            && edge.measured_pairs > 0
+            && edge.decision == EdgeDecision::MustRefetch
+    }) {
+        assert_eq!(
+            edge.answers.consumer_has_own_duty,
+            Some(true),
+            "{} refuses reuse without naming a duty the consumer owes",
+            edge.id
+        );
+        assert_ne!(
+            edge.answers.safety_constraint_served, "none",
+            "{}: a C row has to say what the read guards",
+            edge.id
+        );
+    }
+}
+
+/// A row cannot slide into an option the task book does not offer, and option D cannot be
+/// dressed up as a proven finding.
+#[test]
+fn each_decision_is_one_of_the_four_options_the_task_book_offers() {
+    let options = [
+        (EdgeDecision::ControlledExperimentDefinable, "A"),
+        (EdgeDecision::ContractDesignFirst, "B"),
+        (EdgeDecision::MustRefetch, "C"),
+        (EdgeDecision::InsufficientEvidence, "D"),
+    ];
+    for (decision, letter) in options {
+        assert_eq!(decision.letter(), letter);
+        assert_eq!(
+            decision.as_str(),
+            match decision {
+                EdgeDecision::ControlledExperimentDefinable => "controlled_experiment_definable",
+                EdgeDecision::ContractDesignFirst => "contract_design_first",
+                EdgeDecision::MustRefetch => "must_refetch",
+                EdgeDecision::InsufficientEvidence => "insufficient_evidence",
+            }
+        );
+    }
+    for edge in stage_edges() {
+        assert!(
+            options.iter().any(|(d, _)| *d == edge.decision),
+            "{} decides something §17 does not offer",
+            edge.id
+        );
+        if edge.decision == EdgeDecision::InsufficientEvidence {
+            assert_eq!(
+                edge.contract,
+                ProofStatus::Unknown,
+                "{} claims the evidence is insufficient while recording a proven contract",
+                edge.id
+            );
+        }
+    }
 }

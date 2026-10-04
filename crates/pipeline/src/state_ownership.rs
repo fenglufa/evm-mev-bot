@@ -2185,5 +2185,1333 @@ pub fn kinds() -> Vec<&'static str> {
     ALL_KINDS.iter().map(|kind| kind.as_str()).collect()
 }
 
+/// §17: the only four things the evidence can support deciding about one stage edge. The
+/// variants are the task book's options A to D, so a row cannot drift into a fifth answer and
+/// cannot invent "safe" as a decision: `safe_to_reuse_now` stays a tier of its own (§10), and
+/// option A only says a controlled experiment is definable next phase.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum EdgeDecision {
+    ControlledExperimentDefinable,
+    ContractDesignFirst,
+    MustRefetch,
+    InsufficientEvidence,
+}
+
+impl EdgeDecision {
+    pub const fn letter(self) -> &'static str {
+        match self {
+            Self::ControlledExperimentDefinable => "A",
+            Self::ContractDesignFirst => "B",
+            Self::MustRefetch => "C",
+            Self::InsufficientEvidence => "D",
+        }
+    }
+
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::ControlledExperimentDefinable => "controlled_experiment_definable",
+            Self::ContractDesignFirst => "contract_design_first",
+            Self::MustRefetch => "must_refetch",
+            Self::InsufficientEvidence => "insufficient_evidence",
+        }
+    }
+}
+
+/// §6's nine sub-questions, asked of every edge so no row answers fewer than the task book
+/// asks. `None` is only used where neither the code nor a record decides it; it never means
+/// "assumed", and a row with a `None` can still reach a decision — §14 forbids reading a
+/// silence as safety, not as a conclusion.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+pub struct EdgeAnswers {
+    pub what_the_producer_read: &'static str,
+    pub what_the_consumer_read: &'static str,
+    pub same_semantics: Option<bool>,
+    pub safety_constraint_served: &'static str,
+    pub producer_result_carried: Option<bool>,
+    pub consumer_has_own_duty: Option<bool>,
+    pub external_change_between: Option<bool>,
+    pub version_or_token_exists: Option<bool>,
+    pub minimal_addition: &'static str,
+}
+
+/// One investigated edge: the two stages, what crosses it, what M8.4.2 measured there, and
+/// which of §17's four options the evidence supports. `producer_stage` and `consumer_stage`
+/// spell stages the way a run record spells them (`stage_label`), so a table can be reconciled
+/// against the rows without a translation layer; `method: None` marks an edge that carries a
+/// question but no measured duplicate.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+pub struct StageEdge {
+    pub id: &'static str,
+    pub section: &'static str,
+    pub producer_stage: &'static str,
+    pub consumer_stage: &'static str,
+    pub state_kind: &'static str,
+    pub method: Option<&'static str>,
+    pub producer_caller: Option<&'static str>,
+    pub consumer_caller: Option<&'static str>,
+    pub measured_pairs: u32,
+    pub question: &'static str,
+    pub answers: EdgeAnswers,
+    pub contract: ProofStatus,
+    pub decision: EdgeDecision,
+    pub reasons: &'static [&'static str],
+    pub anchors: &'static [Anchor],
+}
+
+static EDGES: [StageEdge; 23] = [
+    // -- §6 A: preflight → build, the twelve measured pairs -------------------------
+    StageEdge {
+        id: "s6.chain_id.connection_to_preflight",
+        section: "6",
+        producer_stage: "unstamped",
+        consumer_stage: "preflight",
+        state_kind: StateKind::ChainIdentity.as_str(),
+        method: Some("eth_chainId"),
+        producer_caller: None,
+        consumer_caller: Some("endpoint chain id"),
+        measured_pairs: 3,
+        question: "can preflight's chain leg consume the answer the connection already took?",
+        answers: EdgeAnswers {
+            what_the_producer_read:
+                "one eth_chainId on the connection, before any stage is named: the record \
+                 leaves its stage empty and labels it unstamped",
+            what_the_consumer_read: "preflight's own eth_chainId, stamped `endpoint chain id`",
+            same_semantics: Some(true),
+            safety_constraint_served: "the §26 chain leg — the endpoint answers as the chain \
+                                       the run was configured for",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(false),
+            version_or_token_exists: Some(false),
+            minimal_addition: "a field saying a connection has learned its chain id, and one \
+                               saying which connection an answer came from",
+        },
+        contract: ProofStatus::PartiallyProven,
+        decision: EdgeDecision::ContractDesignFirst,
+        reasons: &[
+            "the answer belongs to a connection and cannot move inside one, which is why a \
+             contract is designable here at all",
+            "no type that crosses into preflight carries a chain id, so the value would have \
+             to be invented rather than found",
+            "preflight's leg stays whichever way this goes: comparing an answer against \
+             configuration is not a fetch",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/giwa/sequencer_direct.rs",
+                "pub async fn endpoint_chain_id",
+                "the connection's own ask, read rather than remembered",
+            ),
+            code(
+                "crates/execution/src/giwa/preflight_facts.rs",
+                "endpoint chain id",
+                "the preflight stamp that makes this pair measurable",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/reuse-candidates.json",
+                "\"unstamped\"",
+                "the spelling a run record uses for the stage-less producer",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.chain_id.connection_to_build",
+        section: "6",
+        producer_stage: "unstamped",
+        consumer_stage: "build",
+        state_kind: StateKind::ChainIdentity.as_str(),
+        method: Some("eth_chainId"),
+        producer_caller: None,
+        consumer_caller: Some("step 1: gate — endpoint chain id"),
+        measured_pairs: 3,
+        question: "does the build's chain leg need its own ask, or a carried answer?",
+        answers: EdgeAnswers {
+            what_the_producer_read:
+                "the connection's eth_chainId, the same single ask as the row above",
+            what_the_consumer_read: "the build's gate leg, stamped `step 1: gate — endpoint \
+                                     chain id`",
+            same_semantics: Some(true),
+            safety_constraint_served: "the same chain id checked again at the moment a build \
+                                       starts, against what the run was configured for",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(false),
+            version_or_token_exists: Some(false),
+            minimal_addition: "none this milestone may make: keeping the leg costs the ask, \
+                               and §6 forbids trading the leg away",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "this read is a named gate leg, and §6's last line forbids deleting a \
+             pre-submission check to make a value shareable",
+            "the state itself is the best-founded in the model: chain identity is the one \
+             category whose ownership this build proves",
+            "so the refusal is about the check, not about the state — which is exactly the \
+             distinction §6 asks for",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/sequence.rs",
+                "gate — endpoint chain id",
+                "the leg, by the name the run records",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/reuse-candidates.json",
+                "\"step 1: gate — endpoint chain id\"",
+                "the measured consumer role on the build side",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.nonce.preflight_to_build",
+        section: "6",
+        producer_stage: "preflight",
+        consumer_stage: "build",
+        state_kind: StateKind::Nonce.as_str(),
+        method: Some("eth_getTransactionCount"),
+        producer_caller: Some("pending and latest nonces"),
+        consumer_caller: Some("step 1: pending and latest nonces"),
+        measured_pairs: 3,
+        question: "is preflight's nonce a snapshot the build may spend?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getTransactionCount for the sender, pending and latest \
+                                     in one call, stamped `pending and latest nonces`",
+            what_the_consumer_read: "the same ask again at the step it is about to send, stamped \
+                                     `step 1: pending and latest nonces`",
+            same_semantics: Some(true),
+            safety_constraint_served: "the §26 nonce leg — the number the node will accept next",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(false),
+            minimal_addition: "an attempt-scoped nonce reservation, which this build does not \
+                               have and §3 forbids adding",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "the code states its own rule: re-read per send",
+            "any mined or accepted transaction moves the answer between the two asks, and \
+             nothing detects that except asking",
+            "the nonce an intent carries is the simulation's assumption about the account, not \
+             the node's next number",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/giwa/preflight_facts.rs",
+                "pending and latest nonces",
+                "the preflight half of the pair",
+            ),
+            code(
+                "crates/execution/src/sequence.rs",
+                "pending and latest nonces",
+                "the build half, at its own step",
+            ),
+            code(
+                "crates/execution/src/nonce.rs",
+                "pub fn next(&self) -> u64 {",
+                "the pending view this leg reads",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/reuse-candidates.json",
+                "\"step 1: pending and latest nonces\"",
+                "the measured pair",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.native_balance.preflight_to_before_snapshot",
+        section: "6",
+        producer_stage: "preflight",
+        consumer_stage: "build",
+        state_kind: StateKind::NativeBalance.as_str(),
+        method: Some("eth_getBalance"),
+        producer_caller: Some("native balance of the sender"),
+        consumer_caller: Some("before-snapshot: native and input-token balances"),
+        measured_pairs: 3,
+        question: "the build asks the balance twice; may the preflight answer serve either?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getBalance for the sender at the head preflight had \
+                                     just read, stamped `native balance of the sender`",
+            what_the_consumer_read: "eth_getBalance again inside the before-snapshot — one of \
+                                     the build's two balance asks, the other being the gate leg \
+                                     below — stamped `before-snapshot: native and input-token \
+                                     balances`",
+            same_semantics: Some(false),
+            safety_constraint_served: "not a gate: the before-snapshot is the baseline the real \
+                                       asset delta is measured against afterwards",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(false),
+            minimal_addition: "an owner for a balance between stages, plus a field saying which \
+                               question an answer answers — §4's balance row names both",
+        },
+        contract: ProofStatus::PartiallyProven,
+        decision: EdgeDecision::ContractDesignFirst,
+        reasons: &[
+            "in all three runs both asks name the same height, and they still ask different \
+             questions: can it pay, versus what did it hold",
+            "nothing holds a balance after its read returns, so sharing would mean inventing a \
+             holder rather than reading one",
+            "this row is not covered by §6's ban — the before-snapshot is an audit baseline, not \
+             a pre-submission check — which is why it lands on B while the gate row below lands \
+             on C",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/giwa/preflight_facts.rs",
+                "native balance of the sender",
+                "the preflight stamp",
+            ),
+            code(
+                "crates/execution/src/sequence.rs",
+                "before-snapshot: native",
+                "the build-side half of a diff, not a check",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/reuse-candidates.json",
+                "\"native balance of the sender\"",
+                "the measured producer caller",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.fee.preflight_to_build",
+        section: "6",
+        producer_stage: "preflight",
+        consumer_stage: "build",
+        state_kind: StateKind::FeeParameters.as_str(),
+        method: Some("eth_maxPriorityFeePerGas"),
+        producer_caller: Some("fee at pinned block"),
+        consumer_caller: Some("step 1: fee at pinned block"),
+        measured_pairs: 3,
+        question: "may the build price itself from preflight's fee answer?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_maxPriorityFeePerGas, stamped `fee at pinned block`",
+            what_the_consumer_read: "eth_maxPriorityFeePerGas again at the step, stamped \
+                                     `step 1: fee at pinned block`",
+            same_semantics: Some(true),
+            safety_constraint_served: "the §26 fee leg — a moved fee changes the profit the \
+                                       sequence is being sent for",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(false),
+            minimal_addition: "a stated validity window — no expiry, deadline or TTL field \
+                               exists in any crate",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "the method carries no block term at all, so an answer is a sample of the moment \
+             the node served it",
+            "the leg exists to catch a moved fee; handing it the moved number leaves it \
+             nothing to compare",
+            "this is a proven negative, not an unknown: the asks are identical and the \
+             conclusion is that the second one is the check",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/giwa/preflight_facts.rs",
+                "fee at pinned block",
+                "the preflight half of the pair",
+            ),
+            code(
+                "crates/execution/src/sequence.rs",
+                "fee at pinned block",
+                "the build half, inside the leg",
+            ),
+            code(
+                "crates/execution/src/fee.rs",
+                "pub struct FeeReading",
+                "the value that does carry a block identity, next to the ask that does not",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.fee.intra_preflight_head_pair",
+        section: "6",
+        producer_stage: "preflight",
+        consumer_stage: "preflight",
+        state_kind: StateKind::FeeParameters.as_str(),
+        method: Some("eth_maxPriorityFeePerGas"),
+        producer_caller: Some("fee at pinned block"),
+        consumer_caller: Some("fee at head"),
+        measured_pairs: 3,
+        question: "two identical asks inside one stage — is one of them wasted?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_maxPriorityFeePerGas for the pinned block",
+            what_the_consumer_read: "eth_maxPriorityFeePerGas for the head, stamped \
+                                     `fee at head`",
+            same_semantics: Some(false),
+            safety_constraint_served: "the head-versus-pin fee comparison inside preflight",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(false),
+            minimal_addition: "nothing: the pair is the mechanism, and §6 asks that it not be \
+                               traded away",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "the two reads are the two halves of one check; removing either removes the check",
+            "M8.4.2 counted this as a duplicate because the asks are identical, not because \
+             they are redundant — the record cannot tell the two apart and this row says which \
+             is which",
+            "a same-stage pair is the cheapest reuse question in the model and still comes out \
+             as C, which is the clearest evidence that duplicate counts do not imply waste",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/giwa/preflight_facts.rs",
+                "fee at head",
+                "the head half of the comparison",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/reuse-candidates.json",
+                "\"fee at head\"",
+                "the measured same-stage pair",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.header.nonce_track_tag_preflight_to_build",
+        section: "6",
+        producer_stage: "preflight",
+        consumer_stage: "build",
+        state_kind: StateKind::BlockHeader.as_str(),
+        method: Some("eth_getBlockByNumber"),
+        producer_caller: Some("head at latest"),
+        consumer_caller: Some("step 1: pending and latest nonces"),
+        measured_pairs: 3,
+        question: "the header asks on the nonce track: does a carried `latest` mean the same block?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getBlockByNumber for `latest`, stamped `head at latest`",
+            what_the_consumer_read: "eth_getBlockByNumber for `latest` and `pending` again at \
+                                     the step, to resolve the tags its nonce leg asks in",
+            same_semantics: Some(false),
+            safety_constraint_served: "resolving the tags the nonce leg speaks, at the moment \
+                                       that leg runs",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(false),
+            minimal_addition: "a record of which height a tag resolved to — neither ask names \
+                               a height, so no shared value would carry an identity a consumer \
+                               could check",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "both sides ask a tag, and a tag is a moment rather than an identity — §10's \
+             `latest is not an explicit height` is this row",
+            "the height `latest` named at preflight can be a different height at the build, \
+             and neither record says which it got",
+            "these are 6 of M8.4.2's 21 header candidates, and they are not the family the \
+             header rows below decide about",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/giwa/preflight_facts.rs",
+                "head at latest",
+                "the tag the preflight side asks",
+            ),
+            code(
+                "crates/chain/src/rpc.rs",
+                "fn block_param",
+                "where a tag becomes the term the node sees",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/reuse-candidates.json",
+                "\"head at latest\"",
+                "the measured tag-against-tag pair",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.header.nonce_track_tag_intra_preflight",
+        section: "6",
+        producer_stage: "preflight",
+        consumer_stage: "preflight",
+        state_kind: StateKind::BlockHeader.as_str(),
+        method: Some("eth_getBlockByNumber"),
+        producer_caller: Some("head at latest"),
+        consumer_caller: Some("pending and latest nonces"),
+        measured_pairs: 3,
+        question: "inside preflight, could one resolved height serve both asks?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getBlockByNumber for `latest`, the head preflight \
+                                     reports its other reads at",
+            what_the_consumer_read: "the same tag asked again for the nonce leg, stamped \
+                                     `pending and latest nonces`",
+            same_semantics: Some(true),
+            safety_constraint_served: "nothing of its own: the second ask is the same question \
+                                       asked again a few calls later",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(false),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(false),
+            minimal_addition: "a per-run note of the height `latest` resolved to, kept by \
+                               whoever stamps the ask — that one field would make the second \
+                               ask checkable rather than merely equal",
+        },
+        contract: ProofStatus::PartiallyProven,
+        decision: EdgeDecision::ContractDesignFirst,
+        reasons: &[
+            "inside one stage's own run the ownership question does not arise, so this is the \
+             one measured pair in the table whose blocker is purely a missing record",
+            "it is still not safe today: two asks a few calls apart can straddle a block, and \
+             nothing says which height either got",
+            "§3 forbids widening M8.3.1's cache to cover it, so the finding stays a design item",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/giwa/preflight_facts.rs",
+                "pending and latest nonces",
+                "the second ask, in the same stage",
+            ),
+            code(
+                "crates/simulation/src/state.rs",
+                "struct StateReadCache {",
+                "the cache whose scope §3 forbids changing",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.header.observation_to_build_fee_input",
+        section: "6",
+        producer_stage: "observation",
+        consumer_stage: "build",
+        state_kind: StateKind::BlockHeader.as_str(),
+        method: Some("eth_getBlockByNumber"),
+        producer_caller: Some("head and header that fixed the pin"),
+        consumer_caller: Some("step 1: fee at pinned block"),
+        measured_pairs: 3,
+        question: "may the build's fee input be handed over instead of re-read?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getBlockByNumber at the pinned height, the read that \
+                                     fixed the pin",
+            what_the_consumer_read: "eth_getBlockByNumber at the same height, for the base fee \
+                                     the step prices against",
+            same_semantics: Some(true),
+            safety_constraint_served: "the header here is an input to a computation, not a \
+                                       check — the check is the fee comparison and the binding \
+                                       leg, both separate rows",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(false),
+            external_change_between: Some(false),
+            version_or_token_exists: Some(true),
+            minimal_addition: "a carrier that moves number and hash together, and a consumer \
+                               that verifies the hash against its pin before using the value",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::ControlledExperimentDefinable,
+        reasons: &[
+            "this is the only family in the model where identity, freshness and ownership are \
+             all proven: a numbered block is settled, and §4's header row shows three \
+             production points that verify it",
+            "what is missing is a field, not a rule — `PreflightReport`, the only type that \
+             crosses the boundary, carries a verdict and free text and no state value",
+            "A here is a decision about the next phase and not a claim of safety today: \
+             `safe_to_reuse_now` stays false for all 42 measured candidates",
+        ],
+        anchors: &[
+            code(
+                "crates/simulation/src/state.rs",
+                "pub struct BlockPin",
+                "the number-plus-hash a carrier would move",
+            ),
+            code(
+                "crates/execution/src/preflight.rs",
+                "pub struct PreflightReport",
+                "the crossing type, and why it cannot hold the value today",
+            ),
+            code(
+                "crates/execution/src/sequence.rs",
+                "fee at pinned block",
+                "the consumer that would receive it",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.header.observation_to_build_binding_gate",
+        section: "6",
+        producer_stage: "observation",
+        consumer_stage: "build",
+        state_kind: StateKind::BlockHeader.as_str(),
+        method: Some("eth_getBlockByNumber"),
+        producer_caller: Some("head and header that fixed the pin"),
+        consumer_caller: Some("step 1: gate — block binding at pin"),
+        measured_pairs: 3,
+        question: "same state, same height — so may the binding leg consume it?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getBlockByNumber at the pinned height, once, when the \
+                                     pin was fixed",
+            what_the_consumer_read: "eth_getBlockByNumber at the same height again, to learn \
+                                     whether the node still calls that height the same block",
+            same_semantics: Some(true),
+            safety_constraint_served: "the §26 block-binding leg: a reorganisation between the \
+                                       pin and the build",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(true),
+            minimal_addition: "none: the leg's authority is that it is an independent read at \
+                               the moment it guards",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "a handed-over header would make the comparison check the pin against an answer \
+             taken before the pin was questioned",
+            "§6's ban on deleting a pre-submission check decides this row whatever the row \
+             above concludes — and the two rows differ only in which consumer asked",
+            "this is §6's clearest demonstration that one state can be shareable for one \
+             consumer and unshareable for another",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/sequence.rs",
+                "gate — block binding at pin",
+                "the leg",
+            ),
+            code(
+                "crates/execution/src/gate.rs",
+                "pub enum BlockBinding",
+                "Confirmed, Reorged, Unverified — the verdict the leg produces",
+            ),
+            code(
+                "crates/execution/src/chain_read.rs",
+                "fn read_binding",
+                "the read that produces it",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/reuse-candidates.json",
+                "\"step 1: gate — block binding at pin\"",
+                "the measured consumer role",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.header.observation_to_preflight_binding",
+        section: "6",
+        producer_stage: "observation",
+        consumer_stage: "preflight",
+        state_kind: StateKind::BlockHeader.as_str(),
+        method: Some("eth_getBlockByNumber"),
+        producer_caller: Some("head and header that fixed the pin"),
+        consumer_caller: Some("block binding at pin"),
+        measured_pairs: 3,
+        question: "preflight binds the pin too; is that a second check or a duplicate read?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getBlockByNumber at the pinned height, when the pin \
+                                     was fixed",
+            what_the_consumer_read: "eth_getBlockByNumber at the same height, as preflight's \
+                                     own binding fact, stamped `block binding at pin`",
+            same_semantics: Some(true),
+            safety_constraint_served: "preflight's §26 binding leg — the pin is still the block \
+                                      it was when the finding was priced",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(true),
+            minimal_addition: "nothing on this edge either: a check that consumes an earlier \
+                               copy of its own answer is not a check",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "preflight and the build each bind the pin at their own moment, and those moments \
+             are the point of the two legs",
+            "the pair is identical in the record and different in purpose, so §6's \
+             per-item rule keeps this row separate from the fee-input row",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/giwa/preflight_facts.rs",
+                "block binding at pin",
+                "preflight's binding stamp",
+            ),
+            code(
+                "crates/execution/src/giwa/sequencer_direct.rs",
+                "fn base_fee_at",
+                "the sibling read taken at the same pin",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s6.header.observation_to_preflight_fee_input",
+        section: "6",
+        producer_stage: "observation",
+        consumer_stage: "preflight",
+        state_kind: StateKind::BlockHeader.as_str(),
+        method: Some("eth_getBlockByNumber"),
+        producer_caller: Some("head and header that fixed the pin"),
+        consumer_caller: Some("fee at pinned block"),
+        measured_pairs: 3,
+        question: "the same header feeds preflight's fee pair; same conclusion as the build's?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getBlockByNumber at the pinned height, once",
+            what_the_consumer_read: "eth_getBlockByNumber at the same height for the base fee \
+                                     the fee pair compares",
+            same_semantics: Some(true),
+            safety_constraint_served: "none by itself: the fee comparison is the check, and \
+                                       this read is an input to it",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(false),
+            external_change_between: Some(false),
+            version_or_token_exists: Some(true),
+            minimal_addition: "the same carrier the build-side row names — one field serving \
+                               both consumers",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::ControlledExperimentDefinable,
+        reasons: &[
+            "with the fee-input leg in both stages, the experiment's shape is fixed: one \
+             header per pinned height, verified by whichever consumer uses it",
+            "the binding legs stay independent reads, so the experiment never touches a check",
+            "the pair is 3 of the 15 numbered-height header candidates M8.4.2 measured",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/giwa/preflight_facts.rs",
+                "fee at pinned block",
+                "the preflight consumer of the same header",
+            ),
+            code(
+                "crates/pipeline/src/sim.rs",
+                "state_version_mismatch",
+                "the plan-side check that a height and a hash must both still agree",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s7.header.observation_to_simulation_pin_read",
+        section: "7",
+        producer_stage: "observation",
+        consumer_stage: "simulation",
+        state_kind: StateKind::BlockHeader.as_str(),
+        method: Some("eth_getBlockByNumber"),
+        producer_caller: Some("head and header that fixed the pin"),
+        consumer_caller: Some("header at pin"),
+        measured_pairs: 3,
+        question: "the simulation's own header at pin: an extra read or the pin's evidence?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getBlockByNumber at the pinned height, from the \
+                                     observation that fixed the pin",
+            what_the_consumer_read: "eth_getBlockByNumber at the same height, as the first of \
+                                     the 39 calls one simulation makes, stamped `header at pin`",
+            same_semantics: Some(true),
+            safety_constraint_served: "the provider round trip's pin check: the run is about \
+                                       the block it claims to be about",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(true),
+            minimal_addition: "nothing: this read is how the simulation learns its pin held",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "the check compares the pin the request carries against what the node answers at \
+             that height now; a handed-over answer removes the second half",
+            "§7 asks whether the simulation re-fetches canonical state: this row is one of the \
+             39 calls that are the answer",
+            "the header family therefore splits three ways on this edge: A for a fee input, C \
+             for two binding legs, C for the simulation's pin",
+        ],
+        anchors: &[
+            code(
+                "crates/simulation/src/request.rs",
+                "fn check_pin",
+                "the round trip that compares number and hash",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/reuse-candidates.json",
+                "\"header at pin\"",
+                "the measured simulation caller",
+            ),
+        ],
+    },
+    // -- §6 B: the item on the list that turns out not to be a read ------------------
+    StageEdge {
+        id: "s6.gas_limit.not_a_chain_read",
+        section: "6",
+        producer_stage: "preflight",
+        consumer_stage: "build",
+        state_kind: StateKind::FeeParameters.as_str(),
+        method: None,
+        producer_caller: None,
+        consumer_caller: None,
+        measured_pairs: 0,
+        question: "does either stage pay the node for a gas limit or an estimate?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "nothing: preflight stamps no gas ask in any of the three \
+                                     runs",
+            what_the_consumer_read: "nothing from the node: the limit is resolved from the \
+                                     simulation's measured gas plus a margin, then bounded by a \
+                                     configured ceiling and re-checked against the measurement",
+            same_semantics: None,
+            safety_constraint_served: "the ceiling keeps a limit inside a block a node could \
+                                       actually include",
+            producer_result_carried: None,
+            consumer_has_own_duty: Some(true),
+            external_change_between: None,
+            version_or_token_exists: None,
+            minimal_addition: "nothing: there is no chain answer on this edge to carry",
+        },
+        contract: ProofStatus::NotApplicable,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "§6 lists gas limit or gas estimate as an item to analyse, and the analysis is that \
+             it is not a state read here — that is a conclusion, not a gap",
+            "the three runs asked nine methods in 246 calls; no eth_estimateGas and no \
+             eth_gasPrice is among them, which the recompute gate re-derives rather than quotes",
+            "C on this row means there is nothing on the edge to reuse, not that a read has to \
+             be kept: §17 offers no not-applicable option, so the row says which half of C it \
+             means",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/builder.rs",
+                "policy.gas.resolve(policy.simulated_gas_used)",
+                "the limit comes from this run's own measurement",
+            ),
+            code(
+                "crates/execution/src/builder.rs",
+                "maximum_gas_limit: 60_000_000",
+                "the ceiling, a configured number from one measured real block",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/rpc-summary.json",
+                "\"eth_getCode\"",
+                "one run's method list; the gate test asserts this list holds no estimate and \
+                 no gas price",
+            ),
+        ],
+    },
+    // -- §7: opportunity → simulation -------------------------------------------------
+    StageEdge {
+        id: "s7.pool_reserves.finding_to_simulation",
+        section: "7",
+        producer_stage: "opportunity",
+        consumer_stage: "simulation",
+        state_kind: StateKind::PoolReserves.as_str(),
+        method: None,
+        producer_caller: None,
+        consumer_caller: None,
+        measured_pairs: 0,
+        question: "may the simulation run on the reserves the finding was priced from?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "no RPC: a finding is priced from pool states the graph \
+                                     holds, each restated at an applied position",
+            what_the_consumer_read: "code, storage slots, balances and nonces for itself at the \
+                                     pinned height — 38 of the 39 calls one simulation makes",
+            same_semantics: Some(false),
+            safety_constraint_served: "the simulation must be about the state a real node holds \
+                                       at the pin, not about a view derived from logs",
+            producer_result_carried: Some(true),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(true),
+            minimal_addition: "nothing: §7 forbids treating the graph as a REVM state source, \
+                               and the pin check that guards the difference already exists",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "a GraphSnapshot is built from logs the store applied; it carries an applied \
+             position and no state root, no storage, no code",
+            "one block number does not prove one state — §10's first inequality is this row, \
+             and the finding does carry the hash that closes it",
+            "what crosses the edge is the identity and the path, never the state itself",
+        ],
+        anchors: &[
+            code(
+                "crates/state/src/store.rs",
+                "pub struct InMemoryStateStore",
+                "where the log-derived view lives",
+            ),
+            code(
+                "crates/graph/src/snapshot.rs",
+                "pub struct GraphSnapshot {",
+                "the view a finding is priced from, with no state root in it",
+            ),
+            code(
+                "crates/simulation/src/state.rs",
+                "get_code(key.block, key.address)",
+                "the canonical read that replaces it",
+            ),
+            code(
+                "crates/pipeline/src/sim.rs",
+                "state_version_mismatch",
+                "the check that keeps the two views from being confused",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/rpc-summary.json",
+                "\"eth_getStorageAt\"",
+                "the bulk of one simulation's 39 calls",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s7.block_identity.finding_pin_is_verified",
+        section: "7",
+        producer_stage: "opportunity",
+        consumer_stage: "simulation",
+        state_kind: StateKind::BlockHeader.as_str(),
+        method: None,
+        producer_caller: None,
+        consumer_caller: None,
+        measured_pairs: 0,
+        question: "is the identity a finding carries enough to describe the state it came from?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "an applied position: the height the ledger stopped at, and \
+                                     the hash recorded beside it",
+            what_the_consumer_read: "a pin verified by number and by hash at three separate \
+                                     points — dispatch, plan, provider round trip",
+            same_semantics: None,
+            safety_constraint_served: "the pin is what makes a simulation about a past block a \
+                                       claim about that block",
+            producer_result_carried: Some(true),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(true),
+            minimal_addition: "nothing for the identity; the open item is a value that carries \
+                               number and hash together to a consumer that wants a header",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "a height alone is not an identity — a reorganisation replaces one block with \
+             another at the same number; a height plus a hash is, and the code enforces the pair",
+            "this is the finding that licenses §6's two header rows: an experiment may share a \
+             header, never a bare height",
+            "C on this row is the half of §7 that says the pin's own read stays wherever a \
+             consumer verifies it — the carrier question is already recorded on the edges that \
+             have a shareable consumer",
+        ],
+        anchors: &[
+            code(
+                "crates/opportunity/src/lifecycle.rs",
+                "pub pinned_block_hash: B256,",
+                "the hash a finding carries, not only its height",
+            ),
+            code(
+                "crates/pipeline/src/runner.rs",
+                "state_unavailable",
+                "the dispatch check",
+            ),
+            code(
+                "crates/simulation/src/request.rs",
+                "fn check_pin",
+                "the provider round trip's check",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s7.opportunity_staleness.decided_before_repricing",
+        section: "7",
+        producer_stage: "opportunity",
+        consumer_stage: "build",
+        state_kind: StateKind::TransactionIntent.as_str(),
+        method: None,
+        producer_caller: None,
+        consumer_caller: None,
+        measured_pairs: 0,
+        question: "after a finding, does a state change mean expiry, re-simulation or re-detection?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "the finding's state version against the ledger's applied \
+                                     position",
+            what_the_consumer_read: "preflight and the gate legs re-read at their own moments, \
+                                     and the intent carries the identities of the run it came from",
+            same_semantics: None,
+            safety_constraint_served: "§7's distinction between favourable at detection and \
+                                       still favourable at submission",
+            producer_result_carried: Some(true),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(true),
+            minimal_addition: "nothing: expiry, re-simulation and re-detection are already \
+                               three separate decisions in code",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "expiry is decided by the ledger before a simulation is even asked for, so a stale \
+             finding never reaches the edge that could be tempted to reuse it",
+            "a re-simulation is a new run with a new fingerprint, not a reuse of the old one",
+            "still favourable at submission is what the gate legs answer, which is why they \
+             stay — §7's question is answered by keeping the stages' separate answers",
+        ],
+        anchors: &[
+            code(
+                "crates/opportunity/src/lifecycle.rs",
+                "pub fn simmable(",
+                "the ledger's own decision point",
+            ),
+            code(
+                "crates/execution/src/sequence.rs",
+                "fn preflight_cleared",
+                "the three checks the build performs on preflight's verdict",
+            ),
+            code(
+                "crates/execution/src/gate.rs",
+                "pub enum Freshness",
+                "the vocabulary for still-good-at-submission",
+            ),
+        ],
+    },
+    // -- §8: state update → simulation ------------------------------------------------
+    StageEdge {
+        id: "s8.pool_reserves.snapshot_lacks_a_hash",
+        section: "8",
+        producer_stage: "state_store",
+        consumer_stage: "graph",
+        state_kind: StateKind::PoolReserves.as_str(),
+        method: None,
+        producer_caller: None,
+        consumer_caller: None,
+        measured_pairs: 0,
+        question: "does the path from an event to a snapshot produce something a consumer can \
+                   bind to, and do replay and live travel it together?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "an event applied to the store through the one entry point \
+                                     the store has, ordered by the update path",
+            what_the_consumer_read: "a snapshot carrying the position it applied to, rebuilt \
+                                     each block",
+            same_semantics: None,
+            safety_constraint_served: "ordering: a snapshot only means something as the \
+                                       position it stopped at",
+            producer_result_carried: Some(true),
+            consumer_has_own_duty: Some(false),
+            external_change_between: Some(false),
+            version_or_token_exists: Some(false),
+            minimal_addition: "a block hash beside the applied position, so a consumer of a \
+                               snapshot can state which block it means",
+        },
+        contract: ProofStatus::PartiallyProven,
+        decision: EdgeDecision::ContractDesignFirst,
+        reasons: &[
+            "the store has exactly one way in and the builder states the position it applied \
+             to, and replay and live meet at the same canonical function",
+            "what is missing is not determinism but identity: a height with no hash cannot be \
+             checked against a node, and the snapshot type has no hash field",
+            "so §8's authority matrix records this edge as designable and not yet written \
+             down — which is a finding, not a refusal",
+        ],
+        anchors: &[
+            code(
+                "crates/state/src/update.rs",
+                "The only way anything may enter the store.",
+                "the single entry point",
+            ),
+            code(
+                "crates/graph/src/builder.rs",
+                "The target block is the snapshot's own applied position",
+                "the position a snapshot names",
+            ),
+            code(
+                "crates/pipeline/src/engine.rs",
+                "fn on_canonical",
+                "where replay and live meet",
+            ),
+            code(
+                "crates/graph/src/snapshot.rs",
+                "pub struct GraphSnapshot {",
+                "the type that has a height and no hash",
+            ),
+            record(
+                "data/evidence/m8/storage-dependency/dependency-map.json",
+                "\"ordered\"",
+                "the recorded ordering of one run's reads",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s8.canonical_state.store_is_not_an_evm_source",
+        section: "8",
+        producer_stage: "graph",
+        consumer_stage: "simulation",
+        state_kind: StateKind::StorageSlot.as_str(),
+        method: None,
+        producer_caller: None,
+        consumer_caller: None,
+        measured_pairs: 0,
+        question: "which of the states this path maintains may be a simulation input?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "reserves and fee figures derived from logs, and the pool \
+                                     states the graph rebuilt from them",
+            what_the_consumer_read: "REVM's canonical reads: code, storage slots, balances and \
+                                     nonces at a height, each keyed by that height",
+            same_semantics: Some(false),
+            safety_constraint_served: "the simulation must execute against what the chain holds, \
+                                       so its reads go to the node",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(true),
+            minimal_addition: "nothing: §8 asks for the authority matrix as the output, and the \
+                               matrix's answer is that the two sources are not interchangeable",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "the store answers what the pools did; REVM asks what the chain holds — the two \
+             questions have different producers, owners and authorities",
+            "a simulation's reads are one run's own: the cache is scoped to it and no \
+             process-wide map exists, which is what the dependency evidence records",
+            "this row is the §8 statement of §7's, seen from the source side rather than the \
+             finding side",
+        ],
+        anchors: &[
+            code(
+                "crates/simulation/src/state.rs",
+                "struct StateReadCache {",
+                "the per-simulation scope",
+            ),
+            code(
+                "crates/simulation/src/state.rs",
+                "no process-wide map",
+                "the code's own words for the boundary",
+            ),
+            record(
+                "data/evidence/m8/storage-dependency/dependency-map.json",
+                "\"ordered\"",
+                "one run's read order, the evidence for its self-containedness",
+            ),
+        ],
+    },
+    // -- §9: simulation → build -------------------------------------------------------
+    StageEdge {
+        id: "s9.native_balance.build_gate_leg",
+        section: "9",
+        producer_stage: "simulation",
+        consumer_stage: "build",
+        state_kind: StateKind::NativeBalance.as_str(),
+        method: Some("eth_getBalance"),
+        producer_caller: Some("account: sender"),
+        consumer_caller: Some("step 1: gate — native balance"),
+        measured_pairs: 3,
+        question: "the simulation already read the sender's balance; may the gate consume it?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "eth_getBalance for the sender as one of the simulation's \
+                                     canonical reads, stamped `account: sender`",
+            what_the_consumer_read: "eth_getBalance again at the pinned height as the §26 \
+                                     balance leg, stamped `step 1: gate — native balance`",
+            same_semantics: Some(false),
+            safety_constraint_served: "the pre-submission balance check: the real wallet can \
+                                       pay for this sequence",
+            producer_result_carried: Some(false),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(true),
+            version_or_token_exists: Some(false),
+            minimal_addition: "none that §6 would allow: the leg is a pre-submission check",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "the simulation's read answered whether an endowment could pay inside a run; the \
+             gate answers whether the real wallet can pay before sending",
+            "§6's ban on deleting a pre-submission check decides this row directly",
+            "this is the balance family's third shape: B for the audit baseline, C for the \
+             gate leg, C for the nonce track's sibling — three conclusions, one category",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/sequence.rs",
+                "gate — native balance",
+                "the leg",
+            ),
+            code(
+                "crates/execution/src/gate.rs",
+                "pub enum BalanceEvidence",
+                "a per-step verdict rather than a held value",
+            ),
+            record(
+                "data/evidence/m8/cross-stage/reuse-candidates.json",
+                "\"step 1: gate — native balance\"",
+                "the measured consumer role",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s9.transaction_intent.fields_agree_by_construction",
+        section: "9",
+        producer_stage: "simulation",
+        consumer_stage: "build",
+        state_kind: StateKind::TransactionIntent.as_str(),
+        method: None,
+        producer_caller: None,
+        consumer_caller: None,
+        measured_pairs: 0,
+        question: "which simulation-to-build fields are bound by a check rather than by the \
+                   code that wrote them?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "a simulation result, fingerprinted over its own serialised \
+                                     fields",
+            what_the_consumer_read: "an intent naming that fingerprint and the simulation's \
+                                     nonce, gas, calldata and target; the build then compares \
+                                     nine fields of its own bytes against the intent",
+            same_semantics: None,
+            safety_constraint_served: "§14's round trip: the bytes that get signed must \
+                                       describe the intent that was approved",
+            producer_result_carried: Some(true),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(false),
+            version_or_token_exists: Some(true),
+            minimal_addition: "a check that re-derives the intent's fields from the simulation \
+                               result it names: today nine fields are compared after the build, \
+                               against the intent, and none against the simulation",
+        },
+        contract: ProofStatus::PartiallyProven,
+        decision: EdgeDecision::ContractDesignFirst,
+        reasons: &[
+            "chain id, target, value, calldata, nonce, gas limit, fee parameters and the sender \
+             are carried from the run by construction — `from_simulated_step` is the only way \
+             an intent is made — so their agreement is a property of one function, not of a check",
+            "the identities that do get compared are the opportunity, the simulation \
+             fingerprint and the risk decision, which is what makes an intent evidence about a \
+             run rather than a claim",
+            "B because the missing mechanism is a field and a comparison, not an RPC question",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/builder.rs",
+                "pub fn round_trip",
+                "the nine-field comparison, intent against bytes",
+            ),
+            code(
+                "crates/execution/src/intent.rs",
+                "pub simulation_id: B256,",
+                "the fingerprint that binds an intent to one run",
+            ),
+            code(
+                "crates/execution/src/intent.rs",
+                "pub fn from_simulated_step(",
+                "the construction that makes agreement automatic rather than verified",
+            ),
+            test(
+                "crates/execution/tests/sequence.rs",
+                "the_plan_is_the_run_s_transactions_in_order_and_nothing_else",
+                "the existing test that a plan carries only what the run decided",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s9.simulation_result.override_dependence_is_refused",
+        section: "9",
+        producer_stage: "simulation",
+        consumer_stage: "build",
+        state_kind: StateKind::SimulationResult.as_str(),
+        method: None,
+        producer_caller: None,
+        consumer_caller: None,
+        measured_pairs: 0,
+        question: "if the run needed a state override, can the real chain reproduce it?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "whatever the provider was given: canonical reads at the \
+                                     pin, plus any override the request carried",
+            what_the_consumer_read: "an intent that declares how its sender was funded, and a \
+                                     build that refuses an override-funded one before signing",
+            same_semantics: Some(false),
+            safety_constraint_served: "§33 and §34: no real account could send a transaction \
+                                       that only works inside an overridden environment",
+            producer_result_carried: Some(true),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(false),
+            version_or_token_exists: Some(true),
+            minimal_addition: "nothing: the edge is closed by rule, and §9's demand that an \
+                               override-dependent run not count as proof of executability is \
+                               enforced rather than assumed",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "the refusal is in the builder, names the funding it refused, and fires before any \
+             signature is taken",
+            "a run that needed an override is evidence about an environment, not about a block \
+             — which is exactly what §9 forbids confusing",
+            "the intent records its funding instead of inferring it, because a simulation \
+             result does not carry the sender's balance",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/builder.rs",
+                "policy.require_unoverridden_state && intent.funding.derived_from_overridden_state()",
+                "the refusal",
+            ),
+            code(
+                "crates/simulation/src/state.rs",
+                "pub struct StateOverride",
+                "the environment the run may have leaned on",
+            ),
+            code(
+                "crates/execution/src/intent.rs",
+                "pub enum SenderFunding",
+                "the declaration the refusal reads",
+            ),
+        ],
+    },
+    StageEdge {
+        id: "s9.transaction_intent.multi_step_plan_is_refused",
+        section: "9",
+        producer_stage: "simulation",
+        consumer_stage: "build",
+        state_kind: StateKind::TransactionIntent.as_str(),
+        method: None,
+        producer_caller: None,
+        consumer_caller: None,
+        measured_pairs: 0,
+        question: "does a favourable multi-step run entitle one transaction?",
+        answers: EdgeAnswers {
+            what_the_producer_read: "a sequence of steps, each executed inside the same \
+                                     simulation, where step two only works if step one landed",
+            what_the_consumer_read: "one transaction, carrying the step count it came from and a \
+                                     sequence position when one exists",
+            same_semantics: Some(false),
+            safety_constraint_served: "§4: an intent that describes step 1 of a multi-step plan \
+                                       without a position has no executor committed to the rest",
+            producer_result_carried: Some(true),
+            consumer_has_own_duty: Some(true),
+            external_change_between: Some(false),
+            version_or_token_exists: Some(true),
+            minimal_addition: "nothing here either: the refusal exists, and the remaining \
+                               question is which executor contract a sequence needs — outside \
+                               this milestone",
+        },
+        contract: ProofStatus::Proven,
+        decision: EdgeDecision::MustRefetch,
+        reasons: &[
+            "a simulation's profit is a property of the whole sequence, so a single \
+             transaction's buildability is not implied by it",
+            "the build refuses on the step count and the absent position, naming both",
+            "this is §9's field-by-field answer for route and swap steps: they are carried, and \
+             carrying them is not the same as being allowed to send one",
+        ],
+        anchors: &[
+            code(
+                "crates/execution/src/builder.rs",
+                "describes step 1 of a {}-step sequence",
+                "the refusal and the field it reads",
+            ),
+            code(
+                "crates/execution/src/intent.rs",
+                "pub simulated_steps: usize,",
+                "the count that makes the refusal possible",
+            ),
+        ],
+    },
+];
+
+/// The edges, in table order: §6's measured pairs first, then §7, §8 and §9.
+pub fn stage_edges() -> &'static [StageEdge] {
+    &EDGES
+}
+
 #[cfg(test)]
 mod tests;
