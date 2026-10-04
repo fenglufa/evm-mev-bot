@@ -1,0 +1,485 @@
+{
+  "arms": [
+    {
+      "arm": "baseline",
+      "counters": {
+        "execution_block_context_no_context": 1,
+        "execution_build_success": 1,
+        "execution_preflight_success": 1,
+        "execution_sequence_attempt": 1,
+        "execution_sequence_blocked": 1,
+        "execution_sequence_unsettled": 1
+      },
+      "lane_reads": [
+        {
+          "caller": null,
+          "seq": 1,
+          "site": "balance",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 2,
+          "site": "token_balance",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 3,
+          "site": "token_balance",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 4,
+          "site": "fee_reading",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 5,
+          "site": "nonce",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 6,
+          "site": "endpoint_chain_id",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 7,
+          "site": "block_hash_at",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 8,
+          "site": "balance",
+          "stage": null
+        }
+      ],
+      "producer_verdict": {
+        "outcome": "refused",
+        "reason": "unverifiable_block_context",
+        "reason_detail": "the consumer cannot verify this context: this fixture hand-builds a verdict and gathers no read of the block",
+        "verified_block": null
+      },
+      "record": {
+        "after": null,
+        "before": {
+          "account": "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
+          "block_hash": "0x0000000000000000000000000000000000000000000000000000000000004376",
+          "block_number": 37530592,
+          "native_wei": "0x470de4df820000",
+          "provenance": "block 37530592 (0x0000000000000000000000000000000000000000000000000000000000004376); native: eth_getBalance(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, 37530592); scripted eth_call balanceOf(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f) at block 37530592; scripted eth_call balanceOf(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, 0x4200000000000000000000000000000000000006) at block 37530592",
+          "token_balances": {
+            "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": "0x0",
+            "0x4200000000000000000000000000000000000006": "0x0"
+          }
+        },
+        "builds": [
+          {
+            "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+            "block_number": 37530593,
+            "chain_id": 91342,
+            "fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+            "position": 0,
+            "sender_expected": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+            "serialization_bytes": 50,
+            "unsigned": {
+              "access_list": [],
+              "chain_id": 91342,
+              "gas_limit": 120000,
+              "input": "0xd0e30db0",
+              "max_fee_per_gas": "0x2d4",
+              "max_priority_fee_per_gas": "0x0",
+              "nonce": 0,
+              "to": "0x4200000000000000000000000000000000000006",
+              "tx_type": "dynamic_fee",
+              "value": "0x38d7ea4c68000"
+            }
+          }
+        ],
+        "completed": false,
+        "context_checks": [
+          {
+            "consumer_read": null,
+            "expected_block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+            "expected_block_number": 37530593,
+            "expected_chain_id": 91342,
+            "outcome": "no_context",
+            "position": 0,
+            "reason": null,
+            "reused": false
+          }
+        ],
+        "cost": null,
+        "delta_audit": {
+          "lines": [],
+          "tolerance": {
+            "denominator": 100,
+            "numerator": 1
+          },
+          "uncompared": []
+        },
+        "detail": "build-only stops at Built: step 1 has no signature and no bytes (§19, §20)",
+        "execution_id": "exec-f664ec79813e52d1",
+        "flow_checks": [],
+        "flows": [],
+        "lane": "released",
+        "market": {
+          "counts_as_real_arbitrage": false,
+          "evidence": "the sequence lane's pricing, ordering, audits and accounting, over a simulated run this file scripted",
+          "market_kind": "CONTROLLED_FIXTURE"
+        },
+        "mismatch": null,
+        "mode": "build-only",
+        "opportunity_id": "sequence-under-test",
+        "profit": null,
+        "route": null,
+        "sources": [
+          "6 broadcastable transaction(s) from a 10-step simulated plan pinned to block 37530593; venues 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 then 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E over input token 0x4200000000000000000000000000000000000006",
+          "preflight passed for sequence-under-test: 0 lines, ceiling 44617200000 wei, re-priced output 1002000000000000",
+          "step 1: fee from eip1559 maxFeePerGas = baseFee(362) * 2 + tip(0) = 724, read at block 37530593 at block 37530593 (eip1559), eip1559 maxFee=724 tip=0",
+          "step 1: nonce 0 from scripted eth_getTransactionCount (confirmed and pending) at block 37530593",
+          "step 1: block context no_context for chain 91342 block 37530593 hash 0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e: nothing was propagated to this stage"
+        ],
+        "status": "built",
+        "steps_planned": 6,
+        "stopped_at": 0,
+        "transactions": [],
+        "wraps": []
+      }
+    },
+    {
+      "arm": "verified_context",
+      "counters": {
+        "execution_block_context_accepted": 1,
+        "execution_build_success": 1,
+        "execution_preflight_success": 1,
+        "execution_sequence_attempt": 1,
+        "execution_sequence_blocked": 1,
+        "execution_sequence_unsettled": 1
+      },
+      "lane_reads": [
+        {
+          "caller": null,
+          "seq": 1,
+          "site": "balance",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 2,
+          "site": "token_balance",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 3,
+          "site": "token_balance",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 4,
+          "site": "fee_reading",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 5,
+          "site": "nonce",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 6,
+          "site": "endpoint_chain_id",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 7,
+          "site": "block_hash_at",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 8,
+          "site": "balance",
+          "stage": null
+        }
+      ],
+      "producer_verdict": {
+        "outcome": "verified",
+        "reason": null,
+        "verified_block": {
+          "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+          "block_number": 37530593,
+          "chain_id": 91342,
+          "scope": "fixed_historical",
+          "source": "scripted eth_getBlockByNumber at the pin",
+          "verified_by": "the §5 producer leg of this test"
+        }
+      },
+      "record": {
+        "after": null,
+        "before": {
+          "account": "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
+          "block_hash": "0x0000000000000000000000000000000000000000000000000000000000004376",
+          "block_number": 37530592,
+          "native_wei": "0x470de4df820000",
+          "provenance": "block 37530592 (0x0000000000000000000000000000000000000000000000000000000000004376); native: eth_getBalance(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, 37530592); scripted eth_call balanceOf(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f) at block 37530592; scripted eth_call balanceOf(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, 0x4200000000000000000000000000000000000006) at block 37530592",
+          "token_balances": {
+            "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": "0x0",
+            "0x4200000000000000000000000000000000000006": "0x0"
+          }
+        },
+        "builds": [
+          {
+            "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+            "block_number": 37530593,
+            "chain_id": 91342,
+            "fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+            "position": 0,
+            "sender_expected": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+            "serialization_bytes": 50,
+            "unsigned": {
+              "access_list": [],
+              "chain_id": 91342,
+              "gas_limit": 120000,
+              "input": "0xd0e30db0",
+              "max_fee_per_gas": "0x2d4",
+              "max_priority_fee_per_gas": "0x0",
+              "nonce": 0,
+              "to": "0x4200000000000000000000000000000000000006",
+              "tx_type": "dynamic_fee",
+              "value": "0x38d7ea4c68000"
+            }
+          }
+        ],
+        "completed": false,
+        "context_checks": [
+          {
+            "consumer_read": true,
+            "expected_block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+            "expected_block_number": 37530593,
+            "expected_chain_id": 91342,
+            "outcome": "accepted",
+            "position": 0,
+            "reason": null,
+            "reused": false
+          }
+        ],
+        "cost": null,
+        "delta_audit": {
+          "lines": [],
+          "tolerance": {
+            "denominator": 100,
+            "numerator": 1
+          },
+          "uncompared": []
+        },
+        "detail": "build-only stops at Built: step 1 has no signature and no bytes (§19, §20)",
+        "execution_id": "exec-f664ec79813e52d1",
+        "flow_checks": [],
+        "flows": [],
+        "lane": "released",
+        "market": {
+          "counts_as_real_arbitrage": false,
+          "evidence": "the sequence lane's pricing, ordering, audits and accounting, over a simulated run this file scripted",
+          "market_kind": "CONTROLLED_FIXTURE"
+        },
+        "mismatch": null,
+        "mode": "build-only",
+        "opportunity_id": "sequence-under-test",
+        "profit": null,
+        "route": null,
+        "sources": [
+          "6 broadcastable transaction(s) from a 10-step simulated plan pinned to block 37530593; venues 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 then 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E over input token 0x4200000000000000000000000000000000000006",
+          "preflight passed for sequence-under-test: 0 lines, ceiling 44617200000 wei, re-priced output 1002000000000000",
+          "step 1: fee from eip1559 maxFeePerGas = baseFee(362) * 2 + tip(0) = 724, read at block 37530593 at block 37530593 (eip1559), eip1559 maxFee=724 tip=0",
+          "step 1: nonce 0 from scripted eth_getTransactionCount (confirmed and pending) at block 37530593",
+          "step 1: block context accepted for chain 91342 block 37530593 hash 0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e: the propagated context, this stage's own pin and this stage's own read name one block (consumer read made: true)"
+        ],
+        "status": "built",
+        "steps_planned": 6,
+        "stopped_at": 0,
+        "transactions": [],
+        "wraps": []
+      }
+    },
+    {
+      "arm": "negative_control",
+      "counters": {
+        "execution_block_context_rejected": 1,
+        "execution_build_success": 1,
+        "execution_preflight_success": 1,
+        "execution_sequence_attempt": 1,
+        "execution_sequence_blocked": 1,
+        "execution_sequence_unsettled": 1
+      },
+      "lane_reads": [
+        {
+          "caller": null,
+          "seq": 1,
+          "site": "balance",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 2,
+          "site": "token_balance",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 3,
+          "site": "token_balance",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 4,
+          "site": "fee_reading",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 5,
+          "site": "nonce",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 6,
+          "site": "endpoint_chain_id",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 7,
+          "site": "block_hash_at",
+          "stage": null
+        },
+        {
+          "caller": null,
+          "seq": 8,
+          "site": "balance",
+          "stage": null
+        }
+      ],
+      "producer_verdict": {
+        "outcome": "verified",
+        "reason": null,
+        "verified_block": {
+          "block_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+          "block_number": 37530593,
+          "chain_id": 91342,
+          "scope": "fixed_historical",
+          "source": "scripted eth_getBlockByNumber at the pin",
+          "verified_by": "the §5 producer leg of this test"
+        }
+      },
+      "record": {
+        "after": null,
+        "before": {
+          "account": "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
+          "block_hash": "0x0000000000000000000000000000000000000000000000000000000000004376",
+          "block_number": 37530592,
+          "native_wei": "0x470de4df820000",
+          "provenance": "block 37530592 (0x0000000000000000000000000000000000000000000000000000000000004376); native: eth_getBalance(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, 37530592); scripted eth_call balanceOf(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, 0x07D4af6E2bc8DD82beb06b4FD279DF4c9028F26f) at block 37530592; scripted eth_call balanceOf(0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf, 0x4200000000000000000000000000000000000006) at block 37530592",
+          "token_balances": {
+            "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f": "0x0",
+            "0x4200000000000000000000000000000000000006": "0x0"
+          }
+        },
+        "builds": [
+          {
+            "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+            "block_number": 37530593,
+            "chain_id": 91342,
+            "fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+            "position": 0,
+            "sender_expected": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+            "serialization_bytes": 50,
+            "unsigned": {
+              "access_list": [],
+              "chain_id": 91342,
+              "gas_limit": 120000,
+              "input": "0xd0e30db0",
+              "max_fee_per_gas": "0x2d4",
+              "max_priority_fee_per_gas": "0x0",
+              "nonce": 0,
+              "to": "0x4200000000000000000000000000000000000006",
+              "tx_type": "dynamic_fee",
+              "value": "0x38d7ea4c68000"
+            }
+          }
+        ],
+        "completed": false,
+        "context_checks": [
+          {
+            "consumer_read": true,
+            "expected_block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+            "expected_block_number": 37530593,
+            "expected_chain_id": 91342,
+            "outcome": "rejected",
+            "position": 0,
+            "reason": "block_hash_mismatch",
+            "reason_detail": "at block 37530593 the two answers are 0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e and 0x5555555555555555555555555555555555555555555555555555555555555555",
+            "reused": false
+          }
+        ],
+        "cost": null,
+        "delta_audit": {
+          "lines": [],
+          "tolerance": {
+            "denominator": 100,
+            "numerator": 1
+          },
+          "uncompared": []
+        },
+        "detail": "build-only stops at Built: step 1 has no signature and no bytes (§19, §20)",
+        "execution_id": "exec-f664ec79813e52d1",
+        "flow_checks": [],
+        "flows": [],
+        "lane": "released",
+        "market": {
+          "counts_as_real_arbitrage": false,
+          "evidence": "the sequence lane's pricing, ordering, audits and accounting, over a simulated run this file scripted",
+          "market_kind": "CONTROLLED_FIXTURE"
+        },
+        "mismatch": null,
+        "mode": "build-only",
+        "opportunity_id": "sequence-under-test",
+        "profit": null,
+        "route": null,
+        "sources": [
+          "6 broadcastable transaction(s) from a 10-step simulated plan pinned to block 37530593; venues 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4 then 0x5b3C1E3FB6A97C0130AE015fF10F53A1A30c353E over input token 0x4200000000000000000000000000000000000006",
+          "preflight passed for sequence-under-test: 0 lines, ceiling 44617200000 wei, re-priced output 1002000000000000",
+          "step 1: fee from eip1559 maxFeePerGas = baseFee(362) * 2 + tip(0) = 724, read at block 37530593 at block 37530593 (eip1559), eip1559 maxFee=724 tip=0",
+          "step 1: nonce 0 from scripted eth_getTransactionCount (confirmed and pending) at block 37530593",
+          "step 1: block context rejected for chain 91342 block 37530593 hash 0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e: block_hash_mismatch: at block 37530593 the two answers are 0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e and 0x5555555555555555555555555555555555555555555555555555555555555555"
+        ],
+        "status": "built",
+        "steps_planned": 6,
+        "stopped_at": 0,
+        "transactions": [],
+        "wraps": []
+      }
+    }
+  ],
+  "execution_mode": "build-only",
+  "independent_runs": 0,
+  "milestone": "M8.4.4",
+  "repetitions_of_one_drive": 3,
+  "run": "run-01",
+  "schema": 1,
+  "source": "fixture",
+  "venue": "the scripted lane of crates/execution/tests/sequence.rs",
+  "what_source_means": "a deterministic in-process stand-in answers the lane: these numbers show the contract working, they are not market behaviour and are never added to a live run's"
+}

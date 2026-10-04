@@ -111,7 +111,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1658,
+          "line": 1790,
           "matches": 1,
           "note": "the leg, by the name the run records",
           "source": "code",
@@ -168,7 +168,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1640,
+          "line": 1760,
           "matches": 1,
           "note": "the build half, at its own step",
           "source": "code",
@@ -233,7 +233,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1531,
+          "line": 1625,
           "matches": 1,
           "note": "the build-side half of a diff, not a check",
           "source": "code",
@@ -290,7 +290,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1616,
+          "line": 1736,
           "matches": 1,
           "note": "the build half, inside the leg",
           "source": "code",
@@ -502,7 +502,7 @@
         },
         {
           "file": "crates/execution/src/preflight.rs",
-          "line": 395,
+          "line": 407,
           "matches": 1,
           "note": "the crossing type, and why it cannot hold the value today",
           "source": "code",
@@ -510,7 +510,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1616,
+          "line": 1736,
           "matches": 1,
           "note": "the consumer that would receive it",
           "source": "code",
@@ -551,7 +551,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1663,
+          "line": 1795,
           "matches": 1,
           "note": "the leg",
           "source": "code",
@@ -957,7 +957,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1229,
+          "line": 1323,
           "matches": 1,
           "note": "the three checks the build performs on preflight's verdict",
           "source": "code",
@@ -1136,7 +1136,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1670,
+          "line": 1853,
           "matches": 1,
           "note": "the leg",
           "source": "code",
@@ -1217,7 +1217,7 @@
         },
         {
           "file": "crates/execution/tests/sequence.rs",
-          "line": 582,
+          "line": 589,
           "matches": 1,
           "note": "the existing test that a plan carries only what the run decided",
           "source": "test",

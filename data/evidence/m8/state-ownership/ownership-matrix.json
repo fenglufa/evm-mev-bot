@@ -397,7 +397,7 @@
         "evidence_refs": [
           {
             "file": "crates/execution/src/giwa/preflight_facts.rs",
-            "line": 364,
+            "line": 378,
             "matches": 1,
             "note": "the head the preflight balance is asked at",
             "source": "code",
@@ -405,7 +405,7 @@
           },
           {
             "file": "crates/execution/src/sequence.rs",
-            "line": 1531,
+            "line": 1625,
             "matches": 1,
             "note": "the build's second balance ask, at preflight's height",
             "source": "code",
@@ -413,7 +413,7 @@
           },
           {
             "file": "crates/execution/src/sequence.rs",
-            "line": 1670,
+            "line": 1853,
             "matches": 1,
             "note": "the build's funding leg, at the intent's pinned height",
             "source": "code",
@@ -429,7 +429,7 @@
         "evidence_refs": [
           {
             "file": "crates/execution/src/sequence.rs",
-            "line": 168,
+            "line": 171,
             "matches": 1,
             "note": "the code's own words for this rule",
             "source": "code",
@@ -639,7 +639,7 @@
         "evidence_refs": [
           {
             "file": "crates/execution/src/sequence.rs",
-            "line": 1616,
+            "line": 1736,
             "matches": 1,
             "note": "the re-read this row is about",
             "source": "code",
@@ -699,7 +699,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/preflight.rs",
-          "line": 395,
+          "line": 407,
           "matches": 1,
           "note": "the crossing type, whose fields are attempt id, findings, passed, two numbers, a reason and a ceiling",
           "source": "code",
@@ -707,7 +707,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1229,
+          "line": 1323,
           "matches": 1,
           "note": "the three checks the build actually performs on that report",
           "source": "code",
@@ -1026,7 +1026,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/tests/sequence.rs",
-          "line": 582,
+          "line": 589,
           "matches": 1,
           "note": "the binding that does exist",
           "source": "test",
@@ -1150,7 +1150,7 @@
         },
         {
           "file": "crates/execution/src/preflight.rs",
-          "line": 395,
+          "line": 407,
           "matches": 1,
           "note": "what crosses today",
           "source": "code",
@@ -1169,7 +1169,7 @@
         "evidence_refs": [
           {
             "file": "crates/execution/src/sequence.rs",
-            "line": 1229,
+            "line": 1323,
             "matches": 1,
             "note": "the three checks, in order, in one function",
             "source": "code",

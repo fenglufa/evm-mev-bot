@@ -1,0 +1,149 @@
+{
+  "counts": {
+    "refused": 3,
+    "rows": 9,
+    "verified": 6
+  },
+  "header": {
+    "assembled_from": [
+      "fixed-block/run-01.json",
+      "fixed-block/run-02.json",
+      "fixed-block/run-03.json"
+    ],
+    "execution_mode": "build-only",
+    "file": "contract/producer-verification.json",
+    "generated_by": "crates/execution/tests/block_context_evidence.rs",
+    "independent_runs": 0,
+    "milestone": "M8.4.4",
+    "repetitions_of_one_drive": 3,
+    "schema": 1,
+    "source": "fixture",
+    "venue": "the scripted lane of crates/execution/tests/sequence.rs"
+  },
+  "note": "§31: a producer that refused propagates nothing, and the consumer's answer to nothing is `no_context`. That is the baseline arm, recorded here so the absence of a context is a row a reader can count rather than a gap in a table",
+  "rows": [
+    {
+      "arm": "baseline",
+      "outcome": "refused",
+      "reason": "unverifiable_block_context",
+      "reason_detail": "the consumer cannot verify this context: this fixture hand-builds a verdict and gathers no read of the block",
+      "run": "run-01",
+      "verified_block": null,
+      "verified_block_equals_the_steps_pin": false
+    },
+    {
+      "arm": "verified_context",
+      "outcome": "verified",
+      "reason": null,
+      "reason_detail": null,
+      "run": "run-01",
+      "verified_block": {
+        "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      },
+      "verified_block_equals_the_steps_pin": true
+    },
+    {
+      "arm": "negative_control",
+      "outcome": "verified",
+      "reason": null,
+      "reason_detail": null,
+      "run": "run-01",
+      "verified_block": {
+        "block_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      },
+      "verified_block_equals_the_steps_pin": false
+    },
+    {
+      "arm": "baseline",
+      "outcome": "refused",
+      "reason": "unverifiable_block_context",
+      "reason_detail": "the consumer cannot verify this context: this fixture hand-builds a verdict and gathers no read of the block",
+      "run": "run-02",
+      "verified_block": null,
+      "verified_block_equals_the_steps_pin": false
+    },
+    {
+      "arm": "verified_context",
+      "outcome": "verified",
+      "reason": null,
+      "reason_detail": null,
+      "run": "run-02",
+      "verified_block": {
+        "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      },
+      "verified_block_equals_the_steps_pin": true
+    },
+    {
+      "arm": "negative_control",
+      "outcome": "verified",
+      "reason": null,
+      "reason_detail": null,
+      "run": "run-02",
+      "verified_block": {
+        "block_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      },
+      "verified_block_equals_the_steps_pin": false
+    },
+    {
+      "arm": "baseline",
+      "outcome": "refused",
+      "reason": "unverifiable_block_context",
+      "reason_detail": "the consumer cannot verify this context: this fixture hand-builds a verdict and gathers no read of the block",
+      "run": "run-03",
+      "verified_block": null,
+      "verified_block_equals_the_steps_pin": false
+    },
+    {
+      "arm": "verified_context",
+      "outcome": "verified",
+      "reason": null,
+      "reason_detail": null,
+      "run": "run-03",
+      "verified_block": {
+        "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      },
+      "verified_block_equals_the_steps_pin": true
+    },
+    {
+      "arm": "negative_control",
+      "outcome": "verified",
+      "reason": null,
+      "reason_detail": null,
+      "run": "run-03",
+      "verified_block": {
+        "block_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      },
+      "verified_block_equals_the_steps_pin": false
+    }
+  ]
+}

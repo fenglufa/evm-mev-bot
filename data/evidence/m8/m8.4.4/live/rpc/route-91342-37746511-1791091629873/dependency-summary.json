@@ -1,0 +1,332 @@
+{
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "diagnosis_schema": 2,
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791091629878,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f303f4df1e987b7817f57e0da392c5db7a99860f",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "not_a_claim": "§20: no number in this file says the provider is the bottleneck, that these reads could be batched, that C1/C2/C4 ordering matters, or that an uninstrumented surface made no calls. It is a description of what was recorded, and the recomputation rules are beside each figure",
+  "per_run_totals_are_in": "pipeline-summary.json",
+  "percentile_algorithm": "nearest_rank",
+  "pipeline": {
+    "build": {
+      "code_stage_names": [
+        "build"
+      ],
+      "rpc_count_total": 11,
+      "rpc_union_duration_ns_per_run": {
+        "max_ns": 2800155377,
+        "measured": true,
+        "min_ns": 2800155377,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "rpc_union_duration_ns_total": 2800155377,
+      "runs_reporting_it": 1,
+      "why": "§7's `Build` *and* its `Execution preparation`: the lane's fee, nonce, balance, endpoint-chain-id and block-binding reads are stamped `build` (`crates/execution/src/sequence.rs`), because the run's ladder gives those pre-submission reads no span of their own. They are measured here, in this row, and not in the empty one below"
+    },
+    "detection": {
+      "code_stage_names": [
+        "opportunity_detection"
+      ],
+      "rpc_count_total": 6,
+      "rpc_union_duration_ns_per_run": {
+        "max_ns": 1563248334,
+        "measured": true,
+        "min_ns": 1563248334,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "rpc_union_duration_ns_total": 1563248334,
+      "runs_reporting_it": 1,
+      "why": "§7's first rung after the block is detected: this build prices both venues and produces the candidate inside one stage, `opportunity_detection`, and every read of that leg is stamped with it"
+    },
+    "execution_preparation": {
+      "code_stage_names": [],
+      "rpc_count_total": 0,
+      "rpc_union_duration_ns_per_run": {
+        "max_ns": 0,
+        "measured": true,
+        "min_ns": 0,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "rpc_union_duration_ns_total": 0,
+      "runs_reporting_it": 1,
+      "why": "EMPTY BY THE MAPPING, NOT BY MEASUREMENT: the reads §7 means by this name exist and are counted — in `build`, which is the stage the issuing code stamps. §8 forbids renaming a stage to make a report read better, so this bucket keeps the absence of a separate name visible rather than moving calls into it"
+    },
+    "opportunity": {
+      "code_stage_names": [],
+      "rpc_count_total": 0,
+      "rpc_union_duration_ns_per_run": {
+        "max_ns": 0,
+        "measured": true,
+        "min_ns": 0,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "rpc_union_duration_ns_total": 0,
+      "runs_reporting_it": 1,
+      "why": "EMPTY BY THE MAPPING, NOT BY MEASUREMENT: §8's list separates detection from opportunity and this build does not — the one stage `opportunity_detection` covers both, so its calls are filed under `detection` and are deliberately not counted a second time here"
+    },
+    "preflight": {
+      "code_stage_names": [
+        "preflight",
+        "risk"
+      ],
+      "rpc_count_total": 23,
+      "rpc_union_duration_ns_per_run": {
+        "max_ns": 6240908250,
+        "measured": true,
+        "min_ns": 6240908250,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "rpc_union_duration_ns_total": 6240908250,
+      "runs_reporting_it": 1,
+      "why": "§26's gate, whose reads the lane stamps `preflight` at the site that issues them, together with `risk`, the other stage between the simulation and the build"
+    },
+    "simulation": {
+      "code_stage_names": [
+        "simulation"
+      ],
+      "rpc_count_total": 39,
+      "rpc_union_duration_ns_per_run": {
+        "max_ns": 10921311087,
+        "measured": true,
+        "min_ns": 10921311087,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "rpc_union_duration_ns_total": 10921311087,
+      "runs_reporting_it": 1,
+      "why": "the run's 39-odd state reads: every call the state-acquisition sink holds, all of them at the pin, all of them named by an engine phase (§4's vocabulary)"
+    },
+    "stages_the_seven_do_not_name": {
+      "code_stage_names": [
+        "observation",
+        "sign",
+        "submit",
+        "inclusion",
+        "receipt",
+        "settlement",
+        "profit_verification"
+      ],
+      "rpc_count_total": 2,
+      "rpc_union_duration_ns_per_run": {
+        "max_ns": 1020017541,
+        "measured": true,
+        "min_ns": 1020017541,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "rpc_union_duration_ns_total": 1020017541,
+      "runs_reporting_it": 1,
+      "why": "the stage names this build has and §8's seven do not: `observation`, which is where the pin was fixed (§13), and the six rungs after the build — `sign`, `submit`, `inclusion`, `receipt`, `settlement`, `profit_verification`. They get a key of their own instead of being folded into the nearest-looking of the seven, which would put post-submission calls inside `build`"
+    },
+    "state_update": {
+      "code_stage_names": [
+        "state_update",
+        "graph_update"
+      ],
+      "rpc_count_total": 0,
+      "rpc_union_duration_ns_per_run": {
+        "max_ns": 0,
+        "measured": true,
+        "min_ns": 0,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "rpc_union_duration_ns_total": 0,
+      "runs_reporting_it": 1,
+      "why": "§7's second and third rungs are two stage names here, `state_update` and `graph_update`, and both are folded into this one bucket because §19 asks for one"
+    }
+  },
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "question": "§19's one-screen answer: how many storage reads had to wait, on what proof, and how the whole run's RPC time splits across the stages the code actually names",
+  "recompute": "storage_reads is `dependency-map.json`'s `summary` over its `nodes`; every pipeline figure is `pipeline-summary.json`'s `pooled.buckets`, and each of those is a re-sweep of `pipeline-calls.json`'s rows",
+  "sources_are_never_blended": true,
+  "storage_read_rows_are_in": "storage-reads.json",
+  "storage_reads": {
+    "independent": 0,
+    "ordered": 19,
+    "total": 20,
+    "unknown": 1
+  },
+  "unit": "ns"
+}

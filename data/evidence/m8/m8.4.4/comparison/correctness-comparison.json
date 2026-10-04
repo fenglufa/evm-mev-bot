@@ -1,0 +1,136 @@
+{
+  "axes": [
+    "block_identity",
+    "build_output",
+    "transaction_intent",
+    "serialization",
+    "fingerprint"
+  ],
+  "correctness_equal_count": 15,
+  "correctness_mismatch_count": 0,
+  "header": {
+    "assembled_from": [
+      "fixed-block/run-01.json",
+      "fixed-block/run-02.json",
+      "fixed-block/run-03.json"
+    ],
+    "execution_mode": "build-only",
+    "file": "comparison/correctness-comparison.json",
+    "generated_by": "crates/execution/tests/block_context_evidence.rs",
+    "independent_runs": 0,
+    "milestone": "M8.4.4",
+    "repetitions_of_one_drive": 3,
+    "schema": 1,
+    "source": "fixture",
+    "venue": "the scripted lane of crates/execution/tests/sequence.rs"
+  },
+  "per_run": [
+    {
+      "axes": [
+        {
+          "axis": "block_identity",
+          "equal": true,
+          "evidence": "the two arms' build rows, as the triple §25 requires"
+        },
+        {
+          "axis": "build_output",
+          "equal": true,
+          "evidence": "the whole unsigned object, field for field in build-comparison.json"
+        },
+        {
+          "axis": "transaction_intent",
+          "equal": true,
+          "evidence": "the intent reaches this record only through the build row: §12's fields are what the builder read off the intent, so this axis is the build row and is labelled as that. The fixture publishes no separate intent object, and pointing at one would be a reference to a file that does not exist"
+        },
+        {
+          "axis": "serialization",
+          "equal": true,
+          "evidence": "the signing payload's byte length, per arm"
+        },
+        {
+          "axis": "fingerprint",
+          "equal": true,
+          "evidence": "keccak over that payload, per arm"
+        }
+      ],
+      "consumer_outcomes": {
+        "baseline": "no_context",
+        "negative_control": "rejected",
+        "verified_context": "accepted"
+      },
+      "run": "run-01"
+    },
+    {
+      "axes": [
+        {
+          "axis": "block_identity",
+          "equal": true,
+          "evidence": "the two arms' build rows, as the triple §25 requires"
+        },
+        {
+          "axis": "build_output",
+          "equal": true,
+          "evidence": "the whole unsigned object, field for field in build-comparison.json"
+        },
+        {
+          "axis": "transaction_intent",
+          "equal": true,
+          "evidence": "the intent reaches this record only through the build row: §12's fields are what the builder read off the intent, so this axis is the build row and is labelled as that. The fixture publishes no separate intent object, and pointing at one would be a reference to a file that does not exist"
+        },
+        {
+          "axis": "serialization",
+          "equal": true,
+          "evidence": "the signing payload's byte length, per arm"
+        },
+        {
+          "axis": "fingerprint",
+          "equal": true,
+          "evidence": "keccak over that payload, per arm"
+        }
+      ],
+      "consumer_outcomes": {
+        "baseline": "no_context",
+        "negative_control": "rejected",
+        "verified_context": "accepted"
+      },
+      "run": "run-02"
+    },
+    {
+      "axes": [
+        {
+          "axis": "block_identity",
+          "equal": true,
+          "evidence": "the two arms' build rows, as the triple §25 requires"
+        },
+        {
+          "axis": "build_output",
+          "equal": true,
+          "evidence": "the whole unsigned object, field for field in build-comparison.json"
+        },
+        {
+          "axis": "transaction_intent",
+          "equal": true,
+          "evidence": "the intent reaches this record only through the build row: §12's fields are what the builder read off the intent, so this axis is the build row and is labelled as that. The fixture publishes no separate intent object, and pointing at one would be a reference to a file that does not exist"
+        },
+        {
+          "axis": "serialization",
+          "equal": true,
+          "evidence": "the signing payload's byte length, per arm"
+        },
+        {
+          "axis": "fingerprint",
+          "equal": true,
+          "evidence": "keccak over that payload, per arm"
+        }
+      ],
+      "consumer_outcomes": {
+        "baseline": "no_context",
+        "negative_control": "rejected",
+        "verified_context": "accepted"
+      },
+      "run": "run-03"
+    }
+  ],
+  "the_control_is_not_counted_as_an_axis": "§19's Baseline == Verified Context is the pair measured here; the control's job is E8, and its outcome is printed on every row without being averaged into this count",
+  "total_axis_comparisons": 15
+}

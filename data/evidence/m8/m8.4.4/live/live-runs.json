@@ -1,0 +1,221 @@
+{
+  "aggregate": {
+    "consumer_accepted": 1,
+    "consumer_rejected": 0,
+    "consumer_row_absent": 2,
+    "fixed_historical_scope_contexts": 3,
+    "head_minus_pin_max": 17,
+    "head_minus_pin_min": 14,
+    "live_head_scope_contexts": 0,
+    "producer_refused": 0,
+    "producer_verified": 3,
+    "producer_verified_equals_pin": 3,
+    "reached_build": 1,
+    "reused_true": 0,
+    "runs": 3,
+    "signed_transactions_bytes": 0,
+    "stopped_before_build": 2,
+    "submissions_bytes": 0,
+    "successful_real_arbitrage": 0
+  },
+  "header": {
+    "assembled_from": [
+      "live/route-runs/route-91342-37746091-1791091208939/route-run.json",
+      "live/route-runs/route-91342-37746091-1791091208939/preflight.json",
+      "live/route-runs/route-91342-37746091-1791091208939/metrics.json",
+      "live/rpc/route-91342-37746091-1791091208939/outside-simulation-rpc.json",
+      "live/route-runs/route-91342-37746182-1791091300296/route-run.json",
+      "live/route-runs/route-91342-37746182-1791091300296/preflight.json",
+      "live/route-runs/route-91342-37746182-1791091300296/metrics.json",
+      "live/rpc/route-91342-37746182-1791091300296/outside-simulation-rpc.json",
+      "live/route-runs/route-91342-37746511-1791091629873/route-run.json",
+      "live/route-runs/route-91342-37746511-1791091629873/preflight.json",
+      "live/route-runs/route-91342-37746511-1791091629873/metrics.json",
+      "live/rpc/route-91342-37746511-1791091629873/outside-simulation-rpc.json"
+    ],
+    "file": "live/live-runs.json",
+    "generated_by": "crates/execution/tests/block_context_evidence.rs",
+    "independent_runs": 3,
+    "milestone": "M8.4.4",
+    "schema": 1,
+    "source": "live"
+  },
+  "per_run": [
+    {
+      "block_context_counters": {},
+      "build_count": 0,
+      "build_fingerprint": null,
+      "build_identity": null,
+      "chain_id": 91342,
+      "consumer_check_count": 0,
+      "consumer_outcome": null,
+      "consumer_read": null,
+      "consumer_refusal_reason": null,
+      "consumer_reused": null,
+      "consumer_rows_verbatim": [],
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_detail": "invalid intent: the transaction carries max_fee_per_gas 1000674 and the fee read at block 37746108 says 1000680 — the base fee has risen since this plan was priced, so the run is underpriced for the block it would land in *and* the ceiling its profit was costed against is below what it would actually pay",
+      "execution_mode": "build-only",
+      "execution_status": "failed",
+      "git_revision": "f303f4df1e987b7817f57e0da392c5db7a99860f",
+      "head_at_preflight": {
+        "block_hash": "0xf65fd8b8a6b1aaf374020ab5f0c343d2683159b5e71f42407a2da719e2f65096",
+        "block_number": 37746108,
+        "chain_id": 91342
+      },
+      "head_minus_pin": 17,
+      "pinned_identity": {
+        "block_hash": "0xe5a01bef711f041b25ac6ac12f41e41a2e5eaf28ac680803883c1fd5acbecf38",
+        "block_number": 37746091,
+        "chain_id": 91342
+      },
+      "preflight_passed": false,
+      "preflight_rejected_because": "the transaction carries max_fee_per_gas 1000674 and the fee read at block 37746108 says 1000680 — the base fee has risen since this plan was priced, so the run is underpriced for the block it would land in *and* the ceiling its profit was costed against is below what it would actually pay",
+      "producer_outcome": "verified",
+      "producer_refusal_reason": null,
+      "producer_scope": "fixed_historical",
+      "producer_verified_equals_pin": true,
+      "producer_verified_identity": {
+        "block_hash": "0xe5a01bef711f041b25ac6ac12f41e41a2e5eaf28ac680803883c1fd5acbecf38",
+        "block_number": 37746091,
+        "chain_id": 91342
+      },
+      "rpc_duration_total_ns": 8707925919,
+      "rpc_lifecycle_calls": 32,
+      "rpc_simulation_calls_recorded_elsewhere": 39,
+      "scope_derived_from_head_and_pin": "fixed_historical",
+      "session": "route-91342-37746091-1791091208939",
+      "signed_transactions_bytes": 0,
+      "state_read_concurrency": 1,
+      "state_read_reuse": true,
+      "submissions_bytes": 0,
+      "successful_real_arbitrage": false,
+      "transaction_rows": 0
+    },
+    {
+      "block_context_counters": {},
+      "build_count": 0,
+      "build_fingerprint": null,
+      "build_identity": null,
+      "chain_id": 91342,
+      "consumer_check_count": 0,
+      "consumer_outcome": null,
+      "consumer_read": null,
+      "consumer_refusal_reason": null,
+      "consumer_reused": null,
+      "consumer_rows_verbatim": [],
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_detail": "invalid intent: the transaction carries max_fee_per_gas 1000682 and the fee read at block 37746197 says 1000684 — the base fee has risen since this plan was priced, so the run is underpriced for the block it would land in *and* the ceiling its profit was costed against is below what it would actually pay",
+      "execution_mode": "build-only",
+      "execution_status": "failed",
+      "git_revision": "f303f4df1e987b7817f57e0da392c5db7a99860f",
+      "head_at_preflight": {
+        "block_hash": "0x979009c5d6a7cf148b8ee1d3836f835209e6abaaaaf87fccde83e6cee89db350",
+        "block_number": 37746197,
+        "chain_id": 91342
+      },
+      "head_minus_pin": 15,
+      "pinned_identity": {
+        "block_hash": "0xec9748e93b4535a1e7b97cdcb62d7c2218a6652b48710056b516298a7cbfbe3f",
+        "block_number": 37746182,
+        "chain_id": 91342
+      },
+      "preflight_passed": false,
+      "preflight_rejected_because": "the transaction carries max_fee_per_gas 1000682 and the fee read at block 37746197 says 1000684 — the base fee has risen since this plan was priced, so the run is underpriced for the block it would land in *and* the ceiling its profit was costed against is below what it would actually pay",
+      "producer_outcome": "verified",
+      "producer_refusal_reason": null,
+      "producer_scope": "fixed_historical",
+      "producer_verified_equals_pin": true,
+      "producer_verified_identity": {
+        "block_hash": "0xec9748e93b4535a1e7b97cdcb62d7c2218a6652b48710056b516298a7cbfbe3f",
+        "block_number": 37746182,
+        "chain_id": 91342
+      },
+      "rpc_duration_total_ns": 9323843837,
+      "rpc_lifecycle_calls": 32,
+      "rpc_simulation_calls_recorded_elsewhere": 39,
+      "scope_derived_from_head_and_pin": "fixed_historical",
+      "session": "route-91342-37746182-1791091300296",
+      "signed_transactions_bytes": 0,
+      "state_read_concurrency": 1,
+      "state_read_reuse": true,
+      "submissions_bytes": 0,
+      "successful_real_arbitrage": false,
+      "transaction_rows": 0
+    },
+    {
+      "block_context_counters": {
+        "execution_block_context_accepted": 1
+      },
+      "build_count": 1,
+      "build_fingerprint": "0x12d6034616a4d79715f04ac6b7130b13b8e4fec6467b07835ec4a4bf8cdab9b3",
+      "build_identity": {
+        "block_hash": "0x3de0b4f99c8cb72882dad884704f104ea57c649856620e9c0c0357f17591b35e",
+        "block_number": 37746511,
+        "chain_id": 91342
+      },
+      "chain_id": 91342,
+      "consumer_check_count": 1,
+      "consumer_outcome": "accepted",
+      "consumer_read": true,
+      "consumer_refusal_reason": null,
+      "consumer_reused": false,
+      "consumer_rows_verbatim": [
+        {
+          "consumer_read": true,
+          "expected_block_hash": "0x3de0b4f99c8cb72882dad884704f104ea57c649856620e9c0c0357f17591b35e",
+          "expected_block_number": 37746511,
+          "expected_chain_id": 91342,
+          "outcome": "accepted",
+          "position": 0,
+          "reason": null,
+          "reused": false
+        }
+      ],
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "execution_detail": "build-only stops at Built: step 1 has no signature and no bytes (§19, §20)",
+      "execution_mode": "build-only",
+      "execution_status": "built",
+      "git_revision": "f303f4df1e987b7817f57e0da392c5db7a99860f",
+      "head_at_preflight": {
+        "block_hash": "0x9ab1c4281e80992d31b0bc3cbf05e151682931609184472b0cf6a0c9f4248f3c",
+        "block_number": 37746525,
+        "chain_id": 91342
+      },
+      "head_minus_pin": 14,
+      "pinned_identity": {
+        "block_hash": "0x3de0b4f99c8cb72882dad884704f104ea57c649856620e9c0c0357f17591b35e",
+        "block_number": 37746511,
+        "chain_id": 91342
+      },
+      "preflight_passed": true,
+      "preflight_rejected_because": null,
+      "producer_outcome": "verified",
+      "producer_refusal_reason": null,
+      "producer_scope": "fixed_historical",
+      "producer_verified_equals_pin": true,
+      "producer_verified_identity": {
+        "block_hash": "0x3de0b4f99c8cb72882dad884704f104ea57c649856620e9c0c0357f17591b35e",
+        "block_number": 37746511,
+        "chain_id": 91342
+      },
+      "rpc_duration_total_ns": 12261236252,
+      "rpc_lifecycle_calls": 43,
+      "rpc_simulation_calls_recorded_elsewhere": 39,
+      "scope_derived_from_head_and_pin": "fixed_historical",
+      "session": "route-91342-37746511-1791091629873",
+      "signed_transactions_bytes": 0,
+      "state_read_concurrency": 1,
+      "state_read_reuse": true,
+      "submissions_bytes": 0,
+      "successful_real_arbitrage": false,
+      "transaction_rows": 0
+    }
+  ],
+  "what_this_table_does_not_record": [
+    "a live §21 Case B: no run carried a `live_head` context into a Build stage, because on all three the chain had already moved past the pin by preflight time, so `head_minus_pin` is positive on every row and the derived scope is `fixed_historical`. That case is graded in `crates/execution/tests/sequence.rs`, not here, and this table records the absence as a count of 0",
+    "an RPC saving: the count question is `live/rpc-census-comparison.json`, and §2 is why its answer is 0",
+    "a duration or wall-clock claim: `rpc_duration_total_ns` is printed per run as a measurement, and six runs against a chain that moved under them are not a paired sample (§33)"
+  ],
+  "what_this_table_records": "the producer leg ran and verified the pin on all three runs; the consumer leg ran only on the run that reached Build, and accepted it against its own read; the other two were refused by §26's fee line before Build ever ran, so their consumer rows are absent — recorded as an absence rather than filled in (§30)"
+}

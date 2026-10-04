@@ -1,0 +1,672 @@
+{
+  "answer": "the run this milestone built made 43 lifecycle provider calls and 15 cells; each of the three control-group runs made the same, cell for cell (3 of 3 pairs identical), and the net provider calls saved per pair is [0, 0, 0]. Propagation added no read and removed none on the path that ran. No net RPC reduction.",
+  "census_by_run": [
+    {
+      "cells": [
+        {
+          "calls": 1,
+          "method": "eth_blockNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 6,
+          "method": "eth_call",
+          "stage": "opportunity_detection"
+        },
+        {
+          "calls": 12,
+          "method": "eth_call",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_chainId",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBalance",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBlockByNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 5,
+          "method": "eth_getBlockByNumber",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": "preflight"
+        }
+      ],
+      "cells_recounted_from_rows": 32,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "lifecycle_calls": 32,
+      "run": "live/route-91342-37746091-1791091208939",
+      "simulation_calls_recorded_elsewhere": 39,
+      "total_provider_calls": 71
+    },
+    {
+      "cells": [
+        {
+          "calls": 1,
+          "method": "eth_blockNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 6,
+          "method": "eth_call",
+          "stage": "opportunity_detection"
+        },
+        {
+          "calls": 12,
+          "method": "eth_call",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_chainId",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBalance",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBlockByNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 5,
+          "method": "eth_getBlockByNumber",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": "preflight"
+        }
+      ],
+      "cells_recounted_from_rows": 32,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "lifecycle_calls": 32,
+      "run": "live/route-91342-37746182-1791091300296",
+      "simulation_calls_recorded_elsewhere": 39,
+      "total_provider_calls": 71
+    },
+    {
+      "cells": [
+        {
+          "calls": 1,
+          "method": "eth_blockNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 2,
+          "method": "eth_call",
+          "stage": null
+        },
+        {
+          "calls": 6,
+          "method": "eth_call",
+          "stage": "opportunity_detection"
+        },
+        {
+          "calls": 12,
+          "method": "eth_call",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_chainId",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_chainId",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getBalance",
+          "stage": null
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBalance",
+          "stage": "preflight"
+        },
+        {
+          "calls": 3,
+          "method": "eth_getBlockByNumber",
+          "stage": null
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBlockByNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 5,
+          "method": "eth_getBlockByNumber",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": "preflight"
+        }
+      ],
+      "cells_recounted_from_rows": 43,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "lifecycle_calls": 43,
+      "run": "live/route-91342-37746511-1791091629873",
+      "simulation_calls_recorded_elsewhere": 39,
+      "total_provider_calls": 82
+    },
+    {
+      "cells": [
+        {
+          "calls": 1,
+          "method": "eth_blockNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 2,
+          "method": "eth_call",
+          "stage": null
+        },
+        {
+          "calls": 6,
+          "method": "eth_call",
+          "stage": "opportunity_detection"
+        },
+        {
+          "calls": 12,
+          "method": "eth_call",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_chainId",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_chainId",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getBalance",
+          "stage": null
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBalance",
+          "stage": "preflight"
+        },
+        {
+          "calls": 3,
+          "method": "eth_getBlockByNumber",
+          "stage": null
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBlockByNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 5,
+          "method": "eth_getBlockByNumber",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": "preflight"
+        }
+      ],
+      "cells_recounted_from_rows": 43,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "lifecycle_calls": 43,
+      "run": "prior/route-91342-37700740-1791045857463",
+      "simulation_calls_recorded_elsewhere": 39,
+      "total_provider_calls": 82
+    },
+    {
+      "cells": [
+        {
+          "calls": 1,
+          "method": "eth_blockNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 2,
+          "method": "eth_call",
+          "stage": null
+        },
+        {
+          "calls": 6,
+          "method": "eth_call",
+          "stage": "opportunity_detection"
+        },
+        {
+          "calls": 12,
+          "method": "eth_call",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_chainId",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_chainId",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getBalance",
+          "stage": null
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBalance",
+          "stage": "preflight"
+        },
+        {
+          "calls": 3,
+          "method": "eth_getBlockByNumber",
+          "stage": null
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBlockByNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 5,
+          "method": "eth_getBlockByNumber",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": "preflight"
+        }
+      ],
+      "cells_recounted_from_rows": 43,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "lifecycle_calls": 43,
+      "run": "prior/route-91342-37700778-1791045896094",
+      "simulation_calls_recorded_elsewhere": 39,
+      "total_provider_calls": 82
+    },
+    {
+      "cells": [
+        {
+          "calls": 1,
+          "method": "eth_blockNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 2,
+          "method": "eth_call",
+          "stage": null
+        },
+        {
+          "calls": 6,
+          "method": "eth_call",
+          "stage": "opportunity_detection"
+        },
+        {
+          "calls": 12,
+          "method": "eth_call",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_chainId",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_chainId",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getBalance",
+          "stage": null
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBalance",
+          "stage": "preflight"
+        },
+        {
+          "calls": 3,
+          "method": "eth_getBlockByNumber",
+          "stage": null
+        },
+        {
+          "calls": 1,
+          "method": "eth_getBlockByNumber",
+          "stage": "observation"
+        },
+        {
+          "calls": 5,
+          "method": "eth_getBlockByNumber",
+          "stage": "preflight"
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_getTransactionCount",
+          "stage": "preflight"
+        },
+        {
+          "calls": 1,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": null
+        },
+        {
+          "calls": 2,
+          "method": "eth_maxPriorityFeePerGas",
+          "stage": "preflight"
+        }
+      ],
+      "cells_recounted_from_rows": 43,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "lifecycle_calls": 43,
+      "run": "prior/route-91342-37700806-1791045924232",
+      "simulation_calls_recorded_elsewhere": 39,
+      "total_provider_calls": 82
+    }
+  ],
+  "comparison": {
+    "blocked_live_runs_explained": [
+      {
+        "cells_only_in_the_built_run": [
+          {
+            "calls": 2,
+            "method": "eth_call",
+            "stage": null
+          },
+          {
+            "calls": 1,
+            "method": "eth_chainId",
+            "stage": null
+          },
+          {
+            "calls": 2,
+            "method": "eth_getBalance",
+            "stage": null
+          },
+          {
+            "calls": 3,
+            "method": "eth_getBlockByNumber",
+            "stage": null
+          },
+          {
+            "calls": 2,
+            "method": "eth_getTransactionCount",
+            "stage": null
+          },
+          {
+            "calls": 1,
+            "method": "eth_maxPriorityFeePerGas",
+            "stage": null
+          }
+        ],
+        "cells_only_in_this_run": [],
+        "every_unattributed_stage_is_in_the_built_run": true,
+        "lifecycle_calls": 32,
+        "run": "live/route-91342-37746091-1791091208939"
+      },
+      {
+        "cells_only_in_the_built_run": [
+          {
+            "calls": 2,
+            "method": "eth_call",
+            "stage": null
+          },
+          {
+            "calls": 1,
+            "method": "eth_chainId",
+            "stage": null
+          },
+          {
+            "calls": 2,
+            "method": "eth_getBalance",
+            "stage": null
+          },
+          {
+            "calls": 3,
+            "method": "eth_getBlockByNumber",
+            "stage": null
+          },
+          {
+            "calls": 2,
+            "method": "eth_getTransactionCount",
+            "stage": null
+          },
+          {
+            "calls": 1,
+            "method": "eth_maxPriorityFeePerGas",
+            "stage": null
+          }
+        ],
+        "cells_only_in_this_run": [],
+        "every_unattributed_stage_is_in_the_built_run": true,
+        "lifecycle_calls": 32,
+        "run": "live/route-91342-37746182-1791091300296"
+      }
+    ],
+    "built_run": "live/route-91342-37746511-1791091629873",
+    "endpoint_digest_count": 1,
+    "endpoint_digests": [
+      "rpc-faa716cada04a9ef"
+    ],
+    "paired_against": [
+      {
+        "cells_identical": true,
+        "differing_cells": 0,
+        "lifecycle_calls": {
+          "live": 43,
+          "prior": 43
+        },
+        "live_run": "live/route-91342-37746511-1791091629873",
+        "net_provider_calls_saved": 0,
+        "prior_run": "prior/route-91342-37700740-1791045857463",
+        "total_provider_calls": {
+          "live": 82,
+          "prior": 82
+        }
+      },
+      {
+        "cells_identical": true,
+        "differing_cells": 0,
+        "lifecycle_calls": {
+          "live": 43,
+          "prior": 43
+        },
+        "live_run": "live/route-91342-37746511-1791091629873",
+        "net_provider_calls_saved": 0,
+        "prior_run": "prior/route-91342-37700778-1791045896094",
+        "total_provider_calls": {
+          "live": 82,
+          "prior": 82
+        }
+      },
+      {
+        "cells_identical": true,
+        "differing_cells": 0,
+        "lifecycle_calls": {
+          "live": 43,
+          "prior": 43
+        },
+        "live_run": "live/route-91342-37746511-1791091629873",
+        "net_provider_calls_saved": 0,
+        "prior_run": "prior/route-91342-37700806-1791045924232",
+        "total_provider_calls": {
+          "live": 82,
+          "prior": 82
+        }
+      }
+    ]
+  },
+  "control_group": {
+    "evidence_dir": "data/evidence/m8/cross-stage",
+    "milestone": "M8.4.2",
+    "pairing_evidence": [
+      {
+        "candidate_identical": true,
+        "chain_id": {
+          "live": 91342,
+          "prior": 91342
+        },
+        "execution_mode": {
+          "live": "build-only",
+          "prior": "build-only"
+        },
+        "prior_run": "prior/route-91342-37700740-1791045857463",
+        "state_read_concurrency": {
+          "live": 1,
+          "prior": 1
+        },
+        "state_read_reuse": {
+          "live": true,
+          "prior": true
+        }
+      },
+      {
+        "candidate_identical": true,
+        "chain_id": {
+          "live": 91342,
+          "prior": 91342
+        },
+        "execution_mode": {
+          "live": "build-only",
+          "prior": "build-only"
+        },
+        "prior_run": "prior/route-91342-37700778-1791045896094",
+        "state_read_concurrency": {
+          "live": 1,
+          "prior": 1
+        },
+        "state_read_reuse": {
+          "live": true,
+          "prior": true
+        }
+      },
+      {
+        "candidate_identical": true,
+        "chain_id": {
+          "live": 91342,
+          "prior": 91342
+        },
+        "execution_mode": {
+          "live": "build-only",
+          "prior": "build-only"
+        },
+        "prior_run": "prior/route-91342-37700806-1791045924232",
+        "state_read_concurrency": {
+          "live": 1,
+          "prior": 1
+        },
+        "state_read_reuse": {
+          "live": true,
+          "prior": true
+        }
+      }
+    ],
+    "why_pairable": "not asserted in prose: `pairing_evidence` below compares each control run's own record against this run's — chain, execution mode, candidate object, fee evidence path and the two state-read defaults"
+  },
+  "header": {
+    "assembled_from": [
+      "live/rpc/route-91342-37746091-1791091208939/outside-simulation-rpc.json",
+      "live/rpc/route-91342-37746182-1791091300296/outside-simulation-rpc.json",
+      "live/rpc/route-91342-37746511-1791091629873/outside-simulation-rpc.json",
+      "data/evidence/m8/cross-stage/runs/route-91342-37700740-1791045857463/outside-simulation-rpc.json",
+      "data/evidence/m8/cross-stage/runs/route-91342-37700778-1791045896094/outside-simulation-rpc.json",
+      "data/evidence/m8/cross-stage/runs/route-91342-37700806-1791045924232/outside-simulation-rpc.json"
+    ],
+    "file": "live/rpc-census-comparison.json",
+    "generated_by": "crates/execution/tests/block_context_evidence.rs",
+    "independent_runs": 3,
+    "milestone": "M8.4.4",
+    "schema": 1,
+    "source": "live"
+  },
+  "not_claimed": "no duration or wall-clock claim. `rpc_duration_total_ns` is in `live/live-runs.json` per run as a measurement; §33 asks RPC count, RPC duration and wall clock to be told apart, so only the count is compared here and the times are only printed",
+  "question": "§33: how many provider calls did the lifecycle make, and did propagating a verified block context change that number?"
+}

@@ -1,0 +1,106 @@
+{
+  "fields_published": [
+    "block_hash",
+    "block_number",
+    "chain_id",
+    "scope",
+    "source",
+    "verified_by"
+  ],
+  "header": {
+    "assembled_from": [
+      "fixed-block/run-01.json",
+      "fixed-block/run-02.json",
+      "fixed-block/run-03.json"
+    ],
+    "execution_mode": "build-only",
+    "file": "contract/verified-block-context.json",
+    "generated_by": "crates/execution/tests/block_context_evidence.rs",
+    "independent_runs": 0,
+    "milestone": "M8.4.4",
+    "repetitions_of_one_drive": 3,
+    "schema": 1,
+    "source": "fixture",
+    "venue": "the scripted lane of crates/execution/tests/sequence.rs"
+  },
+  "identity_is_complete_in_every_verified_row": true,
+  "verified_at_ms": {
+    "appears_anywhere_in_the_raw_rows": false,
+    "is_part_of_the_record": false,
+    "why": "§28: the stamp is a diagnostic. §17's recomputable equality is a property of the identity and the bytes, and a wall clock in the record would make two honest runs of one block differ for a reason that means nothing"
+  },
+  "verified_rows": [
+    {
+      "arm": "verified_context",
+      "run": "run-01",
+      "verified_block": {
+        "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      }
+    },
+    {
+      "arm": "negative_control",
+      "run": "run-01",
+      "verified_block": {
+        "block_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      }
+    },
+    {
+      "arm": "verified_context",
+      "run": "run-02",
+      "verified_block": {
+        "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      }
+    },
+    {
+      "arm": "negative_control",
+      "run": "run-02",
+      "verified_block": {
+        "block_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      }
+    },
+    {
+      "arm": "verified_context",
+      "run": "run-03",
+      "verified_block": {
+        "block_hash": "0xbe5cc13bfb394bf7fcd665398ea3c9b54fc7ff4d85e2c215c847333b77593c3e",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      }
+    },
+    {
+      "arm": "negative_control",
+      "run": "run-03",
+      "verified_block": {
+        "block_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "block_number": 37530593,
+        "chain_id": 91342,
+        "scope": "fixed_historical",
+        "source": "scripted eth_getBlockByNumber at the pin",
+        "verified_by": "the §5 producer leg of this test"
+      }
+    }
+  ]
+}

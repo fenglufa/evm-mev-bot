@@ -1,0 +1,252 @@
+{
+  "compared_fields": [
+    "chain_id",
+    "tx_type",
+    "nonce",
+    "to",
+    "value",
+    "gas_limit",
+    "input",
+    "access_list",
+    "max_fee_per_gas",
+    "max_priority_fee_per_gas"
+  ],
+  "every_field_equal_in_every_run": true,
+  "fingerprints_equal_all_runs": true,
+  "header": {
+    "assembled_from": [
+      "fixed-block/run-01.json",
+      "fixed-block/run-02.json",
+      "fixed-block/run-03.json"
+    ],
+    "execution_mode": "build-only",
+    "file": "comparison/build-comparison.json",
+    "generated_by": "crates/execution/tests/block_context_evidence.rs",
+    "independent_runs": 0,
+    "milestone": "M8.4.4",
+    "repetitions_of_one_drive": 3,
+    "schema": 1,
+    "source": "fixture",
+    "venue": "the scripted lane of crates/execution/tests/sequence.rs"
+  },
+  "note": "the control's identical transaction is not a pass for the control — it is the §7 claim that a refusal judges the propagated value and not the route: the step built what its own read said, and the refused context never reached a signature",
+  "per_run": [
+    {
+      "baseline_fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+      "fields": [
+        {
+          "baseline": 91342,
+          "equal": true,
+          "field": "chain_id",
+          "verified_context": 91342
+        },
+        {
+          "baseline": "dynamic_fee",
+          "equal": true,
+          "field": "tx_type",
+          "verified_context": "dynamic_fee"
+        },
+        {
+          "baseline": 0,
+          "equal": true,
+          "field": "nonce",
+          "verified_context": 0
+        },
+        {
+          "baseline": "0x4200000000000000000000000000000000000006",
+          "equal": true,
+          "field": "to",
+          "verified_context": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "baseline": "0x38d7ea4c68000",
+          "equal": true,
+          "field": "value",
+          "verified_context": "0x38d7ea4c68000"
+        },
+        {
+          "baseline": 120000,
+          "equal": true,
+          "field": "gas_limit",
+          "verified_context": 120000
+        },
+        {
+          "baseline": "0xd0e30db0",
+          "equal": true,
+          "field": "input",
+          "verified_context": "0xd0e30db0"
+        },
+        {
+          "baseline": [],
+          "equal": true,
+          "field": "access_list",
+          "verified_context": []
+        },
+        {
+          "baseline": "0x2d4",
+          "equal": true,
+          "field": "max_fee_per_gas",
+          "verified_context": "0x2d4"
+        },
+        {
+          "baseline": "0x0",
+          "equal": true,
+          "field": "max_priority_fee_per_gas",
+          "verified_context": "0x0"
+        }
+      ],
+      "fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+      "fingerprint_equal": true,
+      "negative_control_fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+      "run": "run-01",
+      "sender_expected_equal": true,
+      "serialization_bytes_equal": true,
+      "unsigned_object_equal": true
+    },
+    {
+      "baseline_fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+      "fields": [
+        {
+          "baseline": 91342,
+          "equal": true,
+          "field": "chain_id",
+          "verified_context": 91342
+        },
+        {
+          "baseline": "dynamic_fee",
+          "equal": true,
+          "field": "tx_type",
+          "verified_context": "dynamic_fee"
+        },
+        {
+          "baseline": 0,
+          "equal": true,
+          "field": "nonce",
+          "verified_context": 0
+        },
+        {
+          "baseline": "0x4200000000000000000000000000000000000006",
+          "equal": true,
+          "field": "to",
+          "verified_context": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "baseline": "0x38d7ea4c68000",
+          "equal": true,
+          "field": "value",
+          "verified_context": "0x38d7ea4c68000"
+        },
+        {
+          "baseline": 120000,
+          "equal": true,
+          "field": "gas_limit",
+          "verified_context": 120000
+        },
+        {
+          "baseline": "0xd0e30db0",
+          "equal": true,
+          "field": "input",
+          "verified_context": "0xd0e30db0"
+        },
+        {
+          "baseline": [],
+          "equal": true,
+          "field": "access_list",
+          "verified_context": []
+        },
+        {
+          "baseline": "0x2d4",
+          "equal": true,
+          "field": "max_fee_per_gas",
+          "verified_context": "0x2d4"
+        },
+        {
+          "baseline": "0x0",
+          "equal": true,
+          "field": "max_priority_fee_per_gas",
+          "verified_context": "0x0"
+        }
+      ],
+      "fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+      "fingerprint_equal": true,
+      "negative_control_fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+      "run": "run-02",
+      "sender_expected_equal": true,
+      "serialization_bytes_equal": true,
+      "unsigned_object_equal": true
+    },
+    {
+      "baseline_fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+      "fields": [
+        {
+          "baseline": 91342,
+          "equal": true,
+          "field": "chain_id",
+          "verified_context": 91342
+        },
+        {
+          "baseline": "dynamic_fee",
+          "equal": true,
+          "field": "tx_type",
+          "verified_context": "dynamic_fee"
+        },
+        {
+          "baseline": 0,
+          "equal": true,
+          "field": "nonce",
+          "verified_context": 0
+        },
+        {
+          "baseline": "0x4200000000000000000000000000000000000006",
+          "equal": true,
+          "field": "to",
+          "verified_context": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "baseline": "0x38d7ea4c68000",
+          "equal": true,
+          "field": "value",
+          "verified_context": "0x38d7ea4c68000"
+        },
+        {
+          "baseline": 120000,
+          "equal": true,
+          "field": "gas_limit",
+          "verified_context": 120000
+        },
+        {
+          "baseline": "0xd0e30db0",
+          "equal": true,
+          "field": "input",
+          "verified_context": "0xd0e30db0"
+        },
+        {
+          "baseline": [],
+          "equal": true,
+          "field": "access_list",
+          "verified_context": []
+        },
+        {
+          "baseline": "0x2d4",
+          "equal": true,
+          "field": "max_fee_per_gas",
+          "verified_context": "0x2d4"
+        },
+        {
+          "baseline": "0x0",
+          "equal": true,
+          "field": "max_priority_fee_per_gas",
+          "verified_context": "0x0"
+        }
+      ],
+      "fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+      "fingerprint_equal": true,
+      "negative_control_fingerprint": "0xda922714c890ad91a20f78785b866840e177f6d9f694e63cc5504519926f0aba",
+      "run": "run-03",
+      "sender_expected_equal": true,
+      "serialization_bytes_equal": true,
+      "unsigned_object_equal": true
+    }
+  ],
+  "the_control_builds_the_same_transaction": true
+}

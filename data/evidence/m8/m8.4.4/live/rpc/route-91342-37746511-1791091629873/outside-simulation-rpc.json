@@ -1,0 +1,1589 @@
+{
+  "calls": 43,
+  "clock": "one monotonic origin per run, shared with the latency trace (§7)",
+  "core_state_reads_not_included": {
+    "rule": "§14: the reads a simulation makes through its own sink stay in that simulation's line and in the 39-call baseline. This file holds the rest of the lifecycle, and no call is in both — the sink a derived adapter carries replaces the one it inherited, so each call lands in exactly one list (crates/chain/tests/rpc_trace_safety.rs)",
+    "simulation_calls_recorded_elsewhere": 39
+  },
+  "diagnosis_only": "§17 and §18: this file is written by an observer. It changes no cache, adds no batch, opens no second connection and asks the node for nothing the run was not already going to ask",
+  "diagnosis_schema": 2,
+  "duration_distribution_ns": {
+    "max_ns": 636906750,
+    "measured": true,
+    "min_ns": 229517000,
+    "p50_ns": 257809084,
+    "p90_ns": 372953375,
+    "p95_ns": 405004958,
+    "p99_ns": null,
+    "p99_reason": {
+      "minimum_samples": 100,
+      "reason": "insufficient_sample"
+    },
+    "samples": 43,
+    "unit": "ns"
+  },
+  "duration_total_ns": 12261236252,
+  "endpoint_id": "rpc-faa716cada04a9ef",
+  "execution_mode": "build-only",
+  "generated_at_unix_ms": 1791091629878,
+  "generated_at_used_for_durations": false,
+  "git_revision": "f303f4df1e987b7817f57e0da392c5db7a99860f",
+  "instrumentation_issues_no_requests": true,
+  "minimum_samples_for_rank": {
+    "p50": 2,
+    "p90": 10,
+    "p95": 20,
+    "p99": 100
+  },
+  "per_class": [
+    {
+      "calls": 0,
+      "class": "simulation-state",
+      "duration_distribution_ns": {
+        "measured": false,
+        "note": "no run in this baseline produced this figure",
+        "samples": 0,
+        "unit": "ns"
+      },
+      "duration_total_ns": 0,
+      "methods": [],
+      "note": "a call inside the simulation's own span, seen by the lifecycle sink — expected to be empty, because those calls go to the simulation's sink; a non-zero count here says the two sinks disagree about who watched the call",
+      "share_of_lifecycle_calls_per_mille": {
+        "denominator": 43,
+        "notation": "per mille: part × 1000 ÷ whole, integer division",
+        "numerator": 0,
+        "per_mille": 0
+      },
+      "stages": []
+    },
+    {
+      "calls": 2,
+      "class": "simulation-context",
+      "duration_distribution_ns": {
+        "max_ns": 615012583,
+        "measured": true,
+        "min_ns": 405004958,
+        "p50_ns": 405004958,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 2,
+        "unit": "ns"
+      },
+      "duration_total_ns": 1020017541,
+      "methods": [
+        "eth_blockNumber",
+        "eth_getBlockByNumber"
+      ],
+      "note": "the head read and the header read that fix the pin every state read below is made at (`latest_block`, `get_block_context`)",
+      "share_of_lifecycle_calls_per_mille": {
+        "denominator": 43,
+        "notation": "per mille: part × 1000 ÷ whole, integer division",
+        "numerator": 2,
+        "per_mille": 46
+      },
+      "stages": [
+        "observation"
+      ]
+    },
+    {
+      "calls": 6,
+      "class": "detection",
+      "duration_distribution_ns": {
+        "max_ns": 305295834,
+        "measured": true,
+        "min_ns": 233416916,
+        "p50_ns": 254466209,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 6,
+        "unit": "ns"
+      },
+      "duration_total_ns": 1563248334,
+      "methods": [
+        "eth_call"
+      ],
+      "note": "the reads that price the route before a simulation exists: the two pools' reserves and anything else `price_legs` asks for",
+      "share_of_lifecycle_calls_per_mille": {
+        "denominator": 43,
+        "notation": "per mille: part × 1000 ÷ whole, integer division",
+        "numerator": 6,
+        "per_mille": 139
+      },
+      "stages": [
+        "opportunity_detection"
+      ]
+    },
+    {
+      "calls": 24,
+      "class": "preflight",
+      "duration_distribution_ns": {
+        "max_ns": 636906750,
+        "measured": true,
+        "min_ns": 229517000,
+        "p50_ns": 257809084,
+        "p90_ns": 372953375,
+        "p95_ns": 390524291,
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 24,
+        "unit": "ns"
+      },
+      "duration_total_ns": 6877815000,
+      "methods": [
+        "eth_call",
+        "eth_chainId",
+        "eth_getBalance",
+        "eth_getBlockByNumber",
+        "eth_getTransactionCount",
+        "eth_maxPriorityFeePerGas"
+      ],
+      "note": "the gate's own reads, gathered through the same adapter the market was priced from: head, balances, allowances, fee facts",
+      "share_of_lifecycle_calls_per_mille": {
+        "denominator": 43,
+        "notation": "per mille: part × 1000 ÷ whole, integer division",
+        "numerator": 24,
+        "per_mille": 558
+      },
+      "stages": [
+        "preflight"
+      ]
+    },
+    {
+      "calls": 0,
+      "class": "orchestration",
+      "duration_distribution_ns": {
+        "measured": false,
+        "note": "no run in this baseline produced this figure",
+        "samples": 0,
+        "unit": "ns"
+      },
+      "duration_total_ns": 0,
+      "methods": [],
+      "note": "a call made while a stage this milestone does not name was open — the run's bookkeeping rather than its state acquisition",
+      "share_of_lifecycle_calls_per_mille": {
+        "denominator": 43,
+        "notation": "per mille: part × 1000 ÷ whole, integer division",
+        "numerator": 0,
+        "per_mille": 0
+      },
+      "stages": []
+    },
+    {
+      "calls": 11,
+      "class": "unknown",
+      "duration_distribution_ns": {
+        "max_ns": 278857375,
+        "measured": true,
+        "min_ns": 236283125,
+        "p50_ns": 253337000,
+        "p90_ns": 264855667,
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 11,
+        "unit": "ns"
+      },
+      "duration_total_ns": 2800155377,
+      "methods": [
+        "eth_call",
+        "eth_chainId",
+        "eth_getBalance",
+        "eth_getBlockByNumber",
+        "eth_getTransactionCount",
+        "eth_maxPriorityFeePerGas"
+      ],
+      "note": "no closed nanosecond stage span held this call, so this evidence does not say who asked for it (§10's `unknown`, stated with the spans that were tried)",
+      "share_of_lifecycle_calls_per_mille": {
+        "denominator": 43,
+        "notation": "per mille: part × 1000 ÷ whole, integer division",
+        "numerator": 11,
+        "per_mille": 255
+      },
+      "stages": []
+    }
+  ],
+  "per_method": [
+    {
+      "calls": 1,
+      "count_stats": {
+        "max": 1,
+        "measured": true,
+        "min": 1,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "duration_distribution_ns": {
+        "max_ns": 615012583,
+        "measured": true,
+        "min_ns": 615012583,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50_ns": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "ns"
+      },
+      "duration_total_ns": 615012583,
+      "method": "eth_blockNumber"
+    },
+    {
+      "calls": 20,
+      "count_stats": {
+        "max": 20,
+        "measured": true,
+        "min": 20,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "duration_distribution_ns": {
+        "max_ns": 372953375,
+        "measured": true,
+        "min_ns": 229517000,
+        "p50_ns": 254466209,
+        "p90_ns": 270396625,
+        "p95_ns": 305295834,
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 20,
+        "unit": "ns"
+      },
+      "duration_total_ns": 5245848960,
+      "method": "eth_call"
+    },
+    {
+      "calls": 3,
+      "count_stats": {
+        "max": 3,
+        "measured": true,
+        "min": 3,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "duration_distribution_ns": {
+        "max_ns": 636906750,
+        "measured": true,
+        "min_ns": 236283125,
+        "p50_ns": 257809084,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "duration_total_ns": 1130998959,
+      "method": "eth_chainId"
+    },
+    {
+      "calls": 3,
+      "count_stats": {
+        "max": 3,
+        "measured": true,
+        "min": 3,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "duration_distribution_ns": {
+        "max_ns": 264855667,
+        "measured": true,
+        "min_ns": 230256792,
+        "p50_ns": 261922792,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "duration_total_ns": 757035251,
+      "method": "eth_getBalance"
+    },
+    {
+      "calls": 9,
+      "count_stats": {
+        "max": 9,
+        "measured": true,
+        "min": 9,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "duration_distribution_ns": {
+        "max_ns": 405004958,
+        "measured": true,
+        "min_ns": 241832958,
+        "p50_ns": 278092166,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 9,
+        "unit": "ns"
+      },
+      "duration_total_ns": 2681167665,
+      "method": "eth_getBlockByNumber"
+    },
+    {
+      "calls": 4,
+      "count_stats": {
+        "max": 4,
+        "measured": true,
+        "min": 4,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "duration_distribution_ns": {
+        "max_ns": 254600500,
+        "measured": true,
+        "min_ns": 244411583,
+        "p50_ns": 246535542,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 4,
+        "unit": "ns"
+      },
+      "duration_total_ns": 998379667,
+      "method": "eth_getTransactionCount"
+    },
+    {
+      "calls": 3,
+      "count_stats": {
+        "max": 3,
+        "measured": true,
+        "min": 3,
+        "note": "a single sample: this row is one measurement, not a distribution",
+        "p50": null,
+        "p50_reason": {
+          "minimum_samples": 2,
+          "reason": "insufficient_sample"
+        },
+        "p90": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 1,
+        "unit": "count"
+      },
+      "duration_distribution_ns": {
+        "max_ns": 316462625,
+        "measured": true,
+        "min_ns": 241485417,
+        "p50_ns": 274845125,
+        "p90_ns": null,
+        "p90_reason": {
+          "minimum_samples": 10,
+          "reason": "insufficient_sample"
+        },
+        "p95_ns": null,
+        "p95_reason": {
+          "minimum_samples": 20,
+          "reason": "insufficient_sample"
+        },
+        "p99_ns": null,
+        "p99_reason": {
+          "minimum_samples": 100,
+          "reason": "insufficient_sample"
+        },
+        "samples": 3,
+        "unit": "ns"
+      },
+      "duration_total_ns": 832793167,
+      "method": "eth_maxPriorityFeePerGas"
+    }
+  ],
+  "percentile_algorithm": "nearest_rank",
+  "provider_duration_field": "provider_total_duration: this build records one call at the point it becomes bytes on the wire, so request construction, the wait on the node, response decoding and state conversion are not separable there (§17's breakdown_unavailable) and are reported as one provider duration",
+  "rows": [
+    {
+      "attempts": 1,
+      "block": null,
+      "class": "simulation-context",
+      "class_basis": "started_ns 679137209 falls inside the `observation` span ([679033584, 1700619959]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": null,
+      "duration_ns": 615012583,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 1294149792,
+      "key_note": "dedup_key_unavailable_for_method",
+      "method": "eth_blockNumber",
+      "rpc_id": 1,
+      "slot": null,
+      "stage": "observation",
+      "started_ns": 679137209,
+      "success": true,
+      "target": null
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "simulation-context",
+      "class_basis": "started_ns 1294903459 falls inside the `observation` span ([679033584, 1700619959]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "block|91342|37746511|hydrated|false",
+      "duration_ns": 405004958,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 1699908417,
+      "key_note": null,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 2,
+      "slot": null,
+      "stage": "observation",
+      "started_ns": 1294903459,
+      "success": true,
+      "target": "0x37746511"
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "detection",
+      "class_basis": "started_ns 1706388959 falls inside the `opportunity_detection` span ([1700619959, 3273464084]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746511|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681",
+      "duration_ns": 259720416,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 1966109375,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 3,
+      "slot": null,
+      "stage": "opportunity_detection",
+      "started_ns": 1706388959,
+      "success": true,
+      "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "detection",
+      "class_basis": "started_ns 1966428959 falls inside the `opportunity_detection` span ([1700619959, 3273464084]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746511|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7",
+      "duration_ns": 254456750,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 2220885709,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 4,
+      "slot": null,
+      "stage": "opportunity_detection",
+      "started_ns": 1966428959,
+      "success": true,
+      "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "detection",
+      "class_basis": "started_ns 2220946750 falls inside the `opportunity_detection` span ([1700619959, 3273464084]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746511|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac",
+      "duration_ns": 305295834,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 2526242584,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 5,
+      "slot": null,
+      "stage": "opportunity_detection",
+      "started_ns": 2220946750,
+      "success": true,
+      "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "detection",
+      "class_basis": "started_ns 2526493209 falls inside the `opportunity_detection` span ([1700619959, 3273464084]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746511|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681",
+      "duration_ns": 233416916,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 2759910125,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 6,
+      "slot": null,
+      "stage": "opportunity_detection",
+      "started_ns": 2526493209,
+      "success": true,
+      "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "detection",
+      "class_basis": "started_ns 2760022875 falls inside the `opportunity_detection` span ([1700619959, 3273464084]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746511|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7",
+      "duration_ns": 255892209,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 3015915084,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 7,
+      "slot": null,
+      "stage": "opportunity_detection",
+      "started_ns": 2760022875,
+      "success": true,
+      "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "detection",
+      "class_basis": "started_ns 3015976875 falls inside the `opportunity_detection` span ([1700619959, 3273464084]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746511|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac",
+      "duration_ns": 254466209,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 3270443084,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 8,
+      "slot": null,
+      "stage": "opportunity_detection",
+      "started_ns": 3015976875,
+      "success": true,
+      "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "attempts": 1,
+      "block": null,
+      "class": "preflight",
+      "class_basis": "started_ns 14245799334 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": null,
+      "duration_ns": 636906750,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 14882706084,
+      "key_note": "dedup_key_unavailable_for_method",
+      "method": "eth_chainId",
+      "rpc_id": 9,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 14245799334,
+      "success": true,
+      "target": null
+    },
+    {
+      "attempts": 1,
+      "block": "latest",
+      "class": "preflight",
+      "class_basis": "started_ns 14883228709 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "block|91342|latest|hydrated|false",
+      "duration_ns": 278092166,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 15161320875,
+      "key_note": null,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 10,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 14883228709,
+      "success": true,
+      "target": "0xlatest"
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "preflight",
+      "class_basis": "started_ns 15161647375 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "block|91342|37746511|hydrated|false",
+      "duration_ns": 258543250,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 15420190625,
+      "key_note": null,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 11,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 15161647375,
+      "success": true,
+      "target": "0x37746511"
+    },
+    {
+      "attempts": 1,
+      "block": null,
+      "class": "preflight",
+      "class_basis": "started_ns 15420232334 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": null,
+      "duration_ns": 274845125,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 15695077459,
+      "key_note": "dedup_key_unavailable_for_method",
+      "method": "eth_maxPriorityFeePerGas",
+      "rpc_id": 12,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 15420232334,
+      "success": true,
+      "target": null
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 15695533625 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "block|91342|37746525|hydrated|false",
+      "duration_ns": 314356167,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 16009889792,
+      "key_note": null,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 13,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 15695533625,
+      "success": true,
+      "target": "0x37746525"
+    },
+    {
+      "attempts": 1,
+      "block": null,
+      "class": "preflight",
+      "class_basis": "started_ns 16009928417 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": null,
+      "duration_ns": 316462625,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 16326391042,
+      "key_note": "dedup_key_unavailable_for_method",
+      "method": "eth_maxPriorityFeePerGas",
+      "rpc_id": 14,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 16009928417,
+      "success": true,
+      "target": null
+    },
+    {
+      "attempts": 1,
+      "block": "latest",
+      "class": "preflight",
+      "class_basis": "started_ns 16326455042 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "block|91342|latest|hydrated|false",
+      "duration_ns": 241832958,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 16568288000,
+      "key_note": null,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 15,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 16326455042,
+      "success": true,
+      "target": "0xlatest"
+    },
+    {
+      "attempts": 1,
+      "block": "37746527",
+      "class": "preflight",
+      "class_basis": "started_ns 16568438250 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "nonce|91342|37746527|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "duration_ns": 252832042,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 16821270292,
+      "key_note": null,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 16,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 16568438250,
+      "success": true,
+      "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+    },
+    {
+      "attempts": 1,
+      "block": "pending",
+      "class": "preflight",
+      "class_basis": "started_ns 16821314167 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "nonce|91342|pending|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "duration_ns": 254600500,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 17075914667,
+      "key_note": null,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 17,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 16821314167,
+      "success": true,
+      "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 17076114209 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000007802f875830164ce07830f4240830f44be82fda4944200000000000000000000000000000000000006865af3107a400084d0e30db0c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000",
+      "duration_ns": 270396625,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 17346510834,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 18,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 17076114209,
+      "success": true,
+      "target": "0x420000000000000000000000000000000000000f"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 17346653584 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce08830f4240830f44be82cb0494420000000000000000000000000000000000000680b844a9059cbb0000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a400000000000000000000000000000000000000000000000000005af3107a4000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000",
+      "duration_ns": 246343916,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 17592997500,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 19,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 17346653584,
+      "success": true,
+      "target": "0x420000000000000000000000000000000000000f"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 17593410792 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce09830f4240830f44be8301b968942a3ceafba30f6626170cbb0cd67392efb94bd9a480b8a4022c0d9f00000000000000000000000000000000000000000000000418bddcf67410ccbd0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000",
+      "duration_ns": 372953375,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 17966364167,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 20,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 17593410792,
+      "success": true,
+      "target": "0x420000000000000000000000000000000000000f"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 17966490250 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x420000000000000000000000000000000000000f|49948e0e000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000b302f8b0830164ce0a830f4240830f44be82c33f9407d4af6e2bc8dd82beb06b4fd279df4c9028f26f80b844a9059cbb0000000000000000000000005b3c1e3fb6a97c0130ae015ff10f53a1a30c353e00000000000000000000000000000000000000000000000418bddcf67410ccbdc001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed00000000000000000000000000",
+      "duration_ns": 254307125,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 18220797375,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 21,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 17966490250,
+      "success": true,
+      "target": "0x420000000000000000000000000000000000000f"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 18221167042 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000011502f90111830164ce0b830f4240830f44be8301c145945b3c1e3fb6a97c0130ae015ff10f53a1a30c353e80b8a4022c0d9f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025d5d645c29c9000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c00000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000",
+      "duration_ns": 256313000,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 18477480042,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 22,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 18221167042,
+      "success": true,
+      "target": "0x420000000000000000000000000000000000000f"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 18477604625 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x420000000000000000000000000000000000000f|49948e0e0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000009202f88f830164ce0c830f4240830f44be82c50394420000000000000000000000000000000000000680a42e1a7d4d00000000000000000000000000000000000000000000000000025d5d645c29c9c001a08a601e861d11b6d370257d71a19c923bf596076c0b958da36649ee3cbfc89b98a07f24fe7eca58a272a825d2c9f90c4befaca38b129bb6eb4ab27c27af34051aed0000000000000000000000000000",
+      "duration_ns": 253918375,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 18731523000,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 23,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 18477604625,
+      "success": true,
+      "target": "0x420000000000000000000000000000000000000f"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 18731838167 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0dfe1681",
+      "duration_ns": 259443000,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 18991281167,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 24,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 18731838167,
+      "success": true,
+      "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 18991340667 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|d21220a7",
+      "duration_ns": 229517000,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 19220857667,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 25,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 18991340667,
+      "success": true,
+      "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 19220998917 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|0902f1ac",
+      "duration_ns": 261595625,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 19482594542,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 26,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 19220998917,
+      "success": true,
+      "target": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 19482669917 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0dfe1681",
+      "duration_ns": 251291417,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 19733961334,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 27,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 19482669917,
+      "success": true,
+      "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 19734114834 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|d21220a7",
+      "duration_ns": 268527583,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 20002642417,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 28,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 19734114834,
+      "success": true,
+      "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 20002779125 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "call|91342|37746525|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|0902f1ac",
+      "duration_ns": 246146209,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 20248925334,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 29,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 20002779125,
+      "success": true,
+      "target": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "preflight",
+      "class_basis": "started_ns 20249151000 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "balance|91342|37746525|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "duration_ns": 230256792,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 20479407792,
+      "key_note": null,
+      "method": "eth_getBalance",
+      "rpc_id": 30,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 20249151000,
+      "success": true,
+      "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+    },
+    {
+      "attempts": 1,
+      "block": null,
+      "class": "preflight",
+      "class_basis": "started_ns 20479450875 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": null,
+      "duration_ns": 257809084,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 20737259959,
+      "key_note": "dedup_key_unavailable_for_method",
+      "method": "eth_chainId",
+      "rpc_id": 31,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 20479450875,
+      "success": true,
+      "target": null
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "preflight",
+      "class_basis": "started_ns 20737308459 falls inside the `preflight` span ([14245393792, 21131042209]), which this build reaches by the reads of that stage — §14 files a call with the stage that held it",
+      "dedup_key": "block|91342|37746511|hydrated|false",
+      "duration_ns": 390524291,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 21127832750,
+      "key_note": null,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 32,
+      "slot": null,
+      "stage": "preflight",
+      "started_ns": 20737308459,
+      "success": true,
+      "target": "0x37746511"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "unknown",
+      "class_basis": "started_ns 21137453750 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": "balance|91342|37746525|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "duration_ns": 261922792,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 21399376542,
+      "key_note": null,
+      "method": "eth_getBalance",
+      "rpc_id": 33,
+      "slot": null,
+      "stage": null,
+      "started_ns": 21137453750,
+      "success": true,
+      "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "unknown",
+      "class_basis": "started_ns 21399449875 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": "call|91342|37746525|0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "duration_ns": 248578917,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 21648028792,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 34,
+      "slot": null,
+      "stage": null,
+      "started_ns": 21399449875,
+      "success": true,
+      "target": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+    },
+    {
+      "attempts": 1,
+      "block": "37746525",
+      "class": "unknown",
+      "class_basis": "started_ns 21648110625 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": "call|91342|37746525|0x4200000000000000000000000000000000000006|70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "duration_ns": 263268459,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 21911379084,
+      "key_note": null,
+      "method": "eth_call",
+      "rpc_id": 35,
+      "slot": null,
+      "stage": null,
+      "started_ns": 21648110625,
+      "success": true,
+      "target": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "unknown",
+      "class_basis": "started_ns 21911457917 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": "block|91342|37746511|hydrated|false",
+      "duration_ns": 253337000,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 22164794917,
+      "key_note": null,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 36,
+      "slot": null,
+      "stage": null,
+      "started_ns": 21911457917,
+      "success": true,
+      "target": "0x37746511"
+    },
+    {
+      "attempts": 1,
+      "block": null,
+      "class": "unknown",
+      "class_basis": "started_ns 22164858250 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": null,
+      "duration_ns": 241485417,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 22406343667,
+      "key_note": "dedup_key_unavailable_for_method",
+      "method": "eth_maxPriorityFeePerGas",
+      "rpc_id": 37,
+      "slot": null,
+      "stage": null,
+      "started_ns": 22164858250,
+      "success": true,
+      "target": null
+    },
+    {
+      "attempts": 1,
+      "block": "latest",
+      "class": "unknown",
+      "class_basis": "started_ns 22406746959 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": "block|91342|latest|hydrated|false",
+      "duration_ns": 278857375,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 22685604334,
+      "key_note": null,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 38,
+      "slot": null,
+      "stage": null,
+      "started_ns": 22406746959,
+      "success": true,
+      "target": "0xlatest"
+    },
+    {
+      "attempts": 1,
+      "block": "37746533",
+      "class": "unknown",
+      "class_basis": "started_ns 22685671917 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": "nonce|91342|37746533|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "duration_ns": 244411583,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 22930083500,
+      "key_note": null,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 39,
+      "slot": null,
+      "stage": null,
+      "started_ns": 22685671917,
+      "success": true,
+      "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+    },
+    {
+      "attempts": 1,
+      "block": "pending",
+      "class": "unknown",
+      "class_basis": "started_ns 22930181667 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": "nonce|91342|pending|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "duration_ns": 246535542,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 23176717209,
+      "key_note": null,
+      "method": "eth_getTransactionCount",
+      "rpc_id": 40,
+      "slot": null,
+      "stage": null,
+      "started_ns": 22930181667,
+      "success": true,
+      "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+    },
+    {
+      "attempts": 1,
+      "block": null,
+      "class": "unknown",
+      "class_basis": "started_ns 23176784709 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": null,
+      "duration_ns": 236283125,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 23413067834,
+      "key_note": "dedup_key_unavailable_for_method",
+      "method": "eth_chainId",
+      "rpc_id": 41,
+      "slot": null,
+      "stage": null,
+      "started_ns": 23176784709,
+      "success": true,
+      "target": null
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "unknown",
+      "class_basis": "started_ns 23413091084 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": "block|91342|37746511|hydrated|false",
+      "duration_ns": 260619500,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 23673710584,
+      "key_note": null,
+      "method": "eth_getBlockByNumber",
+      "rpc_id": 42,
+      "slot": null,
+      "stage": null,
+      "started_ns": 23413091084,
+      "success": true,
+      "target": "0x37746511"
+    },
+    {
+      "attempts": 1,
+      "block": "37746511",
+      "class": "unknown",
+      "class_basis": "started_ns 23673880500 falls inside none of the run's closed nanosecond spans [observation(679033584–1700619959), opportunity_detection(1700619959–3273464084), simulation(3276290167–14230770125), risk(14234384250–14234652584), preflight(14245393792–21131042209)]; the gaps between spans and the coarse spans are named in `stage_spans`",
+      "dedup_key": "balance|91342|37746511|0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+      "duration_ns": 264855667,
+      "endpoint_id": "rpc-faa716cada04a9ef",
+      "error_class": null,
+      "finished_ns": 23938736167,
+      "key_note": null,
+      "method": "eth_getBalance",
+      "rpc_id": 43,
+      "slot": null,
+      "stage": null,
+      "started_ns": 23673880500,
+      "success": true,
+      "target": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+    }
+  ],
+  "sources_are_never_blended": true,
+  "stage_spans": [
+    {
+      "ended_ns": 1700619959,
+      "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+      "outcome": "completed",
+      "stage": "observation",
+      "started_ns": 679033584,
+      "usable_for_classification": true
+    },
+    {
+      "ended_ns": null,
+      "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+      "outcome": "skipped",
+      "stage": "state_update",
+      "started_ns": null,
+      "usable_for_classification": false
+    },
+    {
+      "ended_ns": null,
+      "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+      "outcome": "skipped",
+      "stage": "graph_update",
+      "started_ns": null,
+      "usable_for_classification": false
+    },
+    {
+      "ended_ns": 3273464084,
+      "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+      "outcome": "completed",
+      "stage": "opportunity_detection",
+      "started_ns": 1700619959,
+      "usable_for_classification": true
+    },
+    {
+      "ended_ns": 14230770125,
+      "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+      "outcome": "completed",
+      "stage": "simulation",
+      "started_ns": 3276290167,
+      "usable_for_classification": true
+    },
+    {
+      "ended_ns": 14234652584,
+      "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+      "outcome": "completed",
+      "stage": "risk",
+      "started_ns": 14234384250,
+      "usable_for_classification": true
+    },
+    {
+      "ended_ns": 21131042209,
+      "note": "both ends are readings of this run's monotonic clock, so a call stamped on that clock either falls inside this span or it does not",
+      "outcome": "completed",
+      "stage": "preflight",
+      "started_ns": 14245393792,
+      "usable_for_classification": true
+    },
+    {
+      "ended_ns": null,
+      "note": "this span's duration was read off millisecond stamps the run took for its own reasons, so it is not claimed to hold a nanosecond-stamped call",
+      "outcome": "completed",
+      "stage": "build",
+      "started_ns": null,
+      "usable_for_classification": false
+    },
+    {
+      "ended_ns": null,
+      "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+      "outcome": "skipped",
+      "stage": "sign",
+      "started_ns": null,
+      "usable_for_classification": false
+    },
+    {
+      "ended_ns": null,
+      "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+      "outcome": "skipped",
+      "stage": "submit",
+      "started_ns": null,
+      "usable_for_classification": false
+    },
+    {
+      "ended_ns": null,
+      "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+      "outcome": "skipped",
+      "stage": "inclusion",
+      "started_ns": null,
+      "usable_for_classification": false
+    },
+    {
+      "ended_ns": null,
+      "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+      "outcome": "skipped",
+      "stage": "receipt",
+      "started_ns": null,
+      "usable_for_classification": false
+    },
+    {
+      "ended_ns": null,
+      "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+      "outcome": "skipped",
+      "stage": "settlement",
+      "started_ns": null,
+      "usable_for_classification": false
+    },
+    {
+      "ended_ns": null,
+      "note": "no closed interval: the stage was skipped, was still open when the run ended, or was written as a duration with no instants behind it",
+      "outcome": "skipped",
+      "stage": "profit_verification",
+      "started_ns": null,
+      "usable_for_classification": false
+    }
+  ],
+  "unit": "ns",
+  "unreachable_reads": [
+    {
+      "reads": "eth_chainId",
+      "reported_as": "not counted here, and not counted as zero either",
+      "where": "HttpChainAdapter::connect (crates/chain/src/rpc.rs) — the call that learns the chain id before any adapter exists to be watched",
+      "why_this_file_cannot_count_them": "a sink is attached to an adapter, and the adapter is what `connect` returns, so the request that produced it happened first. One per adapter construction; its duration is in no table here"
+    },
+    {
+      "reads": "the execution lane's reads",
+      "reported_as": "not counted here, and not counted as zero either",
+      "where": "the lane's own HttpChainAdapter (crates/execution/src/giwa/sequencer_direct.rs) — head, nonce, balance, fee parameters, receipts and the submissions themselves",
+      "why_this_file_cannot_count_them": "the lane builds a second adapter from the same URL; a sink attached to the pipeline's handle is not on that one. Their cost is bounded by the run's build/submit/receipt stage spans, which are in the latency trace, not here"
+    },
+    {
+      "reads": "WebSocket reads",
+      "reported_as": "not counted here, and not counted as zero either",
+      "where": "the live ingestion path (crates/chain/src/live), which is not this run's route lifecycle",
+      "why_this_file_cannot_count_them": "a route run reads the chain over HTTP only; the subscription transport issues no call that this sink could see"
+    }
+  ]
+}

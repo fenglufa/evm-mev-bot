@@ -1,0 +1,68 @@
+{
+  "aggregate": {
+    "baseline_rpc_count": 24,
+    "method_counts_equal_all_runs": true,
+    "method_order_equal_all_runs": true,
+    "net_rpc_saved": 0,
+    "reuse_rpc_count": 24,
+    "saved_rpc": 0,
+    "verification_rpc_added": 0
+  },
+  "forbidden_statement": "Header reuse reduced RPC. §33 forbids it whenever verification_rpc_added cancels saved_rpc, which is what these rows say happened",
+  "header": {
+    "assembled_from": [
+      "fixed-block/run-01.json",
+      "fixed-block/run-02.json",
+      "fixed-block/run-03.json"
+    ],
+    "execution_mode": "build-only",
+    "file": "comparison/rpc-comparison.json",
+    "generated_by": "crates/execution/tests/block_context_evidence.rs",
+    "independent_runs": 0,
+    "milestone": "M8.4.4",
+    "repetitions_of_one_drive": 3,
+    "schema": 1,
+    "source": "fixture",
+    "venue": "the scripted lane of crates/execution/tests/sequence.rs"
+  },
+  "per_run": [
+    {
+      "baseline_block_reads": 1,
+      "baseline_rpc_count": 8,
+      "method_counts_equal": true,
+      "method_order_equal": true,
+      "net_rpc_saved": 0,
+      "reuse_block_reads": 1,
+      "reuse_rpc_count": 8,
+      "run": "run-01",
+      "saved_rpc": 0,
+      "verification_rpc_added": 0
+    },
+    {
+      "baseline_block_reads": 1,
+      "baseline_rpc_count": 8,
+      "method_counts_equal": true,
+      "method_order_equal": true,
+      "net_rpc_saved": 0,
+      "reuse_block_reads": 1,
+      "reuse_rpc_count": 8,
+      "run": "run-02",
+      "saved_rpc": 0,
+      "verification_rpc_added": 0
+    },
+    {
+      "baseline_block_reads": 1,
+      "baseline_rpc_count": 8,
+      "method_counts_equal": true,
+      "method_order_equal": true,
+      "net_rpc_saved": 0,
+      "reuse_block_reads": 1,
+      "reuse_rpc_count": 8,
+      "run": "run-03",
+      "saved_rpc": 0,
+      "verification_rpc_added": 0
+    }
+  ],
+  "rpc_count_statement": "No net RPC reduction.",
+  "why_the_number_is_zero": "§2 keeps the step's own binding read in place: it is the input the §14 gate judges, and deleting a safety check to buy a saving is the one trade this milestone was told not to make. Propagation therefore adds a consumer verification over a read that was already happening, and the RPC count is unchanged by construction rather than by luck"
+}
