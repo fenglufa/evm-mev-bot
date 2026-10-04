@@ -1422,7 +1422,7 @@ Detection → Preflight 的第二次 eth_call：
 
 # 49. M8.6 — RPC Reduction Opportunity Census
 
-**状态：IN PROGRESS**
+**状态：COMPLETE**
 
 M8.6 的目标：
 
@@ -1466,6 +1466,13 @@ M8.6：
 * Real Arbitrage。
 
 M8.6 完成后才决定下一轮 RPC 优化。
+
+最终 verdict：
+
+```text
+NO_SAFE_RPC_REDUCTION_FOUND
+```
+M8 RPC Reduction Census 已完成。当前没有被证实可以安全消除的 RPC。后续如果出现 RPC Reduction 机会，必须产生新的证据与独立里程碑，不得因为 M8 已完成而直接向生产代码增加缓存、复用或跨阶段状态载体。
 
 ---
 
