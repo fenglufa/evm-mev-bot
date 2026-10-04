@@ -1,0 +1,172 @@
+{
+  "_provenance": {
+    "asked": "§19: evidence that lets a reviewer answer how many candidates were found, how many passed each verification stage, how many were verified, how many were rejected and why each rejection was made — with a reproducible source behind every number.",
+    "assemble_command": "M91_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "GIWA_RPC_URL at run time, which is the endpoint recorded at data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint; this directory names it only as that digest, in the shape RpcTraceSink::endpoint_id uses (crates/chain/src/rpc_trace.rs:933).",
+    "milestone": "M9.1",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "raw/pass-a.json",
+      "raw/pass-b.json",
+      "raw/rpc-calls-pass-a.jsonl",
+      "raw/rpc-calls-pass-b.jsonl"
+    ],
+    "run_command": "GIWA_RPC_URL=<endpoint from the environment> cargo test -p evm-discovery --test historical_live -- -- --ignored --nocapture --test-threads=1",
+    "written_at": "the run, not the review: no field in this directory is a restatement of a number a reader could not recompute from the rows beside it"
+  },
+  "boundaries": [
+    "Discovery != Trust",
+    "Observed != Verified",
+    "Verified != Fresh",
+    "Verified Pool != Tradable Opportunity",
+    "Graph != REVM State",
+    "Flashblocks != Canonical State",
+    "Duplicate != Reusable",
+    "Reusable != Safe"
+  ],
+  "chain_id": 91342,
+  "determinism": {
+    "candidate_set_equal": true,
+    "graph_edges_equal": true,
+    "measured_by": "both_passes_rebuild_to_the_same_rows in this file: it rebuilds the five row tables from pass a and from pass b and compares the serialized bytes, then swaps which pass is read first and requires the same bytes again",
+    "pool_meta_equal": true,
+    "registry_rows_equal": true,
+    "rejected_set_equal": true,
+    "rule": "§21: the same history run twice has to give one answer. Compared at the row level, by semantic identity, never by list position.",
+    "verified_set_equal": true
+  },
+  "integration": {
+    "attested": 80,
+    "committed_registry_pools": 4,
+    "duplicate_claims": 0,
+    "fees_attested": {
+      "None": 80
+    },
+    "graph_block": 37224031,
+    "graph_edges": 48,
+    "merged_with_committed_registry": {
+      "Ok": 84
+    },
+    "pools_skipped_by_the_graph": 56,
+    "registry_pools_built_by_this_run": 80,
+    "skip_reasons": {
+      "NotAtTargetBlock": 56
+    },
+    "store_rejections": 0
+  },
+  "not_claimed": [
+    "a verified pool is not a tradable opportunity: nothing here was priced against a route or executed",
+    "a verified pool is not fresh: the graph prices only the pools whose newest Sync is at the snapshot's own block, and reports the rest as skipped",
+    "the fee is unknown for every pool attested here (§14), and discovery never fills it in"
+  ],
+  "rpc": {
+    "broadcasts": 0,
+    "methods_seen": [
+      "eth_call",
+      "eth_chainId",
+      "eth_getCode",
+      "eth_getLogs"
+    ],
+    "note": "pass a's count includes the one eth_chainId the connection itself made; the two passes differ by exactly that call and nothing else.",
+    "pass_a_calls": 441,
+    "pass_b_calls": 440,
+    "real_arbitrage": 0,
+    "signatures": 0,
+    "write_methods_seen": []
+  },
+  "source": {
+    "address_filter": "empty — the scan asks the chain, never a list of known factories (§8)",
+    "chunk_blocks": 4999,
+    "kind": "HistoricalPairCreated",
+    "node_log_limit": 20000,
+    "question_asked": "eth_getLogs over the range, with topic0 0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9 and no address list"
+  },
+  "table": "discovery-summary",
+  "totals": {
+    "blocks_scanned": 50000,
+    "candidates": 85,
+    "distinct_pool_addresses": 85,
+    "duplicate_logs": 0,
+    "getlogs_chunks": 15,
+    "malformed_logs": 0,
+    "pair_created_logs": 85,
+    "windows_scanned": 5
+  },
+  "verdict": "COMPLETE_FOR_HISTORICAL_DISCOVERY",
+  "verification": {
+    "identity_stage_reached": 85,
+    "rejected": 5,
+    "rejected_by_reason": {
+      "no_authoritative_state": 5
+    },
+    "rejected_by_stage": {
+      "state": 5
+    },
+    "rule": "a candidate reached a stage when no earlier stage rejected it; the stage recorded on a rejection is the first one that failed, so reached(X) = candidates - rejected at a stage <= X",
+    "state_stage_reached": 80,
+    "token_stage_reached": 85,
+    "verified": 80
+  },
+  "windows": [
+    {
+      "blocks_scanned": 10000,
+      "candidates_decoded": 2,
+      "chunks": 3,
+      "distinct_pool_addresses": 2,
+      "duplicate_logs": 0,
+      "from_block": 4050000,
+      "malformed_logs": 0,
+      "pair_created_logs_returned": 2,
+      "to_block": 4059999
+    },
+    {
+      "blocks_scanned": 10000,
+      "candidates_decoded": 6,
+      "chunks": 3,
+      "distinct_pool_addresses": 6,
+      "duplicate_logs": 0,
+      "from_block": 28540000,
+      "malformed_logs": 0,
+      "pair_created_logs_returned": 6,
+      "to_block": 28549999
+    },
+    {
+      "blocks_scanned": 10000,
+      "candidates_decoded": 6,
+      "chunks": 3,
+      "distinct_pool_addresses": 6,
+      "duplicate_logs": 0,
+      "from_block": 31710000,
+      "malformed_logs": 0,
+      "pair_created_logs_returned": 6,
+      "to_block": 31719999
+    },
+    {
+      "blocks_scanned": 10000,
+      "candidates_decoded": 17,
+      "chunks": 3,
+      "distinct_pool_addresses": 17,
+      "duplicate_logs": 0,
+      "from_block": 37180000,
+      "malformed_logs": 0,
+      "pair_created_logs_returned": 17,
+      "to_block": 37189999
+    },
+    {
+      "blocks_scanned": 10000,
+      "candidates_decoded": 54,
+      "chunks": 3,
+      "distinct_pool_addresses": 54,
+      "duplicate_logs": 0,
+      "from_block": 37220000,
+      "malformed_logs": 0,
+      "pair_created_logs_returned": 54,
+      "to_block": 37229999
+    }
+  ]
+}

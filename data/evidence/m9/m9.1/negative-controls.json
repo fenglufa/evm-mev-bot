@@ -1,0 +1,270 @@
+{
+  "_provenance": {
+    "asked": "§20: each negative control must demonstrate that the corresponding invalid condition is rejected.",
+    "how_these_rows_were_produced": "run_negative_controls() in crates/discovery/tests/evidence_gate.rs tampered the records in-process and handed them to the production verify()/integrate()/Registry::validate() — no network, no fixture that pre-decides the answer, and `observed` is what the code said",
+    "milestone": "M9.1",
+    "no_key_in_this_file": true
+  },
+  "all_expected": true,
+  "conditions_covered": [
+    "fake PairCreated emitter",
+    "wrong pair address",
+    "wrong token address",
+    "same token on both sides",
+    "wrong chain",
+    "malformed PairCreated data",
+    "missing state evidence",
+    "unverified pool entering Registry",
+    "unknown fee becoming 997/1000"
+  ],
+  "controls": [
+    {
+      "condition": "verification at latest instead of at the candidate's block",
+      "demonstrated_by": "verification.rs::a_read_at_the_wrong_block_is_rejected_as_unpinned",
+      "expected": "read_not_pinned_at_discovery_block",
+      "guard": "provenance stage: the block each record names must be the claim's own block",
+      "id": "NC10",
+      "invalid_condition_rejected": true,
+      "observed": "read_not_pinned_at_discovery_block",
+      "tampering": "every read moved one block later than the claim, contents unchanged"
+    },
+    {
+      "condition": "missing state evidence",
+      "demonstrated_by": "pipeline.rs::a_pool_the_store_refuses_is_still_registered_and_skipped_by_the_graph",
+      "expected": "empty_reserves:true",
+      "guard": "verification accepts it (it is the pool's statement); the state store refuses to hold it and the graph reports the pool as skipped",
+      "id": "NC11",
+      "invalid_condition_rejected": true,
+      "observed": "empty_reserves:true",
+      "tampering": "the pool's own Sync, with one reserve side emptied out"
+    },
+    {
+      "condition": "fake PairCreated emitter",
+      "demonstrated_by": "verification.rs::swapping_the_emitter_changes_nothing",
+      "expected": "same verdict with either emitter",
+      "guard": "no rule reads the emitter: the verdict is identical",
+      "id": "NC1a",
+      "invalid_condition_rejected": true,
+      "observed": "same verdict with either emitter",
+      "tampering": "the claim's emitter swapped between two real factories, nothing else changed"
+    },
+    {
+      "condition": "fake PairCreated emitter",
+      "demonstrated_by": "verification.rs::a_claim_about_an_empty_address_is_rejected_whosever_factory_emitted_it",
+      "expected": "no_bytecode",
+      "guard": "identity stage: eth_getCode answers 0 bytes",
+      "id": "NC1b",
+      "invalid_condition_rejected": true,
+      "observed": "no_bytecode",
+      "tampering": "a claim naming an address with no contract behind it, emitted by a real factory"
+    },
+    {
+      "condition": "wrong pair address",
+      "demonstrated_by": "verification.rs::a_wrong_pair_address_is_rejected_because_nothing_answers_there",
+      "expected": "no_bytecode",
+      "guard": "identity stage",
+      "id": "NC2a",
+      "invalid_condition_rejected": true,
+      "observed": "no_bytecode",
+      "tampering": "the claim names 0x…deadbeef and the reads of it come back empty"
+    },
+    {
+      "condition": "wrong pair address",
+      "demonstrated_by": "verification.rs::readings_from_another_pool_are_never_this_candidate_s",
+      "expected": "read_about_another_pool",
+      "guard": "provenance stage: a record's target is the only thing tying it to its candidate",
+      "id": "NC2b",
+      "invalid_condition_rejected": true,
+      "observed": "read_about_another_pool",
+      "tampering": "healthy reads belonging to the real pair, attached to a claim about another address"
+    },
+    {
+      "condition": "wrong pair address",
+      "demonstrated_by": "verification.rs::readings_from_another_pool_are_never_this_candidate_s",
+      "expected": "read_about_another_pool",
+      "guard": "provenance stage",
+      "id": "NC2c",
+      "invalid_condition_rejected": true,
+      "observed": "read_about_another_pool",
+      "tampering": "a Sync published by a different pool, attached as this candidate's state"
+    },
+    {
+      "condition": "wrong token address",
+      "demonstrated_by": "verification.rs::a_wrong_token_address_is_rejected_because_the_contract_disagrees",
+      "expected": "claimed_tokens_disagree_with_contract",
+      "guard": "tokens stage: the claim and the contract are two independent statements",
+      "id": "NC3a",
+      "invalid_condition_rejected": true,
+      "observed": "claimed_tokens_disagree_with_contract",
+      "tampering": "token0() answers an address the factory did not claim"
+    },
+    {
+      "condition": "wrong token address",
+      "demonstrated_by": "verification.rs::a_wrong_token_address_is_rejected_because_the_contract_disagrees",
+      "expected": "tokens_unreadable",
+      "guard": "tokens stage: an unreadable answer is not a truncated address",
+      "id": "NC3b",
+      "invalid_condition_rejected": true,
+      "observed": "tokens_unreadable",
+      "tampering": "token1() answers something that is not an address word"
+    },
+    {
+      "condition": "same token on both sides",
+      "demonstrated_by": "verification.rs::the_same_token_on_both_sides_is_rejected",
+      "expected": "same_token_on_both_sides",
+      "guard": "tokens stage",
+      "id": "NC4a",
+      "invalid_condition_rejected": true,
+      "observed": "same_token_on_both_sides",
+      "tampering": "the claim and the contract both say token0 == token1"
+    },
+    {
+      "condition": "same token on both sides",
+      "demonstrated_by": "pipeline.rs::a_rejected_candidate_has_no_path_into_the_registry",
+      "expected": "degenerate_pair_refused",
+      "guard": "Registry::validate()",
+      "id": "NC4b",
+      "invalid_condition_rejected": true,
+      "observed": "degenerate_pair_refused",
+      "tampering": "a doctored attestation with one token on both sides, handed straight to the registry"
+    },
+    {
+      "condition": "wrong chain",
+      "demonstrated_by": "verification.rs::a_candidate_spanning_two_chains_is_rejected_before_the_reads_are_read",
+      "expected": "chain_mismatch",
+      "guard": "provenance stage, before any content is read",
+      "id": "NC5-claimed_token0",
+      "invalid_condition_rejected": true,
+      "observed": "chain_mismatch",
+      "tampering": "claimed_token0 moved to chain id 31337 while the rest stayed on 91342"
+    },
+    {
+      "condition": "wrong chain",
+      "demonstrated_by": "verification.rs::a_candidate_spanning_two_chains_is_rejected_before_the_reads_are_read",
+      "expected": "chain_mismatch",
+      "guard": "provenance stage, before any content is read",
+      "id": "NC5-claimed_token1",
+      "invalid_condition_rejected": true,
+      "observed": "chain_mismatch",
+      "tampering": "claimed_token1 moved to chain id 31337 while the rest stayed on 91342"
+    },
+    {
+      "condition": "wrong chain",
+      "demonstrated_by": "verification.rs::a_candidate_spanning_two_chains_is_rejected_before_the_reads_are_read",
+      "expected": "chain_mismatch",
+      "guard": "provenance stage, before any content is read",
+      "id": "NC5-pool",
+      "invalid_condition_rejected": true,
+      "observed": "chain_mismatch",
+      "tampering": "pool moved to chain id 31337 while the rest stayed on 91342"
+    },
+    {
+      "condition": "wrong chain",
+      "demonstrated_by": "pipeline.rs::a_rejected_candidate_has_no_path_into_the_registry",
+      "expected": "chain_mismatch_refused",
+      "guard": "Registry::validate()",
+      "id": "NC5-registry",
+      "invalid_condition_rejected": true,
+      "observed": "chain_mismatch_refused",
+      "tampering": "an attestation whose token belongs to another chain, handed straight to the registry"
+    },
+    {
+      "condition": "malformed PairCreated data",
+      "demonstrated_by": "scanning.rs::malformed_pair_created_data_produces_a_row_and_no_candidate",
+      "expected": "malformed_log_row:topics=3:data=32",
+      "guard": "the protocol decoder: an undecodable log becomes a row carrying its shape and the decoder's own words, never a candidate",
+      "id": "NC6",
+      "invalid_condition_rejected": true,
+      "observed": "malformed_log_row:topics=3:data=32",
+      "tampering": "a log carrying the right topic0 and half the data words"
+    },
+    {
+      "condition": "malformed PairCreated data",
+      "demonstrated_by": "scanning.rs::an_event_from_another_part_of_the_protocol_is_neither_claim_nor_rejection",
+      "expected": "no_claim_no_rejection",
+      "guard": "the adapter recognises no event there",
+      "id": "NC6b",
+      "invalid_condition_rejected": true,
+      "observed": "no_claim_no_rejection",
+      "tampering": "a well-formed log whose topic0 is not PairCreated"
+    },
+    {
+      "condition": "missing state evidence",
+      "demonstrated_by": "verification.rs::a_candidate_with_no_state_evidence_is_rejected_at_the_state_stage",
+      "expected": "no_authoritative_state",
+      "guard": "state stage: a contract that answers everything is still not a priceable pool",
+      "id": "NC7a",
+      "invalid_condition_rejected": true,
+      "observed": "no_authoritative_state",
+      "tampering": "the pool published no Sync in the searched range"
+    },
+    {
+      "condition": "missing state evidence",
+      "demonstrated_by": "verification.rs::a_candidate_with_no_state_evidence_is_rejected_at_the_state_stage",
+      "expected": "no_authoritative_state",
+      "guard": "state stage, and the detail keeps \"never emitted\" apart from \"unreadable\"",
+      "id": "NC7b",
+      "invalid_condition_rejected": true,
+      "observed": "no_authoritative_state",
+      "tampering": "seven Sync logs were seen and none could be read as a reserve pair"
+    },
+    {
+      "condition": "unverified pool entering Registry",
+      "demonstrated_by": "pipeline.rs::a_rejected_candidate_has_no_path_into_the_registry",
+      "expected": "no_attestation_exists_for_it",
+      "guard": "verify() returns a rejection, not a value that can be attested; integrate() takes only VerifiedPool",
+      "id": "NC8a",
+      "invalid_condition_rejected": true,
+      "observed": "no_attestation_exists_for_it",
+      "tampering": "a rejected candidate is handed the same pipeline a verified one goes through"
+    },
+    {
+      "condition": "unverified pool entering Registry",
+      "demonstrated_by": "pipeline.rs::a_rejected_candidate_has_no_path_into_the_registry",
+      "expected": "unevidenced_refused",
+      "guard": "Registry::validate()",
+      "id": "NC8b",
+      "invalid_condition_rejected": true,
+      "observed": "unevidenced_refused",
+      "tampering": "an attestation written by hand with its three evidence buckets emptied"
+    },
+    {
+      "condition": "unverified pool entering Registry",
+      "demonstrated_by": "pipeline.rs::a_rejected_candidate_has_no_path_into_the_registry",
+      "expected": "bucket_guard_blind",
+      "guard": "not the registry: its guard counts buckets, so discovery's verify() has to refuse unblocked reads first — this row records which layer is doing the work",
+      "id": "NC8c",
+      "invalid_condition_rejected": true,
+      "observed": "bucket_guard_blind",
+      "tampering": "an attestation whose evidence refs all name no block"
+    },
+    {
+      "condition": "unknown fee becoming 997/1000",
+      "demonstrated_by": "verification.rs::an_unknown_fee_stays_unknown_all_the_way_into_the_attestation",
+      "expected": "fee_stays_unknown",
+      "guard": "attest::attestation_of passes the field through with no default and no branch; the serialized record is searched for 997, 1000 and numerator",
+      "id": "NC9",
+      "invalid_condition_rejected": true,
+      "observed": "fee_stays_unknown",
+      "tampering": "the whole bridge, from a verified pool with no fee to a graph edge"
+    },
+    {
+      "condition": "positive control: nothing tampered",
+      "demonstrated_by": "pipeline.rs::a_verified_pool_travels_the_existing_pipeline_and_prices_an_edge",
+      "expected": "verified_and_priced",
+      "guard": "the same pipeline",
+      "id": "PC0",
+      "invalid_condition_rejected": true,
+      "observed": "verified_and_priced",
+      "tampering": "the healthy records, unedited"
+    }
+  ],
+  "controls_beyond_the_nine": [
+    "NC10 is §22's pin, which is not in §20's list and is the failure mode §22 names",
+    "NC11 is the store's own refusal of an empty reserve side",
+    "PC0 is the positive control: a fair candidate still gets through, so a rejection below cannot be the guard rejecting everything"
+  ],
+  "negative_controls": 23,
+  "rows_that_behaved_as_expected": 24,
+  "table": "negative-controls"
+}

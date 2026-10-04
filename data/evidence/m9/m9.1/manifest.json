@@ -1,0 +1,92 @@
+{
+  "_provenance": {
+    "asked": "§19: evidence that lets a reviewer answer how many candidates were found, how many passed each verification stage, how many were verified, how many were rejected and why each rejection was made — with a reproducible source behind every number.",
+    "assemble_command": "M91_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "GIWA_RPC_URL at run time, which is the endpoint recorded at data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint; this directory names it only as that digest, in the shape RpcTraceSink::endpoint_id uses (crates/chain/src/rpc_trace.rs:933).",
+    "milestone": "M9.1",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "raw/pass-a.json",
+      "raw/pass-b.json",
+      "raw/rpc-calls-pass-a.jsonl",
+      "raw/rpc-calls-pass-b.jsonl"
+    ],
+    "run_command": "GIWA_RPC_URL=<endpoint from the environment> cargo test -p evm-discovery --test historical_live -- -- --ignored --nocapture --test-threads=1",
+    "written_at": "the run, not the review: no field in this directory is a restatement of a number a reader could not recompute from the rows beside it"
+  },
+  "boundaries": [
+    "Discovery != Trust",
+    "Observed != Verified",
+    "Verified != Fresh",
+    "Verified Pool != Tradable Opportunity",
+    "Graph != REVM State",
+    "Flashblocks != Canonical State",
+    "Duplicate != Reusable",
+    "Reusable != Safe"
+  ],
+  "files": [
+    {
+      "bytes": 6969,
+      "digest": "0xa8e4772b29be82c0b0e64f87118080b950bf24300f8d4e06849eb98fdf5ab1c0",
+      "file": "README.md"
+    },
+    {
+      "bytes": 72503,
+      "digest": "0xcab550d71710d1d902392cd131717c06760715966a97070f4b6013617f8cda82",
+      "file": "candidate-pools.json"
+    },
+    {
+      "bytes": 6206,
+      "digest": "0x37ae5525d381d8510a374dd2357f00dc5c5867bce67f4dca39108b8009972ee9",
+      "file": "discovery-summary.json"
+    },
+    {
+      "bytes": 12784,
+      "digest": "0x42b95386503da8f3a01919988d483ed48a8725f10d0ae6968715bb2503aaeebc",
+      "file": "negative-controls.json"
+    },
+    {
+      "bytes": 5043,
+      "digest": "0xbe92887bd22508bc1ebeb5feaa3818735825f2ceea41dc43691d069c96c95c3b",
+      "file": "rejected-pools.json"
+    },
+    {
+      "bytes": 3468,
+      "digest": "0x6efb08110ab4213af1209a606b0e1b7f58793fbe564c334fb2783e3230f17844",
+      "file": "rpc-calls.json"
+    },
+    {
+      "bytes": 79387,
+      "digest": "0x827c6cd897fbc91af5b7c984e83f0b5b4f093b67dd3fd62a6cadfaf491b80a49",
+      "file": "state-graph-integration.json"
+    },
+    {
+      "bytes": 268067,
+      "digest": "0xe0d6327be0111896336fc94a9a0c651f64b337b738c3481022215930900ee50b",
+      "file": "verification-evidence.json"
+    },
+    {
+      "bytes": 85671,
+      "digest": "0xd81cd46cf89095ebfd1801b05152892ddb41158ebf9539c621a880888c04f0a1",
+      "file": "verified-pools.json"
+    }
+  ],
+  "negative_controls_run_here": 24,
+  "questions_answered": {
+    "how_many_became_verified_pools": "discovery-summary.json#/verification/verified; rows in verified-pools.json",
+    "how_many_candidates_were_found": "discovery-summary.json#/totals/candidates; one row per claim in candidate-pools.json",
+    "how_many_passed_identity_verification": "discovery-summary.json#/verification/identity_stage_reached",
+    "how_many_passed_state_verification": "discovery-summary.json#/verification/state_stage_reached",
+    "how_many_passed_token_verification": "discovery-summary.json#/verification/token_stage_reached",
+    "how_many_were_rejected": "discovery-summary.json#/verification/rejected; rows in rejected-pools.json",
+    "whether_it_ran_twice_and_agreed": "discovery-summary.json#/determinism, and rpc-calls.json#/passes",
+    "which_blocks_the_reads_used": "verification-evidence.json#/rows/read_blocks, and rpc-calls.json's block arguments",
+    "why_each_rejection_was_made": "rejected-pools.json#/rows, one reason plus the record's own words per row"
+  },
+  "table": "manifest"
+}

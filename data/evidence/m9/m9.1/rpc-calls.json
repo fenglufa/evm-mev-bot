@@ -1,0 +1,83 @@
+{
+  "_provenance": {
+    "asked": "§19: evidence that lets a reviewer answer how many candidates were found, how many passed each verification stage, how many were verified, how many were rejected and why each rejection was made — with a reproducible source behind every number.",
+    "assemble_command": "M91_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "GIWA_RPC_URL at run time, which is the endpoint recorded at data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint; this directory names it only as that digest, in the shape RpcTraceSink::endpoint_id uses (crates/chain/src/rpc_trace.rs:933).",
+    "milestone": "M9.1",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "raw/pass-a.json",
+      "raw/pass-b.json",
+      "raw/rpc-calls-pass-a.jsonl",
+      "raw/rpc-calls-pass-b.jsonl"
+    ],
+    "run_command": "GIWA_RPC_URL=<endpoint from the environment> cargo test -p evm-discovery --test historical_live -- -- --ignored --nocapture --test-threads=1",
+    "written_at": "the run, not the review: no field in this directory is a restatement of a number a reader could not recompute from the rows beside it"
+  },
+  "cost_model": {
+    "getlogs_chunks_per_window": 3,
+    "note": "§23: no cache, no cross-stage reuse, no reduction. M8.6 concluded NO_SAFE_RPC_REDUCTION_FOUND and this milestone did not reopen it.",
+    "reads_per_candidate": "4 pinned contract reads (eth_getCode, token0(), token1(), getReserves()) + 1 Sync search"
+  },
+  "passes": [
+    {
+      "as_recorded_by_the_run": 441,
+      "block_arguments_that_are_not_decimal_heights": [],
+      "by_method": {
+        "eth_call": 255,
+        "eth_chainId": 1,
+        "eth_getCode": 85,
+        "eth_getLogs": 100
+      },
+      "by_method_as_recorded": {
+        "eth_call": 255,
+        "eth_chainId": 1,
+        "eth_getCode": 85,
+        "eth_getLogs": 100
+      },
+      "call_events": 441,
+      "distinct_block_arguments": 41,
+      "distinct_block_arguments_as_recorded": 41,
+      "dropped_events": 0,
+      "every_read_pinned": true,
+      "methods_outside_the_read_only_set": [],
+      "pass": "a",
+      "refusals": []
+    },
+    {
+      "as_recorded_by_the_run": 440,
+      "block_arguments_that_are_not_decimal_heights": [],
+      "by_method": {
+        "eth_call": 255,
+        "eth_getCode": 85,
+        "eth_getLogs": 100
+      },
+      "by_method_as_recorded": {
+        "eth_call": 255,
+        "eth_getCode": 85,
+        "eth_getLogs": 100
+      },
+      "call_events": 440,
+      "distinct_block_arguments": 41,
+      "distinct_block_arguments_as_recorded": 41,
+      "dropped_events": 0,
+      "every_read_pinned": true,
+      "methods_outside_the_read_only_set": [],
+      "pass": "b",
+      "refusals": []
+    }
+  ],
+  "read_only_methods": [
+    "eth_chainId",
+    "eth_getLogs",
+    "eth_call",
+    "eth_getCode"
+  ],
+  "source": "the adapter's own trace (RpcTraceSink), written per pass; tallied here from the jsonl rather than from the run's summary, so a mis-count in the run would show up as a byte difference against the committed table",
+  "table": "rpc-calls"
+}

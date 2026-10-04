@@ -1,0 +1,122 @@
+{
+  "_provenance": {
+    "asked": "§19: evidence that lets a reviewer answer how many candidates were found, how many passed each verification stage, how many were verified, how many were rejected and why each rejection was made — with a reproducible source behind every number.",
+    "assemble_command": "M91_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "GIWA_RPC_URL at run time, which is the endpoint recorded at data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint; this directory names it only as that digest, in the shape RpcTraceSink::endpoint_id uses (crates/chain/src/rpc_trace.rs:933).",
+    "milestone": "M9.1",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "raw/pass-a.json",
+      "raw/pass-b.json",
+      "raw/rpc-calls-pass-a.jsonl",
+      "raw/rpc-calls-pass-b.jsonl"
+    ],
+    "run_command": "GIWA_RPC_URL=<endpoint from the environment> cargo test -p evm-discovery --test historical_live -- -- --ignored --nocapture --test-threads=1",
+    "written_at": "the run, not the review: no field in this directory is a restatement of a number a reader could not recompute from the rows beside it"
+  },
+  "every_row_names_a_reason_and_quotes_the_record": true,
+  "row_identity": "the candidate's own chain position plus the stage it stopped at — a row that changed which read failed is a different finding",
+  "rows": [
+    {
+      "detail": "no Sync(uint112,uint112) from this pool in 28543905..=28549999 (0 logs of any shape were seen)",
+      "discovery_block": 28543905,
+      "identity": "91342/0x133e57116919b80b29fcbeb6ae74b70494529b16/28543905/17/state",
+      "pool": "0x133e57116919b80b29fcbeb6ae74b70494529b16",
+      "reads_that_led_here": {
+        "calls_failed": 0,
+        "calls_succeeded": 4,
+        "state_search_range": [
+          28543905,
+          28549999
+        ],
+        "sync_logs_seen": 0,
+        "sync_present": false
+      },
+      "reason": "no_authoritative_state",
+      "reason_derives_from_stage": true,
+      "stage": "state"
+    },
+    {
+      "detail": "no Sync(uint112,uint112) from this pool in 31714066..=31719999 (0 logs of any shape were seen)",
+      "discovery_block": 31714066,
+      "identity": "91342/0x267c5c5d5ea1b3bdb228d7974d22270b09123be2/31714066/11/state",
+      "pool": "0x267c5c5d5ea1b3bdb228d7974d22270b09123be2",
+      "reads_that_led_here": {
+        "calls_failed": 0,
+        "calls_succeeded": 4,
+        "state_search_range": [
+          31714066,
+          31719999
+        ],
+        "sync_logs_seen": 0,
+        "sync_present": false
+      },
+      "reason": "no_authoritative_state",
+      "reason_derives_from_stage": true,
+      "stage": "state"
+    },
+    {
+      "detail": "no Sync(uint112,uint112) from this pool in 31714059..=31719999 (0 logs of any shape were seen)",
+      "discovery_block": 31714059,
+      "identity": "91342/0x32d7a03d4222864b22da103bcfe87e99a8044b8f/31714059/13/state",
+      "pool": "0x32d7a03d4222864b22da103bcfe87e99a8044b8f",
+      "reads_that_led_here": {
+        "calls_failed": 0,
+        "calls_succeeded": 4,
+        "state_search_range": [
+          31714059,
+          31719999
+        ],
+        "sync_logs_seen": 0,
+        "sync_present": false
+      },
+      "reason": "no_authoritative_state",
+      "reason_derives_from_stage": true,
+      "stage": "state"
+    },
+    {
+      "detail": "no Sync(uint112,uint112) from this pool in 28543909..=28549999 (0 logs of any shape were seen)",
+      "discovery_block": 28543909,
+      "identity": "91342/0x61c1d098b78306d5cc751eb16bd058d5969dbf15/28543909/0/state",
+      "pool": "0x61c1d098b78306d5cc751eb16bd058d5969dbf15",
+      "reads_that_led_here": {
+        "calls_failed": 0,
+        "calls_succeeded": 4,
+        "state_search_range": [
+          28543909,
+          28549999
+        ],
+        "sync_logs_seen": 0,
+        "sync_present": false
+      },
+      "reason": "no_authoritative_state",
+      "reason_derives_from_stage": true,
+      "stage": "state"
+    },
+    {
+      "detail": "no Sync(uint112,uint112) from this pool in 28543912..=28549999 (0 logs of any shape were seen)",
+      "discovery_block": 28543912,
+      "identity": "91342/0x84d051815352f326443d5b1899b8467a2f099693/28543912/0/state",
+      "pool": "0x84d051815352f326443d5b1899b8467a2f099693",
+      "reads_that_led_here": {
+        "calls_failed": 0,
+        "calls_succeeded": 4,
+        "state_search_range": [
+          28543912,
+          28549999
+        ],
+        "sync_logs_seen": 0,
+        "sync_present": false
+      },
+      "reason": "no_authoritative_state",
+      "reason_derives_from_stage": true,
+      "stage": "state"
+    }
+  ],
+  "table": "rejected-pools"
+}
