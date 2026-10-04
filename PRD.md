@@ -2413,7 +2413,7 @@ Capital Efficiency
 | M8.4.3    | State Ownership                               | COMPLETE    |
 | M8.4.4    | Block Context Propagation                     | COMPLETE    |
 | M8.5.1    | eth_call Ownership                            | COMPLETE    |
-| M8.6      | RPC Reduction Census                          | IN PROGRESS |
+| M8.6      | RPC Reduction Census                          | COMPLETE    |
 | M9        | Discovery + Graph Search + PathFinder         | PLANNED     |
 | M10       | Arbitrage Executor Contract                   | PLANNED     |
 | M11       | Multi-Hop + Multi-Lane                        | PLANNED     |
@@ -3223,8 +3223,7 @@ M8.4.2 ✅
 M8.4.3 ✅
 M8.4.4 ✅
 M8.5.1 ✅
-
-M8.6  🚧
+M8.6  ✅
 ```
 
 下一步：
