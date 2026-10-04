@@ -22,6 +22,7 @@
 //! adding up would fail rather than quietly pass.
 
 use std::collections::{BTreeMap, HashMap, VecDeque};
+use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
@@ -31,14 +32,16 @@ use async_trait::async_trait;
 use evm_chain::{RpcTraceSink, RpcTraceSource};
 use evm_core::{BlockNumber, ChainId, LogIndex, TxHash, TxIndex};
 use evm_execution::{
-    audit_route, broadcastable, reconcile_flows, swap_observations, transfer_flows, wrap_moves,
-    Abilities, AssetReader, AssetReading, BuildPolicy, ChainReader, DeltaAudit, EndpointKind,
+    audit_route, broadcastable, reconcile_flows, signing_hash_for_chain, swap_observations,
+    transfer_flows, wrap_moves, Abilities, AssetReader, AssetReading, BlockContextScope,
+    BlockIdentity, BuildPolicy, ChainReader, ContextRefusal, DeltaAudit, EndpointKind,
     ExecutionError, ExecutionKey, ExecutionMode, ExecutionSetup, ExecutionStatus, FeePolicy,
     FeeReading, FeeSource, GasPolicy, GateAttempt, LaneRelease, MarketKind, NonceReading,
-    NonceSource, PreflightCheck, PreflightFinding, PreflightReport, ProfitVerificationStatus,
-    Receipt, ReceiptPolicy, ReceiptStatus, SenderFunding, SequencePlan, SequenceStage,
-    SignedTransaction, Signer, SnapshotPin, SubmissionOutcome, TokenFlow, Tolerance,
-    TransactionIntent, TransactionSubmitter, TransactionType, WrapMove,
+    NonceSource, PreflightCheck, PreflightFinding, PreflightReport, ProducerOutcome,
+    ProfitVerificationStatus, Receipt, ReceiptPolicy, ReceiptStatus, SenderFunding, SequencePlan,
+    SequenceStage, SignedTransaction, Signer, SnapshotPin, SubmissionOutcome, TokenFlow, Tolerance,
+    TransactionIntent, TransactionSubmitter, TransactionType, UnsignedTransaction,
+    VerifiedBlockContext, WrapMove,
 };
 use evm_metrics::{Clock, Metrics};
 use evm_protocol::signatures::{V2Topics, Weth9Topics};
@@ -59,6 +62,10 @@ const TEST_SCALAR: [u8; 32] = {
 const CHAIN: u64 = 91_342;
 /// The block the M7 candidate was priced against (`candidate-fee-measurement.json`).
 const PIN: u64 = 37_530_593;
+/// M8.4.4 §16: the subtree of the evidence tree that holds this file's raw arm rows. Named here
+/// and in `tests/block_context_evidence.rs` — the two test binaries cannot share a module — so
+/// the writer's own comment below states what the second copy would have to drift into.
+const FIXED_BLOCK_DIR: &str = "fixed-block";
 /// The base fee measured at that block, in wei per gas.
 const BASE_FEE: u64 = 362;
 const TIP: u64 = 0;
@@ -1595,6 +1602,13 @@ fn preflight_ok(plan: &SequencePlan) -> PreflightReport {
         expected_net_after_costs_wei: Some(I256::from_raw(u(PROFIT))),
         rejected_because: None,
         sequence_ceiling_wei: u(ceiling),
+        // The hand-built verdict of §54's tests proves the *gate*, not M8.4.4's producer leg, so
+        // it propagates nothing: the sequence stage then records `no_context` per step and still
+        // reads the block at its own pin, which is the §30 shape — a stage that was handed
+        // nothing says so, and does not pretend the producer answered.
+        block_context: ProducerOutcome::Refused(ContextRefusal::UnverifiableBlockContext(
+            "this fixture hand-builds a verdict and gathers no read of the block".to_string(),
+        )),
     }
 }
 
@@ -1610,6 +1624,77 @@ async fn drive(stage: &mut SequenceStage, metrics: &mut Metrics) -> evm_executio
             metrics,
         )
         .await
+}
+
+/// M8.4.4 §5's producer leg, expressed over this fixture's own pin.
+///
+/// The identity comes from the plan rather than from the `PIN` constant on purpose: the
+/// consumer's expected side is built by production code off `step.intent`, so an assertion
+/// that hardcoded a height here would pass even if the stage started checking a different
+/// block than the one it sends against.
+fn pinned_identity() -> BlockIdentity {
+    let intent = &plan().steps[0].intent;
+    BlockIdentity {
+        chain_id: ChainId(intent.chain_id),
+        number: intent.block_number,
+        hash: intent.block_hash,
+    }
+}
+
+/// A verdict that carries a producer-verified context over `identity`.
+///
+/// `verify` is handed the same block on both sides, which is what a real producer leg looks
+/// like when the endpoint answers the question it was asked: the two reads agreeing *is* the
+/// proof, and nothing here is trusted past it. The scope is passed in because §8 makes it a
+/// separate question from identity, and the tests below keep it separate too.
+fn verdict_carrying(identity: &BlockIdentity, scope: BlockContextScope) -> PreflightReport {
+    let context = VerifiedBlockContext::verify(
+        identity,
+        identity,
+        scope,
+        "scripted eth_getBlockByNumber at the pin",
+        "the §5 producer leg of this test",
+        1_700_000_000_000,
+    )
+    .expect("a block read that answers the question it was asked verifies against itself");
+    let plan = plan();
+    let mut verdict = preflight_ok(&plan);
+    verdict.block_context = ProducerOutcome::Verified(context);
+    verdict
+}
+
+/// [`drive`] with the verdict chosen by the caller, because M8.4.4's question is what the
+/// build stage does with a context handed to it, and `preflight_ok` propagates none.
+async fn drive_with_verdict(
+    stage: &mut SequenceStage,
+    metrics: &mut Metrics,
+    verdict: &PreflightReport,
+) -> evm_execution::SequenceReport {
+    let plan = plan();
+    stage
+        .run(
+            &plan,
+            &arbitrage_attempt(),
+            Some(verdict),
+            &before_head(),
+            metrics,
+        )
+        .await
+}
+
+/// The one line M8.4.4's consumer leg writes per step it drives, or `None` when it wrote none.
+fn context_line(report: &evm_execution::SequenceReport) -> String {
+    let lines: Vec<&String> = report
+        .sources
+        .iter()
+        .filter(|source| source.contains("block context"))
+        .collect();
+    assert_eq!(
+        lines.len(),
+        1,
+        "one step driven, so exactly one consumer answer: {lines:?}"
+    );
+    lines[0].clone()
 }
 
 // ---------------------------------------------------------------------------
@@ -2600,4 +2685,891 @@ async fn labelling_the_lane_changes_neither_its_calls_nor_its_verdict() {
         traced_metrics.counters.entries(),
         plain_metrics.counters.entries()
     );
+}
+
+// ---------------------------------------------------------------------------
+// M8.4.4 §5/§6/§14: the consumer leg, run by the stage that has to check for itself
+// ---------------------------------------------------------------------------
+
+/// §6's pass case at the only scale that proves the wiring — the real stage, the real gate, the
+/// real halt: the build stage is handed a context naming the block it reads for itself, and it
+/// records `accepted` with the consumer's own read still in hand. That second half is the whole
+/// difference between checking and believing, and §2 forbids the belief.
+#[tokio::test]
+async fn the_build_stage_accepts_a_context_that_names_the_block_it_reads_for_itself() {
+    let (mut stage, scripted) = assemble(
+        Scripted::new(ExecutionMode::BuildOnly),
+        ExecutionMode::BuildOnly,
+        Tolerance::new(1, 100),
+    );
+    let mut metrics = Metrics::default();
+    let identity = pinned_identity();
+    let report = drive_with_verdict(
+        &mut stage,
+        &mut metrics,
+        &verdict_carrying(&identity, BlockContextScope::FixedHistorical),
+    )
+    .await;
+
+    let line = context_line(&report);
+    assert!(
+        line.starts_with("step 1: block context accepted for "),
+        "{line}"
+    );
+    // the identity the consumer checked against is the step's own pin, printed on the line so
+    // the evidence says which block was agreed about rather than only that someone agreed
+    assert!(line.contains(&identity.describe()), "{line}");
+    assert!(line.contains("consumer read made: true"), "{line}");
+    assert_eq!(metrics.get("execution_block_context_accepted"), 1);
+    assert_eq!(metrics.get("execution_block_context_rejected"), 0);
+    assert_eq!(metrics.get("execution_block_context_no_context"), 0);
+
+    // Accepting a context changes no decision the mode had already made: the step is built and
+    // stops there, with no key read, no signature and nothing handed to a node.
+    assert_eq!(report.reached, Some(ExecutionStatus::Built));
+    assert!(
+        report.detail.contains("stops at Built"),
+        "{}",
+        report.detail
+    );
+    assert_eq!(scripted.sent_count(), 0);
+}
+
+/// §7's invalidation and §19's negative control, run end to end. The producer's answer is a real
+/// verification of a real block — just not the block this step pins, at the same height. Before
+/// this milestone nothing in the crate compared the two, so a disagreement between two stages
+/// about one block was not a fact anybody could count; now it is a named rejection that lands
+/// before any signature is asked for.
+#[tokio::test]
+async fn a_context_about_another_block_at_the_same_height_is_refused_by_name() {
+    let (mut stage, scripted) = assemble(
+        Scripted::new(ExecutionMode::BuildOnly),
+        ExecutionMode::BuildOnly,
+        Tolerance::new(1, 100),
+    );
+    let mut metrics = Metrics::default();
+    let tampered = BlockIdentity {
+        chain_id: ChainId(CHAIN),
+        number: BlockNumber(PIN),
+        hash: alloy_primitives::B256::repeat_byte(0x55),
+    };
+    assert_ne!(tampered.hash, pinned_hash());
+    let report = drive_with_verdict(
+        &mut stage,
+        &mut metrics,
+        &verdict_carrying(&tampered, BlockContextScope::FixedHistorical),
+    )
+    .await;
+
+    let line = context_line(&report);
+    assert!(
+        line.starts_with("step 1: block context rejected for "),
+        "{line}"
+    );
+    // both hashes are on the line: what this step pins, and what the context claims. A refusal
+    // that named neither would be a sentence nobody could re-check (§17).
+    assert!(line.contains(&format!("{:#x}", pinned_hash())), "{line}");
+    assert!(line.contains(&format!("{:#x}", tampered.hash)), "{line}");
+    assert_eq!(metrics.get("execution_block_context_rejected"), 1);
+    assert_eq!(metrics.get("execution_block_context_accepted"), 0);
+
+    // The refusal judges the propagated context, not this step's own pin: the gate's binding
+    // read still answered confirmed, the build still happened, and the halt is still the mode's
+    // own. §2's line — a consumer that cannot check must reject — buys a detector, not a new
+    // way to fail a route that was sound.
+    assert_eq!(report.reached, Some(ExecutionStatus::Built));
+    assert!(
+        report.detail.contains("stops at Built"),
+        "{}",
+        report.detail
+    );
+    assert_eq!(metrics.get("execution_gate_blocked"), 0);
+    assert_eq!(scripted.sent_count(), 0);
+}
+
+/// §7's NC2 run end to end: the context is a true statement about a real block, and it is one
+/// block off the pin this step sends against. Height is the first thing the consumer compares
+/// after chain, so a context about the neighbouring block never reaches a hash comparison — and
+/// the row says which two heights disagreed.
+#[tokio::test]
+async fn a_context_about_the_neighbouring_height_is_refused_before_the_hash_is_compared() {
+    let (mut stage, scripted) = assemble(
+        Scripted::new(ExecutionMode::BuildOnly),
+        ExecutionMode::BuildOnly,
+        Tolerance::new(1, 100),
+    );
+    let mut metrics = Metrics::default();
+    let elsewhere = BlockIdentity {
+        chain_id: ChainId(CHAIN),
+        number: BlockNumber(PIN + 1),
+        hash: pinned_hash(),
+    };
+    let report = drive_with_verdict(
+        &mut stage,
+        &mut metrics,
+        &verdict_carrying(&elsewhere, BlockContextScope::FixedHistorical),
+    )
+    .await;
+
+    let line = context_line(&report);
+    assert!(
+        line.starts_with("step 1: block context rejected for "),
+        "{line}"
+    );
+    assert!(
+        line.contains(&format!(
+            "the two answers name blocks {PIN} and {}",
+            PIN + 1
+        )),
+        "{line}"
+    );
+    assert_eq!(metrics.get("execution_block_context_rejected"), 1);
+    assert_eq!(report.reached, Some(ExecutionStatus::Built));
+    assert_eq!(scripted.sent_count(), 0);
+}
+
+/// §7's NC3 run end to end. A chain id is part of the identity (§25) precisely because a testnet
+/// height and a mainnet height can be the same integer over the same-looking hash: the consumer
+/// refuses on the chain alone, before it has any opinion about the block.
+#[tokio::test]
+async fn a_context_from_another_chain_is_refused_and_names_both_chains() {
+    let (mut stage, scripted) = assemble(
+        Scripted::new(ExecutionMode::BuildOnly),
+        ExecutionMode::BuildOnly,
+        Tolerance::new(1, 100),
+    );
+    let mut metrics = Metrics::default();
+    let foreign = BlockIdentity {
+        chain_id: ChainId(CHAIN + 1),
+        number: BlockNumber(PIN),
+        hash: pinned_hash(),
+    };
+    let report = drive_with_verdict(
+        &mut stage,
+        &mut metrics,
+        &verdict_carrying(&foreign, BlockContextScope::FixedHistorical),
+    )
+    .await;
+
+    let line = context_line(&report);
+    assert!(
+        line.starts_with("step 1: block context rejected for "),
+        "{line}"
+    );
+    assert!(
+        line.contains(&format!(
+            "the two answers name chains {CHAIN} and {}",
+            CHAIN + 1
+        )),
+        "{line}"
+    );
+    assert_eq!(metrics.get("execution_block_context_rejected"), 1);
+    assert_eq!(report.reached, Some(ExecutionStatus::Built));
+    assert_eq!(scripted.sent_count(), 0);
+}
+
+/// §14's gate and §2's, at the same time and at unit scale: the consumer leg must not add a read
+/// to the step it judges, and must not retire the read that judges it. Three arms, three
+/// different propagated contexts, one identical tally of lane sites — because the only thing that
+/// differs between them is a judgement made on an answer the lane had already given.
+#[tokio::test]
+async fn all_three_consumer_answers_ask_the_lane_for_exactly_the_same_reads() {
+    async fn consumer_arm(verdict: &PreflightReport) -> Vec<&'static str> {
+        let (mut stage, scripted) = assemble(
+            Scripted::new(ExecutionMode::BuildOnly),
+            ExecutionMode::BuildOnly,
+            Tolerance::new(1, 100),
+        );
+        let mut metrics = Metrics::default();
+        let plan = plan();
+        stage
+            .run(
+                &plan,
+                &arbitrage_attempt(),
+                Some(verdict),
+                &before_head(),
+                &mut metrics,
+            )
+            .await;
+        let mut sites: Vec<&'static str> =
+            scripted.lane_reads().iter().map(|read| read.site).collect();
+        sites.sort_unstable();
+        sites
+    }
+
+    let identity = pinned_identity();
+    let tampered = BlockIdentity {
+        chain_id: ChainId(CHAIN),
+        number: BlockNumber(PIN),
+        hash: alloy_primitives::B256::repeat_byte(0x55),
+    };
+    let accepted = consumer_arm(&verdict_carrying(
+        &identity,
+        BlockContextScope::FixedHistorical,
+    ))
+    .await;
+    let refused = consumer_arm(&verdict_carrying(
+        &tampered,
+        BlockContextScope::FixedHistorical,
+    ))
+    .await;
+    let plan = plan();
+    let none = consumer_arm(&preflight_ok(&plan)).await;
+
+    assert_eq!(
+        accepted, refused,
+        "a judgement must not cost an RPC or save one"
+    );
+    assert_eq!(accepted, none);
+    // the positive control: the arm really did read the block the consumer compares against,
+    // once, which is what makes §2's ban on deleting that read visible as a number.
+    assert_eq!(
+        accepted
+            .iter()
+            .filter(|site| **site == "block_hash_at")
+            .count(),
+        1,
+        "{accepted:?}"
+    );
+    assert!(accepted.contains(&"endpoint_chain_id"), "{accepted:?}");
+}
+
+/// §21's controlled freshness test, on the path that actually runs.
+///
+/// Case A is the arm the evidence tree already publishes: a context about the pinned block, the
+/// step reads that block, the two agree, accepted. Case B is this test. §21 forbids deciding the
+/// answer in the test, so the answer is read off the two facts the production lane states:
+///
+/// * [`crate::sequence`]'s `Build` leg calls `consumer_check(.., None)` — §20 bans `latest` on
+///   this path, so the stage that consumes a block context never asks what the head is;
+/// * `consumer_check`'s own rule for a `LiveHead` context with no head answer is a named refusal,
+///   because "verified while it was the head" says nothing about now (§8).
+///
+/// Those two together are the current freshness contract, and what they give here is a REJECT —
+/// not because a head moved, but because this boundary has no honest way to say one hasn't. The
+/// same verdict on a `FixedHistorical` context is accepted two lines lower, which is the whole
+/// content of §8's distinction and the reason the refusal cannot be read as "propagation is
+/// unsafe": the block identity leg passed first, and the step went on to build the identical
+/// transaction from its own read either way (§30).
+#[tokio::test]
+async fn a_live_head_context_is_refused_at_the_build_boundary_that_reads_no_head() {
+    let identity = pinned_identity();
+    let live_head = verdict_carrying(&identity, BlockContextScope::LiveHead);
+    let fixed_pin = verdict_carrying(&identity, BlockContextScope::FixedHistorical);
+
+    async fn drive_with(verdict: &PreflightReport) -> (evm_execution::SequenceReport, Metrics) {
+        let (mut stage, _) = assemble(
+            Scripted::new(ExecutionMode::BuildOnly),
+            ExecutionMode::BuildOnly,
+            Tolerance::new(1, 100),
+        );
+        let mut metrics = Metrics::default();
+        let report = drive_with_verdict(&mut stage, &mut metrics, verdict).await;
+        (report, metrics)
+    }
+
+    let (case_b, metrics_b) = drive_with(&live_head).await;
+    let refused = case_b
+        .context_checks
+        .first()
+        .unwrap_or_else(|| panic!("the consumer leg recorded no row: {:?}", case_b.to_json()));
+    assert_eq!(refused.outcome.name(), "rejected", "{refused:?}");
+    let refused_row = refused.outcome.to_row();
+    assert_eq!(
+        refused_row["reason"].as_str(),
+        Some("unverifiable_block_context"),
+        "the refusal must name why the freshness question has no answer here, not that a hash \
+         disagreed: {refused_row}"
+    );
+    assert_eq!(
+        refused_row["consumer_read"].as_bool(),
+        Some(true),
+        "the identity leg did run: this stage read its own block and it agreed: {refused_row}"
+    );
+    assert_eq!(metrics_b.get("execution_block_context_rejected"), 1);
+    assert!(
+        context_line(&case_b).contains("unverifiable_block_context"),
+        "{}",
+        context_line(&case_b)
+    );
+
+    // Case A, one scope away: the same read, the same height, the same hash.
+    let (case_a, metrics_a) = drive_with(&fixed_pin).await;
+    let accepted = case_a
+        .context_checks
+        .first()
+        .unwrap_or_else(|| panic!("the consumer leg recorded no row: {:?}", case_a.to_json()));
+    assert_eq!(accepted.outcome.name(), "accepted", "{accepted:?}");
+    assert_eq!(metrics_a.get("execution_block_context_accepted"), 1);
+
+    // §30 on the refused side: the step builds from its own pin, at the same block the
+    // refused context named, and the refusal changes nothing that the build leg decided —
+    // the two arms' build rows are the same row.
+    for report in [&case_b, &case_a] {
+        assert_eq!(report.builds.len(), 1, "{:?}", report.builds);
+        assert_eq!(report.builds[0].identity.number, BlockNumber(PIN));
+        assert_eq!(report.builds[0].identity.hash, pinned_hash());
+        assert_eq!(report.reached, Some(ExecutionStatus::Built));
+    }
+    assert_eq!(
+        case_b.builds[0].fingerprint, case_a.builds[0].fingerprint,
+        "a freshness judgement that refused must not reach the transaction that was built"
+    );
+}
+
+// ---------------------------------------------------------------------------
+// M8.4.4 §11/§12/§19/§35: the two arms, their negative control, and the rows they publish
+// ---------------------------------------------------------------------------
+
+/// §11's three arms: one driven `BuildOnly` step each, on this fixture's own pin. The plan, the
+/// lane's answers, the mode and the tolerance are shared constants, so the only thing a reader is
+/// comparing between arms is the verdict the build stage was handed.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Arm {
+    /// Arm A — the path as it stood before this milestone. [`preflight_ok`] hand-builds a §26
+    /// verdict that verified nothing about the block, which is exactly what a producer with no
+    /// context to propagate hands down: the consumer records `no_context` and reads the block
+    /// for itself.
+    Baseline,
+    /// Arm B — §5's producer leg verified this step's pin, and the verdict carries that context.
+    VerifiedContext,
+    /// §19's negative control, and §7's NC1 and NC5 in one shape: a producer-verified statement
+    /// about a *different block at the height this step pins*.
+    NegativeControl,
+}
+
+impl Arm {
+    fn name(self) -> &'static str {
+        match self {
+            Self::Baseline => "baseline",
+            Self::VerifiedContext => "verified_context",
+            Self::NegativeControl => "negative_control",
+        }
+    }
+
+    fn verdict(self) -> PreflightReport {
+        match self {
+            Self::Baseline => preflight_ok(&plan()),
+            Self::VerifiedContext => {
+                verdict_carrying(&pinned_identity(), BlockContextScope::FixedHistorical)
+            }
+            Self::NegativeControl => {
+                verdict_carrying(&tampered_identity(), BlockContextScope::FixedHistorical)
+            }
+        }
+    }
+}
+
+/// The pin this fixture drives, with a hash the lane never answers for it — the identity §7's
+/// NC1 and NC5 demand, built off [`pinned_identity`] so the height and chain stay the real ones.
+fn tampered_identity() -> BlockIdentity {
+    let mut identity = pinned_identity();
+    identity.hash = alloy_primitives::B256::repeat_byte(0x55);
+    identity
+}
+
+/// One arm driven, and everything it left behind written the way a reader gets it: the
+/// [`evm_execution::SequenceReport::to_json`] row is the same object the CLI appends to a live
+/// run's `executions.jsonl`, and the lane's tally is its own account of the reads it answered.
+///
+/// §17 is why the row is the report's serialization rather than a summary typed out here: every
+/// figure the tables below publish has to be recomputable from the record it describes, and a
+/// hand-written one could only ever agree with itself.
+async fn drive_arm(arm: Arm) -> serde_json::Value {
+    let (mut stage, scripted) = assemble(
+        Scripted::new(ExecutionMode::BuildOnly),
+        ExecutionMode::BuildOnly,
+        Tolerance::new(1, 100),
+    );
+    let mut metrics = Metrics::default();
+    let verdict = arm.verdict();
+    let producer = verdict.block_context.to_row();
+    let report = drive_with_verdict(&mut stage, &mut metrics, &verdict).await;
+    let reads: Vec<serde_json::Value> = scripted
+        .lane_reads()
+        .iter()
+        .enumerate()
+        .map(|(index, read)| {
+            serde_json::json!({
+                "seq": index + 1,
+                "site": read.site,
+                "stage": read.stage,
+                "caller": read.caller,
+            })
+        })
+        .collect();
+    serde_json::json!({
+        "arm": arm.name(),
+        "producer_verdict": producer,
+        "lane_reads": reads,
+        "counters": metrics.counters.to_json(),
+        "record": report.to_json(),
+    })
+}
+
+/// The one build row an arm leaves, or a failure naming the arm that left none. A BuildOnly step
+/// builds exactly one transaction, so a row count other than one is the fixture disagreeing with
+/// the mode it was run in.
+fn build_row(arm: Arm, row: &serde_json::Value) -> serde_json::Value {
+    let builds = row["record"]["builds"]
+        .as_array()
+        .unwrap_or_else(|| panic!("{}: the record carries no `builds` array", arm.name()));
+    assert_eq!(
+        builds.len(),
+        1,
+        "{}: one step driven, so one build row",
+        arm.name()
+    );
+    builds[0].clone()
+}
+
+/// The consumer leg's answer for one arm, read off the record's own line rather than from a
+/// counter, because the line is what names the two identities that disagreed.
+fn context_line_of(arm: Arm, row: &serde_json::Value) -> String {
+    let lines: Vec<&str> = row["record"]["sources"]
+        .as_array()
+        .expect("the record carries its sources")
+        .iter()
+        .filter_map(|line| line.as_str())
+        .filter(|line| line.contains("block context"))
+        .collect();
+    assert_eq!(
+        lines.len(),
+        1,
+        "{}: one step driven, so one consumer answer: {lines:?}",
+        arm.name()
+    );
+    lines[0].to_string()
+}
+
+/// §35's experiment claim, first half: the arm that was handed a verified context and the arm
+/// that was handed nothing act on the *same block*. Read off the build rows rather than the
+/// fixture's constants, because §13 forbids inferring this from the final transaction alone —
+/// the identity has to be a stated field of the record before the result can be compared to it.
+#[tokio::test]
+async fn baseline_and_reuse_same_block_identity() {
+    let baseline = drive_arm(Arm::Baseline).await;
+    let reuse = drive_arm(Arm::VerifiedContext).await;
+    let left = build_row(Arm::Baseline, &baseline);
+    let right = build_row(Arm::VerifiedContext, &reuse);
+    for field in ["chain_id", "block_number", "block_hash"] {
+        assert_eq!(
+            left[field], right[field],
+            "the two arms acted on different {field}: {left} vs {right}"
+        );
+    }
+    // and the identity they agree on is this step's own pin, not a value the test brought along:
+    // the height is the one the plan pins, and the hash is the one the scripted lane answers at it.
+    assert_eq!(
+        right["block_hash"],
+        serde_json::json!(format!("{:#x}", pinned_hash())),
+        "{right}"
+    );
+    assert_eq!(right["block_number"], serde_json::json!(PIN), "{right}");
+    // the consumer said *which* answer it checked against, on the line, in both arms — an arm
+    // with no context still names the block it read for itself (§2's line: it cannot be silent).
+    assert!(
+        context_line_of(Arm::Baseline, &baseline).contains(&pinned_identity().describe()),
+        "{:?}",
+        context_line_of(Arm::Baseline, &baseline)
+    );
+    assert!(
+        context_line_of(Arm::VerifiedContext, &reuse).contains(&pinned_identity().describe()),
+        "{:?}",
+        context_line_of(Arm::VerifiedContext, &reuse)
+    );
+}
+
+/// §12's field list, compared as the whole `unsigned` object instead of a hand-picked subset: a
+/// field no test names is exactly the field that could differ quietly. `target`, `value`,
+/// `calldata`, `nonce`, `gas_limit`, both fee fields, `chain_id` and `access_list` are all inside
+/// it, and `sender_expected` is the builder's own statement of who may sign these bytes.
+#[tokio::test]
+async fn baseline_and_reuse_same_build_result() {
+    let baseline = drive_arm(Arm::Baseline).await;
+    let reuse = drive_arm(Arm::VerifiedContext).await;
+    let left = build_row(Arm::Baseline, &baseline);
+    let right = build_row(Arm::VerifiedContext, &reuse);
+    assert_eq!(left["unsigned"], right["unsigned"], "{left} vs {right}");
+    assert_eq!(left["sender_expected"], right["sender_expected"]);
+    // the rung and the reason the run stopped there belong to the mode, not to the arm: §19's
+    // equality is about the transaction, and a difference here would mean the context changed
+    // what the route decided — which is the one thing this milestone must not do quietly.
+    assert_eq!(
+        baseline["record"]["status"], reuse["record"]["status"],
+        "the arms reached different rungs"
+    );
+    assert_eq!(baseline["record"]["builds"], reuse["record"]["builds"]);
+    // positive control on the fixture itself: the build row really does name the §12 fields, so
+    // an equality over `unsigned` is a comparison of eight values and not of one empty object.
+    let unsigned = right["unsigned"].as_object().expect("a built transaction");
+    for field in [
+        "tx_type",
+        "chain_id",
+        "nonce",
+        "to",
+        "value",
+        "gas_limit",
+        "input",
+        "access_list",
+        "max_fee_per_gas",
+        "max_priority_fee_per_gas",
+    ] {
+        assert!(
+            unsigned.contains_key(field),
+            "{field} missing from {unsigned:?}"
+        );
+    }
+}
+
+/// §35's third experiment claim and §12's fingerprint: the two arms produced the same bytes to
+/// sign. The second half of this test is the control that makes the first half mean anything —
+/// the fingerprint is recomputed from the row's own fields with the crate's own hash leg, so it
+/// cannot be a constant the fixture carried from one arm to the other.
+#[tokio::test]
+async fn baseline_and_reuse_same_fingerprint() {
+    let baseline = drive_arm(Arm::Baseline).await;
+    let reuse = drive_arm(Arm::VerifiedContext).await;
+    let left = build_row(Arm::Baseline, &baseline);
+    let right = build_row(Arm::VerifiedContext, &reuse);
+    assert_eq!(
+        left["fingerprint"], right["fingerprint"],
+        "the arms signed different bytes"
+    );
+    assert_eq!(
+        left["serialization_bytes"], right["serialization_bytes"],
+        "the arms serialized to different lengths"
+    );
+    let unsigned: UnsignedTransaction =
+        serde_json::from_value(right["unsigned"].clone()).expect("a record's own build fields");
+    let recomputed = signing_hash_for_chain(&unsigned, unsigned.chain_id)
+        .expect("the recorded fields form a transaction this crate can hash");
+    assert_eq!(
+        right["fingerprint"],
+        serde_json::json!(format!("{:#x}", recomputed)),
+        "the published fingerprint is not what the published fields hash to"
+    );
+    // and it moves when a field it covers moves: the same row with one fee wei more is a
+    // different fingerprint, so equality above is a statement about bytes and not about a stub.
+    let mut shifted = unsigned.clone();
+    shifted.max_fee_per_gas = shifted.max_fee_per_gas.map(|fee| fee + U256::from(1u64));
+    let shifted_hash = signing_hash_for_chain(&shifted, shifted.chain_id)
+        .expect("the shifted fields still form a transaction");
+    assert_ne!(recomputed, shifted_hash, "a fee change left the hash alone");
+}
+
+/// §14's gate, as a number rather than a sentence: the only difference an arm may introduce is
+/// the header reuse the milestone declares — and because §2 forbids deleting the read that makes
+/// the check, the declared difference is *nothing*. Compared as an ordered list, so an arm that
+/// added one read at the end and removed one at the start cannot pass on a multiset match, and
+/// compared as counters too, because the stage's own tally is what a reader audits the line
+/// against.
+#[tokio::test]
+async fn no_extra_rpc_outside_declared_header_reuse() {
+    let mut by_arm = Vec::new();
+    for arm in [Arm::Baseline, Arm::VerifiedContext, Arm::NegativeControl] {
+        by_arm.push((arm, drive_arm(arm).await));
+    }
+    let reference = &by_arm[0].1["lane_reads"];
+    for (arm, row) in &by_arm[1..] {
+        assert_eq!(
+            &row["lane_reads"],
+            reference,
+            "{} asked the lane for a different sequence of reads than {}",
+            arm.name(),
+            by_arm[0].0.name()
+        );
+        // every counter the run bumped, except the three this milestone's consumer leg writes:
+        // those are the judgement's own output, and they are compared by name further down.
+        let mut left = row["counters"].as_object().expect("counters").clone();
+        let mut right = by_arm[0].1["counters"]
+            .as_object()
+            .expect("counters")
+            .clone();
+        for name in [
+            "execution_block_context_accepted",
+            "execution_block_context_rejected",
+            "execution_block_context_no_context",
+        ] {
+            left.remove(name);
+            right.remove(name);
+        }
+        assert_eq!(
+            left,
+            right,
+            "{} and {} bumped different counters while asking the same reads",
+            arm.name(),
+            by_arm[0].0.name()
+        );
+    }
+    // the positive control on the comparison above: the sequence is not empty, and the block read
+    // the consumer judges itself against is in it exactly once per step.
+    let sites: Vec<&str> = reference
+        .as_array()
+        .expect("lane reads")
+        .iter()
+        .map(|read| read["site"].as_str().expect("a named site"))
+        .collect();
+    assert!(!sites.is_empty(), "the arm answered no reads at all");
+    assert_eq!(
+        sites
+            .iter()
+            .filter(|site| **site == "block_hash_at")
+            .count(),
+        1,
+        "{sites:?}"
+    );
+    // §32's counts, and §14's honest arithmetic: the consumer leg's judgement is the only thing
+    // that moved, no arm added or retired a read, and `saved` therefore is 0 rather than a
+    // number the milestone would rather had.
+    for (arm, row) in &by_arm {
+        let counters = row["counters"].as_object().expect("counters");
+        let value = |name: &str| {
+            counters
+                .get(name)
+                .and_then(serde_json::Value::as_u64)
+                .unwrap_or(0)
+        };
+        let expected_accepted = usize::from(*arm == Arm::VerifiedContext);
+        let expected_rejected = usize::from(*arm == Arm::NegativeControl);
+        let expected_none = usize::from(*arm == Arm::Baseline);
+        assert_eq!(
+            value("execution_block_context_accepted"),
+            u64::try_from(expected_accepted).expect("one arm"),
+            "{}: {row}",
+            arm.name()
+        );
+        assert_eq!(
+            value("execution_block_context_rejected"),
+            u64::try_from(expected_rejected).expect("one arm"),
+            "{}: {row}",
+            arm.name()
+        );
+        assert_eq!(
+            value("execution_block_context_no_context"),
+            u64::try_from(expected_none).expect("one arm"),
+            "{}: {row}",
+            arm.name()
+        );
+        // the read that judges the propagated context is asked once, in every arm — which is
+        // what §2's ban on deleting it looks like as a number, and why `saved = 0`.
+        assert_eq!(
+            reference
+                .as_array()
+                .expect("lane reads")
+                .iter()
+                .filter(|read| read["site"].as_str() == Some("block_hash_at"))
+                .count(),
+            1,
+            "{}",
+            arm.name()
+        );
+    }
+}
+
+/// E1 and §16: the arms' raw rows, published where a reader can recompute the tables from them.
+///
+/// Three runs of one deterministic drive, and the file says what that is: `repetitions_of_one_drive`
+/// is 3 while `independent_runs` is 0. Two runs agreeing here is evidence the fixture is
+/// reproducible, not evidence about a market — the independent samples this milestone reasons
+/// about are the live runs under `live/`, where a node answers at three different moments.
+#[tokio::test]
+async fn the_fixed_block_arms_publish_their_raw_rows() {
+    let dir = fixture_evidence_root();
+    let mut published: Vec<(String, serde_json::Value)> = Vec::new();
+    for index in 1..=3 {
+        let name = format!("run-{index:02}");
+        let mut arms = Vec::new();
+        for arm in [Arm::Baseline, Arm::VerifiedContext, Arm::NegativeControl] {
+            arms.push(drive_arm(arm).await);
+        }
+        let row = serde_json::json!({
+            "schema": 1,
+            "milestone": "M8.4.4",
+            "run": name,
+            "source": "fixture",
+            "what_source_means": "a deterministic in-process stand-in answers the lane: these \
+                                  numbers show the contract working, they are not market \
+                                  behaviour and are never added to a live run's",
+            "repetitions_of_one_drive": 3,
+            "independent_runs": 0,
+            "execution_mode": "build-only",
+            "venue": "the scripted lane of crates/execution/tests/sequence.rs",
+            "arms": arms,
+        });
+        write_json(&dir.join(format!("{name}.json")), &row);
+        published.push((name, row));
+    }
+
+    // the three runs differ in their own label and in nothing else, measured rather than
+    // asserted in prose: strip the label out of run 01 and compare it to the others.
+    let mut first = published[0].1.clone();
+    first["run"] = serde_json::json!("");
+    for (name, row) in &published[1..] {
+        let mut other = row.clone();
+        other["run"] = serde_json::json!("");
+        assert_eq!(
+            first, other,
+            "{name}: two runs of one deterministic drive disagreed"
+        );
+    }
+
+    // E8's raw material, in every run: the negative control is refused by name, and the two
+    // hashes that disagree are both on its line.
+    for (name, row) in &published {
+        let arms = row["arms"].as_array().expect("three arms");
+        assert_eq!(arms.len(), 3, "{name}");
+        let control = &arms[2];
+        let line = context_line_of(Arm::NegativeControl, control);
+        assert!(line.contains("rejected"), "{name}: {line}");
+        assert!(line.contains("block_hash_mismatch"), "{name}: {line}");
+        assert!(
+            line.contains(&format!("{:#x}", pinned_hash())),
+            "{name}: {line}"
+        );
+        assert!(
+            line.contains(&format!("{:#x}", tampered_identity().hash)),
+            "{name}: {line}"
+        );
+        assert_eq!(
+            control["producer_verdict"]["outcome"],
+            serde_json::json!("verified"),
+            "{name}: the control's producer did verify its own (wrong) block, which is the \
+             point — a refusal here would be testing that garbage is caught by nobody checking \
+             it, not testing the consumer"
+        );
+    }
+}
+
+/// §29's named error and §31's `reused` flag, checked against the sentence the same verdict wrote
+/// one line away. Two representations of one fact are only safe if a test compares them: the gate
+/// in `tests/block_context_evidence.rs` reads the fields, a human reading `executions.jsonl` reads
+/// the line, and a drift between the two would mean the evidence says one thing and the report
+/// another.
+#[tokio::test]
+async fn the_structured_consumer_row_and_the_prose_line_agree() {
+    for arm in [Arm::Baseline, Arm::VerifiedContext, Arm::NegativeControl] {
+        let row = drive_arm(arm).await;
+        let checks = row["record"]["context_checks"]
+            .as_array()
+            .expect("one step driven, one consumer row");
+        assert_eq!(checks.len(), 1, "{}", arm.name());
+        let check = &checks[0];
+        let line = context_line_of(arm, &row);
+
+        assert_eq!(check["position"], serde_json::json!(0), "{}", arm.name());
+        // §25: the row names the whole identity it checked, never a bare height.
+        assert_eq!(
+            check["expected_chain_id"],
+            serde_json::json!(CHAIN),
+            "{line}"
+        );
+        assert_eq!(
+            check["expected_block_number"],
+            serde_json::json!(PIN),
+            "{line}"
+        );
+        assert_eq!(
+            check["expected_block_hash"],
+            serde_json::json!(format!("{:#x}", pinned_hash())),
+            "{line}"
+        );
+
+        // the outcome word is the same token in both places, and it is the token the counter
+        // was keyed by — three call sites, one name.
+        let outcome = check["outcome"].as_str().expect("an outcome word");
+        assert!(
+            line.contains(&format!("block context {outcome} for ")),
+            "{line}"
+        );
+        assert_eq!(
+            row["counters"][format!("execution_block_context_{outcome}")]
+                .as_u64()
+                .unwrap_or(0),
+            1,
+            "{line}"
+        );
+
+        match outcome {
+            "no_context" => {
+                assert_eq!(check["reason"], serde_json::Value::Null, "{line}");
+                assert_eq!(check["consumer_read"], serde_json::Value::Null, "{line}");
+            }
+            "accepted" => {
+                assert_eq!(check["reason"], serde_json::Value::Null, "{line}");
+                // §31: the consumer read for itself, so `reused` is the flag that says no value
+                // was taken on trust — which is what this production path always does.
+                assert_eq!(check["consumer_read"], serde_json::json!(true), "{line}");
+                assert_eq!(check["reused"], serde_json::json!(false), "{line}");
+            }
+            "rejected" => {
+                assert_eq!(
+                    check["reason"],
+                    serde_json::json!("block_hash_mismatch"),
+                    "{line}: §29 asks the refusal to have a name; this arm tampers with the hash \
+                     and nothing else"
+                );
+                assert!(line.contains("block_hash_mismatch"), "{line}");
+                assert_eq!(check["consumer_read"], serde_json::json!(true), "{line}");
+                assert_eq!(check["reused"], serde_json::json!(false), "{line}");
+                // §30: the refusal is recorded as a fallback performed, and the step's own read is
+                // what the row shows it fell back to.
+                assert_eq!(
+                    row["record"]["builds"][0]["block_hash"],
+                    serde_json::json!(format!("{:#x}", pinned_hash())),
+                    "{line}: the rejected context was never the value the step sent against"
+                );
+            }
+            other => panic!("{}: {other} is not one of §7's three outcomes", arm.name()),
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// the publishing helpers the experiment test above uses
+// ---------------------------------------------------------------------------
+/// The workspace root, as this crate's own manifest sees it.
+fn workspace_root() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
+}
+
+/// The evidence tree: `M844_FIXTURE_EVIDENCE` names it — the same shape as
+/// `M842_FIXTURE_EVIDENCE`, so a regeneration is one environment variable and not an edit. Its
+/// absence is a scratch directory under `target/`, where a plain `cargo test` cannot overwrite
+/// committed evidence.
+///
+/// Only the subtree named at the call site is created and written: these tests run in one process,
+/// and a root-level wipe would let a second test delete the first one's output.
+fn evidence_tree() -> PathBuf {
+    match std::env::var("M844_FIXTURE_EVIDENCE") {
+        Ok(dir) if !dir.is_empty() => {
+            let path = PathBuf::from(dir);
+            if path.is_relative() {
+                workspace_root().join(path)
+            } else {
+                path
+            }
+        }
+        _ => workspace_root().join("target/execution-tests/m8.4.4"),
+    }
+}
+
+/// Where §16's raw arm rows go: `<tree>/fixed-block/run-NN.json`.
+fn fixture_evidence_root() -> PathBuf {
+    let dir = evidence_tree().join(FIXED_BLOCK_DIR);
+    std::fs::create_dir_all(&dir).unwrap_or_else(|error| {
+        panic!(
+            "{}: the fixed-block subtree could not be created: {error}",
+            dir.display()
+        )
+    });
+    dir
+}
+
+/// One file, one row, in the repository's byte shape: pretty JSON, one trailing newline.
+fn write_json(path: &Path, value: &serde_json::Value) {
+    let text = serde_json::to_string_pretty(value).expect("a row built here is serializable");
+    std::fs::write(path, format!("{text}\n")).unwrap_or_else(|error| {
+        panic!("{}: the row could not be written: {error}", path.display())
+    });
 }
