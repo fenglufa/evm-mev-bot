@@ -1,0 +1,2026 @@
+{
+  "strategy": "pool",
+  "chunk_blocks": 4999,
+  "target": 37224031,
+  "pools": 80,
+  "eth_getlogs_requests": 21439,
+  "logs_returned": 227,
+  "blocks_scanned": 106899130,
+  "blocks_covered_by_the_pass": null,
+  "irrelevant_logs": null,
+  "undecodable_logs": null,
+  "duplicate_logs": null,
+  "wall_ms": 7216588,
+  "target_state_valid": 80,
+  "state_unavailable": 0,
+  "state_invalid": 0,
+  "scan_incomplete": 0,
+  "rows": [
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x0320fce15a53ac48e9010bfff4da21d3cd095bff"
+      },
+      "target": 37224031,
+      "discovery_block": 28544305,
+      "search_from": 28544305,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x0320fce15a53ac48e9010bfff4da21d3cd095bff"
+        },
+        "block_number": 28544982,
+        "tx_hash": "0xcd2f1837e84b450e51d716029df0f526e10d761469f7b02554f82648fb1a8b12",
+        "tx_index": 1,
+        "log_index": 4,
+        "reserve0": "0x38d7ea4c68000",
+        "reserve1": "0x38d7ea4c68000"
+      },
+      "chunks_scanned": 1737,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x08b4ddaf033eacd73f2f0e04417b89e6f8cfd9c4"
+      },
+      "target": 37224031,
+      "discovery_block": 37187624,
+      "search_from": 37187624,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x08b4ddaf033eacd73f2f0e04417b89e6f8cfd9c4"
+        },
+        "block_number": 37187757,
+        "tx_hash": "0xeb9cacbef357b26bb9ade81bc892b40b241c23166f41fd42b03310539f748f8e",
+        "tx_index": 5,
+        "log_index": 4,
+        "reserve0": "0x28048c5ec000",
+        "reserve1": "0x22b1c8c1227a00000"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x0a33bfcea548c942129633cbce113d8f57f539b6"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x0a33bfcea548c942129633cbce113d8f57f539b6"
+        },
+        "block_number": 37223879,
+        "tx_hash": "0x3210b8b553a2fe5ea91e77bf4ac79bf86774b15c3883f8340b6651c8d5c40fc3",
+        "tx_index": 30,
+        "log_index": 36,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5"
+      },
+      "target": 37224031,
+      "discovery_block": 31714094,
+      "search_from": 31715134,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5"
+        },
+        "block_number": 31715802,
+        "tx_hash": "0x49d8aa067ccda87c76a7dfbc89895ae4868929c8399a39688a3a823703206034",
+        "tx_index": 5,
+        "log_index": 16,
+        "reserve0": "0x152d02c7e14af6800000",
+        "reserve1": "0xde0b6b3a7640000"
+      },
+      "chunks_scanned": 1102,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x10650efc8e3ff56e665041f6852bb9aea96681ad"
+      },
+      "target": 37224031,
+      "discovery_block": 37188014,
+      "search_from": 37194038,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x10650efc8e3ff56e665041f6852bb9aea96681ad"
+        },
+        "block_number": 37198215,
+        "tx_hash": "0x0e3bdfa0abacd84b187a81ff3a82f7d18628a7393a2b649911c496c0d2abdacb",
+        "tx_index": 25,
+        "log_index": 37,
+        "reserve0": "0x152f6567482bbbb00000",
+        "reserve1": "0x45dfd5140c"
+      },
+      "chunks_scanned": 6,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x10b78cc89702372539086cb12a7be9b4b1c40d8f"
+      },
+      "target": 37224031,
+      "discovery_block": 37223488,
+      "search_from": 37223488,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x10b78cc89702372539086cb12a7be9b4b1c40d8f"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 117,
+        "reserve0": "0x5a039428e3",
+        "reserve1": "0x8fb114e6d7fa000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x112111ec78cb8fe9529ff805ef17670f6e9ab1bc"
+      },
+      "target": 37224031,
+      "discovery_block": 37222733,
+      "search_from": 37222733,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x112111ec78cb8fe9529ff805ef17670f6e9ab1bc"
+        },
+        "block_number": 37222733,
+        "tx_hash": "0x8bb09840499d82f1ef91a8365980dfc210898b436fbb60d9bc0c8115b40bbbdf",
+        "tx_index": 49,
+        "log_index": 53,
+        "reserve0": "0x2129fbb621313cd76",
+        "reserve1": "0x26104fbb4c75"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x1bce4588db3a204e7878e86001059e4084ce3039"
+      },
+      "target": 37224031,
+      "discovery_block": 37221081,
+      "search_from": 37221081,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x1bce4588db3a204e7878e86001059e4084ce3039"
+        },
+        "block_number": 37221081,
+        "tx_hash": "0x04be16b2a18e4e3ec4b859f1f8b531d2b19aae144299e39342e8c623b3533978",
+        "tx_index": 45,
+        "log_index": 53,
+        "reserve0": "0x27f4495fa4a3",
+        "reserve1": "0x27c2a1bdc045"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x2269c89c3945fa862f967f01c9a171518d623670"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x2269c89c3945fa862f967f01c9a171518d623670"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 45,
+        "reserve0": "0x57f72494fd",
+        "reserve1": "0x930bb394cd4b000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3289dd77150087687fc27dd4f60b430952d65d8c"
+      },
+      "target": 37224031,
+      "discovery_block": 4057560,
+      "search_from": 12229032,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x3289dd77150087687fc27dd4f60b430952d65d8c"
+        },
+        "block_number": 12232608,
+        "tx_hash": "0xaabb17ec7f11a6cd6ce075eb615b476bd78a4e41dc149db62a2b4cbc722ff798",
+        "tx_index": 1,
+        "log_index": 3,
+        "reserve0": "0xb9414872c2491302372e1",
+        "reserve1": "0x23940c7cd8b36101a"
+      },
+      "chunks_scanned": 5000,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42"
+      },
+      "target": 37224031,
+      "discovery_block": 31714087,
+      "search_from": 31715134,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42"
+        },
+        "block_number": 31715794,
+        "tx_hash": "0x6bb1b695bfcb0c00e30ab568d143d6d38273911c5c9a8af5b91090cb510e2de8",
+        "tx_index": 5,
+        "log_index": 9,
+        "reserve0": "0x2a5a058fc295ed000000",
+        "reserve1": "0x2e90edd000"
+      },
+      "chunks_scanned": 1102,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3813479cd750a0a6738d36fedce6e7b1b85ebe26"
+      },
+      "target": 37224031,
+      "discovery_block": 37187606,
+      "search_from": 37187606,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x3813479cd750a0a6738d36fedce6e7b1b85ebe26"
+        },
+        "block_number": 37187622,
+        "tx_hash": "0x00ecdb40d5fdf3c78659463aaad38b855627a747ffeae0514051665335878fa5",
+        "tx_index": 41,
+        "log_index": 40,
+        "reserve0": "0x246139ca8000",
+        "reserve1": "0x22b1c8c1227a00000"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x386198cccac7e9bd0d7ae67da78b45652498cb12"
+      },
+      "target": 37224031,
+      "discovery_block": 37223108,
+      "search_from": 37223108,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x386198cccac7e9bd0d7ae67da78b45652498cb12"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 97,
+        "reserve0": "0x4ca6ef482f",
+        "reserve1": "0xa8d01e620cea000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3a06a6578893c0a8e70bde914433b53eb8c68482"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x3a06a6578893c0a8e70bde914433b53eb8c68482"
+        },
+        "block_number": 37223875,
+        "tx_hash": "0x4eab05b9a2fc7cb1035ed19e5cf8ee76d75cd9e87f92b4344a79ee8b55bd0b34",
+        "tx_index": 20,
+        "log_index": 39,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3b9176a69168ae44cfefeffc46be8bbd49a5726d"
+      },
+      "target": 37224031,
+      "discovery_block": 37187566,
+      "search_from": 37187566,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x3b9176a69168ae44cfefeffc46be8bbd49a5726d"
+        },
+        "block_number": 37187582,
+        "tx_hash": "0x6360869b7732b34fb83e65c87dfc78fbde0bda13be70660148fea2ba12f743fa",
+        "tx_index": 38,
+        "log_index": 43,
+        "reserve0": "0x22b1c8c1227a00000",
+        "reserve1": "0x246139ca8000"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3cd8230f1a5b9315834632be9d01742f0f569972"
+      },
+      "target": 37224031,
+      "discovery_block": 37223488,
+      "search_from": 37223488,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x3cd8230f1a5b9315834632be9d01742f0f569972"
+        },
+        "block_number": 37223882,
+        "tx_hash": "0x6c5c3eb06a97d971857e1344ba7e78b860c3922f9203706a2b03aae04cfdd9fe",
+        "tx_index": 33,
+        "log_index": 42,
+        "reserve0": "0x6f05b59d3b20000",
+        "reserve1": "0x746a528800"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3cf114d454032347be343f457942bd01cd0332d3"
+      },
+      "target": 37224031,
+      "discovery_block": 37223109,
+      "search_from": 37223109,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x3cf114d454032347be343f457942bd01cd0332d3"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 105,
+        "reserve0": "0x547ad049f7",
+        "reserve1": "0x9921aa794d5b000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3d2ae231e04f0498e4c09b68e80e3c02c39e8770"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x3d2ae231e04f0498e4c09b68e80e3c02c39e8770"
+        },
+        "block_number": 37223870,
+        "tx_hash": "0x112e79498b1e82c0ed3cb2d84b45ab8232e920e5aceeff2e72e51c47d892d33a",
+        "tx_index": 94,
+        "log_index": 180,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3d33a6bfff5d1c656c9c6a6701d01979c2e285f5"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x3d33a6bfff5d1c656c9c6a6701d01979c2e285f5"
+        },
+        "block_number": 37223872,
+        "tx_hash": "0x4faf1814edbdf8bb5a82674b0ebdbf920f19641d8d8a6794de09c2afb67b5769",
+        "tx_index": 15,
+        "log_index": 18,
+        "reserve0": "0x6f05b59d3b20000",
+        "reserve1": "0x746a528800"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x3fe071db2e55bdaf870d07317397a47d4277d836"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x3fe071db2e55bdaf870d07317397a47d4277d836"
+        },
+        "block_number": 37223874,
+        "tx_hash": "0x5157eed02d6dae279b2fbd401aeac63c9946ee4b029c0d88ec7d6931a5e80f44",
+        "tx_index": 59,
+        "log_index": 44,
+        "reserve0": "0x6f05b59d3b20000",
+        "reserve1": "0x746a528800"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x41839207b1d72f29054444716811a5e1c92dd926"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x41839207b1d72f29054444716811a5e1c92dd926"
+        },
+        "block_number": 37223878,
+        "tx_hash": "0x233ac531eed9e5c9b829bb3fd8d74c607e6cd2857130b6917040a0b29f6add6f",
+        "tx_index": 20,
+        "log_index": 31,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x46503d6ad9f91eac86b5084fe30858aecbe439a9"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x46503d6ad9f91eac86b5084fe30858aecbe439a9"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 77,
+        "reserve0": "0x9671ead9fb28000",
+        "reserve1": "0x55fbf8d1c3"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x47b5b17685df68f935e0810608ae75003407646c"
+      },
+      "target": 37224031,
+      "discovery_block": 37223105,
+      "search_from": 37223105,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x47b5b17685df68f935e0810608ae75003407646c"
+        },
+        "block_number": 37223868,
+        "tx_hash": "0x79460c696518379917c9e6d4eb2cffc66987fb782b24c20c36c705142c85bfd0",
+        "tx_index": 73,
+        "log_index": 97,
+        "reserve0": "0x6f05b59d3b20000",
+        "reserve1": "0x746a528800"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x4952066fa997ea6d574e176ef5dbec21b3e36f8b"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x4952066fa997ea6d574e176ef5dbec21b3e36f8b"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 49,
+        "reserve0": "0xa583fe711e48000",
+        "reserve1": "0x4e2cb3dd1d"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x4a231fd326ea4a833ac7bc1178e467088fbfad7c"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x4a231fd326ea4a833ac7bc1178e467088fbfad7c"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 81,
+        "reserve0": "0x98caec404e85000",
+        "reserve1": "0x54aa84a28b"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x4b804e4c766fcd4f7d50a55fe199b0944a01ef53"
+      },
+      "target": 37224031,
+      "discovery_block": 37223109,
+      "search_from": 37223109,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x4b804e4c766fcd4f7d50a55fe199b0944a01ef53"
+        },
+        "block_number": 37223882,
+        "tx_hash": "0xfd84e6fc66057dc2147c7b0d26de8d7886620f0ed9682ac152b1eb5b1e0fff4e",
+        "tx_index": 17,
+        "log_index": 15,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x4e8cf8cfeba78e2f503400c4c32329bc5f6b821e"
+      },
+      "target": 37224031,
+      "discovery_block": 37223105,
+      "search_from": 37223105,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x4e8cf8cfeba78e2f503400c4c32329bc5f6b821e"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 33,
+        "reserve0": "0x5479093913",
+        "reserve1": "0x9924e7eed964000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x4f2f29231cc6889e8c2550ca27a4a4a4630c3517"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x4f2f29231cc6889e8c2550ca27a4a4a4630c3517"
+        },
+        "block_number": 37223872,
+        "tx_hash": "0xd5b8fda510bdb0b8df3f993c2bab6c8abc18ff641d99ad20cb60a7c786bc371a",
+        "tx_index": 35,
+        "log_index": 197,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x50de79a6754bf4b48fe291441a89ef37fb702057"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x50de79a6754bf4b48fe291441a89ef37fb702057"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 85,
+        "reserve0": "0x52fd0e031e",
+        "reserve1": "0x9be400928d05000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x5103da7ee3fc7f9a245c43ef92dc4857af2ba19b"
+      },
+      "target": 37224031,
+      "discovery_block": 37223105,
+      "search_from": 37223105,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x5103da7ee3fc7f9a245c43ef92dc4857af2ba19b"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 29,
+        "reserve0": "0xa70c53c2c21e000",
+        "reserve1": "0x4d759af303"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x510dcdd0eddb81b38006ea501e85fbf43633cd39"
+      },
+      "target": 37224031,
+      "discovery_block": 37222623,
+      "search_from": 37222623,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x510dcdd0eddb81b38006ea501e85fbf43633cd39"
+        },
+        "block_number": 37222623,
+        "tx_hash": "0x737e2fde298e009f95cec00feb4be2403eafcd3505b05f5f4ae7eea7326c2836",
+        "tx_index": 36,
+        "log_index": 43,
+        "reserve0": "0x2ba7def30000",
+        "reserve1": "0x22b1c8c1227a00000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x59ae3d8b69e11105c2fcc0a45a94aac6f0fe3203"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x59ae3d8b69e11105c2fcc0a45a94aac6f0fe3203"
+        },
+        "block_number": 37223878,
+        "tx_hash": "0x080eb58f9f0b6528726fea8a406b9c76f22c7ba3a40287122e29e218d4824fa1",
+        "tx_index": 41,
+        "log_index": 62,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+      },
+      "target": 37224031,
+      "discovery_block": 4058192,
+      "search_from": 4058192,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+        },
+        "block_number": 4058411,
+        "tx_hash": "0xec09f28bb14bae2ab3da737df2a0be17abb4b623b31269bdf32fd1a4ccae342c",
+        "tx_index": 1,
+        "log_index": 5,
+        "reserve0": "0x6c6b935b8bbd400000",
+        "reserve1": "0x470de4df820000"
+      },
+      "chunks_scanned": 6635,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x5bef6275607901dcd58160356660151be0637440"
+      },
+      "target": 37224031,
+      "discovery_block": 37187526,
+      "search_from": 37189039,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x5bef6275607901dcd58160356660151be0637440"
+        },
+        "block_number": 37191169,
+        "tx_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+        "tx_index": 18,
+        "log_index": 34,
+        "reserve0": "0x2153378e5e5f",
+        "reserve1": "0x25e2609223623153e"
+      },
+      "chunks_scanned": 7,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x5dc46b157c34043bbbdb9608eb0af521659d8a79"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x5dc46b157c34043bbbdb9608eb0af521659d8a79"
+        },
+        "block_number": 37223876,
+        "tx_hash": "0xd129b557aec8a7f54ea4c8507f411647218ff6bec63095f1fc0cc00079883634",
+        "tx_index": 150,
+        "log_index": 169,
+        "reserve0": "0x6f05b59d3b20000",
+        "reserve1": "0x746a528800"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x616d834775633f027b86df65dfcae1d5c2239d09"
+      },
+      "target": 37224031,
+      "discovery_block": 37187564,
+      "search_from": 37187564,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x616d834775633f027b86df65dfcae1d5c2239d09"
+        },
+        "block_number": 37187576,
+        "tx_hash": "0xad0401fdee75022b1a2e17f3e3d2bc6176da9d29b30cd1bbcdaf3f8af7be7f7d",
+        "tx_index": 31,
+        "log_index": 27,
+        "reserve0": "0x22b1c8c1227a00000",
+        "reserve1": "0x246139ca8000"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x663ada0eb53baecb1a915e7a47b293f9e5a247ab"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x663ada0eb53baecb1a915e7a47b293f9e5a247ab"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 69,
+        "reserve0": "0x52376fba6c",
+        "reserve1": "0x9d5bc402119f800"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x7c1e30f10e835fa2c06439f9b432d8cb19094805"
+      },
+      "target": 37224031,
+      "discovery_block": 37223105,
+      "search_from": 37223105,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x7c1e30f10e835fa2c06439f9b432d8cb19094805"
+        },
+        "block_number": 37223869,
+        "tx_hash": "0xd9cceb3b504d739618e1d211c5f06672882c74f04d20a96d5e1457303969c98f",
+        "tx_index": 54,
+        "log_index": 68,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x7ca5b94deae67e31c2ebb9e8b56b1f2db6acbcf0"
+      },
+      "target": 37224031,
+      "discovery_block": 37223105,
+      "search_from": 37223105,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x7ca5b94deae67e31c2ebb9e8b56b1f2db6acbcf0"
+        },
+        "block_number": 37223868,
+        "tx_hash": "0xa9d786ff2c06d525bbe25e228095489073cea32f006065bda15b22506c3d5996",
+        "tx_index": 30,
+        "log_index": 38,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x7cd2dc53c08fed7110ff0b0a46766de3a308ad48"
+      },
+      "target": 37224031,
+      "discovery_block": 37187098,
+      "search_from": 37187098,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x7cd2dc53c08fed7110ff0b0a46766de3a308ad48"
+        },
+        "block_number": 37187173,
+        "tx_hash": "0x73eca747c3e2e9377ac6073e755af47ed44e1d1732c5d9f3da50cd0647f0c607",
+        "tx_index": 37,
+        "log_index": 45,
+        "reserve0": "0x38e62046fb1a0000",
+        "reserve1": "0x210eaf595cf46f07ec92"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x884b3be88d46d659b1c392b9d6d2157fd8fcffa6"
+      },
+      "target": 37224031,
+      "discovery_block": 37187544,
+      "search_from": 37187544,
+      "search_to": 37224031,
+      "sync_logs_seen": 3,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x884b3be88d46d659b1c392b9d6d2157fd8fcffa6"
+        },
+        "block_number": 37187741,
+        "tx_hash": "0x04558ada3551705f660d4a8cf92ec0bed31d8567793af9d859b43802fd7bf6a7",
+        "tx_index": 42,
+        "log_index": 46,
+        "reserve0": "0x2c0500cea000",
+        "reserve1": "0x1f8c8d4da4ab8edd2"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 3
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x8e08ceffef66dfcc9ade2a013bd081292359c3f3"
+      },
+      "target": 37224031,
+      "discovery_block": 37223108,
+      "search_from": 37223108,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x8e08ceffef66dfcc9ade2a013bd081292359c3f3"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 101,
+        "reserve0": "0x5c9fac8f5a",
+        "reserve1": "0x8ba1b321bc7d000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x9084f1633787f798b6dcc4f915068c29c5152a59"
+      },
+      "target": 37224031,
+      "discovery_block": 37223109,
+      "search_from": 37223109,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x9084f1633787f798b6dcc4f915068c29c5152a59"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 109,
+        "reserve0": "0x5ade6a0e1e",
+        "reserve1": "0x8e560d759251000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x93249955231f8b37d5b3c3731b50631e04003277"
+      },
+      "target": 37224031,
+      "discovery_block": 37187506,
+      "search_from": 37187506,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x93249955231f8b37d5b3c3731b50631e04003277"
+        },
+        "block_number": 37187522,
+        "tx_hash": "0xe21ff223f4436072dede7905acbac692d77a234d8fc7553a9e6c517afdda02f0",
+        "tx_index": 34,
+        "log_index": 48,
+        "reserve0": "0x246139ca8000",
+        "reserve1": "0x22b1c8c1227a00000"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x9889f51dd4542649198b04f499d80e0618bec432"
+      },
+      "target": 37224031,
+      "discovery_block": 37187546,
+      "search_from": 37187546,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x9889f51dd4542649198b04f499d80e0618bec432"
+        },
+        "block_number": 37187562,
+        "tx_hash": "0xde6c5b13c306b5a53b15ec9a79e6716cda79ba68af35a9aad90af439df194c7a",
+        "tx_index": 75,
+        "log_index": 101,
+        "reserve0": "0x246139ca8000",
+        "reserve1": "0x22b1c8c1227a00000"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x9b8f4cb83f1505347334daa121a6f7ffa5f55500"
+      },
+      "target": 37224031,
+      "discovery_block": 37187584,
+      "search_from": 37187584,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x9b8f4cb83f1505347334daa121a6f7ffa5f55500"
+        },
+        "block_number": 37187965,
+        "tx_hash": "0x17f2cf5a8131813414189bd7c80bfb2991231905efc4374481cecf6714772d9b",
+        "tx_index": 48,
+        "log_index": 73,
+        "reserve0": "0x1e0d0da28232ed33e",
+        "reserve1": "0x2a04c696b000"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0x9e63f054b9dcf31b0ad4eac89da296e4d9e23d68"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0x9e63f054b9dcf31b0ad4eac89da296e4d9e23d68"
+        },
+        "block_number": 37223871,
+        "tx_hash": "0xbf42bad22c31ec3d889b0d4d79273676c1fe293ab470a8a646e0093f149f1887",
+        "tx_index": 47,
+        "log_index": 57,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xa1b27e2491606830c712eb368c52bd04b6654f1d"
+      },
+      "target": 37224031,
+      "discovery_block": 37223488,
+      "search_from": 37223488,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xa1b27e2491606830c712eb368c52bd04b6654f1d"
+        },
+        "block_number": 37223883,
+        "tx_hash": "0xa6abe2883420fbc3f936a164145e2904252541230f6043b2969b2600afdb1dfa",
+        "tx_index": 29,
+        "log_index": 40,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xa47c8e56a2ce9789cef4b419a7a67ab9409cd3ab"
+      },
+      "target": 37224031,
+      "discovery_block": 28544298,
+      "search_from": 28544298,
+      "search_to": 37224031,
+      "sync_logs_seen": 7,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xa47c8e56a2ce9789cef4b419a7a67ab9409cd3ab"
+        },
+        "block_number": 28545331,
+        "tx_hash": "0x5ff8aac479c42ee407ad586f13487d4138424abf6ccb5d92ddfcbb49eed5dcfd",
+        "tx_index": 1,
+        "log_index": 3,
+        "reserve0": "0x1ff0739851d9ea1074",
+        "reserve1": "0x20948cebc3f9c40000"
+      },
+      "chunks_scanned": 1737,
+      "logs_returned": 7
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xa4b69fbaa7e99ec700b755eafd70086ed778574f"
+      },
+      "target": 37224031,
+      "discovery_block": 37187504,
+      "search_from": 37187504,
+      "search_to": 37224031,
+      "sync_logs_seen": 3,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xa4b69fbaa7e99ec700b755eafd70086ed778574f"
+        },
+        "block_number": 37187735,
+        "tx_hash": "0xf595cdd47b86897095d387079f8d460d435b80eba83dc67c919fe68b3dc8b71c",
+        "tx_index": 5,
+        "log_index": 5,
+        "reserve0": "0x2c0500cea000",
+        "reserve1": "0x1f8c8d4da4ab8edd2"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 3
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xacb1a7492fc9d49db9c49e0d52f17c69c1d5f42a"
+      },
+      "target": 37224031,
+      "discovery_block": 31714080,
+      "search_from": 31715134,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xacb1a7492fc9d49db9c49e0d52f17c69c1d5f42a"
+        },
+        "block_number": 31715786,
+        "tx_hash": "0xfec8444766233892a24820b6b864b875861b49f5a576945b4088670ade929b95",
+        "tx_index": 3,
+        "log_index": 10,
+        "reserve0": "0x2a5a058fc295ed000000",
+        "reserve1": "0x4a817c800"
+      },
+      "chunks_scanned": 1102,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xace7b6ea758ae29909e41f0c9e06088510c829ae"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xace7b6ea758ae29909e41f0c9e06088510c829ae"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 57,
+        "reserve0": "0x519f90e568",
+        "reserve1": "0x9e8129b7f1c1000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xad92ce999be830db26dcd20530a53e8fb7c804a3"
+      },
+      "target": 37224031,
+      "discovery_block": 37220796,
+      "search_from": 37220796,
+      "search_to": 37224031,
+      "sync_logs_seen": 3,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xad92ce999be830db26dcd20530a53e8fb7c804a3"
+        },
+        "block_number": 37220798,
+        "tx_hash": "0xa7a1c857cf4fa37ec035b2be0168be5cb933203770e9000f9080f2641f0f407c",
+        "tx_index": 16,
+        "log_index": 19,
+        "reserve0": "0x28e8f1fbbc66",
+        "reserve1": "0x26d43893f7ad"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 3
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xb2353fe6d7ff6d56a83937da8577b967275a37ec"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xb2353fe6d7ff6d56a83937da8577b967275a37ec"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 41,
+        "reserve0": "0x5d5a91147c",
+        "reserve1": "0x8a8984bddaec000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xb4b42db1b3d41a581c08a274bcddc44c2c5e5182"
+      },
+      "target": 37224031,
+      "discovery_block": 37223108,
+      "search_from": 37223108,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xb4b42db1b3d41a581c08a274bcddc44c2c5e5182"
+        },
+        "block_number": 37223880,
+        "tx_hash": "0x20941c5285e885cbc7f6f3bccfcf1a8f26621e3b888e406df896395ebc925450",
+        "tx_index": 28,
+        "log_index": 46,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xb5b8fde93ceb3209081cbfb5f761b7610376ce5b"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xb5b8fde93ceb3209081cbfb5f761b7610376ce5b"
+        },
+        "block_number": 37223873,
+        "tx_hash": "0xd725aed1a7e9627661d26f393de29021e11f57999d597385004f31ebf2e66287",
+        "tx_index": 25,
+        "log_index": 34,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xb99e3a154b379205d121fa0dc5be2ac513a0e220"
+      },
+      "target": 37224031,
+      "discovery_block": 37187604,
+      "search_from": 37187604,
+      "search_to": 37224031,
+      "sync_logs_seen": 3,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xb99e3a154b379205d121fa0dc5be2ac513a0e220"
+        },
+        "block_number": 37187755,
+        "tx_hash": "0xf6b4af3ec9d2004321605274448706174346b4ce7d31715a3bdcbbce0f097ae1",
+        "tx_index": 14,
+        "log_index": 15,
+        "reserve0": "0x2c0500cea000",
+        "reserve1": "0x1f8c8d4da4ab8edd2"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 3
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xbc457b9fff394d5d2c2b30a219f19cf5a0b7a42b"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xbc457b9fff394d5d2c2b30a219f19cf5a0b7a42b"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 61,
+        "reserve0": "0x561c4c7670",
+        "reserve1": "0x9639217cf911000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xc1ee735dd32b2db5b6314fd7e7ef0a3fa846d382"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xc1ee735dd32b2db5b6314fd7e7ef0a3fa846d382"
+        },
+        "block_number": 37223877,
+        "tx_hash": "0x29ed59d1a47681f7ffa2f63e0d1a73d94712919bac2b8ef6720a3362dc9005bc",
+        "tx_index": 28,
+        "log_index": 32,
+        "reserve0": "0x6f05b59d3b20000",
+        "reserve1": "0x746a528800"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xc3ba575ee825c1c34903e77e2da180f6fdcf17bb"
+      },
+      "target": 37224031,
+      "discovery_block": 37187626,
+      "search_from": 37187626,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xc3ba575ee825c1c34903e77e2da180f6fdcf17bb"
+        },
+        "block_number": 37187642,
+        "tx_hash": "0x6f30bb0f06cc86c48db62e67384e9bf7599c5385b5d4b6b497a1b599203102d9",
+        "tx_index": 60,
+        "log_index": 65,
+        "reserve0": "0x246139ca8000",
+        "reserve1": "0x22b1c8c1227a00000"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xc4104f6e8ec7f7458560c1f31a7a528340288087"
+      },
+      "target": 37224031,
+      "discovery_block": 37222623,
+      "search_from": 37222623,
+      "search_to": 37224031,
+      "sync_logs_seen": 3,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xc4104f6e8ec7f7458560c1f31a7a528340288087"
+        },
+        "block_number": 37222671,
+        "tx_hash": "0x5536909d9d912bdf02077c677f3179be9b3549dbda3aaca60faaf2bc3261766f",
+        "tx_index": 29,
+        "log_index": 46,
+        "reserve0": "0x2c970b93716a",
+        "reserve1": "0x1c535fcc38dafdd44"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 3
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xc444614176616bcb535804e258028c45917e5f7c"
+      },
+      "target": 37224031,
+      "discovery_block": 37222733,
+      "search_from": 37222733,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xc444614176616bcb535804e258028c45917e5f7c"
+        },
+        "block_number": 37222733,
+        "tx_hash": "0x8bb09840499d82f1ef91a8365980dfc210898b436fbb60d9bc0c8115b40bbbdf",
+        "tx_index": 49,
+        "log_index": 57,
+        "reserve0": "0x243995cc23c2c328a",
+        "reserve1": "0x29d10e8e32f6"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xc48f08f80cb0a78e77bcbed59de7326f47516e37"
+      },
+      "target": 37224031,
+      "discovery_block": 37187586,
+      "search_from": 37187586,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xc48f08f80cb0a78e77bcbed59de7326f47516e37"
+        },
+        "block_number": 37187602,
+        "tx_hash": "0xb2ed1d56b95e09b65d3e199c9a07fc0fd87dd3221e33bbc9677322402195bde6",
+        "tx_index": 36,
+        "log_index": 36,
+        "reserve0": "0x22b1c8c1227a00000",
+        "reserve1": "0x246139ca8000"
+      },
+      "chunks_scanned": 8,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xccaa51daea9eaf6c14b01d40abbc4fe18229bef8"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xccaa51daea9eaf6c14b01d40abbc4fe18229bef8"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 65,
+        "reserve0": "0x97c07f6cad86000",
+        "reserve1": "0x553ee27a31"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xccc9eb614585eacd07195db9fecb08c61b72e465"
+      },
+      "target": 37224031,
+      "discovery_block": 28544301,
+      "search_from": 28544301,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xccc9eb614585eacd07195db9fecb08c61b72e465"
+        },
+        "block_number": 28544978,
+        "tx_hash": "0x3c6eda3b8c380e87b6a4d6d532dd82abc6d8571878ec581d5bc38e0c4d2881b8",
+        "tx_index": 1,
+        "log_index": 4,
+        "reserve0": "0xde0b6b3a7640000",
+        "reserve1": "0xde0b6b3a7640000"
+      },
+      "chunks_scanned": 1737,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xd25855e2816972d52f38abcbc2e29ba8477cab78"
+      },
+      "target": 37224031,
+      "discovery_block": 37223109,
+      "search_from": 37223109,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xd25855e2816972d52f38abcbc2e29ba8477cab78"
+        },
+        "block_number": 37223881,
+        "tx_hash": "0x6319b9c35ac66f101a0642563646cdad31de3878009b050313c6451362d0486b",
+        "tx_index": 22,
+        "log_index": 26,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xd2b3d4452a58cf0cf39548c10e6236167c7490fa"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xd2b3d4452a58cf0cf39548c10e6236167c7490fa"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 73,
+        "reserve0": "0x5288156b33",
+        "reserve1": "0x9cc12e131a28000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xdb74b294e1a08b287d3a0438f3d6768edf3fcf4e"
+      },
+      "target": 37224031,
+      "discovery_block": 37223105,
+      "search_from": 37223105,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xdb74b294e1a08b287d3a0438f3d6768edf3fcf4e"
+        },
+        "block_number": 37223870,
+        "tx_hash": "0x7952a3c65057121608228232db21ab33c6bc7827e740b10f7a684b77072bfa82",
+        "tx_index": 38,
+        "log_index": 53,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xdbf299d50a0cedf324c9e9496a7e464fbb826c45"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xdbf299d50a0cedf324c9e9496a7e464fbb826c45"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 89,
+        "reserve0": "0x523c71db6d",
+        "reserve1": "0x9d5221755cfe000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xdf0249441ba1741b01a07971f6ca197e7b5df254"
+      },
+      "target": 37224031,
+      "discovery_block": 37223105,
+      "search_from": 37223105,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xdf0249441ba1741b01a07971f6ca197e7b5df254"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 25,
+        "reserve0": "0x4e10dc5abf",
+        "reserve1": "0xa5bf56a4309c000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xe0c051aa98a38f90b6cea77d66d1126fca72399e"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xe0c051aa98a38f90b6cea77d66d1126fca72399e"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 93,
+        "reserve0": "0x4cdd27cb0f",
+        "reserve1": "0xa858680cae90000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0"
+      },
+      "target": 37224031,
+      "discovery_block": 31714073,
+      "search_from": 31715134,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0"
+        },
+        "block_number": 31715779,
+        "tx_hash": "0x1522ad62c504f1a537635ac3216e702c6b60680b7590ae76b6a5e5484abfa5bd",
+        "tx_index": 11,
+        "log_index": 13,
+        "reserve0": "0x32ee841b800",
+        "reserve1": "0xde0b6b3a7640000"
+      },
+      "chunks_scanned": 1102,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xe7d666952fa25370cfcd2cd82cd98866aa1b3994"
+      },
+      "target": 37224031,
+      "discovery_block": 37223107,
+      "search_from": 37223107,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xe7d666952fa25370cfcd2cd82cd98866aa1b3994"
+        },
+        "block_number": 37223876,
+        "tx_hash": "0xbcc9c595d7188ece53af7943361491fcaac4a2577038288554329fc6fe52f5d0",
+        "tx_index": 96,
+        "log_index": 101,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xe9393cbe54d8acc4e65cebe52e751fc6af5c2ea3"
+      },
+      "target": 37224031,
+      "discovery_block": 37223108,
+      "search_from": 37223108,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xe9393cbe54d8acc4e65cebe52e751fc6af5c2ea3"
+        },
+        "block_number": 37223880,
+        "tx_hash": "0x6f392fa52934cbb11936675fd414b6c2a6cc6346fb9247930d9ba10a8d47bc2c",
+        "tx_index": 47,
+        "log_index": 83,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xeb1f285e13ea04bc7f5d83522848f23dc126153e"
+      },
+      "target": 37224031,
+      "discovery_block": 37223488,
+      "search_from": 37223488,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xeb1f285e13ea04bc7f5d83522848f23dc126153e"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 113,
+        "reserve0": "0xa13c2a9ebe9a000",
+        "reserve1": "0x503e9a2c0e"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xf437c686f4a2e74c0aba48511f5f540195df4818"
+      },
+      "target": 37224031,
+      "discovery_block": 37223105,
+      "search_from": 37223105,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xf437c686f4a2e74c0aba48511f5f540195df4818"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 37,
+        "reserve0": "0x50fe0d0039",
+        "reserve1": "0x9fbdfad16c3e800"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578"
+      },
+      "target": 37224031,
+      "discovery_block": 37187524,
+      "search_from": 37189039,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578"
+        },
+        "block_number": 37191169,
+        "tx_hash": "0x6132a9da4eea92b66b19b19b0d76caa7ea51c634ba7a314972e3de18579692ba",
+        "tx_index": 18,
+        "log_index": 29,
+        "reserve0": "0x1fec55161350",
+        "reserve1": "0x279990e77bd34e6b3"
+      },
+      "chunks_scanned": 7,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xf5a0cc177dc7f8f0d6abffa38a4640508a0539d1"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 2,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xf5a0cc177dc7f8f0d6abffa38a4640508a0539d1"
+        },
+        "block_number": 37223874,
+        "tx_hash": "0x7fc546e9674490bcf01d786fdcb8b02fe4208bab35e4bd1f4da8911aa4a6e1a1",
+        "tx_index": 16,
+        "log_index": 20,
+        "reserve0": "0x746a528800",
+        "reserve1": "0x6f05b59d3b20000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 2
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xfffb66cefb727cd81f93edf9d035fd21cffd47f9"
+      },
+      "target": 37224031,
+      "discovery_block": 37189463,
+      "search_from": 37189463,
+      "search_to": 37224031,
+      "sync_logs_seen": 1,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xfffb66cefb727cd81f93edf9d035fd21cffd47f9"
+        },
+        "block_number": 37189463,
+        "tx_hash": "0xdf71bef39f1c9164589f87efa9519892f1337e77c8ccc6da5068bfdb10fc234b",
+        "tx_index": 11,
+        "log_index": 16,
+        "reserve0": "0x56bc75e2d63100000",
+        "reserve1": "0x45d964b800"
+      },
+      "chunks_scanned": 7,
+      "logs_returned": 1
+    },
+    {
+      "pool": {
+        "chain_id": 91342,
+        "address": "0xfffcd966645ac0c8dae66a6f85fefa9ce76e42bb"
+      },
+      "target": 37224031,
+      "discovery_block": 37223106,
+      "search_from": 37223106,
+      "search_to": 37224031,
+      "sync_logs_seen": 5,
+      "selected": {
+        "pool": {
+          "chain_id": 91342,
+          "address": "0xfffcd966645ac0c8dae66a6f85fefa9ce76e42bb"
+        },
+        "block_number": 37224031,
+        "tx_hash": "0x966609c6ec743fdc609557d7d7b1779e8d8b6059a85dff57d7251341f029f056",
+        "tx_index": 18,
+        "log_index": 53,
+        "reserve0": "0x4989cb94d4",
+        "reserve1": "0xaffaaee5249c000"
+      },
+      "chunks_scanned": 1,
+      "logs_returned": 5
+    }
+  ],
+  "trace": {
+    "events_recorded": 20000,
+    "events_dropped": 1440,
+    "max_events_per_sink": 20000,
+    "eth_getlogs_scans": 21439
+  }
+}

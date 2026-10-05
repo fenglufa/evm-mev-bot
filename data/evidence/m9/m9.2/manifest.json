@@ -1,0 +1,127 @@
+{
+  "_provenance": {
+    "asked": "§23/§24: evidence that lets a reviewer answer, for every pool M9.1 verified, which Sync the run selected as its authoritative state, at which block and log index, with what scan proving nothing later happened up to the target block, and which of those pools the target block's graph then took — with every number recomputable from the raw records beside it.",
+    "assemble_command": "M92_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test reconstruction_evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/reconstruction_evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test reconstruction_evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "GIWA_RPC_URL at run time, which is the endpoint recorded at data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint; this directory names it only as that digest, in the shape RpcTraceSink::endpoint_id uses (crates/chain/src/rpc_trace.rs:933).",
+    "milestone": "M9.2",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "raw/reconstruction-pass-a.json",
+      "raw/reconstruction-pass-b.json",
+      "raw/rpc-calls-pass-a.jsonl",
+      "raw/rpc-calls-pass-b.jsonl",
+      "raw/strategy-a-pool.json",
+      "raw/strategy-a-rpc.jsonl",
+      "raw/probe-node-capacity.json",
+      "raw/probe-node-capacity-rpc.jsonl"
+    ],
+    "run_command": "GIWA_RPC_URL=<endpoint from the environment> M92_STRATEGY=<pool|census> M92_TARGET=37224031 cargo test -p evm-discovery --test sync_reconstruction_live -- --ignored --nocapture --test-threads=1 <target name>  (§11 probe, then §12 both arms, then §20/§27)",
+    "written_at": "the run, not the review: no field in this directory is a restatement of a number a reader could not recompute from the rows beside it"
+  },
+  "files": [
+    {
+      "bytes": 100068,
+      "digest": "0xc98de5974d8dc90c654c0da4b04361edbed33c5d19914ea03b3b9fddb8ef2e16",
+      "file": "graph-integration.json"
+    },
+    {
+      "bytes": 8896,
+      "digest": "0xf9535a9f4ac81362d7fc4cb1fe64bb63cf26f87874c259286e0818147b253a04",
+      "file": "node-capacity.json"
+    },
+    {
+      "bytes": 60766,
+      "digest": "0xbe90cd7b5c9590d5f587b79c3852d93d286ca5a1036fe970de704b631ecafc54",
+      "file": "reconstruction.json"
+    },
+    {
+      "bytes": 2526,
+      "digest": "0x38290c1cb3b2f42b7ff6666a151447d40b5886e3560088f92df40302abcf8ae7",
+      "file": "rejected-pools.json"
+    },
+    {
+      "bytes": 6269,
+      "digest": "0x8927870a61c71d6956ba2f46bb4785f01484fc53f5671a978b8a3138ed68d953",
+      "file": "rpc-calls.json"
+    },
+    {
+      "bytes": 11256,
+      "digest": "0xfa6fae3654fe81f80af6ca49073ecd6bcc473b4a25dec9c56a60fd5e57089553",
+      "file": "strategy-comparison.json"
+    },
+    {
+      "bytes": 15027,
+      "digest": "0x21ca2cae327d2047e63c2e67d4ae8f9e33ea0ad6076558d870fc247e0ce840d2",
+      "file": "summary.json"
+    },
+    {
+      "bytes": 67073,
+      "digest": "0x60dea0ddfc4b44e6567f6791d28b13818e27ecaa34b2ff8885b7a2b599fa1fb7",
+      "file": "sync-events.json"
+    }
+  ],
+  "negative_controls_run_here": "the §19 controls are tests, not rows: crates/discovery/tests/sync_reconstruction.rs (34 tests over scan, selection and the graph door) and crates/graph/tests/state_at_target.rs (9 tests over the snapshot projection). summary.json#negative_controls maps each NC to the tests that carry it, and `every_negative_control_names_a_test_that_runs` reads those names out of the source files.",
+  "questions_answered": [
+    "How many pools did M9.1 verify, and what is each one's state at block 37224031? — reconstruction.json, 80 rows",
+    "Which Sync was selected for each, and what proved nothing came after it? — sync-events.json",
+    "How many of them entered the target block's graph, and why did the rest not? — graph-integration.json, rejected-pools.json",
+    "What did the reads cost, and which query strategy won? — rpc-calls.json, strategy-comparison.json, node-capacity.json",
+    "Is the same input reproducible? — summary.json#determinism, and `committed_tables_match_a_rebuild_from_the_raw_records` in this file"
+  ],
+  "raw_files": [
+    {
+      "bytes": 307546,
+      "digest": "0xc810fbb16209cd16fb9e76626d0aec27f4260c60fd15e4985d714ed10890e6ca",
+      "file": "raw/reconstruction-pass-a.json",
+      "lines": 1
+    },
+    {
+      "bytes": 307546,
+      "digest": "0xb9ac7dc710718ddf7629df725b0d447ad9af0d120399500e42d63269e9097b0b",
+      "file": "raw/reconstruction-pass-b.json",
+      "lines": 1
+    },
+    {
+      "bytes": 4678866,
+      "digest": "0xcaa506712bc5f3069f1707c7a6e89925166989abef67630e692b6bd61d08f8f9",
+      "file": "raw/rpc-calls-pass-a.jsonl",
+      "lines": 10747
+    },
+    {
+      "bytes": 4677570,
+      "digest": "0x6087626ede1e2598c9ca66b77fb3c809aded76dda71e258792613e03dbd130a8",
+      "file": "raw/rpc-calls-pass-b.jsonl",
+      "lines": 10747
+    },
+    {
+      "bytes": 59132,
+      "digest": "0x75991d328301214d91760134a9bfdeea05404d3d9d6d99d8bdc64363e73715db",
+      "file": "raw/strategy-a-pool.json",
+      "lines": 1
+    },
+    {
+      "bytes": 8736014,
+      "digest": "0x652ff2b7690de37b0de258a852a072986228d7d7f53fe392a7ef0156d5de9671",
+      "file": "raw/strategy-a-rpc.jsonl",
+      "lines": 20000
+    },
+    {
+      "bytes": 4365,
+      "digest": "0x03910e927d6973b854bf4e5850fee4d20500fe051a92527293f888fd503927cf",
+      "file": "raw/probe-node-capacity.json",
+      "lines": 1
+    },
+    {
+      "bytes": 8445,
+      "digest": "0x91d760d2144c1c611f3eed56a955f9932216d2effaaed8c542ee0849f4f3ac1f",
+      "file": "raw/probe-node-capacity-rpc.jsonl",
+      "lines": 18
+    }
+  ],
+  "table": "manifest"
+}

@@ -1,0 +1,189 @@
+[
+  {
+    "filter": "chain-wide",
+    "from_block": 37219032,
+    "to_block": 37224031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 7700,
+    "duration_ms": 4844,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37214032,
+    "to_block": 37224031,
+    "blocks": 10000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 14034,
+    "duration_ms": 4582,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37214031,
+    "to_block": 37224031,
+    "blocks": 10001,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 14035,
+    "duration_ms": 11909,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37204032,
+    "to_block": 37224031,
+    "blocks": 20000,
+    "address": null,
+    "accepted": false,
+    "logs_returned": 0,
+    "duration_ms": 472,
+    "error": "rpc request failed: http status 400 Bad Request: {\"error\":{\"code\":-32602,\"message\":\"block range greater than 10000 max\"},\"id\":1,\"jsonrpc\":\"2.0\"}"
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37174032,
+    "to_block": 37224031,
+    "blocks": 50000,
+    "address": null,
+    "accepted": false,
+    "logs_returned": 0,
+    "duration_ms": 496,
+    "error": "rpc request failed: http status 400 Bad Request: {\"error\":{\"code\":-32602,\"message\":\"block range greater than 10000 max\"},\"id\":1,\"jsonrpc\":\"2.0\"}"
+  },
+  {
+    "filter": "pool",
+    "from_block": 37219032,
+    "to_block": 37224031,
+    "blocks": 5000,
+    "address": "0x0320fce15a53ac48e9010bfff4da21d3cd095bff",
+    "accepted": true,
+    "logs_returned": 0,
+    "duration_ms": 264,
+    "error": null
+  },
+  {
+    "filter": "pool",
+    "from_block": 37214031,
+    "to_block": 37224031,
+    "blocks": 10001,
+    "address": "0x0320fce15a53ac48e9010bfff4da21d3cd095bff",
+    "accepted": true,
+    "logs_returned": 0,
+    "duration_ms": 249,
+    "error": null
+  },
+  {
+    "filter": "pool",
+    "from_block": 37204032,
+    "to_block": 37224031,
+    "blocks": 20000,
+    "address": "0x0320fce15a53ac48e9010bfff4da21d3cd095bff",
+    "accepted": false,
+    "logs_returned": 0,
+    "duration_ms": 493,
+    "error": "rpc request failed: http status 400 Bad Request: {\"error\":{\"code\":-32602,\"message\":\"block range greater than 10000 max\"},\"id\":1,\"jsonrpc\":\"2.0\"}"
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37219032,
+    "to_block": 37224031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 7700,
+    "duration_ms": 1456,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37214032,
+    "to_block": 37219031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 6334,
+    "duration_ms": 1588,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37209032,
+    "to_block": 37214031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 5460,
+    "duration_ms": 2811,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37204032,
+    "to_block": 37209031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 6884,
+    "duration_ms": 3141,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37199032,
+    "to_block": 37204031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 6347,
+    "duration_ms": 2856,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 37194032,
+    "to_block": 37199031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 7855,
+    "duration_ms": 3159,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 32219032,
+    "to_block": 32224031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 2780,
+    "duration_ms": 2752,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 22219032,
+    "to_block": 22224031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 42,
+    "duration_ms": 316,
+    "error": null
+  },
+  {
+    "filter": "chain-wide",
+    "from_block": 7219032,
+    "to_block": 7224031,
+    "blocks": 5000,
+    "address": null,
+    "accepted": true,
+    "logs_returned": 251,
+    "duration_ms": 563,
+    "error": null
+  }
+]

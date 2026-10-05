@@ -1,0 +1,105 @@
+{
+  "_provenance": {
+    "asked": "§23/§24: evidence that lets a reviewer answer, for every pool M9.1 verified, which Sync the run selected as its authoritative state, at which block and log index, with what scan proving nothing later happened up to the target block, and which of those pools the target block's graph then took — with every number recomputable from the raw records beside it.",
+    "assemble_command": "M92_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test reconstruction_evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/reconstruction_evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test reconstruction_evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "GIWA_RPC_URL at run time, which is the endpoint recorded at data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint; this directory names it only as that digest, in the shape RpcTraceSink::endpoint_id uses (crates/chain/src/rpc_trace.rs:933).",
+    "milestone": "M9.2",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "raw/reconstruction-pass-a.json",
+      "raw/reconstruction-pass-b.json",
+      "raw/rpc-calls-pass-a.jsonl",
+      "raw/rpc-calls-pass-b.jsonl",
+      "raw/strategy-a-pool.json",
+      "raw/strategy-a-rpc.jsonl",
+      "raw/probe-node-capacity.json",
+      "raw/probe-node-capacity-rpc.jsonl"
+    ],
+    "run_command": "GIWA_RPC_URL=<endpoint from the environment> M92_STRATEGY=<pool|census> M92_TARGET=37224031 cargo test -p evm-discovery --test sync_reconstruction_live -- --ignored --nocapture --test-threads=1 <target name>  (§11 probe, then §12 both arms, then §20/§27)",
+    "written_at": "the run, not the review: no field in this directory is a restatement of a number a reader could not recompute from the rows beside it"
+  },
+  "calls_outside_the_read_only_set": 0,
+  "no_latest_state": "a log query's block range is not a field the sink stamps (`eth_getLogs` lines carry `block: null`; `tally.calls_with_a_pinned_block` counts the lines that do carry one, which is how much the trace can show and no more). The pinned-range claim rests on the two things that do record it: every row in `reconstruction.json` names `search_from`/`search_to` as numbers, `search_to` is equal to the target, and this run scans each pool from that pool's own `discovery_block` up, so `search_from` is at or above `discovery_block` on every row (§8); their sum is this table's `blocks_scanned`. And the type that reaches the wire is `LogFilter { from_block: BlockNumber, to_block: BlockNumber }` (`crates/chain/src/types.rs:135`), whose two fields `block_param` formats as hex numbers (`crates/chain/src/rpc.rs:396`) — a tag has no type here, so no historical read in this milestone could be answered by `latest` (§10).",
+  "passes": [
+    {
+      "accounting": {
+        "calls_the_scan_accounts_for": 10747,
+        "cap_per_sink": 20000,
+        "eth_chainId_lines": 1,
+        "eth_getlogs_requests": 10746,
+        "eth_getlogs_requests_the_rows_were_built_from": 10746,
+        "events_dropped_beyond_the_cap": 0,
+        "events_recorded": 10747,
+        "lines_in_the_trace_file": 10747,
+        "pool_call_refusals": 0,
+        "run": "pass a",
+        "scope": "every call this run put on the wire is one line in this file",
+        "trace_file": "raw/rpc-calls-pass-a.jsonl",
+        "trace_is_complete": true
+      },
+      "blocks_scanned": 106905069,
+      "chunk_blocks": 9999,
+      "logs_returned": 230,
+      "pass": "a",
+      "strategy": "pool",
+      "tally": {
+        "by_method": {
+          "eth_chainId": 1,
+          "eth_getLogs": 10746
+        },
+        "calls": 10747,
+        "calls_with_a_pinned_block": 0,
+        "max_duration_ms": 16567,
+        "median_duration_ms": 170
+      },
+      "target_block": 37224031,
+      "wall_ms": 3073928
+    },
+    {
+      "accounting": {
+        "calls_the_scan_accounts_for": 10747,
+        "cap_per_sink": 20000,
+        "eth_chainId_lines": 1,
+        "eth_getlogs_requests": 10746,
+        "eth_getlogs_requests_the_rows_were_built_from": 10746,
+        "events_dropped_beyond_the_cap": 0,
+        "events_recorded": 10747,
+        "lines_in_the_trace_file": 10747,
+        "pool_call_refusals": 0,
+        "run": "pass b",
+        "scope": "every call this run put on the wire is one line in this file",
+        "trace_file": "raw/rpc-calls-pass-b.jsonl",
+        "trace_is_complete": true
+      },
+      "blocks_scanned": 106905069,
+      "chunk_blocks": 9999,
+      "logs_returned": 230,
+      "pass": "b",
+      "strategy": "pool",
+      "tally": {
+        "by_method": {
+          "eth_chainId": 1,
+          "eth_getLogs": 10746
+        },
+        "calls": 10747,
+        "calls_with_a_pinned_block": 0,
+        "max_duration_ms": 8742,
+        "median_duration_ms": 172
+      },
+      "target_block": 37224031,
+      "wall_ms": 2683183
+    }
+  ],
+  "read_only_methods": [
+    "eth_chainId",
+    "eth_getLogs"
+  ],
+  "scope_of_that_count": "every trace file in raw/ — both reconstruction passes, both arms of the §12 experiment, and the §11 probe, as `manifest.json#raw_files` lists them. §28 asks for signatures, broadcasts and real arbitrage to be zero; anything signed or broadcast would have reached the node through a method in one of these traces, and the run held no signing key and had no broadcast path.",
+  "table": "rpc-calls",
+  "trace_is_the_source": "the per-method counts above are read off the adapter's own trace lines, and `accounting` then reconciles those lines against the request count in the same run's document. One sink holds `cap_per_sink` events and counts the rest, so a longer run's file is the first `cap_per_sink` calls and `events_dropped_beyond_the_cap` names the rest — the file is never presented as the whole run. Both halves have to add up to the calls the scan accounts for, and `sync_reconstruction_live::audit_trace` requires the same sum before a run commits anything: a method outside `read_only_methods`, a block argument that is not a pinned number, a lost event or a refused window stops the run."
+}
