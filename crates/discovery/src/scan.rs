@@ -278,20 +278,7 @@ impl HistoricalPairCreatedSource {
             cursor = last + 1;
         }
 
-        raw_logs.sort();
-        let mut deduped: Vec<ChainLog> = Vec::with_capacity(raw_logs.len());
-        let mut duplicate_logs = 0usize;
-        for log in raw_logs {
-            let repeat = deduped.last().is_some_and(|last| {
-                last.block_number == log.block_number && last.log_index == log.log_index
-            });
-            if repeat {
-                duplicate_logs += 1;
-            } else {
-                deduped.push(log);
-            }
-        }
-
+        let (deduped, duplicate_logs) = sort_and_dedup_logs(raw_logs);
         let (candidates, malformed_logs) = ScanReport::decode_claims(adapter, &deduped);
         Ok(ScanReport {
             chain_id,
@@ -313,17 +300,53 @@ impl HistoricalPairCreatedSource {
         to: BlockNumber,
     ) -> Result<Vec<ChainLog>> {
         let logs = chain.get_logs(self.filter_for(from, to)).await?;
-        if logs.len() >= NODE_LOG_LIMIT {
-            return Err(DiscoveryError::Configuration(format!(
-                "blocks {}..={} returned {} logs, which is the node's per-request ceiling: the \
-                 range has to be narrowed, because a truncated census is not a census",
-                from.0,
-                to.0,
-                logs.len()
-            )));
-        }
+        refuse_truncated_window(from, to, logs.len())?;
         Ok(logs)
     }
+}
+
+/// Turn an answer that filled the node's result ceiling into an error.
+///
+/// Shared with [`crate::reconstruct`], which asks a different question of the same
+/// node and has the same failure available to it: a truncated `Sync` scan reads
+/// exactly like a scan that found nothing, and "no later `Sync`" is the evidence a
+/// target-block projection rests on.
+pub(crate) fn refuse_truncated_window(
+    from: BlockNumber,
+    to: BlockNumber,
+    returned: usize,
+) -> Result<()> {
+    if returned >= NODE_LOG_LIMIT {
+        return Err(DiscoveryError::Configuration(format!(
+            "blocks {}..={} returned {} logs, which is the node's per-request ceiling: the \
+             range has to be narrowed, because a truncated census is not a census",
+            from.0, to.0, returned
+        )));
+    }
+    Ok(())
+}
+
+/// Sort logs by chain position and drop repeats, counting what was dropped.
+///
+/// Two windows covering one block (an overlapping range, or a node that answers a
+/// narrower question with a wider answer) make a log appear twice. Position is the
+/// identity that decides, so the count is exact rather than approximate.
+pub(crate) fn sort_and_dedup_logs(logs: Vec<ChainLog>) -> (Vec<ChainLog>, usize) {
+    let mut sorted = logs;
+    sorted.sort();
+    let mut deduped: Vec<ChainLog> = Vec::with_capacity(sorted.len());
+    let mut duplicate_logs = 0usize;
+    for log in sorted {
+        let repeat = deduped.last().is_some_and(|last| {
+            last.block_number == log.block_number && last.log_index == log.log_index
+        });
+        if repeat {
+            duplicate_logs += 1;
+        } else {
+            deduped.push(log);
+        }
+    }
+    (deduped, duplicate_logs)
 }
 
 /// The bytes of a raw log in the shape the evidence file writes them.

@@ -341,8 +341,21 @@ pub async fn collect_candidate_reads<A: ChainAdapter + ?Sized>(
 /// through the same word-level helpers the adapter uses and says so. A log whose
 /// shape is wrong yields `None`, and its candidate ends up with `sync: None`: no
 /// state evidence, therefore no graph.
-fn sync_record_of(pool: &PoolId, log: &ChainLog) -> Option<SyncRecord> {
+///
+/// [`crate::reconstruct`] decodes through this same function, so "the pool's own
+/// `Sync`" means one shape in one place: a log verification would not accept can
+/// never become a target-block state either.
+///
+/// The emitter check is part of that shape, not a formality. A record belongs to the
+/// address that published it, and `reconstruct`'s census asks the chain rather than a
+/// list of addresses — so without this gate one pool's `Sync` would be handed to every
+/// pool in the range, which is the difference between "this pool traded at block 121"
+/// and "some pool did".
+pub(crate) fn sync_record_of(pool: &PoolId, log: &ChainLog) -> Option<SyncRecord> {
     let topics = V2Topics::default();
+    if log.address != pool.address {
+        return None;
+    }
     if log.topics.first() != Some(&topics.sync) {
         return None;
     }

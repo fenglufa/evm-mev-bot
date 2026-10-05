@@ -34,11 +34,13 @@ use evm_core::{BlockNumber, ChainId, PoolId, PoolState};
 use evm_graph::{GraphBuild, MarketGraphBuilder};
 use evm_protocol::{PoolAttestation, Registry, RegistryError};
 use evm_state::{
-    InMemoryStateStore, StateError, StateSnapshot, StateStore, StateUpdate, UpdatePosition,
+    InMemoryStateStore, StateError, StateSnapshot, StateStore, StateUpdate, SyncScanCoverage,
+    UpdatePosition,
 };
 
 use crate::attest::attestation_of;
 use crate::error::{DiscoveryError, Result};
+use crate::reconstruct::Reconstruction;
 use crate::verify::VerifiedPool;
 
 /// Which claim a duplicated address kept, and which one it did not.
@@ -152,13 +154,82 @@ pub fn integrate(
     verified: &[VerifiedPool],
 ) -> Result<DiscoveredState> {
     let (claims, duplicates) = unique_claims(verified);
+    // Only the pools that got an attestation may be synced: a dropped duplicate's
+    // `Sync` would otherwise move a pool the registry knows by a different claim.
+    let syncs = syncs_of(&claims);
+    integrate_with(chain_id, base, &claims, syncs, duplicates, None)
+}
 
+/// The same pipeline, priced at an explicitly named target block, with state that a
+/// `Sync` scan reconstructed rather than the state verification happened to see.
+///
+/// This is M9.2's door from reconstruction to graph, and it is deliberately a sibling
+/// of [`integrate`] rather than a change to it: M9.1's evidence tables are the output
+/// of `integrate`, and its rule — a pool prices the graph iff its state is in the very
+/// block the snapshot was applied at — stays exactly where it was. What differs here is
+/// only *which* `Sync` is fed and the evidence attached to the projection:
+///
+/// - the state a pool is given is the one `reconstruction` selected for the target,
+///   which may be from any block at or before it, and a pool whose scan found no `Sync`
+///   is registered and unsynced, which the builder reports as `StateUnavailable`;
+/// - the snapshot is projected with `StateSnapshot::at_target`, so the graph is built at
+///   `reconstruction.target` and each pool's coverage range travels with it;
+/// - the builder still decides admission, on the same predicate it has always used plus
+///   the scan proof (§16: the rule is not weakened, the evidence is added).
+///
+/// The verified pools are still the source of identity: attestation, dedup, and the
+/// registry's own validation are untouched, so a reconstructed state cannot put a pool
+/// on the graph that discovery never attested.
+pub fn integrate_at_target(
+    chain_id: ChainId,
+    base: &Registry,
+    verified: &[VerifiedPool],
+    reconstruction: &Reconstruction,
+) -> Result<DiscoveredState> {
+    let (claims, duplicates) = unique_claims(verified);
+    let attested: BTreeMap<PoolId, ()> = claims
+        .iter()
+        .map(|pool| (pool.candidate.pool, ()))
+        .collect();
+    let syncs: Vec<PoolState> = reconstruction
+        .rows
+        .iter()
+        .filter(|row| attested.contains_key(&row.pool))
+        .filter_map(|row| row.state())
+        .collect();
+    integrate_with(
+        chain_id,
+        base,
+        &claims,
+        syncs,
+        duplicates,
+        Some(reconstruction),
+    )
+}
+
+/// Registry → store → snapshot → graph, for both doors above.
+///
+/// `reconstruction` is the projection: `None` means the snapshot is handed to the
+/// builder exactly as the store applied it, which is the behavior M2 through M9.1 have
+/// always had, and `Some` names the target block and the per-pool scan coverage that
+/// licenses a pool older than the target to price it. Everything else — one attestation
+/// per address, syncs fed in ascending chain position, the store's refusals recorded as
+/// data rather than raised as errors, the builder as the only admission gate — is
+/// shared, because two copies of those rules is how two doors start to disagree.
+fn integrate_with(
+    chain_id: ChainId,
+    base: &Registry,
+    claims: &[&VerifiedPool],
+    mut syncs: Vec<PoolState>,
+    duplicates: Vec<DuplicateClaim>,
+    reconstruction: Option<&Reconstruction>,
+) -> Result<DiscoveredState> {
     // Registry first, and the project's own guard on this run's output before it
     // can reach anything downstream: complete evidence, one chain per
     // attestation, no same-token pair.
     let mut discovered = Registry::default();
     let mut attested = Vec::with_capacity(claims.len());
-    for pool in &claims {
+    for pool in claims {
         let attestation = attestation_of(pool);
         discovered
             .pools
@@ -181,10 +252,9 @@ pub fn integrate(
             .map_err(|err| store_error(pool, err.to_string()))?;
     }
 
-    // Only the pools that got an attestation may be synced: a dropped duplicate's
-    // `Sync` would otherwise move a pool the registry knows by a different claim.
+    syncs.sort_by_key(|state| (state.block_number.0, state.log_index.0, state.pool));
     let mut rejections = Vec::new();
-    for sync in syncs_of(&claims) {
+    for sync in syncs {
         let position = UpdatePosition::new(sync.block_number, sync.log_index);
         let pool = sync.pool;
         let update = StateUpdate::PoolSynced {
@@ -216,7 +286,13 @@ pub fn integrate(
     }
     rejections.sort_by_key(StoreRejection::identity);
 
-    let snapshot = store.snapshot();
+    let snapshot = match reconstruction {
+        Some(reconstruction) => {
+            let coverage: BTreeMap<PoolId, SyncScanCoverage> = reconstruction.coverage();
+            store.snapshot().at_target(reconstruction.target, coverage)
+        }
+        None => store.snapshot(),
+    };
     let graph = match snapshot.position {
         Some(_) => GraphOutcome::Built(MarketGraphBuilder::new().build_traced(&snapshot).map_err(
             |err| DiscoveryError::Integration {

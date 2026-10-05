@@ -68,9 +68,14 @@ impl GraphSnapshot {
         self.chain_id
     }
 
-    /// The block this view is taken at: the state snapshot's applied position.
-    /// Every edge here was priced in exactly this block — a pool whose newest
-    /// state is older is skipped and reported, never carried along.
+    /// The block this view is taken at: the target the builder was asked for,
+    /// which is the state snapshot's applied position unless a reconstruction
+    /// named a block explicitly.
+    ///
+    /// Every edge here prices exactly this block — either its authoritative
+    /// `Sync` happened in it, or a complete `Sync` scan proves the pool's older
+    /// `Sync` still held at it. A pool neither of those cover is skipped and
+    /// reported, never carried along.
     pub fn block_number(&self) -> BlockNumber {
         self.block_number
     }

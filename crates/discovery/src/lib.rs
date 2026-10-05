@@ -38,22 +38,35 @@
 //! [`scan`] asks the node for records and [`verify`] decides from records already
 //! in hand — so the evidence this crate writes can be recomputed offline, without
 //! a second run against a provider that may answer differently next hour.
+//!
+//! M9.1 answered "does this pool exist, and did it ever publish reserves". A pool
+//! whose answer is yes is still not in the graph unless its reserves are the reserves
+//! of the block being priced, which is a second question about a different range of
+//! blocks — and [`reconstruct`] is that one: the pool's latest authoritative `Sync`
+//! at or before an explicit target, plus the scan that proves nothing later happened
+//! before that target.
 
 pub mod attest;
 pub mod candidate;
 pub mod error;
 pub mod integrate;
 pub mod reads;
+pub mod reconstruct;
 pub mod scan;
 pub mod verify;
 
 pub use attest::{attestation_of, fee_of, SYNC_SIGNATURE};
 pub use candidate::{CandidatePool, DiscoverySource};
 pub use error::{DiscoveryError, Result};
-pub use integrate::{integrate, DiscoveredState, DuplicateClaim, GraphOutcome, StoreRejection};
+pub use integrate::{
+    integrate, integrate_at_target, DiscoveredState, DuplicateClaim, GraphOutcome, StoreRejection,
+};
 pub use reads::{
     collect_candidate_reads, collect_contract_reads, collect_sync_record, return_hex, CallKind,
     CallRecord, CandidateReads, SyncRecord,
+};
+pub use reconstruct::{
+    HistoricalSyncSource, PoolStateAtTarget, PoolSyncAtTarget, Reconstruction, SyncCensus,
 };
 pub use scan::{
     hex_of, log_record, pair_created_topic0, HistoricalPairCreatedSource, LogRecord, MalformedLog,
