@@ -341,6 +341,46 @@ pub fn reserves(reserve0: U256, reserve1: U256) -> Bytes {
     Bytes::from(data)
 }
 
+/// A `Sync(uint112,uint112)` log as the pool itself emits it: one topic, two words,
+/// and the block plus log index the chain gave it.
+///
+/// `tx_index` is fixed because no reconstruction rule reads it — a `Sync` is ordered
+/// by block and log index, which is what `crates/chain/src/recorded.rs` proves is
+/// already the chain's total order — and leaving it out of the fixture's signature is
+/// what keeps a test from accidentally asserting on it.
+pub fn sync_log(
+    pool: Address,
+    reserve0: U256,
+    reserve1: U256,
+    block: u64,
+    log_index: u64,
+) -> ChainLog {
+    let mut data = Vec::with_capacity(64);
+    data.extend(reserve0.to_be_bytes::<32>());
+    data.extend(reserve1.to_be_bytes::<32>());
+    ChainLog {
+        chain_id: ChainId(CHAIN),
+        block_number: BlockNumber(block),
+        tx_hash: TxHash(B256::left_padding_from(&[block as u8])),
+        tx_index: TxIndex(1),
+        log_index: LogIndex(log_index),
+        address: pool,
+        topics: vec![evm_protocol::V2Topics::default().sync],
+        data: Bytes::from(data),
+    }
+}
+
+/// The same log, with the reserves a real pair publishes.
+pub fn sync_at_block(pool: Address, block: u64) -> ChainLog {
+    sync_log(
+        pool,
+        U256::from(1_000u32),
+        U256::from(2_000u32),
+        block,
+        block,
+    )
+}
+
 /// The filter a whole-window scan of `from..=to` asks the node for: one topic0, no
 /// address list (§8 — discovery asks the chain, not a list of known factories).
 pub fn window_filter(from: u64, to: u64) -> LogFilter {
