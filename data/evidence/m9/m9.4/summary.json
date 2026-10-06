@@ -1,0 +1,246 @@
+{
+  "ab_section_28": [
+    {
+      "affected_pools": 0,
+      "basis": "transaction-level lead unless labelled height-level; both are in latency.json",
+      "canonical_reconciled_digest_handings": 59,
+      "canonical_reconciled_heights": 46,
+      "decoded": 80,
+      "duplicates": 4,
+      "flashblocks_received": 80,
+      "gaps": "N/A_NOT_MEASURABLE",
+      "height_level_median_lead_ms": 2190,
+      "max_lead_ms": 3701,
+      "median_lead_ms": 2305,
+      "mismatches": 0,
+      "p95_lead_ms": 3333,
+      "sequence_valid": 80,
+      "window": "window-a"
+    },
+    {
+      "affected_pools": 0,
+      "basis": "transaction-level lead unless labelled height-level; both are in latency.json",
+      "canonical_reconciled_digest_handings": 57,
+      "canonical_reconciled_heights": 45,
+      "decoded": 82,
+      "duplicates": 1,
+      "flashblocks_received": 82,
+      "gaps": "N/A_NOT_MEASURABLE",
+      "height_level_median_lead_ms": 1587,
+      "max_lead_ms": 2845,
+      "median_lead_ms": 1587,
+      "mismatches": 0,
+      "p95_lead_ms": 2606,
+      "sequence_valid": 82,
+      "window": "window-b"
+    }
+  ],
+  "boundaries_kept": {
+    "canonical_state_store": "the radar's types live in evm-live and reach no writer; the §58 gate is crates/live/tests/preconf_isolation.rs",
+    "graph_and_pathfinder": "no Flashblocks frame is a PathFinder input (§20/§21); crates/graph and crates/pathfinder are untouched",
+    "m9_2_semantics": "the pool set here is read from M9.2's committed table, never re-derived",
+    "no_second_canonical_pipeline": "§44: the radar emits its own RadarEvent type and is never handed to the pipeline's canonical branch"
+  },
+  "denominators": {
+    "edges": 160,
+    "graph_block": 37224031,
+    "registered_pools": 80,
+    "source": "data/evidence/m9/m9.2/graph-integration.json",
+    "tokens": 50
+  },
+  "endpoint_identity": {
+    "canonical_endpoint_id": "rpc-faa716cada04a9ef",
+    "chain_id": 91342,
+    "decode_result": [
+      {
+        "decode_failures": 0,
+        "frames_rejected": 0,
+        "read_failures": 0,
+        "window": "window-a"
+      },
+      {
+        "decode_failures": 0,
+        "frames_rejected": 0,
+        "read_failures": 0,
+        "window": "window-b"
+      }
+    ],
+    "flashblocks_endpoint_id": "rpc-a9eb0c34d5519e0a",
+    "message_count": [
+      {
+        "canonical_digests_handed": 59,
+        "events_delivered": 759,
+        "pending_reads": 80,
+        "window": "window-a"
+      },
+      {
+        "canonical_digests_handed": 58,
+        "events_delivered": 748,
+        "pending_reads": 82,
+        "window": "window-b"
+      }
+    ],
+    "observed_blocks_and_sequence": [
+      {
+        "first_pending_height": 37961507,
+        "first_sealed_height": 37961504,
+        "last_pending_height": 37961551,
+        "last_sealed_height": 37961549,
+        "sequence_basis": "local read order only — see protocol.json's identity_fields.frame_index",
+        "window": "window-a"
+      },
+      {
+        "first_pending_height": 37961562,
+        "first_sealed_height": 37961560,
+        "last_pending_height": 37961606,
+        "last_sealed_height": 37961605,
+        "sequence_basis": "local read order only — see protocol.json's identity_fields.frame_index",
+        "window": "window-b"
+      }
+    ],
+    "transport": "http-poll-pending",
+    "url_written_anywhere_in_this_directory": false
+  },
+  "headline": "the official GIWA Flashblocks endpoint answers one repeated poll for one growing `pending` block and nothing else: no push, no frame index, no state credential. Built on that transport, the Early Radar holds views, validates identity, reconciles by content, and gains no authority over canonical RPC.",
+  "milestone": "M9.4",
+  "profit": {
+    "gross": "N/A",
+    "net": "N/A",
+    "realized": "N/A",
+    "reason": "§35/§36: no financial evaluation at this milestone. A zero would claim something was priced and found worthless; nothing here reads a reserve, an amount, a fee or a gas price for execution."
+  },
+  "recompute_agreement_section_32": [
+    {
+      "axes": [
+        "frames_offered",
+        "frames_accepted",
+        "frames_duplicate",
+        "heights_seen",
+        "heights_multi_view",
+        "heights_ge_three_views",
+        "state_root_placeholders",
+        "transactions_observed",
+        "canonical_closures",
+        "reconciled_content_equal",
+        "reconciled_content_prefix",
+        "reconciled_content_superset",
+        "reconciled_content_divergent",
+        "reconciled_no_view",
+        "reconciled_hash_match",
+        "affected_pools_emitted"
+      ],
+      "axes_compared": 16,
+      "disagreements": 0,
+      "disclosed_instead_of_smoothed": "the reported canonical_closures counts digest handings; distinct_heights_closed counts heights. Both appear above because they are different numbers.",
+      "per_closure_axes": [
+        "verdict class (set logic over the two raw transaction lists)",
+        "flashblocks_lead_ms",
+        "canonical_lag_ms",
+        "reconciliation_latency_ms"
+      ],
+      "window": "window-a"
+    },
+    {
+      "axes": [
+        "frames_offered",
+        "frames_accepted",
+        "frames_duplicate",
+        "heights_seen",
+        "heights_multi_view",
+        "heights_ge_three_views",
+        "state_root_placeholders",
+        "transactions_observed",
+        "canonical_closures",
+        "reconciled_content_equal",
+        "reconciled_content_prefix",
+        "reconciled_content_superset",
+        "reconciled_content_divergent",
+        "reconciled_no_view",
+        "reconciled_hash_match",
+        "affected_pools_emitted"
+      ],
+      "axes_compared": 16,
+      "disagreements": 0,
+      "disclosed_instead_of_smoothed": "the reported canonical_closures counts digest handings; distinct_heights_closed counts heights. Both appear above because they are different numbers.",
+      "per_closure_axes": [
+        "verdict class (set logic over the two raw transaction lists)",
+        "flashblocks_lead_ms",
+        "canonical_lag_ms",
+        "reconciliation_latency_ms"
+      ],
+      "window": "window-b"
+    }
+  ],
+  "rpc_accounting_section_34": {
+    "canonical_reads_issued": 117,
+    "chain_id_reads": 4,
+    "explained_by": "every issued read has a line: the pending arm's reads are pending-reads.jsonl, the closing arm's polls are canonical-reads.jsonl and its gap fills are the digests nested in each poll line's gap_reads, and eth_chainId is counted per connect in the run metadata",
+    "instrumentation_added_rpc": 0,
+    "instrumentation_added_rpc_reason": "the radar reads nothing: it is a function of the frames and digests the harness hands it. This gate reads committed files and issues zero requests, so the tables cost nothing to rebuild (§34).",
+    "methods_requested": [
+      "eth_chainId",
+      "eth_getBlockByNumber"
+    ],
+    "pending_reads_issued": 162,
+    "this_gate_issues_zero_requests": true
+  },
+  "safety": {
+    "broadcasts": 0,
+    "private_sequencer": "BLOCKED (§37, unchanged)",
+    "real_arbitrage_evaluations": 0,
+    "self_hosted_node": "not used (§38)",
+    "signatures": 0,
+    "signing_key_literal_shape": "the secret scan's own needle list would match a field named after it, so this count is spelled without those characters; the needles and the positive control are in `no_secret_shape_appears_in_the_directory`",
+    "urls_in_this_directory": 0
+  },
+  "semantics_that_must_be_quoted_with_this_directory": {
+    "flashblocks_can_accelerate_detection": true,
+    "flashblocks_can_increase_authority_over_canonical_rpc": false,
+    "flashblocks_equals_canonical_state": false,
+    "quote": "§51: Flashblocks != Canonical State. Flashblocks can accelerate detection, but cannot increase authority over canonical RPC. Verified != Fresh forever. EARLY ≠ FINAL, OBSERVED ≠ VERIFIED, VERIFIED ≠ CANONICAL, CANONICAL ≠ PROFITABLE (§61).",
+    "verified_equals_fresh_forever": false
+  },
+  "table": "summary",
+  "what_is_not_claimed": [
+    "a real AffectedPool hit: 0 in both windows, with the denominators and the non-zero positive control in affected-pools.json",
+    "sequence-gap detection on the preconfirmation arm: unmeasurable without a wire index, recorded as N/A_NOT_MEASURABLE rather than 0",
+    "replay or cursor semantics: UNKNOWN, not SUPPORTED (§52)",
+    "that the pending view is a state credential: its stateRoot is an all-zero placeholder in every distinct view of both windows",
+    "that a 45 s testnet window generalises: the lead distributions carry their non-positive counts and latency.json carries its selection warning",
+    "any authority over canonical RPC: canonical wins on every closure row"
+  ],
+  "windows": [
+    {
+      "canonical_interval_ms": 500,
+      "ended_by": "stop_requested",
+      "final_stage": "disconnected",
+      "pending_payload_bytes_total": 2039861,
+      "pool_set_graph_block": 37224031,
+      "pool_set_size": 80,
+      "read_interval_ms": 250,
+      "started_at_unix_ms": 1791306622616,
+      "verbatim_payload_budget_bytes": 1500000,
+      "verbatim_payload_bytes_left": 1503,
+      "verbatim_payload_reads": 60,
+      "window": "window-a",
+      "window_ms_elapsed": 45026,
+      "window_ms_requested": 45000
+    },
+    {
+      "canonical_interval_ms": 500,
+      "ended_by": "stop_requested",
+      "final_stage": "disconnected",
+      "pending_payload_bytes_total": 2387721,
+      "pool_set_graph_block": 37224031,
+      "pool_set_size": 80,
+      "read_interval_ms": 250,
+      "started_at_unix_ms": 1791306677409,
+      "verbatim_payload_budget_bytes": 1500000,
+      "verbatim_payload_bytes_left": 3915,
+      "verbatim_payload_reads": 50,
+      "window": "window-b",
+      "window_ms_elapsed": 45026,
+      "window_ms_requested": 45000
+    }
+  ]
+}

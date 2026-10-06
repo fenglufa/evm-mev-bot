@@ -1,0 +1,140 @@
+{
+  "_provenance": {
+    "asked": "§30/§31/§49: what the official preconfirmation endpoint actually answered over two bounded windows, what the Early Radar did with it, how far ahead of canonical it was, and which of the task book's questions this transport cannot be asked at all — with every number recomputable from the raw lines beside it by a reader who calls no production helper.",
+    "assemble_command": "M94_EVIDENCE_REFRESH=1 cargo test -p evm-live --test preconf_evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/live/tests/preconf_evidence_gate.rs",
+    "canonical_endpoint": "rpc-faa716cada04a9ef",
+    "capture_commands": [
+      "M94_RAW_DIR=data/evidence/m9/m9.4/raw/window-a M94_WINDOW_MS=45000 M94_READ_INTERVAL_MS=250 M94_CANONICAL_INTERVAL_MS=500 cargo test -p evm-live --test preconf_live_giwa -- --ignored --test-threads=1",
+      "M94_RAW_DIR=data/evidence/m9/m9.4/raw/window-b M94_WINDOW_MS=45000 M94_READ_INTERVAL_MS=250 M94_CANONICAL_INTERVAL_MS=500 cargo test -p evm-live --test preconf_live_giwa -- --ignored --test-threads=1"
+    ],
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-live --test preconf_evidence_gate -- --test-threads=1",
+    "endpoint_note": "§33: the endpoints are the digests the capture itself wrote into each run report, quoted from the raw line rather than retyped here. No URL appears here, and no recomputation of a digest is performed, because that would need the URL the digest replaced.",
+    "flashblocks_endpoint": "rpc-a9eb0c34d5519e0a",
+    "input_files": [
+      "data/evidence/m9/m9.2/graph-integration.json",
+      "data/evidence/m9/m9.4/raw/window-a/live-run-report.json",
+      "data/evidence/m9/m9.4/raw/window-b/live-run-report.json"
+    ],
+    "milestone": "M9.4",
+    "no_key_in_this_file": true,
+    "written_at": "the run, not the review: wall time lives in raw/ and is quoted here rather than re-measured, so a rebuild is byte-identical"
+  },
+  "files": [
+    {
+      "bytes": 9769,
+      "digest": "0x6cb480b6fb2513a91cbbcbcd5daa45e201cf8fb4ee1c123f227ec13ec85d3e65",
+      "file": "summary.json",
+      "lines": 246
+    },
+    {
+      "bytes": 5449,
+      "digest": "0xec3c0676acf8691496dec7d8a92761ee72e55769b2d8db68f83fc19bc170621d",
+      "file": "protocol.json",
+      "lines": 177
+    },
+    {
+      "bytes": 89514,
+      "digest": "0x46609b5ad9da3a1e2d45935e31a7eb108c5fe19bedd3882fd0877af0746e0971",
+      "file": "flashblocks.jsonl",
+      "lines": 162
+    },
+    {
+      "bytes": 51941,
+      "digest": "0xcf80d45d4144dacb4c5a68801c6dcb9ee2b9bf16e5f7c3a7b5c5d63b9c423d5e",
+      "file": "sequence.json",
+      "lines": 1539
+    },
+    {
+      "bytes": 2509,
+      "digest": "0x67af3cd7181807f4484fc3a82b1eee795c02383cfee11e7f072205a4ce2ee063",
+      "file": "affected-pools.json",
+      "lines": 40
+    },
+    {
+      "bytes": 69656,
+      "digest": "0x787daea9866def530c1b32badd550fc57de14e2d37adcebb7fc769350cbcca6c",
+      "file": "reconciliation.json",
+      "lines": 2258
+    },
+    {
+      "bytes": 102567,
+      "digest": "0xb797ccce36c4c05a04cf0ddbd0e71ecce1a3a275900ea966d419ad751369e286",
+      "file": "latency.json",
+      "lines": 2572
+    },
+    {
+      "bytes": 7707,
+      "digest": "0xfbe380b0cb8759f0841c82c7896a1036ee6ae3ab390964664a7691ba935d6b4e",
+      "file": "negative-controls.json",
+      "lines": 160
+    }
+  ],
+  "gate": "cargo test -p evm-live --test preconf_evidence_gate -- --test-threads=1 writes nothing and compares every byte above against a fresh rebuild",
+  "raw_files": [
+    {
+      "bytes": 4345,
+      "digest": "0x3ca45586f686102821820518f5147f7cf348cd50a07eb331d2f944bb4f07220b",
+      "file": "raw/window-a/live-run-report.json",
+      "lines": 119
+    },
+    {
+      "bytes": 164086,
+      "digest": "0x7f3e60d87a6e2002ad0ffc787dcddc740a16825dfb7ccdfc79fbb6c08761148a",
+      "file": "raw/window-a/events.jsonl",
+      "lines": 759
+    },
+    {
+      "bytes": 562777,
+      "digest": "0x4e7d49cf61551e0fc03373c5b563937e51289e36976d7d30093ad9bc9377a3cd",
+      "file": "raw/window-a/pending-reads.jsonl",
+      "lines": 80
+    },
+    {
+      "bytes": 166431,
+      "digest": "0x7ff014174819ce7073ff503f963ce7ded301df53ad110f2611d821667be8feef",
+      "file": "raw/window-a/canonical-reads.jsonl",
+      "lines": 50
+    },
+    {
+      "bytes": 1508142,
+      "digest": "0xb83f9b2cef89a475cf8db1b10b54eb5b4b4c36e1d662aab0ce28c80707c24fa1",
+      "file": "raw/window-a/pending-payloads.jsonl",
+      "lines": 60
+    },
+    {
+      "bytes": 4345,
+      "digest": "0xa85d770f7de2d42522aa34011cf1d3b7ef0946ce104d35a4e9f8fdeec7b96e79",
+      "file": "raw/window-b/live-run-report.json",
+      "lines": 119
+    },
+    {
+      "bytes": 161090,
+      "digest": "0x63bcc27e09cb71eea5beb595cd6013746435ac8c015c9c7410d83f8bc07e27cf",
+      "file": "raw/window-b/events.jsonl",
+      "lines": 748
+    },
+    {
+      "bytes": 636452,
+      "digest": "0x80173e979db46d12aa58a76c6f99ced2fd7328917513aab6d0587e5f81ef1a37",
+      "file": "raw/window-b/pending-reads.jsonl",
+      "lines": 82
+    },
+    {
+      "bytes": 169187,
+      "digest": "0x10b3b88de6bc228d02e76ef3adfedad277fdefac13dc9ac2e3c4a32e270e5815",
+      "file": "raw/window-b/canonical-reads.jsonl",
+      "lines": 55
+    },
+    {
+      "bytes": 1504123,
+      "digest": "0xc1de845203902952803eef68ef4ef0326cf49b92c35349190ae8b42dce7441f5",
+      "file": "raw/window-b/pending-payloads.jsonl",
+      "lines": 50
+    }
+  ],
+  "raw_records": 10,
+  "table": "manifest",
+  "tables": 10
+}

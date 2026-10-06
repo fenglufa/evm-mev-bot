@@ -1,0 +1,177 @@
+{
+  "capabilities": [
+    {
+      "capability": "push / subscription",
+      "value": "NOT_AVAILABLE_ON_THIS_TRANSPORT",
+      "witness": "both windows read the preconfirmation arm by polling on an HTTP adapter, and each run report says transport = http-poll-pending. The authority for the endpoint side is audit §2.1's probes; this milestone re-ran none of them and claims nothing beyond them."
+    },
+    {
+      "capability": "provider frame index",
+      "value": "ABSENT",
+      "witness": "observed_header_keys above"
+    },
+    {
+      "capability": "replay after disconnect",
+      "value": "UNKNOWN",
+      "witness": "§52: neither window reset its link (link_resets = 0), so the question was never asked and no method that could answer it was requested."
+    },
+    {
+      "capability": "cursor / gap recovery",
+      "value": "UNKNOWN",
+      "witness": "same: there is no wire index to cursor with, and no preconfirmation gap is detectable (§9)."
+    },
+    {
+      "capability": "pending receipts",
+      "value": "NOT_REQUESTED_IN THESE_WINDOWS",
+      "witness": "methods_requested lists two methods and receipt_lists_decoded is 0, so the log-derived half of AffectedPool has no real-traffic witness here; its correctness rests on the fixtures and on NC10/NC11/NC12."
+    },
+    {
+      "capability": "state credential for the pending view",
+      "value": "NONE (all-zero stateRoot)",
+      "witness": "state_root_placeholder_throughout per height in sequence.json"
+    }
+  ],
+  "chain_id": 91342,
+  "endpoints": {
+    "canonical": "rpc-faa716cada04a9ef",
+    "flashblocks": "rpc-a9eb0c34d5519e0a",
+    "note": "§33: the two digests the capture wrote itself. This table recomputes neither, because recomputing one would need the URL it replaced."
+  },
+  "identity_fields": {
+    "frame_index": "ABSENT — no index / sequence / slot / payloadId key appears in any read, so the frame index is assigned locally from read order (§8)",
+    "height": "number — a hex quantity, present in every read",
+    "parent_identity": "parentHash — present in every read",
+    "state_credential": "stateRoot — an all-zero placeholder in every distinct view of both windows",
+    "view_hash": "hash — changes between reads of one height, so identity is never the hash alone"
+  },
+  "kind": "characterization from the committed raw lines (§5.1/§6)",
+  "methods_requested": [
+    "eth_chainId",
+    "eth_getBlockByNumber"
+  ],
+  "observed_header_key_count": 26,
+  "observed_header_keys": [
+    {
+      "key": "baseFeePerGas",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "blobGasUsed",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "difficulty",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "excessBlobGas",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "extraData",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "gasLimit",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "gasUsed",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "hash",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "logsBloom",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "miner",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "mixHash",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "nonce",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "number",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "parentBeaconBlockRoot",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "parentHash",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "receiptsRoot",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "requestsHash",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "sha3Uncles",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "size",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "stateRoot",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "timestamp",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "transactions",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "transactionsRoot",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "uncles",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "withdrawals",
+      "reads_naming_it": 162
+    },
+    {
+      "key": "withdrawalsRoot",
+      "reads_naming_it": 162
+    }
+  ],
+  "reads_sampled": 162,
+  "table": "protocol",
+  "transaction_shapes": [
+    {
+      "count": 4348,
+      "shape": "full_object"
+    }
+  ],
+  "what_was_not_probed_here": [
+    "node version / commit — the endpoint publishes no field naming it (§52: UNKNOWN, not guessed)",
+    "upstream Flashblocks vs Subblocks evolution — a repository question, answered in the audit, not by these two windows",
+    "storage / balance / logs at the pending tag — audit §2.2 already ruled the pending view out as a state credential; this milestone reads no state"
+  ],
+  "wire_format_notes": [
+    "a pending answer is one complete block object: no envelope, no notification method, no subscription id, nothing to frame a stream with",
+    "the same height is answered repeatedly and each answer is a longer list of the same transactions, so a frame is a snapshot of one growing view rather than a delta",
+    "the header names the sequencer as miner and carries the OP-Stack fields (blobGasUsed, excessBlobGas, requestsHash, withdrawalsRoot), which is what identifies this endpoint's product family without a version string the endpoint does not publish"
+  ]
+}

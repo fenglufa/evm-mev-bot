@@ -1,0 +1,2258 @@
+{
+  "canonical_wins_note": "every row carries canonical_wins = true because §17 makes it a property of the verdict set, not a branch: the classes differ only in what is recorded about the view.",
+  "kind": "§15–§19 content comparison, recomputed from raw by set logic over the two transaction lists",
+  "repeat_closures": {
+    "disclosed_rather_than_silently_repaired": true,
+    "effect_on_counters": "the reported `canonical_closures` counts digest handings, not heights. Both numbers are printed per window above, and `closure_of_this_height` labels every row.",
+    "verdict_stability": 0,
+    "verdict_stability_meaning": "how many heights changed verdict class between their closures. 0 means the axis is a counting difference and not a correctness one — but flattening the two numbers would still have been a misstatement, so they stay separate.",
+    "what": "one height can be closed more than once: the closing arm polls `latest` and hands the same sealed digest again, while the radar keeps the closed view so a late frame still has something to compare against (§19)"
+  },
+  "rows": [
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 1,
+      "hash_matched": false,
+      "height": 37961504,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 0,
+      "reconciled_at_unix_ms": 1791306622934,
+      "sealed_hash": "0x7695914b4812348b5e7c7dbffb6a1d384598548bd34515b6f04b96b2763dbb69",
+      "sealed_transactions": 29,
+      "verdict_recomputed": "no_view",
+      "verdict_reported": "no_view",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 17,
+      "hash_matched": false,
+      "height": 37961505,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 0,
+      "reconciled_at_unix_ms": 1791306624000,
+      "sealed_hash": "0xdbe369ebe1ce3866016d79cd21b8990e73a5299ecc4c6b5c6913f8392649c74c",
+      "sealed_transactions": 28,
+      "verdict_recomputed": "no_view",
+      "verdict_reported": "no_view",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 32,
+      "hash_matched": false,
+      "height": 37961506,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 0,
+      "reconciled_at_unix_ms": 1791306624921,
+      "sealed_hash": "0x03c1733b3a89e20cd47b8ab7c03ac23699603a305d885a63071f1c4318645f86",
+      "sealed_transactions": 88,
+      "verdict_recomputed": "no_view",
+      "verdict_reported": "no_view",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 48,
+      "hash_matched": false,
+      "height": 37961507,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 30,
+      "reconciled_at_unix_ms": 1791306625851,
+      "sealed_hash": "0xd2392ffa28afb8096c2748be16ad499b3ccf79bfbe5a4cedab3ed12793684c87",
+      "sealed_transactions": 30,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 58,
+      "hash_matched": false,
+      "height": 37961508,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 29,
+      "reconciled_at_unix_ms": 1791306626374,
+      "sealed_hash": "0xb0b935ee014c64afec1adee3e640d5277ee395eb349ce7caac2fc1f49c8c216a",
+      "sealed_transactions": 29,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 75,
+      "hash_matched": false,
+      "height": 37961509,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306627467,
+      "sealed_hash": "0x6ffe5d910b2513d2cde1df43ef96dd2d2c55e66abd1babd4f1f70c220eeb6d3a",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 86,
+      "hash_matched": false,
+      "height": 37961509,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306627977,
+      "sealed_hash": "0x6ffe5d910b2513d2cde1df43ef96dd2d2c55e66abd1babd4f1f70c220eeb6d3a",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 95,
+      "hash_matched": false,
+      "height": 37961510,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 27,
+      "reconciled_at_unix_ms": 1791306628546,
+      "sealed_hash": "0x55446a6b57dd6df6646d7b112dc10b5f293bcdf9a8c2405345df127e40f16e95",
+      "sealed_transactions": 27,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 112,
+      "hash_matched": false,
+      "height": 37961511,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 24,
+      "reconciled_at_unix_ms": 1791306629693,
+      "sealed_hash": "0xbd1c5962ee4965ef50768ea211ea6233b4eaf31b1d9998eb141f3197751b40fd",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 129,
+      "hash_matched": false,
+      "height": 37961511,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 24,
+      "reconciled_at_unix_ms": 1791306630773,
+      "sealed_hash": "0xbd1c5962ee4965ef50768ea211ea6233b4eaf31b1d9998eb141f3197751b40fd",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 150,
+      "hash_matched": false,
+      "height": 37961512,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306631916,
+      "sealed_hash": "0xd2737dd76d341a310ed0cd1d8e80979327d30faf8ddd467059e3465b281b809b",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 160,
+      "hash_matched": false,
+      "height": 37961513,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306632684,
+      "sealed_hash": "0xa14cadd5b0981c829542ae12f63b6588f7bcbcad6c00ba9020d1366afa714dc2",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 173,
+      "hash_matched": false,
+      "height": 37961514,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 28,
+      "reconciled_at_unix_ms": 1791306633150,
+      "sealed_hash": "0x13b4b59fd3789e8ab5b82b51601dd80d881db83e7cf04559c3c3fec35e2ee877",
+      "sealed_transactions": 28,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 183,
+      "hash_matched": false,
+      "height": 37961515,
+      "held_and_sealed_reported": [
+        30,
+        34
+      ],
+      "held_transactions": 30,
+      "reconciled_at_unix_ms": 1791306633760,
+      "sealed_hash": "0x44f92e730fb2918cb3ba5d289d48dbe5f5cf28252140b60da3d0f687a0f8a73d",
+      "sealed_transactions": 34,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 203,
+      "hash_matched": false,
+      "height": 37961516,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 81,
+      "reconciled_at_unix_ms": 1791306634753,
+      "sealed_hash": "0x8f068814cd9be495a2b998bec88b3f16a9af6c7befdab645282be426782dfc2f",
+      "sealed_transactions": 81,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 219,
+      "hash_matched": false,
+      "height": 37961517,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306635913,
+      "sealed_hash": "0xeef70688eed83c584ae51967f08c8829bb82231e61a76e192a09861e99480e00",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 230,
+      "hash_matched": false,
+      "height": 37961518,
+      "held_and_sealed_reported": [
+        18,
+        21
+      ],
+      "held_transactions": 18,
+      "reconciled_at_unix_ms": 1791306636406,
+      "sealed_hash": "0xa825da3c60d8bb784e0d8ca82f619ac921f287225f572b7f5f3394a89dadc6d7",
+      "sealed_transactions": 21,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 240,
+      "hash_matched": false,
+      "height": 37961518,
+      "held_and_sealed_reported": [
+        18,
+        21
+      ],
+      "held_transactions": 18,
+      "reconciled_at_unix_ms": 1791306636884,
+      "sealed_hash": "0xa825da3c60d8bb784e0d8ca82f619ac921f287225f572b7f5f3394a89dadc6d7",
+      "sealed_transactions": 21,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 257,
+      "hash_matched": false,
+      "height": 37961519,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 30,
+      "reconciled_at_unix_ms": 1791306638192,
+      "sealed_hash": "0x2a0ba1a0302b4757fc7165a8618cc49f51032e87bb998f894f5ae9d562866973",
+      "sealed_transactions": 30,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 267,
+      "hash_matched": false,
+      "height": 37961520,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 26,
+      "reconciled_at_unix_ms": 1791306638787,
+      "sealed_hash": "0x6cc3e77b525cb25373d151e08a79f9ad18b14023bea245fa1216945b15a72366",
+      "sealed_transactions": 26,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 284,
+      "hash_matched": false,
+      "height": 37961521,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 0,
+      "reconciled_at_unix_ms": 1791306639754,
+      "sealed_hash": "0x29df175fe272743f9065621cb103d238a70db1cc7f98b413c5198644f16d5512",
+      "sealed_transactions": 34,
+      "verdict_recomputed": "no_view",
+      "verdict_reported": "no_view",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 293,
+      "hash_matched": false,
+      "height": 37961522,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306640178,
+      "sealed_hash": "0x920f8701782cbe4829db615a006d6254888ed5e6daa9c9a66cb3b88fb4be78ce",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 304,
+      "hash_matched": false,
+      "height": 37961522,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306640834,
+      "sealed_hash": "0x920f8701782cbe4829db615a006d6254888ed5e6daa9c9a66cb3b88fb4be78ce",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 320,
+      "hash_matched": false,
+      "height": 37961523,
+      "held_and_sealed_reported": [
+        13,
+        21
+      ],
+      "held_transactions": 13,
+      "reconciled_at_unix_ms": 1791306641801,
+      "sealed_hash": "0xe829f1c2af23bf47b96cae9e6845a109115e4dfa34e36a1a209291fd61f21f3e",
+      "sealed_transactions": 21,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 330,
+      "hash_matched": false,
+      "height": 37961524,
+      "held_and_sealed_reported": [
+        19,
+        20
+      ],
+      "held_transactions": 19,
+      "reconciled_at_unix_ms": 1791306642362,
+      "sealed_hash": "0x49a9fcf7df320e993ceb03dbd781967ab7db52dc1090db86f9d33ea4e54f5111",
+      "sealed_transactions": 20,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 341,
+      "hash_matched": false,
+      "height": 37961524,
+      "held_and_sealed_reported": [
+        19,
+        20
+      ],
+      "held_transactions": 19,
+      "reconciled_at_unix_ms": 1791306642870,
+      "sealed_hash": "0x49a9fcf7df320e993ceb03dbd781967ab7db52dc1090db86f9d33ea4e54f5111",
+      "sealed_transactions": 20,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 357,
+      "hash_matched": false,
+      "height": 37961525,
+      "held_and_sealed_reported": [
+        83,
+        86
+      ],
+      "held_transactions": 83,
+      "reconciled_at_unix_ms": 1791306644154,
+      "sealed_hash": "0xa0ed83b53b6d6586deebc25fe960815c74fdfaa0d85899d47702b423b117e5a0",
+      "sealed_transactions": 86,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 367,
+      "hash_matched": false,
+      "height": 37961526,
+      "held_and_sealed_reported": [
+        28,
+        31
+      ],
+      "held_transactions": 28,
+      "reconciled_at_unix_ms": 1791306644699,
+      "sealed_hash": "0xd0ba646cf92f35bc1290d89e5707add7500556653f38c6f0a7cdca25feb4b660",
+      "sealed_transactions": 31,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 378,
+      "hash_matched": false,
+      "height": 37961526,
+      "held_and_sealed_reported": [
+        28,
+        31
+      ],
+      "held_transactions": 28,
+      "reconciled_at_unix_ms": 1791306645210,
+      "sealed_hash": "0xd0ba646cf92f35bc1290d89e5707add7500556653f38c6f0a7cdca25feb4b660",
+      "sealed_transactions": 31,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 390,
+      "hash_matched": false,
+      "height": 37961527,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 34,
+      "reconciled_at_unix_ms": 1791306645698,
+      "sealed_hash": "0xb4bca9883a9efc3d1042545fe9e5204040d5acb0f12ce747bdd962e36970f518",
+      "sealed_transactions": 34,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 406,
+      "hash_matched": false,
+      "height": 37961528,
+      "held_and_sealed_reported": [
+        30,
+        39
+      ],
+      "held_transactions": 30,
+      "reconciled_at_unix_ms": 1791306646648,
+      "sealed_hash": "0xd5b1a78203f56e9f6dc7cd44c3db86e8bc2bef4f72351404394db57d1d8897a7",
+      "sealed_transactions": 39,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 417,
+      "hash_matched": false,
+      "height": 37961529,
+      "held_and_sealed_reported": [
+        16,
+        18
+      ],
+      "held_transactions": 16,
+      "reconciled_at_unix_ms": 1791306647192,
+      "sealed_hash": "0x3c6d941608f9f2825dd1ec6510fabfaeabaeb3e7995bdc4d83ed8d22147c8606",
+      "sealed_transactions": 18,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 427,
+      "hash_matched": false,
+      "height": 37961530,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 24,
+      "reconciled_at_unix_ms": 1791306647634,
+      "sealed_hash": "0x9406e8651e45dc72d008a5916c2de3f7a95a3e4b424eccac0c494b4e5944518c",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 444,
+      "hash_matched": false,
+      "height": 37961530,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 24,
+      "reconciled_at_unix_ms": 1791306648737,
+      "sealed_hash": "0x9406e8651e45dc72d008a5916c2de3f7a95a3e4b424eccac0c494b4e5944518c",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 3,
+      "event_index": 454,
+      "hash_matched": false,
+      "height": 37961530,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 24,
+      "reconciled_at_unix_ms": 1791306649171,
+      "sealed_hash": "0x9406e8651e45dc72d008a5916c2de3f7a95a3e4b424eccac0c494b4e5944518c",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 466,
+      "hash_matched": false,
+      "height": 37961531,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 29,
+      "reconciled_at_unix_ms": 1791306649891,
+      "sealed_hash": "0x300a304286461ca2a26784b7bd719a6cefca430efce4d03ed2a077efe1140b69",
+      "sealed_transactions": 29,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 476,
+      "hash_matched": false,
+      "height": 37961532,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 22,
+      "reconciled_at_unix_ms": 1791306650458,
+      "sealed_hash": "0xe01d258011f374b6943ec1ebf0dd36dc36efcaaa59907e00d07bc975d930c1d8",
+      "sealed_transactions": 22,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 487,
+      "hash_matched": false,
+      "height": 37961533,
+      "held_and_sealed_reported": [
+        22,
+        25
+      ],
+      "held_transactions": 22,
+      "reconciled_at_unix_ms": 1791306651398,
+      "sealed_hash": "0x67fae09ac73320fef84cfd444cac6f42fc1389818e90880100ace2356f793414",
+      "sealed_transactions": 25,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 497,
+      "hash_matched": false,
+      "height": 37961534,
+      "held_and_sealed_reported": [
+        21,
+        23
+      ],
+      "held_transactions": 21,
+      "reconciled_at_unix_ms": 1791306652079,
+      "sealed_hash": "0x7e85444de9b6a4daaa4f439f60b37a7ee41f88003d342c3c5a2878dbe0010c81",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 508,
+      "hash_matched": false,
+      "height": 37961535,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 34,
+      "reconciled_at_unix_ms": 1791306652591,
+      "sealed_hash": "0x49d95adce439186eaa352fcf48f6828cd20b782b4bbf2af36cc69cdbac3aa7ca",
+      "sealed_transactions": 34,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 525,
+      "hash_matched": false,
+      "height": 37961536,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 76,
+      "reconciled_at_unix_ms": 1791306654020,
+      "sealed_hash": "0x177f63b3ce081aa20a023fe3584ef3f7af8871743013c8b9caa22c374fea41e6",
+      "sealed_transactions": 76,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 536,
+      "hash_matched": false,
+      "height": 37961537,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306654569,
+      "sealed_hash": "0xc058381f9ee4446e2198c044f9c73a73e1fadc7f380e5391c731ccd39dddc203",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 547,
+      "hash_matched": false,
+      "height": 37961537,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306655146,
+      "sealed_hash": "0xc058381f9ee4446e2198c044f9c73a73e1fadc7f380e5391c731ccd39dddc203",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 556,
+      "hash_matched": false,
+      "height": 37961538,
+      "held_and_sealed_reported": [
+        29,
+        34
+      ],
+      "held_transactions": 29,
+      "reconciled_at_unix_ms": 1791306655622,
+      "sealed_hash": "0x6cb9aed3189d1dad2364f2b82ef0fa2a9330a01b2bdf175603aff139146ced24",
+      "sealed_transactions": 34,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 573,
+      "hash_matched": false,
+      "height": 37961539,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 24,
+      "reconciled_at_unix_ms": 1791306656651,
+      "sealed_hash": "0x35f94574ff90e8107ff7f90354d120691fb2229266977c447b827b40d475bc9c",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 584,
+      "hash_matched": false,
+      "height": 37961540,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 25,
+      "reconciled_at_unix_ms": 1791306657177,
+      "sealed_hash": "0xf7a7872009a386f5de9623f6d7ce45e7ec4d344ffc739e45f28ef970b862b089",
+      "sealed_transactions": 25,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 594,
+      "hash_matched": false,
+      "height": 37961540,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 25,
+      "reconciled_at_unix_ms": 1791306658111,
+      "sealed_hash": "0xf7a7872009a386f5de9623f6d7ce45e7ec4d344ffc739e45f28ef970b862b089",
+      "sealed_transactions": 25,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 604,
+      "hash_matched": false,
+      "height": 37961541,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 24,
+      "reconciled_at_unix_ms": 1791306658737,
+      "sealed_hash": "0x035eb687375bc36659da9d4794582dd22244e6ce86cb5e72f2323dea7c12569c",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 622,
+      "hash_matched": false,
+      "height": 37961542,
+      "held_and_sealed_reported": [
+        15,
+        24
+      ],
+      "held_transactions": 15,
+      "reconciled_at_unix_ms": 1791306659801,
+      "sealed_hash": "0x9fdb105ce74677d6e7bc8904a8e745e4422d303c261f8774cac133148a993abf",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 632,
+      "hash_matched": false,
+      "height": 37961542,
+      "held_and_sealed_reported": [
+        15,
+        24
+      ],
+      "held_transactions": 15,
+      "reconciled_at_unix_ms": 1791306660441,
+      "sealed_hash": "0x9fdb105ce74677d6e7bc8904a8e745e4422d303c261f8774cac133148a993abf",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 3,
+      "event_index": 642,
+      "hash_matched": false,
+      "height": 37961542,
+      "held_and_sealed_reported": [
+        15,
+        24
+      ],
+      "held_transactions": 15,
+      "reconciled_at_unix_ms": 1791306661386,
+      "sealed_hash": "0x9fdb105ce74677d6e7bc8904a8e745e4422d303c261f8774cac133148a993abf",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 651,
+      "hash_matched": false,
+      "height": 37961543,
+      "held_and_sealed_reported": [
+        21,
+        22
+      ],
+      "held_transactions": 21,
+      "reconciled_at_unix_ms": 1791306661962,
+      "sealed_hash": "0x6b774ef22e20609239467418b4afd87a1fb1b194824a73d87860dc3a39263bc6",
+      "sealed_transactions": 22,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 662,
+      "hash_matched": false,
+      "height": 37961544,
+      "held_and_sealed_reported": [
+        30,
+        36
+      ],
+      "held_transactions": 30,
+      "reconciled_at_unix_ms": 1791306662401,
+      "sealed_hash": "0x72047c40534fa7555dff8e4a2631125eb2cc31f0488959395c0f2e8325fef730",
+      "sealed_transactions": 36,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 679,
+      "hash_matched": false,
+      "height": 37961545,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 100,
+      "reconciled_at_unix_ms": 1791306663544,
+      "sealed_hash": "0x46c330721af99f3f43057a0c3cf43b658c8ada943710e2446352255866e7eb7d",
+      "sealed_transactions": 100,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 690,
+      "hash_matched": false,
+      "height": 37961545,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 100,
+      "reconciled_at_unix_ms": 1791306664105,
+      "sealed_hash": "0x46c330721af99f3f43057a0c3cf43b658c8ada943710e2446352255866e7eb7d",
+      "sealed_transactions": 100,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 708,
+      "hash_matched": false,
+      "height": 37961546,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 58,
+      "reconciled_at_unix_ms": 1791306665763,
+      "sealed_hash": "0x9307acb7ec4d77323ffde2a1d4fef9e30013ab1484ad7ee7b773981835008134",
+      "sealed_transactions": 58,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 721,
+      "hash_matched": false,
+      "height": 37961547,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 44,
+      "reconciled_at_unix_ms": 1791306666205,
+      "sealed_hash": "0xe78dc84089c605c6ea067355db4bd152975466ff484f193b5fe7e41e4b507dc5",
+      "sealed_transactions": 44,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 740,
+      "hash_matched": false,
+      "height": 37961548,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 43,
+      "reconciled_at_unix_ms": 1791306667294,
+      "sealed_hash": "0x427b710ca80b913970fecdbb0e2bfb04dc9b5b8231ac14929236a169197a1c99",
+      "sealed_transactions": 43,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 750,
+      "hash_matched": false,
+      "height": 37961549,
+      "held_and_sealed_reported": [
+        32,
+        35
+      ],
+      "held_transactions": 32,
+      "reconciled_at_unix_ms": 1791306667730,
+      "sealed_hash": "0x4cb269d7d67d2e084a8d54716a52433540cc49eff90bb5152b04d666e2f86e7f",
+      "sealed_transactions": 35,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-a"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 1,
+      "hash_matched": false,
+      "height": 37961560,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 0,
+      "reconciled_at_unix_ms": 1791306677684,
+      "sealed_hash": "0x32713b1c93a6db1a182abfb060dcd9f36f1bf7000fbd508d00ad394e8dec8a63",
+      "sealed_transactions": 27,
+      "verdict_recomputed": "no_view",
+      "verdict_reported": "no_view",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 16,
+      "hash_matched": false,
+      "height": 37961561,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 0,
+      "reconciled_at_unix_ms": 1791306678839,
+      "sealed_hash": "0x3f7adf2aab4e179d02aed1bcc7fbeaa40c9feff52b65efd8ee78b3d783b8686a",
+      "sealed_transactions": 31,
+      "verdict_recomputed": "no_view",
+      "verdict_reported": "no_view",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 26,
+      "hash_matched": false,
+      "height": 37961562,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 26,
+      "reconciled_at_unix_ms": 1791306679590,
+      "sealed_hash": "0x6c98e3eaff9a10128d6d42d19976d4552c380d567f8adff805177e9d2505d8cb",
+      "sealed_transactions": 26,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 37,
+      "hash_matched": false,
+      "height": 37961562,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 26,
+      "reconciled_at_unix_ms": 1791306680132,
+      "sealed_hash": "0x6c98e3eaff9a10128d6d42d19976d4552c380d567f8adff805177e9d2505d8cb",
+      "sealed_transactions": 26,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 3,
+      "event_index": 53,
+      "hash_matched": false,
+      "height": 37961562,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 26,
+      "reconciled_at_unix_ms": 1791306680971,
+      "sealed_hash": "0x6c98e3eaff9a10128d6d42d19976d4552c380d567f8adff805177e9d2505d8cb",
+      "sealed_transactions": 26,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 69,
+      "hash_matched": false,
+      "height": 37961563,
+      "held_and_sealed_reported": [
+        31,
+        33
+      ],
+      "held_transactions": 31,
+      "reconciled_at_unix_ms": 1791306682576,
+      "sealed_hash": "0x3eea53b1c82b30e8f5f53c05d750ddfbd4be914b914f0ec1ee51f0defbf4de1f",
+      "sealed_transactions": 33,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 79,
+      "hash_matched": false,
+      "height": 37961564,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 28,
+      "reconciled_at_unix_ms": 1791306683100,
+      "sealed_hash": "0x9845de07ac11d1926e1ac975d02086dcfee5ede3781b1450e032e95220462169",
+      "sealed_transactions": 28,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 97,
+      "hash_matched": false,
+      "height": 37961565,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 25,
+      "reconciled_at_unix_ms": 1791306683903,
+      "sealed_hash": "0x3084d7d6de5d9a88532d8868a3d58e3275bacab8886d3c7326f71b4f201981c5",
+      "sealed_transactions": 25,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 107,
+      "hash_matched": false,
+      "height": 37961566,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 86,
+      "reconciled_at_unix_ms": 1791306684316,
+      "sealed_hash": "0xf94bfae5dc1652728ba7bffe227333532807316062f8f11f8821c103d9af4a65",
+      "sealed_transactions": 86,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 118,
+      "hash_matched": false,
+      "height": 37961567,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 28,
+      "reconciled_at_unix_ms": 1791306684827,
+      "sealed_hash": "0x0b7ef08b3764adfed98dc8cf0fa5500e02526bdf385e9b277d0d216c6efbc52f",
+      "sealed_transactions": 28,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 135,
+      "hash_matched": false,
+      "height": 37961568,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 18,
+      "reconciled_at_unix_ms": 1791306685779,
+      "sealed_hash": "0x51355c44a8d154416a3bf1ed5db776c101fb13547e5f386b08fda59492a91484",
+      "sealed_transactions": 18,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 145,
+      "hash_matched": false,
+      "height": 37961569,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 27,
+      "reconciled_at_unix_ms": 1791306686220,
+      "sealed_hash": "0xfb303250e1af2c9dabda7d204badc16a032b18d85a6ade9ba12fc3a770557c0b",
+      "sealed_transactions": 27,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 162,
+      "hash_matched": false,
+      "height": 37961569,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 27,
+      "reconciled_at_unix_ms": 1791306687263,
+      "sealed_hash": "0xfb303250e1af2c9dabda7d204badc16a032b18d85a6ade9ba12fc3a770557c0b",
+      "sealed_transactions": 27,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 178,
+      "hash_matched": false,
+      "height": 37961570,
+      "held_and_sealed_reported": [
+        26,
+        29
+      ],
+      "held_transactions": 26,
+      "reconciled_at_unix_ms": 1791306688569,
+      "sealed_hash": "0xc72c51284f8f96090a024311b87d52ca2659d5a156dc3573f021a80e83c8915e",
+      "sealed_transactions": 29,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 189,
+      "hash_matched": false,
+      "height": 37961571,
+      "held_and_sealed_reported": [
+        27,
+        35
+      ],
+      "held_transactions": 27,
+      "reconciled_at_unix_ms": 1791306689337,
+      "sealed_hash": "0x8a17eb36f836f43ee705a5f0b18953f092121664bb1300fd199ab1ac0f601415",
+      "sealed_transactions": 35,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 199,
+      "hash_matched": false,
+      "height": 37961572,
+      "held_and_sealed_reported": [
+        18,
+        27
+      ],
+      "held_transactions": 18,
+      "reconciled_at_unix_ms": 1791306689988,
+      "sealed_hash": "0xd046b4f0ba14ea1083293c3a0c0194409a49d028ff9c7d44b2213394e5445043",
+      "sealed_transactions": 27,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 217,
+      "hash_matched": false,
+      "height": 37961573,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 39,
+      "reconciled_at_unix_ms": 1791306691062,
+      "sealed_hash": "0x61d9f116e6f5bdc7fde1be3f66befb5c400dd30a78c17466c5b4a33b30908395",
+      "sealed_transactions": 39,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 227,
+      "hash_matched": false,
+      "height": 37961574,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 32,
+      "reconciled_at_unix_ms": 1791306691928,
+      "sealed_hash": "0xb38ecb6f752e7804700b6b441a9a9c63ba9cdda8bf6b4fcc2c68d769e3fe586c",
+      "sealed_transactions": 32,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 238,
+      "hash_matched": false,
+      "height": 37961575,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 38,
+      "reconciled_at_unix_ms": 1791306692799,
+      "sealed_hash": "0xc803872cbf74727a00cdf637e5a925c63d4d7973ba41f38078b454ceb62b18b5",
+      "sealed_transactions": 38,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 249,
+      "hash_matched": false,
+      "height": 37961575,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 38,
+      "reconciled_at_unix_ms": 1791306693238,
+      "sealed_hash": "0xc803872cbf74727a00cdf637e5a925c63d4d7973ba41f38078b454ceb62b18b5",
+      "sealed_transactions": 38,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 259,
+      "hash_matched": false,
+      "height": 37961576,
+      "held_and_sealed_reported": [
+        21,
+        30
+      ],
+      "held_transactions": 21,
+      "reconciled_at_unix_ms": 1791306693718,
+      "sealed_hash": "0xdee829d0c2107db5945b8be01d48998ed891837e8b5ea6016426fd6b5e40b26b",
+      "sealed_transactions": 30,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 275,
+      "hash_matched": false,
+      "height": 37961577,
+      "held_and_sealed_reported": [
+        86,
+        106
+      ],
+      "held_transactions": 86,
+      "reconciled_at_unix_ms": 1791306694916,
+      "sealed_hash": "0x4e523144d53068efe3a39adfb3c28c9648b01d585c4ee78838496793f4f73b1d",
+      "sealed_transactions": 106,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 293,
+      "hash_matched": false,
+      "height": 37961578,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 35,
+      "reconciled_at_unix_ms": 1791306695919,
+      "sealed_hash": "0x03871be50d8e5d2cc51dc2dffe78ec9265238444c1a8a090c3af81e855fde5dd",
+      "sealed_transactions": 35,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 303,
+      "hash_matched": false,
+      "height": 37961579,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 29,
+      "reconciled_at_unix_ms": 1791306696450,
+      "sealed_hash": "0xb23a1711b71fb8a5239382744480e6ee9b2c02898eb3e8c0719f18f2984f0242",
+      "sealed_transactions": 29,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 314,
+      "hash_matched": false,
+      "height": 37961580,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 33,
+      "reconciled_at_unix_ms": 1791306697205,
+      "sealed_hash": "0xc18648190eeb21bb4baede59e388c8b7eb465e9124b00592e42af99d095098cc",
+      "sealed_transactions": 33,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 338,
+      "hash_matched": false,
+      "height": 37961580,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 33,
+      "reconciled_at_unix_ms": 1791306698920,
+      "sealed_hash": "0xc18648190eeb21bb4baede59e388c8b7eb465e9124b00592e42af99d095098cc",
+      "sealed_transactions": 33,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "gap_fill",
+      "closure_of_this_height": 1,
+      "event_index": 354,
+      "hash_matched": false,
+      "height": 37961581,
+      "held_and_sealed_reported": [
+        24,
+        29
+      ],
+      "held_transactions": 24,
+      "reconciled_at_unix_ms": 1791306699913,
+      "sealed_hash": "0x08c70740f0998dcf188fa931c4d8be892b908ddaa18a1d59edffc490ee801123",
+      "sealed_transactions": 29,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 363,
+      "hash_matched": false,
+      "height": 37961582,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 0,
+      "reconciled_at_unix_ms": 1791306700430,
+      "sealed_hash": "0x2bf54f8d1bec2281d18c53f3fd8033368d74dc9c1e542bc902a29eb9db1bbbb1",
+      "sealed_transactions": 24,
+      "verdict_recomputed": "no_view",
+      "verdict_reported": "no_view",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 373,
+      "hash_matched": false,
+      "height": 37961583,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306700989,
+      "sealed_hash": "0x972c33b8b5a8024224ea37a5cb095b5cf3f400d9b9a1d71c4eacc53b4aed32b9",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 383,
+      "hash_matched": false,
+      "height": 37961584,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 25,
+      "reconciled_at_unix_ms": 1791306701686,
+      "sealed_hash": "0x29353b74f35264c00656207b73f2a838cbebf520d291846066f1511c7dd305b6",
+      "sealed_transactions": 25,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 394,
+      "hash_matched": false,
+      "height": 37961585,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 30,
+      "reconciled_at_unix_ms": 1791306702399,
+      "sealed_hash": "0x132d84b78734a359c8111704b9dd94d95f9d46663e33529cdc87fe15ce7e48e6",
+      "sealed_transactions": 30,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 404,
+      "hash_matched": false,
+      "height": 37961585,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 30,
+      "reconciled_at_unix_ms": 1791306702902,
+      "sealed_hash": "0x132d84b78734a359c8111704b9dd94d95f9d46663e33529cdc87fe15ce7e48e6",
+      "sealed_transactions": 30,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 421,
+      "hash_matched": false,
+      "height": 37961586,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 102,
+      "reconciled_at_unix_ms": 1791306703906,
+      "sealed_hash": "0x20f6e498b5e3a88864258c3234cf2dc01ada4d5b28eccbf097536234a8783649",
+      "sealed_transactions": 102,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 431,
+      "hash_matched": false,
+      "height": 37961587,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 42,
+      "reconciled_at_unix_ms": 1791306704438,
+      "sealed_hash": "0x32f273b09f0322d4c0fc6e8eb8650e91956bc5e6f55fb0f808e13c58b7eb30f0",
+      "sealed_transactions": 42,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 442,
+      "hash_matched": false,
+      "height": 37961587,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 42,
+      "reconciled_at_unix_ms": 1791306705093,
+      "sealed_hash": "0x32f273b09f0322d4c0fc6e8eb8650e91956bc5e6f55fb0f808e13c58b7eb30f0",
+      "sealed_transactions": 42,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 458,
+      "hash_matched": false,
+      "height": 37961588,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 41,
+      "reconciled_at_unix_ms": 1791306706054,
+      "sealed_hash": "0x134de4ca97959548ae194c97128204710241d3149d5f0cabca95d3ca14d27395",
+      "sealed_transactions": 41,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 468,
+      "hash_matched": false,
+      "height": 37961589,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 42,
+      "reconciled_at_unix_ms": 1791306706595,
+      "sealed_hash": "0x30ce596615565e1601fa7db19666d64f29f5fb20c9b8d7d8f0863b1450e123be",
+      "sealed_transactions": 42,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 479,
+      "hash_matched": false,
+      "height": 37961590,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 37,
+      "reconciled_at_unix_ms": 1791306707241,
+      "sealed_hash": "0xc1938b4d2478b52fafe30eabb1708730e9160f4b22ba1e5212ddca8bd6f8eb52",
+      "sealed_transactions": 37,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 496,
+      "hash_matched": false,
+      "height": 37961590,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 37,
+      "reconciled_at_unix_ms": 1791306708173,
+      "sealed_hash": "0xc1938b4d2478b52fafe30eabb1708730e9160f4b22ba1e5212ddca8bd6f8eb52",
+      "sealed_transactions": 37,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 505,
+      "hash_matched": false,
+      "height": 37961591,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 29,
+      "reconciled_at_unix_ms": 1791306708889,
+      "sealed_hash": "0x564671461757426f704612a7c10c51cce86d3a73fa9ddea5a3a5a3c473be6880",
+      "sealed_transactions": 29,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 523,
+      "hash_matched": false,
+      "height": 37961592,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 28,
+      "reconciled_at_unix_ms": 1791306709791,
+      "sealed_hash": "0xdfae968c37c31ccedff1de007b257da2c7948172d9500fea0851e2f5e934f93a",
+      "sealed_transactions": 28,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 533,
+      "hash_matched": false,
+      "height": 37961593,
+      "held_and_sealed_reported": [
+        27,
+        36
+      ],
+      "held_transactions": 27,
+      "reconciled_at_unix_ms": 1791306710333,
+      "sealed_hash": "0x1545bc4f7b0a616d7cae755f022fad4ccd1ba486678e73a9e71bf7e05c70041d",
+      "sealed_transactions": 36,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 550,
+      "hash_matched": false,
+      "height": 37961594,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306711375,
+      "sealed_hash": "0x7ba127474a1546d15692c6360565cf0df65e1e3ca4c8dbf4210ed4ae97aaf64a",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 561,
+      "hash_matched": false,
+      "height": 37961594,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306711894,
+      "sealed_hash": "0x7ba127474a1546d15692c6360565cf0df65e1e3ca4c8dbf4210ed4ae97aaf64a",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 577,
+      "hash_matched": false,
+      "height": 37961595,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 75,
+      "reconciled_at_unix_ms": 1791306712966,
+      "sealed_hash": "0xee50f5c75a7a486c13d2177f4020f24c08b57ecbeb78e2912dc1faefc87cbd81",
+      "sealed_transactions": 75,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 594,
+      "hash_matched": false,
+      "height": 37961596,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 26,
+      "reconciled_at_unix_ms": 1791306713837,
+      "sealed_hash": "0x261e35e36aa19d7722e355e041c022e14c4e8985c6b9f2618cbdd52c6fbb797e",
+      "sealed_transactions": 26,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 604,
+      "hash_matched": false,
+      "height": 37961597,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 27,
+      "reconciled_at_unix_ms": 1791306714249,
+      "sealed_hash": "0xfbc6db044f1faedb1da6ce7bab3e5e4625f1e9d5bb27826d2091fdd73ef7a03d",
+      "sealed_transactions": 27,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 621,
+      "hash_matched": false,
+      "height": 37961597,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 27,
+      "reconciled_at_unix_ms": 1791306715403,
+      "sealed_hash": "0xfbc6db044f1faedb1da6ce7bab3e5e4625f1e9d5bb27826d2091fdd73ef7a03d",
+      "sealed_transactions": 27,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 630,
+      "hash_matched": false,
+      "height": 37961598,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 26,
+      "reconciled_at_unix_ms": 1791306715865,
+      "sealed_hash": "0xcc2a0511c496bf8db06c2851c529996807adc617216808c8577bd54e1ac3197e",
+      "sealed_transactions": 26,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 648,
+      "hash_matched": false,
+      "height": 37961599,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 28,
+      "reconciled_at_unix_ms": 1791306716867,
+      "sealed_hash": "0x9a360abd3fc9a0a0ca834dd82bd191fa05207bafa3adaf070fb1ec667858d22a",
+      "sealed_transactions": 28,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 658,
+      "hash_matched": false,
+      "height": 37961600,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306717369,
+      "sealed_hash": "0xc161aa6551e5c6db12506ee10cd585db662cbd20a9bf3d46698bb9da0db55da3",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 675,
+      "hash_matched": false,
+      "height": 37961600,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 23,
+      "reconciled_at_unix_ms": 1791306718539,
+      "sealed_hash": "0xc161aa6551e5c6db12506ee10cd585db662cbd20a9bf3d46698bb9da0db55da3",
+      "sealed_transactions": 23,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 685,
+      "hash_matched": false,
+      "height": 37961601,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 26,
+      "reconciled_at_unix_ms": 1791306719217,
+      "sealed_hash": "0xc69534ce05fc20c1e838884f6c876520ee9ec3627c244925da3ab6c6f98fd279",
+      "sealed_transactions": 26,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 695,
+      "hash_matched": false,
+      "height": 37961602,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 30,
+      "reconciled_at_unix_ms": 1791306719766,
+      "sealed_hash": "0xd3497a14151928320292ffd39072c4d5bb93d4bc20e7e8de3c9230cababfaf7c",
+      "sealed_transactions": 30,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 713,
+      "hash_matched": false,
+      "height": 37961603,
+      "held_and_sealed_reported": [
+        null,
+        null
+      ],
+      "held_transactions": 28,
+      "reconciled_at_unix_ms": 1791306720829,
+      "sealed_hash": "0x1f2e878cbfb5b4a4c8b8127f180f2cfe48c01e01a2ec8f7f24de230bccc00c9b",
+      "sealed_transactions": 28,
+      "verdict_recomputed": "content_equal",
+      "verdict_reported": "content_equal",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 1,
+      "event_index": 723,
+      "hash_matched": false,
+      "height": 37961604,
+      "held_and_sealed_reported": [
+        20,
+        25
+      ],
+      "held_transactions": 20,
+      "reconciled_at_unix_ms": 1791306721229,
+      "sealed_hash": "0x17dcfc0256913ddc2037ef6eb09fc41872377343e3a6e555670e3a094adefdf6",
+      "sealed_transactions": 25,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    },
+    {
+      "canonical_wins": true,
+      "closing_side": "latest_poll",
+      "closure_of_this_height": 2,
+      "event_index": 740,
+      "hash_matched": false,
+      "height": 37961604,
+      "held_and_sealed_reported": [
+        20,
+        25
+      ],
+      "held_transactions": 20,
+      "reconciled_at_unix_ms": 1791306722183,
+      "sealed_hash": "0x17dcfc0256913ddc2037ef6eb09fc41872377343e3a6e555670e3a094adefdf6",
+      "sealed_transactions": 25,
+      "verdict_recomputed": "content_prefix",
+      "verdict_reported": "content_prefix",
+      "window": "window-b"
+    }
+  ],
+  "table": "reconciliation",
+  "windows": [
+    {
+      "closures_reported": 59,
+      "distinct_heights_closed": 46,
+      "hash_match_recomputed": 0,
+      "hash_match_reported": 0,
+      "verdicts_recomputed": {
+        "content_equal": 35,
+        "content_prefix": 20,
+        "no_view": 4
+      },
+      "verdicts_reported": {
+        "content_divergent": 0,
+        "content_equal": 35,
+        "content_prefix": 20,
+        "content_superset": 0,
+        "no_view": 4
+      },
+      "window": "window-a"
+    },
+    {
+      "closures_reported": 57,
+      "distinct_heights_closed": 45,
+      "hash_match_recomputed": 0,
+      "hash_match_reported": 0,
+      "verdicts_recomputed": {
+        "content_equal": 44,
+        "content_prefix": 10,
+        "no_view": 3
+      },
+      "verdicts_reported": {
+        "content_divergent": 0,
+        "content_equal": 44,
+        "content_prefix": 10,
+        "content_superset": 0,
+        "no_view": 3
+      },
+      "window": "window-b"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "canonical_side_pool_lists": {
+    "closures_where_canonical_named_a_list": 0,
+    "diverged": 0,
+    "matched": 0,
+    "note": "the closing arm reads `eth_getBlockByNumber([latest, true])` and no receipt, so it names no target list and every closure is UNVERIFIED on this axis — a different statement from 'the pool sets agree' (§28)",
+    "unverified": 109
+  },
+  "denominators": {
+    "distinct_senders_observed": 559,
+    "distinct_tokens_in_that_table": 50,
+    "distinct_transaction_targets_observed": 156,
+    "edges_in_that_table": 160,
+    "graph_block": 37224031,
+    "registered_pools_from_m9_2": 80,
+    "source_of_the_pool_set": "data/evidence/m9/m9.2/graph-integration.json"
+  },
+  "kind": "the registered-pool half of the early radar (§12–§14), recomputed by address intersection over the raw transaction targets",
+  "real_window_result": {
+    "affected_pool_events_emitted": 0,
+    "affected_pools_by_log_reported": 0,
+    "affected_pools_by_target_reported": 0,
+    "log_derived_half": "no witness in real traffic: these windows requested two methods and neither was a receipts read, so the log path's correctness rests on the fixtures and on NC10/NC11/NC12 rather than on this table (§48's rule to record the actual count)",
+    "positive_control_sequencer_hits": 2,
+    "positive_control_token_side_hits": 1,
+    "receipt_lists_read_in_window": 0,
+    "targets_hitting_the_registered_pool_set": 0,
+    "why_this_zero_is_not_a_parser_failure": "both sides of the intersection are non-empty (156 distinct observed targets against 80 registered pools), and the same intersection over the same lines is non-zero for the 1 known token contract(s) and the 2 sequencer address(es) these transactions do call. An empty pool intersection is therefore a market fact, not a silent miss."
+  },
+  "senders_observed_but_unused": {
+    "count": 559,
+    "reason": "the radar keys AffectedPool on what a transaction calls or what a log is emitted by, never on who signed it. The column exists to say a bigger set was looked at and deliberately not used."
+  },
+  "table": "affected-pools",
+  "what_a_hit_would_have_produced": [
+    "AffectedPool { pool, caused_by transaction hash, strength (by target or by log), block_number, local_frame_sequence }",
+    "nothing else: no reserve, no price, no amount, no path (§13/§14), and no input to PathFinder (§20/§21)",
+    "at closure, a pool-set comparison against canonical — recorded as UNVERIFIED when canonical named no list (§16)"
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "controls": [
+    {
+      "claim": "a repeat of the same (height, view hash) is applied once and derives nothing new",
+      "class": "duplicate",
+      "control": "NC1",
+      "fixture_test": "nc1_duplicate_frame_is_not_applied_twice",
+      "real_window_witness": {
+        "axis": "repeated (height, view hash) reads in raw/window-*/pending-reads.jsonl, counted again in sequence.json",
+        "observed": 5
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "a height that was never pending is announced and never reconstructed",
+      "class": "gap",
+      "control": "NC2",
+      "fixture_test": "nc2_height_skip_is_announced_and_never_reconstructed",
+      "real_window_witness": {
+        "axis": "no wire frame index on this transport; the canonical arm's skipped heights are counted separately in sequence.json",
+        "observed": "N/A_NOT_MEASURABLE"
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "a frame or a receipt naming another block is refused, never spliced in",
+      "class": "wrong_block",
+      "control": "NC3",
+      "fixture_test": "nc3_frame_and_receipt_naming_another_block_are_both_refused",
+      "real_window_witness": {
+        "axis": "a receipt naming another block — structurally empty here, because neither window read receipts",
+        "observed": 0
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "a parent that does not continue the sealed block below invalidates the view",
+      "class": "wrong_parent",
+      "control": "NC4",
+      "fixture_test": "nc4_wrong_parent_invalidates_and_does_not_merge",
+      "real_window_witness": {
+        "axis": "frames_wrong_parent; the uncheckable half is reported as parent_checks_uncheckable and is not folded into this number",
+        "observed": 0
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "the decoder fails closed and the held view survives it",
+      "class": "malformed_payload",
+      "control": "NC5",
+      "fixture_test": "nc5_malformed_payload_fails_closed_at_the_decoder",
+      "real_window_witness": {
+        "axis": "decode_failures in both run reports",
+        "observed": 0
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "a frame from another chain is refused before anything is held",
+      "class": "wrong_chain",
+      "control": "NC6",
+      "fixture_test": "nc6_wrong_chain_is_refused_before_anything_is_held",
+      "real_window_witness": {
+        "axis": "frames_wrong_chain",
+        "observed": 0
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "a reset leaves no cross-session state for the next session to be wrong about",
+      "class": "reconnect",
+      "control": "NC7",
+      "fixture_test": "nc7_giving_up_on_the_transport_leaves_no_state_to_resume",
+      "real_window_witness": {
+        "axis": "link_resets: a 45 s window that never gave up on the transport, so §11's invalidation path has fixture evidence only",
+        "observed": 0
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "content disagreement makes canonical win, with no merge",
+      "class": "canonical_mismatch",
+      "control": "NC8",
+      "fixture_test": "nc8_canonical_mismatch_makes_canonical_win_with_no_merge",
+      "real_window_witness": {
+        "axis": "content_divergent closures, recomputed in reconciliation.json's rows",
+        "observed": 0
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "a frame for an already sealed height is compared, then discarded",
+      "class": "late_flashblock",
+      "control": "NC9",
+      "fixture_test": "nc9_late_flashblock_does_not_pollute_the_closed_view",
+      "real_window_witness": {
+        "axis": "frames_late",
+        "observed": 0
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "a transaction that names no registered pool produces no AffectedPool",
+      "class": "unrelated_transaction",
+      "control": "NC10",
+      "fixture_test": "nc10_unrelated_transaction_produces_no_affected_pool",
+      "real_window_witness": {
+        "axis": "the whole real corpus is this control: no transaction of either window named a registered pool and no AffectedPool was emitted",
+        "observed": {
+          "affected_pools_emitted": 0,
+          "registered_pools": 80,
+          "transactions_observed": 4240
+        }
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "a reverted or unstatus receipt is never read as a state mutation",
+      "class": "reverted_transaction",
+      "control": "NC11",
+      "fixture_test": "nc11_reverted_receipt_is_never_read_as_a_state_mutation",
+      "real_window_witness": {
+        "axis": "no receipts read, so real traffic offers nothing on this axis; the fixture and audit §2.5's 86 reverted receipts are the witnesses",
+        "observed": 0
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    },
+    {
+      "claim": "three changes to one pool keep three identities",
+      "class": "same_pool_multiple_changes",
+      "control": "NC12",
+      "fixture_test": "nc12_three_changes_to_one_pool_keep_three_identities",
+      "real_window_witness": {
+        "axis": "heights_multi_view: repeated views of one height, which is the same dedup question at the frame axis rather than the log axis",
+        "observed": 64
+      },
+      "run": "cargo test -p evm-live --test preconf_negative_controls -- --test-threads=1",
+      "test_file": "crates/live/tests/preconf_negative_controls.rs"
+    }
+  ],
+  "kind": "§29's twelve controls, each bound to the test that runs it and to whatever the real windows happened to exercise",
+  "not_proven_by_real_traffic": [
+    "NC5 malformed payload: 0 decode failures in both windows, so fail-closed behaviour is proven by fixture only",
+    "NC7 reconnect: 0 link resets, so §11's invalidation is proven by fixture only",
+    "NC3 and NC11 on the receipt axis: neither window read receipts, so the log/receipt half of §12–§14 has no real-traffic sample at all"
+  ],
+  "rule": "a control names a test or it does not exist, and an `observed: 0` is not a pass — it is the count of times real traffic offered the question. §54's twelve fixture classes are listed with their five labels in preconf_fixtures.rs.",
+  "table": "negative-controls"
+}
