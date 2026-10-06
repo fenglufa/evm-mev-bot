@@ -1486,6 +1486,7 @@ dependencies = [
  "evm-chain",
  "evm-core",
  "evm-graph",
+ "evm-pathfinder",
  "evm-protocol",
  "evm-replay",
  "evm-state",
@@ -1577,6 +1578,19 @@ dependencies = [
  "serde_json",
  "thiserror 2.0.17",
  "tokio",
+]
+
+[[package]]
+name = "evm-pathfinder"
+version = "0.1.0"
+dependencies = [
+ "alloy-primitives",
+ "evm-core",
+ "evm-graph",
+ "evm-state",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
 ]
 
 [[package]]

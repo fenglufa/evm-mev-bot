@@ -8,6 +8,7 @@ members = [
     "crates/graph",
     "crates/discovery",
     "crates/opportunity",
+    "crates/pathfinder",
     "crates/replay",
     "crates/simulation",
     "crates/risk",
@@ -32,6 +33,7 @@ evm-replay = { path = "crates/replay" }
 evm-graph = { path = "crates/graph" }
 evm-discovery = { path = "crates/discovery" }
 evm-opportunity = { path = "crates/opportunity" }
+evm-pathfinder = { path = "crates/pathfinder" }
 evm-simulation = { path = "crates/simulation" }
 evm-risk = { path = "crates/risk" }
 evm-live = { path = "crates/live" }
