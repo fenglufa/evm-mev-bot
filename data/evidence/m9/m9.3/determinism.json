@@ -1,0 +1,56 @@
+{
+  "_provenance": {
+    "asked": "§36–§41: which closed routes exist in M9.2's real target-block graph, how many are 2-hop and 3-hop, which have every fee proved, whether two runs of one graph and one config agree byte for byte, and how much walking and how long that took — with every number recomputable from the raw run documents beside it by a reader who calls no production helper.",
+    "assemble_command": "M93_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/pathfinder_evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "the digest of the endpoint M7 and M9.1/M9.2 recorded. This milestone makes no request at all: the graph is rebuilt from committed JSON, so the digest appears here only to keep the provenance chain unbroken, and no URL is written anywhere in this directory.",
+    "input_files": [
+      "data/evidence/m9/m9.1/raw/pass-a.json",
+      "data/evidence/m9/m9.2/raw/reconstruction-pass-a.json",
+      "data/evidence/m9/m9.2/graph-integration.json"
+    ],
+    "milestone": "M9.3",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "data/evidence/m9/m9.3/raw/run-a.json",
+      "data/evidence/m9/m9.3/raw/run-b.json"
+    ],
+    "written_at": "the run, not the review: every count is read off the candidate rows beside it, and the one number that cannot repeat — the wall clock — lives in raw/ and is quoted rather than re-measured"
+  },
+  "candidate_json_digest": {
+    "equal": true,
+    "run_a": "0x958c5670cd1e4d139f25160f1a62c65580f01c1578d36f6955033bc507aa39c4",
+    "run_b": "0x958c5670cd1e4d139f25160f1a62c65580f01c1578d36f6955033bc507aa39c4"
+  },
+  "compared": {
+    "candidate_count": true,
+    "candidate_json": true,
+    "candidate_order": true,
+    "canonical_keys": true
+  },
+  "fresh_rebuild_vs_recorded_runs": {
+    "cycles": true,
+    "note": "a gate run calls the search a third time. Its candidate list and its DFS state count have to equal both recorded runs; only its wall time is allowed to differ, and it is therefore not compared.",
+    "states_visited": true
+  },
+  "rule": "§40: exact equality on all four, not a count. Two runs of one graph and one config that differ in any position are a nondeterministic search, and a matching length would hide it.",
+  "runs": [
+    "data/evidence/m9/m9.3/raw/run-a.json",
+    "data/evidence/m9/m9.3/raw/run-b.json"
+  ],
+  "same_input": {
+    "chain_id": true,
+    "config": true,
+    "graph_edges": true,
+    "target_block": true
+  },
+  "table": "determinism",
+  "wall_ms": {
+    "run_a": 31,
+    "run_b": 32
+  }
+}

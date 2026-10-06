@@ -1,0 +1,1415 @@
+{
+  "_provenance": {
+    "asked": "§36–§41: which closed routes exist in M9.2's real target-block graph, how many are 2-hop and 3-hop, which have every fee proved, whether two runs of one graph and one config agree byte for byte, and how much walking and how long that took — with every number recomputable from the raw run documents beside it by a reader who calls no production helper.",
+    "assemble_command": "M93_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/pathfinder_evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "the digest of the endpoint M7 and M9.1/M9.2 recorded. This milestone makes no request at all: the graph is rebuilt from committed JSON, so the digest appears here only to keep the provenance chain unbroken, and no URL is written anywhere in this directory.",
+    "input_files": [
+      "data/evidence/m9/m9.1/raw/pass-a.json",
+      "data/evidence/m9/m9.2/raw/reconstruction-pass-a.json",
+      "data/evidence/m9/m9.2/graph-integration.json"
+    ],
+    "milestone": "M9.3",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "data/evidence/m9/m9.3/raw/run-a.json",
+      "data/evidence/m9/m9.3/raw/run-b.json"
+    ],
+    "written_at": "the run, not the review: every count is read off the candidate rows beside it, and the one number that cannot repeat — the wall clock — lives in raw/ and is quoted rather than re-measured"
+  },
+  "counts": {
+    "fee_complete": 0,
+    "fee_incomplete": 68,
+    "three_hop": 2,
+    "total": 68,
+    "two_hop": 66
+  },
+  "fields": {
+    "canonical_key": "the route's least rotation, one `pool:token_in>token_out` per edge, joined by `+`",
+    "chain_id": "the graph's chain",
+    "edges": "directed edges in trade order, identities only — no reserves, no amounts",
+    "fee_status": "`complete` only if every edge's pool has an attested fee; `incomplete` otherwise, and never a guessed rate",
+    "hop_count": "edges walked, always 2..=3 in v0.1",
+    "start_token": "the token spent first and received last, as the canonical rotation reads it",
+    "target_block": "the graph's target block, copied onto every candidate"
+  },
+  "ordering_rule": "canonical_key ascending — the order the search returns, restated rather than re-sorted, so a reader can check the output arrived sorted (§25).",
+  "row_identity": "§12: chain_id + target_block + the ordered edge sequence under canonical_key. No row position, no list index, no hash.",
+  "rows": [
+    {
+      "canonical_key": "0x08b4ddaf033eacd73f2f0e04417b89e6f8cfd9c4:0x4200000000000000000000000000000000000006>0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79+0xc3ba575ee825c1c34903e77e2da180f6fdcf17bb:0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x08b4ddaf033eacd73f2f0e04417b89e6f8cfd9c4",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79"
+        },
+        {
+          "pool": "0xc3ba575ee825c1c34903e77e2da180f6fdcf17bb",
+          "token_in": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x08b4ddaf033eacd73f2f0e04417b89e6f8cfd9c4:0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79>0x4200000000000000000000000000000000000006+0xc3ba575ee825c1c34903e77e2da180f6fdcf17bb:0x4200000000000000000000000000000000000006>0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x08b4ddaf033eacd73f2f0e04417b89e6f8cfd9c4",
+          "token_in": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xc3ba575ee825c1c34903e77e2da180f6fdcf17bb",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xb435aff0b8779ac1ae8e3e232a47da63d6d78d79",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x0a33bfcea548c942129633cbce113d8f57f539b6:0x4200000000000000000000000000000000000006>0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a+0xe0c051aa98a38f90b6cea77d66d1126fca72399e:0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x0a33bfcea548c942129633cbce113d8f57f539b6",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a"
+        },
+        {
+          "pool": "0xe0c051aa98a38f90b6cea77d66d1126fca72399e",
+          "token_in": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x0a33bfcea548c942129633cbce113d8f57f539b6:0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a>0x4200000000000000000000000000000000000006+0xe0c051aa98a38f90b6cea77d66d1126fca72399e:0x4200000000000000000000000000000000000006>0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x0a33bfcea548c942129633cbce113d8f57f539b6",
+          "token_in": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xe0c051aa98a38f90b6cea77d66d1126fca72399e",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x5047ec4509d4d53cdbfc5ac279c4434099b7de5a",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5:0x03a884af9fa7af6557a21496f67e781fc8d00f95>0xc5bf73bddef871bafb49d12f5d05a5b300422cdf+0xe1a9db8507570806ef64ff8d3583787c43f9eff0:0xc5bf73bddef871bafb49d12f5d05a5b300422cdf>0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6+0x354f408aa2f45fd8d955070e9ef1e47c368bfc42:0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6>0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+          "token_in": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+          "token_out": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+        },
+        {
+          "pool": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+          "token_in": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+          "token_out": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+        },
+        {
+          "pool": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+          "token_in": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+          "token_out": "0x03a884af9fa7af6557a21496f67e781fc8d00f95"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 3,
+      "start_token": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5:0xc5bf73bddef871bafb49d12f5d05a5b300422cdf>0x03a884af9fa7af6557a21496f67e781fc8d00f95+0x354f408aa2f45fd8d955070e9ef1e47c368bfc42:0x03a884af9fa7af6557a21496f67e781fc8d00f95>0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6+0xe1a9db8507570806ef64ff8d3583787c43f9eff0:0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6>0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+          "token_in": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+          "token_out": "0x03a884af9fa7af6557a21496f67e781fc8d00f95"
+        },
+        {
+          "pool": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+          "token_in": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+          "token_out": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+        },
+        {
+          "pool": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+          "token_in": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+          "token_out": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 3,
+      "start_token": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x10b78cc89702372539086cb12a7be9b4b1c40d8f:0x4200000000000000000000000000000000000006>0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33+0xa1b27e2491606830c712eb368c52bd04b6654f1d:0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x10b78cc89702372539086cb12a7be9b4b1c40d8f",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33"
+        },
+        {
+          "pool": "0xa1b27e2491606830c712eb368c52bd04b6654f1d",
+          "token_in": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x10b78cc89702372539086cb12a7be9b4b1c40d8f:0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33>0x4200000000000000000000000000000000000006+0xa1b27e2491606830c712eb368c52bd04b6654f1d:0x4200000000000000000000000000000000000006>0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x10b78cc89702372539086cb12a7be9b4b1c40d8f",
+          "token_in": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xa1b27e2491606830c712eb368c52bd04b6654f1d",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x73d884c7a0b4767b7c07e1fc1706a64a3c6eee33",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x112111ec78cb8fe9529ff805ef17670f6e9ab1bc:0x2003bfae2ef61eda44f1356f470b5d17464f4f20>0x4200000000000000000000000000000000000006+0xc444614176616bcb535804e258028c45917e5f7c:0x4200000000000000000000000000000000000006>0x2003bfae2ef61eda44f1356f470b5d17464f4f20",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x112111ec78cb8fe9529ff805ef17670f6e9ab1bc",
+          "token_in": "0x2003bfae2ef61eda44f1356f470b5d17464f4f20",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xc444614176616bcb535804e258028c45917e5f7c",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x2003bfae2ef61eda44f1356f470b5d17464f4f20"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x2003bfae2ef61eda44f1356f470b5d17464f4f20",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x112111ec78cb8fe9529ff805ef17670f6e9ab1bc:0x4200000000000000000000000000000000000006>0x2003bfae2ef61eda44f1356f470b5d17464f4f20+0xc444614176616bcb535804e258028c45917e5f7c:0x2003bfae2ef61eda44f1356f470b5d17464f4f20>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x112111ec78cb8fe9529ff805ef17670f6e9ab1bc",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x2003bfae2ef61eda44f1356f470b5d17464f4f20"
+        },
+        {
+          "pool": "0xc444614176616bcb535804e258028c45917e5f7c",
+          "token_in": "0x2003bfae2ef61eda44f1356f470b5d17464f4f20",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x2269c89c3945fa862f967f01c9a171518d623670:0x4200000000000000000000000000000000000006>0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa+0x9e63f054b9dcf31b0ad4eac89da296e4d9e23d68:0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x2269c89c3945fa862f967f01c9a171518d623670",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa"
+        },
+        {
+          "pool": "0x9e63f054b9dcf31b0ad4eac89da296e4d9e23d68",
+          "token_in": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x2269c89c3945fa862f967f01c9a171518d623670:0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa>0x4200000000000000000000000000000000000006+0x9e63f054b9dcf31b0ad4eac89da296e4d9e23d68:0x4200000000000000000000000000000000000006>0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x2269c89c3945fa862f967f01c9a171518d623670",
+          "token_in": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x9e63f054b9dcf31b0ad4eac89da296e4d9e23d68",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xf5b1afbb4df98d2d846cc76920b2161653d0dfaa",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3813479cd750a0a6738d36fedce6e7b1b85ebe26:0x4200000000000000000000000000000000000006>0x9d0c58f3d49e2216d533c901fca4b79d123b7eec+0xb99e3a154b379205d121fa0dc5be2ac513a0e220:0x9d0c58f3d49e2216d533c901fca4b79d123b7eec>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3813479cd750a0a6738d36fedce6e7b1b85ebe26",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec"
+        },
+        {
+          "pool": "0xb99e3a154b379205d121fa0dc5be2ac513a0e220",
+          "token_in": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3813479cd750a0a6738d36fedce6e7b1b85ebe26:0x9d0c58f3d49e2216d533c901fca4b79d123b7eec>0x4200000000000000000000000000000000000006+0xb99e3a154b379205d121fa0dc5be2ac513a0e220:0x4200000000000000000000000000000000000006>0x9d0c58f3d49e2216d533c901fca4b79d123b7eec",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3813479cd750a0a6738d36fedce6e7b1b85ebe26",
+          "token_in": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xb99e3a154b379205d121fa0dc5be2ac513a0e220",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x9d0c58f3d49e2216d533c901fca4b79d123b7eec",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x386198cccac7e9bd0d7ae67da78b45652498cb12:0x4200000000000000000000000000000000000006>0x8e890d57deca39f27eed12b74f38587f2c58582e+0xb4b42db1b3d41a581c08a274bcddc44c2c5e5182:0x8e890d57deca39f27eed12b74f38587f2c58582e>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x386198cccac7e9bd0d7ae67da78b45652498cb12",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x8e890d57deca39f27eed12b74f38587f2c58582e"
+        },
+        {
+          "pool": "0xb4b42db1b3d41a581c08a274bcddc44c2c5e5182",
+          "token_in": "0x8e890d57deca39f27eed12b74f38587f2c58582e",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x386198cccac7e9bd0d7ae67da78b45652498cb12:0x8e890d57deca39f27eed12b74f38587f2c58582e>0x4200000000000000000000000000000000000006+0xb4b42db1b3d41a581c08a274bcddc44c2c5e5182:0x4200000000000000000000000000000000000006>0x8e890d57deca39f27eed12b74f38587f2c58582e",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x386198cccac7e9bd0d7ae67da78b45652498cb12",
+          "token_in": "0x8e890d57deca39f27eed12b74f38587f2c58582e",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xb4b42db1b3d41a581c08a274bcddc44c2c5e5182",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x8e890d57deca39f27eed12b74f38587f2c58582e"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x8e890d57deca39f27eed12b74f38587f2c58582e",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3a06a6578893c0a8e70bde914433b53eb8c68482:0x4200000000000000000000000000000000000006>0xe8388e2d3f4e081375b507946c94d0fd242781db+0x663ada0eb53baecb1a915e7a47b293f9e5a247ab:0xe8388e2d3f4e081375b507946c94d0fd242781db>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3a06a6578893c0a8e70bde914433b53eb8c68482",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xe8388e2d3f4e081375b507946c94d0fd242781db"
+        },
+        {
+          "pool": "0x663ada0eb53baecb1a915e7a47b293f9e5a247ab",
+          "token_in": "0xe8388e2d3f4e081375b507946c94d0fd242781db",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3a06a6578893c0a8e70bde914433b53eb8c68482:0xe8388e2d3f4e081375b507946c94d0fd242781db>0x4200000000000000000000000000000000000006+0x663ada0eb53baecb1a915e7a47b293f9e5a247ab:0x4200000000000000000000000000000000000006>0xe8388e2d3f4e081375b507946c94d0fd242781db",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3a06a6578893c0a8e70bde914433b53eb8c68482",
+          "token_in": "0xe8388e2d3f4e081375b507946c94d0fd242781db",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x663ada0eb53baecb1a915e7a47b293f9e5a247ab",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xe8388e2d3f4e081375b507946c94d0fd242781db"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xe8388e2d3f4e081375b507946c94d0fd242781db",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3b9176a69168ae44cfefeffc46be8bbd49a5726d:0x0745e84011b0558a37eb4bfc894b5a29c3876f29>0x4200000000000000000000000000000000000006+0x616d834775633f027b86df65dfcae1d5c2239d09:0x4200000000000000000000000000000000000006>0x0745e84011b0558a37eb4bfc894b5a29c3876f29",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3b9176a69168ae44cfefeffc46be8bbd49a5726d",
+          "token_in": "0x0745e84011b0558a37eb4bfc894b5a29c3876f29",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x616d834775633f027b86df65dfcae1d5c2239d09",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x0745e84011b0558a37eb4bfc894b5a29c3876f29"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x0745e84011b0558a37eb4bfc894b5a29c3876f29",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3b9176a69168ae44cfefeffc46be8bbd49a5726d:0x4200000000000000000000000000000000000006>0x0745e84011b0558a37eb4bfc894b5a29c3876f29+0x616d834775633f027b86df65dfcae1d5c2239d09:0x0745e84011b0558a37eb4bfc894b5a29c3876f29>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3b9176a69168ae44cfefeffc46be8bbd49a5726d",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x0745e84011b0558a37eb4bfc894b5a29c3876f29"
+        },
+        {
+          "pool": "0x616d834775633f027b86df65dfcae1d5c2239d09",
+          "token_in": "0x0745e84011b0558a37eb4bfc894b5a29c3876f29",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3cd8230f1a5b9315834632be9d01742f0f569972:0x377242c363458405b42eaa8a751511ff970d3057>0x4200000000000000000000000000000000000006+0xeb1f285e13ea04bc7f5d83522848f23dc126153e:0x4200000000000000000000000000000000000006>0x377242c363458405b42eaa8a751511ff970d3057",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3cd8230f1a5b9315834632be9d01742f0f569972",
+          "token_in": "0x377242c363458405b42eaa8a751511ff970d3057",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xeb1f285e13ea04bc7f5d83522848f23dc126153e",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x377242c363458405b42eaa8a751511ff970d3057"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x377242c363458405b42eaa8a751511ff970d3057",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3cd8230f1a5b9315834632be9d01742f0f569972:0x4200000000000000000000000000000000000006>0x377242c363458405b42eaa8a751511ff970d3057+0xeb1f285e13ea04bc7f5d83522848f23dc126153e:0x377242c363458405b42eaa8a751511ff970d3057>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3cd8230f1a5b9315834632be9d01742f0f569972",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x377242c363458405b42eaa8a751511ff970d3057"
+        },
+        {
+          "pool": "0xeb1f285e13ea04bc7f5d83522848f23dc126153e",
+          "token_in": "0x377242c363458405b42eaa8a751511ff970d3057",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3cf114d454032347be343f457942bd01cd0332d3:0x4200000000000000000000000000000000000006>0x734eccd37b38116db67bb03831333ffa1dc2d4a3+0xd25855e2816972d52f38abcbc2e29ba8477cab78:0x734eccd37b38116db67bb03831333ffa1dc2d4a3>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3cf114d454032347be343f457942bd01cd0332d3",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3"
+        },
+        {
+          "pool": "0xd25855e2816972d52f38abcbc2e29ba8477cab78",
+          "token_in": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3cf114d454032347be343f457942bd01cd0332d3:0x734eccd37b38116db67bb03831333ffa1dc2d4a3>0x4200000000000000000000000000000000000006+0xd25855e2816972d52f38abcbc2e29ba8477cab78:0x4200000000000000000000000000000000000006>0x734eccd37b38116db67bb03831333ffa1dc2d4a3",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3cf114d454032347be343f457942bd01cd0332d3",
+          "token_in": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xd25855e2816972d52f38abcbc2e29ba8477cab78",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x734eccd37b38116db67bb03831333ffa1dc2d4a3",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3d2ae231e04f0498e4c09b68e80e3c02c39e8770:0x4200000000000000000000000000000000000006>0x8668f207441ad2991b91ddb97942fb1cf0e7f857+0xb2353fe6d7ff6d56a83937da8577b967275a37ec:0x8668f207441ad2991b91ddb97942fb1cf0e7f857>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3d2ae231e04f0498e4c09b68e80e3c02c39e8770",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857"
+        },
+        {
+          "pool": "0xb2353fe6d7ff6d56a83937da8577b967275a37ec",
+          "token_in": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3d2ae231e04f0498e4c09b68e80e3c02c39e8770:0x8668f207441ad2991b91ddb97942fb1cf0e7f857>0x4200000000000000000000000000000000000006+0xb2353fe6d7ff6d56a83937da8577b967275a37ec:0x4200000000000000000000000000000000000006>0x8668f207441ad2991b91ddb97942fb1cf0e7f857",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3d2ae231e04f0498e4c09b68e80e3c02c39e8770",
+          "token_in": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xb2353fe6d7ff6d56a83937da8577b967275a37ec",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x8668f207441ad2991b91ddb97942fb1cf0e7f857",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3d33a6bfff5d1c656c9c6a6701d01979c2e285f5:0x1477d41fe0e9280e66475335b9e5844220cacb82>0x4200000000000000000000000000000000000006+0x4952066fa997ea6d574e176ef5dbec21b3e36f8b:0x4200000000000000000000000000000000000006>0x1477d41fe0e9280e66475335b9e5844220cacb82",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3d33a6bfff5d1c656c9c6a6701d01979c2e285f5",
+          "token_in": "0x1477d41fe0e9280e66475335b9e5844220cacb82",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x4952066fa997ea6d574e176ef5dbec21b3e36f8b",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x1477d41fe0e9280e66475335b9e5844220cacb82"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x1477d41fe0e9280e66475335b9e5844220cacb82",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3d33a6bfff5d1c656c9c6a6701d01979c2e285f5:0x4200000000000000000000000000000000000006>0x1477d41fe0e9280e66475335b9e5844220cacb82+0x4952066fa997ea6d574e176ef5dbec21b3e36f8b:0x1477d41fe0e9280e66475335b9e5844220cacb82>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3d33a6bfff5d1c656c9c6a6701d01979c2e285f5",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x1477d41fe0e9280e66475335b9e5844220cacb82"
+        },
+        {
+          "pool": "0x4952066fa997ea6d574e176ef5dbec21b3e36f8b",
+          "token_in": "0x1477d41fe0e9280e66475335b9e5844220cacb82",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3fe071db2e55bdaf870d07317397a47d4277d836:0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077>0x4200000000000000000000000000000000000006+0xccaa51daea9eaf6c14b01d40abbc4fe18229bef8:0x4200000000000000000000000000000000000006>0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3fe071db2e55bdaf870d07317397a47d4277d836",
+          "token_in": "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xccaa51daea9eaf6c14b01d40abbc4fe18229bef8",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x3fe071db2e55bdaf870d07317397a47d4277d836:0x4200000000000000000000000000000000000006>0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077+0xccaa51daea9eaf6c14b01d40abbc4fe18229bef8:0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x3fe071db2e55bdaf870d07317397a47d4277d836",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077"
+        },
+        {
+          "pool": "0xccaa51daea9eaf6c14b01d40abbc4fe18229bef8",
+          "token_in": "0x3cb5972649de6567e8ff7cc6bcb7e44888c6b077",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x41839207b1d72f29054444716811a5e1c92dd926:0x4200000000000000000000000000000000000006>0x86380eba48f82d2d4167260a9e9d04345f462770+0x50de79a6754bf4b48fe291441a89ef37fb702057:0x86380eba48f82d2d4167260a9e9d04345f462770>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x41839207b1d72f29054444716811a5e1c92dd926",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x86380eba48f82d2d4167260a9e9d04345f462770"
+        },
+        {
+          "pool": "0x50de79a6754bf4b48fe291441a89ef37fb702057",
+          "token_in": "0x86380eba48f82d2d4167260a9e9d04345f462770",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x41839207b1d72f29054444716811a5e1c92dd926:0x86380eba48f82d2d4167260a9e9d04345f462770>0x4200000000000000000000000000000000000006+0x50de79a6754bf4b48fe291441a89ef37fb702057:0x4200000000000000000000000000000000000006>0x86380eba48f82d2d4167260a9e9d04345f462770",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x41839207b1d72f29054444716811a5e1c92dd926",
+          "token_in": "0x86380eba48f82d2d4167260a9e9d04345f462770",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x50de79a6754bf4b48fe291441a89ef37fb702057",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x86380eba48f82d2d4167260a9e9d04345f462770"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x86380eba48f82d2d4167260a9e9d04345f462770",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x46503d6ad9f91eac86b5084fe30858aecbe439a9:0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac>0x4200000000000000000000000000000000000006+0x5dc46b157c34043bbbdb9608eb0af521659d8a79:0x4200000000000000000000000000000000000006>0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x46503d6ad9f91eac86b5084fe30858aecbe439a9",
+          "token_in": "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x5dc46b157c34043bbbdb9608eb0af521659d8a79",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x46503d6ad9f91eac86b5084fe30858aecbe439a9:0x4200000000000000000000000000000000000006>0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac+0x5dc46b157c34043bbbdb9608eb0af521659d8a79:0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x46503d6ad9f91eac86b5084fe30858aecbe439a9",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac"
+        },
+        {
+          "pool": "0x5dc46b157c34043bbbdb9608eb0af521659d8a79",
+          "token_in": "0x0c7d59a3c51441a6bb6a8eeacb7b71f2091b44ac",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x47b5b17685df68f935e0810608ae75003407646c:0x3808eca92d1845416be419fb73257706dec3629f>0x4200000000000000000000000000000000000006+0x5103da7ee3fc7f9a245c43ef92dc4857af2ba19b:0x4200000000000000000000000000000000000006>0x3808eca92d1845416be419fb73257706dec3629f",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x47b5b17685df68f935e0810608ae75003407646c",
+          "token_in": "0x3808eca92d1845416be419fb73257706dec3629f",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x5103da7ee3fc7f9a245c43ef92dc4857af2ba19b",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x3808eca92d1845416be419fb73257706dec3629f"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x3808eca92d1845416be419fb73257706dec3629f",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x47b5b17685df68f935e0810608ae75003407646c:0x4200000000000000000000000000000000000006>0x3808eca92d1845416be419fb73257706dec3629f+0x5103da7ee3fc7f9a245c43ef92dc4857af2ba19b:0x3808eca92d1845416be419fb73257706dec3629f>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x47b5b17685df68f935e0810608ae75003407646c",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x3808eca92d1845416be419fb73257706dec3629f"
+        },
+        {
+          "pool": "0x5103da7ee3fc7f9a245c43ef92dc4857af2ba19b",
+          "token_in": "0x3808eca92d1845416be419fb73257706dec3629f",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x4a231fd326ea4a833ac7bc1178e467088fbfad7c:0x3a8ee4eba269a25ec5931a64dd1303aab1083c96>0x4200000000000000000000000000000000000006+0xc1ee735dd32b2db5b6314fd7e7ef0a3fa846d382:0x4200000000000000000000000000000000000006>0x3a8ee4eba269a25ec5931a64dd1303aab1083c96",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x4a231fd326ea4a833ac7bc1178e467088fbfad7c",
+          "token_in": "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xc1ee735dd32b2db5b6314fd7e7ef0a3fa846d382",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x4a231fd326ea4a833ac7bc1178e467088fbfad7c:0x4200000000000000000000000000000000000006>0x3a8ee4eba269a25ec5931a64dd1303aab1083c96+0xc1ee735dd32b2db5b6314fd7e7ef0a3fa846d382:0x3a8ee4eba269a25ec5931a64dd1303aab1083c96>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x4a231fd326ea4a833ac7bc1178e467088fbfad7c",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96"
+        },
+        {
+          "pool": "0xc1ee735dd32b2db5b6314fd7e7ef0a3fa846d382",
+          "token_in": "0x3a8ee4eba269a25ec5931a64dd1303aab1083c96",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x4b804e4c766fcd4f7d50a55fe199b0944a01ef53:0x4200000000000000000000000000000000000006>0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385+0x9084f1633787f798b6dcc4f915068c29c5152a59:0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x4b804e4c766fcd4f7d50a55fe199b0944a01ef53",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385"
+        },
+        {
+          "pool": "0x9084f1633787f798b6dcc4f915068c29c5152a59",
+          "token_in": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x4b804e4c766fcd4f7d50a55fe199b0944a01ef53:0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385>0x4200000000000000000000000000000000000006+0x9084f1633787f798b6dcc4f915068c29c5152a59:0x4200000000000000000000000000000000000006>0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x4b804e4c766fcd4f7d50a55fe199b0944a01ef53",
+          "token_in": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x9084f1633787f798b6dcc4f915068c29c5152a59",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x7ee91c0d92d790cce5b1fbac0cb072e05ad10385",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x4e8cf8cfeba78e2f503400c4c32329bc5f6b821e:0x4200000000000000000000000000000000000006>0x76a9f4e95032f2e7e432fb47e85042f3833bc633+0x7c1e30f10e835fa2c06439f9b432d8cb19094805:0x76a9f4e95032f2e7e432fb47e85042f3833bc633>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x4e8cf8cfeba78e2f503400c4c32329bc5f6b821e",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633"
+        },
+        {
+          "pool": "0x7c1e30f10e835fa2c06439f9b432d8cb19094805",
+          "token_in": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x4e8cf8cfeba78e2f503400c4c32329bc5f6b821e:0x76a9f4e95032f2e7e432fb47e85042f3833bc633>0x4200000000000000000000000000000000000006+0x7c1e30f10e835fa2c06439f9b432d8cb19094805:0x4200000000000000000000000000000000000006>0x76a9f4e95032f2e7e432fb47e85042f3833bc633",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x4e8cf8cfeba78e2f503400c4c32329bc5f6b821e",
+          "token_in": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x7c1e30f10e835fa2c06439f9b432d8cb19094805",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x76a9f4e95032f2e7e432fb47e85042f3833bc633",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x4f2f29231cc6889e8c2550ca27a4a4a4630c3517:0x4200000000000000000000000000000000000006>0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80+0xfffcd966645ac0c8dae66a6f85fefa9ce76e42bb:0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x4f2f29231cc6889e8c2550ca27a4a4a4630c3517",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80"
+        },
+        {
+          "pool": "0xfffcd966645ac0c8dae66a6f85fefa9ce76e42bb",
+          "token_in": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x4f2f29231cc6889e8c2550ca27a4a4a4630c3517:0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80>0x4200000000000000000000000000000000000006+0xfffcd966645ac0c8dae66a6f85fefa9ce76e42bb:0x4200000000000000000000000000000000000006>0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x4f2f29231cc6889e8c2550ca27a4a4a4630c3517",
+          "token_in": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xfffcd966645ac0c8dae66a6f85fefa9ce76e42bb",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xcc7dd5cf1592d46a0dd6061976ee6a2b9e322d80",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x510dcdd0eddb81b38006ea501e85fbf43633cd39:0x4200000000000000000000000000000000000006>0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da+0xc4104f6e8ec7f7458560c1f31a7a528340288087:0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x510dcdd0eddb81b38006ea501e85fbf43633cd39",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da"
+        },
+        {
+          "pool": "0xc4104f6e8ec7f7458560c1f31a7a528340288087",
+          "token_in": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x510dcdd0eddb81b38006ea501e85fbf43633cd39:0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da>0x4200000000000000000000000000000000000006+0xc4104f6e8ec7f7458560c1f31a7a528340288087:0x4200000000000000000000000000000000000006>0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x510dcdd0eddb81b38006ea501e85fbf43633cd39",
+          "token_in": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xc4104f6e8ec7f7458560c1f31a7a528340288087",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xddae43b6b2dd2a342a4a36d914f141cd6b4f54da",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x59ae3d8b69e11105c2fcc0a45a94aac6f0fe3203:0x4200000000000000000000000000000000000006>0x5ffb098e5381d2512471341a23d83c7b2fcfdf42+0xdbf299d50a0cedf324c9e9496a7e464fbb826c45:0x5ffb098e5381d2512471341a23d83c7b2fcfdf42>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x59ae3d8b69e11105c2fcc0a45a94aac6f0fe3203",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42"
+        },
+        {
+          "pool": "0xdbf299d50a0cedf324c9e9496a7e464fbb826c45",
+          "token_in": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x59ae3d8b69e11105c2fcc0a45a94aac6f0fe3203:0x5ffb098e5381d2512471341a23d83c7b2fcfdf42>0x4200000000000000000000000000000000000006+0xdbf299d50a0cedf324c9e9496a7e464fbb826c45:0x4200000000000000000000000000000000000006>0x5ffb098e5381d2512471341a23d83c7b2fcfdf42",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x59ae3d8b69e11105c2fcc0a45a94aac6f0fe3203",
+          "token_in": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xdbf299d50a0cedf324c9e9496a7e464fbb826c45",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x5ffb098e5381d2512471341a23d83c7b2fcfdf42",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x5bef6275607901dcd58160356660151be0637440:0x4200000000000000000000000000000000000006>0xcffe7472a7a1a6947f56233854ae91a54c862f62+0xf487d533cae6cddd0c7e7bbbac084dd04d876578:0xcffe7472a7a1a6947f56233854ae91a54c862f62>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x5bef6275607901dcd58160356660151be0637440",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xcffe7472a7a1a6947f56233854ae91a54c862f62"
+        },
+        {
+          "pool": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+          "token_in": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x5bef6275607901dcd58160356660151be0637440:0xcffe7472a7a1a6947f56233854ae91a54c862f62>0x4200000000000000000000000000000000000006+0xf487d533cae6cddd0c7e7bbbac084dd04d876578:0x4200000000000000000000000000000000000006>0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x5bef6275607901dcd58160356660151be0637440",
+          "token_in": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xf487d533cae6cddd0c7e7bbbac084dd04d876578",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xcffe7472a7a1a6947f56233854ae91a54c862f62"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xcffe7472a7a1a6947f56233854ae91a54c862f62",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x7ca5b94deae67e31c2ebb9e8b56b1f2db6acbcf0:0x4200000000000000000000000000000000000006>0xca6453931adcafa58fe93ca88b7f7f3c3d0238da+0xdf0249441ba1741b01a07971f6ca197e7b5df254:0xca6453931adcafa58fe93ca88b7f7f3c3d0238da>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x7ca5b94deae67e31c2ebb9e8b56b1f2db6acbcf0",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da"
+        },
+        {
+          "pool": "0xdf0249441ba1741b01a07971f6ca197e7b5df254",
+          "token_in": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x7ca5b94deae67e31c2ebb9e8b56b1f2db6acbcf0:0xca6453931adcafa58fe93ca88b7f7f3c3d0238da>0x4200000000000000000000000000000000000006+0xdf0249441ba1741b01a07971f6ca197e7b5df254:0x4200000000000000000000000000000000000006>0xca6453931adcafa58fe93ca88b7f7f3c3d0238da",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x7ca5b94deae67e31c2ebb9e8b56b1f2db6acbcf0",
+          "token_in": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xdf0249441ba1741b01a07971f6ca197e7b5df254",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xca6453931adcafa58fe93ca88b7f7f3c3d0238da",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x884b3be88d46d659b1c392b9d6d2157fd8fcffa6:0x4200000000000000000000000000000000000006>0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54+0x9889f51dd4542649198b04f499d80e0618bec432:0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x884b3be88d46d659b1c392b9d6d2157fd8fcffa6",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54"
+        },
+        {
+          "pool": "0x9889f51dd4542649198b04f499d80e0618bec432",
+          "token_in": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x884b3be88d46d659b1c392b9d6d2157fd8fcffa6:0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54>0x4200000000000000000000000000000000000006+0x9889f51dd4542649198b04f499d80e0618bec432:0x4200000000000000000000000000000000000006>0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x884b3be88d46d659b1c392b9d6d2157fd8fcffa6",
+          "token_in": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0x9889f51dd4542649198b04f499d80e0618bec432",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xc5c66aea7f3accbe4fb93abc6fc67ded194d2b54",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x8e08ceffef66dfcc9ade2a013bd081292359c3f3:0x4200000000000000000000000000000000000006>0x4682e95161873123859c461f0bca0ada9fe1a240+0xe9393cbe54d8acc4e65cebe52e751fc6af5c2ea3:0x4682e95161873123859c461f0bca0ada9fe1a240>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x8e08ceffef66dfcc9ade2a013bd081292359c3f3",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x4682e95161873123859c461f0bca0ada9fe1a240"
+        },
+        {
+          "pool": "0xe9393cbe54d8acc4e65cebe52e751fc6af5c2ea3",
+          "token_in": "0x4682e95161873123859c461f0bca0ada9fe1a240",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x8e08ceffef66dfcc9ade2a013bd081292359c3f3:0x4682e95161873123859c461f0bca0ada9fe1a240>0x4200000000000000000000000000000000000006+0xe9393cbe54d8acc4e65cebe52e751fc6af5c2ea3:0x4200000000000000000000000000000000000006>0x4682e95161873123859c461f0bca0ada9fe1a240",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x8e08ceffef66dfcc9ade2a013bd081292359c3f3",
+          "token_in": "0x4682e95161873123859c461f0bca0ada9fe1a240",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xe9393cbe54d8acc4e65cebe52e751fc6af5c2ea3",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x4682e95161873123859c461f0bca0ada9fe1a240"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4682e95161873123859c461f0bca0ada9fe1a240",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x93249955231f8b37d5b3c3731b50631e04003277:0x4200000000000000000000000000000000000006>0xbd27300e23577d103a5763c1f45e5cf380655b05+0xa4b69fbaa7e99ec700b755eafd70086ed778574f:0xbd27300e23577d103a5763c1f45e5cf380655b05>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x93249955231f8b37d5b3c3731b50631e04003277",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xbd27300e23577d103a5763c1f45e5cf380655b05"
+        },
+        {
+          "pool": "0xa4b69fbaa7e99ec700b755eafd70086ed778574f",
+          "token_in": "0xbd27300e23577d103a5763c1f45e5cf380655b05",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x93249955231f8b37d5b3c3731b50631e04003277:0xbd27300e23577d103a5763c1f45e5cf380655b05>0x4200000000000000000000000000000000000006+0xa4b69fbaa7e99ec700b755eafd70086ed778574f:0x4200000000000000000000000000000000000006>0xbd27300e23577d103a5763c1f45e5cf380655b05",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x93249955231f8b37d5b3c3731b50631e04003277",
+          "token_in": "0xbd27300e23577d103a5763c1f45e5cf380655b05",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xa4b69fbaa7e99ec700b755eafd70086ed778574f",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xbd27300e23577d103a5763c1f45e5cf380655b05"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xbd27300e23577d103a5763c1f45e5cf380655b05",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x9b8f4cb83f1505347334daa121a6f7ffa5f55500:0x195ae861143297bf5615f87973614251a8503775>0x4200000000000000000000000000000000000006+0xc48f08f80cb0a78e77bcbed59de7326f47516e37:0x4200000000000000000000000000000000000006>0x195ae861143297bf5615f87973614251a8503775",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x9b8f4cb83f1505347334daa121a6f7ffa5f55500",
+          "token_in": "0x195ae861143297bf5615f87973614251a8503775",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xc48f08f80cb0a78e77bcbed59de7326f47516e37",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x195ae861143297bf5615f87973614251a8503775"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x195ae861143297bf5615f87973614251a8503775",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0x9b8f4cb83f1505347334daa121a6f7ffa5f55500:0x4200000000000000000000000000000000000006>0x195ae861143297bf5615f87973614251a8503775+0xc48f08f80cb0a78e77bcbed59de7326f47516e37:0x195ae861143297bf5615f87973614251a8503775>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0x9b8f4cb83f1505347334daa121a6f7ffa5f55500",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x195ae861143297bf5615f87973614251a8503775"
+        },
+        {
+          "pool": "0xc48f08f80cb0a78e77bcbed59de7326f47516e37",
+          "token_in": "0x195ae861143297bf5615f87973614251a8503775",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0xace7b6ea758ae29909e41f0c9e06088510c829ae:0x4200000000000000000000000000000000000006>0x677999c00bf03e79fd1affb15cd108d897028fb8+0xb5b8fde93ceb3209081cbfb5f761b7610376ce5b:0x677999c00bf03e79fd1affb15cd108d897028fb8>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0xace7b6ea758ae29909e41f0c9e06088510c829ae",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x677999c00bf03e79fd1affb15cd108d897028fb8"
+        },
+        {
+          "pool": "0xb5b8fde93ceb3209081cbfb5f761b7610376ce5b",
+          "token_in": "0x677999c00bf03e79fd1affb15cd108d897028fb8",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0xace7b6ea758ae29909e41f0c9e06088510c829ae:0x677999c00bf03e79fd1affb15cd108d897028fb8>0x4200000000000000000000000000000000000006+0xb5b8fde93ceb3209081cbfb5f761b7610376ce5b:0x4200000000000000000000000000000000000006>0x677999c00bf03e79fd1affb15cd108d897028fb8",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0xace7b6ea758ae29909e41f0c9e06088510c829ae",
+          "token_in": "0x677999c00bf03e79fd1affb15cd108d897028fb8",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xb5b8fde93ceb3209081cbfb5f761b7610376ce5b",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x677999c00bf03e79fd1affb15cd108d897028fb8"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x677999c00bf03e79fd1affb15cd108d897028fb8",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0xbc457b9fff394d5d2c2b30a219f19cf5a0b7a42b:0x4200000000000000000000000000000000000006>0xbce17d4a973b8778335312eb32e41fe085bebb23+0xf5a0cc177dc7f8f0d6abffa38a4640508a0539d1:0xbce17d4a973b8778335312eb32e41fe085bebb23>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0xbc457b9fff394d5d2c2b30a219f19cf5a0b7a42b",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xbce17d4a973b8778335312eb32e41fe085bebb23"
+        },
+        {
+          "pool": "0xf5a0cc177dc7f8f0d6abffa38a4640508a0539d1",
+          "token_in": "0xbce17d4a973b8778335312eb32e41fe085bebb23",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0xbc457b9fff394d5d2c2b30a219f19cf5a0b7a42b:0xbce17d4a973b8778335312eb32e41fe085bebb23>0x4200000000000000000000000000000000000006+0xf5a0cc177dc7f8f0d6abffa38a4640508a0539d1:0x4200000000000000000000000000000000000006>0xbce17d4a973b8778335312eb32e41fe085bebb23",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0xbc457b9fff394d5d2c2b30a219f19cf5a0b7a42b",
+          "token_in": "0xbce17d4a973b8778335312eb32e41fe085bebb23",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xf5a0cc177dc7f8f0d6abffa38a4640508a0539d1",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xbce17d4a973b8778335312eb32e41fe085bebb23"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xbce17d4a973b8778335312eb32e41fe085bebb23",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0xd2b3d4452a58cf0cf39548c10e6236167c7490fa:0x4200000000000000000000000000000000000006>0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81+0xe7d666952fa25370cfcd2cd82cd98866aa1b3994:0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0xd2b3d4452a58cf0cf39548c10e6236167c7490fa",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81"
+        },
+        {
+          "pool": "0xe7d666952fa25370cfcd2cd82cd98866aa1b3994",
+          "token_in": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0xd2b3d4452a58cf0cf39548c10e6236167c7490fa:0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81>0x4200000000000000000000000000000000000006+0xe7d666952fa25370cfcd2cd82cd98866aa1b3994:0x4200000000000000000000000000000000000006>0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0xd2b3d4452a58cf0cf39548c10e6236167c7490fa",
+          "token_in": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xe7d666952fa25370cfcd2cd82cd98866aa1b3994",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0xdcb1b2df4db294d9e786d0b5bd981be3d142cf81",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0xdb74b294e1a08b287d3a0438f3d6768edf3fcf4e:0x4200000000000000000000000000000000000006>0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5+0xf437c686f4a2e74c0aba48511f5f540195df4818:0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5>0x4200000000000000000000000000000000000006",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0xdb74b294e1a08b287d3a0438f3d6768edf3fcf4e",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5"
+        },
+        {
+          "pool": "0xf437c686f4a2e74c0aba48511f5f540195df4818",
+          "token_in": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x4200000000000000000000000000000000000006",
+      "target_block": 37224031
+    },
+    {
+      "canonical_key": "0xdb74b294e1a08b287d3a0438f3d6768edf3fcf4e:0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5>0x4200000000000000000000000000000000000006+0xf437c686f4a2e74c0aba48511f5f540195df4818:0x4200000000000000000000000000000000000006>0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5",
+      "chain_id": 91342,
+      "edges": [
+        {
+          "pool": "0xdb74b294e1a08b287d3a0438f3d6768edf3fcf4e",
+          "token_in": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "pool": "0xf437c686f4a2e74c0aba48511f5f540195df4818",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5"
+        }
+      ],
+      "fee_status": "incomplete",
+      "hop_count": 2,
+      "start_token": "0x7fe3a05199e7cac5538e2a1ec4d0d59bc9b7e9f5",
+      "target_block": 37224031
+    }
+  ],
+  "table": "cycles"
+}

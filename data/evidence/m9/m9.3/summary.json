@@ -1,0 +1,87 @@
+{
+  "_provenance": {
+    "asked": "§36–§41: which closed routes exist in M9.2's real target-block graph, how many are 2-hop and 3-hop, which have every fee proved, whether two runs of one graph and one config agree byte for byte, and how much walking and how long that took — with every number recomputable from the raw run documents beside it by a reader who calls no production helper.",
+    "assemble_command": "M93_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/pathfinder_evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "the digest of the endpoint M7 and M9.1/M9.2 recorded. This milestone makes no request at all: the graph is rebuilt from committed JSON, so the digest appears here only to keep the provenance chain unbroken, and no URL is written anywhere in this directory.",
+    "input_files": [
+      "data/evidence/m9/m9.1/raw/pass-a.json",
+      "data/evidence/m9/m9.2/raw/reconstruction-pass-a.json",
+      "data/evidence/m9/m9.2/graph-integration.json"
+    ],
+    "milestone": "M9.3",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "data/evidence/m9/m9.3/raw/run-a.json",
+      "data/evidence/m9/m9.3/raw/run-b.json"
+    ],
+    "written_at": "the run, not the review: every count is read off the candidate rows beside it, and the one number that cannot repeat — the wall clock — lives in raw/ and is quoted rather than re-measured"
+  },
+  "canonical_unique": true,
+  "chain_id": 91342,
+  "cycles_2hop": 66,
+  "cycles_3hop": 2,
+  "dfs_states_visited": 14860,
+  "duplicate_cycles": 0,
+  "fee_complete": 0,
+  "fee_incomplete": 68,
+  "graph_edges": 160,
+  "graph_nodes": 50,
+  "graph_pools": 80,
+  "graph_read": {
+    "distinct_pools_in_candidates": 69,
+    "edges_used_by_at_least_one_candidate": 138,
+    "edges_used_by_no_candidate": 22,
+    "note": "an edge with no candidate is a market this block's topology closes nowhere through within the hop bound — a statement about shape, not about quality."
+  },
+  "max_hops": 3,
+  "not_claimed": [
+    "that any candidate is profitable, or close to it",
+    "that any candidate can be filled at this block's reserves",
+    "that any fee on any candidate is known",
+    "that a deeper bound would find more, or that three hops is enough",
+    "that this graph is current: it is block 37224031 as M9.2 rebuilt it"
+  ],
+  "profit": {
+    "gross_profit": "N/A",
+    "net_profit": "N/A",
+    "realized_profit": "N/A",
+    "reason": "§56: not evaluated at this stage. N/A and 0 are different statements — a zero would claim the search priced these routes and found them worthless, and the search reads no reserves, no fee values and no gas."
+  },
+  "safety": {
+    "broadcasts": 0,
+    "discovery_production_dependencies_name_pathfinder": false,
+    "flashblock_reads": 0,
+    "how_this_is_checkable": "§42/§50: this block reads the two Cargo.toml files at assembly time. The search crate links four crates, none of which can open a socket; discovery depends on it only as a dev-dependency, so no pipeline edge was created here.",
+    "pathfinder_dependencies_allowed": [
+      "evm-core",
+      "evm-graph",
+      "serde",
+      "thiserror"
+    ],
+    "pathfinder_production_dependencies": [
+      "evm-core",
+      "evm-graph",
+      "serde",
+      "thiserror"
+    ],
+    "real_arbitrage_executed": 0,
+    "rpc_calls": 0,
+    "signatures": 0,
+    "state_mutations": 0
+  },
+  "search_wall_ms": 31,
+  "table": "summary",
+  "target_block": 37224031,
+  "terminology": {
+    "what_is_counted": "cycle candidates — closed routes in one block's topology",
+    "what_is_not_counted": "a candidate is not an opportunity, not a quote, and not a count of money. total_cycles above counts shapes in a graph and is never a number of trades (§38/§55)."
+  },
+  "total_cycles": 68,
+  "verdict": "CYCLE_CANDIDATES_FOUND",
+  "verdict_rule": "`CYCLE_CANDIDATES_FOUND` requires the search to return at least one well-formed candidate over the rebuilt M9.2 graph. Neither verdict says anything about profit, fillability, or the fees being proved; §58's Fee and Safety groups are graded from `fee-status.json`, `safety` above, and the static scans."
+}

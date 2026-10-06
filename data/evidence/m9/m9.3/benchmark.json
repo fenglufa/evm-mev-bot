@@ -1,0 +1,41 @@
+{
+  "_provenance": {
+    "asked": "§36–§41: which closed routes exist in M9.2's real target-block graph, how many are 2-hop and 3-hop, which have every fee proved, whether two runs of one graph and one config agree byte for byte, and how much walking and how long that took — with every number recomputable from the raw run documents beside it by a reader who calls no production helper.",
+    "assemble_command": "M93_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/pathfinder_evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "the digest of the endpoint M7 and M9.1/M9.2 recorded. This milestone makes no request at all: the graph is rebuilt from committed JSON, so the digest appears here only to keep the provenance chain unbroken, and no URL is written anywhere in this directory.",
+    "input_files": [
+      "data/evidence/m9/m9.1/raw/pass-a.json",
+      "data/evidence/m9/m9.2/raw/reconstruction-pass-a.json",
+      "data/evidence/m9/m9.2/graph-integration.json"
+    ],
+    "milestone": "M9.3",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "data/evidence/m9/m9.3/raw/run-a.json",
+      "data/evidence/m9/m9.3/raw/run-b.json"
+    ],
+    "written_at": "the run, not the review: every count is read off the candidate rows beside it, and the one number that cannot repeat — the wall clock — lives in raw/ and is quoted rather than re-measured"
+  },
+  "candidate_count": 68,
+  "cycles_2hop": 66,
+  "cycles_3hop": 2,
+  "dfs_states_visited": 14860,
+  "graph_edge_count": 160,
+  "graph_node_count": 50,
+  "graph_pool_count": 80,
+  "interpretation": "§43: no latency target is set for M9.3 and none is implied by this row. The first goals are correctness, determinism and a bounded search; `dfs_states_visited` is here so a future slow run can be read without changing what the search returns.",
+  "max_hops": 3,
+  "no_speculative_optimization": "§44–§47: no memoization, no global cache, no RPC cache, no parallel DFS, no unsafe, no arena, no SIMD. The graph is borrowed, not cloned, and a GraphEdge is never copied into a candidate — only its EdgeId.",
+  "states_per_candidate": 218.52941176470588,
+  "table": "benchmark",
+  "wall_ms": {
+    "measured_on": "the assembly run. A gate run re-measures and is not compared against these bytes, which is exactly why the number lives in raw/ and every table quotes it instead of claiming it.",
+    "run_a": 31,
+    "run_b": 32
+  }
+}

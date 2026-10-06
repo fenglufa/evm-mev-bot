@@ -1,0 +1,93 @@
+{
+  "_provenance": {
+    "asked": "§36–§41: which closed routes exist in M9.2's real target-block graph, how many are 2-hop and 3-hop, which have every fee proved, whether two runs of one graph and one config agree byte for byte, and how much walking and how long that took — with every number recomputable from the raw run documents beside it by a reader who calls no production helper.",
+    "assemble_command": "M93_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/pathfinder_evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "the digest of the endpoint M7 and M9.1/M9.2 recorded. This milestone makes no request at all: the graph is rebuilt from committed JSON, so the digest appears here only to keep the provenance chain unbroken, and no URL is written anywhere in this directory.",
+    "input_files": [
+      "data/evidence/m9/m9.1/raw/pass-a.json",
+      "data/evidence/m9/m9.2/raw/reconstruction-pass-a.json",
+      "data/evidence/m9/m9.2/graph-integration.json"
+    ],
+    "milestone": "M9.3",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "data/evidence/m9/m9.3/raw/run-a.json",
+      "data/evidence/m9/m9.3/raw/run-b.json"
+    ],
+    "written_at": "the run, not the review: every count is read off the candidate rows beside it, and the one number that cannot repeat — the wall clock — lives in raw/ and is quoted rather than re-measured"
+  },
+  "recomputed_over_the_real_graph": {
+    "checks": [
+      "every route closes on its start token",
+      "every consecutive pair is adjacent",
+      "no pool appears twice in one route",
+      "no token is stood on twice before the route closes",
+      "hop_count is 2 or 3 and equals the edge count",
+      "every edge is in the graph M9.2 published",
+      "chain_id and target_block equal the graph's on every row",
+      "canonical_key is the least rotation of the row's own edges",
+      "canonical keys are unique across rows",
+      "fee_status follows M9.2's fee column, edge by edge"
+    ],
+    "rows_checked": 68,
+    "rule": "§53/§54: the same rules are re-derived from the committed rows by a test that calls no search and no discovery function — a candidate that broke one of them would fail this table, not only the unit test that produced it.",
+    "violations": 0
+  },
+  "table": "negative-controls",
+  "unit_tests": [
+    {
+      "claim": "A --P1--> B --P1--> A emits nothing",
+      "id": "NC1",
+      "source_file": "crates/pathfinder/tests/pathfinder.rs",
+      "tests": "t07_same_pool_reuse_is_rejected"
+    },
+    {
+      "claim": "A -> B -> A -> C -> A emits nothing",
+      "id": "NC2",
+      "source_file": "crates/pathfinder/tests/pathfinder.rs",
+      "tests": "t10_repeated_intermediate_token_is_rejected"
+    },
+    {
+      "claim": "an open path A -> B -> C emits nothing",
+      "id": "NC3",
+      "source_file": "crates/pathfinder/tests/pathfinder.rs",
+      "tests": "t04_open_path_yields_no_candidates"
+    },
+    {
+      "claim": "the three rotations of one cycle are one candidate",
+      "id": "NC4",
+      "source_file": "crates/pathfinder/tests/pathfinder.rs",
+      "tests": "t13_rotations_are_deduplicated"
+    },
+    {
+      "claim": "a route and its reversal stay two candidates",
+      "id": "NC5",
+      "source_file": "crates/pathfinder/tests/pathfinder.rs",
+      "tests": "t14_reversal_is_preserved"
+    },
+    {
+      "claim": "one unattested fee keeps a candidate enumerable and never tradable",
+      "id": "NC6",
+      "source_file": "crates/pathfinder/tests/pathfinder.rs",
+      "tests": "t18_one_none_is_incomplete, t22_incomplete_cannot_be_promoted"
+    },
+    {
+      "claim": "a candidate carries the graph's target block and no other",
+      "id": "NC7",
+      "source_file": "crates/pathfinder/tests/pathfinder.rs",
+      "tests": "nc7_candidates_carry_the_graphs_target_block"
+    },
+    {
+      "claim": "the same route at two target blocks is two identities",
+      "id": "NC8",
+      "source_file": "crates/pathfinder/tests/pathfinder.rs",
+      "tests": "nc8_snapshots_at_different_blocks_are_distinct"
+    }
+  ],
+  "what_no_control_covers": "none of these says a candidate is worth trading. NC6 is the closest, and its finding runs the other way: a route with an unproved fee is a shape, not an offer."
+}

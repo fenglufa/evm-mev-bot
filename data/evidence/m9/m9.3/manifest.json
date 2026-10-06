@@ -1,0 +1,86 @@
+{
+  "_provenance": {
+    "asked": "§36–§41: which closed routes exist in M9.2's real target-block graph, how many are 2-hop and 3-hop, which have every fee proved, whether two runs of one graph and one config agree byte for byte, and how much walking and how long that took — with every number recomputable from the raw run documents beside it by a reader who calls no production helper.",
+    "assemble_command": "M93_EVIDENCE_REFRESH=1 cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "assembled_by": "crates/discovery/tests/pathfinder_evidence_gate.rs",
+    "chain_id": 91342,
+    "check_command": "cargo test -p evm-discovery --test pathfinder_evidence_gate -- --test-threads=1",
+    "endpoint": "rpc-faa716cada04a9ef",
+    "endpoint_link": "data/evidence/m7/census-pair-created.json#_provenance.rpc_endpoint",
+    "endpoint_source": "the digest of the endpoint M7 and M9.1/M9.2 recorded. This milestone makes no request at all: the graph is rebuilt from committed JSON, so the digest appears here only to keep the provenance chain unbroken, and no URL is written anywhere in this directory.",
+    "input_files": [
+      "data/evidence/m9/m9.1/raw/pass-a.json",
+      "data/evidence/m9/m9.2/raw/reconstruction-pass-a.json",
+      "data/evidence/m9/m9.2/graph-integration.json"
+    ],
+    "milestone": "M9.3",
+    "no_key_in_this_file": true,
+    "raw_records": [
+      "data/evidence/m9/m9.3/raw/run-a.json",
+      "data/evidence/m9/m9.3/raw/run-b.json"
+    ],
+    "written_at": "the run, not the review: every count is read off the candidate rows beside it, and the one number that cannot repeat — the wall clock — lives in raw/ and is quoted rather than re-measured"
+  },
+  "files": [
+    {
+      "bytes": 4470,
+      "digest": "0x767f55cc76af0153061ed05e971e64b8222fe107e1f23b88eabda1a56a41299e",
+      "file": "summary.json"
+    },
+    {
+      "bytes": 67629,
+      "digest": "0xcad198c5466d17d89f75615c1a1dc913a36dfb130ff1d221cd51bcb66bf7df02",
+      "file": "cycles.json"
+    },
+    {
+      "bytes": 43885,
+      "digest": "0x0f864a1958e1ea0cb0dfb9ef1e117384c2843f00371409f585bae69e59d023c7",
+      "file": "candidate-edges.json"
+    },
+    {
+      "bytes": 49426,
+      "digest": "0x0dc271ae0678b96ef9a10fe431fafcff808dc1b86e68a1b883873c0e13a9c83c",
+      "file": "fee-status.json"
+    },
+    {
+      "bytes": 2868,
+      "digest": "0x4db0ea358cd91c046fe684210547b6bd02d3ce88853779240ed6dcb5bcd1c9db",
+      "file": "determinism.json"
+    },
+    {
+      "bytes": 2757,
+      "digest": "0x9a49989eaa80744faac2197779f19ceb89804c75e7b97b3bc448b1294a0c8ab5",
+      "file": "benchmark.json"
+    },
+    {
+      "bytes": 4602,
+      "digest": "0x6a1bb2716356c442b7e04d4d907c58c4a0b37bb9c1b7454c39460763be3628ec",
+      "file": "negative-controls.json"
+    }
+  ],
+  "negative_controls_run_here": "§35's eight controls are unit tests in crates/pathfinder/tests/pathfinder.rs. This directory re-derives the same rules from its own rows (`negative-controls.json#recomputed_over_the_real_graph`) and greps the source for every test name it quotes.",
+  "questions_answered": [
+    "which closed routes exist in M9.2's target-block graph, and how many of each depth",
+    "which of them have every fee proved, edge by edge rather than by assumption",
+    "whether two runs of one graph and one config agree byte for byte",
+    "how much walking the bounded search did to answer, and how long it took",
+    "whether this milestone touched a node, a key or a broadcast — and how a reader checks that without trusting this file"
+  ],
+  "raw_files": [
+    {
+      "bytes": 65371,
+      "cycles_recorded": 68,
+      "digest": "0x889148fca1f94f6c693d020b64f33d13ae78d0b5e05dcbd5c21610e758af286b",
+      "file": "raw/run-a.json",
+      "wall_ms": 31
+    },
+    {
+      "bytes": 65371,
+      "cycles_recorded": 68,
+      "digest": "0x57fb1d2c817e71e7715c4737e072dd8d38b16b311007ad067e8f82eaa1aa1e2f",
+      "file": "raw/run-b.json",
+      "wall_ms": 32
+    }
+  ],
+  "table": "manifest"
+}
