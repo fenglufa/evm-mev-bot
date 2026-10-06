@@ -16,6 +16,12 @@ thiserror.workspace = true
 
 [dev-dependencies]
 async-trait.workspace = true
+# M9.3 §36/§50: the evidence gate reads the M9.2 graph through the search. Test-only on
+# purpose — a production dependency here would wire candidates into the pipeline.
+# The M3 amount-optimizer crate is deliberately not listed, in dev-dependencies either:
+# M9.2's boundary gate scans this whole manifest for that name, so the two-hop cross-check
+# in the evidence gate reads M9.2's committed edge table instead of calling M3's enumerator.
+evm-pathfinder.workspace = true
 evm-replay.workspace = true
 serde_json.workspace = true
 tokio.workspace = true
