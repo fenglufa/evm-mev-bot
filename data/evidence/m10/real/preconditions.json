@@ -1,0 +1,48 @@
+{
+  "chain_id": 91342,
+  "endpoint": "https://sepolia-rpc.giwa.io",
+  "endpoint_source": "GIWA_RPC_URL at run time; no URL is baked into the source (§5)",
+  "gas_ceiling_wei": {
+    "call": "600000",
+    "creation": "5000000"
+  },
+  "head_at_first_step": {
+    "hash": "0x6f9369cb66e37be1689918f90a503ff12494d5e713ef7619d40011eb886a2830",
+    "number": 38023914
+  },
+  "input_token": "0x4200000000000000000000000000000000000006",
+  "key_source": "`GIWA_EXECUTION_PRIVATE_KEY`, read once by this test; the value is never printed, stored or written to evidence (§19/§35)",
+  "native_balance_wei": "35150697468677639",
+  "operator": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+  "planned_principal_wei": "100000000000000",
+  "pools": [
+    "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+    "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+  ],
+  "preflight_reads": [
+    {
+      "block_timestamp_last": "1791367640",
+      "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "read_at_block": 38023914,
+      "reserve0": "833769110338570972349",
+      "reserve1": "1200000000000000",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "block_timestamp_last": "1791367640",
+      "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "read_at_block": 38023914,
+      "reserve0": "2166230889661429027651",
+      "reserve1": "18469587832303757",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    }
+  ],
+  "receipt_policy": {
+    "attempts": 30,
+    "between_attempts_ms": "1000"
+  },
+  "second_token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+  "what_this_is": "§57's preconditions for the controlled ladder, read before the creation transaction was signed"
+}

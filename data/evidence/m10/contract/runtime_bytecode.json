@@ -1,0 +1,130 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "assembled_by": "crates/execution/tests/executor_evidence_gate.rs",
+  "body": {
+    "artifacts": {
+      "creation": {
+        "bytes": 7565,
+        "digest_of_the_artifact_file": {
+          "bytes": 15130,
+          "keccak256": "0x0489af1157059871a533fdd84772a2f9706ea8657721c03476267953dff8ec98"
+        },
+        "file": "contracts/artifacts/ArbitrageExecutor.bin",
+        "keccak256": "0x8c49d87cc6173d83a36c97fd1f919555143e431b4124fea08368054a676c7263"
+      },
+      "runtime": {
+        "bytes": 7347,
+        "digest_of_the_artifact_file": {
+          "bytes": 14694,
+          "keccak256": "0x406ea6a94b908b13d63aa5ee62d4855fe820622bca76fec4283e7970e1e78438"
+        },
+        "file": "contracts/artifacts/ArbitrageExecutor.bin-runtime",
+        "keccak256": "0x917ed914c157e86958d0b2de9d85a62a3a62c381b49166e091e3b67255d42cca"
+      }
+    },
+    "creation_contains_runtime_as_its_tail": true,
+    "published_by_the_live_run": {
+      "contract/bytecode_hash.json": {
+        "creation_code_bytes": 7565,
+        "creation_code_keccak256": "0x8c49d87cc6173d83a36c97fd1f919555143e431b4124fea08368054a676c7263"
+      },
+      "contract/deployment.json": {
+        "abi_version": "solc 0.8.37+commit.f401782d, ArbitrageExecutor.bin sha256 69ae3d937671666e2fe1e05b86c88a0b4d51587fb052bcbb967c79609d9a2680",
+        "creation_code_bytes": 7565,
+        "creation_code_hash": "0x8c49d87cc6173d83a36c97fd1f919555143e431b4124fea08368054a676c7263",
+        "deployment_address": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+        "deployment_block": 38023919,
+        "deployment_tx": "0x226c71f642a1febed9cab35af945486aca88d6ab47ec393f204979da40023eb7"
+      },
+      "the_ladders_creation_step": {
+        "agree": true,
+        "constructor": "constructor(address operator_), read out of the contract source",
+        "creation_code_bytes": 7565,
+        "creation_code_keccak256": "0x8c49d87cc6173d83a36c97fd1f919555143e431b4124fea08368054a676c7263",
+        "input_is": "the creation code with the one argument word appended",
+        "operator_argument": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "published_input_bytes": 7597,
+        "published_input_hash": "0x664863a9cb08cc12c5bcf877bd1bfbf21cfe29b7947280edecd8ba74278135ca",
+        "recomputed_input_bytes": 7597,
+        "recomputed_input_keccak256": "0x664863a9cb08cc12c5bcf877bd1bfbf21cfe29b7947280edecd8ba74278135ca",
+        "why_this_is_here": "§48 asks what a reader can re-verify from real-chain evidence without a node; this is the one hash in the directory that is derived from the compiler's bytes and the deployment row alone, and it is what ties the deployed contract's operator to this artifact"
+      }
+    },
+    "recipe_count": 4,
+    "recipes_that_deploy_the_runtime_code": {
+      "data/evidence/m10/states/caller_is_not_the_stored_operator.json": {
+        "declared_rows": [
+          {
+            "address": "0x1000000000000000000000000000000000000010",
+            "code_bytes_declared": 7347,
+            "code_bytes_measured": 7347,
+            "is_the_compilers_runtime_artifact": true,
+            "keccak_of_the_declared_code": "0x917ed914c157e86958d0b2de9d85a62a3a62c381b49166e091e3b67255d42cca",
+            "length_declared_matches_the_bytes": true
+          }
+        ],
+        "executor": "0x1000000000000000000000000000000000000010",
+        "recipe_keccak256": "0x44e181f403080be5fc4c431bc006641c874bb0e71246e6e84d61b87367e41f05"
+      },
+      "data/evidence/m10/states/committed.json": {
+        "declared_rows": [
+          {
+            "address": "0x1000000000000000000000000000000000000010",
+            "code_bytes_declared": 7347,
+            "code_bytes_measured": 7347,
+            "is_the_compilers_runtime_artifact": true,
+            "keccak_of_the_declared_code": "0x917ed914c157e86958d0b2de9d85a62a3a62c381b49166e091e3b67255d42cca",
+            "length_declared_matches_the_bytes": true
+          }
+        ],
+        "executor": "0x1000000000000000000000000000000000000010",
+        "recipe_keccak256": "0x307307fb96ad85c4562684f4782f615d7b85a6ae8e9e469a439632e6cdc71e24"
+      },
+      "data/evidence/m10/states/pair_not_in_the_allowlist.json": {
+        "declared_rows": [
+          {
+            "address": "0x1000000000000000000000000000000000000010",
+            "code_bytes_declared": 7347,
+            "code_bytes_measured": 7347,
+            "is_the_compilers_runtime_artifact": true,
+            "keccak_of_the_declared_code": "0x917ed914c157e86958d0b2de9d85a62a3a62c381b49166e091e3b67255d42cca",
+            "length_declared_matches_the_bytes": true
+          }
+        ],
+        "executor": "0x1000000000000000000000000000000000000010",
+        "recipe_keccak256": "0x9bd5418ec0ce508f53649f082e4f508da4dcdfbdb0f44d4a2ecee9c77c26b203"
+      },
+      "data/evidence/m10/states/token_not_in_the_allowlist.json": {
+        "declared_rows": [
+          {
+            "address": "0x1000000000000000000000000000000000000010",
+            "code_bytes_declared": 7347,
+            "code_bytes_measured": 7347,
+            "is_the_compilers_runtime_artifact": true,
+            "keccak_of_the_declared_code": "0x917ed914c157e86958d0b2de9d85a62a3a62c381b49166e091e3b67255d42cca",
+            "length_declared_matches_the_bytes": true
+          }
+        ],
+        "executor": "0x1000000000000000000000000000000000000010",
+        "recipe_keccak256": "0x915db73bd9bd2eec4eea521ae095f3e0dcb66e875ad84ac03b3b1b22ca8a6a30"
+      }
+    },
+    "runtime_is_not_hashed_by_the_live_files": {
+      "value": true,
+      "why": "deployment.json and bytecode_hash.json were written by a run that could ask a node for the code it deployed and did not; neither publishes a runtime hash. §47 asks for one, so this file derives it from the compiler's runtime artifact instead of inventing a chain read for it."
+    },
+    "what_this_does_not_prove": "that the deployed address currently holds these bytes. Confirming that is an `eth_getCode` call, which §51 forbids this gate from adding, and which the live harness did not record. The claim here is artifact-to-artifact, and the artifact-to-chain link is the deployment transaction's own input hash, quoted above.",
+    "what_this_is": "§47's bytecode evidence, and §60's contract/bytecode_hash.json sibling. The published deployment files hash the *creation* code; this file supplies the missing half — the runtime code hash — and shows that the same runtime code is the one every state recipe in this directory deploys for REVM.",
+    "what_this_proves": "the code REVM simulated is byte-identical to the code the compiler emitted for the contract that was deployed: one artifact, one hash, and every fixture in this directory runs that hash. §47's ban on `Rust calldata ≠ 实际部署 contract ABI` has no room to open when the simulated code and the deployed code are the same bytes."
+  },
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "directory": "contract",
+  "evidence_root": "data/evidence/m10",
+  "file": "data/evidence/m10/contract/runtime_bytecode.json",
+  "milestone": "M10",
+  "published_by": {
+    "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test executor_evidence -- --test-threads=1",
+    "the_rest_of_this_directory": "crates/execution/tests/executor_evidence.rs"
+  },
+  "schema": "m10-evidence-v1"
+}

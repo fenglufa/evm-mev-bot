@@ -1,0 +1,1288 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "assembled_by": "crates/execution/tests/executor_evidence_gate.rs",
+  "body": {
+    "counts": {
+      "abi_entries_including_constructor": 38,
+      "errors": 22,
+      "events": 6,
+      "functions": 9,
+      "selectors_and_topics_derived_by_this_gate": 37
+    },
+    "event_emissions": {
+      "distinct_topic0_values": 2,
+      "logs_emitted_at_the_executor_address": 6,
+      "named_by_this_abi": {
+        "Executed": 2,
+        "LegExecuted": 4
+      },
+      "unnamed_by_this_abi": []
+    },
+    "functions": [
+      {
+        "declared_in_the_source_as": "a public state variable in the source, which solc exposes as a getter",
+        "name": "MAX_LEGS",
+        "selector": "0xe22b1552",
+        "signature": "MAX_LEGS()"
+      },
+      {
+        "declared_in_the_source_as": "a function declaration in the source",
+        "name": "execute",
+        "selector": "0xfeb0554e",
+        "signature": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)"
+      },
+      {
+        "declared_in_the_source_as": "a public state variable in the source, which solc exposes as a getter",
+        "name": "operator",
+        "selector": "0x570ca735",
+        "signature": "operator()"
+      },
+      {
+        "declared_in_the_source_as": "a public state variable in the source, which solc exposes as a getter",
+        "name": "pairAllowed",
+        "selector": "0x721fd6c5",
+        "signature": "pairAllowed(address)"
+      },
+      {
+        "declared_in_the_source_as": "a function declaration in the source",
+        "name": "setOperator",
+        "selector": "0xb3ab15fb",
+        "signature": "setOperator(address)"
+      },
+      {
+        "declared_in_the_source_as": "a function declaration in the source",
+        "name": "setPairAllowed",
+        "selector": "0x357783ee",
+        "signature": "setPairAllowed(address,bool)"
+      },
+      {
+        "declared_in_the_source_as": "a function declaration in the source",
+        "name": "setTokenAllowed",
+        "selector": "0x15f69012",
+        "signature": "setTokenAllowed(address,bool)"
+      },
+      {
+        "declared_in_the_source_as": "a public state variable in the source, which solc exposes as a getter",
+        "name": "tokenAllowed",
+        "selector": "0x55219d5a",
+        "signature": "tokenAllowed(address)"
+      },
+      {
+        "declared_in_the_source_as": "a function declaration in the source",
+        "name": "withdraw",
+        "selector": "0xd9caed12",
+        "signature": "withdraw(address,address,uint256)"
+      }
+    ],
+    "listing_lines_with_no_abi_entry": [],
+    "revert_payload_selectors": {
+      "rows_with_published_revert_bytes": 12,
+      "standard_signatures_handed_here": [
+        {
+          "expected": "08c379a0",
+          "keccak_by_this_gate": "0x08c379a0",
+          "signature": "Error(string)"
+        },
+        {
+          "expected": "4e487b71",
+          "keccak_by_this_gate": "0x4e487b71",
+          "signature": "Panic(uint256)"
+        }
+      ],
+      "table": [
+        {
+          "bytes": 100,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0x7623cf5e",
+          "label_published_by_the_row": "AskBelowFloor",
+          "named_by_a_standard_signature": null,
+          "named_by_this_abi": "AskBelowFloor",
+          "row": "fixtures/profit_guard.json#leg_asking_below_its_own_floor"
+        },
+        {
+          "bytes": 100,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0x08c379a0",
+          "label_published_by_the_row": "Error(string)",
+          "named_by_a_standard_signature": "Error(string)",
+          "named_by_this_abi": null,
+          "row": "fixtures/revert.json#forced_second_leg_revert"
+        },
+        {
+          "bytes": 68,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0xec5122fa",
+          "label_published_by_the_row": "FinalShortfall",
+          "named_by_a_standard_signature": null,
+          "named_by_this_abi": "FinalShortfall",
+          "row": "fixtures/slippage.json#final_floor_above_the_priced_output"
+        },
+        {
+          "bytes": 100,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0xc8f78074",
+          "label_published_by_the_row": "BrokenContinuity",
+          "named_by_a_standard_signature": null,
+          "named_by_this_abi": "BrokenContinuity",
+          "row": "negative_controls/broken_route.json#token_continuity_broken"
+        },
+        {
+          "bytes": 100,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0x7623cf5e",
+          "label_published_by_the_row": "AskBelowFloor",
+          "named_by_a_standard_signature": null,
+          "named_by_this_abi": "AskBelowFloor",
+          "row": "negative_controls/final_profit.json#leg_asking_below_its_own_floor"
+        },
+        {
+          "bytes": 100,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0x08c379a0",
+          "label_published_by_the_row": "Error(string)",
+          "named_by_a_standard_signature": "Error(string)",
+          "named_by_this_abi": null,
+          "row": "negative_controls/forced_second_leg_revert.json#forced_second_leg_revert"
+        },
+        {
+          "bytes": 36,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0x61a9d3db",
+          "label_published_by_the_row": "PairNotAllowed",
+          "named_by_a_standard_signature": null,
+          "named_by_this_abi": "PairNotAllowed",
+          "row": "negative_controls/invalid_pair.json#pair_not_in_the_allowlist"
+        },
+        {
+          "bytes": 68,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0xec5122fa",
+          "label_published_by_the_row": "FinalShortfall",
+          "named_by_a_standard_signature": null,
+          "named_by_this_abi": "FinalShortfall",
+          "row": "negative_controls/min_output.json#final_floor_above_the_priced_output"
+        },
+        {
+          "bytes": 36,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0x94403b70",
+          "label_published_by_the_row": "TokenNotAllowed",
+          "named_by_a_standard_signature": null,
+          "named_by_this_abi": "TokenNotAllowed",
+          "row": "negative_controls/token_not_allowed.json#token_not_in_the_allowlist"
+        },
+        {
+          "bytes": 36,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0x76c6c93a",
+          "label_published_by_the_row": "NotOperator",
+          "named_by_a_standard_signature": null,
+          "named_by_this_abi": "NotOperator",
+          "row": "negative_controls/wrong_operator.json#caller_is_not_the_stored_operator"
+        },
+        {
+          "bytes": 4,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0x1f2a2005",
+          "label_published_by_the_row": "ZeroAmount",
+          "named_by_a_standard_signature": null,
+          "named_by_this_abi": "ZeroAmount",
+          "row": "negative_controls/zero_amount.json#zero_amount_in_a_leg"
+        },
+        {
+          "bytes": 100,
+          "bytes_and_label_agree": true,
+          "first_four_bytes": "0x08c379a0",
+          "label_published_by_the_row": "Error(string)",
+          "named_by_a_standard_signature": "Error(string)",
+          "named_by_this_abi": null,
+          "row": "simulation/failure.json#forced_second_leg_revert"
+        }
+      ]
+    },
+    "sources": {
+      "abi_version_as_published": "solc 0.8.37+commit.f401782d, ArbitrageExecutor.bin sha256 69ae3d937671666e2fe1e05b86c88a0b4d51587fb052bcbb967c79609d9a2680",
+      "contract_source": {
+        "digest": {
+          "bytes": 21407,
+          "keccak256": "0x7d046032ffde5e6f6fc3f30ae2aa48a1c5a8c6a9338dab155a976ebd18225cb8"
+        },
+        "error_declarations": 22,
+        "event_declarations": 6,
+        "file": "contracts/ArbitrageExecutor.sol",
+        "function_declarations": 20,
+        "public_getter_declarations": 4
+      },
+      "solc_abi_json": {
+        "digest": {
+          "bytes": 8132,
+          "keccak256": "0x2615cca162a620f3563b7f2070589a00299b8662e0eea4bd9f8cf3acab8bac82"
+        },
+        "entries": 38,
+        "file": "contracts/artifacts/ArbitrageExecutor.abi"
+      },
+      "solc_selector_listing": {
+        "digest": {
+          "bytes": 1969,
+          "keccak256": "0x1d0a4c9da26d02e09a5e73801113a92802f4b62cd3e6a1e2ee02990b23ac6d26"
+        },
+        "file": "contracts/artifacts/ArbitrageExecutor.signatures",
+        "lines": 37,
+        "sections": [
+          "Error signatures",
+          "Event signatures",
+          "Function signatures"
+        ]
+      }
+    },
+    "surface": [
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | AmountChainBroken(uint256,uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expected",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "claimed",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0x5b75de284601b7a46b44c2576395f928f63972876a00e3394da0f1c921a29360",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "AmountChainBroken",
+        "outputs": null,
+        "selector_or_topic0": "0x5b75de28",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "AmountChainBroken(uint256,uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | AskBelowFloor(uint256,uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "ask",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "floor",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0x7623cf5ed6861abfe525a76179614b24acc126fe306c52d615dbc8cf2e8118cf",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "AskBelowFloor",
+        "outputs": null,
+        "selector_or_topic0": "0x7623cf5e",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "AskBelowFloor(uint256,uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | BrokenContinuity(uint256,address,address)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "expected",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "found",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0xc8f7807416763a3653539406bcc5743eaf1e682f32cbd683b1f7b44f9e0eadc7",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "BrokenContinuity",
+        "outputs": null,
+        "selector_or_topic0": "0xc8f78074",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "BrokenContinuity(uint256,address,address)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | DeliveryMismatch(uint256,uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "asked",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "received",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0x661d542874f1fa60c283339f4c07b2ed833bc19cd76c2e8bb1cde31cea11f0e7",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "DeliveryMismatch",
+        "outputs": null,
+        "selector_or_topic0": "0x661d5428",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "DeliveryMismatch(uint256,uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | FinalShortfall(uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "delivered",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "floor",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0xec5122fa5b74c0df384cfabec5ee2f8840cecd16f8b88afebc22d4733aa82001",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "FinalShortfall",
+        "outputs": null,
+        "selector_or_topic0": "0xec5122fa",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "FinalShortfall(uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | HoldingMismatch(uint256,address,uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "held",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "claimed",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0xbc75ed0f4043bf95c2a9a3dcb930588ca16493869a697a5fd961efa61d8ac7ea",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "HoldingMismatch",
+        "outputs": null,
+        "selector_or_topic0": "0xbc75ed0f",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "HoldingMismatch(uint256,address,uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | InputDeliveryMismatch(uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "claimed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "received",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0x455fc64225aef422f7bdf125550d742a904c934f701a810dcdf2c8619de887a6",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "InputDeliveryMismatch",
+        "outputs": null,
+        "selector_or_topic0": "0x455fc642",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "InputDeliveryMismatch(uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | InsufficientAllowance(uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "available",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "needed",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0x2a1b2dd846b7c4bf41216c8f38fc58089000eb0b20edf03e6f81ecadbe2cbedf",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "InsufficientAllowance",
+        "outputs": null,
+        "selector_or_topic0": "0x2a1b2dd8",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "InsufficientAllowance(uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | InsufficientBalance(uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "available",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "needed",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0xcf4791818fba6e019216eb4864093b4947f674afada5d305e57d598b641dad1d",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "InsufficientBalance",
+        "outputs": null,
+        "selector_or_topic0": "0xcf479181",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "InsufficientBalance(uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | LegSelfLoop(uint256,address)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0x117b8fe262201c815924dbf903c97c3c7c9cc0e0a728b4cf7228b8a171344dea",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "LegSelfLoop",
+        "outputs": null,
+        "selector_or_topic0": "0x117b8fe2",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "LegSelfLoop(uint256,address)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | LegShortfall(uint256,uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "received",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "floor",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0x0f70866784fa7f322a2e7837e2f2c4d2fdc399cd88ae10958560dad0d7675ee2",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "LegShortfall",
+        "outputs": null,
+        "selector_or_topic0": "0x0f708667",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "LegShortfall(uint256,uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | NoLegs()",
+        "inputs": [],
+        "keccak_of_that_signature": "0x9528138c6c880f17065fc44e80d74c8e49a38847dc946aa63a205b95408a9cea",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "NoLegs",
+        "outputs": null,
+        "selector_or_topic0": "0x9528138c",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "NoLegs()",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | NotOperator(address)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "caller",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0x76c6c93a6423c7e2cef5f93921b1d4d1a5ffb795cd7cfed2df95566b7c7f7c40",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "NotOperator",
+        "outputs": null,
+        "selector_or_topic0": "0x76c6c93a",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "NotOperator(address)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | NotRoundTrip(address,address)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "inputToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "otherEnd",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0x1dea38fdcefbbe77c45b5f14dfb74000b33038ec9d0fafa3bc1619b45074d083",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "NotRoundTrip",
+        "outputs": null,
+        "selector_or_topic0": "0x1dea38fd",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "NotRoundTrip(address,address)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | PairNotAllowed(address)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "pool",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0x61a9d3db10b594db4f3189c93a747a86bd956e83a77ba09111c5d16d97eeca4d",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "PairNotAllowed",
+        "outputs": null,
+        "selector_or_topic0": "0x61a9d3db",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "PairNotAllowed(address)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | PayoutMismatch(uint256,uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "available",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "delivered",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0x3fc884e5eeffb67328ed800e90d9a75e3008c35742fe0309be19c7f5e15e64f0",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "PayoutMismatch",
+        "outputs": null,
+        "selector_or_topic0": "0x3fc884e5",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "PayoutMismatch(uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | PoolSidesMismatch(address,address,address,address)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "pool",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenIn",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "token0",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "token1",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0xcee5602f173cc8e39acd08fc401463c2341502c5f5e036ff7aba6a2f267d3221",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "PoolSidesMismatch",
+        "outputs": null,
+        "selector_or_topic0": "0xcee5602f",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "PoolSidesMismatch(address,address,address,address)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | ReentrancyDetected()",
+        "inputs": [],
+        "keccak_of_that_signature": "0xc5f2be51ec4ec0ad8a7972d497da993a6fcbb89cf72c05f97d654ed81ce53492",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "ReentrancyDetected",
+        "outputs": null,
+        "selector_or_topic0": "0xc5f2be51",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "ReentrancyDetected()",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | TokenNotAllowed(address)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0x94403b7099477045d56a4ad621224a9a16fcb7e4b0d02e508215a9bf747a12d4",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "TokenNotAllowed",
+        "outputs": null,
+        "selector_or_topic0": "0x94403b70",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "TokenNotAllowed(address)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | TooManyLegs(uint256)",
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "legs",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0xdf1012cc219b2cf9c593d134ba268aaa5ee4717ab737aaae57fc94fc20eae771",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "TooManyLegs",
+        "outputs": null,
+        "selector_or_topic0": "0xdf1012cc",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "TooManyLegs(uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | ZeroAddress()",
+        "inputs": [],
+        "keccak_of_that_signature": "0xd92e233df2717d4a40030e20904abd27b68fcbeede117eaaccbbdac9618c8c73",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "ZeroAddress",
+        "outputs": null,
+        "selector_or_topic0": "0xd92e233d",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "ZeroAddress()",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Error signatures | ZeroAmount()",
+        "inputs": [],
+        "keccak_of_that_signature": "0x1f2a2005cb66a8e145327e8814e243a0996aec9bfe1e15a495778b1236dbd485",
+        "kind": "error",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "ZeroAmount",
+        "outputs": null,
+        "selector_or_topic0": "0x1f2a2005",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "ZeroAmount()",
+        "state_mutability": null
+      },
+      {
+        "anonymous": false,
+        "compiler_listing_line": "Event signatures | Executed(address,address,address,uint256,uint256,uint256)",
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "inputToken",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "legs",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amountIn",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "delivered",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0x8afddecc599827d961cd234e5aad7a87db63c9b3c02c1b0d4b50dca218903c88",
+        "kind": "event",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "Executed",
+        "outputs": null,
+        "selector_or_topic0": "0x8afddecc599827d961cd234e5aad7a87db63c9b3c02c1b0d4b50dca218903c88",
+        "selector_or_topic0_width_bytes": 32,
+        "signature_derived_from_the_abi_json": "Executed(address,address,address,uint256,uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": false,
+        "compiler_listing_line": "Event signatures | LegExecuted(uint256,address,address,address,uint256,uint256)",
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "pool",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "tokenIn",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "tokenOut",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amountIn",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "delivered",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0xdc86a46e6b13c0d7d1cf4b9fc5b1d3dd92c43b969387a0777abc476e32d85829",
+        "kind": "event",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "LegExecuted",
+        "outputs": null,
+        "selector_or_topic0": "0xdc86a46e6b13c0d7d1cf4b9fc5b1d3dd92c43b969387a0777abc476e32d85829",
+        "selector_or_topic0_width_bytes": 32,
+        "signature_derived_from_the_abi_json": "LegExecuted(uint256,address,address,address,uint256,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": false,
+        "compiler_listing_line": "Event signatures | OperatorSet(address,address)",
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "previous",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "next",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0xfd489696792cc4c5d5b226c46f008e459c8ec9b746c49191d74bb92c19fd1867",
+        "kind": "event",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "OperatorSet",
+        "outputs": null,
+        "selector_or_topic0": "0xfd489696792cc4c5d5b226c46f008e459c8ec9b746c49191d74bb92c19fd1867",
+        "selector_or_topic0_width_bytes": 32,
+        "signature_derived_from_the_abi_json": "OperatorSet(address,address)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": false,
+        "compiler_listing_line": "Event signatures | PairAllowedSet(address,bool)",
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "pair",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bool",
+            "name": "allowed",
+            "type": "bool"
+          }
+        ],
+        "keccak_of_that_signature": "0xcc7a80dbd3fa4c52186b25adb4d60da892f19d5339671847b02f4dd5cc818264",
+        "kind": "event",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "PairAllowedSet",
+        "outputs": null,
+        "selector_or_topic0": "0xcc7a80dbd3fa4c52186b25adb4d60da892f19d5339671847b02f4dd5cc818264",
+        "selector_or_topic0_width_bytes": 32,
+        "signature_derived_from_the_abi_json": "PairAllowedSet(address,bool)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": false,
+        "compiler_listing_line": "Event signatures | TokenAllowedSet(address,bool)",
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bool",
+            "name": "allowed",
+            "type": "bool"
+          }
+        ],
+        "keccak_of_that_signature": "0xdc86ea80c17dba36e8aac1a8a9461dcc3967506848bd50e2e48b90507867abb9",
+        "kind": "event",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "TokenAllowedSet",
+        "outputs": null,
+        "selector_or_topic0": "0xdc86ea80c17dba36e8aac1a8a9461dcc3967506848bd50e2e48b90507867abb9",
+        "selector_or_topic0_width_bytes": 32,
+        "signature_derived_from_the_abi_json": "TokenAllowedSet(address,bool)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": false,
+        "compiler_listing_line": "Event signatures | Withdrawn(address,address,uint256)",
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0xd1c19fbcd4551a5edfb66d43d2e337c04837afda3482b42bdf569a8fccdae5fb",
+        "kind": "event",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "Withdrawn",
+        "outputs": null,
+        "selector_or_topic0": "0xd1c19fbcd4551a5edfb66d43d2e337c04837afda3482b42bdf569a8fccdae5fb",
+        "selector_or_topic0_width_bytes": 32,
+        "signature_derived_from_the_abi_json": "Withdrawn(address,address,uint256)",
+        "state_mutability": null
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Function signatures | MAX_LEGS()",
+        "inputs": [],
+        "keccak_of_that_signature": "0xe22b15528b41c8047e5a700d98b62ec4bfe2a804dba761e6fa291047bab8cd91",
+        "kind": "function",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "MAX_LEGS",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "selector_or_topic0": "0xe22b1552",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "MAX_LEGS()",
+        "state_mutability": "view"
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Function signatures | execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)",
+        "inputs": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "pool",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "tokenIn",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "tokenOut",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountIn",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountOut",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "minAmountOut",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct ArbitrageExecutor.Leg[]",
+            "name": "legs",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "address",
+            "name": "inputToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountIn",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minFinalAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0xfeb0554e79baac4b6934264ef4c1ee1a2b090d0698d962ff2d2aeae70f95bd2c",
+        "kind": "function",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "execute",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "delivered",
+            "type": "uint256"
+          }
+        ],
+        "selector_or_topic0": "0xfeb0554e",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)",
+        "state_mutability": "nonpayable"
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Function signatures | operator()",
+        "inputs": [],
+        "keccak_of_that_signature": "0x570ca735581959075ebe5d80866c147e02e10468660b2778657d32bffe1eb83d",
+        "kind": "function",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "operator",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "selector_or_topic0": "0x570ca735",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "operator()",
+        "state_mutability": "view"
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Function signatures | pairAllowed(address)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0x721fd6c5d119871f38be1babaf2d120b090a8afa29d5e85d194d2c83fcaea7c6",
+        "kind": "function",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "pairAllowed",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "selector_or_topic0": "0x721fd6c5",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "pairAllowed(address)",
+        "state_mutability": "view"
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Function signatures | setOperator(address)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "next",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0xb3ab15fb11ffa7b9eb05d4bbbaf2cc0222cb2634965b63d8b5553144f6f789ce",
+        "kind": "function",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "setOperator",
+        "outputs": [],
+        "selector_or_topic0": "0xb3ab15fb",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "setOperator(address)",
+        "state_mutability": "nonpayable"
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Function signatures | setPairAllowed(address,bool)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "pair",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "allowed",
+            "type": "bool"
+          }
+        ],
+        "keccak_of_that_signature": "0x357783ee698d1a8800db6928ef527e0a34aacfdd3c46749b4509e34024214ea8",
+        "kind": "function",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "setPairAllowed",
+        "outputs": [],
+        "selector_or_topic0": "0x357783ee",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "setPairAllowed(address,bool)",
+        "state_mutability": "nonpayable"
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Function signatures | setTokenAllowed(address,bool)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "allowed",
+            "type": "bool"
+          }
+        ],
+        "keccak_of_that_signature": "0x15f690123ac68de9e9d3f8c4488c10ce4b14349e66c06f60cac6ce29abb8bd0f",
+        "kind": "function",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "setTokenAllowed",
+        "outputs": [],
+        "selector_or_topic0": "0x15f69012",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "setTokenAllowed(address,bool)",
+        "state_mutability": "nonpayable"
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Function signatures | tokenAllowed(address)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "keccak_of_that_signature": "0x55219d5a827dd073b2b0ba2d2ada68d1d8ca59b96d2f1431535edbe19b43ceff",
+        "kind": "function",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "tokenAllowed",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "selector_or_topic0": "0x55219d5a",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "tokenAllowed(address)",
+        "state_mutability": "view"
+      },
+      {
+        "anonymous": null,
+        "compiler_listing_line": "Function signatures | withdraw(address,address,uint256)",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "keccak_of_that_signature": "0xd9caed12f81c440f63c9677a4301dff8e874a7abd93e3ecd0aaea4ffa129d9fb",
+        "kind": "function",
+        "listed_by_the_compiler_with_the_same_spelling": true,
+        "name": "withdraw",
+        "outputs": [],
+        "selector_or_topic0": "0xd9caed12",
+        "selector_or_topic0_width_bytes": 4,
+        "signature_derived_from_the_abi_json": "withdraw(address,address,uint256)",
+        "state_mutability": "nonpayable"
+      }
+    ],
+    "the_execute_selector_four_ways": {
+      "compilers_own_listing": "feb0554e",
+      "keccak_computed_by_this_gate": "0xfeb0554e",
+      "protocol_crates_generated_constant": "0xfeb0554e",
+      "published_by_every_scenario_row_as_observed_selector": [
+        {
+          "agree": true,
+          "agrees_with_the_compilers_listing": "feb0554e",
+          "is_the_execute_selector_of_the_crate": true,
+          "keccak_of_the_published_signature": "0xfeb0554e",
+          "keccak_via_the_protocol_crate": "0xfeb0554e",
+          "published_selector": "feb0554e",
+          "signature": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)"
+        }
+      ],
+      "signature_derived_from_the_abi_json": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)"
+    },
+    "what_this_does_not_prove": "that the code at the deployed address is this ABI's code. Nothing here asks a node for runtime bytecode — §51 forbids a gate from adding a read — so the link from this ABI to chain state is the same single compilation §42/§43 pin, restated in contract/runtime_bytecode.json.",
+    "what_this_is": "§47's ABI evidence, and §60's contract/abi.json. The ABI below is not transcribed from the Rust module that encodes it: it is read out of solc's own artifact, re-derived as signature strings by this gate, hashed here, and then compared with the compiler's printed selector table, with the protocol crate's derived constants, and with what the published runs actually put on the wire.",
+    "what_this_proves": "one ABI, four independent spellings of it: the bytes REVM ran decode under these selectors, every revert payload in this directory names an error this ABI declares, every log the executor emitted matches an event topic this ABI derives, and the compiler's own listing agrees with its own JSON. §47's ban holds for the calldata this workspace produces."
+  },
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "directory": "contract",
+  "evidence_root": "data/evidence/m10",
+  "file": "data/evidence/m10/contract/abi.json",
+  "milestone": "M10",
+  "published_by": {
+    "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test executor_evidence -- --test-threads=1",
+    "the_rest_of_this_directory": "crates/execution/tests/executor_evidence.rs"
+  },
+  "schema": "m10-evidence-v1"
+}

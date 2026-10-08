@@ -1,0 +1,543 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "assembled_by": "crates/execution/tests/executor_evidence_gate.rs",
+  "body": {
+    "byte_identity": {
+      "artifacts_written_before_this_file": [
+        {
+          "digest": {
+            "bytes": 6114,
+            "keccak256": "0xe836b8ea39f949c1a2b7dee233e04038da010c7ff1d9a36731efc1dfc13af7d6"
+          },
+          "file": "negative_controls/wrong_chain.json"
+        },
+        {
+          "digest": {
+            "bytes": 6248,
+            "keccak256": "0xb604e482f6e7d1d257a1e3ad942ab0cac6b38264c840a22370c7d151442c7ca8"
+          },
+          "file": "negative_controls/wrong_executor.json"
+        },
+        {
+          "digest": {
+            "bytes": 46351,
+            "keccak256": "0x2c5b0255ebf65dd85df938581ad051a704743af6b4555468444d69360c4cb823"
+          },
+          "file": "contract/abi.json"
+        },
+        {
+          "digest": {
+            "bytes": 7628,
+            "keccak256": "0x6635440c49e3f380389f6c387267688ea6a602b4d9a86539ac798b3a63b6ea8b"
+          },
+          "file": "contract/runtime_bytecode.json"
+        },
+        {
+          "digest": {
+            "bytes": 55079,
+            "keccak256": "0xe5d02365e76d2a05b9a299e2953b9700636a2c271ce95d534283c13880517d60"
+          },
+          "file": "execution/lifecycle.json"
+        }
+      ],
+      "inputs": [
+        {
+          "digest": {
+            "bytes": 548,
+            "keccak256": "0xb6ddcb48d5c3e388fbc23405d340e0e9fa849799a22492f094967a3175ec3276"
+          },
+          "file": "contract/bytecode_hash.json"
+        },
+        {
+          "digest": {
+            "bytes": 2058,
+            "keccak256": "0x573fb01433e498d8af1f41401eadb583419df8497f3046f5f25b8590f6228002"
+          },
+          "file": "contract/deployment.json"
+        },
+        {
+          "digest": {
+            "bytes": 15433,
+            "keccak256": "0xa9e34cc26c4df677df7dfc7d82101d5484b116d4d0446e3dd241dbe46a5df6f0"
+          },
+          "file": "fixtures/profit_guard.json"
+        },
+        {
+          "digest": {
+            "bytes": 15616,
+            "keccak256": "0x0e23456b53442c2d34205ec452855510e35ee87e542d9f32f18d570aec832b43"
+          },
+          "file": "fixtures/revert.json"
+        },
+        {
+          "digest": {
+            "bytes": 15439,
+            "keccak256": "0x966c8af6203b7447ae13cc7f7b16a5fde43483a0535170e2f3ae65b688a54e4a"
+          },
+          "file": "fixtures/slippage.json"
+        },
+        {
+          "digest": {
+            "bytes": 25360,
+            "keccak256": "0x2fa5ac454915e24bcfa9a4bbd1904450449924bd8c40bfda26e37e3c4887b0dd"
+          },
+          "file": "fixtures/success.json"
+        },
+        {
+          "digest": {
+            "bytes": 15594,
+            "keccak256": "0x2fcc6859fd4e6bb478dc0e9cd708dcb1975bb0c43452f315594b85eef858ce0b"
+          },
+          "file": "negative_controls/broken_route.json"
+        },
+        {
+          "digest": {
+            "bytes": 15451,
+            "keccak256": "0x8f3bcdfc17f872290cbf21066a741bba0263fbc112e651a6156251f0911af7f8"
+          },
+          "file": "negative_controls/final_profit.json"
+        },
+        {
+          "digest": {
+            "bytes": 15652,
+            "keccak256": "0x18707c5f0945ea69bc2d17edc63005865ea031fbf8194d5a1fcdaf1e2610c50b"
+          },
+          "file": "negative_controls/forced_second_leg_revert.json"
+        },
+        {
+          "digest": {
+            "bytes": 15298,
+            "keccak256": "0x0b288b1c7e90b92767a2db05595134ee64feedc1c602232485571eab0077cead"
+          },
+          "file": "negative_controls/invalid_pair.json"
+        },
+        {
+          "digest": {
+            "bytes": 15459,
+            "keccak256": "0x0f59255c607d38b930d3b781ce971deb44c9f77c730905eead426413f5d4a5f8"
+          },
+          "file": "negative_controls/min_output.json"
+        },
+        {
+          "digest": {
+            "bytes": 15296,
+            "keccak256": "0x46e3238dd8c904ad2b53b700ef762c0dac7d4da9f23376c46d2c8932ac6f5124"
+          },
+          "file": "negative_controls/token_not_allowed.json"
+        },
+        {
+          "digest": {
+            "bytes": 15331,
+            "keccak256": "0x7420885dafa6a599308d81d226e9101a442a23f4a72bbed03395752b026de475"
+          },
+          "file": "negative_controls/wrong_operator.json"
+        },
+        {
+          "digest": {
+            "bytes": 15413,
+            "keccak256": "0xc2c13a10b6480b0dd84e93c2bff0a4d163d644c0297b9d84507985fe9932bcd5"
+          },
+          "file": "negative_controls/zero_amount.json"
+        },
+        {
+          "digest": {
+            "bytes": 24367,
+            "keccak256": "0x03170d5a6b2d13e19c6edad4bcffd94d33401e611e6f16416b402621629de89d"
+          },
+          "file": "real/giwa_execution.json"
+        },
+        {
+          "digest": {
+            "bytes": 6201,
+            "keccak256": "0x6db3d3d7278861ddbe85fd7d5e9aee731388e6636b996f0b4781af77103497ff"
+          },
+          "file": "real/giwa_failure.json"
+        },
+        {
+          "digest": {
+            "bytes": 10485,
+            "keccak256": "0x8f4e8e53468c0bf0533eb784f99ac52c801f8801cb855d7e0548ff7c1848f703"
+          },
+          "file": "real/giwa_ladder_steps.json"
+        },
+        {
+          "digest": {
+            "bytes": 1842,
+            "keccak256": "0xcecaa51e19edc0631e1234d9b01f46ebc4c0c7e5984f07e3815b1086012aabcb"
+          },
+          "file": "real/preconditions.json"
+        },
+        {
+          "digest": {
+            "bytes": 15621,
+            "keccak256": "0x0dd4912c39e6aa26e3bfed39be44f8f0dad3e876974bf2072b9d219032321848"
+          },
+          "file": "simulation/failure.json"
+        },
+        {
+          "digest": {
+            "bytes": 25364,
+            "keccak256": "0x8f472cc42f68fd8f0e7fd16700004630fc4bc51755f60aae226e556db2d76984"
+          },
+          "file": "simulation/success.json"
+        },
+        {
+          "digest": {
+            "bytes": 26073,
+            "keccak256": "0x44e181f403080be5fc4c431bc006641c874bb0e71246e6e84d61b87367e41f05"
+          },
+          "file": "states/caller_is_not_the_stored_operator.json"
+        },
+        {
+          "digest": {
+            "bytes": 25460,
+            "keccak256": "0x307307fb96ad85c4562684f4782f615d7b85a6ae8e9e469a439632e6cdc71e24"
+          },
+          "file": "states/committed.json"
+        },
+        {
+          "digest": {
+            "bytes": 25478,
+            "keccak256": "0x9bd5418ec0ce508f53649f082e4f508da4dcdfbdb0f44d4a2ecee9c77c26b203"
+          },
+          "file": "states/pair_not_in_the_allowlist.json"
+        },
+        {
+          "digest": {
+            "bytes": 25479,
+            "keccak256": "0x915db73bd9bd2eec4eea521ae095f3e0dcb66e875ad84ac03b3b1b22ca8a6a30"
+          },
+          "file": "states/token_not_in_the_allowlist.json"
+        }
+      ],
+      "not_digestable_here": [
+        "recompute/deterministic.json",
+        "manifest.json",
+        "README.md"
+      ],
+      "why": "this file cannot digest itself, and the README and the manifest are written after it; both are digested by manifest.json, which is the last file this run writes and which nothing else digests. The run-dependent column unchanged_from_previous_run lives there for the same reason."
+    },
+    "drift": [],
+    "drift_count": 0,
+    "gates": [
+      {
+        "answered_by": "plan_rebuild, over every published scenario row",
+        "gate": "D1",
+        "measurements": {
+          "published_rows_in_the_directory": 14,
+          "rows_rebuilt": 14,
+          "rows_whose_field_spelling_and_byte_spelling_hash_the_same": 14,
+          "sensitivity_fields_mutated": 28,
+          "sensitivity_mutants_that_changed_the_plan_hash": 28
+        },
+        "pass": true,
+        "task_book_question": "same plan → same plan hash",
+        "why_the_sensitivity_table_is_part_of_D1": "a hash that repeats for the same plan is only half of §6's rule; a hash that also repeats for a *different* plan would let one execution be re-rolled into another"
+      },
+      {
+        "answered_by": "plan_rebuild — the execution crate's encoder against the bytes the simulation crate ran",
+        "gate": "D2",
+        "measurements": {
+          "rows_rebuilt": 14,
+          "rows_whose_encoded_bytes_equal_the_published_bytes": 14,
+          "rows_whose_keccak_equals_the_published_digest": 14,
+          "rows_whose_length_equals_the_published_length": 14
+        },
+        "pass": true,
+        "task_book_question": "same plan → same calldata",
+        "what_a_failure_would_mean": "§47's ban in its only testable form: a plan whose Rust encoding is not the bytes REVM executed describes a transaction nobody could send, and every fixture below it would be describing somebody else's call"
+      },
+      {
+        "answered_by": "d3_replay — a different crate, a different cargo test invocation, the published recipe and the published spec",
+        "gate": "D3",
+        "measurements": {
+          "distinct_revm_runs": 9,
+          "published_rows_in_the_directory": 14,
+          "runs_replayed": 9,
+          "runs_whose_whole_observed_block_is_json_identical": 9
+        },
+        "note": "one run per (recipe digest, calldata digest), not one per row: two rows that ran the same call against the same state are one REVM run, and counting them twice would inflate the census",
+        "pass": true,
+        "task_book_question": "same fixture → same simulation result"
+      },
+      {
+        "answered_by": "d4_rejudge — decode_revert over the published revert bytes, plus §27's residue judged out of the published state rows",
+        "gate": "D4",
+        "measurements": {
+          "real_chain_failure_problems": 0,
+          "rows_rejudged": 14,
+          "rows_with_classification_problems": 0,
+          "rows_with_judgement_problems": 0
+        },
+        "pass": true,
+        "task_book_question": "same failure fixture → same revert classification"
+      },
+      {
+        "answered_by": "plan_rebuild, and the identity table the real run published",
+        "gate": "D5",
+        "measurements": {
+          "rows_rebuilt": 14,
+          "rows_where_the_id_names_the_published_pools_and_tokens": 14,
+          "rows_whose_two_spellings_id_the_route_the_same": 14,
+          "the_real_runs_route_id_parts_match": true
+        },
+        "pass": true,
+        "task_book_question": "same route → same route id",
+        "why_the_second_column_is_the_load_bearing_one": "a stable id that names the wrong pools is a stable id for nothing; §38 asks the identity to *name the route*"
+      }
+    ],
+    "gates_answered": 5,
+    "gates_passing": 5,
+    "negative_controls_50": {
+      "all_ten_answered": true,
+      "contract_layer_rows_naming_their_refusal": 8,
+      "controls": [
+        {
+          "answered_by": "plan_layer.plan_layer_controls: this gate plants the mutation on the row named there and quotes the execution crate's refusal, because the refusal happens before any byte exists",
+          "control": "wrong chain",
+          "expected_refusal": "wrong_chain",
+          "file": "negative_controls/wrong_chain.json",
+          "file_exists": true,
+          "refused_at": "plan"
+        },
+        {
+          "answered_by": "plan_layer.plan_layer_controls: this gate plants the mutation on the row named there and quotes the execution crate's refusal, because the refusal happens before any byte exists",
+          "control": "wrong executor",
+          "expected_refusal": "wrong_executor",
+          "file": "negative_controls/wrong_executor.json",
+          "file_exists": true,
+          "refused_at": "plan"
+        },
+        {
+          "answered_by": "plan_layer.contract_layer_controls for the label, and d4_rejudge for the classification: REVM ran the deployed bytecode and the contract answered",
+          "control": "wrong operator",
+          "expected_refusal": "NotOperator",
+          "file": "negative_controls/wrong_operator.json",
+          "file_exists": true,
+          "refused_at": "contract"
+        },
+        {
+          "answered_by": "plan_layer.contract_layer_controls for the label, and d4_rejudge for the classification: REVM ran the deployed bytecode and the contract answered",
+          "control": "wrong token continuity",
+          "expected_refusal": "BrokenContinuity",
+          "file": "negative_controls/broken_route.json",
+          "file_exists": true,
+          "refused_at": "contract"
+        },
+        {
+          "answered_by": "plan_layer.contract_layer_controls for the label, and d4_rejudge for the classification: REVM ran the deployed bytecode and the contract answered",
+          "control": "zero amount",
+          "expected_refusal": "ZeroAmount",
+          "file": "negative_controls/zero_amount.json",
+          "file_exists": true,
+          "refused_at": "contract"
+        },
+        {
+          "answered_by": "plan_layer.contract_layer_controls for the label, and d4_rejudge for the classification: REVM ran the deployed bytecode and the contract answered",
+          "control": "min output violation",
+          "expected_refusal": "FinalShortfall",
+          "file": "negative_controls/min_output.json",
+          "file_exists": true,
+          "refused_at": "contract"
+        },
+        {
+          "answered_by": "plan_layer.contract_layer_controls for the label, and d4_rejudge for the classification: REVM ran the deployed bytecode and the contract answered",
+          "control": "final profit violation",
+          "expected_refusal": "AskBelowFloor",
+          "file": "negative_controls/final_profit.json",
+          "file_exists": true,
+          "refused_at": "contract"
+        },
+        {
+          "answered_by": "plan_layer.contract_layer_controls for the label, and d4_rejudge for the classification: REVM ran the deployed bytecode and the contract answered",
+          "control": "pair not allowed",
+          "expected_refusal": "PairNotAllowed",
+          "file": "negative_controls/invalid_pair.json",
+          "file_exists": true,
+          "refused_at": "contract"
+        },
+        {
+          "answered_by": "plan_layer.contract_layer_controls for the label, and d4_rejudge for the classification: REVM ran the deployed bytecode and the contract answered",
+          "control": "token not allowed",
+          "expected_refusal": "TokenNotAllowed",
+          "file": "negative_controls/token_not_allowed.json",
+          "file_exists": true,
+          "refused_at": "contract"
+        },
+        {
+          "answered_by": "plan_layer.contract_layer_controls for the label, and d4_rejudge for the classification: REVM ran the deployed bytecode and the contract answered",
+          "control": "forced second-leg revert",
+          "expected_refusal": "Error(string)",
+          "file": "negative_controls/forced_second_leg_revert.json",
+          "file_exists": true,
+          "refused_at": "contract"
+        }
+      ],
+      "expected_contract_layer": 8,
+      "expected_plan_layer": 2,
+      "planned_by_this_gate": 2
+    },
+    "phase_ledger": [
+      {
+        "phase": "inventory",
+        "published_keys": [
+          "absent_by_design",
+          "files_read",
+          "files_this_gate_writes",
+          "input_digests",
+          "listed_by_s60_but_absent",
+          "present_but_not_listed"
+        ],
+        "ran": true
+      },
+      {
+        "phase": "row_inventory",
+        "published_keys": [
+          "distinct_revm_runs",
+          "distinct_scenarios",
+          "duplicate_agreement",
+          "files_with_rows",
+          "published_rows"
+        ],
+        "ran": true
+      },
+      {
+        "phase": "live_run",
+        "published_keys": [
+          "chain_id",
+          "create_address_recomputation",
+          "deployment_and_bytecode_hash_agree",
+          "deployment_fields",
+          "deployment_row_is_the_ladders_first_step",
+          "files_read",
+          "fixture_executor_address_is_not_the_deployed_one",
+          "ladder_step_count",
+          "market",
+          "readable",
+          "the_deployed_executor_is_named_by"
+        ],
+        "ran": true
+      },
+      {
+        "phase": "state_integrity",
+        "published_keys": [
+          "committed_fixture_digest",
+          "committed_fixture_file",
+          "note",
+          "recipes"
+        ],
+        "ran": true
+      },
+      {
+        "phase": "d3_replay",
+        "published_keys": [
+          "comparison",
+          "identity_of_a_run",
+          "layer",
+          "note",
+          "runs",
+          "runs_byte_identical",
+          "runs_replayed"
+        ],
+        "ran": true
+      },
+      {
+        "phase": "d4_rejudge",
+        "published_keys": [
+          "note",
+          "real_chain_failure",
+          "rows",
+          "rows_rejudged",
+          "rows_with_classification_problems",
+          "rows_with_judgement_problems"
+        ],
+        "ran": true
+      },
+      {
+        "phase": "plan_layer",
+        "published_keys": [
+          "contract_layer_controls",
+          "d1_plan_hash_stable",
+          "d2_calldata_equal_to_published_bytes",
+          "d2_calldata_hash_equal_to_published_digest",
+          "d2_calldata_len_agrees",
+          "d5_identity_names_the_published_route",
+          "d5_route_id_stable",
+          "declared_bound_matches_the_real_run",
+          "declared_max_block_age",
+          "per_row",
+          "plan_layer_controls",
+          "plan_layer_facts_published_by_the_rows",
+          "real_run",
+          "rows_in_the_directory",
+          "rows_rebuilt",
+          "sensitivity",
+          "the_real_runs_published_declared_max_block_age",
+          "why_null"
+        ],
+        "ran": true
+      },
+      {
+        "phase": "contract_abi",
+        "published_keys": [
+          "abi_version",
+          "counts",
+          "digest",
+          "events_at_the_executor_address",
+          "file",
+          "listing_lines_with_no_abi_entry",
+          "revert_bytes_rows_matched",
+          "revert_bytes_rows_total",
+          "rows_publishing_the_execute_selector",
+          "surface_count",
+          "unnamed_event_topics",
+          "written_files_so_far"
+        ],
+        "ran": true
+      },
+      {
+        "phase": "runtime_bytecode",
+        "published_keys": [
+          "creation_bytes",
+          "creation_keccak256",
+          "creation_tail_holds_runtime",
+          "digest",
+          "file",
+          "recipes_checked",
+          "recipes_running_the_compilers_runtime",
+          "runtime_bytes",
+          "runtime_keccak256"
+        ],
+        "ran": true
+      },
+      {
+        "phase": "lifecycle",
+        "published_keys": [
+          "checks",
+          "checks_agreeing",
+          "digest",
+          "file",
+          "ledger_rows",
+          "nonce_ladder_rows",
+          "record_fields"
+        ],
+        "ran": true
+      }
+    ],
+    "rpc_reads": "none. This file builds no adapter and names no endpoint; every value in the five tables above was read out of this directory, which is §51's answer given by construction rather than by measurement.",
+    "verdict": {
+      "directory_recomputes": true,
+      "reading": "true only when all five §49 gates pass their own counts and no published claim disagreed with this run's answer anywhere in any phase"
+    }
+  },
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "directory": "recompute",
+  "evidence_root": "data/evidence/m10",
+  "file": "data/evidence/m10/recompute/deterministic.json",
+  "milestone": "M10",
+  "published_by": {
+    "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test executor_evidence -- --test-threads=1",
+    "the_rest_of_this_directory": "crates/execution/tests/executor_evidence.rs"
+  },
+  "schema": "m10-evidence-v1"
+}

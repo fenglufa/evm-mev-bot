@@ -1,0 +1,87 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "assembled_by": "crates/execution/tests/executor_evidence_gate.rs",
+  "boundary": {
+    "call": "ExecutablePlan::new(plan, binding)",
+    "constructed": false,
+    "error_class": "ExecutionError::PlanRejected",
+    "message": "plan rejected: §7: the plan is for chain 91342 and this execution is configured for chain 91343; the endpoint's own answer is a third opinion and never a substitute for the binding",
+    "note": "§40: the refusal reaches the caller as a named class, not as a string invented at the call site"
+  },
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "configured_binding": {
+    "chain_id": 91343,
+    "executor": "0x1000000000000000000000000000000000000010",
+    "why_this_is_the_mutant": "one above the chain id the row publishes; the route itself is untouched"
+  },
+  "control": "wrong chain",
+  "declared_by_this_gate": {
+    "correlation_id": "evidence-gate:fixtures/success.json#success_round_trip",
+    "funding": "state override: data/evidence/m10/states/committed.json (0x307307fb96ad85c4562684f4782f615d7b85a6ae8e9e469a439632e6cdc71e24) declares the accounts, allowances and executor code this run reads; no node was asked whether this sender could pay",
+    "market": {
+      "counts_as_real_arbitrage": false,
+      "evidence": "fixtures/success.json#success_round_trip: CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited",
+      "market_kind": "CONTROLLED_FIXTURE"
+    },
+    "max_block_age": 20,
+    "profit_denomination_reason": "WETH wei. Not comparable to the gas bill, which is native wei (§34)",
+    "profit_provenance": "min_final_amount as published in fixtures/success.json#success_round_trip: 864806517171626",
+    "simulation_id": "0x5441908802d1613cc13cfe2d8de5dcb27e41a63d1a745f2c578c2ca74d6325dd",
+    "state_fingerprint": "declared-state-recipe-0x307307fb96ad85c4562684f4782f615d7b85a6ae8e9e469a439632e6cdc71e24",
+    "status": "declared by this gate, not published by the row's producer",
+    "validity_provenance": "declared by this gate for fixtures/success.json#success_round_trip: the row prices its route at block 37530593, published as observed.block.number, and publishes no age bound of its own"
+  },
+  "directory": "negative_controls",
+  "evidence_root": "data/evidence/m10",
+  "file": "data/evidence/m10/negative_controls/wrong_chain.json",
+  "layer": "plan",
+  "milestone": "M10",
+  "plan": {
+    "calldata_hash": "0xde854866b4121fea8e11d066e200c675165957649f0c83f8af3477806d18bcc4",
+    "calldata_len": 580,
+    "chain_id": 91342,
+    "executor_as_the_plan_names": "0x1000000000000000000000000000000000000010",
+    "input_amount": "100000000000000",
+    "min_final_output": "864806517171626",
+    "plan_hash": "0x2cf4ee69a62eb7451d9113c2ab5f4e08992f2280f06081d284eff8c1e401189f",
+    "published_by": "rebuilt by this gate from the row's own published fields and bytes (§49's D1/D2), not copied from a producer",
+    "route_id": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x4200000000000000000000000000000000000006",
+    "sender": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f"
+  },
+  "planted_on_row": "fixtures/success.json#success_round_trip",
+  "published_by": {
+    "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test executor_evidence -- --test-threads=1",
+    "the_rest_of_this_directory": "crates/execution/tests/executor_evidence.rs"
+  },
+  "refusal": {
+    "codes": [
+      "wrong_chain"
+    ],
+    "count": 1,
+    "exactly_the_one_named_refusal": true,
+    "expected_code": "wrong_chain",
+    "reasons": [
+      "§7: the plan is for chain 91342 and this execution is configured for chain 91343; the endpoint's own answer is a third opinion and never a substitute for the binding"
+    ]
+  },
+  "schema": "m10-evidence-v1",
+  "section": "§50's planted controls, refused under §7 and §36",
+  "unmutated_twin": {
+    "binding": {
+      "chain_id": 91342,
+      "executor": "0x1000000000000000000000000000000000000010"
+    },
+    "boundary_constructed": true,
+    "frozen_identity": {
+      "calldata_hash": "0xde854866b4121fea8e11d066e200c675165957649f0c83f8af3477806d18bcc4",
+      "plan_hash": "0x2cf4ee69a62eb7451d9113c2ab5f4e08992f2280f06081d284eff8c1e401189f",
+      "route_id": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x4200000000000000000000000000000000000006"
+    },
+    "refusal_codes": [],
+    "why_it_is_here": "without it this file would only show that some plan is refused, which a broken route would show too"
+  },
+  "what_this_does_not_prove": "nothing about the contract: the refusal happens before a call is made, so REVM never ran, no bytecode was touched, and no bytes were signed or sent",
+  "what_this_proves": "the execution crate refuses a route whose deployment does not match the one it was configured for, and it refuses it by name — §7's chain and §36's target drift are the two ways a correct route becomes somebody else's transaction",
+  "what_was_mutated": "the execution binding this plan is handed, not the route it carries: the chain id for this control, the executor address for the other",
+  "what_was_not_mutated": "the legs, the amounts, the floors, the pinned block, the simulation answer"
+}

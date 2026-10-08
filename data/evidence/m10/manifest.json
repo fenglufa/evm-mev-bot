@@ -1,0 +1,389 @@
+{
+  "absent_fields": [],
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "assembled_by": "crates/execution/tests/executor_evidence_gate.rs",
+  "byte_identity": {
+    "README.md": {
+      "bytes": 8610,
+      "unchanged_from_previous_run": true
+    },
+    "contract/abi.json": {
+      "bytes": 46351,
+      "unchanged_from_previous_run": true
+    },
+    "contract/runtime_bytecode.json": {
+      "bytes": 7628,
+      "unchanged_from_previous_run": true
+    },
+    "execution/lifecycle.json": {
+      "bytes": 55079,
+      "unchanged_from_previous_run": true
+    },
+    "negative_controls/wrong_chain.json": {
+      "bytes": 6114,
+      "unchanged_from_previous_run": true
+    },
+    "negative_controls/wrong_executor.json": {
+      "bytes": 6248,
+      "unchanged_from_previous_run": true
+    },
+    "recompute/deterministic.json": {
+      "bytes": 20031,
+      "unchanged_from_previous_run": true
+    }
+  },
+  "calldata_hash": "0x9ca9b1d030a424b741113d13dd204ecd028afa711b95548857affe7ab25c26b9",
+  "chain_id": 91342,
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "contract_hash": "0x8c49d87cc6173d83a36c97fd1f919555143e431b4124fea08368054a676c7263",
+  "contract_hash_readings": {
+    "creation_bytes": 7565,
+    "creation_code_keccak256": "0x8c49d87cc6173d83a36c97fd1f919555143e431b4124fea08368054a676c7263",
+    "creation_code_tail_holds_the_runtime_code": true,
+    "runtime_bytes": 7347,
+    "runtime_code_keccak256": "0x917ed914c157e86958d0b2de9d85a62a3a62c381b49166e091e3b67255d42cca",
+    "this_manifest_carries": "creation_code_keccak256",
+    "why": "a reader holding only the deployment transaction can recompute it; the runtime hash is what the deployed account returns today, and both are published so neither reading is hidden by the choice"
+  },
+  "deployment_block": 38023919,
+  "deployment_tx": "0x226c71f642a1febed9cab35af945486aca88d6ab47ec393f204979da40023eb7",
+  "directory": ".",
+  "evidence_root": "data/evidence/m10",
+  "executor_address": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+  "field_provenance": {
+    "fields": [
+      {
+        "field": "git_commit",
+        "is_null": false,
+        "read_from": "read from .git/HEAD, then the loose ref or packed-refs — never by running git"
+      },
+      {
+        "field": "chain_id",
+        "is_null": false,
+        "read_from": "contract/deployment.json, cross-read against contract/bytecode_hash.json in live_run.shared_fields and against the chain id in both real records"
+      },
+      {
+        "field": "executor_address",
+        "is_null": false,
+        "read_from": "contract/deployment.json; live_run re-derived it from keccak(rlp([sender, nonce])) and published whether the prediction matches the receipt"
+      },
+      {
+        "field": "deployment_tx",
+        "is_null": false,
+        "read_from": "contract/deployment.json, and it is the first row of real/giwa_ladder_steps.json"
+      },
+      {
+        "field": "deployment_block",
+        "is_null": false,
+        "read_from": "contract/deployment.json"
+      },
+      {
+        "field": "contract_hash",
+        "is_null": false,
+        "read_from": "contract/deployment.json's creation_code_hash — the hash of the code the deployment transaction carried, recomputable from that transaction alone"
+      },
+      {
+        "field": "test_fixture_hash",
+        "is_null": false,
+        "read_from": "keccak256 of the committed fixture file, derived by this gate over the bytes on disk and compared with the claim every scenario row publishes"
+      },
+      {
+        "field": "plan_hash",
+        "is_null": false,
+        "read_from": "real/giwa_execution.json's own execution.plan_hash — quoted, not recomputed: the sent plan's per-leg floors are not published anywhere here, so a plan hash this gate built would be a guess about somebody else's route (see plan_layer.real_run.plan_identity)"
+      },
+      {
+        "field": "calldata_hash",
+        "is_null": false,
+        "read_from": "real/giwa_execution.json's execution.calldata_hash, whose length the ABI table in contract/abi.json independently explains"
+      },
+      {
+        "field": "simulation_hash",
+        "is_null": false,
+        "read_from": "the simulation the sent transaction was bound to — the record's simulation_id, which is also the first half of its risk_decision_id"
+      },
+      {
+        "field": "real_tx_hash",
+        "is_null": false,
+        "read_from": "the execute transaction: included, with its receipt bound to a block. The deployment and the deliberate failure are in real_transaction_hashes below"
+      }
+    ],
+    "note": "the eleven fields above are the §61 list in the §61 order; this table says where each was read from and whether it is null"
+  },
+  "file": "data/evidence/m10/manifest.json",
+  "file_digests": {
+    "files": [
+      {
+        "digest": {
+          "bytes": 548,
+          "keccak256": "0xb6ddcb48d5c3e388fbc23405d340e0e9fa849799a22492f094967a3175ec3276"
+        },
+        "file": "contract/bytecode_hash.json"
+      },
+      {
+        "digest": {
+          "bytes": 2058,
+          "keccak256": "0x573fb01433e498d8af1f41401eadb583419df8497f3046f5f25b8590f6228002"
+        },
+        "file": "contract/deployment.json"
+      },
+      {
+        "digest": {
+          "bytes": 15433,
+          "keccak256": "0xa9e34cc26c4df677df7dfc7d82101d5484b116d4d0446e3dd241dbe46a5df6f0"
+        },
+        "file": "fixtures/profit_guard.json"
+      },
+      {
+        "digest": {
+          "bytes": 15616,
+          "keccak256": "0x0e23456b53442c2d34205ec452855510e35ee87e542d9f32f18d570aec832b43"
+        },
+        "file": "fixtures/revert.json"
+      },
+      {
+        "digest": {
+          "bytes": 15439,
+          "keccak256": "0x966c8af6203b7447ae13cc7f7b16a5fde43483a0535170e2f3ae65b688a54e4a"
+        },
+        "file": "fixtures/slippage.json"
+      },
+      {
+        "digest": {
+          "bytes": 25360,
+          "keccak256": "0x2fa5ac454915e24bcfa9a4bbd1904450449924bd8c40bfda26e37e3c4887b0dd"
+        },
+        "file": "fixtures/success.json"
+      },
+      {
+        "digest": {
+          "bytes": 15594,
+          "keccak256": "0x2fcc6859fd4e6bb478dc0e9cd708dcb1975bb0c43452f315594b85eef858ce0b"
+        },
+        "file": "negative_controls/broken_route.json"
+      },
+      {
+        "digest": {
+          "bytes": 15451,
+          "keccak256": "0x8f3bcdfc17f872290cbf21066a741bba0263fbc112e651a6156251f0911af7f8"
+        },
+        "file": "negative_controls/final_profit.json"
+      },
+      {
+        "digest": {
+          "bytes": 15652,
+          "keccak256": "0x18707c5f0945ea69bc2d17edc63005865ea031fbf8194d5a1fcdaf1e2610c50b"
+        },
+        "file": "negative_controls/forced_second_leg_revert.json"
+      },
+      {
+        "digest": {
+          "bytes": 15298,
+          "keccak256": "0x0b288b1c7e90b92767a2db05595134ee64feedc1c602232485571eab0077cead"
+        },
+        "file": "negative_controls/invalid_pair.json"
+      },
+      {
+        "digest": {
+          "bytes": 15459,
+          "keccak256": "0x0f59255c607d38b930d3b781ce971deb44c9f77c730905eead426413f5d4a5f8"
+        },
+        "file": "negative_controls/min_output.json"
+      },
+      {
+        "digest": {
+          "bytes": 15296,
+          "keccak256": "0x46e3238dd8c904ad2b53b700ef762c0dac7d4da9f23376c46d2c8932ac6f5124"
+        },
+        "file": "negative_controls/token_not_allowed.json"
+      },
+      {
+        "digest": {
+          "bytes": 15331,
+          "keccak256": "0x7420885dafa6a599308d81d226e9101a442a23f4a72bbed03395752b026de475"
+        },
+        "file": "negative_controls/wrong_operator.json"
+      },
+      {
+        "digest": {
+          "bytes": 15413,
+          "keccak256": "0xc2c13a10b6480b0dd84e93c2bff0a4d163d644c0297b9d84507985fe9932bcd5"
+        },
+        "file": "negative_controls/zero_amount.json"
+      },
+      {
+        "digest": {
+          "bytes": 24367,
+          "keccak256": "0x03170d5a6b2d13e19c6edad4bcffd94d33401e611e6f16416b402621629de89d"
+        },
+        "file": "real/giwa_execution.json"
+      },
+      {
+        "digest": {
+          "bytes": 6201,
+          "keccak256": "0x6db3d3d7278861ddbe85fd7d5e9aee731388e6636b996f0b4781af77103497ff"
+        },
+        "file": "real/giwa_failure.json"
+      },
+      {
+        "digest": {
+          "bytes": 10485,
+          "keccak256": "0x8f4e8e53468c0bf0533eb784f99ac52c801f8801cb855d7e0548ff7c1848f703"
+        },
+        "file": "real/giwa_ladder_steps.json"
+      },
+      {
+        "digest": {
+          "bytes": 1842,
+          "keccak256": "0xcecaa51e19edc0631e1234d9b01f46ebc4c0c7e5984f07e3815b1086012aabcb"
+        },
+        "file": "real/preconditions.json"
+      },
+      {
+        "digest": {
+          "bytes": 15621,
+          "keccak256": "0x0dd4912c39e6aa26e3bfed39be44f8f0dad3e876974bf2072b9d219032321848"
+        },
+        "file": "simulation/failure.json"
+      },
+      {
+        "digest": {
+          "bytes": 25364,
+          "keccak256": "0x8f472cc42f68fd8f0e7fd16700004630fc4bc51755f60aae226e556db2d76984"
+        },
+        "file": "simulation/success.json"
+      },
+      {
+        "digest": {
+          "bytes": 26073,
+          "keccak256": "0x44e181f403080be5fc4c431bc006641c874bb0e71246e6e84d61b87367e41f05"
+        },
+        "file": "states/caller_is_not_the_stored_operator.json"
+      },
+      {
+        "digest": {
+          "bytes": 25460,
+          "keccak256": "0x307307fb96ad85c4562684f4782f615d7b85a6ae8e9e469a439632e6cdc71e24"
+        },
+        "file": "states/committed.json"
+      },
+      {
+        "digest": {
+          "bytes": 25478,
+          "keccak256": "0x9bd5418ec0ce508f53649f082e4f508da4dcdfbdb0f44d4a2ecee9c77c26b203"
+        },
+        "file": "states/pair_not_in_the_allowlist.json"
+      },
+      {
+        "digest": {
+          "bytes": 25479,
+          "keccak256": "0x915db73bd9bd2eec4eea521ae095f3e0dcb66e875ad84ac03b3b1b22ca8a6a30"
+        },
+        "file": "states/token_not_in_the_allowlist.json"
+      },
+      {
+        "digest": {
+          "bytes": 6114,
+          "keccak256": "0xe836b8ea39f949c1a2b7dee233e04038da010c7ff1d9a36731efc1dfc13af7d6"
+        },
+        "file": "negative_controls/wrong_chain.json"
+      },
+      {
+        "digest": {
+          "bytes": 6248,
+          "keccak256": "0xb604e482f6e7d1d257a1e3ad942ab0cac6b38264c840a22370c7d151442c7ca8"
+        },
+        "file": "negative_controls/wrong_executor.json"
+      },
+      {
+        "digest": {
+          "bytes": 46351,
+          "keccak256": "0x2c5b0255ebf65dd85df938581ad051a704743af6b4555468444d69360c4cb823"
+        },
+        "file": "contract/abi.json"
+      },
+      {
+        "digest": {
+          "bytes": 7628,
+          "keccak256": "0x6635440c49e3f380389f6c387267688ea6a602b4d9a86539ac798b3a63b6ea8b"
+        },
+        "file": "contract/runtime_bytecode.json"
+      },
+      {
+        "digest": {
+          "bytes": 55079,
+          "keccak256": "0xe5d02365e76d2a05b9a299e2953b9700636a2c271ce95d534283c13880517d60"
+        },
+        "file": "execution/lifecycle.json"
+      },
+      {
+        "digest": {
+          "bytes": 20031,
+          "keccak256": "0x163aedbd483c75e605b58858855030b6b073e326d80b897c488f549045796b42"
+        },
+        "file": "recompute/deterministic.json"
+      },
+      {
+        "digest": {
+          "bytes": 8610,
+          "keccak256": "0x54bfcaf8f35b8fc155878b5302b1ed674f7b1a6d85a3a94a0e21097c8e89bd3f"
+        },
+        "file": "README.md"
+      }
+    ],
+    "files_digest": 31,
+    "note": "every file in this directory except this manifest, as a digest of the bytes this run found on disk or wrote. manifest.json is written last, so its own digest is nowhere — a file cannot stand in its own checksum table."
+  },
+  "git_commit": "66b421de57e5e8db2836ec974d20a450533aa482",
+  "git_commit_reading": [
+    ".git/HEAD is a symbolic ref to refs/heads/main",
+    "read from the loose ref refs/heads/main"
+  ],
+  "milestone": "M10",
+  "not_claimed": {
+    "broadcast_by_this_gate": "none — no key was read, nothing was signed, no endpoint was named (§51)",
+    "giwa_success_file": "absent by design — §60 forbids creating a fabricated one, and §52 says an included receipt proves none of the four things a success would need",
+    "profit_status": null,
+    "real_profitable_arbitrage": "NOT_PROVEN",
+    "realized_profit": null,
+    "why_they_are_null": null
+  },
+  "plan_hash": "0x00c9831d71a87cd9e9257e7ca9983705d02801ba5805eccab6e2ccd084377335",
+  "published_by": {
+    "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test executor_evidence -- --test-threads=1",
+    "the_rest_of_this_directory": "crates/execution/tests/executor_evidence.rs"
+  },
+  "real_transaction_hashes": {
+    "deployment": "0x226c71f642a1febed9cab35af945486aca88d6ab47ec393f204979da40023eb7",
+    "execute_included": "0x1105c89b06a8edc84995d614fe1e2b79344e2d36d48c62c00f533946f2f82771",
+    "failure_reverted": "0x95407d7ee1e440f700c5336e7fa60baf7e9b5bfbff40a97aeb60254e295596ec",
+    "nonce_ladder": 8,
+    "note": "three transactions from one EOA in one nonce sequence: §57's controlled call, §58's controlled failure, and the deployment that made both possible. §61's real_tx_hash is the execute row because it is the only one that carried a route to completion."
+  },
+  "real_tx_hash": "0x1105c89b06a8edc84995d614fe1e2b79344e2d36d48c62c00f533946f2f82771",
+  "rpc_reads": 0,
+  "schema": "m10-evidence-v1",
+  "simulation_hash": "0x9fae73afd75f1a135452e084677fd1c576eb6e1e7d54ea291e0dfd501713801d",
+  "test_fixture_hash": "0x4672cca9fecb05bcc4771b1f74b2d6fe34fbeb5bbc76ed83f3211c9ddbe4c6cd",
+  "test_fixture_identity": {
+    "claimed_by_every_scenario_row": "0x4672cca9fecb05bcc4771b1f74b2d6fe34fbeb5bbc76ed83f3211c9ddbe4c6cd",
+    "file": "fixtures/simulation-m10/fixture-37530593-executor.json",
+    "recomputed_by_this_gate": {
+      "bytes": 134403,
+      "keccak256": "0x4672cca9fecb05bcc4771b1f74b2d6fe34fbeb5bbc76ed83f3211c9ddbe4c6cd"
+    },
+    "recomputed_equals_claimed": true,
+    "rows_in_the_directory": 14,
+    "rows_naming_it": 14
+  },
+  "verdict": {
+    "determinism_digest": {
+      "bytes": 20031,
+      "keccak256": "0x163aedbd483c75e605b58858855030b6b073e326d80b897c488f549045796b42"
+    },
+    "directory_recomputes": true,
+    "drift": [],
+    "drift_count": 0,
+    "reading": "true when all five §49 gates passed their own counts and nothing in any phase disagreed with a published claim"
+  }
+}

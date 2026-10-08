@@ -559,7 +559,7 @@
         },
         {
           "file": "crates/execution/src/gate.rs",
-          "line": 74,
+          "line": 81,
           "matches": 1,
           "note": "Confirmed, Reorged, Unverified — the verdict the leg produces",
           "source": "code",
@@ -965,7 +965,7 @@
         },
         {
           "file": "crates/execution/src/gate.rs",
-          "line": 63,
+          "line": 70,
           "matches": 1,
           "note": "the vocabulary for still-good-at-submission",
           "source": "code",
@@ -1144,7 +1144,7 @@
         },
         {
           "file": "crates/execution/src/gate.rs",
-          "line": 90,
+          "line": 97,
           "matches": 1,
           "note": "a per-step verdict rather than a held value",
           "source": "code",

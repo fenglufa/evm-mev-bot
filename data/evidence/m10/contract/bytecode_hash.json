@@ -1,0 +1,10 @@
+{
+  "abi_version": "solc 0.8.37+commit.f401782d, ArbitrageExecutor.bin sha256 69ae3d937671666e2fe1e05b86c88a0b4d51587fb052bcbb967c79609d9a2680",
+  "chain_id": 91342,
+  "creation_code_bytes": 7565,
+  "creation_code_keccak256": "0x8c49d87cc6173d83a36c97fd1f919555143e431b4124fea08368054a676c7263",
+  "deployment_address": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+  "deployment_block": 38023919,
+  "deployment_tx": "0x226c71f642a1febed9cab35af945486aca88d6ab47ec393f204979da40023eb7",
+  "operator": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+}

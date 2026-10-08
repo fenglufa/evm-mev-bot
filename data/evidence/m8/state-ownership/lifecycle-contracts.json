@@ -401,7 +401,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/stage.rs",
-          "line": 380,
+          "line": 420,
           "matches": 1,
           "note": "the lane's own statement of what it re-confirms",
           "source": "code",
@@ -464,7 +464,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/stage.rs",
-          "line": 380,
+          "line": 420,
           "matches": 1,
           "note": "the lane's own statement of what it re-confirms",
           "source": "code",
@@ -496,7 +496,7 @@
         },
         {
           "file": "crates/execution/src/gate.rs",
-          "line": 90,
+          "line": 97,
           "matches": 1,
           "note": "a per-step verdict, not a held value",
           "source": "code",
@@ -591,7 +591,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/lifecycle.rs",
-          "line": 740,
+          "line": 764,
           "matches": 1,
           "note": "the only in-process nonce advance",
           "source": "code",
@@ -821,7 +821,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/gate.rs",
-          "line": 74,
+          "line": 81,
           "matches": 1,
           "note": "Confirmed, Reorged, Unverified",
           "source": "code",
@@ -1178,7 +1178,7 @@
         },
         {
           "file": "crates/execution/src/gate.rs",
-          "line": 63,
+          "line": 70,
           "matches": 1,
           "note": "a freshness leg the gate can fail — and that both production paths fill in with a constant",
           "source": "code",

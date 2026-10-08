@@ -1,0 +1,271 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test executor_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/executor_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "directory": "negative_controls",
+  "evidence_root": "data/evidence/m10",
+  "file": "data/evidence/m10/negative_controls/forced_second_leg_revert.json",
+  "milestone": "M10",
+  "rows": {
+    "forced_second_leg_revert": {
+      "d3_double_run": {
+        "note": "the same fixture and the same call, twice in this process; §49's D3 is the cross-process and cross-crate form, which the execution crate's gate reproduces from the published spec",
+        "observed_json_identical": true,
+        "runs": 2
+      },
+      "expected": {
+        "contract_error": null,
+        "delivered": "none",
+        "delivered_keys": {
+          "any": "no claim is made about the returned number",
+          "none": "a call that never completed returns nothing",
+          "route_weth_out_leg2": "the second leg's exact ask, as the fixture's own quote prices it"
+        },
+        "logs": 0,
+        "market_moved": false,
+        "outcome": "reverted",
+        "residue": "none",
+        "residue_keys": {
+          "any": "the run traded, so the market moved — the amount is published, not judged",
+          "none": "no reserve, no balance and no storage word is left different (§27)"
+        },
+        "revert_kind": "Error(string)"
+      },
+      "layer": "revm",
+      "market": "CONTROLLED_FIXTURE",
+      "milestone": "M10",
+      "observed": {
+        "amount_in": "0x5af3107a4000",
+        "balances": [
+          {
+            "after": "0x5af3107a4000",
+            "before": "0x5af3107a4000",
+            "holder": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "token": "0x4200000000000000000000000000000000000006"
+          },
+          {
+            "after": "0x0",
+            "before": "0x0",
+            "holder": "0x1000000000000000000000000000000000000010",
+            "token": "0x4200000000000000000000000000000000000006"
+          },
+          {
+            "after": "0x0",
+            "before": "0x0",
+            "holder": "0x2000000000000000000000000000000000000020",
+            "token": "0x4200000000000000000000000000000000000006"
+          },
+          {
+            "after": "0x0",
+            "before": "0x0",
+            "holder": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+          },
+          {
+            "after": "0x0",
+            "before": "0x0",
+            "holder": "0x1000000000000000000000000000000000000010",
+            "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+          },
+          {
+            "after": "0x0",
+            "before": "0x0",
+            "holder": "0x2000000000000000000000000000000000000020",
+            "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+          }
+        ],
+        "block": {
+          "hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+          "number": 37530593
+        },
+        "calldata": "0xfeb0554e00000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000420000000000000000000000000000000000000600000000000000000000000000000000000000000000000000005af3107a400000000000000000000000000000000000000000000000000000031289754165aa000000000000000000000000200000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000020000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a4000000000000000000000000420000000000000000000000000000000000000600000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f00000000000000000000000000000000000000000000000000005af3107a4000000000000000000000000000000000000000000000000004ea2ce4749290c686000000000000000000000000000000000000000000000004ea2ce4749290c6860000000000000000000000005b3c1e3fb6a97c0130ae015ff10f53a1a30c353e00000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f0000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000004ea2ce4749290c68600000000000000000000000000000000000000000000000000031289754165ab00000000000000000000000000000000000000000000000000031289754165aa",
+        "calldata_len": 580,
+        "chain_id": 91342,
+        "charge": {
+          "Priced": {
+            "base_fee_per_gas": 362,
+            "effective_gas_price": 362,
+            "gas_used": 287343,
+            "pricing": {
+              "Eip1559": {
+                "priority_fee_per_gas": 0,
+                "provenance": "block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it"
+              }
+            },
+            "wei": "0x63330f6"
+          }
+        },
+        "contract_error": null,
+        "delivered": null,
+        "executor": "0x1000000000000000000000000000000000000010",
+        "gas_limit": 3000000,
+        "gas_used": 287343,
+        "input_token": "0x4200000000000000000000000000000000000006",
+        "logs": [],
+        "min_final_amount": "0x31289754165aa",
+        "operator": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+        "recipient": "0x2000000000000000000000000000000000000020",
+        "reserves": [
+          {
+            "after": {
+              "block_timestamp_last": "0x68bfe1b4",
+              "reserve0": "0x3635c9adc5dea00000",
+              "reserve1": "0x38d7ea4c68000",
+              "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token1": "0x4200000000000000000000000000000000000006"
+            },
+            "before": {
+              "block_timestamp_last": "0x68bfe1b4",
+              "reserve0": "0x3635c9adc5dea00000",
+              "reserve1": "0x38d7ea4c68000",
+              "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token1": "0x4200000000000000000000000000000000000006"
+            },
+            "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+          },
+          {
+            "after": {
+              "block_timestamp_last": "0x68bfd987",
+              "reserve0": "0x6c6b935b8bbd400000",
+              "reserve1": "0x470de4df820000",
+              "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token1": "0x4200000000000000000000000000000000000006"
+            },
+            "before": {
+              "block_timestamp_last": "0x68bfd987",
+              "reserve0": "0x6c6b935b8bbd400000",
+              "reserve1": "0x470de4df820000",
+              "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token1": "0x4200000000000000000000000000000000000006"
+            },
+            "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+          }
+        ],
+        "revert_kind": "Error(string)",
+        "selector": "feb0554e",
+        "signature": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)",
+        "state_changes": {
+          "accounts": [
+            {
+              "address": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+              "balance_after": "0x8ac7230483b4cf0a",
+              "balance_before": "0x8ac7230489e80000",
+              "nonce_after": 1,
+              "nonce_before": 0
+            }
+          ],
+          "slots": []
+        },
+        "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited",
+        "status": {
+          "Reverted": {
+            "message": "UniswapV2: K",
+            "raw": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000c556e697377617056323a204b0000000000000000000000000000000000000000"
+          }
+        }
+      },
+      "planted_control": {
+        "by": "+1 wei over pool B's exact ask",
+        "moved": "legs[1].amount_out and legs[1].amount_in and legs[0]'s carried input",
+        "why_this_fails": "a V2 pair pays exactly what it is asked to pay, then checks its own constant product; one wei over the line is the pair's assert, not the executor's"
+      },
+      "route": {
+        "amount_in": "100000000000000",
+        "input_token": "0x4200000000000000000000000000000000000006",
+        "leg_0": {
+          "ask": "90661089388014913158",
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        "leg_1": {
+          "ask": "864806517171626",
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        },
+        "profit_before_gas": "764806517171626",
+        "profit_denomination": "WETH wei. Not comparable to the gas bill, which is native wei (§34)",
+        "quote": "getAmountOut at the recorded reserves, 0.30 % fee, floored the way the Solidity divides — the claim the contract is required to check"
+      },
+      "run_spec": {
+        "call": {
+          "amount_in": "100000000000000",
+          "input_token": "0x4200000000000000000000000000000000000006",
+          "kind": "execute",
+          "legs": [
+            {
+              "amount_in": "100000000000000",
+              "amount_out": "90661089388014913158",
+              "min_amount_out": "90661089388014913158",
+              "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+              "token_in": "0x4200000000000000000000000000000000000006",
+              "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            },
+            {
+              "amount_in": "90661089388014913158",
+              "amount_out": "864806517171627",
+              "min_amount_out": "864806517171626",
+              "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+              "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token_out": "0x4200000000000000000000000000000000000006"
+            }
+          ],
+          "min_final_amount": "864806517171626",
+          "recipient": "0x2000000000000000000000000000000000000020",
+          "selector": "0xfeb0554e",
+          "signature": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)"
+        },
+        "calldata": "0xfeb0554e00000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000420000000000000000000000000000000000000600000000000000000000000000000000000000000000000000005af3107a400000000000000000000000000000000000000000000000000000031289754165aa000000000000000000000000200000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000020000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a4000000000000000000000000420000000000000000000000000000000000000600000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f00000000000000000000000000000000000000000000000000005af3107a4000000000000000000000000000000000000000000000000004ea2ce4749290c686000000000000000000000000000000000000000000000004ea2ce4749290c6860000000000000000000000005b3c1e3fb6a97c0130ae015ff10f53a1a30c353e00000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f0000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000004ea2ce4749290c68600000000000000000000000000000000000000000000000000031289754165ab00000000000000000000000000000000000000000000000000031289754165aa",
+        "calldata_keccak256": "0x62ee8e3bc38b9532d67446b19e6b7fc4c876fc0eead1e82d0402f34da66fbf9a",
+        "calldata_len": 580,
+        "chain_id": 91342,
+        "endowment_wei": "10000000000000000000",
+        "executor": "0x1000000000000000000000000000000000000010",
+        "gas_limit": 3000000,
+        "operator": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+        "priced_at_block": 37530593,
+        "pricing": {
+          "kind": "eip1559",
+          "priority_fee_per_gas": 0,
+          "provenance": "block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it"
+        },
+        "rules": "Prague",
+        "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited",
+        "units": {
+          "addresses": "0x-prefixed 20-byte hex",
+          "amounts": "decimal wei words of the token the call names",
+          "slots": "0x-prefixed 32-byte hex words"
+        }
+      },
+      "scenario": "forced_second_leg_revert",
+      "schema": "m10-evidence-v1",
+      "spec_ref": "§27/§13 (NC10)",
+      "state": {
+        "committed_fixture": {
+          "additions_file": "fixtures/simulation-m10/fixture-37530593-executor-additions.json",
+          "bytes": 134403,
+          "file": "fixtures/simulation-m10/fixture-37530593-executor.json",
+          "keccak256": "0x4672cca9fecb05bcc4771b1f74b2d6fe34fbeb5bbc76ed83f3211c9ddbe4c6cd"
+        },
+        "declared_accounts": 3,
+        "declared_words": 13,
+        "rebuild": "the recording plus the recipe file's rows, which are the committed fixture's own rows — so the same rebuild lands on fixtures/simulation-m10/ byte for byte, and the control is in the call rather than in the state",
+        "recipe_bytes": 25460,
+        "recipe_file": "data/evidence/m10/states/committed.json",
+        "recipe_keccak256": "0x307307fb96ad85c4562684f4782f615d7b85a6ae8e9e469a439632e6cdc71e24",
+        "recipe_rows": 16,
+        "recording": {
+          "bytes": 118250,
+          "file": "fixtures/simulation-m7/dump-37530593-07D4af6E.json",
+          "keccak256": "0x31137559f3c5328b94a36157518d351ad3cf2d37d1fd86dcffd0495e0881cce6"
+        },
+        "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited",
+        "uses_a_variant_of_the_committed_fixture": false
+      },
+      "verdict": "PASS",
+      "what_this_is": "leg 2 asks pool B for one wei more than the invariant can pay. Pool A has already traded when the second pool refuses in its own words, and the whole transaction is discarded — the finding is the empty residue list, not the revert"
+    }
+  },
+  "schema": "m10-evidence-v1"
+}

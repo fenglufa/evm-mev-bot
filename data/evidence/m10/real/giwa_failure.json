@@ -1,0 +1,149 @@
+{
+  "chain_id": 91342,
+  "executor": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+  "expected": "tx included, receipt.status = 0, no partial state",
+  "min_final_amount_wei": "10000000000000000",
+  "no_partial_state": true,
+  "operator": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+  "principal_wei": "100000000000000",
+  "receipt_status": "reverted",
+  "residue_read_at_block": 38023967,
+  "reverted": true,
+  "simulation_attribution": {
+    "balances": [
+      {
+        "after": "1265605650524617",
+        "before": "1265605650524617",
+        "changed": false,
+        "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "token": "0x4200000000000000000000000000000000000006"
+      },
+      {
+        "after": "0",
+        "before": "0",
+        "changed": false,
+        "holder": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+        "token": "0x4200000000000000000000000000000000000006"
+      },
+      {
+        "after": "1265605650524617",
+        "before": "1265605650524617",
+        "changed": false,
+        "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "token": "0x4200000000000000000000000000000000000006"
+      },
+      {
+        "after": "0",
+        "before": "0",
+        "changed": false,
+        "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+      },
+      {
+        "after": "0",
+        "before": "0",
+        "changed": false,
+        "holder": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+        "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+      },
+      {
+        "after": "0",
+        "before": "0",
+        "changed": false,
+        "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+      }
+    ],
+    "block": 38023945,
+    "block_hash": "0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39",
+    "calldata_hash": "0xdd52d22b778a2c67b722c458e814420d22310c8439b16bddcac316c46c67d192",
+    "calldata_len": 580,
+    "charge": "Priced { gas_used: 283771, effective_gas_price: 1000274, base_fee_per_gas: Some(274), wei: 283848753254, pricing: Eip1559 { priority_fee_per_gas: 1000000, provenance: \"the tip this session's fee reading quoted from the node (1000000 wei/gas); the base fee comes from the pinned header, not from here\" } }",
+    "contract_error": "FinalShortfall",
+    "delivered": null,
+    "describe": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 38023945 on rpc:chain-91342: reverted with FinalShortfall (revert data 0xec5122fa0000000000000000000000000000000000000000000000000001e05643546e15000000000000000000000000000000000000000000000000002386f26fc10000), 283771 gas of 600000 allowed, market moved: false",
+    "gas_limit": 600000,
+    "gas_used": 283771,
+    "label": "floor_too_high",
+    "min_final_amount": "10000000000000000",
+    "reserves": [
+      {
+        "after": [
+          "833769110338570972349",
+          "1200000000000000"
+        ],
+        "before": [
+          "833769110338570972349",
+          "1200000000000000"
+        ],
+        "changed": false,
+        "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+      },
+      {
+        "after": [
+          "2166230889661429027651",
+          "18469587832303757"
+        ],
+        "before": [
+          "2166230889661429027651",
+          "18469587832303757"
+        ],
+        "changed": false,
+        "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+      }
+    ],
+    "revert_kind": "FinalShortfall",
+    "status": "Reverted(RevertData { raw: 0xec5122fa0000000000000000000000000000000000000000000000000001e05643546e15000000000000000000000000000000000000000000000000002386f26fc10000, message: None })",
+    "succeeded": false
+  },
+  "step": {
+    "balance_wei": "35048511056756737",
+    "chain_id": 91342,
+    "detail": "eth_sendRawTransaction returned 0x95407d7ee1e440f700c5336e7fa60baf7e9b5bfbff40a97aeb60254e295596ec",
+    "fee_provenance": "eip1559 maxFeePerGas = baseFee(274) * 2 + tip(1000000) = 1000548, read at block 38023963",
+    "gas_limit": 600000,
+    "head_binding": "confirmed: block 38023963 is 0xa1e5aef462c39fb2c8bd0507355578b4b2a40520223938ab2c7e8227339441aa",
+    "head_number": 38023963,
+    "input_bytes": 580,
+    "input_hash": "0xdd52d22b778a2c67b722c458e814420d22310c8439b16bddcac316c46c67d192",
+    "label": "execute-floor-too-high",
+    "max_fee_per_gas_wei": "1000548",
+    "maximum_spend_wei": "600328800000",
+    "nonce": 65,
+    "receipt_block_hash": "0xafaa638fcaef8587b78b8c4edec8acd6d1968d051458ed2cb8ff7f4b67f5cef7",
+    "receipt_block_number": 38023967,
+    "receipt_contract_address": null,
+    "receipt_effective_gas_price_wei": "1000274",
+    "receipt_gas_used": 56723,
+    "receipt_l1_fee_wei": "468",
+    "receipt_l2_cost_wei": "56738542102",
+    "receipt_log_count": 0,
+    "receipt_status": "reverted",
+    "recovered_sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+    "submission": "submitted",
+    "to": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+    "transaction_hash": "0x95407d7ee1e440f700c5336e7fa60baf7e9b5bfbff40a97aeb60254e295596ec",
+    "tx_type": "eip1559",
+    "value_wei": "0"
+  },
+  "unknown_fields": "If the node could not include this transaction the row is an error, not a pass: §58 says UNKNOWN rather than a fabricated revert, and this run stops with a reason. no_partial_state is null when the failing receipt names no block, because then nothing was read.",
+  "wallet_after_failure": {
+    "block_number": 38023967,
+    "native_wei": "35048454318214167",
+    "token0_executor_wei": "0",
+    "token0_operator_wei": "0",
+    "weth_allowance_to_executor_wei": "0",
+    "weth_executor_wei": "0",
+    "weth_operator_wei": "1693741728651230"
+  },
+  "wallet_before_failure": {
+    "block_number": 38023963,
+    "native_wei": "35048511056756737",
+    "token0_executor_wei": "0",
+    "token0_operator_wei": "0",
+    "weth_allowance_to_executor_wei": "0",
+    "weth_executor_wei": "0",
+    "weth_operator_wei": "1693741728651230"
+  },
+  "what_this_is": "§58's real controlled failure: min_final_amount deliberately above anything this market can pay"
+}

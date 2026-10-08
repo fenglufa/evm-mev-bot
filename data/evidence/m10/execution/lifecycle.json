@@ -1,0 +1,1386 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "assembled_by": "crates/execution/tests/executor_evidence_gate.rs",
+  "body": {
+    "asset_movement_31": {
+      "gross_out": "528136078126613",
+      "net_weth_delta": "428136078126613",
+      "note": "§31's row is the receipt's own numbers; the two wallet rows are reads at blocks, and §12/§14 is why the profit cell is null rather than a subtraction across denominations. The surplus that was already in the operator's WETH balance before this run is quoted by wallet_before_note.",
+      "principal_wei": "100000000000000",
+      "wallet_after": {
+        "block_number": 38023960,
+        "native_wei": "35048511056756737",
+        "token0_executor_wei": "0",
+        "token0_operator_wei": "0",
+        "weth_allowance_to_executor_wei": "0",
+        "weth_executor_wei": "0",
+        "weth_operator_wei": "1693741728651230"
+      },
+      "wallet_at_block_before_execute": {
+        "block_number": 38023959,
+        "native_wei": "35048740421585948",
+        "token0_executor_wei": "0",
+        "token0_operator_wei": "0",
+        "weth_allowance_to_executor_wei": "100000000000000",
+        "weth_executor_wei": "0",
+        "weth_operator_wei": "1265605650524617"
+      }
+    },
+    "audit": [
+      {
+        "agree": true,
+        "check": "deploy: recovered_sender",
+        "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+      },
+      {
+        "agree": true,
+        "check": "deploy: chain id",
+        "published": 91342,
+        "recomputed_by_this_gate": 91342
+      },
+      {
+        "agree": true,
+        "check": "deploy: maximum_spend_wei",
+        "published": "5002740000000",
+        "recomputed_by_this_gate": "5002740000000"
+      },
+      {
+        "agree": true,
+        "check": "deploy: receipt_l2_cost_wei",
+        "published": "1691963471000",
+        "recomputed_by_this_gate": "1691963471000"
+      },
+      {
+        "agree": true,
+        "check": "deploy → allow-pair-a: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+        "published": "35149005505199836",
+        "recomputed_by_this_gate": "35149005505199836"
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-a: recovered_sender",
+        "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-a: chain id",
+        "published": 91342,
+        "recomputed_by_this_gate": 91342
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-a: maximum_spend_wei",
+        "published": "600328800000",
+        "recomputed_by_this_gate": "600328800000"
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-a: receipt_l2_cost_wei",
+        "published": "47846106242",
+        "recomputed_by_this_gate": "47846106242"
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-a → allow-pair-b: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+        "published": "35148957659093395",
+        "recomputed_by_this_gate": "35148957659093395"
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-b: recovered_sender",
+        "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-b: chain id",
+        "published": 91342,
+        "recomputed_by_this_gate": 91342
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-b: maximum_spend_wei",
+        "published": "600328800000",
+        "recomputed_by_this_gate": "600328800000"
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-b: receipt_l2_cost_wei",
+        "published": "47846106242",
+        "recomputed_by_this_gate": "47846106242"
+      },
+      {
+        "agree": true,
+        "check": "allow-pair-b → allow-token-0: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+        "published": "35148909812986954",
+        "recomputed_by_this_gate": "35148909812986954"
+      },
+      {
+        "agree": true,
+        "check": "allow-token-0: recovered_sender",
+        "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+      },
+      {
+        "agree": true,
+        "check": "allow-token-0: chain id",
+        "published": 91342,
+        "recomputed_by_this_gate": 91342
+      },
+      {
+        "agree": true,
+        "check": "allow-token-0: maximum_spend_wei",
+        "published": "600328800000",
+        "recomputed_by_this_gate": "600328800000"
+      },
+      {
+        "agree": true,
+        "check": "allow-token-0: receipt_l2_cost_wei",
+        "published": "47813097200",
+        "recomputed_by_this_gate": "47813097200"
+      },
+      {
+        "agree": true,
+        "check": "allow-token-0 → allow-weth: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+        "published": "35148861999889635",
+        "recomputed_by_this_gate": "35148861999889635"
+      },
+      {
+        "agree": true,
+        "check": "allow-weth: recovered_sender",
+        "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+      },
+      {
+        "agree": true,
+        "check": "allow-weth: chain id",
+        "published": 91342,
+        "recomputed_by_this_gate": 91342
+      },
+      {
+        "agree": true,
+        "check": "allow-weth: maximum_spend_wei",
+        "published": "600328800000",
+        "recomputed_by_this_gate": "600328800000"
+      },
+      {
+        "agree": true,
+        "check": "allow-weth: receipt_l2_cost_wei",
+        "published": "47597038016",
+        "recomputed_by_this_gate": "47597038016"
+      },
+      {
+        "agree": true,
+        "check": "allow-weth → wrap-principal: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+        "published": "35148814402851500",
+        "recomputed_by_this_gate": "35148814402851500"
+      },
+      {
+        "agree": true,
+        "check": "wrap-principal: recovered_sender",
+        "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+      },
+      {
+        "agree": true,
+        "check": "wrap-principal: chain id",
+        "published": 91342,
+        "recomputed_by_this_gate": 91342
+      },
+      {
+        "agree": true,
+        "check": "wrap-principal: maximum_spend_wei",
+        "published": "100600328800000",
+        "recomputed_by_this_gate": "100600328800000"
+      },
+      {
+        "agree": true,
+        "check": "wrap-principal: receipt_l2_cost_wei",
+        "published": "27839625968",
+        "recomputed_by_this_gate": "27839625968"
+      },
+      {
+        "agree": true,
+        "check": "wrap-principal → approve-executor: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+        "published": "35048786563225413",
+        "recomputed_by_this_gate": "35048786563225413"
+      },
+      {
+        "agree": true,
+        "check": "approve-executor: recovered_sender",
+        "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+      },
+      {
+        "agree": true,
+        "check": "approve-executor: chain id",
+        "published": 91342,
+        "recomputed_by_this_gate": 91342
+      },
+      {
+        "agree": true,
+        "check": "approve-executor: maximum_spend_wei",
+        "published": "600328800000",
+        "recomputed_by_this_gate": "600328800000"
+      },
+      {
+        "agree": true,
+        "check": "approve-executor: receipt_l2_cost_wei",
+        "published": "46141639346",
+        "recomputed_by_this_gate": "46141639346"
+      },
+      {
+        "agree": true,
+        "check": "execute: the operator's native balance fell by exactly the receipt's L2 cost plus the L1 fee, and by nothing else",
+        "published": "229364829211",
+        "recomputed_by_this_gate": "229364829211"
+      },
+      {
+        "agree": true,
+        "check": "execute: total_fee equals l2_fee + l1_fee",
+        "published": "229364829211",
+        "recomputed_by_this_gate": "229364829211"
+      },
+      {
+        "agree": true,
+        "check": "execute: l2_fee equals gas_used × effective_gas_price",
+        "published": "229364828748",
+        "recomputed_by_this_gate": "229364828748"
+      },
+      {
+        "agree": true,
+        "check": "execute: the record's hex fees are the §31 row's decimal fees",
+        "published": "229364829211",
+        "recomputed_by_this_gate": "229364829211"
+      },
+      {
+        "agree": true,
+        "check": "execute: the record's hex L2 fee is the §31 row's",
+        "published": "229364828748",
+        "recomputed_by_this_gate": "229364828748"
+      },
+      {
+        "agree": true,
+        "check": "execute: the record's hex L1 fee is the §31 row's",
+        "published": "463",
+        "recomputed_by_this_gate": "463"
+      },
+      {
+        "agree": true,
+        "check": "failure: the reverted transaction's bill is the whole native balance movement, so the operator paid for the failed call and received nothing back",
+        "published": "56738542570",
+        "recomputed_by_this_gate": "56738542570"
+      },
+      {
+        "agree": true,
+        "check": "§31: the WETH the operator actually gained, read off the two wallet rows",
+        "published": "428136078126613",
+        "recomputed_by_this_gate": "428136078126613"
+      },
+      {
+        "agree": true,
+        "check": "§31: output_amount is the same delta the balance columns print",
+        "published": "428136078126613",
+        "recomputed_by_this_gate": "428136078126613"
+      },
+      {
+        "agree": true,
+        "check": "§31: the gross the route paid out is the net delta plus this plan's principal",
+        "published": "528136078126613",
+        "recomputed_by_this_gate": "528136078126613"
+      },
+      {
+        "agree": true,
+        "check": "§31: the route's published second-leg ask is that gross",
+        "published": "528136078126613",
+        "recomputed_by_this_gate": "528136078126613"
+      },
+      {
+        "agree": true,
+        "check": "§31: token0 (the middle asset) left the run where it started",
+        "published": "0",
+        "recomputed_by_this_gate": "0"
+      },
+      {
+        "agree": true,
+        "check": "§31: realized_profit is null, not zero — §34's two denominations do not add",
+        "published": null,
+        "recomputed_by_this_gate": "null because the route settles in WETH and the bill is paid in the native asset"
+      },
+      {
+        "agree": true,
+        "check": "§32: the gas limit that was signed is the limit the simulation completed at plus the declared margin, and nothing else",
+        "published": "620000",
+        "recomputed_by_this_gate": "620000"
+      },
+      {
+        "agree": true,
+        "check": "§32: the record carries the proved limit, not the signed one",
+        "published": "600000",
+        "recomputed_by_this_gate": "600000"
+      },
+      {
+        "agree": true,
+        "check": "§32: the record's own gas_limit field is that proved limit",
+        "published": "600000",
+        "recomputed_by_this_gate": "600000"
+      },
+      {
+        "agree": true,
+        "check": "§32: the gas the run used is the gas the receipt reports, in simulation and on chain alike — the §13 bound is satisfied twice over",
+        "published": "229302",
+        "recomputed_by_this_gate": "229302"
+      },
+      {
+        "agree": true,
+        "check": "§32: the receipt's gas used is the §31 row's",
+        "published": "229302",
+        "recomputed_by_this_gate": "229302"
+      },
+      {
+        "agree": true,
+        "check": "§32: the principal the simulation was given is the principal the chain moved",
+        "published": "100000000000000",
+        "recomputed_by_this_gate": "100000000000000"
+      },
+      {
+        "agree": true,
+        "check": "§32: and it is the principal the plan declares",
+        "published": "100000000000000",
+        "recomputed_by_this_gate": "100000000000000"
+      },
+      {
+        "agree": true,
+        "check": "§32: the delivered-versus-actual difference is zero",
+        "published": "0",
+        "recomputed_by_this_gate": "0"
+      },
+      {
+        "agree": true,
+        "check": "§32: the difference the §31 row would print is gross minus principal minus the net delta",
+        "published": "0",
+        "recomputed_by_this_gate": "0"
+      },
+      {
+        "agree": true,
+        "check": "§13: the bill the record estimated is the proved limit at the declared cap",
+        "published": "600328800000",
+        "recomputed_by_this_gate": "600328800000"
+      },
+      {
+        "agree": true,
+        "check": "§39: risk_decision_id is keccak(simulation_id ‖ plan_hash)",
+        "published": "0xe63908e7f896005a3f91ae2919173f0783e02eaadca5ab4b58541fc6ffb05646",
+        "recomputed_by_this_gate": "0xe63908e7f896005a3f91ae2919173f0783e02eaadca5ab4b58541fc6ffb05646"
+      },
+      {
+        "agree": true,
+        "check": "§30: the idempotency key's middle part is the simulation id",
+        "published": "0x9fae73afd75f1a135452e084677fd1c576eb6e1e7d54ea291e0dfd501713801d",
+        "recomputed_by_this_gate": "0x9fae73afd75f1a135452e084677fd1c576eb6e1e7d54ea291e0dfd501713801d"
+      },
+      {
+        "agree": true,
+        "check": "§30: and its first part is the opportunity id",
+        "published": "m10-giwa-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4-0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-100000000000000",
+        "recomputed_by_this_gate": "m10-giwa-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4-0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-100000000000000"
+      },
+      {
+        "agree": true,
+        "check": "the record's route id is the one the execution row published",
+        "published": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x4200000000000000000000000000000000000006",
+        "recomputed_by_this_gate": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x4200000000000000000000000000000000000006"
+      },
+      {
+        "agree": true,
+        "check": "the record's transaction hash is the §31 row's",
+        "published": "0x1105c89b06a8edc84995d614fe1e2b79344e2d36d48c62c00f533946f2f82771",
+        "recomputed_by_this_gate": "0x1105c89b06a8edc84995d614fe1e2b79344e2d36d48c62c00f533946f2f82771"
+      },
+      {
+        "agree": true,
+        "check": "the record's target is the deployed executor",
+        "published": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+        "recomputed_by_this_gate": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517"
+      },
+      {
+        "agree": true,
+        "check": "and the deployed executor is the one the run's own row names",
+        "published": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+        "recomputed_by_this_gate": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517"
+      },
+      {
+        "agree": true,
+        "check": "§34: an ERC-20 route is sent with zero value on the transaction",
+        "published": "0x0",
+        "recomputed_by_this_gate": "0x0"
+      },
+      {
+        "agree": true,
+        "check": "§8: this run was Active at the head it was sent into, judged by the plan's own freshness function over the plan's own bound",
+        "published": "Active",
+        "recomputed_by_this_gate": "Active"
+      },
+      {
+        "agree": true,
+        "check": "§8: the gap the file publishes is the two block numbers it publishes, subtracted",
+        "published": 10,
+        "recomputed_by_this_gate": 10
+      },
+      {
+        "agree": true,
+        "check": "§8: the block the route was priced at is the record's opportunity block",
+        "published": "0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39",
+        "recomputed_by_this_gate": "0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39"
+      },
+      {
+        "agree": true,
+        "check": "§8: and the plan's declared bound is the one the gate runs under",
+        "published": 20,
+        "recomputed_by_this_gate": 20
+      },
+      {
+        "agree": true,
+        "check": "§27: with the gas bill set aside, nothing but the operator's native balance moved across the reverted call — the gate's own reading of no_partial_state",
+        "published": true,
+        "recomputed_by_this_gate": true
+      },
+      {
+        "agree": true,
+        "check": "§27: and the reverted receipt emitted no log",
+        "published": 0,
+        "recomputed_by_this_gate": 0
+      },
+      {
+        "agree": true,
+        "check": "§58: the receipt status is the failure the file says it is",
+        "published": "reverted",
+        "recomputed_by_this_gate": "reverted"
+      },
+      {
+        "agree": true,
+        "check": "§27: the residue was read at the block the after-row names",
+        "published": 38023967,
+        "recomputed_by_this_gate": 38023967
+      },
+      {
+        "agree": true,
+        "check": "the calldata the reverted call sent is the calldata the attribution simulated",
+        "published": "0xdd52d22b778a2c67b722c458e814420d22310c8439b16bddcac316c46c67d192",
+        "recomputed_by_this_gate": "0xdd52d22b778a2c67b722c458e814420d22310c8439b16bddcac316c46c67d192"
+      },
+      {
+        "agree": true,
+        "check": "and it is the same length the attribution published",
+        "published": 580,
+        "recomputed_by_this_gate": 580
+      },
+      {
+        "agree": true,
+        "check": "§58: the floor that failed is the floor the plan published",
+        "published": "10000000000000000",
+        "recomputed_by_this_gate": "10000000000000000"
+      },
+      {
+        "agree": true,
+        "check": "the failure file's two spellings of the refusal agree",
+        "published": "FinalShortfall",
+        "recomputed_by_this_gate": "FinalShortfall"
+      },
+      {
+        "agree": true,
+        "check": "§49's D4: the classification the gate decoded from the revert bytes is the one the failure file names",
+        "published": "FinalShortfall",
+        "recomputed_by_this_gate": "FinalShortfall"
+      },
+      {
+        "agree": true,
+        "check": "the principal the preconditions planned is the principal the execute row prices",
+        "published": "100000000000000",
+        "recomputed_by_this_gate": "100000000000000"
+      },
+      {
+        "agree": true,
+        "check": "and it is the principal the ladder published",
+        "published": "100000000000000",
+        "recomputed_by_this_gate": "100000000000000"
+      },
+      {
+        "agree": true,
+        "check": "and the wrap step sent exactly that much native asset",
+        "published": "100000000000000",
+        "recomputed_by_this_gate": "100000000000000"
+      },
+      {
+        "agree": true,
+        "check": "the operator the ladder sent from is the operator the deployment recorded",
+        "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+      },
+      {
+        "agree": true,
+        "check": "and is the sender the lifecycle record carries",
+        "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+      },
+      {
+        "agree": true,
+        "check": "every transaction in this directory is a distinct transaction",
+        "published": 9,
+        "recomputed_by_this_gate": 9
+      }
+    ],
+    "audit_checks": {
+      "agreeing": 84,
+      "checks": 84,
+      "disagreeing": []
+    },
+    "files_recomputed_from": [
+      "real/giwa_execution.json",
+      "real/giwa_failure.json",
+      "real/giwa_ladder_steps.json",
+      "real/preconditions.json",
+      "contract/deployment.json"
+    ],
+    "freshness_8": {
+      "cases": [
+        {
+          "head": 38023955,
+          "verdict": "Active",
+          "why": "the head the transaction was sent into"
+        },
+        {
+          "head": 38023960,
+          "verdict": "Active",
+          "why": "the block that actually sealed the transaction — the bound is measured to the head at send time, and this row shows what the same function says at the receipt block"
+        },
+        {
+          "head": 38023976,
+          "verdict": "Stale",
+          "why": "one block past the declared bound"
+        },
+        {
+          "head": 38023944,
+          "verdict": "Stale",
+          "why": "a head behind the block the route was priced at"
+        }
+      ],
+      "declared_max_block_age": 20,
+      "judged_by": "evm_execution::PlanValidity::freshness_at, the plan's own §8 function, given the block numbers the file publishes",
+      "priced_at_block": 38023945,
+      "published_freshness": "Active",
+      "send_head_block": 38023955
+    },
+    "how_to_read_this": "every check row carries the published value and the value this gate recomputed from other published fields, and `agree` is the reader's shorthand for the two being equal. Nothing here re-runs REVM or a node: §56's ladder ran on chain, and this file checks that the rows describing it add up.",
+    "native_asset_ledger": {
+      "begins_at_the_preconditions_read": {
+        "agree": true,
+        "check": "§31: the ladder's first balance read is the preconditions' balance read",
+        "published": "35150697468677639",
+        "recomputed_by_this_gate": "35150697468677639"
+      },
+      "hands_off_to_the_execute_row": {
+        "agree": true,
+        "check": "§31: the last ladder step's balance, minus that step's own bill and value, is the balance the execute transaction was sent from",
+        "published": "35048740421585948",
+        "recomputed_by_this_gate": "35048740421585948"
+      },
+      "identity_of_a_row": "the label the harness gave the step plus the nonce the chain assigned it; rows are ordered by nonce, never by file order",
+      "rows": [
+        {
+          "balance_read_wei": "35150697468677639",
+          "checks": [
+            {
+              "agree": true,
+              "check": "deploy: recovered_sender",
+              "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+              "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+            },
+            {
+              "agree": true,
+              "check": "deploy: chain id",
+              "published": 91342,
+              "recomputed_by_this_gate": 91342
+            },
+            {
+              "agree": true,
+              "check": "deploy: maximum_spend_wei",
+              "published": "5002740000000",
+              "recomputed_by_this_gate": "5002740000000"
+            },
+            {
+              "agree": true,
+              "check": "deploy: receipt_l2_cost_wei",
+              "published": "1691963471000",
+              "recomputed_by_this_gate": "1691963471000"
+            }
+          ],
+          "gas_limit": 5000000,
+          "head_number": 38023916,
+          "identity": "the label the harness gave this step, which the operator wrote, plus the nonce the chain assigned it — neither is a file position",
+          "max_fee_per_gas_wei": "1000548",
+          "maximum_spend_wei": "5002740000000",
+          "nonce": 57,
+          "receipt_block_number": 38023919,
+          "receipt_effective_gas_price_wei": "1000274",
+          "receipt_gas_used": 1691500,
+          "receipt_l1_fee_wei": "6803",
+          "receipt_l2_cost_wei": "1691963471000",
+          "receipt_log_count": 1,
+          "receipt_status": "included",
+          "row": "deploy",
+          "submission_detail": "eth_sendRawTransaction returned 0x226c71f642a1febed9cab35af945486aca88d6ab47ec393f204979da40023eb7",
+          "submitted_to": null,
+          "transaction_hash": "0x226c71f642a1febed9cab35af945486aca88d6ab47ec393f204979da40023eb7",
+          "value_wei": "0"
+        },
+        {
+          "balance_read_wei": "35149005505199836",
+          "checks": [
+            {
+              "agree": true,
+              "check": "deploy → allow-pair-a: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+              "published": "35149005505199836",
+              "recomputed_by_this_gate": "35149005505199836"
+            },
+            {
+              "agree": true,
+              "check": "allow-pair-a: recovered_sender",
+              "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+              "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+            },
+            {
+              "agree": true,
+              "check": "allow-pair-a: chain id",
+              "published": 91342,
+              "recomputed_by_this_gate": 91342
+            },
+            {
+              "agree": true,
+              "check": "allow-pair-a: maximum_spend_wei",
+              "published": "600328800000",
+              "recomputed_by_this_gate": "600328800000"
+            },
+            {
+              "agree": true,
+              "check": "allow-pair-a: receipt_l2_cost_wei",
+              "published": "47846106242",
+              "recomputed_by_this_gate": "47846106242"
+            }
+          ],
+          "gas_limit": 600000,
+          "head_number": 38023920,
+          "identity": "the label the harness gave this step, which the operator wrote, plus the nonce the chain assigned it — neither is a file position",
+          "max_fee_per_gas_wei": "1000548",
+          "maximum_spend_wei": "600328800000",
+          "nonce": 58,
+          "receipt_block_number": 38023923,
+          "receipt_effective_gas_price_wei": "1000274",
+          "receipt_gas_used": 47833,
+          "receipt_l1_fee_wei": "199",
+          "receipt_l2_cost_wei": "47846106242",
+          "receipt_log_count": 1,
+          "receipt_status": "included",
+          "row": "allow-pair-a",
+          "submission_detail": "eth_sendRawTransaction returned 0x5cd6b4af195ce688da130584b8264a6fba17cf06510875a72c0badf55dbe4707",
+          "submitted_to": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "transaction_hash": "0x5cd6b4af195ce688da130584b8264a6fba17cf06510875a72c0badf55dbe4707",
+          "value_wei": "0"
+        },
+        {
+          "balance_read_wei": "35148957659093395",
+          "checks": [
+            {
+              "agree": true,
+              "check": "allow-pair-a → allow-pair-b: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+              "published": "35148957659093395",
+              "recomputed_by_this_gate": "35148957659093395"
+            },
+            {
+              "agree": true,
+              "check": "allow-pair-b: recovered_sender",
+              "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+              "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+            },
+            {
+              "agree": true,
+              "check": "allow-pair-b: chain id",
+              "published": 91342,
+              "recomputed_by_this_gate": 91342
+            },
+            {
+              "agree": true,
+              "check": "allow-pair-b: maximum_spend_wei",
+              "published": "600328800000",
+              "recomputed_by_this_gate": "600328800000"
+            },
+            {
+              "agree": true,
+              "check": "allow-pair-b: receipt_l2_cost_wei",
+              "published": "47846106242",
+              "recomputed_by_this_gate": "47846106242"
+            }
+          ],
+          "gas_limit": 600000,
+          "head_number": 38023924,
+          "identity": "the label the harness gave this step, which the operator wrote, plus the nonce the chain assigned it — neither is a file position",
+          "max_fee_per_gas_wei": "1000548",
+          "maximum_spend_wei": "600328800000",
+          "nonce": 59,
+          "receipt_block_number": 38023928,
+          "receipt_effective_gas_price_wei": "1000274",
+          "receipt_gas_used": 47833,
+          "receipt_l1_fee_wei": "199",
+          "receipt_l2_cost_wei": "47846106242",
+          "receipt_log_count": 1,
+          "receipt_status": "included",
+          "row": "allow-pair-b",
+          "submission_detail": "eth_sendRawTransaction returned 0x16c924deecaf9766c084bce8e57b40b4eb3a7b8057d9cd1d49df070ca60f6a7c",
+          "submitted_to": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "transaction_hash": "0x16c924deecaf9766c084bce8e57b40b4eb3a7b8057d9cd1d49df070ca60f6a7c",
+          "value_wei": "0"
+        },
+        {
+          "balance_read_wei": "35148909812986954",
+          "checks": [
+            {
+              "agree": true,
+              "check": "allow-pair-b → allow-token-0: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+              "published": "35148909812986954",
+              "recomputed_by_this_gate": "35148909812986954"
+            },
+            {
+              "agree": true,
+              "check": "allow-token-0: recovered_sender",
+              "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+              "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+            },
+            {
+              "agree": true,
+              "check": "allow-token-0: chain id",
+              "published": 91342,
+              "recomputed_by_this_gate": 91342
+            },
+            {
+              "agree": true,
+              "check": "allow-token-0: maximum_spend_wei",
+              "published": "600328800000",
+              "recomputed_by_this_gate": "600328800000"
+            },
+            {
+              "agree": true,
+              "check": "allow-token-0: receipt_l2_cost_wei",
+              "published": "47813097200",
+              "recomputed_by_this_gate": "47813097200"
+            }
+          ],
+          "gas_limit": 600000,
+          "head_number": 38023929,
+          "identity": "the label the harness gave this step, which the operator wrote, plus the nonce the chain assigned it — neither is a file position",
+          "max_fee_per_gas_wei": "1000548",
+          "maximum_spend_wei": "600328800000",
+          "nonce": 60,
+          "receipt_block_number": 38023933,
+          "receipt_effective_gas_price_wei": "1000274",
+          "receipt_gas_used": 47800,
+          "receipt_l1_fee_wei": "119",
+          "receipt_l2_cost_wei": "47813097200",
+          "receipt_log_count": 1,
+          "receipt_status": "included",
+          "row": "allow-token-0",
+          "submission_detail": "eth_sendRawTransaction returned 0xf664d77860633e1638f4d868a3ed2824e67f7371909edf5543a005fee2aa23a3",
+          "submitted_to": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "transaction_hash": "0xf664d77860633e1638f4d868a3ed2824e67f7371909edf5543a005fee2aa23a3",
+          "value_wei": "0"
+        },
+        {
+          "balance_read_wei": "35148861999889635",
+          "checks": [
+            {
+              "agree": true,
+              "check": "allow-token-0 → allow-weth: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+              "published": "35148861999889635",
+              "recomputed_by_this_gate": "35148861999889635"
+            },
+            {
+              "agree": true,
+              "check": "allow-weth: recovered_sender",
+              "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+              "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+            },
+            {
+              "agree": true,
+              "check": "allow-weth: chain id",
+              "published": 91342,
+              "recomputed_by_this_gate": 91342
+            },
+            {
+              "agree": true,
+              "check": "allow-weth: maximum_spend_wei",
+              "published": "600328800000",
+              "recomputed_by_this_gate": "600328800000"
+            },
+            {
+              "agree": true,
+              "check": "allow-weth: receipt_l2_cost_wei",
+              "published": "47597038016",
+              "recomputed_by_this_gate": "47597038016"
+            }
+          ],
+          "gas_limit": 600000,
+          "head_number": 38023933,
+          "identity": "the label the harness gave this step, which the operator wrote, plus the nonce the chain assigned it — neither is a file position",
+          "max_fee_per_gas_wei": "1000548",
+          "maximum_spend_wei": "600328800000",
+          "nonce": 61,
+          "receipt_block_number": 38023937,
+          "receipt_effective_gas_price_wei": "1000274",
+          "receipt_gas_used": 47584,
+          "receipt_l1_fee_wei": "119",
+          "receipt_l2_cost_wei": "47597038016",
+          "receipt_log_count": 1,
+          "receipt_status": "included",
+          "row": "allow-weth",
+          "submission_detail": "eth_sendRawTransaction returned 0xf2961dddc625b59854c22330af363a6f207239fbb5f840081e322049d5cbd000",
+          "submitted_to": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "transaction_hash": "0xf2961dddc625b59854c22330af363a6f207239fbb5f840081e322049d5cbd000",
+          "value_wei": "0"
+        },
+        {
+          "balance_read_wei": "35148814402851500",
+          "checks": [
+            {
+              "agree": true,
+              "check": "allow-weth → wrap-principal: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+              "published": "35148814402851500",
+              "recomputed_by_this_gate": "35148814402851500"
+            },
+            {
+              "agree": true,
+              "check": "wrap-principal: recovered_sender",
+              "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+              "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+            },
+            {
+              "agree": true,
+              "check": "wrap-principal: chain id",
+              "published": 91342,
+              "recomputed_by_this_gate": 91342
+            },
+            {
+              "agree": true,
+              "check": "wrap-principal: maximum_spend_wei",
+              "published": "100600328800000",
+              "recomputed_by_this_gate": "100600328800000"
+            },
+            {
+              "agree": true,
+              "check": "wrap-principal: receipt_l2_cost_wei",
+              "published": "27839625968",
+              "recomputed_by_this_gate": "27839625968"
+            }
+          ],
+          "gas_limit": 600000,
+          "head_number": 38023937,
+          "identity": "the label the harness gave this step, which the operator wrote, plus the nonce the chain assigned it — neither is a file position",
+          "max_fee_per_gas_wei": "1000548",
+          "maximum_spend_wei": "100600328800000",
+          "nonce": 62,
+          "receipt_block_number": 38023940,
+          "receipt_effective_gas_price_wei": "1000274",
+          "receipt_gas_used": 27832,
+          "receipt_l1_fee_wei": "119",
+          "receipt_l2_cost_wei": "27839625968",
+          "receipt_log_count": 1,
+          "receipt_status": "included",
+          "row": "wrap-principal",
+          "submission_detail": "eth_sendRawTransaction returned 0xd7f228d308be51c9d9d40e6adfa81ea8d89a9d40e8072249d1d18b1a397bd6e0",
+          "submitted_to": "0x4200000000000000000000000000000000000006",
+          "transaction_hash": "0xd7f228d308be51c9d9d40e6adfa81ea8d89a9d40e8072249d1d18b1a397bd6e0",
+          "value_wei": "100000000000000"
+        },
+        {
+          "balance_read_wei": "35048786563225413",
+          "checks": [
+            {
+              "agree": true,
+              "check": "wrap-principal → approve-executor: the operator's native balance read at each step's head differs by exactly the earlier step's gas bill plus the value it sent",
+              "published": "35048786563225413",
+              "recomputed_by_this_gate": "35048786563225413"
+            },
+            {
+              "agree": true,
+              "check": "approve-executor: recovered_sender",
+              "published": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+              "recomputed_by_this_gate": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+            },
+            {
+              "agree": true,
+              "check": "approve-executor: chain id",
+              "published": 91342,
+              "recomputed_by_this_gate": 91342
+            },
+            {
+              "agree": true,
+              "check": "approve-executor: maximum_spend_wei",
+              "published": "600328800000",
+              "recomputed_by_this_gate": "600328800000"
+            },
+            {
+              "agree": true,
+              "check": "approve-executor: receipt_l2_cost_wei",
+              "published": "46141639346",
+              "recomputed_by_this_gate": "46141639346"
+            }
+          ],
+          "gas_limit": 600000,
+          "head_number": 38023941,
+          "identity": "the label the harness gave this step, which the operator wrote, plus the nonce the chain assigned it — neither is a file position",
+          "max_fee_per_gas_wei": "1000548",
+          "maximum_spend_wei": "600328800000",
+          "nonce": 63,
+          "receipt_block_number": 38023945,
+          "receipt_effective_gas_price_wei": "1000274",
+          "receipt_gas_used": 46129,
+          "receipt_l1_fee_wei": "119",
+          "receipt_l2_cost_wei": "46141639346",
+          "receipt_log_count": 1,
+          "receipt_status": "included",
+          "row": "approve-executor",
+          "submission_detail": "eth_sendRawTransaction returned 0x8f89a2c5043d8c888f3fb5364000289c4b6e58698f6f570e5caa3d2a25e2addf",
+          "submitted_to": "0x4200000000000000000000000000000000000006",
+          "transaction_hash": "0x8f89a2c5043d8c888f3fb5364000289c4b6e58698f6f570e5caa3d2a25e2addf",
+          "value_wei": "0"
+        }
+      ],
+      "step_count": 7,
+      "the_execute_row_and_the_failure_row_are_one_sequence": {
+        "agree": false,
+        "check": "§57/§58: the failed call was sent from the balance the successful one left behind",
+        "published": null,
+        "recomputed_by_this_gate": true
+      }
+    },
+    "nonce_ladder": [
+      {
+        "exactly_one_later": true,
+        "from": "deploy",
+        "from_nonce": 57,
+        "to": "allow-pair-a",
+        "to_nonce": 58
+      },
+      {
+        "exactly_one_later": true,
+        "from": "allow-pair-a",
+        "from_nonce": 58,
+        "to": "allow-pair-b",
+        "to_nonce": 59
+      },
+      {
+        "exactly_one_later": true,
+        "from": "allow-pair-b",
+        "from_nonce": 59,
+        "to": "allow-token-0",
+        "to_nonce": 60
+      },
+      {
+        "exactly_one_later": true,
+        "from": "allow-token-0",
+        "from_nonce": 60,
+        "to": "allow-weth",
+        "to_nonce": 61
+      },
+      {
+        "exactly_one_later": true,
+        "from": "allow-weth",
+        "from_nonce": 61,
+        "to": "wrap-principal",
+        "to_nonce": 62
+      },
+      {
+        "exactly_one_later": true,
+        "from": "wrap-principal",
+        "from_nonce": 62,
+        "to": "approve-executor",
+        "to_nonce": 63
+      },
+      {
+        "exactly_one_later": true,
+        "from": "approve-executor",
+        "from_nonce": 63,
+        "to": "execute",
+        "to_nonce": 64
+      },
+      {
+        "exactly_one_later": true,
+        "from": "execute",
+        "from_nonce": 64,
+        "to": "failure",
+        "to_nonce": 65
+      }
+    ],
+    "real_failure_58": {
+      "expected_as_published": "tx included, receipt.status = 0, no partial state",
+      "no_partial_state_as_published": true,
+      "note": "the §27 claim is recomputed as a per-field comparison of the two wallet rows, with the native balance excluded because that is the one thing a reverted transaction legitimately spends.",
+      "residue_fields_recomputed": [
+        {
+          "after": "0",
+          "before": "0",
+          "field": "token0_executor_wei",
+          "unchanged": true
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "field": "token0_operator_wei",
+          "unchanged": true
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "field": "weth_allowance_to_executor_wei",
+          "unchanged": true
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "field": "weth_executor_wei",
+          "unchanged": true
+        },
+        {
+          "after": "1693741728651230",
+          "before": "1693741728651230",
+          "field": "weth_operator_wei",
+          "unchanged": true
+        }
+      ],
+      "step": {
+        "balance_wei": "35048511056756737",
+        "chain_id": 91342,
+        "detail": "eth_sendRawTransaction returned 0x95407d7ee1e440f700c5336e7fa60baf7e9b5bfbff40a97aeb60254e295596ec",
+        "fee_provenance": "eip1559 maxFeePerGas = baseFee(274) * 2 + tip(1000000) = 1000548, read at block 38023963",
+        "gas_limit": 600000,
+        "head_binding": "confirmed: block 38023963 is 0xa1e5aef462c39fb2c8bd0507355578b4b2a40520223938ab2c7e8227339441aa",
+        "head_number": 38023963,
+        "input_bytes": 580,
+        "input_hash": "0xdd52d22b778a2c67b722c458e814420d22310c8439b16bddcac316c46c67d192",
+        "label": "execute-floor-too-high",
+        "max_fee_per_gas_wei": "1000548",
+        "maximum_spend_wei": "600328800000",
+        "nonce": 65,
+        "receipt_block_hash": "0xafaa638fcaef8587b78b8c4edec8acd6d1968d051458ed2cb8ff7f4b67f5cef7",
+        "receipt_block_number": 38023967,
+        "receipt_contract_address": null,
+        "receipt_effective_gas_price_wei": "1000274",
+        "receipt_gas_used": 56723,
+        "receipt_l1_fee_wei": "468",
+        "receipt_l2_cost_wei": "56738542102",
+        "receipt_log_count": 0,
+        "receipt_status": "reverted",
+        "recovered_sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "submission": "submitted",
+        "to": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+        "transaction_hash": "0x95407d7ee1e440f700c5336e7fa60baf7e9b5bfbff40a97aeb60254e295596ec",
+        "tx_type": "eip1559",
+        "value_wei": "0"
+      },
+      "wallet_rows": [
+        {
+          "block_number": 38023963,
+          "native_wei": "35048511056756737",
+          "token0_executor_wei": "0",
+          "token0_operator_wei": "0",
+          "weth_allowance_to_executor_wei": "0",
+          "weth_executor_wei": "0",
+          "weth_operator_wei": "1693741728651230"
+        },
+        {
+          "block_number": 38023967,
+          "native_wei": "35048454318214167",
+          "token0_executor_wei": "0",
+          "token0_operator_wei": "0",
+          "weth_allowance_to_executor_wei": "0",
+          "weth_executor_wei": "0",
+          "weth_operator_wei": "1693741728651230"
+        }
+      ],
+      "what_this_is": "§58's real controlled failure: min_final_amount deliberately above anything this market can pay"
+    },
+    "reconciliation_32": {
+      "declared_margin": 20000,
+      "receipt_gas_used": 229302,
+      "record_gas_limit": 600000,
+      "signed_transaction_gas_limit": 620000,
+      "simulation_gas_used": 229302,
+      "simulation_proved_gas_limit": 600000,
+      "which_number_was_sent": "the limit the transaction was sent at is `signed_transaction_gas_limit`, the field taken off the bytes that were signed; `record_gas_limit` is §39's record field, which carries the measurement the intent handed the builder, and the two differ by exactly the declared margin"
+    },
+    "reconciliation_32_input": {
+      "chain_balance_input": "100000000000000",
+      "chain_balance_input_means": "the principal this plan instructed the contract to pull, which is the same constant the simulation was given — the read that credits it to the chain is the output leg's arithmetic: the operator's balance moved by the gross less this figure",
+      "simulation_amount_in": "100000000000000"
+    },
+    "reconciliation_32_output": {
+      "actual_gross_out_in_the_execute_block": "528136078126613",
+      "actual_weth_delta_in_the_execute_block": "428136078126613",
+      "actual_weth_delta_pinned_to_receipt": "428136078126613",
+      "cause_if_different": "state drift: the plan was priced at one canonical block and mined at a later one, and the contract's asks are exact, so a moved market reverts rather than fills worse — a nonzero difference here with status 1 is a read to explain, not a number to edit (§32)",
+      "difference": "0",
+      "difference_means": "REVM's gross delivered amount minus the gross the operator's WETH balance actually gained inside the execute block (that block's net delta plus this plan's principal). Both halves are gross WETH out of the route, which is why the net delta is not an operand here and why the pinned-to-receipt delta is printed as its own row: it is net of the principal and covers the blocks the transaction waited in. `external_movement_in_the_wait_window` is the check that the two windows agree.",
+      "external_movement_in_the_wait_window": "0",
+      "principal_transferred_in": "100000000000000",
+      "simulation_delivered_gross": "528136078126613"
+    },
+    "record_field_inventory": {
+      "fields_in_the_published_record": 46,
+      "filled": [
+        "built_at_ms",
+        "chain_id",
+        "created_at_ms",
+        "effective_gas_price",
+        "estimated_execution_cost_wei",
+        "execution_block",
+        "execution_block_hash",
+        "execution_id",
+        "gas_limit",
+        "gas_used",
+        "idempotency_key",
+        "included_at_ms",
+        "l1_fee",
+        "l2_fee",
+        "max_fee_per_gas",
+        "max_priority_fee_per_gas",
+        "nonce",
+        "opportunity_block",
+        "opportunity_block_hash",
+        "opportunity_id",
+        "risk_decision_id",
+        "route_id",
+        "route_transactions",
+        "sender",
+        "signed_at_ms",
+        "simulation_id",
+        "state_fingerprint",
+        "state_funding",
+        "status",
+        "submitted_at_ms",
+        "target",
+        "total_fee",
+        "transaction_hash",
+        "transaction_type",
+        "value_wei"
+      ],
+      "note": "§24's reuse is this list: the live run wrote an ExecutionRecord with the fields the existing lifecycle type declares, through the existing stage, and did not define a parallel record for M10. §58/§59 is the reason some of those fields are null rather than zero.",
+      "null": [
+        "blocked_reason",
+        "failure",
+        "gross_output",
+        "gross_profit",
+        "input_amount",
+        "input_asset",
+        "profit_status",
+        "profit_verified_at_ms",
+        "realized_profit",
+        "settled_at_ms",
+        "simulation_profit_wei"
+      ],
+      "null_because_the_denominations_do_not_add": 7
+    },
+    "s56_ladder": [
+      {
+        "published_fields": [
+          {
+            "field": "plan_hash",
+            "value": "0x00c9831d71a87cd9e9257e7ca9983705d02801ba5805eccab6e2ccd084377335"
+          },
+          {
+            "field": "calldata_hash",
+            "value": "0x9ca9b1d030a424b741113d13dd204ecd028afa711b95548857affe7ab25c26b9"
+          },
+          {
+            "field": "route_id",
+            "value": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x4200000000000000000000000000000000000006"
+          },
+          {
+            "field": "gas_policy",
+            "value": "§13: the limit this run's simulation completed at (600000) plus the declared margin (20000)"
+          }
+        ],
+        "rung": "ArbitrageExecutionPlan",
+        "where_it_ran": "real/giwa_execution.json's execution block"
+      },
+      {
+        "published_fields": [
+          {
+            "field": "sender",
+            "value": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c"
+          },
+          {
+            "field": "target",
+            "value": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517"
+          },
+          {
+            "field": "chain_id",
+            "value": "91342"
+          },
+          {
+            "field": "nonce",
+            "value": "64"
+          },
+          {
+            "field": "gas_limit",
+            "value": "600000"
+          },
+          {
+            "field": "value_wei",
+            "value": "0x0"
+          },
+          {
+            "field": "simulation_id",
+            "value": "0x9fae73afd75f1a135452e084677fd1c576eb6e1e7d54ea291e0dfd501713801d"
+          },
+          {
+            "field": "risk_decision_id",
+            "value": "0xe63908e7f896005a3f91ae2919173f0783e02eaadca5ab4b58541fc6ffb05646"
+          },
+          {
+            "field": "opportunity_id",
+            "value": "m10-giwa-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4-0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-100000000000000"
+          }
+        ],
+        "rung": "TransactionIntent",
+        "where_it_ran": "crates/execution/src/arbitrage.rs, walked in code by crates/execution/tests/executor_lifecycle.rs"
+      },
+      {
+        "published_fields": [
+          {
+            "field": "transaction_type",
+            "value": "dynamic_fee"
+          },
+          {
+            "field": "max_fee_per_gas",
+            "value": "0xf4464"
+          },
+          {
+            "field": "max_priority_fee_per_gas",
+            "value": "0xf4240"
+          },
+          {
+            "field": "estimated_execution_cost_wei",
+            "value": "0x8bc6628700"
+          }
+        ],
+        "rung": "Build",
+        "where_it_ran": "real/giwa_execution.json's lifecycle record"
+      },
+      {
+        "published_fields": [
+          {
+            "field": "transaction_hash",
+            "value": "0x1105c89b06a8edc84995d614fe1e2b79344e2d36d48c62c00f533946f2f82771"
+          }
+        ],
+        "rung": "Sign",
+        "where_it_ran": "the live harness signed once; its only trace here is the hash the node accepted"
+      },
+      {
+        "published_fields": [
+          {
+            "field": "lane",
+            "value": "released"
+          },
+          {
+            "field": "execution_id",
+            "value": "exec-dd7be7ac30274855"
+          },
+          {
+            "field": "detail",
+            "value": "included in block 38023960 (gas_used=229302, effective_gas_price=1000274, l1_fee=Some(463))"
+          }
+        ],
+        "rung": "Submit",
+        "where_it_ran": "real/giwa_execution.json's execution.report"
+      },
+      {
+        "published_fields": [
+          {
+            "field": "status",
+            "value": "included"
+          },
+          {
+            "field": "gas_used",
+            "value": "229302"
+          },
+          {
+            "field": "effective_gas_price",
+            "value": "0xf4352"
+          },
+          {
+            "field": "execution_block",
+            "value": "38023960"
+          },
+          {
+            "field": "execution_block_hash",
+            "value": "0xd2610226748162250a84f413e81d0532a09c6cc0385c707f6639cc1968586192"
+          },
+          {
+            "field": "l1_fee",
+            "value": "0x1cf"
+          },
+          {
+            "field": "l2_fee",
+            "value": "0x3567358a4c"
+          },
+          {
+            "field": "total_fee",
+            "value": "0x3567358c1b"
+          }
+        ],
+        "rung": "Receipt",
+        "where_it_ran": "real/giwa_execution.json's lifecycle record"
+      },
+      {
+        "published_fields": [
+          {
+            "field": "route_transactions",
+            "value": "1"
+          },
+          {
+            "field": "state_fingerprint",
+            "value": "pinned-block-38023945-0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39"
+          },
+          {
+            "field": "idempotency_key",
+            "value": "m10-giwa-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4-0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-100000000000000|0x9fae73afd75f1a135452e084677fd1c576eb6e1e7d54ea291e0dfd501713801d|0xee974c314d8a6aee1075fc7d5c159acee423ed1240edae37eda4199b35a29f21"
+          },
+          {
+            "field": "blocked_reason",
+            "value": null
+          },
+          {
+            "field": "failure",
+            "value": null
+          }
+        ],
+        "rung": "ExecutionRecord",
+        "where_it_ran": "real/giwa_execution.json's lifecycle record"
+      }
+    ],
+    "s56_note": "the chain ExecutablePlan → TransactionIntent → Build → Sign → Submit → Receipt → ExecutionRecord is walked with the real execution types by crates/execution/tests/executor_lifecycle.rs; the table above is the same seven rungs spelled out of the live run's own record, so the ladder is evidenced both in code and on chain.",
+    "what_this_does_not_prove": "that the run was profitable. §59's verdict is NOT_PROVEN, the profit cells above are null because the route settles in WETH and the bill is paid in the native asset, and an included receipt is not a realised gain (§52).",
+    "what_this_proves": "the rows the live run published are internally consistent: the gas bill, the balance movements, the ids, the freshness bound and the residue claim all recompute out of each other, and the two real transactions sit in one nonce sequence with no gap."
+  },
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1",
+  "directory": "execution",
+  "evidence_root": "data/evidence/m10",
+  "file": "data/evidence/m10/execution/lifecycle.json",
+  "milestone": "M10",
+  "published_by": {
+    "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test executor_evidence -- --test-threads=1",
+    "the_rest_of_this_directory": "crates/execution/tests/executor_evidence.rs"
+  },
+  "schema": "m10-evidence-v1"
+}

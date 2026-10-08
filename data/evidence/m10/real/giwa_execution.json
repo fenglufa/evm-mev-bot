@@ -1,0 +1,509 @@
+{
+  "chain_id": 91342,
+  "endpoint_source": "GIWA_RPC_URL at run time",
+  "evidence_row_31": {
+    "after_balance": "1693741728651230",
+    "balance_delta": "428136078126613",
+    "before_balance": "1265605650524617",
+    "block_number": 38023960,
+    "chain_id": 91342,
+    "effective_gas_price": "1000274",
+    "executor_address": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+    "gas_used": 229302,
+    "input_amount": "100000000000000",
+    "input_asset": "0x4200000000000000000000000000000000000006",
+    "l1_fee": "463",
+    "l2_fee": "229364828748",
+    "nonce": 64,
+    "note": "§31: realized_profit is the record's own field, derived from the receipt and the balance reads, and is null when the two halves cannot be added in one denomination (§12/§14: the route settles in WETH and the bill is paid in the chain's native asset). The WETH balance delta and the fee columns are printed beside it so a reader can do the arithmetic and see why it is not summed here. output_amount is that delta — the operator's net WETH movement across the window from the pinned block to the receipt block — so it is not the gross the route paid out; §32's output leg prints the gross, the principal leg, and the one-block window beside it.",
+    "operator_address": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+    "output_amount": "428136078126613",
+    "output_asset": "0x4200000000000000000000000000000000000006",
+    "realized_profit": null,
+    "realized_profit_status": null,
+    "receipt_status": "included",
+    "token0_balance_delta": "0",
+    "total_fee": "229364829211",
+    "tx_hash": "0x1105c89b06a8edc84995d614fe1e2b79344e2d36d48c62c00f533946f2f82771"
+  },
+  "execution": {
+    "calldata_hash": "0x9ca9b1d030a424b741113d13dd204ecd028afa711b95548857affe7ab25c26b9",
+    "calldata_len": 580,
+    "freshness": "Active",
+    "gas_policy": "§13: the limit this run's simulation completed at (600000) plus the declared margin (20000)",
+    "plan_hash": "0x00c9831d71a87cd9e9257e7ca9983705d02801ba5805eccab6e2ccd084377335",
+    "report": {
+      "detail": "included in block 38023960 (gas_used=229302, effective_gas_price=1000274, l1_fee=Some(463))",
+      "execution_id": "exec-dd7be7ac30274855",
+      "lane": "released",
+      "lifecycle": {
+        "blocked_reason": null,
+        "built_at_ms": 2224,
+        "chain_id": 91342,
+        "created_at_ms": 2224,
+        "effective_gas_price": "0xf4352",
+        "estimated_execution_cost_wei": "0x8bc6628700",
+        "execution_block": 38023960,
+        "execution_block_hash": "0xd2610226748162250a84f413e81d0532a09c6cc0385c707f6639cc1968586192",
+        "execution_id": "exec-dd7be7ac30274855",
+        "failure": null,
+        "gas_limit": 600000,
+        "gas_used": 229302,
+        "gross_output": null,
+        "gross_profit": null,
+        "idempotency_key": "m10-giwa-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4-0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-100000000000000|0x9fae73afd75f1a135452e084677fd1c576eb6e1e7d54ea291e0dfd501713801d|0xee974c314d8a6aee1075fc7d5c159acee423ed1240edae37eda4199b35a29f21",
+        "included_at_ms": 5771,
+        "input_amount": null,
+        "input_asset": null,
+        "l1_fee": "0x1cf",
+        "l2_fee": "0x3567358a4c",
+        "max_fee_per_gas": "0xf4464",
+        "max_priority_fee_per_gas": "0xf4240",
+        "nonce": 64,
+        "opportunity_block": 38023945,
+        "opportunity_block_hash": "0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39",
+        "opportunity_id": "m10-giwa-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4-0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-100000000000000",
+        "profit_status": null,
+        "profit_verified_at_ms": null,
+        "realized_profit": null,
+        "risk_decision_id": "0xe63908e7f896005a3f91ae2919173f0783e02eaadca5ab4b58541fc6ffb05646",
+        "route_id": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x4200000000000000000000000000000000000006",
+        "route_transactions": 1,
+        "sender": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+        "settled_at_ms": null,
+        "signed_at_ms": 2897,
+        "simulation_id": "0x9fae73afd75f1a135452e084677fd1c576eb6e1e7d54ea291e0dfd501713801d",
+        "simulation_profit_wei": null,
+        "state_fingerprint": "pinned-block-38023945-0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39",
+        "state_funding": "real chain state: §57's controlled funding: this run wrapped 100000000000000 wei of the chain's native asset into WETH at 38023940 and approved the executor for the same amount. The pools were not touched.",
+        "status": "included",
+        "submitted_at_ms": 3066,
+        "target": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+        "total_fee": "0x3567358c1b",
+        "transaction_hash": "0x1105c89b06a8edc84995d614fe1e2b79344e2d36d48c62c00f533946f2f82771",
+        "transaction_type": "dynamic_fee",
+        "value_wei": "0x0"
+      },
+      "mode": "submit",
+      "opportunity_id": "m10-giwa-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4-0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-100000000000000",
+      "receipt_answer": "included",
+      "risk_decision_id": "0xe63908e7f896005a3f91ae2919173f0783e02eaadca5ab4b58541fc6ffb05646",
+      "sent": true,
+      "simulation_id": "0x9fae73afd75f1a135452e084677fd1c576eb6e1e7d54ea291e0dfd501713801d",
+      "sources": [
+        "fee: eip1559 maxFeePerGas = baseFee(274) * 2 + tip(1000000) = 1000548, read at block 38023945 (max_fee_per_gas=1000548, tx type eip1559)",
+        "nonce: eth_getTransactionCount at #38023956 for the confirmed view and \"pending\" for the pending view, both read behind one eth_getBlockByNumber(\"latest\")",
+        "native balance of 0xD450630c1c55b1c7DF1EBF7EeaEe1FfFb45E520c read at pinned block 38023945 (not \"latest\"), against this build's maximum spend of gas_limit × max_fee + value — the L2 half of the bill: an OP-stack endpoint also charges an L1 data fee on top of it, which this ceiling does not carry"
+      ],
+      "status": "included",
+      "stopped_with": null,
+      "transaction_hash": "0x1105c89b06a8edc84995d614fe1e2b79344e2d36d48c62c00f533946f2f82771"
+    },
+    "route_id": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x4200000000000000000000000000000000000006",
+    "signed_transaction_gas_limit": 620000
+  },
+  "executor": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+  "freshness_window": {
+    "blocks_between_priced_and_send": 10,
+    "declared_max_block_age": 20,
+    "note": "§8 as the ladder declares and measures it: the bound is the plan's own field, the gap is the two block numbers this run read off the node, and the freshness verdict below is the lifecycle's, not this file's.",
+    "priced_at_block": 38023945,
+    "priced_at_hash": "0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39",
+    "send_head_block": 38023955,
+    "sim_read_concurrency": 8
+  },
+  "l1_fee_wei": "463",
+  "market": "REAL_MARKET",
+  "operator": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+  "preflight_reads": [
+    {
+      "block_timestamp_last": "1791367640",
+      "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "read_at_block": 38023914,
+      "reserve0": "833769110338570972349",
+      "reserve1": "1200000000000000",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "block_timestamp_last": "1791367640",
+      "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "read_at_block": 38023914,
+      "reserve0": "2166230889661429027651",
+      "reserve1": "18469587832303757",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    }
+  ],
+  "principal_wei": "100000000000000",
+  "reconciliation_32": {
+    "gas": {
+      "declared_margin": 20000,
+      "receipt_gas_used": 229302,
+      "record_gas_limit": 600000,
+      "signed_transaction_gas_limit": 620000,
+      "simulation_gas_used": 229302,
+      "simulation_proved_gas_limit": 600000,
+      "which_number_was_sent": "the limit the transaction was sent at is `signed_transaction_gas_limit`, the field taken off the bytes that were signed; `record_gas_limit` is §39's record field, which carries the measurement the intent handed the builder, and the two differ by exactly the declared margin"
+    },
+    "input": {
+      "chain_balance_input": "100000000000000",
+      "chain_balance_input_means": "the principal this plan instructed the contract to pull, which is the same constant the simulation was given — the read that credits it to the chain is the output leg's arithmetic: the operator's balance moved by the gross less this figure",
+      "simulation_amount_in": "100000000000000"
+    },
+    "output": {
+      "actual_gross_out_in_the_execute_block": "528136078126613",
+      "actual_weth_delta_in_the_execute_block": "428136078126613",
+      "actual_weth_delta_pinned_to_receipt": "428136078126613",
+      "cause_if_different": "state drift: the plan was priced at one canonical block and mined at a later one, and the contract's asks are exact, so a moved market reverts rather than fills worse — a nonzero difference here with status 1 is a read to explain, not a number to edit (§32)",
+      "difference": "0",
+      "difference_means": "REVM's gross delivered amount minus the gross the operator's WETH balance actually gained inside the execute block (that block's net delta plus this plan's principal). Both halves are gross WETH out of the route, which is why the net delta is not an operand here and why the pinned-to-receipt delta is printed as its own row: it is net of the principal and covers the blocks the transaction waited in. `external_movement_in_the_wait_window` is the check that the two windows agree.",
+      "external_movement_in_the_wait_window": "0",
+      "principal_transferred_in": "100000000000000",
+      "simulation_delivered_gross": "528136078126613"
+    },
+    "profit": {
+      "actual_gross_out_in_the_execute_block": "528136078126613",
+      "actual_weth_gain_net_of_principal": "428136078126613",
+      "fee_bill_native_wei": "229364829211",
+      "simulation_gross_delivered": "528136078126613",
+      "verdict": "NOT_PROVEN",
+      "why": "the route's gain and the bill are not one asset: the gain is WETH, the fee is the chain's native asset (§12/§14), and this run prices one in the other by no oracle — so the WETH gain is reported as measured and the profit verdict stays unproven rather than becoming a sum of two denominations. §59 keeps this verdict apart from the two above it: a real transaction, included, with a measured balance movement, is not by itself a proven profitable arbitrage."
+    },
+    "route": {
+      "executed_calldata_hash": "0x9ca9b1d030a424b741113d13dd204ecd028afa711b95548857affe7ab25c26b9",
+      "explanation": "the plan's calldata is the bytes REVM ran (§23/§37), so a difference here would mean the lifecycle rebuilt the route rather than sent it",
+      "identical_by_construction": true,
+      "simulation_calldata_hash": "0x9ca9b1d030a424b741113d13dd204ecd028afa711b95548857affe7ab25c26b9"
+    },
+    "status": {
+      "receipt": "included",
+      "simulation": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 38023945 on rpc:chain-91342: returned 528136078126613, 229302 gas of 600000 allowed, market moved: true"
+    }
+  },
+  "reserves_at_pinned_block": [
+    {
+      "block_timestamp_last": "1791367640",
+      "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "read_at_block": 38023945,
+      "reserve0": "833769110338570972349",
+      "reserve1": "1200000000000000",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    },
+    {
+      "block_timestamp_last": "1791367640",
+      "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "read_at_block": 38023945,
+      "reserve0": "2166230889661429027651",
+      "reserve1": "18469587832303757",
+      "token0": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "token1": "0x4200000000000000000000000000000000000006"
+    }
+  ],
+  "route": {
+    "ask_leg1": "63958436793687409358",
+    "ask_leg2": "528136078126613",
+    "buy_pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+    "sell_pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+  },
+  "simulation": {
+    "floor_too_high": {
+      "balances": [
+        {
+          "after": "1265605650524617",
+          "before": "1265605650524617",
+          "changed": false,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "token": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "after": "1265605650524617",
+          "before": "1265605650524617",
+          "changed": false,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        }
+      ],
+      "block": 38023945,
+      "block_hash": "0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39",
+      "calldata_hash": "0xdd52d22b778a2c67b722c458e814420d22310c8439b16bddcac316c46c67d192",
+      "calldata_len": 580,
+      "charge": "Priced { gas_used: 283771, effective_gas_price: 1000274, base_fee_per_gas: Some(274), wei: 283848753254, pricing: Eip1559 { priority_fee_per_gas: 1000000, provenance: \"the tip this session's fee reading quoted from the node (1000000 wei/gas); the base fee comes from the pinned header, not from here\" } }",
+      "contract_error": "FinalShortfall",
+      "delivered": null,
+      "describe": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 38023945 on rpc:chain-91342: reverted with FinalShortfall (revert data 0xec5122fa0000000000000000000000000000000000000000000000000001e05643546e15000000000000000000000000000000000000000000000000002386f26fc10000), 283771 gas of 600000 allowed, market moved: false",
+      "gas_limit": 600000,
+      "gas_used": 283771,
+      "label": "floor_too_high",
+      "min_final_amount": "10000000000000000",
+      "reserves": [
+        {
+          "after": [
+            "833769110338570972349",
+            "1200000000000000"
+          ],
+          "before": [
+            "833769110338570972349",
+            "1200000000000000"
+          ],
+          "changed": false,
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+        },
+        {
+          "after": [
+            "2166230889661429027651",
+            "18469587832303757"
+          ],
+          "before": [
+            "2166230889661429027651",
+            "18469587832303757"
+          ],
+          "changed": false,
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+        }
+      ],
+      "revert_kind": "FinalShortfall",
+      "status": "Reverted(RevertData { raw: 0xec5122fa0000000000000000000000000000000000000000000000000001e05643546e15000000000000000000000000000000000000000000000000002386f26fc10000, message: None })",
+      "succeeded": false
+    },
+    "open_floor": {
+      "balances": [
+        {
+          "after": "1693741728651230",
+          "before": "1265605650524617",
+          "changed": true,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "token": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "after": "1693741728651230",
+          "before": "1265605650524617",
+          "changed": true,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        }
+      ],
+      "block": 38023945,
+      "block_hash": "0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39",
+      "calldata_hash": "0x9ca9b1d030a424b741113d13dd204ecd028afa711b95548857affe7ab25c26b9",
+      "calldata_len": 580,
+      "charge": "Priced { gas_used: 229302, effective_gas_price: 1000274, base_fee_per_gas: Some(274), wei: 229364828748, pricing: Eip1559 { priority_fee_per_gas: 1000000, provenance: \"the tip this session's fee reading quoted from the node (1000000 wei/gas); the base fee comes from the pinned header, not from here\" } }",
+      "contract_error": null,
+      "delivered": "528136078126613",
+      "describe": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 38023945 on rpc:chain-91342: returned 528136078126613, 229302 gas of 600000 allowed, market moved: true",
+      "gas_limit": 600000,
+      "gas_used": 229302,
+      "label": "open_floor",
+      "min_final_amount": "1",
+      "reserves": [
+        {
+          "after": [
+            "769810673544883562991",
+            "1300000000000000"
+          ],
+          "before": [
+            "833769110338570972349",
+            "1200000000000000"
+          ],
+          "changed": true,
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+        },
+        {
+          "after": [
+            "2230189326455116437009",
+            "17941451754177144"
+          ],
+          "before": [
+            "2166230889661429027651",
+            "18469587832303757"
+          ],
+          "changed": true,
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+        }
+      ],
+      "revert_kind": null,
+      "status": "Success",
+      "succeeded": true
+    },
+    "profit_floor": {
+      "balances": [
+        {
+          "after": "1693741728651230",
+          "before": "1265605650524617",
+          "changed": true,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "token": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "after": "1693741728651230",
+          "before": "1265605650524617",
+          "changed": true,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x4200000000000000000000000000000000000006"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0x1fd5512eb6d2c56d5d1fface550013bad9f78517",
+          "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "after": "0",
+          "before": "0",
+          "changed": false,
+          "holder": "0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c",
+          "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        }
+      ],
+      "block": 38023945,
+      "block_hash": "0xd636b0145d224dfa0fa198e9c52ed452fc1ebd4c33bd916eed93cf684c6b2c39",
+      "calldata_hash": "0xc5fa0672c6f0dabb05f0118377fccf76272fd243f050ece9d508e5d91438db16",
+      "calldata_len": 580,
+      "charge": "Priced { gas_used: 229350, effective_gas_price: 1000274, base_fee_per_gas: Some(274), wei: 229412841900, pricing: Eip1559 { priority_fee_per_gas: 1000000, provenance: \"the tip this session's fee reading quoted from the node (1000000 wei/gas); the base fee comes from the pinned header, not from here\" } }",
+      "contract_error": null,
+      "delivered": "528136078126613",
+      "describe": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 38023945 on rpc:chain-91342: returned 528136078126613, 229350 gas of 600000 allowed, market moved: true",
+      "gas_limit": 600000,
+      "gas_used": 229350,
+      "label": "profit_floor",
+      "min_final_amount": "100000000000001",
+      "reserves": [
+        {
+          "after": [
+            "769810673544883562991",
+            "1300000000000000"
+          ],
+          "before": [
+            "833769110338570972349",
+            "1200000000000000"
+          ],
+          "changed": true,
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+        },
+        {
+          "after": [
+            "2230189326455116437009",
+            "17941451754177144"
+          ],
+          "before": [
+            "2166230889661429027651",
+            "18469587832303757"
+          ],
+          "changed": true,
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+        }
+      ],
+      "revert_kind": null,
+      "status": "Success",
+      "succeeded": true
+    }
+  },
+  "verdicts": {
+    "execute_receipt_bound_to_a_block": true,
+    "execute_transaction_sent": true,
+    "executor_deployed_and_configured": true,
+    "note": "§52: receipt.status = 1 alone proves nothing about profit; §59 keeps the two verdicts apart. The measured deltas are above, and the unmeasured ones are null rather than zero.",
+    "real_profitable_arbitrage": "NOT_PROVEN"
+  },
+  "wallet_after": {
+    "block_number": 38023960,
+    "native_wei": "35048511056756737",
+    "token0_executor_wei": "0",
+    "token0_operator_wei": "0",
+    "weth_allowance_to_executor_wei": "0",
+    "weth_executor_wei": "0",
+    "weth_operator_wei": "1693741728651230"
+  },
+  "wallet_at_block_before_execute": {
+    "block_number": 38023959,
+    "native_wei": "35048740421585948",
+    "token0_executor_wei": "0",
+    "token0_operator_wei": "0",
+    "weth_allowance_to_executor_wei": "100000000000000",
+    "weth_executor_wei": "0",
+    "weth_operator_wei": "1265605650524617"
+  },
+  "wallet_before": {
+    "block_number": 38023945,
+    "native_wei": "35048740421585948",
+    "token0_executor_wei": "0",
+    "token0_operator_wei": "0",
+    "weth_allowance_to_executor_wei": "100000000000000",
+    "weth_executor_wei": "0",
+    "weth_operator_wei": "1265605650524617"
+  },
+  "wallet_before_note": "the operator held 1165605650524617 wei of WETH before this run's wrap and 1265605650524617 wei after it; the surplus is an earlier ladder run's residue, untouched by this one. The principal this run prices and sends is 100000000000000 wei, and every delta below is read against this row.",
+  "what_this_is": "§57's controlled ladder on the live GIWA testnet: a real execute transaction sent through the existing execution lifecycle"
+}
