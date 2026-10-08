@@ -26,6 +26,14 @@ pub enum ExecutionError {
     #[error("stale opportunity: {0}")]
     StaleOpportunity(String),
 
+    /// §40's M10 class: the plan itself was refused before anything was built. Distinct from
+    /// [`ExecutionError::InvalidIntent`] because the thing rejected is not an encoding
+    /// question about an intent — it is a decided route that disagrees with the runtime it was
+    /// handed (chain, executor address, route continuity, floors), or with the contract's own
+    /// guards. Nothing was built, so nothing is in flight.
+    #[error("plan rejected: {0}")]
+    PlanRejected(String),
+
     /// §33: the real on-chain account cannot cover `gas_limit * max_fee + value` (or a
     /// token balance the step spends). Measured, never assumed.
     #[error("insufficient balance: {0}")]

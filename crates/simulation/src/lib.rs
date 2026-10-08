@@ -44,6 +44,7 @@
 pub mod acquisition;
 pub mod engine;
 pub mod error;
+pub mod executor;
 pub mod gas;
 pub mod plan;
 pub mod request;
@@ -56,6 +57,7 @@ pub use acquisition::{
 };
 pub use engine::{dump_provider, rpc_provider, DumpSimulator, ProviderDb, RpcSimulator, Simulator};
 pub use error::{Result, SimulationError};
+pub use executor::{BalanceRow, ExecutorOutcome, ExecutorRun, ReserveRow, ReserveSnapshot, Watch};
 pub use gas::{GasBudget, GasCharge, GasPricing};
 pub use plan::{
     AmountSource, Binding, ExecutionPlan, Funding, Measurement, Measurements, PairSides, PlanStep,

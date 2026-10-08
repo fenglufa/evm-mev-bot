@@ -34,10 +34,12 @@
 //! intent and lifecycle modules are chain-agnostic and would compile against any
 //! EIP-1559 chain.
 
+pub mod arbitrage;
 pub mod block_context;
 pub mod builder;
 pub mod chain_read;
 pub mod cost;
+pub mod deploy;
 pub mod error;
 pub mod evidence;
 pub mod fee;
@@ -58,6 +60,11 @@ pub mod stage;
 pub mod submitter;
 pub mod tx;
 
+pub use arbitrage::{
+    AmountDerivation, ArbitrageExecutionPlan, ClassFacts, ExecutablePlan, ExecutionBinding,
+    ExecutionClass, PlanLeg, PlanRejection, PlanRejections, PlanValidity, ProfitPolicy,
+    SimulationContext, SimulationOutcome,
+};
 pub use block_context::{
     BlockContextScope, BlockIdentity, ContextOutcome, ContextRefusal, ProducerOutcome,
     VerifiedBlockContext,
@@ -65,12 +72,16 @@ pub use block_context::{
 pub use builder::{Build, BuildPolicy, GasPolicy, RoundTrip, TransactionBuilder};
 pub use chain_read::{read_binding, ChainReader};
 pub use cost::{EstimatedCost, ExecutionCostEvidence, L1FeeSource, SequenceCost};
+pub use deploy::{
+    constructor_arguments, create_address, creation_input, ChainHead, DeployPolicy, Deployer,
+    Deployment, Step, MAX_INITCODE_BYTES,
+};
 pub use error::{ExecutionError, Result};
 pub use evidence::{SignedTransactionEvidence, SubmissionEvidence};
 pub use fee::{FeePolicy, FeeReading, FeeSource, FeeSourceKind};
 pub use gate::{
     BalanceEvidence, BlockBinding, Freshness, GateAttempt, GateCheck, GateFacts, GateFailure,
-    GateOutcome, NonceEvidence, PreSubmitGate,
+    GateOutcome, NonceEvidence, PlanBinding, PreSubmitGate,
 };
 pub use giwa::{
     estimate_l1_fee, parse_receipt, pool_state_row, pre_signing_envelope, read_pool,

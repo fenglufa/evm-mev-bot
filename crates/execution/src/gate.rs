@@ -41,6 +41,12 @@ pub enum GateCheck {
     /// an eighth arbitrage condition — it is the leg that stands in for the three an
     /// arbitrage answers, and it exists only for [`GateAttempt::Validation`].
     Labelled,
+    /// §36/§7: M10's plan leg, standing in for `risk_accepted` on
+    /// [`GateAttempt::Executor`]. The contract cannot see either binding (a chain id is not an
+    /// opcode argument and a deployed address is not a guard), so this is the only place in the
+    /// ladder where "this plan is about *this* deployment" is re-checked against facts the gate
+    /// was handed rather than against the caller's memory.
+    PlanValid,
 }
 
 impl GateCheck {
@@ -54,6 +60,7 @@ impl GateCheck {
             Self::BalanceSufficient => "balance_sufficient",
             Self::NonceValid => "nonce_valid",
             Self::Labelled => "labelled",
+            Self::PlanValid => "plan_valid",
         }
     }
 }
@@ -121,8 +128,43 @@ pub enum NonceEvidence {
     Unverified(String),
 }
 
-/// Which of §35's two submission paths an attempt belongs to, and the three facts §32
-/// asks about it.
+/// §7/§36: whether the plan this attempt carries is about *this* deployment.
+///
+/// The other legs ask about reads (a balance, a nonce, a block hash). This one asks about a
+/// decided object: a plan names a chain id and an executor address, and neither of those is an
+/// opcode argument on chain — the contract cannot refuse to run because the caller is on the
+/// wrong network. So the check exists only here, and it has to be re-derived from the plan and
+/// the binding the caller hands over rather than taken from whatever the caller remembered.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum PlanBinding {
+    /// The plan validated against this runtime. Both identities are kept so the evidence row can
+    /// tie the refusal-prone words (`route`, `plan`) to bytes (§39).
+    Valid { plan_hash: B256, route_id: String },
+    /// The plan disagrees with the runtime, or with the contract's own guards, with every
+    /// rejection reported in the plan's words.
+    Rejected { reason: String },
+    /// No plan was validated. Unread means blocked, exactly as the other three read-shaped legs
+    /// treat absence.
+    Unverified(String),
+}
+
+impl PlanBinding {
+    pub fn describe(&self) -> String {
+        match self {
+            Self::Valid {
+                plan_hash,
+                route_id,
+            } => {
+                format!("plan {plan_hash:#x} on {route_id} validated against this runtime")
+            }
+            Self::Rejected { reason } => format!("the plan was rejected: {reason}"),
+            Self::Unverified(why) => format!("no plan was validated: {why}"),
+        }
+    }
+}
+
+/// Which of §35's submission paths an attempt belongs to, and the three facts §32 asks about
+/// it.
 ///
 /// This is a choice of *shape* rather than three more booleans, because §32's first
 /// three conditions have no answer at all for a validation transaction: there is no
@@ -142,6 +184,20 @@ pub enum GateAttempt {
         /// The opportunity has not gone stale (§31, carried in from M5's lifecycle).
         freshness: Freshness,
     },
+    /// M10's atomic executor transaction, which §36 gives a different answer to the same
+    /// question: no risk layer judged this run, so `risk_accepted` is replaced by
+    /// [`GateCheck::PlanValid`] and [`Freshness`] is read off the plan's own validity window
+    /// rather than M5's lifecycle (§8 forbids inventing a second freshness rule; it does not
+    /// forbid reusing this one). The four chain legs are unchanged.
+    Executor {
+        /// The plan validated against the runtime it is about to be handed to (§7, §36).
+        plan: PlanBinding,
+        /// REVM ran the whole `EOA → Executor → Pair → Pair → EOA` sequence and it completed
+        /// (§25). A plan whose simulation reverted is refused *here*, not on chain.
+        simulation_success: bool,
+        /// The state the plan was simulated against is still recent enough to act on (§8).
+        freshness: Freshness,
+    },
     /// §35's controlled validation transaction, which is not an arbitrage and says so.
     /// The four chain legs are still checked in full; the three opportunity legs are
     /// replaced by this one requirement — the transaction carries the label §35 and §42
@@ -150,6 +206,26 @@ pub enum GateAttempt {
 }
 
 impl GateAttempt {
+    /// §31's staleness leg, asked of whichever subject carries it: M5's tracked opportunity, or
+    /// M10's plan validity window. Shared because the two subjects must not get two rules — §8
+    /// says the existing gate decides fresh / stale / reject.
+    fn freshness_failure(freshness: &Freshness, subject: &str) -> Option<GateFailure> {
+        match freshness {
+            Freshness::Active => None,
+            Freshness::Stale { reason } => Some(GateFailure {
+                check: GateCheck::OpportunityFresh,
+                reason: format!("the {subject} is stale: {reason}"),
+            }),
+            Freshness::Unknown => Some(GateFailure {
+                check: GateCheck::OpportunityFresh,
+                reason: format!(
+                    "the lifecycle state of the {subject} was never read; §31 forbids forcing a \
+                     send on an unchecked {subject}"
+                ),
+            }),
+        }
+    }
+
     /// The three opportunity legs, in §32's order, as failures where they do not hold.
     fn opportunity_failures(&self) -> Vec<GateFailure> {
         let mut failures = Vec::new();
@@ -173,17 +249,32 @@ impl GateAttempt {
                         reason: "the risk decision about this run is not Accept".to_string(),
                     });
                 }
-                match freshness {
-                    Freshness::Active => {}
-                    Freshness::Stale { reason } => failures.push(GateFailure {
-                        check: GateCheck::OpportunityFresh,
-                        reason: format!("the opportunity is stale: {reason}"),
-                    }),
-                    Freshness::Unknown => failures.push(GateFailure {
-                        check: GateCheck::OpportunityFresh,
-                        reason: "the lifecycle state of the opportunity was never read; §31 \
-                                forbids forcing a send on an unchecked opportunity"
+                failures.extend(Self::freshness_failure(freshness, "opportunity"));
+            }
+            Self::Executor {
+                plan,
+                simulation_success,
+                freshness,
+            } => {
+                if !simulation_success {
+                    failures.push(GateFailure {
+                        check: GateCheck::SimulationSucceeded,
+                        reason: "REVM never saw this route complete; §25's replay of \
+                                 EOA → Executor → Pair → Pair → EOA is what stands between a \
+                                 plan and a broadcast"
                             .to_string(),
+                    });
+                }
+                failures.extend(Self::freshness_failure(freshness, "plan"));
+                match plan {
+                    PlanBinding::Valid { .. } => {}
+                    PlanBinding::Rejected { reason } => failures.push(GateFailure {
+                        check: GateCheck::PlanValid,
+                        reason: reason.clone(),
+                    }),
+                    PlanBinding::Unverified(why) => failures.push(GateFailure {
+                        check: GateCheck::PlanValid,
+                        reason: format!("the plan was never validated against this runtime: {why}"),
                     }),
                 }
             }
@@ -204,13 +295,29 @@ impl GateAttempt {
 
     /// Whether this attempt is an arbitrage — the question §53's evidence line answers
     /// with the word `arbitrage` or the words `validation`.
+    ///
+    /// M10's executor transaction is deliberately *not* an arbitrage here: it is an atomic
+    /// execution primitive, and §69 forbids the two words meaning the same thing. The one place
+    /// the distinction is load-bearing is the lifecycle's `RiskApproved` rung, which only an
+    /// arbitrage that a risk layer actually judged may claim.
     pub fn is_arbitrage(&self) -> bool {
         matches!(self, Self::Arbitrage { .. })
+    }
+
+    /// Whether this attempt came out of a simulation at all — the question the gas policy and
+    /// the `Simulated` rung ask. REVM runs the executor route before it is ever signed (§25), so
+    /// an executor attempt answers yes without having been judged by risk.
+    pub fn has_simulation(&self) -> bool {
+        matches!(self, Self::Arbitrage { .. } | Self::Executor { .. })
     }
 
     pub fn describe(&self) -> String {
         match self {
             Self::Arbitrage { .. } => "arbitrage: §32's seven legs".to_string(),
+            Self::Executor { plan, .. } => format!(
+                "executor: §32's four chain legs plus the plan leg ({})",
+                plan.describe()
+            ),
             Self::Validation { label } => {
                 format!("validation transaction ({label}): §32's four chain legs")
             }
@@ -278,6 +385,7 @@ impl GateOutcome {
             }
             GateCheck::NonceValid => ExecutionError::NonceUnavailable(failure.reason.clone()),
             GateCheck::Labelled => ExecutionError::InvalidIntent(failure.reason.clone()),
+            GateCheck::PlanValid => ExecutionError::PlanRejected(failure.reason.clone()),
         })
     }
 
@@ -584,5 +692,80 @@ mod tests {
             .attempt
             .describe()
             .starts_with("validation"));
+    }
+
+    /// M10's third path. §36 says the plan leg replaces the risk leg for an executor
+    /// transaction, and §8 says the freshness leg is answered by *this* gate rather than a new
+    /// rule — so the two facts under test are that the plan leg can block on its own, and that
+    /// `risk_accepted` is never silently assumed for a path that has no risk layer.
+    #[test]
+    fn an_executor_attempt_is_answered_by_the_plan_leg_and_never_by_the_risk_leg() {
+        let attempt = GateAttempt::Executor {
+            plan: PlanBinding::Valid {
+                plan_hash: B256::left_padding_from(&[7]),
+                route_id: "m10-91342-pool>pool-tok>tok>tok".to_string(),
+            },
+            simulation_success: true,
+            freshness: Freshness::Active,
+        };
+        assert!(attempt.has_simulation(), "REVM ran the route (§25)");
+        assert!(
+            !attempt.is_arbitrage(),
+            "§69: an atomic execution primitive is not an arbitrage, and the lifecycle rung \
+             this predicate gates is the risk one"
+        );
+        let mut one = facts();
+        one.attempt = attempt.clone();
+        assert_eq!(PreSubmitGate::evaluate(&one), GateOutcome::Passed);
+
+        // A plan that disagrees with the runtime blocks on its own leg, in §40's taxonomy.
+        one.attempt = GateAttempt::Executor {
+            plan: PlanBinding::Rejected {
+                reason: "§7: the plan is for chain 1, this runtime is 91342".to_string(),
+            },
+            simulation_success: true,
+            freshness: Freshness::Active,
+        };
+        let outcome = PreSubmitGate::evaluate(&one);
+        let GateOutcome::Blocked { failures } = &outcome else {
+            panic!("a plan bound to another chain cannot pass the gate");
+        };
+        assert_eq!(failures.len(), 1, "{outcome:?}");
+        assert_eq!(failures[0].check, GateCheck::PlanValid);
+        assert!(matches!(
+            outcome.error(),
+            Some(ExecutionError::PlanRejected(_))
+        ));
+
+        // Never validated is never a pass, and a stale plan is stale in the gate's own words.
+        one.attempt = GateAttempt::Executor {
+            plan: PlanBinding::Unverified("the caller kept a plan hash, not a plan".to_string()),
+            simulation_success: false,
+            freshness: Freshness::Stale {
+                reason: "4 blocks have passed since 37984319".to_string(),
+            },
+        };
+        let checks = match PreSubmitGate::evaluate(&one) {
+            GateOutcome::Blocked { failures } => {
+                failures.iter().map(|f| f.check.name()).collect::<Vec<_>>()
+            }
+            GateOutcome::Passed => panic!("three unanswered legs cannot pass"),
+        };
+        assert_eq!(
+            checks,
+            ["simulation_succeeded", "opportunity_fresh", "plan_valid"]
+        );
+        assert!(
+            one.attempt.describe().contains("executor:"),
+            "{}",
+            one.attempt.describe()
+        );
+
+        // The risk leg stays an arbitrage-only question, and the two other paths differ on
+        // whether a simulation exists behind them at all.
+        assert!(facts().attempt.has_simulation());
+        assert!(!validation_facts("M6 execution validation transaction")
+            .attempt
+            .has_simulation());
     }
 }

@@ -199,6 +199,11 @@ pub struct ExecutionRecord {
     pub opportunity_id: String,
     pub simulation_id: B256,
     pub risk_decision_id: B256,
+    /// §38's execution-layer route identity, attached by the stage only for M10's executor
+    /// path. It is a *correlation* id, not a replacement for anything upstream: M9.3's candidate
+    /// identity and M3's opportunity identity stay where they are defined, and a record from
+    /// any other path honestly says `None` rather than borrowing a word it did not earn.
+    pub route_id: Option<String>,
 
     pub chain_id: u64,
     pub opportunity_block: u64,
@@ -296,6 +301,7 @@ impl ExecutionRecord {
             opportunity_id: intent.ids.opportunity_id.clone(),
             simulation_id: intent.ids.simulation_id,
             risk_decision_id: intent.ids.risk_decision_id,
+            route_id: None,
             chain_id: intent.chain_id,
             opportunity_block: intent.block_number.0,
             opportunity_block_hash: intent.block_hash,
@@ -375,6 +381,13 @@ impl ExecutionRecord {
     /// binding is only possible if the record holds the local hash rather than a node's.
     pub fn attach_transaction_hash(&mut self, hash: B256) {
         self.transaction_hash = Some(hash);
+    }
+
+    /// Attach §38's route identity. Determined by the plan's pools and token transitions alone,
+    /// so two runs of the same route name the same string while their execution ids, nonces and
+    /// hashes all differ — which is the join a reader of the evidence actually wants.
+    pub fn attach_route_id(&mut self, route_id: &str) {
+        self.route_id = Some(route_id.to_string());
     }
 
     /// Fold a receipt into the record after the tracker has bound it (§26/§27).
@@ -621,6 +634,17 @@ impl Ledger {
         at_ms: u64,
     ) -> Result<ExecutionStatus> {
         self.record_mut(execution_id)?.advance(to, at_ms)
+    }
+
+    /// Record §38's execution-layer route identity on the ledger's own copy.
+    ///
+    /// Split from [`Ledger::attach_transaction_hash`] rather than passed in with it because the
+    /// two facts arrive at different rungs: the route is known the moment a plan is decided, the
+    /// hash only after bytes are signed.
+    pub fn attach_route_id(&mut self, execution_id: &str, route_id: &str) -> Result<()> {
+        let record = self.record_mut(execution_id)?;
+        record.attach_route_id(route_id);
+        Ok(())
     }
 
     /// Record the local hash on the ledger's own copy of the record.

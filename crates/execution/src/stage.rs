@@ -31,13 +31,15 @@ use evm_core::BlockNumber;
 use evm_metrics::{Clock, Metrics};
 use evm_simulation::SimulationResult;
 
+use crate::arbitrage::{ExecutablePlan, ExecutionBinding};
 use crate::builder::{BuildPolicy, GasPolicy, TransactionBuilder};
 use crate::chain_read::{read_binding, ChainReader};
 use crate::error::{ExecutionError, Result};
 use crate::evidence::{SignedTransactionEvidence, SubmissionEvidence};
 use crate::fee::{FeePolicy, FeeSource};
 use crate::gate::{
-    BalanceEvidence, Freshness, GateAttempt, GateFacts, GateOutcome, NonceEvidence, PreSubmitGate,
+    BalanceEvidence, Freshness, GateAttempt, GateFacts, GateOutcome, NonceEvidence, PlanBinding,
+    PreSubmitGate,
 };
 use crate::giwa::GiwaSequencerDirect;
 use crate::intent::{SenderFunding, TransactionIntent};
@@ -133,6 +135,26 @@ pub struct StageReport {
     pub sent: bool,
     /// Why the run stopped where it did, in the words of the check that stopped it.
     pub detail: String,
+    /// The same stop as a typed fact, not only as prose.
+    ///
+    /// §40's six classes are decided from `sent`, the receipt and *which check* refused, so a
+    /// caller outside this file that wants to say `SubmissionFailed` rather than `None` has to
+    /// be handed the error itself. `detail` cannot carry that: the sentence a submission refusal
+    /// produces and the sentence a plan refusal produces are both strings, and collapsing them
+    /// into one word is exactly what §40 forbids. `None` means no check refused — the ladder ran
+    /// out of rungs, or the run stopped at a boundary that is not a failure (§20's mode, §26's
+    /// budget).
+    pub stopped_with: Option<ExecutionError>,
+    /// What the receipt question finally answered, as the tracker classified it — the fact §40's
+    /// last three classes are decided from.
+    ///
+    /// This is a field rather than something a caller reads off `reached` because the two come
+    /// apart twice: a run that reached `Submitted` and then ran out of receipt budget has a
+    /// `Timeout` answer and no failure, and a run whose receipt could not be bound to a canonical
+    /// block has an answer the tracker calls `NotFound` while §25 keeps it a refusal about our
+    /// reading, not about the chain. The latter is deliberately left `None` here: §40's six do not
+    /// name it, and `ExecutionClass::decide` would then say `None` rather than invent a class.
+    pub receipt_answer: Option<ReceiptStatus>,
     pub lane: LaneRelease,
     /// Where each number came from (§51: an unread fact is a fact about the run).
     pub sources: Vec<String>,
@@ -153,6 +175,8 @@ impl StageReport {
             transaction_hash: None,
             sent: false,
             detail: String::new(),
+            stopped_with: None,
+            receipt_answer: None,
             lane: LaneRelease::Released,
             sources: Vec::new(),
             signed: None,
@@ -174,12 +198,23 @@ impl StageReport {
             transaction_hash: None,
             sent: false,
             detail,
+            stopped_with: None,
+            receipt_answer: None,
             lane: LaneRelease::Released,
             sources: Vec::new(),
             signed: None,
             submission: None,
             record: None,
         }
+    }
+
+    /// [`StageReport::refused`] plus the §40 class the refusal belongs to. M10's two early
+    /// refusals (a plan for another chain, a route REVM saw revert) have no record, no id and
+    /// no bytes, so without this the typed reason would exist only inside the sentence.
+    fn refused_by_plan(opportunity_id: &str, detail: String) -> Self {
+        let mut report = Self::refused(opportunity_id, detail);
+        report.stopped_with = Some(ExecutionError::PlanRejected(report.detail.clone()));
+        report
     }
 
     /// §37's log line: the four ids, the hash once one exists, and nothing else about the
@@ -231,6 +266,11 @@ impl StageReport {
             },
             "sources": self.sources,
             "detail": self.detail,
+            "stopped_with": self
+                .stopped_with
+                .as_ref()
+                .map(|error| error.to_string()),
+            "receipt_answer": self.receipt_answer.map(|status| status.name().to_string()),
             "lifecycle": self
                 .record
                 .as_ref()
@@ -432,6 +472,70 @@ impl ExecutionStage {
         self.drive(intent, attempt, None, metrics).await
     }
 
+    /// §24/§56's consumption point for M10: a decided plan in, the one ladder out. Nothing here
+    /// is a new stage — the intent, the builder, the signer, the submitter, the receipt tracker
+    /// and the record are the same types `on_risk_decision` runs, which is what §24's ban on an
+    /// `ArbitrageSigner` / `ArbitrageSubmitter` / `ArbitrageReceipt` asks for.
+    ///
+    /// Both refusals happen before `drive`, so before any read is paid for, because both are
+    /// answers about the *plan* rather than about the moment of sending: §7's chain binding is
+    /// settled by the configuration, and §25's simulation outcome is already in the plan. Naming
+    /// a route that REVM saw revert as a build failure would collapse §40's classes into each
+    /// other, which is the one thing this entry point exists to keep apart.
+    pub async fn on_arbitrage_plan(
+        &mut self,
+        plan: &ExecutablePlan,
+        binding: &ExecutionBinding,
+        freshness: Freshness,
+        metrics: &mut Metrics,
+    ) -> StageReport {
+        let correlation_id = plan.plan().simulation.correlation_id.clone();
+        if binding.chain_id != self.configured_chain_id {
+            metrics.bump("execution_refused_before_claim");
+            return StageReport::refused_by_plan(
+                &correlation_id,
+                format!(
+                    "§7: this stage is configured for chain {} and the plan was handed a \
+                     binding for chain {}; the endpoint's own answer is not allowed to be the \
+                     tie-breaker, so nothing was built",
+                    self.configured_chain_id, binding.chain_id
+                ),
+            );
+        }
+        let outcome = &plan.plan().simulation.outcome;
+        if !outcome.succeeded() {
+            metrics.bump("execution_refused_before_claim");
+            let revert = match outcome.revert() {
+                Some(revert) => format!(", classified {revert}"),
+                None => String::new(),
+            };
+            return StageReport::refused_by_plan(
+                &correlation_id,
+                format!(
+                    "§25/§40: REVM's answer for this route was {}{revert}, so nothing was \
+                     built, priced, claimed or sent",
+                    outcome.name()
+                ),
+            );
+        }
+        let intent = plan.to_intent();
+        let attempt = GateAttempt::Executor {
+            plan: plan.binding_evidence(binding),
+            // Re-derived from the plan rather than written `true`, so the gate's leg is the
+            // plan's own fact and not this function's conclusion.
+            simulation_success: outcome.succeeded(),
+            freshness,
+        };
+        // §13's gas policy adds its margin to *this* number, so which of the two figures a
+        // simulation reports decides the limit that goes on the wire. It is the limit the run
+        // completed at, not the gas it consumed: under EIP-150 a nested frame receives at most
+        // 63/64 of what its caller has left, so a transaction limited to the burn can starve the
+        // deepest call — which is what §57's first two real attempts did at a 229,302 burn and a
+        // 249,302 limit, while the identical call succeeds with headroom.
+        self.drive(intent, attempt, outcome.proved_gas_limit(), metrics)
+            .await
+    }
+
     async fn drive(
         &mut self,
         mut intent: TransactionIntent,
@@ -441,12 +545,13 @@ impl ExecutionStage {
     ) -> StageReport {
         metrics.bump("execution_attempt");
 
-        // §13's rule is exactly this split: an arbitrage's gas limit must be traceable to
-        // a measurement, and a transaction that was never simulated has no measurement to
-        // be traceable to, so it carries the configured limit instead. Choosing it here
-        // rather than accepting it from a caller is what stops a configured limit reaching
-        // an arbitrage intent.
-        let gas = if attempt.is_arbitrage() {
+        // §13's rule is exactly this split: a simulated transaction's gas limit must be
+        // traceable to a measurement, and a transaction that was never simulated has no
+        // measurement to be traceable to, so it carries the configured limit instead. Choosing
+        // it here rather than accepting it from a caller is what stops a configured limit
+        // reaching an arbitrage intent. M10's executor transaction belongs on the measured side
+        // — REVM ran the whole route before these bytes existed (§25).
+        let gas = if attempt.has_simulation() {
             self.setup.build.gas
         } else {
             GasPolicy::Configured {
@@ -563,14 +668,28 @@ impl ExecutionStage {
         run: &mut Run,
         metrics: &mut Metrics,
     ) -> std::result::Result<(), Halt> {
-        // The two rungs an arbitrage intent already proves. A validation attempt has no
-        // such history, and inventing `Simulated`/`RiskApproved` for it would be §36's
-        // fake M7 written into the lifecycle.
-        if run.attempt.is_arbitrage() {
+        // The rungs the attempt already proves, and the two predicates split deliberately:
+        // `Simulated` is a fact about whether an EVM ran (§25 covers M10's executor route too),
+        // `RiskApproved` is a fact about whether a risk layer judged the run — and only an
+        // arbitrage can claim that. Inventing either one for an attempt that does not have it
+        // would be §36's fake M7 written into the lifecycle.
+        if run.attempt.has_simulation() {
             self.ledger
                 .advance(id, ExecutionStatus::Simulated, self.clock.now_ms())?;
+        }
+        if run.attempt.is_arbitrage() {
             self.ledger
                 .advance(id, ExecutionStatus::RiskApproved, self.clock.now_ms())?;
+        }
+
+        // §38's identity travels with the plan leg that validated, so a record from any other
+        // path keeps its `route_id: None` rather than borrowing a word it did not earn.
+        if let GateAttempt::Executor {
+            plan: PlanBinding::Valid { route_id, .. },
+            ..
+        } = &run.attempt
+        {
+            self.ledger.attach_route_id(id, route_id)?;
         }
 
         let mut policy = self.setup.build.clone();
@@ -766,6 +885,13 @@ impl ExecutionStage {
                 },
             )
             .await;
+        // §40's receipt-side classes are decided from the tracker's own answer, not from the rung
+        // the record ended at. `Unbound` is left unrecorded on purpose: §25 keeps it a refusal
+        // about our reading of a receipt, and a class for it would be §40's collapse.
+        run.report.receipt_answer = match &tracked {
+            TrackedReceipt::Unbound { .. } => None,
+            _ => Some(tracked.status()),
+        };
         match tracked {
             TrackedReceipt::Included(receipt) | TrackedReceipt::Reverted(receipt) => {
                 let outcome_was = receipt.outcome();
@@ -834,6 +960,7 @@ impl ExecutionStage {
     fn stop(&mut self, run: &mut Run, error: &ExecutionError, metrics: &mut Metrics) {
         metrics.bump("execution_stopped");
         let at = self.clock.now_ms();
+        run.report.stopped_with = Some(error.clone());
         if run.report.detail.is_empty() {
             run.report.detail = error.to_string();
         } else {

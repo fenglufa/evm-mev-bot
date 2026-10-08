@@ -209,7 +209,7 @@ impl DatabaseAsync for ProviderDb {
 }
 
 /// The concrete EVM this crate runs: mainnet handler stack, async database.
-type SimEvm = revm::MainnetEvm<MainnetContext<AsyncDb<ProviderDb>>>;
+pub(crate) type SimEvm = revm::MainnetEvm<MainnetContext<AsyncDb<ProviderDb>>>;
 
 /// What one `transact_one_async` call can fail with: the EVM's own error, wrapped
 /// in whatever can go wrong with the fiber that ran it.
@@ -219,7 +219,7 @@ type FiberError = AsyncError<EVMError<AsyncError<DbError>, InvalidTransaction>>;
 // Errors: from REVM's vocabulary back to this crate's (§34)
 // ---------------------------------------------------------------------------
 
-fn unsupported(reason: String) -> SimulationError {
+pub(crate) fn unsupported(reason: String) -> SimulationError {
     SimulationError::UnsupportedTransaction(reason)
 }
 
@@ -228,7 +228,7 @@ fn unsupported(reason: String) -> SimulationError {
 /// `Missing` and `Unavailable` stay distinguishable all the way up: a pruned block
 /// and a node that did not answer are different facts about the world, and a report
 /// that merged them would tell the next reader nothing about which one to go fix.
-fn state_error(error: ProviderError) -> SimulationError {
+pub(crate) fn state_error(error: ProviderError) -> SimulationError {
     match error {
         ProviderError::Missing { provider, what } => {
             SimulationError::MissingState(format!("{provider}: {what}"))
@@ -265,7 +265,7 @@ fn evm_failure(error: EVMError<AsyncError<DbError>, InvalidTransaction>) -> Simu
     }
 }
 
-fn fiber_failure(error: FiberError) -> SimulationError {
+pub(crate) fn fiber_failure(error: FiberError) -> SimulationError {
     match error {
         AsyncError::Inner(evm) => evm_failure(evm),
         fiber => SimulationError::ProviderError(format!(
@@ -274,7 +274,7 @@ fn fiber_failure(error: FiberError) -> SimulationError {
     }
 }
 
-fn protocol_error(error: evm_protocol::ProtocolError) -> SimulationError {
+pub(crate) fn protocol_error(error: evm_protocol::ProtocolError) -> SimulationError {
     SimulationError::ProviderError(format!(
         "a call this crate encoded came back in a shape it does not define: {error}"
     ))
@@ -400,7 +400,7 @@ pub const INTERPRETER_PHASE_PREFIXES: [&str; 2] = [VIEWS_PHASE_PREFIX, EXECUTE_P
 pub const SLOT_AUDIT_PHASE: &str = "state_changes: slots";
 
 /// One interpreter phase name: the prefix, one space, and what is being read.
-fn interpreter_phase(prefix: &str, detail: &str) -> String {
+pub(crate) fn interpreter_phase(prefix: &str, detail: &str) -> String {
     format!("{prefix} {detail}")
 }
 
@@ -591,7 +591,12 @@ pub async fn run(
     plan_summary.evm_rules = request.transaction.rules.model().to_string();
 
     // ---- 4. execute ---------------------------------------------------------
-    let mut evm = build(&provider, &header, request, price, false, abstained)?;
+    let mut evm = build(
+        &provider,
+        &header,
+        request,
+        FeePosture::transaction(price, abstained),
+    )?;
     let template = tx_env(sender, request.transaction.gas_limit_per_step, price)?;
     let mut measurements = Measurements::default();
     let mut budget = GasBudget::new(request.transaction.gas_limit_per_step, plan.len());
@@ -751,7 +756,7 @@ pub async fn run(
 /// be allowed to spend, and [`GasPricing::Unresolved`] says it does not — so this is
 /// the one place that turns the abstention into the `0` the EVM's fee fields carry,
 /// and it is a stated absence rather than a discovered price.
-fn fee_ceiling(pricing: &GasPricing, header: &BlockContext) -> Result<u128> {
+pub(crate) fn fee_ceiling(pricing: &GasPricing, header: &BlockContext) -> Result<u128> {
     match pricing {
         GasPricing::Unresolved { .. } => Ok(0),
         declared => declared
@@ -824,38 +829,91 @@ fn block_env(header: &BlockContext, rules: EvmRules) -> Result<BlockEnv> {
 /// the market, and the run's cost stays `Unpriced` and its net profit
 /// `NotComputable` (§31) whatever the base-fee field says — while its balance and
 /// nonce checks stay on, because those are facts about a sender §58 does endow.
-fn build(
+/// What a run may be charged, as one fact rather than three arguments that have to be
+/// chosen together.
+///
+/// The three travel as a unit: a view has no price and no nonce to spend, and a run whose
+/// pricing abstained has a price of `0` because there is nothing to declare (§31). Passing
+/// them separately is how a caller ends up with a `price` and a `view` that describe
+/// different runs.
+pub(crate) struct FeePosture {
+    /// The ceiling [`fee_ceiling`] resolved from the declared model, or `0` when there is
+    /// no model to resolve.
+    pub price: u128,
+    /// The preflight read of §29: no fee, no nonce check, the block's whole gas.
+    pub view: bool,
+    /// §29's other half — pricing unresolved, so the run must not be refused for the fee
+    /// it does not have.
+    pub abstained: bool,
+}
+
+impl FeePosture {
+    /// The read-only posture: nothing to charge, and no nonce that has not been spent.
+    pub(crate) const fn view() -> Self {
+        Self {
+            price: 0,
+            view: true,
+            abstained: true,
+        }
+    }
+
+    /// The transaction posture: the price the run declares, and whether pricing stood down
+    /// behind it.
+    pub(crate) const fn transaction(price: u128, abstained: bool) -> Self {
+        Self {
+            price,
+            view: false,
+            abstained,
+        }
+    }
+}
+
+pub(crate) fn build_evm(
     provider: &Arc<dyn StateProvider>,
     header: &BlockContext,
-    request: &SimulationRequest,
-    price: u128,
-    view: bool,
-    abstained: bool,
+    rules: EvmRules,
+    caller: Address,
+    gas_limit_per_step: u64,
+    posture: FeePosture,
 ) -> Result<SimEvm> {
-    let mut block = block_env(header, request.transaction.rules)?;
-    if view || abstained {
+    let mut block = block_env(header, rules)?;
+    if posture.view || posture.abstained {
         block.basefee = 0;
     }
-    let mut cfg =
-        CfgEnv::new().with_spec_and_mainnet_gas_params(request.transaction.rules.spec_id());
-    cfg.disable_nonce_check = view;
+    let mut cfg = CfgEnv::new().with_spec_and_mainnet_gas_params(rules.spec_id());
+    cfg.disable_nonce_check = posture.view;
     let db = AsyncDb::new(ProviderDb::new(Arc::clone(provider)));
-    let gas_limit = if view {
+    let gas_limit = if posture.view {
         header.gas_limit
     } else {
-        request.transaction.gas_limit_per_step
+        gas_limit_per_step
     };
-    let tx = tx_env(
-        request.sender_address(),
-        gas_limit,
-        if view { 0 } else { price },
-    )?;
+    let fee = if posture.view { 0 } else { posture.price };
+    let tx = tx_env(caller, gas_limit, fee)?;
     Ok(revm::Context::mainnet()
         .with_cfg(cfg)
         .with_block(block)
         .with_tx(tx)
         .with_db(db)
         .build_mainnet())
+}
+
+/// [`build_evm`] with one request's fields, so the plan path and the executor path
+/// cannot drift apart on how an EVM gets made.
+fn build(
+    provider: &Arc<dyn StateProvider>,
+    header: &BlockContext,
+    request: &SimulationRequest,
+    posture: FeePosture,
+) -> Result<SimEvm> {
+    build_evm(
+        provider,
+        header,
+        request.transaction.rules,
+        request.sender_address(),
+        request.transaction.gas_limit_per_step,
+        posture,
+    )
 }
 
 /// The transaction envelope every step starts from: same sender, same fee model,
@@ -869,7 +927,7 @@ fn build(
 /// fee and a tip here would put a second, independent claim about the market into the
 /// execution; the split an auditor needs is already in the header fields
 /// [`GasCharge`] reports (§29).
-fn tx_env(caller: Address, gas_limit: u64, price: u128) -> Result<TxEnv> {
+pub(crate) fn tx_env(caller: Address, gas_limit: u64, price: u128) -> Result<TxEnv> {
     Ok(TxEnv::builder()
         .caller(caller)
         .gas_limit(gas_limit)
@@ -978,7 +1036,7 @@ fn stepped(result: &ExecutionResult<HaltReason>, step: &ResolvedStep) -> Result<
     }
 }
 
-fn executed_logs(logs: &[Log]) -> Vec<ExecutedLog> {
+pub(crate) fn executed_logs(logs: &[Log]) -> Vec<ExecutedLog> {
     logs.iter()
         .map(|log| ExecutedLog {
             address: log.address,
@@ -998,9 +1056,9 @@ fn executed_logs(logs: &[Log]) -> Vec<ExecutedLog> {
 /// These are run through REVM against the pinned state instead of `eth_call`, so the
 /// fixture path and the node path answer from the same bytecode and the same
 /// storage, and a pool that lies about its sides lies identically on both (§62).
-struct Views {
-    evm: SimEvm,
-    sender: Address,
+pub(crate) struct Views {
+    pub(crate) evm: SimEvm,
+    pub(crate) sender: Address,
 }
 
 impl Views {
@@ -1011,13 +1069,13 @@ impl Views {
         sender: Address,
     ) -> Result<Self> {
         Ok(Self {
-            evm: build(provider, header, request, 0, true, true)?,
+            evm: build(provider, header, request, FeePosture::view())?,
             sender,
         })
     }
 
     /// Run one read-only call and hand back what the contract returned.
-    async fn call(&mut self, to: Address, calldata: Bytes) -> Result<Bytes> {
+    pub(crate) async fn call(&mut self, to: Address, calldata: Bytes) -> Result<Bytes> {
         let mut tx = self.evm.ctx.tx.clone();
         tx.caller = self.sender;
         tx.kind = TxKind::Call(to);
@@ -1039,7 +1097,7 @@ impl Views {
         }
     }
 
-    async fn address(&mut self, pool: Address, call: &V2Call) -> Result<Address> {
+    pub(crate) async fn address(&mut self, pool: Address, call: &V2Call) -> Result<Address> {
         let signature = call.signature();
         let bytes = self.call(pool, call.encode()).await?;
         match call.decode_return(&bytes).map_err(protocol_error)? {
@@ -1050,7 +1108,7 @@ impl Views {
         }
     }
 
-    async fn reserves(&mut self, pool: Address) -> Result<Reserves> {
+    pub(crate) async fn reserves(&mut self, pool: Address) -> Result<Reserves> {
         let bytes = self.call(pool, V2Call::GetReserves.encode()).await?;
         match V2Call::GetReserves
             .decode_return(&bytes)
@@ -1226,13 +1284,13 @@ fn denomination(
 /// built from the last window alone. The last step that held a word contributes its
 /// value, which is the value the sequence ended with.
 #[derive(Default)]
-struct Touched {
+pub(crate) struct Touched {
     accounts: HashMap<Address, (U256, u64)>,
     slots: HashMap<(Address, U256), U256>,
 }
 
 impl Touched {
-    fn absorb(&mut self, state: &EvmState) {
+    pub(crate) fn absorb(&mut self, state: &EvmState) {
         for (address, account) in state {
             self.accounts
                 .insert(*address, (account.info.balance, account.info.nonce));
@@ -1272,7 +1330,7 @@ impl Touched {
 /// [`crate::result::SlotChange`]'s note: which word holds a reserve is a claim about
 /// a layout, and the pool's own `getReserves()` answer is what this crate cites
 /// instead.
-async fn state_changes(
+pub(crate) async fn state_changes(
     touched: &Touched,
     provider: &Arc<dyn StateProvider>,
 ) -> Result<StateChanges> {
