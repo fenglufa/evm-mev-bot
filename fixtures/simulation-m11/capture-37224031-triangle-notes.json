@@ -1,0 +1,148 @@
+{
+  "_provenance": "crates/simulation/tests/multihop_capture.rs — recorded live from GIWA_RPC_URL at one pinned historical block; nothing here is generated, and the executor deployment lives in the fixture that reads this file, not here",
+  "balances_slots": [
+    {
+      "balances_slot": 5,
+      "token": "0x03A884AF9fA7aF6557a21496F67e781fC8D00F95",
+      "witnesses": [
+        {
+          "agree": true,
+          "balanceOf_answer_from_node": "100000000000000000000000",
+          "holder": "0x0e70f2aF6bFf7c9810Ee613814039d95a939E3B5",
+          "word_at_derived_key_from_node": "100000000000000000000000"
+        },
+        {
+          "agree": true,
+          "balanceOf_answer_from_node": "200000000000000000000000",
+          "holder": "0x354f408AA2F45fd8D955070e9Ef1E47c368Bfc42",
+          "word_at_derived_key_from_node": "200000000000000000000000"
+        }
+      ]
+    },
+    {
+      "balances_slot": 3,
+      "token": "0xc5BF73bDDeF871bAfB49D12F5D05A5B300422cdf",
+      "witnesses": [
+        {
+          "agree": true,
+          "balanceOf_answer_from_node": "1000000000000000000",
+          "holder": "0x0e70f2aF6bFf7c9810Ee613814039d95a939E3B5",
+          "word_at_derived_key_from_node": "1000000000000000000"
+        },
+        {
+          "agree": true,
+          "balanceOf_answer_from_node": "1000000000000000000",
+          "holder": "0xE1A9db8507570806Ef64Ff8d3583787c43F9EfF0",
+          "word_at_derived_key_from_node": "1000000000000000000"
+        }
+      ]
+    },
+    {
+      "balances_slot": 5,
+      "token": "0x7c20cb4aB7c6D731c6a167433986fFD17C16ddc6",
+      "witnesses": [
+        {
+          "agree": true,
+          "balanceOf_answer_from_node": "3500000000000",
+          "holder": "0xE1A9db8507570806Ef64Ff8d3583787c43F9EfF0",
+          "word_at_derived_key_from_node": "3500000000000"
+        },
+        {
+          "agree": true,
+          "balanceOf_answer_from_node": "200000000000",
+          "holder": "0x354f408AA2F45fd8D955070e9Ef1E47c368Bfc42",
+          "word_at_derived_key_from_node": "200000000000"
+        }
+      ]
+    }
+  ],
+  "block_hash": "0x7980d66dca57f003859fa7f40df73044881b4693a502b33133c8e2b95b1dc8fb",
+  "block_number": 37224031,
+  "chain_id": 91342,
+  "cycle": {
+    "canonical_key": [
+      "0x0e70f2aF6bFf7c9810Ee613814039d95a939E3B5",
+      "0xE1A9db8507570806Ef64Ff8d3583787c43F9EfF0",
+      "0x354f408AA2F45fd8D955070e9Ef1E47c368Bfc42"
+    ],
+    "source": "data/evidence/m9/m9.3/cycles.json, the two hop_count: 3 rows",
+    "start_token": "0x03A884AF9fA7aF6557a21496F67e781fC8D00F95"
+  },
+  "dump": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+  "enumerated_slots": {
+    "pool_range": [
+      0,
+      20
+    ],
+    "token_range": [
+      0,
+      10
+    ]
+  },
+  "head_at_capture": 38137921,
+  "header": {
+    "base_fee_per_gas": "301",
+    "beneficiary": "0x4200000000000000000000000000000000000011",
+    "gas_limit": 60000000,
+    "timestamp": 1790569147
+  },
+  "not_measured": [
+    "the three pools' fee *configuration* — `tests/triangle_probe.rs` measures the fee each pool keeps on one specific trade at one specific size, which is a different quantity from a parameter the contract stores",
+    "whether any direction of this cycle is profitable at this height — no run of this repository trades these three pools, and §41 keeps `REAL_PROFITABLE_ARBITRAGE` at `UNKNOWN`",
+    "the executor deployment, the operator's funding and the approvals — declared rows in the fixture, CONTROLLED_FIXTURE"
+  ],
+  "pools": [
+    {
+      "blockTimestampLast": "1785060918",
+      "pool": "0x0e70f2aF6bFf7c9810Ee613814039d95a939E3B5",
+      "reserve0": "100000000000000000000000",
+      "reserve1": "1000000000000000000",
+      "token0": "0x03A884AF9fA7aF6557a21496F67e781fC8D00F95",
+      "token1": "0xc5BF73bDDeF871bAfB49D12F5D05A5B300422cdf"
+    },
+    {
+      "blockTimestampLast": "1785060895",
+      "pool": "0xE1A9db8507570806Ef64Ff8d3583787c43F9EfF0",
+      "reserve0": "3500000000000",
+      "reserve1": "1000000000000000000",
+      "token0": "0x7c20cb4aB7c6D731c6a167433986fFD17C16ddc6",
+      "token1": "0xc5BF73bDDeF871bAfB49D12F5D05A5B300422cdf"
+    },
+    {
+      "blockTimestampLast": "1785060910",
+      "pool": "0x354f408AA2F45fd8D955070e9Ef1E47c368Bfc42",
+      "reserve0": "200000000000000000000000",
+      "reserve1": "200000000000",
+      "token0": "0x03A884AF9fA7aF6557a21496F67e781fC8D00F95",
+      "token1": "0x7c20cb4aB7c6D731c6a167433986fFD17C16ddc6"
+    }
+  ],
+  "reserve_equals_balance": [
+    {
+      "agree": true,
+      "pool": "0x0e70f2aF6bFf7c9810Ee613814039d95a939E3B5",
+      "token0_balance_of_pool": "100000000000000000000000",
+      "token0_reserve": "100000000000000000000000",
+      "token1_balance_of_pool": "1000000000000000000",
+      "token1_reserve": "1000000000000000000"
+    },
+    {
+      "agree": true,
+      "pool": "0xE1A9db8507570806Ef64Ff8d3583787c43F9EfF0",
+      "token0_balance_of_pool": "3500000000000",
+      "token0_reserve": "3500000000000",
+      "token1_balance_of_pool": "1000000000000000000",
+      "token1_reserve": "1000000000000000000"
+    },
+    {
+      "agree": true,
+      "pool": "0x354f408AA2F45fd8D955070e9Ef1E47c368Bfc42",
+      "token0_balance_of_pool": "200000000000000000000000",
+      "token0_reserve": "200000000000000000000000",
+      "token1_balance_of_pool": "200000000000",
+      "token1_reserve": "200000000000"
+    }
+  ],
+  "rpc_count": 231,
+  "rpc_paid": 237
+}

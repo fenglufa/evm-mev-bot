@@ -1,0 +1,250 @@
+{
+  "_provenance": "crates/simulation/tests/triangle_probe.rs — a measurement of what the three recorded pools pay a chained three-leg cycle, taken by running M10's executor against fixtures/simulation-m11/dump-37224031-triangle-03a884af.json and reading each payout out of the contract's own error arguments. Every fee here is solved from a payout the EVM reported, not read off a configuration",
+  "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+  "chain_id": 91342,
+  "block_number": 37224031,
+  "stake": "0x8ac7230489e80000",
+  "keys": [
+    {
+      "address": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "slot": "0xea8839452113d7305904ce67e76c9b6859b99a319449e422912dde5dd7a7bacb",
+      "crack": "mapping at slot 5 of 0x03a884af9fa7af6557a21496f67e781fc8d00f95, key 0x1000000000000000000000000000000000000010"
+    },
+    {
+      "address": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "slot": "0xcdc5cc9bb53cca75d8658485e961586ad3c7ec24f454158c43edd930d50e6b44",
+      "crack": "mapping at slot 5 of 0x03a884af9fa7af6557a21496f67e781fc8d00f95, key 0x2000000000000000000000000000000000000020"
+    },
+    {
+      "address": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "slot": "0x54f0471b28b1f8c6dfb122fa85a1730fedd443a7594454a0f8f5848bed671430",
+      "crack": "mapping at slot 3 of 0xc5bf73bddef871bafb49d12f5d05a5b300422cdf, key 0x1000000000000000000000000000000000000010"
+    },
+    {
+      "address": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "slot": "0x9ee10446aac498277cae5bfb17c697a1d1e225e38d00d4877d3f65a65480d295",
+      "crack": "mapping at slot 3 of 0xc5bf73bddef871bafb49d12f5d05a5b300422cdf, key 0x2000000000000000000000000000000000000020"
+    },
+    {
+      "address": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "slot": "0xea8839452113d7305904ce67e76c9b6859b99a319449e422912dde5dd7a7bacb",
+      "crack": "mapping at slot 5 of 0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6, key 0x1000000000000000000000000000000000000010"
+    },
+    {
+      "address": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "slot": "0xcdc5cc9bb53cca75d8658485e961586ad3c7ec24f454158c43edd930d50e6b44",
+      "crack": "mapping at slot 5 of 0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6, key 0x2000000000000000000000000000000000000020"
+    },
+    {
+      "address": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "slot": "0x9b9d7ba19158bf0caefe41789fdcb7348620d78bf2f009ca4bdbbb87da41438a",
+      "crack": "nested mapping at slot 6 of 0x03a884af9fa7af6557a21496f67e781fc8d00f95, owner 0x953e7e98562714c23bc22c7d186cdf516f9dfa6f, spender 0x1000000000000000000000000000000000000010"
+    }
+  ],
+  "funding": [
+    {
+      "kind": "account",
+      "address": "0x4200000000000000000000000000000000000011",
+      "slot": "0x0",
+      "wrote": "an account with no balance, no nonce and no code",
+      "crack": "the recording holds no account row for it",
+      "refusal": "missing state: CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: account 0x4200000000000000000000000000000000000011"
+    },
+    {
+      "kind": "hole",
+      "address": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "slot": "0xea8839452113d7305904ce67e76c9b6859b99a319449e422912dde5dd7a7bacb",
+      "wrote": "0",
+      "crack": "mapping at slot 5 of 0x03a884af9fa7af6557a21496f67e781fc8d00f95, key 0x1000000000000000000000000000000000000010",
+      "refusal": "missing state: CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: storage 0x03A884AF9fA7aF6557a21496F67e781fC8D00F95 slot 106081893032555749810584007428598923708784326239833792265510127378268177283787"
+    },
+    {
+      "kind": "hole",
+      "address": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "slot": "0xcdc5cc9bb53cca75d8658485e961586ad3c7ec24f454158c43edd930d50e6b44",
+      "wrote": "0",
+      "crack": "mapping at slot 5 of 0x03a884af9fa7af6557a21496f67e781fc8d00f95, key 0x2000000000000000000000000000000000000020",
+      "refusal": "missing state: CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: storage 0x03A884AF9fA7aF6557a21496F67e781fC8D00F95 slot 93073614985463962714401707599560398045997292196464621853622608053003931773764"
+    },
+    {
+      "kind": "hole",
+      "address": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "slot": "0x54f0471b28b1f8c6dfb122fa85a1730fedd443a7594454a0f8f5848bed671430",
+      "wrote": "0",
+      "crack": "mapping at slot 3 of 0xc5bf73bddef871bafb49d12f5d05a5b300422cdf, key 0x1000000000000000000000000000000000000010",
+      "refusal": "missing state: CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: storage 0xc5BF73bDDeF871bAfB49D12F5D05A5B300422cdf slot 38418813332736076017945184260041730585102830446708638010661406486019927643184"
+    },
+    {
+      "kind": "hole",
+      "address": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "slot": "0x9ee10446aac498277cae5bfb17c697a1d1e225e38d00d4877d3f65a65480d295",
+      "wrote": "0",
+      "crack": "mapping at slot 3 of 0xc5bf73bddef871bafb49d12f5d05a5b300422cdf, key 0x2000000000000000000000000000000000000020",
+      "refusal": "missing state: CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: storage 0xc5BF73bDDeF871bAfB49D12F5D05A5B300422cdf slot 71863000177896843509351721950944950169116816016576556567986459053852129809045"
+    },
+    {
+      "kind": "hole",
+      "address": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "slot": "0xea8839452113d7305904ce67e76c9b6859b99a319449e422912dde5dd7a7bacb",
+      "wrote": "0",
+      "crack": "mapping at slot 5 of 0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6, key 0x1000000000000000000000000000000000000010",
+      "refusal": "missing state: CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: storage 0x7c20cb4aB7c6D731c6a167433986fFD17C16ddc6 slot 106081893032555749810584007428598923708784326239833792265510127378268177283787"
+    },
+    {
+      "kind": "hole",
+      "address": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "slot": "0xcdc5cc9bb53cca75d8658485e961586ad3c7ec24f454158c43edd930d50e6b44",
+      "wrote": "0",
+      "crack": "mapping at slot 5 of 0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6, key 0x2000000000000000000000000000000000000020",
+      "refusal": "missing state: CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: storage 0x7c20cb4aB7c6D731c6a167433986fFD17C16ddc6 slot 93073614985463962714401707599560398045997292196464621853622608053003931773764"
+    },
+    {
+      "kind": "gate",
+      "address": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "slot": "0x96c6ece38e917e56b07b762375dea8e7ea86038fa9e5bd46a2396a3931880d47",
+      "wrote": "10000000000000000000",
+      "crack": "balances slot 5 of 0x03a884af9fa7af6557a21496f67e781fc8d00f95, learned from the run's own refused row for the executor — the operator's balance at that key is a recorded zero, so this word is a declared fixture funding row rather than a hole being filled",
+      "refusal": "InsufficientBalance: execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted with InsufficientBalance (revert data 0xcf47918100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008ac7230489e80000), 62853 gas of 3000000 allowed, market moved: false"
+    },
+    {
+      "kind": "hole",
+      "address": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "slot": "0x9b9d7ba19158bf0caefe41789fdcb7348620d78bf2f009ca4bdbbb87da41438a",
+      "wrote": "0",
+      "crack": "nested mapping at slot 6 of 0x03a884af9fa7af6557a21496f67e781fc8d00f95, owner 0x953e7e98562714c23bc22c7d186cdf516f9dfa6f, spender 0x1000000000000000000000000000000000000010",
+      "refusal": "missing state: CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: storage 0x03A884AF9fA7aF6557a21496F67e781fC8D00F95 slot 70386739790235355585193037297526428905403199446315378371490982185512783135626"
+    },
+    {
+      "kind": "gate",
+      "address": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "slot": "0x9b9d7ba19158bf0caefe41789fdcb7348620d78bf2f009ca4bdbbb87da41438a",
+      "wrote": "10000000000000000000",
+      "crack": "allowances slot 6 of 0x03a884af9fa7af6557a21496f67e781fc8d00f95, owner 0x953e7e98562714c23bc22c7d186cdf516f9dfa6f, spender 0x1000000000000000000000000000000000000010 — the slot learned from the run's own refused nested row",
+      "refusal": "InsufficientAllowance: execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted with InsufficientAllowance (revert data 0x2a1b2dd800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008ac7230489e80000), 67166 gas of 3000000 allowed, market moved: false"
+    }
+  ],
+  "legs": [
+    {
+      "index": 0,
+      "pool": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+      "token_in": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token_out": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "amount_in": "0x8ac7230489e80000",
+      "amount_out": "0x5aaae6aaea40"
+    },
+    {
+      "index": 1,
+      "pool": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+      "token_in": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "token_out": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "amount_in": "0x5aaae6aaea40",
+      "amount_out": "0x14bb8627"
+    },
+    {
+      "index": 2,
+      "pool": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+      "token_in": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "token_out": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "amount_in": "0x14bb8627",
+      "amount_out": "0x12c45a5c908f979c23"
+    }
+  ],
+  "runs": [
+    {
+      "run": 1,
+      "claims": [
+        "10000000000000000000 in -> 99690060900928 out",
+        "99690060900928 in -> 347833895 out",
+        "347833895 in -> 346190116282063887395 out"
+      ],
+      "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 143875 gas of 3000000 allowed, market moved: false",
+      "contract_error": null,
+      "revert_kind": "Empty",
+      "delivered": null,
+      "gas_used": 143875,
+      "market_moved": false,
+      "repair": "the payload is not the contract's own, so the run's answer is about an external call rather than about a claim"
+    }
+  ],
+  "pools": [
+    {
+      "index": 0,
+      "pool": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+      "token_in": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token_out": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "amount_in": "0x8ac7230489e80000",
+      "reserve_in": "0x152d02c7e14af6800000",
+      "reserve_out": "0xde0b6b3a7640000",
+      "asked": null,
+      "paid": null,
+      "fee_ppm": null,
+      "how_measured": "never reached"
+    },
+    {
+      "index": 1,
+      "pool": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+      "token_in": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "token_out": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "amount_in": "0x5aaae6aaea40",
+      "reserve_in": "0xde0b6b3a7640000",
+      "reserve_out": "0x32ee841b800",
+      "asked": null,
+      "paid": null,
+      "fee_ppm": null,
+      "how_measured": "never reached"
+    },
+    {
+      "index": 2,
+      "pool": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+      "token_in": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "token_out": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "amount_in": "0x14bb8627",
+      "reserve_in": "0x2e90edd000",
+      "reserve_out": "0x2a5a058fc295ed000000",
+      "asked": null,
+      "paid": null,
+      "fee_ppm": null,
+      "how_measured": "never reached"
+    }
+  ],
+  "settled": false,
+  "delivered": null,
+  "market_moved": false,
+  "gas_used": 143875,
+  "final_reserves": [
+    {
+      "pool": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "reserve0_before": "0x152d02c7e14af6800000",
+      "reserve0_after": "0x152d02c7e14af6800000",
+      "reserve1_before": "0xde0b6b3a7640000",
+      "reserve1_after": "0xde0b6b3a7640000",
+      "changed": false
+    },
+    {
+      "pool": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+      "token0": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "reserve0_before": "0x32ee841b800",
+      "reserve0_after": "0x32ee841b800",
+      "reserve1_before": "0xde0b6b3a7640000",
+      "reserve1_after": "0xde0b6b3a7640000",
+      "changed": false
+    },
+    {
+      "pool": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "reserve0_before": "0x2a5a058fc295ed000000",
+      "reserve0_after": "0x2a5a058fc295ed000000",
+      "reserve1_before": "0x2e90edd000",
+      "reserve1_after": "0x2e90edd000",
+      "changed": false
+    }
+  ],
+  "not_measured": [
+    "whether any direction of this cycle is profitable for a real trader — this instrument stakes a fixture-funded amount on fixture-declared rows over pools no run of this repository trades on, so §41 keeps `REAL_PROFITABLE_ARBITRAGE` at `UNKNOWN`",
+    "the pools' fee *configuration* — the ppm column is the fee kept on one specific trade at one specific size, which is the only fee claim a simulation can make"
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "directory": "pricing",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/pricing/declared_4hop.json",
+  "milestone": "M11",
+  "rows": {
+    "declared-4hop-synthetic-p1-p4": {
+      "agrees": {
+        "identity_with_the_rotation_minimum": true,
+        "quote_with_the_fold": true
+      },
+      "chain_id": 7,
+      "hops": [
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x00000000000000000000000000000000000000f1",
+          "reserve_in": "1000000",
+          "reserve_out": "1100000",
+          "token_in": "0x000000000000000000000000000000000000000a",
+          "token_out": "0x000000000000000000000000000000000000000b"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x00000000000000000000000000000000000000f2",
+          "reserve_in": "1000000",
+          "reserve_out": "1000000",
+          "token_in": "0x000000000000000000000000000000000000000b",
+          "token_out": "0x000000000000000000000000000000000000000c"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x00000000000000000000000000000000000000f3",
+          "reserve_in": "1000000",
+          "reserve_out": "1000000",
+          "token_in": "0x000000000000000000000000000000000000000c",
+          "token_out": "0x000000000000000000000000000000000000000d"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x00000000000000000000000000000000000000f4",
+          "reserve_in": "1000000",
+          "reserve_out": "1000000",
+          "token_in": "0x000000000000000000000000000000000000000d",
+          "token_out": "0x000000000000000000000000000000000000000a"
+        }
+      ],
+      "market_claim": {
+        "does_not_prove": "a market, and nothing here is run through the EVM at four legs",
+        "kind": "DECLARED_SYNTHETIC_GRAPH",
+        "pools": "0x00000000000000000000000000000000000000f1",
+        "proves": "that the pricing composes over four hops and reports its own length"
+      },
+      "published": {
+        "gross": {
+          "amount": "80",
+          "state": "gain"
+        },
+        "identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(7), address: 0x00000000000000000000000000000000000000f1 }, token_in: TokenId { chain_id: ChainId(7), address: 0x000000000000000000000000000000000000000a }, token_out: TokenId { chain_id: ChainId(7), address: 0x000000000000000000000000000000000000000b } }, EdgeId { pool: PoolId { chain_id: ChainId(7), address: 0x00000000000000000000000000000000000000f2 }, token_in: TokenId { chain_id: ChainId(7), address: 0x000000000000000000000000000000000000000b }, token_out: TokenId { chain_id: ChainId(7), address: 0x000000000000000000000000000000000000000c } }, EdgeId { pool: PoolId { chain_id: ChainId(7), address: 0x00000000000000000000000000000000000000f3 }, token_in: TokenId { chain_id: ChainId(7), address: 0x000000000000000000000000000000000000000c }, token_out: TokenId { chain_id: ChainId(7), address: 0x000000000000000000000000000000000000000d } }, EdgeId { pool: PoolId { chain_id: ChainId(7), address: 0x00000000000000000000000000000000000000f4 }, token_in: TokenId { chain_id: ChainId(7), address: 0x000000000000000000000000000000000000000d }, token_out: TokenId { chain_id: ChainId(7), address: 0x000000000000000000000000000000000000000a } }])",
+        "identity_edges": [
+          {
+            "pool": "0x00000000000000000000000000000000000000f1",
+            "token_in": "0x000000000000000000000000000000000000000a",
+            "token_out": "0x000000000000000000000000000000000000000b"
+          },
+          {
+            "pool": "0x00000000000000000000000000000000000000f2",
+            "token_in": "0x000000000000000000000000000000000000000b",
+            "token_out": "0x000000000000000000000000000000000000000c"
+          },
+          {
+            "pool": "0x00000000000000000000000000000000000000f3",
+            "token_in": "0x000000000000000000000000000000000000000c",
+            "token_out": "0x000000000000000000000000000000000000000d"
+          },
+          {
+            "pool": "0x00000000000000000000000000000000000000f4",
+            "token_in": "0x000000000000000000000000000000000000000d",
+            "token_out": "0x000000000000000000000000000000000000000a"
+          }
+        ],
+        "input": "1000",
+        "price_state": "quoted",
+        "quote": {
+          "hops": [
+            {
+              "amount_in": "1000",
+              "amount_out": "1095",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x00000000000000000000000000000000000000f1",
+              "token_in": "0x000000000000000000000000000000000000000a",
+              "token_out": "0x000000000000000000000000000000000000000b"
+            },
+            {
+              "amount_in": "1095",
+              "amount_out": "1090",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x00000000000000000000000000000000000000f2",
+              "token_in": "0x000000000000000000000000000000000000000b",
+              "token_out": "0x000000000000000000000000000000000000000c"
+            },
+            {
+              "amount_in": "1090",
+              "amount_out": "1085",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x00000000000000000000000000000000000000f3",
+              "token_in": "0x000000000000000000000000000000000000000c",
+              "token_out": "0x000000000000000000000000000000000000000d"
+            },
+            {
+              "amount_in": "1085",
+              "amount_out": "1080",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x00000000000000000000000000000000000000f4",
+              "token_in": "0x000000000000000000000000000000000000000d",
+              "token_out": "0x000000000000000000000000000000000000000a"
+            }
+          ],
+          "input": "1000",
+          "output": "1080",
+          "truncated": false
+        }
+      },
+      "recomputed_independently": {
+        "hop_outputs": [
+          "1095",
+          "1090",
+          "1085",
+          "1080"
+        ],
+        "identity_edges": [
+          {
+            "pool": "0x00000000000000000000000000000000000000f1",
+            "token_in": "0x000000000000000000000000000000000000000a",
+            "token_out": "0x000000000000000000000000000000000000000b"
+          },
+          {
+            "pool": "0x00000000000000000000000000000000000000f2",
+            "token_in": "0x000000000000000000000000000000000000000b",
+            "token_out": "0x000000000000000000000000000000000000000c"
+          },
+          {
+            "pool": "0x00000000000000000000000000000000000000f3",
+            "token_in": "0x000000000000000000000000000000000000000c",
+            "token_out": "0x000000000000000000000000000000000000000d"
+          },
+          {
+            "pool": "0x00000000000000000000000000000000000000f4",
+            "token_in": "0x000000000000000000000000000000000000000d",
+            "token_out": "0x000000000000000000000000000000000000000a"
+          }
+        ],
+        "identity_matches": true,
+        "identity_method": "minimum rotation of the published trade-order edge list, compared as a Vec<EdgeId> with EdgeId's own Ord",
+        "input": "1000",
+        "method": "this file's own constant-product fold over the published hops array: in*numerator*reserve_out / (reserve_in*denominator + in*numerator), floor division, each output feeding the next input",
+        "output": "1080",
+        "refused_because": null
+      },
+      "route": {
+        "hop_count": 4,
+        "input_token": "0x000000000000000000000000000000000000000a",
+        "input_upper_bound": "999999",
+        "is_priceable": true,
+        "pools": [
+          "0x00000000000000000000000000000000000000f1",
+          "0x00000000000000000000000000000000000000f2",
+          "0x00000000000000000000000000000000000000f3",
+          "0x00000000000000000000000000000000000000f4"
+        ],
+        "tokens": [
+          "0x000000000000000000000000000000000000000a",
+          "0x000000000000000000000000000000000000000b",
+          "0x000000000000000000000000000000000000000c",
+          "0x000000000000000000000000000000000000000d",
+          "0x000000000000000000000000000000000000000a"
+        ],
+        "unattested": null
+      },
+      "state_source": "declared synthetic graph (crates/simulation/tests/multihop_market/mod.rs)",
+      "target_block": 100,
+      "what_this_is": "four hops on a hand-written graph: pricing only, never run through the EVM"
+    }
+  },
+  "schema": "m11-evidence-v1"
+}

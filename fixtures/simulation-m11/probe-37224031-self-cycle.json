@@ -1,0 +1,67 @@
+{
+  "_provenance": "crates/simulation/tests/triangle_probe.rs — a measurement of what each recorded pool of fixtures/simulation-m11/dump-37224031-triangle-03a884af.json answers when M10's executor round-trips through it alone. It measures no fee and judges no market",
+  "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+  "chain_id": 91342,
+  "block_number": 37224031,
+  "rows": [
+    {
+      "pool": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+      "token_a": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token_b": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "claims": [
+        "10000000000000000000 in -> 99690060900928 out",
+        "99690060900928 in -> 9938111313093245260 out"
+      ],
+      "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 133078 gas of 3000000 allowed, market moved: false",
+      "contract_error": null,
+      "revert_kind": "Empty",
+      "revert_bytes": "0x",
+      "gas_used": 133078,
+      "market_moved": false,
+      "reserves_moved": 0,
+      "pool_changed_words": 0,
+      "verdict": "the same empty payload, with one pool and nothing between the pull and its `swap`: this family's `swap` is the author"
+    },
+    {
+      "pool": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+      "token_a": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "token_b": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "claims": [
+        "10000000000000000000 in -> 999999648946963759 out",
+        "999999648946963759 in -> 1747370749414 out"
+      ],
+      "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted with InsufficientBalance (revert data 0xcf47918100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008ac7230489e80000), 52632 gas of 3000000 allowed, market moved: false",
+      "contract_error": "InsufficientBalance",
+      "revert_kind": "InsufficientBalance",
+      "revert_bytes": "0xcf47918100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008ac7230489e80000",
+      "gas_used": 52632,
+      "market_moved": false,
+      "reserves_moved": 0,
+      "pool_changed_words": 0,
+      "verdict": "the run stopped at the executor's own `InsufficientBalance` before any pool was called, so this row measures the probe's funding rather than the pool — it is not an answer from this family"
+    },
+    {
+      "pool": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+      "token_a": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token_b": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "claims": [
+        "10000000000000000000 in -> 9969503 out",
+        "9969503 in -> 9939100537855242194 out"
+      ],
+      "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 133016 gas of 3000000 allowed, market moved: false",
+      "contract_error": null,
+      "revert_kind": "Empty",
+      "revert_bytes": "0x",
+      "gas_used": 133016,
+      "market_moved": false,
+      "reserves_moved": 0,
+      "pool_changed_words": 0,
+      "verdict": "the same empty payload, with one pool and nothing between the pull and its `swap`: this family's `swap` is the author"
+    }
+  ],
+  "reading": "2 of 3 recorded pools answer a two-leg round trip with the same empty payload the three-leg cycle stopped on, and 0 of 3 leave a word different inside the pool.",
+  "not_measured": [
+    "which line inside the pool's `swap` refuses — a payload with no name is not a classification, and the recording holds no bytecode for the contracts the pool itself calls, so the family's authorship is what this table can and does establish",
+    "whether any direction of this cycle is profitable — nothing in this repository trades these pools, so the question is not asked here and §41 keeps `REAL_PROFITABLE_ARBITRAGE` at `UNKNOWN`"
+  ]
+}

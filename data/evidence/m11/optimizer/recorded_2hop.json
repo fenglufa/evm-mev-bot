@@ -1,0 +1,7450 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "directory": "optimizer",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/optimizer/recorded_2hop.json",
+  "milestone": "M11",
+  "rows": {
+    "recorded-2hop-coarse-refine-wide": {
+      "agrees": {
+        "best_input": true,
+        "best_output": true,
+        "every_rebuilt_point_was_attempted": true
+      },
+      "chain_id": 91342,
+      "hops": [
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "reserve_in": "1000000000000000",
+          "reserve_out": "1000000000000000000000",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "reserve_in": "2000000000000000000000",
+          "reserve_out": "20000000000000000",
+          "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "published": {
+        "best_input": "19921940",
+        "best_output": "198025870",
+        "best_profit": "178103930",
+        "covered_the_route_domain": false,
+        "covered_the_route_domain_means": "this flag can only be true for an exhaustive walk that reached the route's own input ceiling; on a sampled search the answer is that the search saw a grid, not the domain — it is a statement about coverage, not a failure",
+        "curve_this_file_asked_the_pipeline_for": [
+          {
+            "gross": {
+              "amount": "8",
+              "state": "gain"
+            },
+            "input": "1",
+            "output": "9"
+          },
+          {
+            "gross": {
+              "amount": "698453",
+              "state": "gain"
+            },
+            "input": "78126",
+            "output": "776579"
+          },
+          {
+            "gross": {
+              "amount": "1396898",
+              "state": "gain"
+            },
+            "input": "156251",
+            "output": "1553149"
+          },
+          {
+            "gross": {
+              "amount": "2095342",
+              "state": "gain"
+            },
+            "input": "234376",
+            "output": "2329718"
+          },
+          {
+            "gross": {
+              "amount": "2793787",
+              "state": "gain"
+            },
+            "input": "312501",
+            "output": "3106288"
+          },
+          {
+            "gross": {
+              "amount": "3492231",
+              "state": "gain"
+            },
+            "input": "390626",
+            "output": "3882857"
+          },
+          {
+            "gross": {
+              "amount": "4190676",
+              "state": "gain"
+            },
+            "input": "468751",
+            "output": "4659427"
+          },
+          {
+            "gross": {
+              "amount": "4889120",
+              "state": "gain"
+            },
+            "input": "546876",
+            "output": "5435996"
+          },
+          {
+            "gross": {
+              "amount": "5587565",
+              "state": "gain"
+            },
+            "input": "625001",
+            "output": "6212566"
+          },
+          {
+            "gross": {
+              "amount": "6286009",
+              "state": "gain"
+            },
+            "input": "703126",
+            "output": "6989135"
+          },
+          {
+            "gross": {
+              "amount": "6984454",
+              "state": "gain"
+            },
+            "input": "781251",
+            "output": "7765705"
+          },
+          {
+            "gross": {
+              "amount": "7682898",
+              "state": "gain"
+            },
+            "input": "859376",
+            "output": "8542274"
+          },
+          {
+            "gross": {
+              "amount": "8381343",
+              "state": "gain"
+            },
+            "input": "937501",
+            "output": "9318844"
+          },
+          {
+            "gross": {
+              "amount": "9079787",
+              "state": "gain"
+            },
+            "input": "1015626",
+            "output": "10095413"
+          },
+          {
+            "gross": {
+              "amount": "9778232",
+              "state": "gain"
+            },
+            "input": "1093751",
+            "output": "10871983"
+          },
+          {
+            "gross": {
+              "amount": "10476676",
+              "state": "gain"
+            },
+            "input": "1171876",
+            "output": "11648552"
+          },
+          {
+            "gross": {
+              "amount": "11175121",
+              "state": "gain"
+            },
+            "input": "1250001",
+            "output": "12425122"
+          },
+          {
+            "gross": {
+              "amount": "11873565",
+              "state": "gain"
+            },
+            "input": "1328126",
+            "output": "13201691"
+          },
+          {
+            "gross": {
+              "amount": "12572010",
+              "state": "gain"
+            },
+            "input": "1406251",
+            "output": "13978261"
+          },
+          {
+            "gross": {
+              "amount": "13270455",
+              "state": "gain"
+            },
+            "input": "1484376",
+            "output": "14754831"
+          },
+          {
+            "gross": {
+              "amount": "13968899",
+              "state": "gain"
+            },
+            "input": "1562501",
+            "output": "15531400"
+          },
+          {
+            "gross": {
+              "amount": "14667344",
+              "state": "gain"
+            },
+            "input": "1640626",
+            "output": "16307970"
+          },
+          {
+            "gross": {
+              "amount": "15365788",
+              "state": "gain"
+            },
+            "input": "1718751",
+            "output": "17084539"
+          },
+          {
+            "gross": {
+              "amount": "16064233",
+              "state": "gain"
+            },
+            "input": "1796876",
+            "output": "17861109"
+          },
+          {
+            "gross": {
+              "amount": "16762677",
+              "state": "gain"
+            },
+            "input": "1875001",
+            "output": "18637678"
+          },
+          {
+            "gross": {
+              "amount": "17461122",
+              "state": "gain"
+            },
+            "input": "1953126",
+            "output": "19414248"
+          },
+          {
+            "gross": {
+              "amount": "18159566",
+              "state": "gain"
+            },
+            "input": "2031251",
+            "output": "20190817"
+          },
+          {
+            "gross": {
+              "amount": "18858011",
+              "state": "gain"
+            },
+            "input": "2109376",
+            "output": "20967387"
+          },
+          {
+            "gross": {
+              "amount": "19556455",
+              "state": "gain"
+            },
+            "input": "2187501",
+            "output": "21743956"
+          },
+          {
+            "gross": {
+              "amount": "20254900",
+              "state": "gain"
+            },
+            "input": "2265626",
+            "output": "22520526"
+          },
+          {
+            "gross": {
+              "amount": "20953344",
+              "state": "gain"
+            },
+            "input": "2343751",
+            "output": "23297095"
+          },
+          {
+            "gross": {
+              "amount": "21651789",
+              "state": "gain"
+            },
+            "input": "2421876",
+            "output": "24073665"
+          },
+          {
+            "gross": {
+              "amount": "22350233",
+              "state": "gain"
+            },
+            "input": "2500001",
+            "output": "24850234"
+          },
+          {
+            "gross": {
+              "amount": "23048678",
+              "state": "gain"
+            },
+            "input": "2578126",
+            "output": "25626804"
+          },
+          {
+            "gross": {
+              "amount": "23747122",
+              "state": "gain"
+            },
+            "input": "2656251",
+            "output": "26403373"
+          },
+          {
+            "gross": {
+              "amount": "24445567",
+              "state": "gain"
+            },
+            "input": "2734376",
+            "output": "27179943"
+          },
+          {
+            "gross": {
+              "amount": "25144011",
+              "state": "gain"
+            },
+            "input": "2812501",
+            "output": "27956512"
+          },
+          {
+            "gross": {
+              "amount": "25842456",
+              "state": "gain"
+            },
+            "input": "2890626",
+            "output": "28733082"
+          },
+          {
+            "gross": {
+              "amount": "26540900",
+              "state": "gain"
+            },
+            "input": "2968751",
+            "output": "29509651"
+          },
+          {
+            "gross": {
+              "amount": "27239345",
+              "state": "gain"
+            },
+            "input": "3046876",
+            "output": "30286221"
+          },
+          {
+            "gross": {
+              "amount": "27937790",
+              "state": "gain"
+            },
+            "input": "3125001",
+            "output": "31062791"
+          },
+          {
+            "gross": {
+              "amount": "28636234",
+              "state": "gain"
+            },
+            "input": "3203126",
+            "output": "31839360"
+          },
+          {
+            "gross": {
+              "amount": "29334679",
+              "state": "gain"
+            },
+            "input": "3281251",
+            "output": "32615930"
+          },
+          {
+            "gross": {
+              "amount": "30033123",
+              "state": "gain"
+            },
+            "input": "3359376",
+            "output": "33392499"
+          },
+          {
+            "gross": {
+              "amount": "30731568",
+              "state": "gain"
+            },
+            "input": "3437501",
+            "output": "34169069"
+          },
+          {
+            "gross": {
+              "amount": "31430012",
+              "state": "gain"
+            },
+            "input": "3515626",
+            "output": "34945638"
+          },
+          {
+            "gross": {
+              "amount": "32128457",
+              "state": "gain"
+            },
+            "input": "3593751",
+            "output": "35722208"
+          },
+          {
+            "gross": {
+              "amount": "32826901",
+              "state": "gain"
+            },
+            "input": "3671876",
+            "output": "36498777"
+          },
+          {
+            "gross": {
+              "amount": "33525346",
+              "state": "gain"
+            },
+            "input": "3750001",
+            "output": "37275347"
+          },
+          {
+            "gross": {
+              "amount": "34223790",
+              "state": "gain"
+            },
+            "input": "3828126",
+            "output": "38051916"
+          },
+          {
+            "gross": {
+              "amount": "34922235",
+              "state": "gain"
+            },
+            "input": "3906251",
+            "output": "38828486"
+          },
+          {
+            "gross": {
+              "amount": "35620679",
+              "state": "gain"
+            },
+            "input": "3984376",
+            "output": "39605055"
+          },
+          {
+            "gross": {
+              "amount": "36319124",
+              "state": "gain"
+            },
+            "input": "4062501",
+            "output": "40381625"
+          },
+          {
+            "gross": {
+              "amount": "37017568",
+              "state": "gain"
+            },
+            "input": "4140626",
+            "output": "41158194"
+          },
+          {
+            "gross": {
+              "amount": "37716013",
+              "state": "gain"
+            },
+            "input": "4218751",
+            "output": "41934764"
+          },
+          {
+            "gross": {
+              "amount": "38414457",
+              "state": "gain"
+            },
+            "input": "4296876",
+            "output": "42711333"
+          },
+          {
+            "gross": {
+              "amount": "39112902",
+              "state": "gain"
+            },
+            "input": "4375001",
+            "output": "43487903"
+          },
+          {
+            "gross": {
+              "amount": "39811346",
+              "state": "gain"
+            },
+            "input": "4453126",
+            "output": "44264472"
+          },
+          {
+            "gross": {
+              "amount": "40509791",
+              "state": "gain"
+            },
+            "input": "4531251",
+            "output": "45041042"
+          },
+          {
+            "gross": {
+              "amount": "41208235",
+              "state": "gain"
+            },
+            "input": "4609376",
+            "output": "45817611"
+          },
+          {
+            "gross": {
+              "amount": "41906680",
+              "state": "gain"
+            },
+            "input": "4687501",
+            "output": "46594181"
+          },
+          {
+            "gross": {
+              "amount": "42605125",
+              "state": "gain"
+            },
+            "input": "4765626",
+            "output": "47370751"
+          },
+          {
+            "gross": {
+              "amount": "43303569",
+              "state": "gain"
+            },
+            "input": "4843751",
+            "output": "48147320"
+          },
+          {
+            "gross": {
+              "amount": "44002014",
+              "state": "gain"
+            },
+            "input": "4921876",
+            "output": "48923890"
+          },
+          {
+            "gross": {
+              "amount": "44700458",
+              "state": "gain"
+            },
+            "input": "5000001",
+            "output": "49700459"
+          },
+          {
+            "gross": {
+              "amount": "45398903",
+              "state": "gain"
+            },
+            "input": "5078126",
+            "output": "50477029"
+          },
+          {
+            "gross": {
+              "amount": "46097347",
+              "state": "gain"
+            },
+            "input": "5156251",
+            "output": "51253598"
+          },
+          {
+            "gross": {
+              "amount": "46795792",
+              "state": "gain"
+            },
+            "input": "5234376",
+            "output": "52030168"
+          },
+          {
+            "gross": {
+              "amount": "47494236",
+              "state": "gain"
+            },
+            "input": "5312501",
+            "output": "52806737"
+          },
+          {
+            "gross": {
+              "amount": "48192681",
+              "state": "gain"
+            },
+            "input": "5390626",
+            "output": "53583307"
+          },
+          {
+            "gross": {
+              "amount": "48891125",
+              "state": "gain"
+            },
+            "input": "5468751",
+            "output": "54359876"
+          },
+          {
+            "gross": {
+              "amount": "49589570",
+              "state": "gain"
+            },
+            "input": "5546876",
+            "output": "55136446"
+          },
+          {
+            "gross": {
+              "amount": "50288014",
+              "state": "gain"
+            },
+            "input": "5625001",
+            "output": "55913015"
+          },
+          {
+            "gross": {
+              "amount": "50986459",
+              "state": "gain"
+            },
+            "input": "5703126",
+            "output": "56689585"
+          },
+          {
+            "gross": {
+              "amount": "51684903",
+              "state": "gain"
+            },
+            "input": "5781251",
+            "output": "57466154"
+          },
+          {
+            "gross": {
+              "amount": "52383348",
+              "state": "gain"
+            },
+            "input": "5859376",
+            "output": "58242724"
+          },
+          {
+            "gross": {
+              "amount": "53081792",
+              "state": "gain"
+            },
+            "input": "5937501",
+            "output": "59019293"
+          },
+          {
+            "gross": {
+              "amount": "53780237",
+              "state": "gain"
+            },
+            "input": "6015626",
+            "output": "59795863"
+          },
+          {
+            "gross": {
+              "amount": "54478681",
+              "state": "gain"
+            },
+            "input": "6093751",
+            "output": "60572432"
+          },
+          {
+            "gross": {
+              "amount": "55177126",
+              "state": "gain"
+            },
+            "input": "6171876",
+            "output": "61349002"
+          },
+          {
+            "gross": {
+              "amount": "55875570",
+              "state": "gain"
+            },
+            "input": "6250001",
+            "output": "62125571"
+          },
+          {
+            "gross": {
+              "amount": "56574015",
+              "state": "gain"
+            },
+            "input": "6328126",
+            "output": "62902141"
+          },
+          {
+            "gross": {
+              "amount": "57272459",
+              "state": "gain"
+            },
+            "input": "6406251",
+            "output": "63678710"
+          },
+          {
+            "gross": {
+              "amount": "57970904",
+              "state": "gain"
+            },
+            "input": "6484376",
+            "output": "64455280"
+          },
+          {
+            "gross": {
+              "amount": "58669348",
+              "state": "gain"
+            },
+            "input": "6562501",
+            "output": "65231849"
+          },
+          {
+            "gross": {
+              "amount": "59367793",
+              "state": "gain"
+            },
+            "input": "6640626",
+            "output": "66008419"
+          },
+          {
+            "gross": {
+              "amount": "60066237",
+              "state": "gain"
+            },
+            "input": "6718751",
+            "output": "66784988"
+          },
+          {
+            "gross": {
+              "amount": "60764682",
+              "state": "gain"
+            },
+            "input": "6796876",
+            "output": "67561558"
+          },
+          {
+            "gross": {
+              "amount": "61463126",
+              "state": "gain"
+            },
+            "input": "6875001",
+            "output": "68338127"
+          },
+          {
+            "gross": {
+              "amount": "62161571",
+              "state": "gain"
+            },
+            "input": "6953126",
+            "output": "69114697"
+          },
+          {
+            "gross": {
+              "amount": "62860016",
+              "state": "gain"
+            },
+            "input": "7031251",
+            "output": "69891267"
+          },
+          {
+            "gross": {
+              "amount": "63558460",
+              "state": "gain"
+            },
+            "input": "7109376",
+            "output": "70667836"
+          },
+          {
+            "gross": {
+              "amount": "64256905",
+              "state": "gain"
+            },
+            "input": "7187501",
+            "output": "71444406"
+          },
+          {
+            "gross": {
+              "amount": "64955349",
+              "state": "gain"
+            },
+            "input": "7265626",
+            "output": "72220975"
+          },
+          {
+            "gross": {
+              "amount": "65653794",
+              "state": "gain"
+            },
+            "input": "7343751",
+            "output": "72997545"
+          },
+          {
+            "gross": {
+              "amount": "66352238",
+              "state": "gain"
+            },
+            "input": "7421876",
+            "output": "73774114"
+          },
+          {
+            "gross": {
+              "amount": "67050683",
+              "state": "gain"
+            },
+            "input": "7500001",
+            "output": "74550684"
+          },
+          {
+            "gross": {
+              "amount": "67749127",
+              "state": "gain"
+            },
+            "input": "7578126",
+            "output": "75327253"
+          },
+          {
+            "gross": {
+              "amount": "68447572",
+              "state": "gain"
+            },
+            "input": "7656251",
+            "output": "76103823"
+          },
+          {
+            "gross": {
+              "amount": "69146016",
+              "state": "gain"
+            },
+            "input": "7734376",
+            "output": "76880392"
+          },
+          {
+            "gross": {
+              "amount": "69844461",
+              "state": "gain"
+            },
+            "input": "7812501",
+            "output": "77656962"
+          },
+          {
+            "gross": {
+              "amount": "70542905",
+              "state": "gain"
+            },
+            "input": "7890626",
+            "output": "78433531"
+          },
+          {
+            "gross": {
+              "amount": "71241350",
+              "state": "gain"
+            },
+            "input": "7968751",
+            "output": "79210101"
+          },
+          {
+            "gross": {
+              "amount": "71939794",
+              "state": "gain"
+            },
+            "input": "8046876",
+            "output": "79986670"
+          },
+          {
+            "gross": {
+              "amount": "72638239",
+              "state": "gain"
+            },
+            "input": "8125001",
+            "output": "80763240"
+          },
+          {
+            "gross": {
+              "amount": "73336683",
+              "state": "gain"
+            },
+            "input": "8203126",
+            "output": "81539809"
+          },
+          {
+            "gross": {
+              "amount": "74035128",
+              "state": "gain"
+            },
+            "input": "8281251",
+            "output": "82316379"
+          },
+          {
+            "gross": {
+              "amount": "74733572",
+              "state": "gain"
+            },
+            "input": "8359376",
+            "output": "83092948"
+          },
+          {
+            "gross": {
+              "amount": "75432017",
+              "state": "gain"
+            },
+            "input": "8437501",
+            "output": "83869518"
+          },
+          {
+            "gross": {
+              "amount": "76130461",
+              "state": "gain"
+            },
+            "input": "8515626",
+            "output": "84646087"
+          },
+          {
+            "gross": {
+              "amount": "76828906",
+              "state": "gain"
+            },
+            "input": "8593751",
+            "output": "85422657"
+          },
+          {
+            "gross": {
+              "amount": "77527350",
+              "state": "gain"
+            },
+            "input": "8671876",
+            "output": "86199226"
+          },
+          {
+            "gross": {
+              "amount": "78225795",
+              "state": "gain"
+            },
+            "input": "8750001",
+            "output": "86975796"
+          },
+          {
+            "gross": {
+              "amount": "78924239",
+              "state": "gain"
+            },
+            "input": "8828126",
+            "output": "87752365"
+          },
+          {
+            "gross": {
+              "amount": "79622684",
+              "state": "gain"
+            },
+            "input": "8906251",
+            "output": "88528935"
+          },
+          {
+            "gross": {
+              "amount": "80321128",
+              "state": "gain"
+            },
+            "input": "8984376",
+            "output": "89305504"
+          },
+          {
+            "gross": {
+              "amount": "81019573",
+              "state": "gain"
+            },
+            "input": "9062501",
+            "output": "90082074"
+          },
+          {
+            "gross": {
+              "amount": "81718017",
+              "state": "gain"
+            },
+            "input": "9140626",
+            "output": "90858643"
+          },
+          {
+            "gross": {
+              "amount": "82416462",
+              "state": "gain"
+            },
+            "input": "9218751",
+            "output": "91635213"
+          },
+          {
+            "gross": {
+              "amount": "83114906",
+              "state": "gain"
+            },
+            "input": "9296876",
+            "output": "92411782"
+          },
+          {
+            "gross": {
+              "amount": "83813351",
+              "state": "gain"
+            },
+            "input": "9375001",
+            "output": "93188352"
+          },
+          {
+            "gross": {
+              "amount": "84511795",
+              "state": "gain"
+            },
+            "input": "9453126",
+            "output": "93964921"
+          },
+          {
+            "gross": {
+              "amount": "85210240",
+              "state": "gain"
+            },
+            "input": "9531251",
+            "output": "94741491"
+          },
+          {
+            "gross": {
+              "amount": "85908684",
+              "state": "gain"
+            },
+            "input": "9609376",
+            "output": "95518060"
+          },
+          {
+            "gross": {
+              "amount": "86607129",
+              "state": "gain"
+            },
+            "input": "9687501",
+            "output": "96294630"
+          },
+          {
+            "gross": {
+              "amount": "87305573",
+              "state": "gain"
+            },
+            "input": "9765626",
+            "output": "97071199"
+          },
+          {
+            "gross": {
+              "amount": "88004018",
+              "state": "gain"
+            },
+            "input": "9843751",
+            "output": "97847769"
+          },
+          {
+            "gross": {
+              "amount": "88702462",
+              "state": "gain"
+            },
+            "input": "9921876",
+            "output": "98624338"
+          },
+          {
+            "gross": {
+              "amount": "89400907",
+              "state": "gain"
+            },
+            "input": "10000001",
+            "output": "99400908"
+          },
+          {
+            "gross": {
+              "amount": "90099351",
+              "state": "gain"
+            },
+            "input": "10078126",
+            "output": "100177477"
+          },
+          {
+            "gross": {
+              "amount": "90797796",
+              "state": "gain"
+            },
+            "input": "10156251",
+            "output": "100954047"
+          },
+          {
+            "gross": {
+              "amount": "91496240",
+              "state": "gain"
+            },
+            "input": "10234376",
+            "output": "101730616"
+          },
+          {
+            "gross": {
+              "amount": "92194685",
+              "state": "gain"
+            },
+            "input": "10312501",
+            "output": "102507186"
+          },
+          {
+            "gross": {
+              "amount": "92893129",
+              "state": "gain"
+            },
+            "input": "10390626",
+            "output": "103283755"
+          },
+          {
+            "gross": {
+              "amount": "93591574",
+              "state": "gain"
+            },
+            "input": "10468751",
+            "output": "104060325"
+          },
+          {
+            "gross": {
+              "amount": "94290019",
+              "state": "gain"
+            },
+            "input": "10546876",
+            "output": "104836895"
+          },
+          {
+            "gross": {
+              "amount": "94988463",
+              "state": "gain"
+            },
+            "input": "10625001",
+            "output": "105613464"
+          },
+          {
+            "gross": {
+              "amount": "95686908",
+              "state": "gain"
+            },
+            "input": "10703126",
+            "output": "106390034"
+          },
+          {
+            "gross": {
+              "amount": "96385352",
+              "state": "gain"
+            },
+            "input": "10781251",
+            "output": "107166603"
+          },
+          {
+            "gross": {
+              "amount": "97083797",
+              "state": "gain"
+            },
+            "input": "10859376",
+            "output": "107943173"
+          },
+          {
+            "gross": {
+              "amount": "97782241",
+              "state": "gain"
+            },
+            "input": "10937501",
+            "output": "108719742"
+          },
+          {
+            "gross": {
+              "amount": "98480686",
+              "state": "gain"
+            },
+            "input": "11015626",
+            "output": "109496312"
+          },
+          {
+            "gross": {
+              "amount": "99179130",
+              "state": "gain"
+            },
+            "input": "11093751",
+            "output": "110272881"
+          },
+          {
+            "gross": {
+              "amount": "99877575",
+              "state": "gain"
+            },
+            "input": "11171876",
+            "output": "111049451"
+          },
+          {
+            "gross": {
+              "amount": "100576019",
+              "state": "gain"
+            },
+            "input": "11250001",
+            "output": "111826020"
+          },
+          {
+            "gross": {
+              "amount": "101274464",
+              "state": "gain"
+            },
+            "input": "11328126",
+            "output": "112602590"
+          },
+          {
+            "gross": {
+              "amount": "101972908",
+              "state": "gain"
+            },
+            "input": "11406251",
+            "output": "113379159"
+          },
+          {
+            "gross": {
+              "amount": "102671353",
+              "state": "gain"
+            },
+            "input": "11484376",
+            "output": "114155729"
+          },
+          {
+            "gross": {
+              "amount": "103369797",
+              "state": "gain"
+            },
+            "input": "11562501",
+            "output": "114932298"
+          },
+          {
+            "gross": {
+              "amount": "104068242",
+              "state": "gain"
+            },
+            "input": "11640626",
+            "output": "115708868"
+          },
+          {
+            "gross": {
+              "amount": "104766686",
+              "state": "gain"
+            },
+            "input": "11718751",
+            "output": "116485437"
+          },
+          {
+            "gross": {
+              "amount": "105465131",
+              "state": "gain"
+            },
+            "input": "11796876",
+            "output": "117262007"
+          },
+          {
+            "gross": {
+              "amount": "106163575",
+              "state": "gain"
+            },
+            "input": "11875001",
+            "output": "118038576"
+          },
+          {
+            "gross": {
+              "amount": "106862020",
+              "state": "gain"
+            },
+            "input": "11953126",
+            "output": "118815146"
+          },
+          {
+            "gross": {
+              "amount": "107560464",
+              "state": "gain"
+            },
+            "input": "12031251",
+            "output": "119591715"
+          },
+          {
+            "gross": {
+              "amount": "108258909",
+              "state": "gain"
+            },
+            "input": "12109376",
+            "output": "120368285"
+          },
+          {
+            "gross": {
+              "amount": "108957353",
+              "state": "gain"
+            },
+            "input": "12187501",
+            "output": "121144854"
+          },
+          {
+            "gross": {
+              "amount": "109655798",
+              "state": "gain"
+            },
+            "input": "12265626",
+            "output": "121921424"
+          },
+          {
+            "gross": {
+              "amount": "110354242",
+              "state": "gain"
+            },
+            "input": "12343751",
+            "output": "122697993"
+          },
+          {
+            "gross": {
+              "amount": "111052687",
+              "state": "gain"
+            },
+            "input": "12421876",
+            "output": "123474563"
+          },
+          {
+            "gross": {
+              "amount": "111751131",
+              "state": "gain"
+            },
+            "input": "12500001",
+            "output": "124251132"
+          },
+          {
+            "gross": {
+              "amount": "112449576",
+              "state": "gain"
+            },
+            "input": "12578126",
+            "output": "125027702"
+          },
+          {
+            "gross": {
+              "amount": "113148020",
+              "state": "gain"
+            },
+            "input": "12656251",
+            "output": "125804271"
+          },
+          {
+            "gross": {
+              "amount": "113846465",
+              "state": "gain"
+            },
+            "input": "12734376",
+            "output": "126580841"
+          },
+          {
+            "gross": {
+              "amount": "114544909",
+              "state": "gain"
+            },
+            "input": "12812501",
+            "output": "127357410"
+          },
+          {
+            "gross": {
+              "amount": "115243354",
+              "state": "gain"
+            },
+            "input": "12890626",
+            "output": "128133980"
+          },
+          {
+            "gross": {
+              "amount": "115941798",
+              "state": "gain"
+            },
+            "input": "12968751",
+            "output": "128910549"
+          },
+          {
+            "gross": {
+              "amount": "116640243",
+              "state": "gain"
+            },
+            "input": "13046876",
+            "output": "129687119"
+          },
+          {
+            "gross": {
+              "amount": "117338687",
+              "state": "gain"
+            },
+            "input": "13125001",
+            "output": "130463688"
+          },
+          {
+            "gross": {
+              "amount": "118037132",
+              "state": "gain"
+            },
+            "input": "13203126",
+            "output": "131240258"
+          },
+          {
+            "gross": {
+              "amount": "118735576",
+              "state": "gain"
+            },
+            "input": "13281251",
+            "output": "132016827"
+          },
+          {
+            "gross": {
+              "amount": "119434021",
+              "state": "gain"
+            },
+            "input": "13359376",
+            "output": "132793397"
+          },
+          {
+            "gross": {
+              "amount": "120132465",
+              "state": "gain"
+            },
+            "input": "13437501",
+            "output": "133569966"
+          },
+          {
+            "gross": {
+              "amount": "120830910",
+              "state": "gain"
+            },
+            "input": "13515626",
+            "output": "134346536"
+          },
+          {
+            "gross": {
+              "amount": "121529354",
+              "state": "gain"
+            },
+            "input": "13593751",
+            "output": "135123105"
+          },
+          {
+            "gross": {
+              "amount": "122227799",
+              "state": "gain"
+            },
+            "input": "13671876",
+            "output": "135899675"
+          },
+          {
+            "gross": {
+              "amount": "122926243",
+              "state": "gain"
+            },
+            "input": "13750001",
+            "output": "136676244"
+          },
+          {
+            "gross": {
+              "amount": "123624688",
+              "state": "gain"
+            },
+            "input": "13828126",
+            "output": "137452814"
+          },
+          {
+            "gross": {
+              "amount": "124323132",
+              "state": "gain"
+            },
+            "input": "13906251",
+            "output": "138229383"
+          },
+          {
+            "gross": {
+              "amount": "125021577",
+              "state": "gain"
+            },
+            "input": "13984376",
+            "output": "139005953"
+          },
+          {
+            "gross": {
+              "amount": "125720021",
+              "state": "gain"
+            },
+            "input": "14062501",
+            "output": "139782522"
+          },
+          {
+            "gross": {
+              "amount": "126418466",
+              "state": "gain"
+            },
+            "input": "14140626",
+            "output": "140559092"
+          },
+          {
+            "gross": {
+              "amount": "127116910",
+              "state": "gain"
+            },
+            "input": "14218751",
+            "output": "141335661"
+          },
+          {
+            "gross": {
+              "amount": "127815355",
+              "state": "gain"
+            },
+            "input": "14296876",
+            "output": "142112231"
+          },
+          {
+            "gross": {
+              "amount": "128513799",
+              "state": "gain"
+            },
+            "input": "14375001",
+            "output": "142888800"
+          },
+          {
+            "gross": {
+              "amount": "129212244",
+              "state": "gain"
+            },
+            "input": "14453126",
+            "output": "143665370"
+          },
+          {
+            "gross": {
+              "amount": "129910688",
+              "state": "gain"
+            },
+            "input": "14531251",
+            "output": "144441939"
+          },
+          {
+            "gross": {
+              "amount": "130609133",
+              "state": "gain"
+            },
+            "input": "14609376",
+            "output": "145218509"
+          },
+          {
+            "gross": {
+              "amount": "131307577",
+              "state": "gain"
+            },
+            "input": "14687501",
+            "output": "145995078"
+          },
+          {
+            "gross": {
+              "amount": "132006022",
+              "state": "gain"
+            },
+            "input": "14765626",
+            "output": "146771648"
+          },
+          {
+            "gross": {
+              "amount": "132704466",
+              "state": "gain"
+            },
+            "input": "14843751",
+            "output": "147548217"
+          },
+          {
+            "gross": {
+              "amount": "133402911",
+              "state": "gain"
+            },
+            "input": "14921876",
+            "output": "148324787"
+          },
+          {
+            "gross": {
+              "amount": "134101355",
+              "state": "gain"
+            },
+            "input": "15000001",
+            "output": "149101356"
+          },
+          {
+            "gross": {
+              "amount": "134799800",
+              "state": "gain"
+            },
+            "input": "15078126",
+            "output": "149877926"
+          },
+          {
+            "gross": {
+              "amount": "135498244",
+              "state": "gain"
+            },
+            "input": "15156251",
+            "output": "150654495"
+          },
+          {
+            "gross": {
+              "amount": "136196689",
+              "state": "gain"
+            },
+            "input": "15234376",
+            "output": "151431065"
+          },
+          {
+            "gross": {
+              "amount": "136895133",
+              "state": "gain"
+            },
+            "input": "15312501",
+            "output": "152207634"
+          },
+          {
+            "gross": {
+              "amount": "137593578",
+              "state": "gain"
+            },
+            "input": "15390626",
+            "output": "152984204"
+          },
+          {
+            "gross": {
+              "amount": "138292022",
+              "state": "gain"
+            },
+            "input": "15468751",
+            "output": "153760773"
+          },
+          {
+            "gross": {
+              "amount": "138990467",
+              "state": "gain"
+            },
+            "input": "15546876",
+            "output": "154537343"
+          },
+          {
+            "gross": {
+              "amount": "139688911",
+              "state": "gain"
+            },
+            "input": "15625001",
+            "output": "155313912"
+          },
+          {
+            "gross": {
+              "amount": "140387356",
+              "state": "gain"
+            },
+            "input": "15703126",
+            "output": "156090482"
+          },
+          {
+            "gross": {
+              "amount": "141085800",
+              "state": "gain"
+            },
+            "input": "15781251",
+            "output": "156867051"
+          },
+          {
+            "gross": {
+              "amount": "141784245",
+              "state": "gain"
+            },
+            "input": "15859376",
+            "output": "157643621"
+          },
+          {
+            "gross": {
+              "amount": "142482689",
+              "state": "gain"
+            },
+            "input": "15937501",
+            "output": "158420190"
+          },
+          {
+            "gross": {
+              "amount": "143181134",
+              "state": "gain"
+            },
+            "input": "16015626",
+            "output": "159196760"
+          },
+          {
+            "gross": {
+              "amount": "143879578",
+              "state": "gain"
+            },
+            "input": "16093751",
+            "output": "159973329"
+          },
+          {
+            "gross": {
+              "amount": "144578023",
+              "state": "gain"
+            },
+            "input": "16171876",
+            "output": "160749899"
+          },
+          {
+            "gross": {
+              "amount": "145276467",
+              "state": "gain"
+            },
+            "input": "16250001",
+            "output": "161526468"
+          },
+          {
+            "gross": {
+              "amount": "145974912",
+              "state": "gain"
+            },
+            "input": "16328126",
+            "output": "162303038"
+          },
+          {
+            "gross": {
+              "amount": "146673356",
+              "state": "gain"
+            },
+            "input": "16406251",
+            "output": "163079607"
+          },
+          {
+            "gross": {
+              "amount": "147371800",
+              "state": "gain"
+            },
+            "input": "16484376",
+            "output": "163856176"
+          },
+          {
+            "gross": {
+              "amount": "148070245",
+              "state": "gain"
+            },
+            "input": "16562501",
+            "output": "164632746"
+          },
+          {
+            "gross": {
+              "amount": "148768689",
+              "state": "gain"
+            },
+            "input": "16640626",
+            "output": "165409315"
+          },
+          {
+            "gross": {
+              "amount": "149467134",
+              "state": "gain"
+            },
+            "input": "16718751",
+            "output": "166185885"
+          },
+          {
+            "gross": {
+              "amount": "150165578",
+              "state": "gain"
+            },
+            "input": "16796876",
+            "output": "166962454"
+          },
+          {
+            "gross": {
+              "amount": "150864023",
+              "state": "gain"
+            },
+            "input": "16875001",
+            "output": "167739024"
+          },
+          {
+            "gross": {
+              "amount": "151562467",
+              "state": "gain"
+            },
+            "input": "16953126",
+            "output": "168515593"
+          },
+          {
+            "gross": {
+              "amount": "152260912",
+              "state": "gain"
+            },
+            "input": "17031251",
+            "output": "169292163"
+          },
+          {
+            "gross": {
+              "amount": "152959356",
+              "state": "gain"
+            },
+            "input": "17109376",
+            "output": "170068732"
+          },
+          {
+            "gross": {
+              "amount": "153657801",
+              "state": "gain"
+            },
+            "input": "17187501",
+            "output": "170845302"
+          },
+          {
+            "gross": {
+              "amount": "154356245",
+              "state": "gain"
+            },
+            "input": "17265626",
+            "output": "171621871"
+          },
+          {
+            "gross": {
+              "amount": "155054690",
+              "state": "gain"
+            },
+            "input": "17343751",
+            "output": "172398441"
+          },
+          {
+            "gross": {
+              "amount": "155753134",
+              "state": "gain"
+            },
+            "input": "17421876",
+            "output": "173175010"
+          },
+          {
+            "gross": {
+              "amount": "156451579",
+              "state": "gain"
+            },
+            "input": "17500001",
+            "output": "173951580"
+          },
+          {
+            "gross": {
+              "amount": "157150023",
+              "state": "gain"
+            },
+            "input": "17578126",
+            "output": "174728149"
+          },
+          {
+            "gross": {
+              "amount": "157848468",
+              "state": "gain"
+            },
+            "input": "17656251",
+            "output": "175504719"
+          },
+          {
+            "gross": {
+              "amount": "158546912",
+              "state": "gain"
+            },
+            "input": "17734376",
+            "output": "176281288"
+          },
+          {
+            "gross": {
+              "amount": "159245357",
+              "state": "gain"
+            },
+            "input": "17812501",
+            "output": "177057858"
+          },
+          {
+            "gross": {
+              "amount": "159943801",
+              "state": "gain"
+            },
+            "input": "17890626",
+            "output": "177834427"
+          },
+          {
+            "gross": {
+              "amount": "160642246",
+              "state": "gain"
+            },
+            "input": "17968751",
+            "output": "178610997"
+          },
+          {
+            "gross": {
+              "amount": "161340690",
+              "state": "gain"
+            },
+            "input": "18046876",
+            "output": "179387566"
+          },
+          {
+            "gross": {
+              "amount": "162039135",
+              "state": "gain"
+            },
+            "input": "18125001",
+            "output": "180164136"
+          },
+          {
+            "gross": {
+              "amount": "162737579",
+              "state": "gain"
+            },
+            "input": "18203126",
+            "output": "180940705"
+          },
+          {
+            "gross": {
+              "amount": "163436024",
+              "state": "gain"
+            },
+            "input": "18281251",
+            "output": "181717275"
+          },
+          {
+            "gross": {
+              "amount": "164134468",
+              "state": "gain"
+            },
+            "input": "18359376",
+            "output": "182493844"
+          },
+          {
+            "gross": {
+              "amount": "164832913",
+              "state": "gain"
+            },
+            "input": "18437501",
+            "output": "183270414"
+          },
+          {
+            "gross": {
+              "amount": "165531357",
+              "state": "gain"
+            },
+            "input": "18515626",
+            "output": "184046983"
+          },
+          {
+            "gross": {
+              "amount": "166229802",
+              "state": "gain"
+            },
+            "input": "18593751",
+            "output": "184823553"
+          },
+          {
+            "gross": {
+              "amount": "166928246",
+              "state": "gain"
+            },
+            "input": "18671876",
+            "output": "185600122"
+          },
+          {
+            "gross": {
+              "amount": "167626691",
+              "state": "gain"
+            },
+            "input": "18750001",
+            "output": "186376692"
+          },
+          {
+            "gross": {
+              "amount": "168325135",
+              "state": "gain"
+            },
+            "input": "18828126",
+            "output": "187153261"
+          },
+          {
+            "gross": {
+              "amount": "169023580",
+              "state": "gain"
+            },
+            "input": "18906251",
+            "output": "187929831"
+          },
+          {
+            "gross": {
+              "amount": "169722024",
+              "state": "gain"
+            },
+            "input": "18984376",
+            "output": "188706400"
+          },
+          {
+            "gross": {
+              "amount": "170420469",
+              "state": "gain"
+            },
+            "input": "19062501",
+            "output": "189482970"
+          },
+          {
+            "gross": {
+              "amount": "171118913",
+              "state": "gain"
+            },
+            "input": "19140626",
+            "output": "190259539"
+          },
+          {
+            "gross": {
+              "amount": "171817358",
+              "state": "gain"
+            },
+            "input": "19218751",
+            "output": "191036109"
+          },
+          {
+            "gross": {
+              "amount": "172515802",
+              "state": "gain"
+            },
+            "input": "19296876",
+            "output": "191812678"
+          },
+          {
+            "gross": {
+              "amount": "173214247",
+              "state": "gain"
+            },
+            "input": "19375001",
+            "output": "192589248"
+          },
+          {
+            "gross": {
+              "amount": "173912691",
+              "state": "gain"
+            },
+            "input": "19453126",
+            "output": "193365817"
+          },
+          {
+            "gross": {
+              "amount": "174611136",
+              "state": "gain"
+            },
+            "input": "19531251",
+            "output": "194142387"
+          },
+          {
+            "gross": {
+              "amount": "175309580",
+              "state": "gain"
+            },
+            "input": "19609376",
+            "output": "194918956"
+          },
+          {
+            "gross": {
+              "amount": "176008025",
+              "state": "gain"
+            },
+            "input": "19687501",
+            "output": "195695526"
+          },
+          {
+            "gross": {
+              "amount": "176706469",
+              "state": "gain"
+            },
+            "input": "19765626",
+            "output": "196472095"
+          },
+          {
+            "gross": {
+              "amount": "177404914",
+              "state": "gain"
+            },
+            "input": "19843751",
+            "output": "197248665"
+          },
+          {
+            "gross": {
+              "amount": "178103358",
+              "state": "gain"
+            },
+            "input": "19921876",
+            "output": "198025234"
+          },
+          {
+            "gross": {
+              "amount": "178102786",
+              "state": "gain"
+            },
+            "input": "19921812",
+            "output": "198024598"
+          },
+          {
+            "gross": {
+              "amount": "178102795",
+              "state": "gain"
+            },
+            "input": "19921813",
+            "output": "198024608"
+          },
+          {
+            "gross": {
+              "amount": "178102804",
+              "state": "gain"
+            },
+            "input": "19921814",
+            "output": "198024618"
+          },
+          {
+            "gross": {
+              "amount": "178102813",
+              "state": "gain"
+            },
+            "input": "19921815",
+            "output": "198024628"
+          },
+          {
+            "gross": {
+              "amount": "178102822",
+              "state": "gain"
+            },
+            "input": "19921816",
+            "output": "198024638"
+          },
+          {
+            "gross": {
+              "amount": "178102831",
+              "state": "gain"
+            },
+            "input": "19921817",
+            "output": "198024648"
+          },
+          {
+            "gross": {
+              "amount": "178102839",
+              "state": "gain"
+            },
+            "input": "19921818",
+            "output": "198024657"
+          },
+          {
+            "gross": {
+              "amount": "178102848",
+              "state": "gain"
+            },
+            "input": "19921819",
+            "output": "198024667"
+          },
+          {
+            "gross": {
+              "amount": "178102857",
+              "state": "gain"
+            },
+            "input": "19921820",
+            "output": "198024677"
+          },
+          {
+            "gross": {
+              "amount": "178102866",
+              "state": "gain"
+            },
+            "input": "19921821",
+            "output": "198024687"
+          },
+          {
+            "gross": {
+              "amount": "178102875",
+              "state": "gain"
+            },
+            "input": "19921822",
+            "output": "198024697"
+          },
+          {
+            "gross": {
+              "amount": "178102884",
+              "state": "gain"
+            },
+            "input": "19921823",
+            "output": "198024707"
+          },
+          {
+            "gross": {
+              "amount": "178102893",
+              "state": "gain"
+            },
+            "input": "19921824",
+            "output": "198024717"
+          },
+          {
+            "gross": {
+              "amount": "178102902",
+              "state": "gain"
+            },
+            "input": "19921825",
+            "output": "198024727"
+          },
+          {
+            "gross": {
+              "amount": "178102911",
+              "state": "gain"
+            },
+            "input": "19921826",
+            "output": "198024737"
+          },
+          {
+            "gross": {
+              "amount": "178102920",
+              "state": "gain"
+            },
+            "input": "19921827",
+            "output": "198024747"
+          },
+          {
+            "gross": {
+              "amount": "178102929",
+              "state": "gain"
+            },
+            "input": "19921828",
+            "output": "198024757"
+          },
+          {
+            "gross": {
+              "amount": "178102938",
+              "state": "gain"
+            },
+            "input": "19921829",
+            "output": "198024767"
+          },
+          {
+            "gross": {
+              "amount": "178102947",
+              "state": "gain"
+            },
+            "input": "19921830",
+            "output": "198024777"
+          },
+          {
+            "gross": {
+              "amount": "178102956",
+              "state": "gain"
+            },
+            "input": "19921831",
+            "output": "198024787"
+          },
+          {
+            "gross": {
+              "amount": "178102965",
+              "state": "gain"
+            },
+            "input": "19921832",
+            "output": "198024797"
+          },
+          {
+            "gross": {
+              "amount": "178102974",
+              "state": "gain"
+            },
+            "input": "19921833",
+            "output": "198024807"
+          },
+          {
+            "gross": {
+              "amount": "178102983",
+              "state": "gain"
+            },
+            "input": "19921834",
+            "output": "198024817"
+          },
+          {
+            "gross": {
+              "amount": "178102991",
+              "state": "gain"
+            },
+            "input": "19921835",
+            "output": "198024826"
+          },
+          {
+            "gross": {
+              "amount": "178103000",
+              "state": "gain"
+            },
+            "input": "19921836",
+            "output": "198024836"
+          },
+          {
+            "gross": {
+              "amount": "178103009",
+              "state": "gain"
+            },
+            "input": "19921837",
+            "output": "198024846"
+          },
+          {
+            "gross": {
+              "amount": "178103018",
+              "state": "gain"
+            },
+            "input": "19921838",
+            "output": "198024856"
+          },
+          {
+            "gross": {
+              "amount": "178103027",
+              "state": "gain"
+            },
+            "input": "19921839",
+            "output": "198024866"
+          },
+          {
+            "gross": {
+              "amount": "178103036",
+              "state": "gain"
+            },
+            "input": "19921840",
+            "output": "198024876"
+          },
+          {
+            "gross": {
+              "amount": "178103045",
+              "state": "gain"
+            },
+            "input": "19921841",
+            "output": "198024886"
+          },
+          {
+            "gross": {
+              "amount": "178103054",
+              "state": "gain"
+            },
+            "input": "19921842",
+            "output": "198024896"
+          },
+          {
+            "gross": {
+              "amount": "178103063",
+              "state": "gain"
+            },
+            "input": "19921843",
+            "output": "198024906"
+          },
+          {
+            "gross": {
+              "amount": "178103072",
+              "state": "gain"
+            },
+            "input": "19921844",
+            "output": "198024916"
+          },
+          {
+            "gross": {
+              "amount": "178103081",
+              "state": "gain"
+            },
+            "input": "19921845",
+            "output": "198024926"
+          },
+          {
+            "gross": {
+              "amount": "178103090",
+              "state": "gain"
+            },
+            "input": "19921846",
+            "output": "198024936"
+          },
+          {
+            "gross": {
+              "amount": "178103099",
+              "state": "gain"
+            },
+            "input": "19921847",
+            "output": "198024946"
+          },
+          {
+            "gross": {
+              "amount": "178103108",
+              "state": "gain"
+            },
+            "input": "19921848",
+            "output": "198024956"
+          },
+          {
+            "gross": {
+              "amount": "178103117",
+              "state": "gain"
+            },
+            "input": "19921849",
+            "output": "198024966"
+          },
+          {
+            "gross": {
+              "amount": "178103126",
+              "state": "gain"
+            },
+            "input": "19921850",
+            "output": "198024976"
+          },
+          {
+            "gross": {
+              "amount": "178103135",
+              "state": "gain"
+            },
+            "input": "19921851",
+            "output": "198024986"
+          },
+          {
+            "gross": {
+              "amount": "178103143",
+              "state": "gain"
+            },
+            "input": "19921852",
+            "output": "198024995"
+          },
+          {
+            "gross": {
+              "amount": "178103152",
+              "state": "gain"
+            },
+            "input": "19921853",
+            "output": "198025005"
+          },
+          {
+            "gross": {
+              "amount": "178103161",
+              "state": "gain"
+            },
+            "input": "19921854",
+            "output": "198025015"
+          },
+          {
+            "gross": {
+              "amount": "178103170",
+              "state": "gain"
+            },
+            "input": "19921855",
+            "output": "198025025"
+          },
+          {
+            "gross": {
+              "amount": "178103179",
+              "state": "gain"
+            },
+            "input": "19921856",
+            "output": "198025035"
+          },
+          {
+            "gross": {
+              "amount": "178103188",
+              "state": "gain"
+            },
+            "input": "19921857",
+            "output": "198025045"
+          },
+          {
+            "gross": {
+              "amount": "178103197",
+              "state": "gain"
+            },
+            "input": "19921858",
+            "output": "198025055"
+          },
+          {
+            "gross": {
+              "amount": "178103206",
+              "state": "gain"
+            },
+            "input": "19921859",
+            "output": "198025065"
+          },
+          {
+            "gross": {
+              "amount": "178103215",
+              "state": "gain"
+            },
+            "input": "19921860",
+            "output": "198025075"
+          },
+          {
+            "gross": {
+              "amount": "178103224",
+              "state": "gain"
+            },
+            "input": "19921861",
+            "output": "198025085"
+          },
+          {
+            "gross": {
+              "amount": "178103233",
+              "state": "gain"
+            },
+            "input": "19921862",
+            "output": "198025095"
+          },
+          {
+            "gross": {
+              "amount": "178103242",
+              "state": "gain"
+            },
+            "input": "19921863",
+            "output": "198025105"
+          },
+          {
+            "gross": {
+              "amount": "178103251",
+              "state": "gain"
+            },
+            "input": "19921864",
+            "output": "198025115"
+          },
+          {
+            "gross": {
+              "amount": "178103260",
+              "state": "gain"
+            },
+            "input": "19921865",
+            "output": "198025125"
+          },
+          {
+            "gross": {
+              "amount": "178103269",
+              "state": "gain"
+            },
+            "input": "19921866",
+            "output": "198025135"
+          },
+          {
+            "gross": {
+              "amount": "178103278",
+              "state": "gain"
+            },
+            "input": "19921867",
+            "output": "198025145"
+          },
+          {
+            "gross": {
+              "amount": "178103286",
+              "state": "gain"
+            },
+            "input": "19921868",
+            "output": "198025154"
+          },
+          {
+            "gross": {
+              "amount": "178103295",
+              "state": "gain"
+            },
+            "input": "19921869",
+            "output": "198025164"
+          },
+          {
+            "gross": {
+              "amount": "178103304",
+              "state": "gain"
+            },
+            "input": "19921870",
+            "output": "198025174"
+          },
+          {
+            "gross": {
+              "amount": "178103313",
+              "state": "gain"
+            },
+            "input": "19921871",
+            "output": "198025184"
+          },
+          {
+            "gross": {
+              "amount": "178103322",
+              "state": "gain"
+            },
+            "input": "19921872",
+            "output": "198025194"
+          },
+          {
+            "gross": {
+              "amount": "178103331",
+              "state": "gain"
+            },
+            "input": "19921873",
+            "output": "198025204"
+          },
+          {
+            "gross": {
+              "amount": "178103340",
+              "state": "gain"
+            },
+            "input": "19921874",
+            "output": "198025214"
+          },
+          {
+            "gross": {
+              "amount": "178103349",
+              "state": "gain"
+            },
+            "input": "19921875",
+            "output": "198025224"
+          },
+          {
+            "gross": {
+              "amount": "178103358",
+              "state": "gain"
+            },
+            "input": "19921876",
+            "output": "198025234"
+          },
+          {
+            "gross": {
+              "amount": "178103367",
+              "state": "gain"
+            },
+            "input": "19921877",
+            "output": "198025244"
+          },
+          {
+            "gross": {
+              "amount": "178103376",
+              "state": "gain"
+            },
+            "input": "19921878",
+            "output": "198025254"
+          },
+          {
+            "gross": {
+              "amount": "178103385",
+              "state": "gain"
+            },
+            "input": "19921879",
+            "output": "198025264"
+          },
+          {
+            "gross": {
+              "amount": "178103394",
+              "state": "gain"
+            },
+            "input": "19921880",
+            "output": "198025274"
+          },
+          {
+            "gross": {
+              "amount": "178103403",
+              "state": "gain"
+            },
+            "input": "19921881",
+            "output": "198025284"
+          },
+          {
+            "gross": {
+              "amount": "178103412",
+              "state": "gain"
+            },
+            "input": "19921882",
+            "output": "198025294"
+          },
+          {
+            "gross": {
+              "amount": "178103421",
+              "state": "gain"
+            },
+            "input": "19921883",
+            "output": "198025304"
+          },
+          {
+            "gross": {
+              "amount": "178103430",
+              "state": "gain"
+            },
+            "input": "19921884",
+            "output": "198025314"
+          },
+          {
+            "gross": {
+              "amount": "178103438",
+              "state": "gain"
+            },
+            "input": "19921885",
+            "output": "198025323"
+          },
+          {
+            "gross": {
+              "amount": "178103447",
+              "state": "gain"
+            },
+            "input": "19921886",
+            "output": "198025333"
+          },
+          {
+            "gross": {
+              "amount": "178103456",
+              "state": "gain"
+            },
+            "input": "19921887",
+            "output": "198025343"
+          },
+          {
+            "gross": {
+              "amount": "178103465",
+              "state": "gain"
+            },
+            "input": "19921888",
+            "output": "198025353"
+          },
+          {
+            "gross": {
+              "amount": "178103474",
+              "state": "gain"
+            },
+            "input": "19921889",
+            "output": "198025363"
+          },
+          {
+            "gross": {
+              "amount": "178103483",
+              "state": "gain"
+            },
+            "input": "19921890",
+            "output": "198025373"
+          },
+          {
+            "gross": {
+              "amount": "178103492",
+              "state": "gain"
+            },
+            "input": "19921891",
+            "output": "198025383"
+          },
+          {
+            "gross": {
+              "amount": "178103501",
+              "state": "gain"
+            },
+            "input": "19921892",
+            "output": "198025393"
+          },
+          {
+            "gross": {
+              "amount": "178103510",
+              "state": "gain"
+            },
+            "input": "19921893",
+            "output": "198025403"
+          },
+          {
+            "gross": {
+              "amount": "178103519",
+              "state": "gain"
+            },
+            "input": "19921894",
+            "output": "198025413"
+          },
+          {
+            "gross": {
+              "amount": "178103528",
+              "state": "gain"
+            },
+            "input": "19921895",
+            "output": "198025423"
+          },
+          {
+            "gross": {
+              "amount": "178103537",
+              "state": "gain"
+            },
+            "input": "19921896",
+            "output": "198025433"
+          },
+          {
+            "gross": {
+              "amount": "178103546",
+              "state": "gain"
+            },
+            "input": "19921897",
+            "output": "198025443"
+          },
+          {
+            "gross": {
+              "amount": "178103555",
+              "state": "gain"
+            },
+            "input": "19921898",
+            "output": "198025453"
+          },
+          {
+            "gross": {
+              "amount": "178103564",
+              "state": "gain"
+            },
+            "input": "19921899",
+            "output": "198025463"
+          },
+          {
+            "gross": {
+              "amount": "178103573",
+              "state": "gain"
+            },
+            "input": "19921900",
+            "output": "198025473"
+          },
+          {
+            "gross": {
+              "amount": "178103582",
+              "state": "gain"
+            },
+            "input": "19921901",
+            "output": "198025483"
+          },
+          {
+            "gross": {
+              "amount": "178103590",
+              "state": "gain"
+            },
+            "input": "19921902",
+            "output": "198025492"
+          },
+          {
+            "gross": {
+              "amount": "178103599",
+              "state": "gain"
+            },
+            "input": "19921903",
+            "output": "198025502"
+          },
+          {
+            "gross": {
+              "amount": "178103608",
+              "state": "gain"
+            },
+            "input": "19921904",
+            "output": "198025512"
+          },
+          {
+            "gross": {
+              "amount": "178103617",
+              "state": "gain"
+            },
+            "input": "19921905",
+            "output": "198025522"
+          },
+          {
+            "gross": {
+              "amount": "178103626",
+              "state": "gain"
+            },
+            "input": "19921906",
+            "output": "198025532"
+          },
+          {
+            "gross": {
+              "amount": "178103635",
+              "state": "gain"
+            },
+            "input": "19921907",
+            "output": "198025542"
+          },
+          {
+            "gross": {
+              "amount": "178103644",
+              "state": "gain"
+            },
+            "input": "19921908",
+            "output": "198025552"
+          },
+          {
+            "gross": {
+              "amount": "178103653",
+              "state": "gain"
+            },
+            "input": "19921909",
+            "output": "198025562"
+          },
+          {
+            "gross": {
+              "amount": "178103662",
+              "state": "gain"
+            },
+            "input": "19921910",
+            "output": "198025572"
+          },
+          {
+            "gross": {
+              "amount": "178103671",
+              "state": "gain"
+            },
+            "input": "19921911",
+            "output": "198025582"
+          },
+          {
+            "gross": {
+              "amount": "178103680",
+              "state": "gain"
+            },
+            "input": "19921912",
+            "output": "198025592"
+          },
+          {
+            "gross": {
+              "amount": "178103689",
+              "state": "gain"
+            },
+            "input": "19921913",
+            "output": "198025602"
+          },
+          {
+            "gross": {
+              "amount": "178103698",
+              "state": "gain"
+            },
+            "input": "19921914",
+            "output": "198025612"
+          },
+          {
+            "gross": {
+              "amount": "178103707",
+              "state": "gain"
+            },
+            "input": "19921915",
+            "output": "198025622"
+          },
+          {
+            "gross": {
+              "amount": "178103716",
+              "state": "gain"
+            },
+            "input": "19921916",
+            "output": "198025632"
+          },
+          {
+            "gross": {
+              "amount": "178103725",
+              "state": "gain"
+            },
+            "input": "19921917",
+            "output": "198025642"
+          },
+          {
+            "gross": {
+              "amount": "178103733",
+              "state": "gain"
+            },
+            "input": "19921918",
+            "output": "198025651"
+          },
+          {
+            "gross": {
+              "amount": "178103742",
+              "state": "gain"
+            },
+            "input": "19921919",
+            "output": "198025661"
+          },
+          {
+            "gross": {
+              "amount": "178103751",
+              "state": "gain"
+            },
+            "input": "19921920",
+            "output": "198025671"
+          },
+          {
+            "gross": {
+              "amount": "178103760",
+              "state": "gain"
+            },
+            "input": "19921921",
+            "output": "198025681"
+          },
+          {
+            "gross": {
+              "amount": "178103769",
+              "state": "gain"
+            },
+            "input": "19921922",
+            "output": "198025691"
+          },
+          {
+            "gross": {
+              "amount": "178103778",
+              "state": "gain"
+            },
+            "input": "19921923",
+            "output": "198025701"
+          },
+          {
+            "gross": {
+              "amount": "178103787",
+              "state": "gain"
+            },
+            "input": "19921924",
+            "output": "198025711"
+          },
+          {
+            "gross": {
+              "amount": "178103796",
+              "state": "gain"
+            },
+            "input": "19921925",
+            "output": "198025721"
+          },
+          {
+            "gross": {
+              "amount": "178103805",
+              "state": "gain"
+            },
+            "input": "19921926",
+            "output": "198025731"
+          },
+          {
+            "gross": {
+              "amount": "178103814",
+              "state": "gain"
+            },
+            "input": "19921927",
+            "output": "198025741"
+          },
+          {
+            "gross": {
+              "amount": "178103823",
+              "state": "gain"
+            },
+            "input": "19921928",
+            "output": "198025751"
+          },
+          {
+            "gross": {
+              "amount": "178103832",
+              "state": "gain"
+            },
+            "input": "19921929",
+            "output": "198025761"
+          },
+          {
+            "gross": {
+              "amount": "178103841",
+              "state": "gain"
+            },
+            "input": "19921930",
+            "output": "198025771"
+          },
+          {
+            "gross": {
+              "amount": "178103850",
+              "state": "gain"
+            },
+            "input": "19921931",
+            "output": "198025781"
+          },
+          {
+            "gross": {
+              "amount": "178103859",
+              "state": "gain"
+            },
+            "input": "19921932",
+            "output": "198025791"
+          },
+          {
+            "gross": {
+              "amount": "178103868",
+              "state": "gain"
+            },
+            "input": "19921933",
+            "output": "198025801"
+          },
+          {
+            "gross": {
+              "amount": "178103877",
+              "state": "gain"
+            },
+            "input": "19921934",
+            "output": "198025811"
+          },
+          {
+            "gross": {
+              "amount": "178103885",
+              "state": "gain"
+            },
+            "input": "19921935",
+            "output": "198025820"
+          },
+          {
+            "gross": {
+              "amount": "178103894",
+              "state": "gain"
+            },
+            "input": "19921936",
+            "output": "198025830"
+          },
+          {
+            "gross": {
+              "amount": "178103903",
+              "state": "gain"
+            },
+            "input": "19921937",
+            "output": "198025840"
+          },
+          {
+            "gross": {
+              "amount": "178103912",
+              "state": "gain"
+            },
+            "input": "19921938",
+            "output": "198025850"
+          },
+          {
+            "gross": {
+              "amount": "178103921",
+              "state": "gain"
+            },
+            "input": "19921939",
+            "output": "198025860"
+          },
+          {
+            "gross": {
+              "amount": "178103930",
+              "state": "gain"
+            },
+            "input": "19921940",
+            "output": "198025870"
+          }
+        ],
+        "domain_max": "20000000",
+        "domain_min": "1",
+        "domain_width": "20000000",
+        "evaluations": 385,
+        "gross": {
+          "amount": "178103930",
+          "state": "gain"
+        },
+        "policy": {
+          "coarse_points": 256,
+          "exhaustive_limit": 4096,
+          "refine_span": 64
+        },
+        "refusals": 0,
+        "search_max": "20000000",
+        "search_min": "1",
+        "strategy": "coarsethenrefine",
+        "strategy_this_run_took": "coarsethenrefine",
+        "termination": "windowrefined"
+      },
+      "recomputed_independently": {
+        "best_input": "19921940",
+        "best_output": "198025870",
+        "best_profit": {
+          "amount": "178103930",
+          "state": "gain"
+        },
+        "coarse_points_rebuilt": 256,
+        "curve": [
+          {
+            "gross": {
+              "amount": "8",
+              "state": "gain"
+            },
+            "input": "1",
+            "output": "9"
+          },
+          {
+            "gross": {
+              "amount": "698453",
+              "state": "gain"
+            },
+            "input": "78126",
+            "output": "776579"
+          },
+          {
+            "gross": {
+              "amount": "1396898",
+              "state": "gain"
+            },
+            "input": "156251",
+            "output": "1553149"
+          },
+          {
+            "gross": {
+              "amount": "2095342",
+              "state": "gain"
+            },
+            "input": "234376",
+            "output": "2329718"
+          },
+          {
+            "gross": {
+              "amount": "2793787",
+              "state": "gain"
+            },
+            "input": "312501",
+            "output": "3106288"
+          },
+          {
+            "gross": {
+              "amount": "3492231",
+              "state": "gain"
+            },
+            "input": "390626",
+            "output": "3882857"
+          },
+          {
+            "gross": {
+              "amount": "4190676",
+              "state": "gain"
+            },
+            "input": "468751",
+            "output": "4659427"
+          },
+          {
+            "gross": {
+              "amount": "4889120",
+              "state": "gain"
+            },
+            "input": "546876",
+            "output": "5435996"
+          },
+          {
+            "gross": {
+              "amount": "5587565",
+              "state": "gain"
+            },
+            "input": "625001",
+            "output": "6212566"
+          },
+          {
+            "gross": {
+              "amount": "6286009",
+              "state": "gain"
+            },
+            "input": "703126",
+            "output": "6989135"
+          },
+          {
+            "gross": {
+              "amount": "6984454",
+              "state": "gain"
+            },
+            "input": "781251",
+            "output": "7765705"
+          },
+          {
+            "gross": {
+              "amount": "7682898",
+              "state": "gain"
+            },
+            "input": "859376",
+            "output": "8542274"
+          },
+          {
+            "gross": {
+              "amount": "8381343",
+              "state": "gain"
+            },
+            "input": "937501",
+            "output": "9318844"
+          },
+          {
+            "gross": {
+              "amount": "9079787",
+              "state": "gain"
+            },
+            "input": "1015626",
+            "output": "10095413"
+          },
+          {
+            "gross": {
+              "amount": "9778232",
+              "state": "gain"
+            },
+            "input": "1093751",
+            "output": "10871983"
+          },
+          {
+            "gross": {
+              "amount": "10476676",
+              "state": "gain"
+            },
+            "input": "1171876",
+            "output": "11648552"
+          },
+          {
+            "gross": {
+              "amount": "11175121",
+              "state": "gain"
+            },
+            "input": "1250001",
+            "output": "12425122"
+          },
+          {
+            "gross": {
+              "amount": "11873565",
+              "state": "gain"
+            },
+            "input": "1328126",
+            "output": "13201691"
+          },
+          {
+            "gross": {
+              "amount": "12572010",
+              "state": "gain"
+            },
+            "input": "1406251",
+            "output": "13978261"
+          },
+          {
+            "gross": {
+              "amount": "13270455",
+              "state": "gain"
+            },
+            "input": "1484376",
+            "output": "14754831"
+          },
+          {
+            "gross": {
+              "amount": "13968899",
+              "state": "gain"
+            },
+            "input": "1562501",
+            "output": "15531400"
+          },
+          {
+            "gross": {
+              "amount": "14667344",
+              "state": "gain"
+            },
+            "input": "1640626",
+            "output": "16307970"
+          },
+          {
+            "gross": {
+              "amount": "15365788",
+              "state": "gain"
+            },
+            "input": "1718751",
+            "output": "17084539"
+          },
+          {
+            "gross": {
+              "amount": "16064233",
+              "state": "gain"
+            },
+            "input": "1796876",
+            "output": "17861109"
+          },
+          {
+            "gross": {
+              "amount": "16762677",
+              "state": "gain"
+            },
+            "input": "1875001",
+            "output": "18637678"
+          },
+          {
+            "gross": {
+              "amount": "17461122",
+              "state": "gain"
+            },
+            "input": "1953126",
+            "output": "19414248"
+          },
+          {
+            "gross": {
+              "amount": "18159566",
+              "state": "gain"
+            },
+            "input": "2031251",
+            "output": "20190817"
+          },
+          {
+            "gross": {
+              "amount": "18858011",
+              "state": "gain"
+            },
+            "input": "2109376",
+            "output": "20967387"
+          },
+          {
+            "gross": {
+              "amount": "19556455",
+              "state": "gain"
+            },
+            "input": "2187501",
+            "output": "21743956"
+          },
+          {
+            "gross": {
+              "amount": "20254900",
+              "state": "gain"
+            },
+            "input": "2265626",
+            "output": "22520526"
+          },
+          {
+            "gross": {
+              "amount": "20953344",
+              "state": "gain"
+            },
+            "input": "2343751",
+            "output": "23297095"
+          },
+          {
+            "gross": {
+              "amount": "21651789",
+              "state": "gain"
+            },
+            "input": "2421876",
+            "output": "24073665"
+          },
+          {
+            "gross": {
+              "amount": "22350233",
+              "state": "gain"
+            },
+            "input": "2500001",
+            "output": "24850234"
+          },
+          {
+            "gross": {
+              "amount": "23048678",
+              "state": "gain"
+            },
+            "input": "2578126",
+            "output": "25626804"
+          },
+          {
+            "gross": {
+              "amount": "23747122",
+              "state": "gain"
+            },
+            "input": "2656251",
+            "output": "26403373"
+          },
+          {
+            "gross": {
+              "amount": "24445567",
+              "state": "gain"
+            },
+            "input": "2734376",
+            "output": "27179943"
+          },
+          {
+            "gross": {
+              "amount": "25144011",
+              "state": "gain"
+            },
+            "input": "2812501",
+            "output": "27956512"
+          },
+          {
+            "gross": {
+              "amount": "25842456",
+              "state": "gain"
+            },
+            "input": "2890626",
+            "output": "28733082"
+          },
+          {
+            "gross": {
+              "amount": "26540900",
+              "state": "gain"
+            },
+            "input": "2968751",
+            "output": "29509651"
+          },
+          {
+            "gross": {
+              "amount": "27239345",
+              "state": "gain"
+            },
+            "input": "3046876",
+            "output": "30286221"
+          },
+          {
+            "gross": {
+              "amount": "27937790",
+              "state": "gain"
+            },
+            "input": "3125001",
+            "output": "31062791"
+          },
+          {
+            "gross": {
+              "amount": "28636234",
+              "state": "gain"
+            },
+            "input": "3203126",
+            "output": "31839360"
+          },
+          {
+            "gross": {
+              "amount": "29334679",
+              "state": "gain"
+            },
+            "input": "3281251",
+            "output": "32615930"
+          },
+          {
+            "gross": {
+              "amount": "30033123",
+              "state": "gain"
+            },
+            "input": "3359376",
+            "output": "33392499"
+          },
+          {
+            "gross": {
+              "amount": "30731568",
+              "state": "gain"
+            },
+            "input": "3437501",
+            "output": "34169069"
+          },
+          {
+            "gross": {
+              "amount": "31430012",
+              "state": "gain"
+            },
+            "input": "3515626",
+            "output": "34945638"
+          },
+          {
+            "gross": {
+              "amount": "32128457",
+              "state": "gain"
+            },
+            "input": "3593751",
+            "output": "35722208"
+          },
+          {
+            "gross": {
+              "amount": "32826901",
+              "state": "gain"
+            },
+            "input": "3671876",
+            "output": "36498777"
+          },
+          {
+            "gross": {
+              "amount": "33525346",
+              "state": "gain"
+            },
+            "input": "3750001",
+            "output": "37275347"
+          },
+          {
+            "gross": {
+              "amount": "34223790",
+              "state": "gain"
+            },
+            "input": "3828126",
+            "output": "38051916"
+          },
+          {
+            "gross": {
+              "amount": "34922235",
+              "state": "gain"
+            },
+            "input": "3906251",
+            "output": "38828486"
+          },
+          {
+            "gross": {
+              "amount": "35620679",
+              "state": "gain"
+            },
+            "input": "3984376",
+            "output": "39605055"
+          },
+          {
+            "gross": {
+              "amount": "36319124",
+              "state": "gain"
+            },
+            "input": "4062501",
+            "output": "40381625"
+          },
+          {
+            "gross": {
+              "amount": "37017568",
+              "state": "gain"
+            },
+            "input": "4140626",
+            "output": "41158194"
+          },
+          {
+            "gross": {
+              "amount": "37716013",
+              "state": "gain"
+            },
+            "input": "4218751",
+            "output": "41934764"
+          },
+          {
+            "gross": {
+              "amount": "38414457",
+              "state": "gain"
+            },
+            "input": "4296876",
+            "output": "42711333"
+          },
+          {
+            "gross": {
+              "amount": "39112902",
+              "state": "gain"
+            },
+            "input": "4375001",
+            "output": "43487903"
+          },
+          {
+            "gross": {
+              "amount": "39811346",
+              "state": "gain"
+            },
+            "input": "4453126",
+            "output": "44264472"
+          },
+          {
+            "gross": {
+              "amount": "40509791",
+              "state": "gain"
+            },
+            "input": "4531251",
+            "output": "45041042"
+          },
+          {
+            "gross": {
+              "amount": "41208235",
+              "state": "gain"
+            },
+            "input": "4609376",
+            "output": "45817611"
+          },
+          {
+            "gross": {
+              "amount": "41906680",
+              "state": "gain"
+            },
+            "input": "4687501",
+            "output": "46594181"
+          },
+          {
+            "gross": {
+              "amount": "42605125",
+              "state": "gain"
+            },
+            "input": "4765626",
+            "output": "47370751"
+          },
+          {
+            "gross": {
+              "amount": "43303569",
+              "state": "gain"
+            },
+            "input": "4843751",
+            "output": "48147320"
+          },
+          {
+            "gross": {
+              "amount": "44002014",
+              "state": "gain"
+            },
+            "input": "4921876",
+            "output": "48923890"
+          },
+          {
+            "gross": {
+              "amount": "44700458",
+              "state": "gain"
+            },
+            "input": "5000001",
+            "output": "49700459"
+          },
+          {
+            "gross": {
+              "amount": "45398903",
+              "state": "gain"
+            },
+            "input": "5078126",
+            "output": "50477029"
+          },
+          {
+            "gross": {
+              "amount": "46097347",
+              "state": "gain"
+            },
+            "input": "5156251",
+            "output": "51253598"
+          },
+          {
+            "gross": {
+              "amount": "46795792",
+              "state": "gain"
+            },
+            "input": "5234376",
+            "output": "52030168"
+          },
+          {
+            "gross": {
+              "amount": "47494236",
+              "state": "gain"
+            },
+            "input": "5312501",
+            "output": "52806737"
+          },
+          {
+            "gross": {
+              "amount": "48192681",
+              "state": "gain"
+            },
+            "input": "5390626",
+            "output": "53583307"
+          },
+          {
+            "gross": {
+              "amount": "48891125",
+              "state": "gain"
+            },
+            "input": "5468751",
+            "output": "54359876"
+          },
+          {
+            "gross": {
+              "amount": "49589570",
+              "state": "gain"
+            },
+            "input": "5546876",
+            "output": "55136446"
+          },
+          {
+            "gross": {
+              "amount": "50288014",
+              "state": "gain"
+            },
+            "input": "5625001",
+            "output": "55913015"
+          },
+          {
+            "gross": {
+              "amount": "50986459",
+              "state": "gain"
+            },
+            "input": "5703126",
+            "output": "56689585"
+          },
+          {
+            "gross": {
+              "amount": "51684903",
+              "state": "gain"
+            },
+            "input": "5781251",
+            "output": "57466154"
+          },
+          {
+            "gross": {
+              "amount": "52383348",
+              "state": "gain"
+            },
+            "input": "5859376",
+            "output": "58242724"
+          },
+          {
+            "gross": {
+              "amount": "53081792",
+              "state": "gain"
+            },
+            "input": "5937501",
+            "output": "59019293"
+          },
+          {
+            "gross": {
+              "amount": "53780237",
+              "state": "gain"
+            },
+            "input": "6015626",
+            "output": "59795863"
+          },
+          {
+            "gross": {
+              "amount": "54478681",
+              "state": "gain"
+            },
+            "input": "6093751",
+            "output": "60572432"
+          },
+          {
+            "gross": {
+              "amount": "55177126",
+              "state": "gain"
+            },
+            "input": "6171876",
+            "output": "61349002"
+          },
+          {
+            "gross": {
+              "amount": "55875570",
+              "state": "gain"
+            },
+            "input": "6250001",
+            "output": "62125571"
+          },
+          {
+            "gross": {
+              "amount": "56574015",
+              "state": "gain"
+            },
+            "input": "6328126",
+            "output": "62902141"
+          },
+          {
+            "gross": {
+              "amount": "57272459",
+              "state": "gain"
+            },
+            "input": "6406251",
+            "output": "63678710"
+          },
+          {
+            "gross": {
+              "amount": "57970904",
+              "state": "gain"
+            },
+            "input": "6484376",
+            "output": "64455280"
+          },
+          {
+            "gross": {
+              "amount": "58669348",
+              "state": "gain"
+            },
+            "input": "6562501",
+            "output": "65231849"
+          },
+          {
+            "gross": {
+              "amount": "59367793",
+              "state": "gain"
+            },
+            "input": "6640626",
+            "output": "66008419"
+          },
+          {
+            "gross": {
+              "amount": "60066237",
+              "state": "gain"
+            },
+            "input": "6718751",
+            "output": "66784988"
+          },
+          {
+            "gross": {
+              "amount": "60764682",
+              "state": "gain"
+            },
+            "input": "6796876",
+            "output": "67561558"
+          },
+          {
+            "gross": {
+              "amount": "61463126",
+              "state": "gain"
+            },
+            "input": "6875001",
+            "output": "68338127"
+          },
+          {
+            "gross": {
+              "amount": "62161571",
+              "state": "gain"
+            },
+            "input": "6953126",
+            "output": "69114697"
+          },
+          {
+            "gross": {
+              "amount": "62860016",
+              "state": "gain"
+            },
+            "input": "7031251",
+            "output": "69891267"
+          },
+          {
+            "gross": {
+              "amount": "63558460",
+              "state": "gain"
+            },
+            "input": "7109376",
+            "output": "70667836"
+          },
+          {
+            "gross": {
+              "amount": "64256905",
+              "state": "gain"
+            },
+            "input": "7187501",
+            "output": "71444406"
+          },
+          {
+            "gross": {
+              "amount": "64955349",
+              "state": "gain"
+            },
+            "input": "7265626",
+            "output": "72220975"
+          },
+          {
+            "gross": {
+              "amount": "65653794",
+              "state": "gain"
+            },
+            "input": "7343751",
+            "output": "72997545"
+          },
+          {
+            "gross": {
+              "amount": "66352238",
+              "state": "gain"
+            },
+            "input": "7421876",
+            "output": "73774114"
+          },
+          {
+            "gross": {
+              "amount": "67050683",
+              "state": "gain"
+            },
+            "input": "7500001",
+            "output": "74550684"
+          },
+          {
+            "gross": {
+              "amount": "67749127",
+              "state": "gain"
+            },
+            "input": "7578126",
+            "output": "75327253"
+          },
+          {
+            "gross": {
+              "amount": "68447572",
+              "state": "gain"
+            },
+            "input": "7656251",
+            "output": "76103823"
+          },
+          {
+            "gross": {
+              "amount": "69146016",
+              "state": "gain"
+            },
+            "input": "7734376",
+            "output": "76880392"
+          },
+          {
+            "gross": {
+              "amount": "69844461",
+              "state": "gain"
+            },
+            "input": "7812501",
+            "output": "77656962"
+          },
+          {
+            "gross": {
+              "amount": "70542905",
+              "state": "gain"
+            },
+            "input": "7890626",
+            "output": "78433531"
+          },
+          {
+            "gross": {
+              "amount": "71241350",
+              "state": "gain"
+            },
+            "input": "7968751",
+            "output": "79210101"
+          },
+          {
+            "gross": {
+              "amount": "71939794",
+              "state": "gain"
+            },
+            "input": "8046876",
+            "output": "79986670"
+          },
+          {
+            "gross": {
+              "amount": "72638239",
+              "state": "gain"
+            },
+            "input": "8125001",
+            "output": "80763240"
+          },
+          {
+            "gross": {
+              "amount": "73336683",
+              "state": "gain"
+            },
+            "input": "8203126",
+            "output": "81539809"
+          },
+          {
+            "gross": {
+              "amount": "74035128",
+              "state": "gain"
+            },
+            "input": "8281251",
+            "output": "82316379"
+          },
+          {
+            "gross": {
+              "amount": "74733572",
+              "state": "gain"
+            },
+            "input": "8359376",
+            "output": "83092948"
+          },
+          {
+            "gross": {
+              "amount": "75432017",
+              "state": "gain"
+            },
+            "input": "8437501",
+            "output": "83869518"
+          },
+          {
+            "gross": {
+              "amount": "76130461",
+              "state": "gain"
+            },
+            "input": "8515626",
+            "output": "84646087"
+          },
+          {
+            "gross": {
+              "amount": "76828906",
+              "state": "gain"
+            },
+            "input": "8593751",
+            "output": "85422657"
+          },
+          {
+            "gross": {
+              "amount": "77527350",
+              "state": "gain"
+            },
+            "input": "8671876",
+            "output": "86199226"
+          },
+          {
+            "gross": {
+              "amount": "78225795",
+              "state": "gain"
+            },
+            "input": "8750001",
+            "output": "86975796"
+          },
+          {
+            "gross": {
+              "amount": "78924239",
+              "state": "gain"
+            },
+            "input": "8828126",
+            "output": "87752365"
+          },
+          {
+            "gross": {
+              "amount": "79622684",
+              "state": "gain"
+            },
+            "input": "8906251",
+            "output": "88528935"
+          },
+          {
+            "gross": {
+              "amount": "80321128",
+              "state": "gain"
+            },
+            "input": "8984376",
+            "output": "89305504"
+          },
+          {
+            "gross": {
+              "amount": "81019573",
+              "state": "gain"
+            },
+            "input": "9062501",
+            "output": "90082074"
+          },
+          {
+            "gross": {
+              "amount": "81718017",
+              "state": "gain"
+            },
+            "input": "9140626",
+            "output": "90858643"
+          },
+          {
+            "gross": {
+              "amount": "82416462",
+              "state": "gain"
+            },
+            "input": "9218751",
+            "output": "91635213"
+          },
+          {
+            "gross": {
+              "amount": "83114906",
+              "state": "gain"
+            },
+            "input": "9296876",
+            "output": "92411782"
+          },
+          {
+            "gross": {
+              "amount": "83813351",
+              "state": "gain"
+            },
+            "input": "9375001",
+            "output": "93188352"
+          },
+          {
+            "gross": {
+              "amount": "84511795",
+              "state": "gain"
+            },
+            "input": "9453126",
+            "output": "93964921"
+          },
+          {
+            "gross": {
+              "amount": "85210240",
+              "state": "gain"
+            },
+            "input": "9531251",
+            "output": "94741491"
+          },
+          {
+            "gross": {
+              "amount": "85908684",
+              "state": "gain"
+            },
+            "input": "9609376",
+            "output": "95518060"
+          },
+          {
+            "gross": {
+              "amount": "86607129",
+              "state": "gain"
+            },
+            "input": "9687501",
+            "output": "96294630"
+          },
+          {
+            "gross": {
+              "amount": "87305573",
+              "state": "gain"
+            },
+            "input": "9765626",
+            "output": "97071199"
+          },
+          {
+            "gross": {
+              "amount": "88004018",
+              "state": "gain"
+            },
+            "input": "9843751",
+            "output": "97847769"
+          },
+          {
+            "gross": {
+              "amount": "88702462",
+              "state": "gain"
+            },
+            "input": "9921876",
+            "output": "98624338"
+          },
+          {
+            "gross": {
+              "amount": "89400907",
+              "state": "gain"
+            },
+            "input": "10000001",
+            "output": "99400908"
+          },
+          {
+            "gross": {
+              "amount": "90099351",
+              "state": "gain"
+            },
+            "input": "10078126",
+            "output": "100177477"
+          },
+          {
+            "gross": {
+              "amount": "90797796",
+              "state": "gain"
+            },
+            "input": "10156251",
+            "output": "100954047"
+          },
+          {
+            "gross": {
+              "amount": "91496240",
+              "state": "gain"
+            },
+            "input": "10234376",
+            "output": "101730616"
+          },
+          {
+            "gross": {
+              "amount": "92194685",
+              "state": "gain"
+            },
+            "input": "10312501",
+            "output": "102507186"
+          },
+          {
+            "gross": {
+              "amount": "92893129",
+              "state": "gain"
+            },
+            "input": "10390626",
+            "output": "103283755"
+          },
+          {
+            "gross": {
+              "amount": "93591574",
+              "state": "gain"
+            },
+            "input": "10468751",
+            "output": "104060325"
+          },
+          {
+            "gross": {
+              "amount": "94290019",
+              "state": "gain"
+            },
+            "input": "10546876",
+            "output": "104836895"
+          },
+          {
+            "gross": {
+              "amount": "94988463",
+              "state": "gain"
+            },
+            "input": "10625001",
+            "output": "105613464"
+          },
+          {
+            "gross": {
+              "amount": "95686908",
+              "state": "gain"
+            },
+            "input": "10703126",
+            "output": "106390034"
+          },
+          {
+            "gross": {
+              "amount": "96385352",
+              "state": "gain"
+            },
+            "input": "10781251",
+            "output": "107166603"
+          },
+          {
+            "gross": {
+              "amount": "97083797",
+              "state": "gain"
+            },
+            "input": "10859376",
+            "output": "107943173"
+          },
+          {
+            "gross": {
+              "amount": "97782241",
+              "state": "gain"
+            },
+            "input": "10937501",
+            "output": "108719742"
+          },
+          {
+            "gross": {
+              "amount": "98480686",
+              "state": "gain"
+            },
+            "input": "11015626",
+            "output": "109496312"
+          },
+          {
+            "gross": {
+              "amount": "99179130",
+              "state": "gain"
+            },
+            "input": "11093751",
+            "output": "110272881"
+          },
+          {
+            "gross": {
+              "amount": "99877575",
+              "state": "gain"
+            },
+            "input": "11171876",
+            "output": "111049451"
+          },
+          {
+            "gross": {
+              "amount": "100576019",
+              "state": "gain"
+            },
+            "input": "11250001",
+            "output": "111826020"
+          },
+          {
+            "gross": {
+              "amount": "101274464",
+              "state": "gain"
+            },
+            "input": "11328126",
+            "output": "112602590"
+          },
+          {
+            "gross": {
+              "amount": "101972908",
+              "state": "gain"
+            },
+            "input": "11406251",
+            "output": "113379159"
+          },
+          {
+            "gross": {
+              "amount": "102671353",
+              "state": "gain"
+            },
+            "input": "11484376",
+            "output": "114155729"
+          },
+          {
+            "gross": {
+              "amount": "103369797",
+              "state": "gain"
+            },
+            "input": "11562501",
+            "output": "114932298"
+          },
+          {
+            "gross": {
+              "amount": "104068242",
+              "state": "gain"
+            },
+            "input": "11640626",
+            "output": "115708868"
+          },
+          {
+            "gross": {
+              "amount": "104766686",
+              "state": "gain"
+            },
+            "input": "11718751",
+            "output": "116485437"
+          },
+          {
+            "gross": {
+              "amount": "105465131",
+              "state": "gain"
+            },
+            "input": "11796876",
+            "output": "117262007"
+          },
+          {
+            "gross": {
+              "amount": "106163575",
+              "state": "gain"
+            },
+            "input": "11875001",
+            "output": "118038576"
+          },
+          {
+            "gross": {
+              "amount": "106862020",
+              "state": "gain"
+            },
+            "input": "11953126",
+            "output": "118815146"
+          },
+          {
+            "gross": {
+              "amount": "107560464",
+              "state": "gain"
+            },
+            "input": "12031251",
+            "output": "119591715"
+          },
+          {
+            "gross": {
+              "amount": "108258909",
+              "state": "gain"
+            },
+            "input": "12109376",
+            "output": "120368285"
+          },
+          {
+            "gross": {
+              "amount": "108957353",
+              "state": "gain"
+            },
+            "input": "12187501",
+            "output": "121144854"
+          },
+          {
+            "gross": {
+              "amount": "109655798",
+              "state": "gain"
+            },
+            "input": "12265626",
+            "output": "121921424"
+          },
+          {
+            "gross": {
+              "amount": "110354242",
+              "state": "gain"
+            },
+            "input": "12343751",
+            "output": "122697993"
+          },
+          {
+            "gross": {
+              "amount": "111052687",
+              "state": "gain"
+            },
+            "input": "12421876",
+            "output": "123474563"
+          },
+          {
+            "gross": {
+              "amount": "111751131",
+              "state": "gain"
+            },
+            "input": "12500001",
+            "output": "124251132"
+          },
+          {
+            "gross": {
+              "amount": "112449576",
+              "state": "gain"
+            },
+            "input": "12578126",
+            "output": "125027702"
+          },
+          {
+            "gross": {
+              "amount": "113148020",
+              "state": "gain"
+            },
+            "input": "12656251",
+            "output": "125804271"
+          },
+          {
+            "gross": {
+              "amount": "113846465",
+              "state": "gain"
+            },
+            "input": "12734376",
+            "output": "126580841"
+          },
+          {
+            "gross": {
+              "amount": "114544909",
+              "state": "gain"
+            },
+            "input": "12812501",
+            "output": "127357410"
+          },
+          {
+            "gross": {
+              "amount": "115243354",
+              "state": "gain"
+            },
+            "input": "12890626",
+            "output": "128133980"
+          },
+          {
+            "gross": {
+              "amount": "115941798",
+              "state": "gain"
+            },
+            "input": "12968751",
+            "output": "128910549"
+          },
+          {
+            "gross": {
+              "amount": "116640243",
+              "state": "gain"
+            },
+            "input": "13046876",
+            "output": "129687119"
+          },
+          {
+            "gross": {
+              "amount": "117338687",
+              "state": "gain"
+            },
+            "input": "13125001",
+            "output": "130463688"
+          },
+          {
+            "gross": {
+              "amount": "118037132",
+              "state": "gain"
+            },
+            "input": "13203126",
+            "output": "131240258"
+          },
+          {
+            "gross": {
+              "amount": "118735576",
+              "state": "gain"
+            },
+            "input": "13281251",
+            "output": "132016827"
+          },
+          {
+            "gross": {
+              "amount": "119434021",
+              "state": "gain"
+            },
+            "input": "13359376",
+            "output": "132793397"
+          },
+          {
+            "gross": {
+              "amount": "120132465",
+              "state": "gain"
+            },
+            "input": "13437501",
+            "output": "133569966"
+          },
+          {
+            "gross": {
+              "amount": "120830910",
+              "state": "gain"
+            },
+            "input": "13515626",
+            "output": "134346536"
+          },
+          {
+            "gross": {
+              "amount": "121529354",
+              "state": "gain"
+            },
+            "input": "13593751",
+            "output": "135123105"
+          },
+          {
+            "gross": {
+              "amount": "122227799",
+              "state": "gain"
+            },
+            "input": "13671876",
+            "output": "135899675"
+          },
+          {
+            "gross": {
+              "amount": "122926243",
+              "state": "gain"
+            },
+            "input": "13750001",
+            "output": "136676244"
+          },
+          {
+            "gross": {
+              "amount": "123624688",
+              "state": "gain"
+            },
+            "input": "13828126",
+            "output": "137452814"
+          },
+          {
+            "gross": {
+              "amount": "124323132",
+              "state": "gain"
+            },
+            "input": "13906251",
+            "output": "138229383"
+          },
+          {
+            "gross": {
+              "amount": "125021577",
+              "state": "gain"
+            },
+            "input": "13984376",
+            "output": "139005953"
+          },
+          {
+            "gross": {
+              "amount": "125720021",
+              "state": "gain"
+            },
+            "input": "14062501",
+            "output": "139782522"
+          },
+          {
+            "gross": {
+              "amount": "126418466",
+              "state": "gain"
+            },
+            "input": "14140626",
+            "output": "140559092"
+          },
+          {
+            "gross": {
+              "amount": "127116910",
+              "state": "gain"
+            },
+            "input": "14218751",
+            "output": "141335661"
+          },
+          {
+            "gross": {
+              "amount": "127815355",
+              "state": "gain"
+            },
+            "input": "14296876",
+            "output": "142112231"
+          },
+          {
+            "gross": {
+              "amount": "128513799",
+              "state": "gain"
+            },
+            "input": "14375001",
+            "output": "142888800"
+          },
+          {
+            "gross": {
+              "amount": "129212244",
+              "state": "gain"
+            },
+            "input": "14453126",
+            "output": "143665370"
+          },
+          {
+            "gross": {
+              "amount": "129910688",
+              "state": "gain"
+            },
+            "input": "14531251",
+            "output": "144441939"
+          },
+          {
+            "gross": {
+              "amount": "130609133",
+              "state": "gain"
+            },
+            "input": "14609376",
+            "output": "145218509"
+          },
+          {
+            "gross": {
+              "amount": "131307577",
+              "state": "gain"
+            },
+            "input": "14687501",
+            "output": "145995078"
+          },
+          {
+            "gross": {
+              "amount": "132006022",
+              "state": "gain"
+            },
+            "input": "14765626",
+            "output": "146771648"
+          },
+          {
+            "gross": {
+              "amount": "132704466",
+              "state": "gain"
+            },
+            "input": "14843751",
+            "output": "147548217"
+          },
+          {
+            "gross": {
+              "amount": "133402911",
+              "state": "gain"
+            },
+            "input": "14921876",
+            "output": "148324787"
+          },
+          {
+            "gross": {
+              "amount": "134101355",
+              "state": "gain"
+            },
+            "input": "15000001",
+            "output": "149101356"
+          },
+          {
+            "gross": {
+              "amount": "134799800",
+              "state": "gain"
+            },
+            "input": "15078126",
+            "output": "149877926"
+          },
+          {
+            "gross": {
+              "amount": "135498244",
+              "state": "gain"
+            },
+            "input": "15156251",
+            "output": "150654495"
+          },
+          {
+            "gross": {
+              "amount": "136196689",
+              "state": "gain"
+            },
+            "input": "15234376",
+            "output": "151431065"
+          },
+          {
+            "gross": {
+              "amount": "136895133",
+              "state": "gain"
+            },
+            "input": "15312501",
+            "output": "152207634"
+          },
+          {
+            "gross": {
+              "amount": "137593578",
+              "state": "gain"
+            },
+            "input": "15390626",
+            "output": "152984204"
+          },
+          {
+            "gross": {
+              "amount": "138292022",
+              "state": "gain"
+            },
+            "input": "15468751",
+            "output": "153760773"
+          },
+          {
+            "gross": {
+              "amount": "138990467",
+              "state": "gain"
+            },
+            "input": "15546876",
+            "output": "154537343"
+          },
+          {
+            "gross": {
+              "amount": "139688911",
+              "state": "gain"
+            },
+            "input": "15625001",
+            "output": "155313912"
+          },
+          {
+            "gross": {
+              "amount": "140387356",
+              "state": "gain"
+            },
+            "input": "15703126",
+            "output": "156090482"
+          },
+          {
+            "gross": {
+              "amount": "141085800",
+              "state": "gain"
+            },
+            "input": "15781251",
+            "output": "156867051"
+          },
+          {
+            "gross": {
+              "amount": "141784245",
+              "state": "gain"
+            },
+            "input": "15859376",
+            "output": "157643621"
+          },
+          {
+            "gross": {
+              "amount": "142482689",
+              "state": "gain"
+            },
+            "input": "15937501",
+            "output": "158420190"
+          },
+          {
+            "gross": {
+              "amount": "143181134",
+              "state": "gain"
+            },
+            "input": "16015626",
+            "output": "159196760"
+          },
+          {
+            "gross": {
+              "amount": "143879578",
+              "state": "gain"
+            },
+            "input": "16093751",
+            "output": "159973329"
+          },
+          {
+            "gross": {
+              "amount": "144578023",
+              "state": "gain"
+            },
+            "input": "16171876",
+            "output": "160749899"
+          },
+          {
+            "gross": {
+              "amount": "145276467",
+              "state": "gain"
+            },
+            "input": "16250001",
+            "output": "161526468"
+          },
+          {
+            "gross": {
+              "amount": "145974912",
+              "state": "gain"
+            },
+            "input": "16328126",
+            "output": "162303038"
+          },
+          {
+            "gross": {
+              "amount": "146673356",
+              "state": "gain"
+            },
+            "input": "16406251",
+            "output": "163079607"
+          },
+          {
+            "gross": {
+              "amount": "147371800",
+              "state": "gain"
+            },
+            "input": "16484376",
+            "output": "163856176"
+          },
+          {
+            "gross": {
+              "amount": "148070245",
+              "state": "gain"
+            },
+            "input": "16562501",
+            "output": "164632746"
+          },
+          {
+            "gross": {
+              "amount": "148768689",
+              "state": "gain"
+            },
+            "input": "16640626",
+            "output": "165409315"
+          },
+          {
+            "gross": {
+              "amount": "149467134",
+              "state": "gain"
+            },
+            "input": "16718751",
+            "output": "166185885"
+          },
+          {
+            "gross": {
+              "amount": "150165578",
+              "state": "gain"
+            },
+            "input": "16796876",
+            "output": "166962454"
+          },
+          {
+            "gross": {
+              "amount": "150864023",
+              "state": "gain"
+            },
+            "input": "16875001",
+            "output": "167739024"
+          },
+          {
+            "gross": {
+              "amount": "151562467",
+              "state": "gain"
+            },
+            "input": "16953126",
+            "output": "168515593"
+          },
+          {
+            "gross": {
+              "amount": "152260912",
+              "state": "gain"
+            },
+            "input": "17031251",
+            "output": "169292163"
+          },
+          {
+            "gross": {
+              "amount": "152959356",
+              "state": "gain"
+            },
+            "input": "17109376",
+            "output": "170068732"
+          },
+          {
+            "gross": {
+              "amount": "153657801",
+              "state": "gain"
+            },
+            "input": "17187501",
+            "output": "170845302"
+          },
+          {
+            "gross": {
+              "amount": "154356245",
+              "state": "gain"
+            },
+            "input": "17265626",
+            "output": "171621871"
+          },
+          {
+            "gross": {
+              "amount": "155054690",
+              "state": "gain"
+            },
+            "input": "17343751",
+            "output": "172398441"
+          },
+          {
+            "gross": {
+              "amount": "155753134",
+              "state": "gain"
+            },
+            "input": "17421876",
+            "output": "173175010"
+          },
+          {
+            "gross": {
+              "amount": "156451579",
+              "state": "gain"
+            },
+            "input": "17500001",
+            "output": "173951580"
+          },
+          {
+            "gross": {
+              "amount": "157150023",
+              "state": "gain"
+            },
+            "input": "17578126",
+            "output": "174728149"
+          },
+          {
+            "gross": {
+              "amount": "157848468",
+              "state": "gain"
+            },
+            "input": "17656251",
+            "output": "175504719"
+          },
+          {
+            "gross": {
+              "amount": "158546912",
+              "state": "gain"
+            },
+            "input": "17734376",
+            "output": "176281288"
+          },
+          {
+            "gross": {
+              "amount": "159245357",
+              "state": "gain"
+            },
+            "input": "17812501",
+            "output": "177057858"
+          },
+          {
+            "gross": {
+              "amount": "159943801",
+              "state": "gain"
+            },
+            "input": "17890626",
+            "output": "177834427"
+          },
+          {
+            "gross": {
+              "amount": "160642246",
+              "state": "gain"
+            },
+            "input": "17968751",
+            "output": "178610997"
+          },
+          {
+            "gross": {
+              "amount": "161340690",
+              "state": "gain"
+            },
+            "input": "18046876",
+            "output": "179387566"
+          },
+          {
+            "gross": {
+              "amount": "162039135",
+              "state": "gain"
+            },
+            "input": "18125001",
+            "output": "180164136"
+          },
+          {
+            "gross": {
+              "amount": "162737579",
+              "state": "gain"
+            },
+            "input": "18203126",
+            "output": "180940705"
+          },
+          {
+            "gross": {
+              "amount": "163436024",
+              "state": "gain"
+            },
+            "input": "18281251",
+            "output": "181717275"
+          },
+          {
+            "gross": {
+              "amount": "164134468",
+              "state": "gain"
+            },
+            "input": "18359376",
+            "output": "182493844"
+          },
+          {
+            "gross": {
+              "amount": "164832913",
+              "state": "gain"
+            },
+            "input": "18437501",
+            "output": "183270414"
+          },
+          {
+            "gross": {
+              "amount": "165531357",
+              "state": "gain"
+            },
+            "input": "18515626",
+            "output": "184046983"
+          },
+          {
+            "gross": {
+              "amount": "166229802",
+              "state": "gain"
+            },
+            "input": "18593751",
+            "output": "184823553"
+          },
+          {
+            "gross": {
+              "amount": "166928246",
+              "state": "gain"
+            },
+            "input": "18671876",
+            "output": "185600122"
+          },
+          {
+            "gross": {
+              "amount": "167626691",
+              "state": "gain"
+            },
+            "input": "18750001",
+            "output": "186376692"
+          },
+          {
+            "gross": {
+              "amount": "168325135",
+              "state": "gain"
+            },
+            "input": "18828126",
+            "output": "187153261"
+          },
+          {
+            "gross": {
+              "amount": "169023580",
+              "state": "gain"
+            },
+            "input": "18906251",
+            "output": "187929831"
+          },
+          {
+            "gross": {
+              "amount": "169722024",
+              "state": "gain"
+            },
+            "input": "18984376",
+            "output": "188706400"
+          },
+          {
+            "gross": {
+              "amount": "170420469",
+              "state": "gain"
+            },
+            "input": "19062501",
+            "output": "189482970"
+          },
+          {
+            "gross": {
+              "amount": "171118913",
+              "state": "gain"
+            },
+            "input": "19140626",
+            "output": "190259539"
+          },
+          {
+            "gross": {
+              "amount": "171817358",
+              "state": "gain"
+            },
+            "input": "19218751",
+            "output": "191036109"
+          },
+          {
+            "gross": {
+              "amount": "172515802",
+              "state": "gain"
+            },
+            "input": "19296876",
+            "output": "191812678"
+          },
+          {
+            "gross": {
+              "amount": "173214247",
+              "state": "gain"
+            },
+            "input": "19375001",
+            "output": "192589248"
+          },
+          {
+            "gross": {
+              "amount": "173912691",
+              "state": "gain"
+            },
+            "input": "19453126",
+            "output": "193365817"
+          },
+          {
+            "gross": {
+              "amount": "174611136",
+              "state": "gain"
+            },
+            "input": "19531251",
+            "output": "194142387"
+          },
+          {
+            "gross": {
+              "amount": "175309580",
+              "state": "gain"
+            },
+            "input": "19609376",
+            "output": "194918956"
+          },
+          {
+            "gross": {
+              "amount": "176008025",
+              "state": "gain"
+            },
+            "input": "19687501",
+            "output": "195695526"
+          },
+          {
+            "gross": {
+              "amount": "176706469",
+              "state": "gain"
+            },
+            "input": "19765626",
+            "output": "196472095"
+          },
+          {
+            "gross": {
+              "amount": "177404914",
+              "state": "gain"
+            },
+            "input": "19843751",
+            "output": "197248665"
+          },
+          {
+            "gross": {
+              "amount": "178103358",
+              "state": "gain"
+            },
+            "input": "19921876",
+            "output": "198025234"
+          },
+          {
+            "gross": {
+              "amount": "178102786",
+              "state": "gain"
+            },
+            "input": "19921812",
+            "output": "198024598"
+          },
+          {
+            "gross": {
+              "amount": "178102795",
+              "state": "gain"
+            },
+            "input": "19921813",
+            "output": "198024608"
+          },
+          {
+            "gross": {
+              "amount": "178102804",
+              "state": "gain"
+            },
+            "input": "19921814",
+            "output": "198024618"
+          },
+          {
+            "gross": {
+              "amount": "178102813",
+              "state": "gain"
+            },
+            "input": "19921815",
+            "output": "198024628"
+          },
+          {
+            "gross": {
+              "amount": "178102822",
+              "state": "gain"
+            },
+            "input": "19921816",
+            "output": "198024638"
+          },
+          {
+            "gross": {
+              "amount": "178102831",
+              "state": "gain"
+            },
+            "input": "19921817",
+            "output": "198024648"
+          },
+          {
+            "gross": {
+              "amount": "178102839",
+              "state": "gain"
+            },
+            "input": "19921818",
+            "output": "198024657"
+          },
+          {
+            "gross": {
+              "amount": "178102848",
+              "state": "gain"
+            },
+            "input": "19921819",
+            "output": "198024667"
+          },
+          {
+            "gross": {
+              "amount": "178102857",
+              "state": "gain"
+            },
+            "input": "19921820",
+            "output": "198024677"
+          },
+          {
+            "gross": {
+              "amount": "178102866",
+              "state": "gain"
+            },
+            "input": "19921821",
+            "output": "198024687"
+          },
+          {
+            "gross": {
+              "amount": "178102875",
+              "state": "gain"
+            },
+            "input": "19921822",
+            "output": "198024697"
+          },
+          {
+            "gross": {
+              "amount": "178102884",
+              "state": "gain"
+            },
+            "input": "19921823",
+            "output": "198024707"
+          },
+          {
+            "gross": {
+              "amount": "178102893",
+              "state": "gain"
+            },
+            "input": "19921824",
+            "output": "198024717"
+          },
+          {
+            "gross": {
+              "amount": "178102902",
+              "state": "gain"
+            },
+            "input": "19921825",
+            "output": "198024727"
+          },
+          {
+            "gross": {
+              "amount": "178102911",
+              "state": "gain"
+            },
+            "input": "19921826",
+            "output": "198024737"
+          },
+          {
+            "gross": {
+              "amount": "178102920",
+              "state": "gain"
+            },
+            "input": "19921827",
+            "output": "198024747"
+          },
+          {
+            "gross": {
+              "amount": "178102929",
+              "state": "gain"
+            },
+            "input": "19921828",
+            "output": "198024757"
+          },
+          {
+            "gross": {
+              "amount": "178102938",
+              "state": "gain"
+            },
+            "input": "19921829",
+            "output": "198024767"
+          },
+          {
+            "gross": {
+              "amount": "178102947",
+              "state": "gain"
+            },
+            "input": "19921830",
+            "output": "198024777"
+          },
+          {
+            "gross": {
+              "amount": "178102956",
+              "state": "gain"
+            },
+            "input": "19921831",
+            "output": "198024787"
+          },
+          {
+            "gross": {
+              "amount": "178102965",
+              "state": "gain"
+            },
+            "input": "19921832",
+            "output": "198024797"
+          },
+          {
+            "gross": {
+              "amount": "178102974",
+              "state": "gain"
+            },
+            "input": "19921833",
+            "output": "198024807"
+          },
+          {
+            "gross": {
+              "amount": "178102983",
+              "state": "gain"
+            },
+            "input": "19921834",
+            "output": "198024817"
+          },
+          {
+            "gross": {
+              "amount": "178102991",
+              "state": "gain"
+            },
+            "input": "19921835",
+            "output": "198024826"
+          },
+          {
+            "gross": {
+              "amount": "178103000",
+              "state": "gain"
+            },
+            "input": "19921836",
+            "output": "198024836"
+          },
+          {
+            "gross": {
+              "amount": "178103009",
+              "state": "gain"
+            },
+            "input": "19921837",
+            "output": "198024846"
+          },
+          {
+            "gross": {
+              "amount": "178103018",
+              "state": "gain"
+            },
+            "input": "19921838",
+            "output": "198024856"
+          },
+          {
+            "gross": {
+              "amount": "178103027",
+              "state": "gain"
+            },
+            "input": "19921839",
+            "output": "198024866"
+          },
+          {
+            "gross": {
+              "amount": "178103036",
+              "state": "gain"
+            },
+            "input": "19921840",
+            "output": "198024876"
+          },
+          {
+            "gross": {
+              "amount": "178103045",
+              "state": "gain"
+            },
+            "input": "19921841",
+            "output": "198024886"
+          },
+          {
+            "gross": {
+              "amount": "178103054",
+              "state": "gain"
+            },
+            "input": "19921842",
+            "output": "198024896"
+          },
+          {
+            "gross": {
+              "amount": "178103063",
+              "state": "gain"
+            },
+            "input": "19921843",
+            "output": "198024906"
+          },
+          {
+            "gross": {
+              "amount": "178103072",
+              "state": "gain"
+            },
+            "input": "19921844",
+            "output": "198024916"
+          },
+          {
+            "gross": {
+              "amount": "178103081",
+              "state": "gain"
+            },
+            "input": "19921845",
+            "output": "198024926"
+          },
+          {
+            "gross": {
+              "amount": "178103090",
+              "state": "gain"
+            },
+            "input": "19921846",
+            "output": "198024936"
+          },
+          {
+            "gross": {
+              "amount": "178103099",
+              "state": "gain"
+            },
+            "input": "19921847",
+            "output": "198024946"
+          },
+          {
+            "gross": {
+              "amount": "178103108",
+              "state": "gain"
+            },
+            "input": "19921848",
+            "output": "198024956"
+          },
+          {
+            "gross": {
+              "amount": "178103117",
+              "state": "gain"
+            },
+            "input": "19921849",
+            "output": "198024966"
+          },
+          {
+            "gross": {
+              "amount": "178103126",
+              "state": "gain"
+            },
+            "input": "19921850",
+            "output": "198024976"
+          },
+          {
+            "gross": {
+              "amount": "178103135",
+              "state": "gain"
+            },
+            "input": "19921851",
+            "output": "198024986"
+          },
+          {
+            "gross": {
+              "amount": "178103143",
+              "state": "gain"
+            },
+            "input": "19921852",
+            "output": "198024995"
+          },
+          {
+            "gross": {
+              "amount": "178103152",
+              "state": "gain"
+            },
+            "input": "19921853",
+            "output": "198025005"
+          },
+          {
+            "gross": {
+              "amount": "178103161",
+              "state": "gain"
+            },
+            "input": "19921854",
+            "output": "198025015"
+          },
+          {
+            "gross": {
+              "amount": "178103170",
+              "state": "gain"
+            },
+            "input": "19921855",
+            "output": "198025025"
+          },
+          {
+            "gross": {
+              "amount": "178103179",
+              "state": "gain"
+            },
+            "input": "19921856",
+            "output": "198025035"
+          },
+          {
+            "gross": {
+              "amount": "178103188",
+              "state": "gain"
+            },
+            "input": "19921857",
+            "output": "198025045"
+          },
+          {
+            "gross": {
+              "amount": "178103197",
+              "state": "gain"
+            },
+            "input": "19921858",
+            "output": "198025055"
+          },
+          {
+            "gross": {
+              "amount": "178103206",
+              "state": "gain"
+            },
+            "input": "19921859",
+            "output": "198025065"
+          },
+          {
+            "gross": {
+              "amount": "178103215",
+              "state": "gain"
+            },
+            "input": "19921860",
+            "output": "198025075"
+          },
+          {
+            "gross": {
+              "amount": "178103224",
+              "state": "gain"
+            },
+            "input": "19921861",
+            "output": "198025085"
+          },
+          {
+            "gross": {
+              "amount": "178103233",
+              "state": "gain"
+            },
+            "input": "19921862",
+            "output": "198025095"
+          },
+          {
+            "gross": {
+              "amount": "178103242",
+              "state": "gain"
+            },
+            "input": "19921863",
+            "output": "198025105"
+          },
+          {
+            "gross": {
+              "amount": "178103251",
+              "state": "gain"
+            },
+            "input": "19921864",
+            "output": "198025115"
+          },
+          {
+            "gross": {
+              "amount": "178103260",
+              "state": "gain"
+            },
+            "input": "19921865",
+            "output": "198025125"
+          },
+          {
+            "gross": {
+              "amount": "178103269",
+              "state": "gain"
+            },
+            "input": "19921866",
+            "output": "198025135"
+          },
+          {
+            "gross": {
+              "amount": "178103278",
+              "state": "gain"
+            },
+            "input": "19921867",
+            "output": "198025145"
+          },
+          {
+            "gross": {
+              "amount": "178103286",
+              "state": "gain"
+            },
+            "input": "19921868",
+            "output": "198025154"
+          },
+          {
+            "gross": {
+              "amount": "178103295",
+              "state": "gain"
+            },
+            "input": "19921869",
+            "output": "198025164"
+          },
+          {
+            "gross": {
+              "amount": "178103304",
+              "state": "gain"
+            },
+            "input": "19921870",
+            "output": "198025174"
+          },
+          {
+            "gross": {
+              "amount": "178103313",
+              "state": "gain"
+            },
+            "input": "19921871",
+            "output": "198025184"
+          },
+          {
+            "gross": {
+              "amount": "178103322",
+              "state": "gain"
+            },
+            "input": "19921872",
+            "output": "198025194"
+          },
+          {
+            "gross": {
+              "amount": "178103331",
+              "state": "gain"
+            },
+            "input": "19921873",
+            "output": "198025204"
+          },
+          {
+            "gross": {
+              "amount": "178103340",
+              "state": "gain"
+            },
+            "input": "19921874",
+            "output": "198025214"
+          },
+          {
+            "gross": {
+              "amount": "178103349",
+              "state": "gain"
+            },
+            "input": "19921875",
+            "output": "198025224"
+          },
+          {
+            "gross": {
+              "amount": "178103358",
+              "state": "gain"
+            },
+            "input": "19921876",
+            "output": "198025234"
+          },
+          {
+            "gross": {
+              "amount": "178103367",
+              "state": "gain"
+            },
+            "input": "19921877",
+            "output": "198025244"
+          },
+          {
+            "gross": {
+              "amount": "178103376",
+              "state": "gain"
+            },
+            "input": "19921878",
+            "output": "198025254"
+          },
+          {
+            "gross": {
+              "amount": "178103385",
+              "state": "gain"
+            },
+            "input": "19921879",
+            "output": "198025264"
+          },
+          {
+            "gross": {
+              "amount": "178103394",
+              "state": "gain"
+            },
+            "input": "19921880",
+            "output": "198025274"
+          },
+          {
+            "gross": {
+              "amount": "178103403",
+              "state": "gain"
+            },
+            "input": "19921881",
+            "output": "198025284"
+          },
+          {
+            "gross": {
+              "amount": "178103412",
+              "state": "gain"
+            },
+            "input": "19921882",
+            "output": "198025294"
+          },
+          {
+            "gross": {
+              "amount": "178103421",
+              "state": "gain"
+            },
+            "input": "19921883",
+            "output": "198025304"
+          },
+          {
+            "gross": {
+              "amount": "178103430",
+              "state": "gain"
+            },
+            "input": "19921884",
+            "output": "198025314"
+          },
+          {
+            "gross": {
+              "amount": "178103438",
+              "state": "gain"
+            },
+            "input": "19921885",
+            "output": "198025323"
+          },
+          {
+            "gross": {
+              "amount": "178103447",
+              "state": "gain"
+            },
+            "input": "19921886",
+            "output": "198025333"
+          },
+          {
+            "gross": {
+              "amount": "178103456",
+              "state": "gain"
+            },
+            "input": "19921887",
+            "output": "198025343"
+          },
+          {
+            "gross": {
+              "amount": "178103465",
+              "state": "gain"
+            },
+            "input": "19921888",
+            "output": "198025353"
+          },
+          {
+            "gross": {
+              "amount": "178103474",
+              "state": "gain"
+            },
+            "input": "19921889",
+            "output": "198025363"
+          },
+          {
+            "gross": {
+              "amount": "178103483",
+              "state": "gain"
+            },
+            "input": "19921890",
+            "output": "198025373"
+          },
+          {
+            "gross": {
+              "amount": "178103492",
+              "state": "gain"
+            },
+            "input": "19921891",
+            "output": "198025383"
+          },
+          {
+            "gross": {
+              "amount": "178103501",
+              "state": "gain"
+            },
+            "input": "19921892",
+            "output": "198025393"
+          },
+          {
+            "gross": {
+              "amount": "178103510",
+              "state": "gain"
+            },
+            "input": "19921893",
+            "output": "198025403"
+          },
+          {
+            "gross": {
+              "amount": "178103519",
+              "state": "gain"
+            },
+            "input": "19921894",
+            "output": "198025413"
+          },
+          {
+            "gross": {
+              "amount": "178103528",
+              "state": "gain"
+            },
+            "input": "19921895",
+            "output": "198025423"
+          },
+          {
+            "gross": {
+              "amount": "178103537",
+              "state": "gain"
+            },
+            "input": "19921896",
+            "output": "198025433"
+          },
+          {
+            "gross": {
+              "amount": "178103546",
+              "state": "gain"
+            },
+            "input": "19921897",
+            "output": "198025443"
+          },
+          {
+            "gross": {
+              "amount": "178103555",
+              "state": "gain"
+            },
+            "input": "19921898",
+            "output": "198025453"
+          },
+          {
+            "gross": {
+              "amount": "178103564",
+              "state": "gain"
+            },
+            "input": "19921899",
+            "output": "198025463"
+          },
+          {
+            "gross": {
+              "amount": "178103573",
+              "state": "gain"
+            },
+            "input": "19921900",
+            "output": "198025473"
+          },
+          {
+            "gross": {
+              "amount": "178103582",
+              "state": "gain"
+            },
+            "input": "19921901",
+            "output": "198025483"
+          },
+          {
+            "gross": {
+              "amount": "178103590",
+              "state": "gain"
+            },
+            "input": "19921902",
+            "output": "198025492"
+          },
+          {
+            "gross": {
+              "amount": "178103599",
+              "state": "gain"
+            },
+            "input": "19921903",
+            "output": "198025502"
+          },
+          {
+            "gross": {
+              "amount": "178103608",
+              "state": "gain"
+            },
+            "input": "19921904",
+            "output": "198025512"
+          },
+          {
+            "gross": {
+              "amount": "178103617",
+              "state": "gain"
+            },
+            "input": "19921905",
+            "output": "198025522"
+          },
+          {
+            "gross": {
+              "amount": "178103626",
+              "state": "gain"
+            },
+            "input": "19921906",
+            "output": "198025532"
+          },
+          {
+            "gross": {
+              "amount": "178103635",
+              "state": "gain"
+            },
+            "input": "19921907",
+            "output": "198025542"
+          },
+          {
+            "gross": {
+              "amount": "178103644",
+              "state": "gain"
+            },
+            "input": "19921908",
+            "output": "198025552"
+          },
+          {
+            "gross": {
+              "amount": "178103653",
+              "state": "gain"
+            },
+            "input": "19921909",
+            "output": "198025562"
+          },
+          {
+            "gross": {
+              "amount": "178103662",
+              "state": "gain"
+            },
+            "input": "19921910",
+            "output": "198025572"
+          },
+          {
+            "gross": {
+              "amount": "178103671",
+              "state": "gain"
+            },
+            "input": "19921911",
+            "output": "198025582"
+          },
+          {
+            "gross": {
+              "amount": "178103680",
+              "state": "gain"
+            },
+            "input": "19921912",
+            "output": "198025592"
+          },
+          {
+            "gross": {
+              "amount": "178103689",
+              "state": "gain"
+            },
+            "input": "19921913",
+            "output": "198025602"
+          },
+          {
+            "gross": {
+              "amount": "178103698",
+              "state": "gain"
+            },
+            "input": "19921914",
+            "output": "198025612"
+          },
+          {
+            "gross": {
+              "amount": "178103707",
+              "state": "gain"
+            },
+            "input": "19921915",
+            "output": "198025622"
+          },
+          {
+            "gross": {
+              "amount": "178103716",
+              "state": "gain"
+            },
+            "input": "19921916",
+            "output": "198025632"
+          },
+          {
+            "gross": {
+              "amount": "178103725",
+              "state": "gain"
+            },
+            "input": "19921917",
+            "output": "198025642"
+          },
+          {
+            "gross": {
+              "amount": "178103733",
+              "state": "gain"
+            },
+            "input": "19921918",
+            "output": "198025651"
+          },
+          {
+            "gross": {
+              "amount": "178103742",
+              "state": "gain"
+            },
+            "input": "19921919",
+            "output": "198025661"
+          },
+          {
+            "gross": {
+              "amount": "178103751",
+              "state": "gain"
+            },
+            "input": "19921920",
+            "output": "198025671"
+          },
+          {
+            "gross": {
+              "amount": "178103760",
+              "state": "gain"
+            },
+            "input": "19921921",
+            "output": "198025681"
+          },
+          {
+            "gross": {
+              "amount": "178103769",
+              "state": "gain"
+            },
+            "input": "19921922",
+            "output": "198025691"
+          },
+          {
+            "gross": {
+              "amount": "178103778",
+              "state": "gain"
+            },
+            "input": "19921923",
+            "output": "198025701"
+          },
+          {
+            "gross": {
+              "amount": "178103787",
+              "state": "gain"
+            },
+            "input": "19921924",
+            "output": "198025711"
+          },
+          {
+            "gross": {
+              "amount": "178103796",
+              "state": "gain"
+            },
+            "input": "19921925",
+            "output": "198025721"
+          },
+          {
+            "gross": {
+              "amount": "178103805",
+              "state": "gain"
+            },
+            "input": "19921926",
+            "output": "198025731"
+          },
+          {
+            "gross": {
+              "amount": "178103814",
+              "state": "gain"
+            },
+            "input": "19921927",
+            "output": "198025741"
+          },
+          {
+            "gross": {
+              "amount": "178103823",
+              "state": "gain"
+            },
+            "input": "19921928",
+            "output": "198025751"
+          },
+          {
+            "gross": {
+              "amount": "178103832",
+              "state": "gain"
+            },
+            "input": "19921929",
+            "output": "198025761"
+          },
+          {
+            "gross": {
+              "amount": "178103841",
+              "state": "gain"
+            },
+            "input": "19921930",
+            "output": "198025771"
+          },
+          {
+            "gross": {
+              "amount": "178103850",
+              "state": "gain"
+            },
+            "input": "19921931",
+            "output": "198025781"
+          },
+          {
+            "gross": {
+              "amount": "178103859",
+              "state": "gain"
+            },
+            "input": "19921932",
+            "output": "198025791"
+          },
+          {
+            "gross": {
+              "amount": "178103868",
+              "state": "gain"
+            },
+            "input": "19921933",
+            "output": "198025801"
+          },
+          {
+            "gross": {
+              "amount": "178103877",
+              "state": "gain"
+            },
+            "input": "19921934",
+            "output": "198025811"
+          },
+          {
+            "gross": {
+              "amount": "178103885",
+              "state": "gain"
+            },
+            "input": "19921935",
+            "output": "198025820"
+          },
+          {
+            "gross": {
+              "amount": "178103894",
+              "state": "gain"
+            },
+            "input": "19921936",
+            "output": "198025830"
+          },
+          {
+            "gross": {
+              "amount": "178103903",
+              "state": "gain"
+            },
+            "input": "19921937",
+            "output": "198025840"
+          },
+          {
+            "gross": {
+              "amount": "178103912",
+              "state": "gain"
+            },
+            "input": "19921938",
+            "output": "198025850"
+          },
+          {
+            "gross": {
+              "amount": "178103921",
+              "state": "gain"
+            },
+            "input": "19921939",
+            "output": "198025860"
+          },
+          {
+            "gross": {
+              "amount": "178103930",
+              "state": "gain"
+            },
+            "input": "19921940",
+            "output": "198025870"
+          }
+        ],
+        "grid_points_rebuilt": 385,
+        "method": "this file re-ranked its own fold of every input in the grid the published domain and policy describe; the grid is rebuilt from those two fields, not taken from the search, and the refinement window is anchored on this file's own best grid point rather than on the search's answer",
+        "points_the_fold_refused": 0,
+        "refinement_anchor_this_file_found": "19921876"
+      },
+      "route_identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+      "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited",
+      "target_block": 37530593,
+      "what_this_is": "a domain wider than the exhaustive limit, so the sampled branch is the one being checked"
+    },
+    "recorded-2hop-exhaustive-window-99999999999937": {
+      "agrees": {
+        "best_input": true,
+        "best_output": true,
+        "every_rebuilt_point_was_attempted": true
+      },
+      "chain_id": 91342,
+      "hops": [
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "reserve_in": "1000000000000000",
+          "reserve_out": "1000000000000000000000",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "reserve_in": "2000000000000000000000",
+          "reserve_out": "20000000000000000",
+          "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "published": {
+        "best_input": "100000000000000",
+        "best_output": "864806517171626",
+        "best_profit": "764806517171626",
+        "covered_the_route_domain": false,
+        "covered_the_route_domain_means": "this flag can only be true for an exhaustive walk that reached the route's own input ceiling; on a sampled search the answer is that the search saw a grid, not the domain — it is a statement about coverage, not a failure",
+        "curve_this_file_asked_the_pipeline_for": [
+          {
+            "gross": {
+              "amount": "764806517171215",
+              "state": "gain"
+            },
+            "input": "99999999999937",
+            "output": "864806517171152"
+          },
+          {
+            "gross": {
+              "amount": "764806517171221",
+              "state": "gain"
+            },
+            "input": "99999999999938",
+            "output": "864806517171159"
+          },
+          {
+            "gross": {
+              "amount": "764806517171228",
+              "state": "gain"
+            },
+            "input": "99999999999939",
+            "output": "864806517171167"
+          },
+          {
+            "gross": {
+              "amount": "764806517171234",
+              "state": "gain"
+            },
+            "input": "99999999999940",
+            "output": "864806517171174"
+          },
+          {
+            "gross": {
+              "amount": "764806517171241",
+              "state": "gain"
+            },
+            "input": "99999999999941",
+            "output": "864806517171182"
+          },
+          {
+            "gross": {
+              "amount": "764806517171247",
+              "state": "gain"
+            },
+            "input": "99999999999942",
+            "output": "864806517171189"
+          },
+          {
+            "gross": {
+              "amount": "764806517171254",
+              "state": "gain"
+            },
+            "input": "99999999999943",
+            "output": "864806517171197"
+          },
+          {
+            "gross": {
+              "amount": "764806517171260",
+              "state": "gain"
+            },
+            "input": "99999999999944",
+            "output": "864806517171204"
+          },
+          {
+            "gross": {
+              "amount": "764806517171267",
+              "state": "gain"
+            },
+            "input": "99999999999945",
+            "output": "864806517171212"
+          },
+          {
+            "gross": {
+              "amount": "764806517171274",
+              "state": "gain"
+            },
+            "input": "99999999999946",
+            "output": "864806517171220"
+          },
+          {
+            "gross": {
+              "amount": "764806517171280",
+              "state": "gain"
+            },
+            "input": "99999999999947",
+            "output": "864806517171227"
+          },
+          {
+            "gross": {
+              "amount": "764806517171287",
+              "state": "gain"
+            },
+            "input": "99999999999948",
+            "output": "864806517171235"
+          },
+          {
+            "gross": {
+              "amount": "764806517171293",
+              "state": "gain"
+            },
+            "input": "99999999999949",
+            "output": "864806517171242"
+          },
+          {
+            "gross": {
+              "amount": "764806517171300",
+              "state": "gain"
+            },
+            "input": "99999999999950",
+            "output": "864806517171250"
+          },
+          {
+            "gross": {
+              "amount": "764806517171306",
+              "state": "gain"
+            },
+            "input": "99999999999951",
+            "output": "864806517171257"
+          },
+          {
+            "gross": {
+              "amount": "764806517171313",
+              "state": "gain"
+            },
+            "input": "99999999999952",
+            "output": "864806517171265"
+          },
+          {
+            "gross": {
+              "amount": "764806517171319",
+              "state": "gain"
+            },
+            "input": "99999999999953",
+            "output": "864806517171272"
+          },
+          {
+            "gross": {
+              "amount": "764806517171326",
+              "state": "gain"
+            },
+            "input": "99999999999954",
+            "output": "864806517171280"
+          },
+          {
+            "gross": {
+              "amount": "764806517171332",
+              "state": "gain"
+            },
+            "input": "99999999999955",
+            "output": "864806517171287"
+          },
+          {
+            "gross": {
+              "amount": "764806517171339",
+              "state": "gain"
+            },
+            "input": "99999999999956",
+            "output": "864806517171295"
+          },
+          {
+            "gross": {
+              "amount": "764806517171345",
+              "state": "gain"
+            },
+            "input": "99999999999957",
+            "output": "864806517171302"
+          },
+          {
+            "gross": {
+              "amount": "764806517171352",
+              "state": "gain"
+            },
+            "input": "99999999999958",
+            "output": "864806517171310"
+          },
+          {
+            "gross": {
+              "amount": "764806517171358",
+              "state": "gain"
+            },
+            "input": "99999999999959",
+            "output": "864806517171317"
+          },
+          {
+            "gross": {
+              "amount": "764806517171365",
+              "state": "gain"
+            },
+            "input": "99999999999960",
+            "output": "864806517171325"
+          },
+          {
+            "gross": {
+              "amount": "764806517171371",
+              "state": "gain"
+            },
+            "input": "99999999999961",
+            "output": "864806517171332"
+          },
+          {
+            "gross": {
+              "amount": "764806517171378",
+              "state": "gain"
+            },
+            "input": "99999999999962",
+            "output": "864806517171340"
+          },
+          {
+            "gross": {
+              "amount": "764806517171384",
+              "state": "gain"
+            },
+            "input": "99999999999963",
+            "output": "864806517171347"
+          },
+          {
+            "gross": {
+              "amount": "764806517171391",
+              "state": "gain"
+            },
+            "input": "99999999999964",
+            "output": "864806517171355"
+          },
+          {
+            "gross": {
+              "amount": "764806517171397",
+              "state": "gain"
+            },
+            "input": "99999999999965",
+            "output": "864806517171362"
+          },
+          {
+            "gross": {
+              "amount": "764806517171404",
+              "state": "gain"
+            },
+            "input": "99999999999966",
+            "output": "864806517171370"
+          },
+          {
+            "gross": {
+              "amount": "764806517171411",
+              "state": "gain"
+            },
+            "input": "99999999999967",
+            "output": "864806517171378"
+          },
+          {
+            "gross": {
+              "amount": "764806517171417",
+              "state": "gain"
+            },
+            "input": "99999999999968",
+            "output": "864806517171385"
+          },
+          {
+            "gross": {
+              "amount": "764806517171424",
+              "state": "gain"
+            },
+            "input": "99999999999969",
+            "output": "864806517171393"
+          },
+          {
+            "gross": {
+              "amount": "764806517171430",
+              "state": "gain"
+            },
+            "input": "99999999999970",
+            "output": "864806517171400"
+          },
+          {
+            "gross": {
+              "amount": "764806517171437",
+              "state": "gain"
+            },
+            "input": "99999999999971",
+            "output": "864806517171408"
+          },
+          {
+            "gross": {
+              "amount": "764806517171443",
+              "state": "gain"
+            },
+            "input": "99999999999972",
+            "output": "864806517171415"
+          },
+          {
+            "gross": {
+              "amount": "764806517171450",
+              "state": "gain"
+            },
+            "input": "99999999999973",
+            "output": "864806517171423"
+          },
+          {
+            "gross": {
+              "amount": "764806517171456",
+              "state": "gain"
+            },
+            "input": "99999999999974",
+            "output": "864806517171430"
+          },
+          {
+            "gross": {
+              "amount": "764806517171463",
+              "state": "gain"
+            },
+            "input": "99999999999975",
+            "output": "864806517171438"
+          },
+          {
+            "gross": {
+              "amount": "764806517171469",
+              "state": "gain"
+            },
+            "input": "99999999999976",
+            "output": "864806517171445"
+          },
+          {
+            "gross": {
+              "amount": "764806517171476",
+              "state": "gain"
+            },
+            "input": "99999999999977",
+            "output": "864806517171453"
+          },
+          {
+            "gross": {
+              "amount": "764806517171482",
+              "state": "gain"
+            },
+            "input": "99999999999978",
+            "output": "864806517171460"
+          },
+          {
+            "gross": {
+              "amount": "764806517171489",
+              "state": "gain"
+            },
+            "input": "99999999999979",
+            "output": "864806517171468"
+          },
+          {
+            "gross": {
+              "amount": "764806517171495",
+              "state": "gain"
+            },
+            "input": "99999999999980",
+            "output": "864806517171475"
+          },
+          {
+            "gross": {
+              "amount": "764806517171502",
+              "state": "gain"
+            },
+            "input": "99999999999981",
+            "output": "864806517171483"
+          },
+          {
+            "gross": {
+              "amount": "764806517171508",
+              "state": "gain"
+            },
+            "input": "99999999999982",
+            "output": "864806517171490"
+          },
+          {
+            "gross": {
+              "amount": "764806517171515",
+              "state": "gain"
+            },
+            "input": "99999999999983",
+            "output": "864806517171498"
+          },
+          {
+            "gross": {
+              "amount": "764806517171521",
+              "state": "gain"
+            },
+            "input": "99999999999984",
+            "output": "864806517171505"
+          },
+          {
+            "gross": {
+              "amount": "764806517171528",
+              "state": "gain"
+            },
+            "input": "99999999999985",
+            "output": "864806517171513"
+          },
+          {
+            "gross": {
+              "amount": "764806517171534",
+              "state": "gain"
+            },
+            "input": "99999999999986",
+            "output": "864806517171520"
+          },
+          {
+            "gross": {
+              "amount": "764806517171541",
+              "state": "gain"
+            },
+            "input": "99999999999987",
+            "output": "864806517171528"
+          },
+          {
+            "gross": {
+              "amount": "764806517171548",
+              "state": "gain"
+            },
+            "input": "99999999999988",
+            "output": "864806517171536"
+          },
+          {
+            "gross": {
+              "amount": "764806517171554",
+              "state": "gain"
+            },
+            "input": "99999999999989",
+            "output": "864806517171543"
+          },
+          {
+            "gross": {
+              "amount": "764806517171561",
+              "state": "gain"
+            },
+            "input": "99999999999990",
+            "output": "864806517171551"
+          },
+          {
+            "gross": {
+              "amount": "764806517171567",
+              "state": "gain"
+            },
+            "input": "99999999999991",
+            "output": "864806517171558"
+          },
+          {
+            "gross": {
+              "amount": "764806517171574",
+              "state": "gain"
+            },
+            "input": "99999999999992",
+            "output": "864806517171566"
+          },
+          {
+            "gross": {
+              "amount": "764806517171580",
+              "state": "gain"
+            },
+            "input": "99999999999993",
+            "output": "864806517171573"
+          },
+          {
+            "gross": {
+              "amount": "764806517171587",
+              "state": "gain"
+            },
+            "input": "99999999999994",
+            "output": "864806517171581"
+          },
+          {
+            "gross": {
+              "amount": "764806517171593",
+              "state": "gain"
+            },
+            "input": "99999999999995",
+            "output": "864806517171588"
+          },
+          {
+            "gross": {
+              "amount": "764806517171600",
+              "state": "gain"
+            },
+            "input": "99999999999996",
+            "output": "864806517171596"
+          },
+          {
+            "gross": {
+              "amount": "764806517171606",
+              "state": "gain"
+            },
+            "input": "99999999999997",
+            "output": "864806517171603"
+          },
+          {
+            "gross": {
+              "amount": "764806517171613",
+              "state": "gain"
+            },
+            "input": "99999999999998",
+            "output": "864806517171611"
+          },
+          {
+            "gross": {
+              "amount": "764806517171619",
+              "state": "gain"
+            },
+            "input": "99999999999999",
+            "output": "864806517171618"
+          },
+          {
+            "gross": {
+              "amount": "764806517171626",
+              "state": "gain"
+            },
+            "input": "100000000000000",
+            "output": "864806517171626"
+          }
+        ],
+        "domain_max": "100000000000000",
+        "domain_min": "99999999999937",
+        "domain_width": "64",
+        "evaluations": 64,
+        "gross": {
+          "amount": "764806517171626",
+          "state": "gain"
+        },
+        "policy": {
+          "coarse_points": 256,
+          "exhaustive_limit": 4096,
+          "refine_span": 64
+        },
+        "refusals": 0,
+        "search_max": "100000000000000",
+        "search_min": "99999999999937",
+        "strategy": "exhaustive",
+        "strategy_this_run_took": "exhaustive",
+        "termination": "domainexhausted"
+      },
+      "recomputed_independently": {
+        "best_input": "100000000000000",
+        "best_output": "864806517171626",
+        "best_profit": {
+          "amount": "764806517171626",
+          "state": "gain"
+        },
+        "coarse_points_rebuilt": 64,
+        "curve": [
+          {
+            "gross": {
+              "amount": "764806517171215",
+              "state": "gain"
+            },
+            "input": "99999999999937",
+            "output": "864806517171152"
+          },
+          {
+            "gross": {
+              "amount": "764806517171221",
+              "state": "gain"
+            },
+            "input": "99999999999938",
+            "output": "864806517171159"
+          },
+          {
+            "gross": {
+              "amount": "764806517171228",
+              "state": "gain"
+            },
+            "input": "99999999999939",
+            "output": "864806517171167"
+          },
+          {
+            "gross": {
+              "amount": "764806517171234",
+              "state": "gain"
+            },
+            "input": "99999999999940",
+            "output": "864806517171174"
+          },
+          {
+            "gross": {
+              "amount": "764806517171241",
+              "state": "gain"
+            },
+            "input": "99999999999941",
+            "output": "864806517171182"
+          },
+          {
+            "gross": {
+              "amount": "764806517171247",
+              "state": "gain"
+            },
+            "input": "99999999999942",
+            "output": "864806517171189"
+          },
+          {
+            "gross": {
+              "amount": "764806517171254",
+              "state": "gain"
+            },
+            "input": "99999999999943",
+            "output": "864806517171197"
+          },
+          {
+            "gross": {
+              "amount": "764806517171260",
+              "state": "gain"
+            },
+            "input": "99999999999944",
+            "output": "864806517171204"
+          },
+          {
+            "gross": {
+              "amount": "764806517171267",
+              "state": "gain"
+            },
+            "input": "99999999999945",
+            "output": "864806517171212"
+          },
+          {
+            "gross": {
+              "amount": "764806517171274",
+              "state": "gain"
+            },
+            "input": "99999999999946",
+            "output": "864806517171220"
+          },
+          {
+            "gross": {
+              "amount": "764806517171280",
+              "state": "gain"
+            },
+            "input": "99999999999947",
+            "output": "864806517171227"
+          },
+          {
+            "gross": {
+              "amount": "764806517171287",
+              "state": "gain"
+            },
+            "input": "99999999999948",
+            "output": "864806517171235"
+          },
+          {
+            "gross": {
+              "amount": "764806517171293",
+              "state": "gain"
+            },
+            "input": "99999999999949",
+            "output": "864806517171242"
+          },
+          {
+            "gross": {
+              "amount": "764806517171300",
+              "state": "gain"
+            },
+            "input": "99999999999950",
+            "output": "864806517171250"
+          },
+          {
+            "gross": {
+              "amount": "764806517171306",
+              "state": "gain"
+            },
+            "input": "99999999999951",
+            "output": "864806517171257"
+          },
+          {
+            "gross": {
+              "amount": "764806517171313",
+              "state": "gain"
+            },
+            "input": "99999999999952",
+            "output": "864806517171265"
+          },
+          {
+            "gross": {
+              "amount": "764806517171319",
+              "state": "gain"
+            },
+            "input": "99999999999953",
+            "output": "864806517171272"
+          },
+          {
+            "gross": {
+              "amount": "764806517171326",
+              "state": "gain"
+            },
+            "input": "99999999999954",
+            "output": "864806517171280"
+          },
+          {
+            "gross": {
+              "amount": "764806517171332",
+              "state": "gain"
+            },
+            "input": "99999999999955",
+            "output": "864806517171287"
+          },
+          {
+            "gross": {
+              "amount": "764806517171339",
+              "state": "gain"
+            },
+            "input": "99999999999956",
+            "output": "864806517171295"
+          },
+          {
+            "gross": {
+              "amount": "764806517171345",
+              "state": "gain"
+            },
+            "input": "99999999999957",
+            "output": "864806517171302"
+          },
+          {
+            "gross": {
+              "amount": "764806517171352",
+              "state": "gain"
+            },
+            "input": "99999999999958",
+            "output": "864806517171310"
+          },
+          {
+            "gross": {
+              "amount": "764806517171358",
+              "state": "gain"
+            },
+            "input": "99999999999959",
+            "output": "864806517171317"
+          },
+          {
+            "gross": {
+              "amount": "764806517171365",
+              "state": "gain"
+            },
+            "input": "99999999999960",
+            "output": "864806517171325"
+          },
+          {
+            "gross": {
+              "amount": "764806517171371",
+              "state": "gain"
+            },
+            "input": "99999999999961",
+            "output": "864806517171332"
+          },
+          {
+            "gross": {
+              "amount": "764806517171378",
+              "state": "gain"
+            },
+            "input": "99999999999962",
+            "output": "864806517171340"
+          },
+          {
+            "gross": {
+              "amount": "764806517171384",
+              "state": "gain"
+            },
+            "input": "99999999999963",
+            "output": "864806517171347"
+          },
+          {
+            "gross": {
+              "amount": "764806517171391",
+              "state": "gain"
+            },
+            "input": "99999999999964",
+            "output": "864806517171355"
+          },
+          {
+            "gross": {
+              "amount": "764806517171397",
+              "state": "gain"
+            },
+            "input": "99999999999965",
+            "output": "864806517171362"
+          },
+          {
+            "gross": {
+              "amount": "764806517171404",
+              "state": "gain"
+            },
+            "input": "99999999999966",
+            "output": "864806517171370"
+          },
+          {
+            "gross": {
+              "amount": "764806517171411",
+              "state": "gain"
+            },
+            "input": "99999999999967",
+            "output": "864806517171378"
+          },
+          {
+            "gross": {
+              "amount": "764806517171417",
+              "state": "gain"
+            },
+            "input": "99999999999968",
+            "output": "864806517171385"
+          },
+          {
+            "gross": {
+              "amount": "764806517171424",
+              "state": "gain"
+            },
+            "input": "99999999999969",
+            "output": "864806517171393"
+          },
+          {
+            "gross": {
+              "amount": "764806517171430",
+              "state": "gain"
+            },
+            "input": "99999999999970",
+            "output": "864806517171400"
+          },
+          {
+            "gross": {
+              "amount": "764806517171437",
+              "state": "gain"
+            },
+            "input": "99999999999971",
+            "output": "864806517171408"
+          },
+          {
+            "gross": {
+              "amount": "764806517171443",
+              "state": "gain"
+            },
+            "input": "99999999999972",
+            "output": "864806517171415"
+          },
+          {
+            "gross": {
+              "amount": "764806517171450",
+              "state": "gain"
+            },
+            "input": "99999999999973",
+            "output": "864806517171423"
+          },
+          {
+            "gross": {
+              "amount": "764806517171456",
+              "state": "gain"
+            },
+            "input": "99999999999974",
+            "output": "864806517171430"
+          },
+          {
+            "gross": {
+              "amount": "764806517171463",
+              "state": "gain"
+            },
+            "input": "99999999999975",
+            "output": "864806517171438"
+          },
+          {
+            "gross": {
+              "amount": "764806517171469",
+              "state": "gain"
+            },
+            "input": "99999999999976",
+            "output": "864806517171445"
+          },
+          {
+            "gross": {
+              "amount": "764806517171476",
+              "state": "gain"
+            },
+            "input": "99999999999977",
+            "output": "864806517171453"
+          },
+          {
+            "gross": {
+              "amount": "764806517171482",
+              "state": "gain"
+            },
+            "input": "99999999999978",
+            "output": "864806517171460"
+          },
+          {
+            "gross": {
+              "amount": "764806517171489",
+              "state": "gain"
+            },
+            "input": "99999999999979",
+            "output": "864806517171468"
+          },
+          {
+            "gross": {
+              "amount": "764806517171495",
+              "state": "gain"
+            },
+            "input": "99999999999980",
+            "output": "864806517171475"
+          },
+          {
+            "gross": {
+              "amount": "764806517171502",
+              "state": "gain"
+            },
+            "input": "99999999999981",
+            "output": "864806517171483"
+          },
+          {
+            "gross": {
+              "amount": "764806517171508",
+              "state": "gain"
+            },
+            "input": "99999999999982",
+            "output": "864806517171490"
+          },
+          {
+            "gross": {
+              "amount": "764806517171515",
+              "state": "gain"
+            },
+            "input": "99999999999983",
+            "output": "864806517171498"
+          },
+          {
+            "gross": {
+              "amount": "764806517171521",
+              "state": "gain"
+            },
+            "input": "99999999999984",
+            "output": "864806517171505"
+          },
+          {
+            "gross": {
+              "amount": "764806517171528",
+              "state": "gain"
+            },
+            "input": "99999999999985",
+            "output": "864806517171513"
+          },
+          {
+            "gross": {
+              "amount": "764806517171534",
+              "state": "gain"
+            },
+            "input": "99999999999986",
+            "output": "864806517171520"
+          },
+          {
+            "gross": {
+              "amount": "764806517171541",
+              "state": "gain"
+            },
+            "input": "99999999999987",
+            "output": "864806517171528"
+          },
+          {
+            "gross": {
+              "amount": "764806517171548",
+              "state": "gain"
+            },
+            "input": "99999999999988",
+            "output": "864806517171536"
+          },
+          {
+            "gross": {
+              "amount": "764806517171554",
+              "state": "gain"
+            },
+            "input": "99999999999989",
+            "output": "864806517171543"
+          },
+          {
+            "gross": {
+              "amount": "764806517171561",
+              "state": "gain"
+            },
+            "input": "99999999999990",
+            "output": "864806517171551"
+          },
+          {
+            "gross": {
+              "amount": "764806517171567",
+              "state": "gain"
+            },
+            "input": "99999999999991",
+            "output": "864806517171558"
+          },
+          {
+            "gross": {
+              "amount": "764806517171574",
+              "state": "gain"
+            },
+            "input": "99999999999992",
+            "output": "864806517171566"
+          },
+          {
+            "gross": {
+              "amount": "764806517171580",
+              "state": "gain"
+            },
+            "input": "99999999999993",
+            "output": "864806517171573"
+          },
+          {
+            "gross": {
+              "amount": "764806517171587",
+              "state": "gain"
+            },
+            "input": "99999999999994",
+            "output": "864806517171581"
+          },
+          {
+            "gross": {
+              "amount": "764806517171593",
+              "state": "gain"
+            },
+            "input": "99999999999995",
+            "output": "864806517171588"
+          },
+          {
+            "gross": {
+              "amount": "764806517171600",
+              "state": "gain"
+            },
+            "input": "99999999999996",
+            "output": "864806517171596"
+          },
+          {
+            "gross": {
+              "amount": "764806517171606",
+              "state": "gain"
+            },
+            "input": "99999999999997",
+            "output": "864806517171603"
+          },
+          {
+            "gross": {
+              "amount": "764806517171613",
+              "state": "gain"
+            },
+            "input": "99999999999998",
+            "output": "864806517171611"
+          },
+          {
+            "gross": {
+              "amount": "764806517171619",
+              "state": "gain"
+            },
+            "input": "99999999999999",
+            "output": "864806517171618"
+          },
+          {
+            "gross": {
+              "amount": "764806517171626",
+              "state": "gain"
+            },
+            "input": "100000000000000",
+            "output": "864806517171626"
+          }
+        ],
+        "grid_points_rebuilt": 64,
+        "method": "this file re-ranked its own fold of every input in the grid the published domain and policy describe; the grid is rebuilt from those two fields, not taken from the search, and the refinement window is anchored on this file's own best grid point rather than on the search's answer",
+        "points_the_fold_refused": 0,
+        "refinement_anchor_this_file_found": null
+      },
+      "route_identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+      "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited",
+      "target_block": 37530593,
+      "what_this_is": "a 64-input window walked entirely, with this file's brute-force scan beside it"
+    },
+    "recorded-2hop-single-point": {
+      "agrees": {
+        "best_input": true,
+        "best_output": true,
+        "every_rebuilt_point_was_attempted": true
+      },
+      "chain_id": 91342,
+      "hops": [
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "reserve_in": "1000000000000000",
+          "reserve_out": "1000000000000000000000",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+          "reserve_in": "2000000000000000000000",
+          "reserve_out": "20000000000000000",
+          "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "published": {
+        "best_input": "100000000000000",
+        "best_output": "864806517171626",
+        "best_profit": "764806517171626",
+        "covered_the_route_domain": false,
+        "covered_the_route_domain_means": "this flag can only be true for an exhaustive walk that reached the route's own input ceiling; on a sampled search the answer is that the search saw a grid, not the domain — it is a statement about coverage, not a failure",
+        "curve_this_file_asked_the_pipeline_for": [
+          {
+            "gross": {
+              "amount": "764806517171626",
+              "state": "gain"
+            },
+            "input": "100000000000000",
+            "output": "864806517171626"
+          }
+        ],
+        "domain_max": "100000000000000",
+        "domain_min": "100000000000000",
+        "domain_width": "1",
+        "evaluations": 1,
+        "gross": {
+          "amount": "764806517171626",
+          "state": "gain"
+        },
+        "policy": {
+          "coarse_points": 256,
+          "exhaustive_limit": 4096,
+          "refine_span": 64
+        },
+        "refusals": 0,
+        "search_max": "100000000000000",
+        "search_min": "100000000000000",
+        "strategy": "exhaustive",
+        "strategy_this_run_took": "exhaustive",
+        "termination": "domainexhausted"
+      },
+      "recomputed_independently": {
+        "best_input": "100000000000000",
+        "best_output": "864806517171626",
+        "best_profit": {
+          "amount": "764806517171626",
+          "state": "gain"
+        },
+        "coarse_points_rebuilt": 1,
+        "curve": [
+          {
+            "gross": {
+              "amount": "764806517171626",
+              "state": "gain"
+            },
+            "input": "100000000000000",
+            "output": "864806517171626"
+          }
+        ],
+        "grid_points_rebuilt": 1,
+        "method": "this file re-ranked its own fold of every input in the grid the published domain and policy describe; the grid is rebuilt from those two fields, not taken from the search, and the refinement window is anchored on this file's own best grid point rather than on the search's answer",
+        "points_the_fold_refused": 0,
+        "refinement_anchor_this_file_found": null
+      },
+      "route_identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+      "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited",
+      "target_block": 37530593,
+      "what_this_is": "the domain of one input every downstream stage reads its numbers from"
+    }
+  },
+  "schema": "m11-evidence-v1"
+}

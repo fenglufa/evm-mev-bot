@@ -1,0 +1,792 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "directory": "controlled/3hop",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/controlled/3hop/chain.json",
+  "milestone": "M11",
+  "rows": {
+    "chain-91342-block-37530593-declared-triangle-0x8656c2ba7bd9be5b2a2fbc5aa0728357340a7311308506a12084956f4fd860ec": {
+      "not_claimed": [
+        "a real-market verdict (§41)",
+        "that this plan was signed, broadcast or included",
+        "that the pricing's output is what the market would pay a live taker"
+      ],
+      "stages": {
+        "binding": {
+          "bound": true,
+          "execution_calldata_hash": "0x34d7232e8a4abd94ca282d9ca5b3afca452b431f1b3c216661d6876d0b4d0ed4",
+          "execution_route_id": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x7000000000000000000000000000000000000bc1>0x7000000000000000000000000000000000000ca2-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x60000000000000000000000000000000000000c3>0x4200000000000000000000000000000000000006",
+          "plan_hash": "0x8656c2ba7bd9be5b2a2fbc5aa0728357340a7311308506a12084956f4fd860ec",
+          "priced_route_id": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x7000000000000000000000000000000000000bc1>0x7000000000000000000000000000000000000ca2-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x60000000000000000000000000000000000000c3>0x4200000000000000000000000000000000000006",
+          "simulated_route_id": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x7000000000000000000000000000000000000bc1>0x7000000000000000000000000000000000000ca2-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x60000000000000000000000000000000000000c3>0x4200000000000000000000000000000000000006",
+          "simulation_calldata_hash": "0x34d7232e8a4abd94ca282d9ca5b3afca452b431f1b3c216661d6876d0b4d0ed4",
+          "simulation_id": "m11-sim-91342-37530593-0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5"
+        },
+        "optimizer": {
+          "best_input": "1000000000000",
+          "best_output": "1186871066266",
+          "domain": [
+            "1000000000000",
+            "1000000000000"
+          ],
+          "evaluations": 1,
+          "strategy": "exhaustive"
+        },
+        "plan": {
+          "calldata": "0xfeb0554e00000000000000000000000000000000000000000000000000000000000000a00000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000000011457073e9a000000000000000000000000200000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000030000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a4000000000000000000000000420000000000000000000000000000000000000600000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000007000000000000000000000000000000000000bc100000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f00000000000000000000000060000000000000000000000000000000000000c30000000000000000000000000000000000000000000000000dd287127ab151f0000000000000000000000000000000000000000000000000000386b281488dec000000000000000000000000000000000000000000000000000386b281488dec0000000000000000000000007000000000000000000000000000000000000ca200000000000000000000000060000000000000000000000000000000000000c30000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000386b281488dec0000000000000000000000000000000000000000000000000000011457073e9a0000000000000000000000000000000000000000000000000000011457073e9a",
+          "calldata_hash": "0x34d7232e8a4abd94ca282d9ca5b3afca452b431f1b3c216661d6876d0b4d0ed4",
+          "canonical_text": "m10-arbitrage-execution-plan\nchain_id=91342\nexecutor=0x1000000000000000000000000000000000000010\nsender=0x953e7e98562714c23bc22c7d186cdf516f9dfa6f\nrecipient=0x2000000000000000000000000000000000000020\ninput_token=0x4200000000000000000000000000000000000006\ninput_amount=1000000000000\nlegs=3\nmin_final_output=1186871066266\nleg[0]|pool=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|token_in=0x4200000000000000000000000000000000000006|token_out=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|amount_in=1000000000000|amount_out=996006981039903216|min_amount_out=996006981039903216|derivation=plan_input\nleg[1]|pool=0x7000000000000000000000000000000000000bc1|token_in=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|token_out=0x60000000000000000000000000000000000000c3|amount_in=996006981039903216|amount_out=992526161448428|min_amount_out=992526161448428|derivation=previous_leg_output\nleg[2]|pool=0x7000000000000000000000000000000000000ca2|token_in=0x60000000000000000000000000000000000000c3|token_out=0x4200000000000000000000000000000000000006|amount_in=992526161448428|amount_out=1186871066266|min_amount_out=1186871066266|derivation=previous_leg_output\nvalidity|simulated_at=37530593|max_block_age=3|provenance=§8's window as M11's fixture declares it\nsimulation|correlation_id=m11-evidence-3hop|block=37530593|hash=0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7|state=37530593:0|simulation_id=0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5|outcome=succeeded|gas_used=425200|proved_gas_limit=3000000|final_amount=1186871066266|funding=real chain state: §34: the operator's balance and allowance are rows in the pinned dump, read by the run rather than written into it|market=CONTROLLED_FIXTURE — three legs (0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 → 0x7000000000000000000000000000000000000bc1 → 0x7000000000000000000000000000000000000ca2), each against a pool whose runtime code is the recorded pair's byte for byte; the topology is declared row by row in crates/simulation/tests/multihop_state\nprofit|denomination=split: profit in 0x4200000000000000000000000000000000000006 and cost in native ETH; no single-denomination net is claimed (§34: the route round-trips in its input token, so the floor the contract enforces and the floor this policy requires are the same asset)|required_final_balance=1186871066266|provenance=§12's floor, mirrored from the guard the call carries\n",
+          "fields": {
+            "chain_id": 91342,
+            "executor": "0x1000000000000000000000000000000000000010",
+            "input_amount": "1000000000000",
+            "input_token": "0x4200000000000000000000000000000000000006",
+            "leg_rows": [
+              {
+                "amount_in": "1000000000000",
+                "amount_out": "996006981039903216",
+                "derivation": "plan_input",
+                "index": 0,
+                "min_amount_out": "996006981039903216",
+                "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+                "token_in": "0x4200000000000000000000000000000000000006",
+                "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+              },
+              {
+                "amount_in": "996006981039903216",
+                "amount_out": "992526161448428",
+                "derivation": "previous_leg_output",
+                "index": 1,
+                "min_amount_out": "992526161448428",
+                "pool": "0x7000000000000000000000000000000000000bc1",
+                "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+                "token_out": "0x60000000000000000000000000000000000000c3"
+              },
+              {
+                "amount_in": "992526161448428",
+                "amount_out": "1186871066266",
+                "derivation": "previous_leg_output",
+                "index": 2,
+                "min_amount_out": "1186871066266",
+                "pool": "0x7000000000000000000000000000000000000ca2",
+                "token_in": "0x60000000000000000000000000000000000000c3",
+                "token_out": "0x4200000000000000000000000000000000000006"
+              }
+            ],
+            "legs": 3,
+            "min_final_output": "1186871066266",
+            "profit": {
+              "denomination": "TokenSettled { token: 0x4200000000000000000000000000000000000006, reason: \"§34: the route round-trips in its input token, so the floor the contract enforces and the floor this policy requires are the same asset\" }",
+              "provenance": "§12's floor, mirrored from the guard the call carries",
+              "required_final_balance": "1186871066266"
+            },
+            "recipient": "0x2000000000000000000000000000000000000020",
+            "sender": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+            "simulation": {
+              "block_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+              "block_number": 37530593,
+              "correlation_id": "m11-evidence-3hop",
+              "funding": "RealState { source: \"§34: the operator's balance and allowance are rows in the pinned dump, read by the run rather than written into it\" }",
+              "market": "CONTROLLED_FIXTURE",
+              "market_evidence": "three legs (0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 → 0x7000000000000000000000000000000000000bc1 → 0x7000000000000000000000000000000000000ca2), each against a pool whose runtime code is the recorded pair's byte for byte; the topology is declared row by row in crates/simulation/tests/multihop_state",
+              "outcome": "succeeded",
+              "simulation_id": "0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5",
+              "state_fingerprint": "37530593:0"
+            },
+            "validity": {
+              "max_block_age": 3,
+              "provenance": "§8's window as M11's fixture declares it",
+              "simulated_at_block": 37530593
+            }
+          },
+          "plan_hash": "0x8656c2ba7bd9be5b2a2fbc5aa0728357340a7311308506a12084956f4fd860ec",
+          "route_id": "m10-91342-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4>0x7000000000000000000000000000000000000bc1>0x7000000000000000000000000000000000000ca2-0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x60000000000000000000000000000000000000c3>0x4200000000000000000000000000000000000006",
+          "token_transitions": [
+            "0x4200000000000000000000000000000000000006",
+            "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "0x60000000000000000000000000000000000000c3",
+            "0x4200000000000000000000000000000000000006"
+          ]
+        },
+        "pricing": {
+          "agrees": {
+            "identity_with_the_rotation_minimum": true,
+            "quote_with_the_fold": true
+          },
+          "chain_id": 91342,
+          "hops": [
+            {
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+              "reserve_in": "1000000000000000",
+              "reserve_out": "1000000000000000000000",
+              "token_in": "0x4200000000000000000000000000000000000006",
+              "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            },
+            {
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x7000000000000000000000000000000000000bc1",
+              "reserve_in": "2000000000000000000000",
+              "reserve_out": "2000000000000000000",
+              "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token_out": "0x60000000000000000000000000000000000000c3"
+            },
+            {
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x7000000000000000000000000000000000000ca2",
+              "reserve_in": "2000000000000000000",
+              "reserve_out": "2400000000000000",
+              "token_in": "0x60000000000000000000000000000000000000c3",
+              "token_out": "0x4200000000000000000000000000000000000006"
+            }
+          ],
+          "market_claim": {
+            "kind": "see pricing/ for this route's market claim"
+          },
+          "published": {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000bc1 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000ca2 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+            "identity_edges": [
+              {
+                "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+                "token_in": "0x4200000000000000000000000000000000000006",
+                "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+              },
+              {
+                "pool": "0x7000000000000000000000000000000000000bc1",
+                "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+                "token_out": "0x60000000000000000000000000000000000000c3"
+              },
+              {
+                "pool": "0x7000000000000000000000000000000000000ca2",
+                "token_in": "0x60000000000000000000000000000000000000c3",
+                "token_out": "0x4200000000000000000000000000000000000006"
+              }
+            ],
+            "input": "1000000000000",
+            "price_state": "quoted",
+            "quote": {
+              "hops": [
+                {
+                  "amount_in": "1000000000000",
+                  "amount_out": "996006981039903216",
+                  "fee": {
+                    "denominator": 1000,
+                    "numerator": 997
+                  },
+                  "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+                  "token_in": "0x4200000000000000000000000000000000000006",
+                  "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+                },
+                {
+                  "amount_in": "996006981039903216",
+                  "amount_out": "992526161448428",
+                  "fee": {
+                    "denominator": 1000,
+                    "numerator": 997
+                  },
+                  "pool": "0x7000000000000000000000000000000000000bc1",
+                  "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+                  "token_out": "0x60000000000000000000000000000000000000c3"
+                },
+                {
+                  "amount_in": "992526161448428",
+                  "amount_out": "1186871066266",
+                  "fee": {
+                    "denominator": 1000,
+                    "numerator": 997
+                  },
+                  "pool": "0x7000000000000000000000000000000000000ca2",
+                  "token_in": "0x60000000000000000000000000000000000000c3",
+                  "token_out": "0x4200000000000000000000000000000000000006"
+                }
+              ],
+              "input": "1000000000000",
+              "output": "1186871066266",
+              "truncated": false
+            }
+          },
+          "recomputed_independently": {
+            "hop_outputs": [
+              "996006981039903216",
+              "992526161448428",
+              "1186871066266"
+            ],
+            "identity_edges": [
+              {
+                "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+                "token_in": "0x4200000000000000000000000000000000000006",
+                "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+              },
+              {
+                "pool": "0x7000000000000000000000000000000000000bc1",
+                "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+                "token_out": "0x60000000000000000000000000000000000000c3"
+              },
+              {
+                "pool": "0x7000000000000000000000000000000000000ca2",
+                "token_in": "0x60000000000000000000000000000000000000c3",
+                "token_out": "0x4200000000000000000000000000000000000006"
+              }
+            ],
+            "identity_matches": true,
+            "identity_method": "minimum rotation of the published trade-order edge list, compared as a Vec<EdgeId> with EdgeId's own Ord",
+            "input": "1000000000000",
+            "method": "this file's own constant-product fold over the published hops array: in*numerator*reserve_out / (reserve_in*denominator + in*numerator), floor division, each output feeding the next input",
+            "output": "1186871066266",
+            "refused_because": null
+          },
+          "route": {
+            "hop_count": 3,
+            "input_token": "0x4200000000000000000000000000000000000006",
+            "input_upper_bound": "2399999999999999",
+            "is_priceable": true,
+            "pools": [
+              "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+              "0x7000000000000000000000000000000000000bc1",
+              "0x7000000000000000000000000000000000000ca2"
+            ],
+            "tokens": [
+              "0x4200000000000000000000000000000000000006",
+              "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "0x60000000000000000000000000000000000000c3",
+              "0x4200000000000000000000000000000000000006"
+            ],
+            "unattested": null
+          },
+          "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 6 declared accounts and 32 declared storage rows — 13 of them M10's two-hop scaffolding (the executor deployment, its configuration words, the wallet's balance and approvals) and 19 of them this cycle's declared topology (one third token and two pools replayed from the recorded pair's runtime code, their pair words, their depths as balances, the self-allowances that code consults, and the executor's allow-list entries for them). A row is declared only where it differs from the recording; the recorded market state is unedited, including 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, which leg A trades against its own recorded reserves at block 37530593 on chain 91342",
+          "target_block": 37530593,
+          "what_this_is": "the route the candidate names, priced at the optimizer's own best input"
+        },
+        "risk": {
+          "clears_the_floor": true,
+          "figures": {
+            "delivered": "1186871066266",
+            "gas_charge_wei": "153922400",
+            "gas_used": 425200,
+            "gross_profit": "186871066266",
+            "input_amount": "1000000000000",
+            "maximum_gas": 425200,
+            "min_final_output": "1186871066266",
+            "minimum_gross_profit": "0"
+          },
+          "gross_by_arithmetic": "186871066266"
+        },
+        "search": {
+          "canonical_key": "CanonicalKey([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000bc1 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000ca2 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+          "chain_id": 91342,
+          "edges": [
+            {
+              "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+              "token_in": "0x4200000000000000000000000000000000000006",
+              "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            },
+            {
+              "pool": "0x7000000000000000000000000000000000000bc1",
+              "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token_out": "0x60000000000000000000000000000000000000c3"
+            },
+            {
+              "pool": "0x7000000000000000000000000000000000000ca2",
+              "token_in": "0x60000000000000000000000000000000000000c3",
+              "token_out": "0x4200000000000000000000000000000000000006"
+            }
+          ],
+          "fee_status": "Complete",
+          "hop_count": 3,
+          "identity_recomputed_from_the_edges": [
+            {
+              "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+              "token_in": "0x4200000000000000000000000000000000000006",
+              "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            },
+            {
+              "pool": "0x7000000000000000000000000000000000000bc1",
+              "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token_out": "0x60000000000000000000000000000000000000c3"
+            },
+            {
+              "pool": "0x7000000000000000000000000000000000000ca2",
+              "token_in": "0x60000000000000000000000000000000000000c3",
+              "token_out": "0x4200000000000000000000000000000000000006"
+            }
+          ],
+          "start_token": "0x4200000000000000000000000000000000000006",
+          "target_block": 37530593
+        },
+        "simulation": {
+          "agrees": {
+            "calldata_hash_with_the_published_figure": true,
+            "request_bytes_with_the_recorded_bytes": true
+          },
+          "published": {
+            "observed": {
+              "balance_rows": [
+                {
+                  "after": "99000000000000",
+                  "before": "100000000000000",
+                  "holder": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+                  "movement": "Decreased { by: 1000000000000 }",
+                  "token": "0x4200000000000000000000000000000000000006"
+                },
+                {
+                  "after": "0",
+                  "before": "0",
+                  "holder": "0x1000000000000000000000000000000000000010",
+                  "movement": "Unchanged",
+                  "token": "0x4200000000000000000000000000000000000006"
+                },
+                {
+                  "after": "1186871066266",
+                  "before": "0",
+                  "holder": "0x2000000000000000000000000000000000000020",
+                  "movement": "Increased { by: 1186871066266 }",
+                  "token": "0x4200000000000000000000000000000000000006"
+                },
+                {
+                  "after": "0",
+                  "before": "0",
+                  "holder": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+                  "movement": "Unchanged",
+                  "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+                },
+                {
+                  "after": "0",
+                  "before": "0",
+                  "holder": "0x1000000000000000000000000000000000000010",
+                  "movement": "Unchanged",
+                  "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+                },
+                {
+                  "after": "0",
+                  "before": "0",
+                  "holder": "0x2000000000000000000000000000000000000020",
+                  "movement": "Unchanged",
+                  "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+                },
+                {
+                  "after": "0",
+                  "before": "0",
+                  "holder": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+                  "movement": "Unchanged",
+                  "token": "0x60000000000000000000000000000000000000c3"
+                },
+                {
+                  "after": "0",
+                  "before": "0",
+                  "holder": "0x1000000000000000000000000000000000000010",
+                  "movement": "Unchanged",
+                  "token": "0x60000000000000000000000000000000000000c3"
+                },
+                {
+                  "after": "0",
+                  "before": "0",
+                  "holder": "0x2000000000000000000000000000000000000020",
+                  "movement": "Unchanged",
+                  "token": "0x60000000000000000000000000000000000000c3"
+                }
+              ],
+              "changed_slots": 18,
+              "charge": "Priced { gas_used: 425200, effective_gas_price: 362, base_fee_per_gas: Some(362), wei: 153922400, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" } }",
+              "contract_error": null,
+              "delivered": "1186871066266",
+              "gas_limit": 3000000,
+              "gas_used": 425200,
+              "logs": 18,
+              "market_moved": true,
+              "reserve_rows": [
+                {
+                  "after": [
+                    "999003993018960096784",
+                    "1001000000000000"
+                  ],
+                  "before": [
+                    "1000000000000000000000",
+                    "1000000000000000"
+                  ],
+                  "changed": true,
+                  "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+                },
+                {
+                  "after": [
+                    "2000996006981039903216",
+                    "1999007473838551572"
+                  ],
+                  "before": [
+                    "2000000000000000000000",
+                    "2000000000000000000"
+                  ],
+                  "changed": true,
+                  "pool": "0x7000000000000000000000000000000000000bc1"
+                },
+                {
+                  "after": [
+                    "2398813128933734",
+                    "2000992526161448428"
+                  ],
+                  "before": [
+                    "2400000000000000",
+                    "2000000000000000000"
+                  ],
+                  "changed": true,
+                  "pool": "0x7000000000000000000000000000000000000ca2"
+                }
+              ],
+              "revert_kind": null,
+              "revert_reason": null,
+              "status": "Success",
+              "succeeded": true
+            },
+            "pricing_quotes_the_same_route": {
+              "delivered": "1186871066266",
+              "priced_against_delivered": {
+                "amount": "0",
+                "state": "even"
+              },
+              "quoted_hop_outputs": [
+                "996006981039903216",
+                "992526161448428",
+                "1186871066266"
+              ]
+            },
+            "simulated_opportunity": {
+              "calldata": "0xfeb0554e00000000000000000000000000000000000000000000000000000000000000a00000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000000011457073e9a000000000000000000000000200000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000030000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a4000000000000000000000000420000000000000000000000000000000000000600000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000007000000000000000000000000000000000000bc100000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f00000000000000000000000060000000000000000000000000000000000000c30000000000000000000000000000000000000000000000000dd287127ab151f0000000000000000000000000000000000000000000000000000386b281488dec000000000000000000000000000000000000000000000000000386b281488dec0000000000000000000000007000000000000000000000000000000000000ca200000000000000000000000060000000000000000000000000000000000000c30000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000386b281488dec0000000000000000000000000000000000000000000000000000011457073e9a0000000000000000000000000000000000000000000000000000011457073e9a",
+              "calldata_hash": "0x34d7232e8a4abd94ca282d9ca5b3afca452b431f1b3c216661d6876d0b4d0ed4",
+              "canonical_text": "m11-multi-hop-simulation\nchain_id=91342\nblock=37530593\nblock_hash=0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7\nexecutor=0x1000000000000000000000000000000000000010\noperator=0x953e7e98562714c23bc22c7d186cdf516f9dfa6f\nrecipient=0x2000000000000000000000000000000000000020\ninput_token=0x4200000000000000000000000000000000000006\ninput_amount=1000000000000\npriced_input=1000000000000\npriced_output=1186871066266\nlegs=3\nmin_final_output=1186871066266\ngas_limit=3000000\ngas_used=425200\nstatus=delivered\nfinal_amount=1186871066266\ngross=gain:186871066266\ncalldata_hash=0x34d7232e8a4abd94ca282d9ca5b3afca452b431f1b3c216661d6876d0b4d0ed4\nroute=3 hops:0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4/0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|0x7000000000000000000000000000000000000bc1/0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x60000000000000000000000000000000000000c3|0x7000000000000000000000000000000000000ca2/0x60000000000000000000000000000000000000c3>0x4200000000000000000000000000000000000006\nleg[0]|pool=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|token_in=0x4200000000000000000000000000000000000006|token_out=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|amount_in=1000000000000|amount_out=996006981039903216|min_amount_out=996006981039903216\nleg[1]|pool=0x7000000000000000000000000000000000000bc1|token_in=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|token_out=0x60000000000000000000000000000000000000c3|amount_in=996006981039903216|amount_out=992526161448428|min_amount_out=992526161448428\nleg[2]|pool=0x7000000000000000000000000000000000000ca2|token_in=0x60000000000000000000000000000000000000c3|token_out=0x4200000000000000000000000000000000000006|amount_in=992526161448428|amount_out=1186871066266|min_amount_out=1186871066266",
+              "chain_id": 91342,
+              "final_amount": "1186871066266",
+              "gas_charge": "Priced { gas_used: 425200, effective_gas_price: 362, base_fee_per_gas: Some(362), wei: 153922400, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" } }",
+              "gas_used": 425200,
+              "gross": {
+                "amount": "186871066266",
+                "state": "gain"
+              },
+              "identity": "m11-sim-91342-37530593-0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5",
+              "identity_hash": "0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5",
+              "input_amount": "1000000000000",
+              "market_moved": true,
+              "matches_pricing": true,
+              "min_final_output": "1186871066266",
+              "route_agrees_with_pricing": "agrees",
+              "simulation_block": 37530593,
+              "simulation_block_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+              "status": "delivered"
+            },
+            "spec": {
+              "call": {
+                "amount_in": "1000000000000",
+                "input_token": "0x4200000000000000000000000000000000000006",
+                "legs": [
+                  {
+                    "amount_in": "1000000000000",
+                    "amount_out": "996006981039903216",
+                    "min_amount_out": "996006981039903216",
+                    "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+                    "token_in": "0x4200000000000000000000000000000000000006",
+                    "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+                  },
+                  {
+                    "amount_in": "996006981039903216",
+                    "amount_out": "992526161448428",
+                    "min_amount_out": "992526161448428",
+                    "pool": "0x7000000000000000000000000000000000000bc1",
+                    "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+                    "token_out": "0x60000000000000000000000000000000000000c3"
+                  },
+                  {
+                    "amount_in": "992526161448428",
+                    "amount_out": "1186871066266",
+                    "min_amount_out": "1186871066266",
+                    "pool": "0x7000000000000000000000000000000000000ca2",
+                    "token_in": "0x60000000000000000000000000000000000000c3",
+                    "token_out": "0x4200000000000000000000000000000000000006"
+                  }
+                ],
+                "min_final_amount": "1186871066266",
+                "recipient": "0x2000000000000000000000000000000000000020",
+                "selector": "0xfeb0554e",
+                "signature": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)"
+              },
+              "calldata": "0xfeb0554e00000000000000000000000000000000000000000000000000000000000000a00000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000000011457073e9a000000000000000000000000200000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000030000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a4000000000000000000000000420000000000000000000000000000000000000600000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000007000000000000000000000000000000000000bc100000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f00000000000000000000000060000000000000000000000000000000000000c30000000000000000000000000000000000000000000000000dd287127ab151f0000000000000000000000000000000000000000000000000000386b281488dec000000000000000000000000000000000000000000000000000386b281488dec0000000000000000000000007000000000000000000000000000000000000ca200000000000000000000000060000000000000000000000000000000000000c30000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000386b281488dec0000000000000000000000000000000000000000000000000000011457073e9a0000000000000000000000000000000000000000000000000000011457073e9a",
+              "calldata_len": 772,
+              "chain_id": 91342,
+              "endowment": "10000000000000000000",
+              "executor": "0x1000000000000000000000000000000000000010",
+              "gas_limit": 3000000,
+              "operator": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+              "priced_at_block": 37530593,
+              "pricing": {
+                "kind": "eip1559",
+                "priority_fee_per_gas": "0",
+                "provenance": "block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it"
+              },
+              "pricing_debug": "Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" }",
+              "recipient": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+              "rules": "Prague",
+              "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 6 declared accounts and 32 declared storage rows — 13 of them M10's two-hop scaffolding (the executor deployment, its configuration words, the wallet's balance and approvals) and 19 of them this cycle's declared topology (one third token and two pools replayed from the recorded pair's runtime code, their pair words, their depths as balances, the self-allowances that code consults, and the executor's allow-list entries for them). A row is declared only where it differs from the recording; the recorded market state is unedited, including 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, which leg A trades against its own recorded reserves at block 37530593 on chain 91342"
+            },
+            "state": {
+              "additions_digest": {
+                "bytes": 100772,
+                "keccak256": "0x10314cf460b17d6525603f52f560d5088be8b67aefb32bc1d5f4fd52e37eefdb"
+              },
+              "additions_file": "fixtures/simulation-m11/fixture-37530593-triangle-additions.json",
+              "base_recording": "fixtures/simulation-m7/dump-37530593-07D4af6E.json",
+              "fixture": {
+                "bytes": 202875,
+                "keccak256": "0x6dad8d03c002812c652acda27949caf9d6b0cfce9431c76b00146ce8ff3b9352"
+              },
+              "fixture_file": "fixtures/simulation-m11/fixture-37530593-triangle.json",
+              "how_to_load": "read fixture_file as an evm_simulation::state::StateDump, hand it to DumpStateProvider::new with the state_source_string above, and run the published calldata bytes against it — the run's only other state edit is the endowment ExecutorRun::setup layers from the published spec, which is the one edit §58 allows and it is named by the spec, not by this file",
+              "state_source_string": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 6 declared accounts and 32 declared storage rows — 13 of them M10's two-hop scaffolding (the executor deployment, its configuration words, the wallet's balance and approvals) and 19 of them this cycle's declared topology (one third token and two pools replayed from the recorded pair's runtime code, their pair words, their depths as balances, the self-allowances that code consults, and the executor's allow-list entries for them). A row is declared only where it differs from the recording; the recorded market state is unedited, including 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, which leg A trades against its own recorded reserves at block 37530593 on chain 91342"
+            }
+          },
+          "recomputed_independently": {
+            "calldata_hash_agrees": true,
+            "calldata_hash_of_the_published_bytes": "0x34d7232e8a4abd94ca282d9ca5b3afca452b431f1b3c216661d6876d0b4d0ed4",
+            "identity_hash_agrees": true,
+            "identity_hash_of_the_published_canonical_text": "0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5",
+            "method": "keccak256 taken over the published request calldata and over the published canonical text, in this file rather than by calling the simulation's own hash methods"
+          },
+          "rpc": {
+            "basis": {
+              "constructed_from": "fixtures/simulation-m11/fixture-37530593-triangle.json",
+              "endpoint_variable": {
+                "name": "GIWA_RPC_URL",
+                "present_in_the_assembling_process": false,
+                "why_it_matters": "the only provider in this workspace that holds a URL reads it from this variable; the runs above are served by the type named in provider_type, which takes a dump file and a label and answers from memory"
+              },
+              "hot_path": "M11 added no read to a hot path: the milestone's production diff is audited in §49's gate, and this directory is assembled offline",
+              "local_reads_served": "every read answered from the dump or was refused; a refusal here would have failed the run rather than costing a request",
+              "provider_type": "evm_simulation::state::DumpStateProvider",
+              "state_source_string": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 6 declared accounts and 32 declared storage rows — 13 of them M10's two-hop scaffolding (the executor deployment, its configuration words, the wallet's balance and approvals) and 19 of them this cycle's declared topology (one third token and two pools replayed from the recorded pair's runtime code, their pair words, their depths as balances, the self-allowances that code consults, and the executor's allow-list entries for them). A row is declared only where it differs from the recording; the recorded market state is unedited, including 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, which leg A trades against its own recorded reserves at block 37530593 on chain 91342"
+            },
+            "rpc_count": 0
+          },
+          "what_this_is": "the three-hop run, filed under the candidate it claims to be the run of"
+        }
+      },
+      "the_contract_answered": {
+        "delivered": "1186871066266",
+        "gas_used": 425200,
+        "min_final_output_met": true,
+        "quoted_output": "1186871066266",
+        "reserve_rows_moved": 3,
+        "status": "delivered"
+      },
+      "the_five_claims": {
+        "calldata_hash": "0x34d7232e8a4abd94ca282d9ca5b3afca452b431f1b3c216661d6876d0b4d0ed4",
+        "calldata_hash_recomputed": "0x34d7232e8a4abd94ca282d9ca5b3afca452b431f1b3c216661d6876d0b4d0ed4",
+        "plan_hash": "0x8656c2ba7bd9be5b2a2fbc5aa0728357340a7311308506a12084956f4fd860ec",
+        "plan_hash_recomputed": "0x8656c2ba7bd9be5b2a2fbc5aa0728357340a7311308506a12084956f4fd860ec",
+        "quote": {
+          "hops": [
+            {
+              "amount_in": "1000000000000",
+              "amount_out": "996006981039903216",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+              "token_in": "0x4200000000000000000000000000000000000006",
+              "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            },
+            {
+              "amount_in": "996006981039903216",
+              "amount_out": "992526161448428",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x7000000000000000000000000000000000000bc1",
+              "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token_out": "0x60000000000000000000000000000000000000c3"
+            },
+            {
+              "amount_in": "992526161448428",
+              "amount_out": "1186871066266",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x7000000000000000000000000000000000000ca2",
+              "token_in": "0x60000000000000000000000000000000000000c3",
+              "token_out": "0x4200000000000000000000000000000000000006"
+            }
+          ],
+          "input": "1000000000000",
+          "output": "1186871066266",
+          "truncated": false
+        },
+        "route_identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000bc1 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000ca2 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+        "route_identity_recomputed": [
+          {
+            "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "token_in": "0x4200000000000000000000000000000000000006",
+            "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+          },
+          {
+            "pool": "0x7000000000000000000000000000000000000bc1",
+            "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "token_out": "0x60000000000000000000000000000000000000c3"
+          },
+          {
+            "pool": "0x7000000000000000000000000000000000000ca2",
+            "token_in": "0x60000000000000000000000000000000000000c3",
+            "token_out": "0x4200000000000000000000000000000000000006"
+          }
+        ],
+        "simulation_identity_hash": "0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5"
+      },
+      "what_this_is": "§37/§38's three-hop case, walked from the cycle the search found to the bytes an executor would run"
+    },
+    "three-hop-rollback-at-the-third-pool": {
+      "balance_rows": 9,
+      "balance_rows_unchanged": 9,
+      "calldata": "0xfeb0554e00000000000000000000000000000000000000000000000000000000000000a00000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000000011457073e9a000000000000000000000000200000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000030000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a4000000000000000000000000420000000000000000000000000000000000000600000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000007000000000000000000000000000000000000bc100000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f00000000000000000000000060000000000000000000000000000000000000c30000000000000000000000000000000000000000000000000dd287127ab151f0000000000000000000000000000000000000000000000000000386b281488dec000000000000000000000000000000000000000000000000000386b281488dec0000000000000000000000007000000000000000000000000000000000000ca200000000000000000000000060000000000000000000000000000000000000c30000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000386b281488dec00000000000000000000000000000000000000000000000000000228ae0e7d3400000000000000000000000000000000000000000000000000000228ae0e7d34",
+      "changed_slots_in_the_three_pools": {
+        "counts": [
+          0,
+          0,
+          0
+        ],
+        "means": "the counts are paired with the pool each was counted on, so a reader who knows only these three addresses can ask the same question; the word order is a rendering, not an index",
+        "pools": [
+          "0x7000000000000000000000000000000000000bc1",
+          "0x7000000000000000000000000000000000000ca2",
+          "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+        ]
+      },
+      "contract_error": null,
+      "delivered": null,
+      "market_moved": false,
+      "reserve_rows": [
+        {
+          "after": [
+            "1000000000000000000000",
+            "1000000000000000"
+          ],
+          "before": [
+            "1000000000000000000000",
+            "1000000000000000"
+          ],
+          "changed": false,
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+        },
+        {
+          "after": [
+            "2000000000000000000000",
+            "2000000000000000000"
+          ],
+          "before": [
+            "2000000000000000000000",
+            "2000000000000000000"
+          ],
+          "changed": false,
+          "pool": "0x7000000000000000000000000000000000000bc1"
+        },
+        {
+          "after": [
+            "2400000000000000",
+            "2000000000000000000"
+          ],
+          "before": [
+            "2400000000000000",
+            "2000000000000000000"
+          ],
+          "changed": false,
+          "pool": "0x7000000000000000000000000000000000000ca2"
+        }
+      ],
+      "revert_reason": "UniswapV2: K",
+      "spec": {
+        "call": {
+          "amount_in": "1000000000000",
+          "input_token": "0x4200000000000000000000000000000000000006",
+          "legs": [
+            {
+              "amount_in": "1000000000000",
+              "amount_out": "996006981039903216",
+              "min_amount_out": "996006981039903216",
+              "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+              "token_in": "0x4200000000000000000000000000000000000006",
+              "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            },
+            {
+              "amount_in": "996006981039903216",
+              "amount_out": "992526161448428",
+              "min_amount_out": "992526161448428",
+              "pool": "0x7000000000000000000000000000000000000bc1",
+              "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token_out": "0x60000000000000000000000000000000000000c3"
+            },
+            {
+              "amount_in": "992526161448428",
+              "amount_out": "2373742132532",
+              "min_amount_out": "2373742132532",
+              "pool": "0x7000000000000000000000000000000000000ca2",
+              "token_in": "0x60000000000000000000000000000000000000c3",
+              "token_out": "0x4200000000000000000000000000000000000006"
+            }
+          ],
+          "min_final_amount": "1186871066266",
+          "recipient": "0x2000000000000000000000000000000000000020",
+          "selector": "0xfeb0554e",
+          "signature": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)"
+        },
+        "calldata": "0xfeb0554e00000000000000000000000000000000000000000000000000000000000000a00000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000000011457073e9a000000000000000000000000200000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000030000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a4000000000000000000000000420000000000000000000000000000000000000600000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f000000000000000000000000000000000000000000000000000000e8d4a510000000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000000000000000000000000000000dd287127ab151f00000000000000000000000007000000000000000000000000000000000000bc100000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f00000000000000000000000060000000000000000000000000000000000000c30000000000000000000000000000000000000000000000000dd287127ab151f0000000000000000000000000000000000000000000000000000386b281488dec000000000000000000000000000000000000000000000000000386b281488dec0000000000000000000000007000000000000000000000000000000000000ca200000000000000000000000060000000000000000000000000000000000000c30000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000000386b281488dec00000000000000000000000000000000000000000000000000000228ae0e7d3400000000000000000000000000000000000000000000000000000228ae0e7d34",
+        "calldata_len": 772,
+        "chain_id": 91342,
+        "endowment": "10000000000000000000",
+        "executor": "0x1000000000000000000000000000000000000010",
+        "gas_limit": 3000000,
+        "operator": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+        "priced_at_block": 37530593,
+        "pricing": {
+          "kind": "eip1559",
+          "priority_fee_per_gas": "0",
+          "provenance": "block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it"
+        },
+        "pricing_debug": "Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" }",
+        "recipient": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+        "rules": "Prague",
+        "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 6 declared accounts and 32 declared storage rows — 13 of them M10's two-hop scaffolding (the executor deployment, its configuration words, the wallet's balance and approvals) and 19 of them this cycle's declared topology (one third token and two pools replayed from the recorded pair's runtime code, their pair words, their depths as balances, the self-allowances that code consults, and the executor's allow-list entries for them). A row is declared only where it differs from the recording; the recorded market state is unedited, including 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, which leg A trades against its own recorded reserves at block 37530593 on chain 91342"
+      },
+      "state": {
+        "additions_digest": {
+          "bytes": 100772,
+          "keccak256": "0x10314cf460b17d6525603f52f560d5088be8b67aefb32bc1d5f4fd52e37eefdb"
+        },
+        "additions_file": "fixtures/simulation-m11/fixture-37530593-triangle-additions.json",
+        "base_recording": "fixtures/simulation-m7/dump-37530593-07D4af6E.json",
+        "fixture": {
+          "bytes": 202875,
+          "keccak256": "0x6dad8d03c002812c652acda27949caf9d6b0cfce9431c76b00146ce8ff3b9352"
+        },
+        "fixture_file": "fixtures/simulation-m11/fixture-37530593-triangle.json",
+        "how_to_load": "read fixture_file as an evm_simulation::state::StateDump, hand it to DumpStateProvider::new with the state_source_string above, and run the published calldata bytes against it — the run's only other state edit is the endowment ExecutorRun::setup layers from the published spec, which is the one edit §58 allows and it is named by the spec, not by this file",
+        "state_source_string": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 6 declared accounts and 32 declared storage rows — 13 of them M10's two-hop scaffolding (the executor deployment, its configuration words, the wallet's balance and approvals) and 19 of them this cycle's declared topology (one third token and two pools replayed from the recorded pair's runtime code, their pair words, their depths as balances, the self-allowances that code consults, and the executor's allow-list entries for them). A row is declared only where it differs from the recording; the recorded market state is unedited, including 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, which leg A trades against its own recorded reserves at block 37530593 on chain 91342"
+      },
+      "status": "Reverted(RevertData { raw: 0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000c556e697377617056323a204b0000000000000000000000000000000000000000, message: Some(\"UniswapV2: K\") })",
+      "verdict": "the run is refused by the third pool's constant-product check, and no word this fixture watches differs from what it was before the call",
+      "what_this_is": "§39: the third leg asks double its priced output, and the call leaves nothing behind"
+    }
+  },
+  "schema": "m11-evidence-v1"
+}

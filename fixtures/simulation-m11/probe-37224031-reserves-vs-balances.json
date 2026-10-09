@@ -1,0 +1,152 @@
+{
+  "_provenance": "crates/simulation/tests/triangle_probe.rs — a measurement of whether each recorded pool of fixtures/simulation-m11/dump-37224031-triangle-03a884af.json caches a reserve equal to the tokens it holds, and what M10's executor answers for the same round trip priced from each of the two. It measures no fee and judges no market",
+  "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+  "chain_id": 91342,
+  "block_number": 37224031,
+  "probe_amount": "0x8ac7230489e80000",
+  "rows": [
+    {
+      "pool": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "reserve0": "0x152d02c7e14af6800000",
+      "balance0": "0x152d02c7e14af6800000",
+      "gap0_permille": "0x3e8",
+      "reserve1": "0xde0b6b3a7640000",
+      "balance1": "0xde0b6b3a7640000",
+      "gap1_permille": "0x3e8",
+      "runs": [
+        {
+          "priced_from": "the pool's recorded token balances",
+          "side_in": "0x152d02c7e14af6800000",
+          "side_out": "0xde0b6b3a7640000",
+          "priced": true,
+          "claims": [
+            "10000000000000000000 in -> 99690060900928 out",
+            "99690060900928 in -> 9938111313093245260 out"
+          ],
+          "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 133078 gas of 3000000 allowed, market moved: false",
+          "contract_error": null,
+          "revert_kind": "Empty",
+          "gas_used": 133078,
+          "delivered": null,
+          "reserves_moved": 0
+        },
+        {
+          "priced_from": "the pool's own `getReserves()` answer",
+          "side_in": "0x152d02c7e14af6800000",
+          "side_out": "0xde0b6b3a7640000",
+          "priced": true,
+          "claims": [
+            "10000000000000000000 in -> 99690060900928 out",
+            "99690060900928 in -> 9938111313093245260 out"
+          ],
+          "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 133078 gas of 3000000 allowed, market moved: false",
+          "contract_error": null,
+          "revert_kind": "Empty",
+          "gas_used": 133078,
+          "delivered": null,
+          "reserves_moved": 0
+        }
+      ],
+      "verdict": "the pair's cached reserves are exactly the balances it holds on both sides, so the two prices this table ran are one measurement: what it establishes is that identity, and the empty payload it answers is therefore not a disagreement between two price sources"
+    },
+    {
+      "pool": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+      "token0": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "token1": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "reserve0": "0x32ee841b800",
+      "balance0": "0x32ee841b800",
+      "gap0_permille": "0x3e8",
+      "reserve1": "0xde0b6b3a7640000",
+      "balance1": "0xde0b6b3a7640000",
+      "gap1_permille": "0x3e8",
+      "runs": [
+        {
+          "priced_from": "the pool's recorded token balances",
+          "side_in": "0x32ee841b800",
+          "side_out": "0xde0b6b3a7640000",
+          "priced": true,
+          "claims": [
+            "10000000000000000000 in -> 999999648946963759 out",
+            "999999648946963759 in -> 1747370749414 out"
+          ],
+          "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted with InsufficientBalance (revert data 0xcf47918100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008ac7230489e80000), 52632 gas of 3000000 allowed, market moved: false",
+          "contract_error": "InsufficientBalance",
+          "revert_kind": "InsufficientBalance",
+          "gas_used": 52632,
+          "delivered": null,
+          "reserves_moved": 0
+        },
+        {
+          "priced_from": "the pool's own `getReserves()` answer",
+          "side_in": "0x32ee841b800",
+          "side_out": "0xde0b6b3a7640000",
+          "priced": true,
+          "claims": [
+            "10000000000000000000 in -> 999999648946963759 out",
+            "999999648946963759 in -> 1747370749414 out"
+          ],
+          "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted with InsufficientBalance (revert data 0xcf47918100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008ac7230489e80000), 52632 gas of 3000000 allowed, market moved: false",
+          "contract_error": "InsufficientBalance",
+          "revert_kind": "InsufficientBalance",
+          "gas_used": 52632,
+          "delivered": null,
+          "reserves_moved": 0
+        }
+      ],
+      "verdict": "every run stopped at the executor's own funding gate (InsufficientBalance, InsufficientBalance) before any pool was called, so this row measures the probe's funding rather than the pair — and it says nothing about whether this family trades"
+    },
+    {
+      "pool": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+      "token0": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "token1": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "reserve0": "0x2a5a058fc295ed000000",
+      "balance0": "0x2a5a058fc295ed000000",
+      "gap0_permille": "0x3e8",
+      "reserve1": "0x2e90edd000",
+      "balance1": "0x2e90edd000",
+      "gap1_permille": "0x3e8",
+      "runs": [
+        {
+          "priced_from": "the pool's recorded token balances",
+          "side_in": "0x2a5a058fc295ed000000",
+          "side_out": "0x2e90edd000",
+          "priced": true,
+          "claims": [
+            "10000000000000000000 in -> 9969503 out",
+            "9969503 in -> 9939100537855242194 out"
+          ],
+          "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 133016 gas of 3000000 allowed, market moved: false",
+          "contract_error": null,
+          "revert_kind": "Empty",
+          "gas_used": 133016,
+          "delivered": null,
+          "reserves_moved": 0
+        },
+        {
+          "priced_from": "the pool's own `getReserves()` answer",
+          "side_in": "0x2a5a058fc295ed000000",
+          "side_out": "0x2e90edd000",
+          "priced": true,
+          "claims": [
+            "10000000000000000000 in -> 9969503 out",
+            "9969503 in -> 9939100537855242194 out"
+          ],
+          "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 133016 gas of 3000000 allowed, market moved: false",
+          "contract_error": null,
+          "revert_kind": "Empty",
+          "gas_used": 133016,
+          "delivered": null,
+          "reserves_moved": 0
+        }
+      ],
+      "verdict": "the pair's cached reserves are exactly the balances it holds on both sides, so the two prices this table ran are one measurement: what it establishes is that identity, and the empty payload it answers is therefore not a disagreement between two price sources"
+    }
+  ],
+  "reading": "0 of 3 recorded pools hold a cached reserve that is not the balance they actually hold, and 2 of 3 answer every price this table ran with the empty payload.",
+  "not_measured": [
+    "why the pair's cache and its holdings diverged — that would need the pool's own history (`mint`, `burn`, `sync`, `skim`), and this recording is one height, not a trace",
+    "whether any direction of this cycle is profitable — nothing in this repository trades these pools, so the question is not asked here and §41 keeps `REAL_PROFITABLE_ARBITRAGE` at `UNKNOWN`"
+  ]
+}

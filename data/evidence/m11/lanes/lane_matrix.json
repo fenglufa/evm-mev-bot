@@ -1,0 +1,1524 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "directory": "lanes",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/lanes/lane_matrix.json",
+  "milestone": "M11",
+  "rows": {
+    "lane-ledger-§31-§36": {
+      "domain": {
+        "amount_each_lane_claims": "100",
+        "capacity_at_open": "1000",
+        "domain_id": "m11-evidence-domain"
+      },
+      "final": {
+        "capital": {
+          "available_capital": "1000",
+          "available_plus_reserved": "1000",
+          "capacity": "1000",
+          "domain_id": "m11-evidence-domain",
+          "invariant_holds": true,
+          "reserved_capital": "0",
+          "settled_input": "100",
+          "sums_to_capacity_recomputed": true
+        },
+        "lanes": [
+          {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              },
+              {
+                "from": "ready",
+                "note": "nonce 0 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b and capital 100 reserved",
+                "to": "reserved"
+              },
+              {
+                "from": "reserved",
+                "note": "in flight",
+                "to": "submitting"
+              },
+              {
+                "from": "submitting",
+                "note": "in flight",
+                "to": "submitted"
+              },
+              {
+                "from": "submitted",
+                "note": "in flight",
+                "to": "included"
+              },
+              {
+                "from": "included",
+                "note": "receipt bound; §34 commit",
+                "to": "settled"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": {
+              "nonce": 0,
+              "signer": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+              "stage": "committed"
+            },
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+            "simulation_id": "m11-evidence-sim-a",
+            "state": "settled"
+          },
+          {
+            "candidate_id": "m11-evidence-cand-b",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 1,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000b2",
+            "simulation_id": "m11-evidence-sim-b",
+            "state": "ready"
+          },
+          {
+            "candidate_id": "m11-evidence-cand-c",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 2,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000c3",
+            "simulation_id": "m11-evidence-sim-c",
+            "state": "ready"
+          },
+          {
+            "candidate_id": "m11-evidence-cand-d",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              },
+              {
+                "from": "ready",
+                "note": "nonce 1 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b and capital 100 reserved",
+                "to": "reserved"
+              },
+              {
+                "from": "reserved",
+                "note": "plan_expired: the window closed",
+                "to": "expired"
+              }
+            ],
+            "lane_id": 3,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000d4",
+            "simulation_id": "m11-evidence-sim-d",
+            "state": "expired"
+          },
+          {
+            "candidate_id": "m11-evidence-cand-e",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 4,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "simulating"
+          },
+          {
+            "candidate_id": "m11-evidence-cand-f",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 5,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000f5",
+            "simulation_id": "m11-evidence-sim-f",
+            "state": "ready"
+          }
+        ],
+        "outstanding_nonces": 1,
+        "winner": 5
+      },
+      "recomputed_independently": {
+        "available_plus_reserved_at_the_end": "1000",
+        "capacity": "1000",
+        "method": "the capital pool is an addition: available plus reserved either equals the capacity or the domain has double-spent. Every step above carries the pair, so the check is per step rather than only at the end.",
+        "nonce_held_by_the_settled_lane": 0,
+        "settled_input": "100",
+        "sums_to_capacity": true
+      },
+      "steps": [
+        {
+          "action": "open",
+          "candidate_id": "m11-evidence-cand-a",
+          "capital": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "0",
+            "sums_to_capacity_recomputed": true
+          },
+          "lane": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": null,
+            "history": [],
+            "lane_id": 0,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "created"
+          },
+          "lane_id": 0
+        },
+        {
+          "action": "open",
+          "candidate_id": "m11-evidence-cand-b",
+          "capital": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "0",
+            "sums_to_capacity_recomputed": true
+          },
+          "lane": {
+            "candidate_id": "m11-evidence-cand-b",
+            "capital": null,
+            "history": [],
+            "lane_id": 1,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "created"
+          },
+          "lane_id": 1
+        },
+        {
+          "action": "open",
+          "candidate_id": "m11-evidence-cand-c",
+          "capital": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "0",
+            "sums_to_capacity_recomputed": true
+          },
+          "lane": {
+            "candidate_id": "m11-evidence-cand-c",
+            "capital": null,
+            "history": [],
+            "lane_id": 2,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "created"
+          },
+          "lane_id": 2
+        },
+        {
+          "action": "begin_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "simulating"
+          },
+          "lane_id": 0
+        },
+        {
+          "action": "begin_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-b",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 1,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "simulating"
+          },
+          "lane_id": 1
+        },
+        {
+          "action": "begin_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-c",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 2,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "simulating"
+          },
+          "lane_id": 2
+        },
+        {
+          "assertion": "three_lanes_simulate_in_parallel",
+          "capital": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "0",
+            "sums_to_capacity_recomputed": true
+          },
+          "lanes_holding_a_nonce": 0,
+          "simulating_lanes": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "action": "record_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+            "simulation_id": "m11-evidence-sim-a",
+            "state": "simulating"
+          },
+          "lane_id": 0,
+          "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+          "simulation_id": "m11-evidence-sim-a"
+        },
+        {
+          "action": "record_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-b",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 1,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000b2",
+            "simulation_id": "m11-evidence-sim-b",
+            "state": "simulating"
+          },
+          "lane_id": 1,
+          "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000b2",
+          "simulation_id": "m11-evidence-sim-b"
+        },
+        {
+          "action": "record_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-c",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 2,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000c3",
+            "simulation_id": "m11-evidence-sim-c",
+            "state": "simulating"
+          },
+          "lane_id": 2,
+          "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000c3",
+          "simulation_id": "m11-evidence-sim-c"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+            "simulation_id": "m11-evidence-sim-a",
+            "state": "risk_checking"
+          },
+          "lane_id": 0,
+          "note": "risk asked",
+          "to": "risk_checking"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+            "simulation_id": "m11-evidence-sim-a",
+            "state": "ready"
+          },
+          "lane_id": 0,
+          "note": "risk accepted",
+          "to": "ready"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-b",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              }
+            ],
+            "lane_id": 1,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000b2",
+            "simulation_id": "m11-evidence-sim-b",
+            "state": "risk_checking"
+          },
+          "lane_id": 1,
+          "note": "risk asked",
+          "to": "risk_checking"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-b",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 1,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000b2",
+            "simulation_id": "m11-evidence-sim-b",
+            "state": "ready"
+          },
+          "lane_id": 1,
+          "note": "risk accepted",
+          "to": "ready"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-c",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              }
+            ],
+            "lane_id": 2,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000c3",
+            "simulation_id": "m11-evidence-sim-c",
+            "state": "risk_checking"
+          },
+          "lane_id": 2,
+          "note": "risk asked",
+          "to": "risk_checking"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-c",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 2,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000c3",
+            "simulation_id": "m11-evidence-sim-c",
+            "state": "ready"
+          },
+          "lane_id": 2,
+          "note": "risk accepted",
+          "to": "ready"
+        },
+        {
+          "action": "choose_winner",
+          "arm": "§36's ranking over the three accepted lanes",
+          "rule": "greater gross gain, then the lower lane id",
+          "standings": [
+            {
+              "gross_gain": "30",
+              "lane_id": 2
+            },
+            {
+              "gross_gain": "90",
+              "lane_id": 0
+            },
+            {
+              "gross_gain": "50",
+              "lane_id": 1
+            }
+          ],
+          "winner": 0
+        },
+        {
+          "capital_after": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "0",
+            "sums_to_capacity_recomputed": true
+          },
+          "control": "nc36_a_losing_lane_is_turned_away",
+          "lane_after": {
+            "candidate_id": "m11-evidence-cand-b",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 1,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000b2",
+            "simulation_id": "m11-evidence-sim-b",
+            "state": "ready"
+          },
+          "refusal": "§36: lane-1 is not the selected winner (lane-0), so nothing is reserved for it",
+          "refusal_code": "lane_not_selected"
+        },
+        {
+          "action": "reserve_for",
+          "capital": {
+            "amount": "100",
+            "domain_id": "m11-evidence-domain"
+          },
+          "capital_after": {
+            "available_capital": "900",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "100",
+            "settled_input": "0",
+            "sums_to_capacity_recomputed": true
+          },
+          "lane_after": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": {
+              "amount": "100",
+              "domain_id": "m11-evidence-domain"
+            },
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              },
+              {
+                "from": "ready",
+                "note": "nonce 0 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b and capital 100 reserved",
+                "to": "reserved"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": {
+              "nonce": 0,
+              "signer": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+              "stage": "reserved"
+            },
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+            "simulation_id": "m11-evidence-sim-a",
+            "state": "reserved"
+          },
+          "lane_id": 0,
+          "nonce": {
+            "nonce": 0,
+            "signer": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+            "stage": "reserved"
+          }
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": {
+              "amount": "100",
+              "domain_id": "m11-evidence-domain"
+            },
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              },
+              {
+                "from": "ready",
+                "note": "nonce 0 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b and capital 100 reserved",
+                "to": "reserved"
+              },
+              {
+                "from": "reserved",
+                "note": "in flight",
+                "to": "submitting"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": {
+              "nonce": 0,
+              "signer": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+              "stage": "reserved"
+            },
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+            "simulation_id": "m11-evidence-sim-a",
+            "state": "submitting"
+          },
+          "lane_id": 0,
+          "note": "in flight",
+          "to": "submitting"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": {
+              "amount": "100",
+              "domain_id": "m11-evidence-domain"
+            },
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              },
+              {
+                "from": "ready",
+                "note": "nonce 0 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b and capital 100 reserved",
+                "to": "reserved"
+              },
+              {
+                "from": "reserved",
+                "note": "in flight",
+                "to": "submitting"
+              },
+              {
+                "from": "submitting",
+                "note": "in flight",
+                "to": "submitted"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": {
+              "nonce": 0,
+              "signer": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+              "stage": "reserved"
+            },
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+            "simulation_id": "m11-evidence-sim-a",
+            "state": "submitted"
+          },
+          "lane_id": 0,
+          "note": "in flight",
+          "to": "submitted"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": {
+              "amount": "100",
+              "domain_id": "m11-evidence-domain"
+            },
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              },
+              {
+                "from": "ready",
+                "note": "nonce 0 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b and capital 100 reserved",
+                "to": "reserved"
+              },
+              {
+                "from": "reserved",
+                "note": "in flight",
+                "to": "submitting"
+              },
+              {
+                "from": "submitting",
+                "note": "in flight",
+                "to": "submitted"
+              },
+              {
+                "from": "submitted",
+                "note": "in flight",
+                "to": "included"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": {
+              "nonce": 0,
+              "signer": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+              "stage": "reserved"
+            },
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+            "simulation_id": "m11-evidence-sim-a",
+            "state": "included"
+          },
+          "lane_id": 0,
+          "note": "in flight",
+          "to": "included"
+        },
+        {
+          "action": "settle",
+          "capital_after": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "100",
+            "sums_to_capacity_recomputed": true
+          },
+          "lane_after": {
+            "candidate_id": "m11-evidence-cand-a",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              },
+              {
+                "from": "ready",
+                "note": "nonce 0 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b and capital 100 reserved",
+                "to": "reserved"
+              },
+              {
+                "from": "reserved",
+                "note": "in flight",
+                "to": "submitting"
+              },
+              {
+                "from": "submitting",
+                "note": "in flight",
+                "to": "submitted"
+              },
+              {
+                "from": "submitted",
+                "note": "in flight",
+                "to": "included"
+              },
+              {
+                "from": "included",
+                "note": "receipt bound; §34 commit",
+                "to": "settled"
+              }
+            ],
+            "lane_id": 0,
+            "nonce": {
+              "nonce": 0,
+              "signer": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+              "stage": "committed"
+            },
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+            "simulation_id": "m11-evidence-sim-a",
+            "state": "settled"
+          },
+          "lane_id": 0,
+          "nonce_outstanding": 1
+        },
+        {
+          "action": "open",
+          "candidate_id": "m11-evidence-cand-d",
+          "capital": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "100",
+            "sums_to_capacity_recomputed": true
+          },
+          "lane": {
+            "candidate_id": "m11-evidence-cand-d",
+            "capital": null,
+            "history": [],
+            "lane_id": 3,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "created"
+          },
+          "lane_id": 3
+        },
+        {
+          "action": "begin_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-d",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 3,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "simulating"
+          },
+          "lane_id": 3
+        },
+        {
+          "action": "record_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-d",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 3,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000d4",
+            "simulation_id": "m11-evidence-sim-d",
+            "state": "simulating"
+          },
+          "lane_id": 3,
+          "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000d4",
+          "simulation_id": "m11-evidence-sim-d"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-d",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              }
+            ],
+            "lane_id": 3,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000d4",
+            "simulation_id": "m11-evidence-sim-d",
+            "state": "risk_checking"
+          },
+          "lane_id": 3,
+          "note": "risk asked",
+          "to": "risk_checking"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-d",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 3,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000d4",
+            "simulation_id": "m11-evidence-sim-d",
+            "state": "ready"
+          },
+          "lane_id": 3,
+          "note": "risk accepted",
+          "to": "ready"
+        },
+        {
+          "action": "choose_winner",
+          "arm": "§46's NC12 arm: the only Ready lane left is the one after the settled pair",
+          "rule": "greater gross gain, then the lower lane id",
+          "standings": [
+            {
+              "gross_gain": "10",
+              "lane_id": 3
+            }
+          ],
+          "winner": 3
+        },
+        {
+          "capital_after": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "100",
+            "sums_to_capacity_recomputed": true
+          },
+          "control": "nc12_a_committed_pair_cannot_be_taken_twice",
+          "lane_after": {
+            "candidate_id": "m11-evidence-cand-d",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 3,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000d4",
+            "simulation_id": "m11-evidence-sim-d",
+            "state": "ready"
+          },
+          "refusal": "§33: nonce 0 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b is held by lane-0 (committed); lane-3 cannot take the same pair",
+          "refusal_code": "nonce_held"
+        },
+        {
+          "capital_after": {
+            "available_capital": "900",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "100",
+            "settled_input": "100",
+            "sums_to_capacity_recomputed": true
+          },
+          "control_positive_arm": "nc12_the_next_nonce_is_granted",
+          "lane_after": {
+            "candidate_id": "m11-evidence-cand-d",
+            "capital": {
+              "amount": "100",
+              "domain_id": "m11-evidence-domain"
+            },
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              },
+              {
+                "from": "ready",
+                "note": "nonce 1 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b and capital 100 reserved",
+                "to": "reserved"
+              }
+            ],
+            "lane_id": 3,
+            "nonce": {
+              "nonce": 1,
+              "signer": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+              "stage": "reserved"
+            },
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000d4",
+            "simulation_id": "m11-evidence-sim-d",
+            "state": "reserved"
+          },
+          "lane_id": 3,
+          "nonce": 1
+        },
+        {
+          "capital_after": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "100",
+            "sums_to_capacity_recomputed": true
+          },
+          "control": "nc15_expiry_returns_the_pair",
+          "disposition": "release",
+          "from": "reserved",
+          "lane_after": {
+            "candidate_id": "m11-evidence-cand-d",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              },
+              {
+                "from": "ready",
+                "note": "nonce 1 for signer 0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b and capital 100 reserved",
+                "to": "reserved"
+              },
+              {
+                "from": "reserved",
+                "note": "plan_expired: the window closed",
+                "to": "expired"
+              }
+            ],
+            "lane_id": 3,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000d4",
+            "simulation_id": "m11-evidence-sim-d",
+            "state": "expired"
+          },
+          "reason": "plan_expired",
+          "released_capital": "100",
+          "released_nonce": {
+            "nonce": 1,
+            "signer": "0x6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b"
+          },
+          "to": "expired"
+        },
+        {
+          "action": "open",
+          "candidate_id": "m11-evidence-cand-e",
+          "capital": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "100",
+            "sums_to_capacity_recomputed": true
+          },
+          "lane": {
+            "candidate_id": "m11-evidence-cand-e",
+            "capital": null,
+            "history": [],
+            "lane_id": 4,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "created"
+          },
+          "lane_id": 4
+        },
+        {
+          "action": "begin_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-e",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 4,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "simulating"
+          },
+          "lane_id": 4
+        },
+        {
+          "control": "nc14_one_plan_hash_binds_one_lane",
+          "lane_after": {
+            "candidate_id": "m11-evidence-cand-e",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 4,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "simulating"
+          },
+          "refusal": "§45: plan 0x00000000000000000000000000000000000000000000000000000000000000a1 is already bound by lane-0; one plan hash is one lane",
+          "refusal_code": "duplicate_plan"
+        },
+        {
+          "control": "nc14_one_candidate_gets_one_lane",
+          "lanes_in_the_ledger": 5,
+          "refusal": "§31: candidate `m11-evidence-cand-a` already has lane-0; a lane is per candidate",
+          "refusal_code": "duplicate_lane"
+        },
+        {
+          "action": "open",
+          "candidate_id": "m11-evidence-cand-f",
+          "capital": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "100",
+            "sums_to_capacity_recomputed": true
+          },
+          "lane": {
+            "candidate_id": "m11-evidence-cand-f",
+            "capital": null,
+            "history": [],
+            "lane_id": 5,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "created"
+          },
+          "lane_id": 5
+        },
+        {
+          "action": "begin_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-f",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 5,
+            "nonce": null,
+            "plan_hash": null,
+            "simulation_id": null,
+            "state": "simulating"
+          },
+          "lane_id": 5
+        },
+        {
+          "action": "record_simulation",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-f",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              }
+            ],
+            "lane_id": 5,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000f5",
+            "simulation_id": "m11-evidence-sim-f",
+            "state": "simulating"
+          },
+          "lane_id": 5,
+          "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000f5",
+          "simulation_id": "m11-evidence-sim-f"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-f",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              }
+            ],
+            "lane_id": 5,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000f5",
+            "simulation_id": "m11-evidence-sim-f",
+            "state": "risk_checking"
+          },
+          "lane_id": 5,
+          "note": "risk asked",
+          "to": "risk_checking"
+        },
+        {
+          "action": "advance",
+          "lane": {
+            "candidate_id": "m11-evidence-cand-f",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 5,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000f5",
+            "simulation_id": "m11-evidence-sim-f",
+            "state": "ready"
+          },
+          "lane_id": 5,
+          "note": "risk accepted",
+          "to": "ready"
+        },
+        {
+          "action": "choose_winner",
+          "arm": "§46's NC13 arm: ranked, then refused because the domain cannot cover the ask",
+          "rule": "greater gross gain, then the lower lane id",
+          "standings": [
+            {
+              "gross_gain": "5",
+              "lane_id": 5
+            }
+          ],
+          "winner": 5
+        },
+        {
+          "capital_after": {
+            "available_capital": "1000",
+            "available_plus_reserved": "1000",
+            "capacity": "1000",
+            "domain_id": "m11-evidence-domain",
+            "invariant_holds": true,
+            "reserved_capital": "0",
+            "settled_input": "100",
+            "sums_to_capacity_recomputed": true
+          },
+          "control": "nc13_a_winner_that_cannot_pay_is_refused",
+          "lane_after": {
+            "candidate_id": "m11-evidence-cand-f",
+            "capital": null,
+            "history": [
+              {
+                "from": "created",
+                "note": "simulation started",
+                "to": "simulating"
+              },
+              {
+                "from": "simulating",
+                "note": "risk asked",
+                "to": "risk_checking"
+              },
+              {
+                "from": "risk_checking",
+                "note": "risk accepted",
+                "to": "ready"
+              }
+            ],
+            "lane_id": 5,
+            "nonce": null,
+            "plan_hash": "0x00000000000000000000000000000000000000000000000000000000000000f5",
+            "simulation_id": "m11-evidence-sim-f",
+            "state": "ready"
+          },
+          "refusal": "§35: lane-5 asks 1001 of domain `m11-evidence-domain` and only 1000 is unreserved of a capacity 1000 (0 already reserved); another lane's reservation is why",
+          "refusal_code": "insufficient_capital"
+        }
+      ],
+      "what_this_is": "§31–§36's lane ledger, driven on scripted numbers: nothing here touches REVM, an endpoint, or a key, which is §28's boundary stated as an absence rather than a promise."
+    }
+  },
+  "schema": "m11-evidence-v1"
+}

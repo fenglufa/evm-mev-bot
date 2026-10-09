@@ -1,0 +1,222 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "determinism": {
+    "assemblies_in_this_run": 2,
+    "byte_identical": true,
+    "cross_process": "tests/multihop_determinism.rs walks the recorded chain through two independent loads of the fixture and compares the five figures; the gate re-runs each row's arithmetic in another crate's process",
+    "method": "the directory was serialized twice from the same assembled rows and the two byte maps were compared before anything reached disk"
+  },
+  "directory": ".",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/manifest.json",
+  "file_digests": {
+    "data/evidence/m11/README.md": {
+      "digest": {
+        "bytes": 2362,
+        "keccak256": "0xf81925a309ec45ebf216b2345e2602c43afd08b3bcbcb8ce178130775b2c1097"
+      }
+    },
+    "data/evidence/m11/controlled/2hop/chain.json": {
+      "digest": {
+        "bytes": 37302,
+        "keccak256": "0x6cbb18d103f0402786727ccfbb0680708c3effe5a4f12dbf4949bfea2936e5cc"
+      },
+      "row_keys": [
+        "chain-91342-block-37530593-recorded-pair-0x29c59c8b1ee3a37803dddba7542d2e5e3f98de3dc36defe44cbb6f80022814b9"
+      ],
+      "rows": 1
+    },
+    "data/evidence/m11/controlled/3hop/chain.json": {
+      "digest": {
+        "bytes": 57575,
+        "keccak256": "0xc27689b8a8e007657c2bcb2eb507c776d8e9bdf886ef37c743e554692b15e241"
+      },
+      "row_keys": [
+        "chain-91342-block-37530593-declared-triangle-0x8656c2ba7bd9be5b2a2fbc5aa0728357340a7311308506a12084956f4fd860ec",
+        "three-hop-rollback-at-the-third-pool"
+      ],
+      "rows": 2
+    },
+    "data/evidence/m11/lanes/lane_matrix.json": {
+      "digest": {
+        "bytes": 48576,
+        "keccak256": "0x41dd9d1857c718e4616227528a296979b6d313571022af20e71985c1df41c31e"
+      },
+      "row_keys": [
+        "lane-ledger-§31-§36"
+      ],
+      "rows": 1
+    },
+    "data/evidence/m11/optimizer/declared_3hop.json": {
+      "digest": {
+        "bytes": 24747,
+        "keccak256": "0x659b2f763b95a083060b0d6451a3db161f3135e0d0e5f8c9587ad12fd5f2e027"
+      },
+      "row_keys": [
+        "declared-3hop-single-point",
+        "declared-3hop-exhaustive-window"
+      ],
+      "rows": 2
+    },
+    "data/evidence/m11/optimizer/recorded_2hop.json": {
+      "digest": {
+        "bytes": 191795,
+        "keccak256": "0x877374dfeef4ea4e9ad96c4385f553df4a137c450c9312e361c265af1d7ec904"
+      },
+      "row_keys": [
+        "recorded-2hop-single-point",
+        "recorded-2hop-exhaustive-window-99999999999937",
+        "recorded-2hop-coarse-refine-wide"
+      ],
+      "rows": 3
+    },
+    "data/evidence/m11/pricing/declared_3hop.json": {
+      "digest": {
+        "bytes": 8824,
+        "keccak256": "0x4407a2d24f55d5ab120ea0c0ae49e18ca47a7a407cc922e9ca41d6f0062fbcc1"
+      },
+      "row_keys": [
+        "declared-3hop-chain91342-block37530593-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4-0x7000000000000000000000000000000000000bc1-0x7000000000000000000000000000000000000ca2"
+      ],
+      "rows": 1
+    },
+    "data/evidence/m11/pricing/declared_4hop.json": {
+      "digest": {
+        "bytes": 9475,
+        "keccak256": "0x6748840d545b36e8a7a574b14f4ade31430e1f3b522c4f99661749b5ca83a27a"
+      },
+      "row_keys": [
+        "declared-4hop-synthetic-p1-p4"
+      ],
+      "rows": 1
+    },
+    "data/evidence/m11/pricing/recorded_2hop.json": {
+      "digest": {
+        "bytes": 6811,
+        "keccak256": "0xbcee7e03188f504d1d8150b1aea9b99832670001928a2b5be4c2c50c64633e72"
+      },
+      "row_keys": [
+        "recorded-2hop-chain91342-block37530593"
+      ],
+      "rows": 1
+    },
+    "data/evidence/m11/real/execution.json": {
+      "digest": {
+        "bytes": 2204,
+        "keccak256": "0x66cb56741bbf082bc1ea7825ba97aa9880492b244e369034774f4364cda30e1f"
+      },
+      "row_keys": [
+        "real-execution"
+      ],
+      "rows": 1
+    },
+    "data/evidence/m11/real/failure.json": {
+      "digest": {
+        "bytes": 1941,
+        "keccak256": "0x0195048d52287506bb18d6196a3649ee901c4f4c3f0337dce2b86fe6a6eaed99"
+      },
+      "row_keys": [
+        "real-failure"
+      ],
+      "rows": 1
+    },
+    "data/evidence/m11/real/reconciliation.json": {
+      "digest": {
+        "bytes": 2011,
+        "keccak256": "0xaab679d1a548a73a7b5fa2c3cfd265b74d6b1ba53546e7120e18703edc26c716"
+      },
+      "row_keys": [
+        "real-reconciliation"
+      ],
+      "rows": 1
+    },
+    "data/evidence/m11/risk/decision.json": {
+      "digest": {
+        "bytes": 13479,
+        "keccak256": "0x430f454e0930311159dec921488a50df0d43bba17dc9375874b1d91d8e9d8dbd"
+      },
+      "row_keys": [
+        "accept-recorded-2hop-0xc80475f90db878bd5a1456bce8066eb652cce1029645c36ed650cffaa016b9e8",
+        "accept-declared-3hop-0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5",
+        "reject-floor-above-the-delivery-0xc80475f90db878bd5a1456bce8066eb652cce1029645c36ed650cffaa016b9e8"
+      ],
+      "rows": 3
+    },
+    "data/evidence/m11/simulation/declared_3hop.json": {
+      "digest": {
+        "bytes": 19559,
+        "keccak256": "0x78b93d3efc1a319c8ac155b6267bc63a27656a226027a401b12f92f6319a1268"
+      },
+      "row_keys": [
+        "declared-3hop-sim-0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5"
+      ],
+      "rows": 1
+    },
+    "data/evidence/m11/simulation/recorded_2hop.json": {
+      "digest": {
+        "bytes": 15880,
+        "keccak256": "0x728e87c5f315bc6d71d58e056bcd677e2644e867d14cfc720050495f55f879bf"
+      },
+      "row_keys": [
+        "recorded-2hop-sim-0xc80475f90db878bd5a1456bce8066eb652cce1029645c36ed650cffaa016b9e8"
+      ],
+      "rows": 1
+    }
+  },
+  "files_written": 16,
+  "milestone": "M11",
+  "not_claimed": [
+    "a real-market profit figure",
+    "that any CONTROLLED_FIXTURE row here is evidence about a live market (§41)",
+    "a transaction hash, a signature, or a private key"
+  ],
+  "not_measured": [
+    {
+      "downstream_arms_that_do_accept_four": "the adapter builds a four-leg request (crates/simulation/tests/multihop_adapter.rs) and risk records one (crates/simulation/tests/multihop_risk.rs)",
+      "item": "a four-hop route executed through the EVM",
+      "what_is_measured_instead": "data/evidence/m11/pricing/declared_4hop.json, on a hand-written graph",
+      "why": "M9.3's pathfinder refuses a candidate deeper than three hops (crates/pathfinder/src/config.rs: PathFinderConfig::MAX_MAX_HOPS, enforced in crates/pathfinder/src/candidate.rs: CycleCandidate::assemble), so no four-hop CycleCandidate exists to price end to end"
+    },
+    {
+      "item": "a real three-hop cycle that the executor can drive",
+      "why": "the one real triangle in the recording lives in pools whose runtime code carries no swap dispatcher arm, measured in crates/simulation/tests/triangle_probe.rs and recorded in fixtures/simulation-m11/probe-37224031-three-leg-slots.json"
+    },
+    {
+      "item": "real execution, real failure and real reconciliation of an M11 plan",
+      "why": "no broadcast was authorized for M11 and §2 forbids a new executor contract; see data/evidence/m11/real/"
+    }
+  ],
+  "rpc_count": 0,
+  "rpc_count_basis": {
+    "endpoint_variable_present": false,
+    "every_run_in_this_directory_is_served_by": "evm_simulation::state::DumpStateProvider",
+    "the_one_file_that_would_have_an_rpc": "crates/simulation/tests/multihop_capture.rs is #[ignore]d and is not part of this assembly; it publishes its own measured cost in fixtures/simulation-m11/capture-37224031-triangle-notes.json"
+  },
+  "schema": "m11-evidence-v1",
+  "self_digest": "not included: a file cannot hash the bytes it is about to contain",
+  "total_bytes": 442541,
+  "total_bytes_scope": "the bytes of every file this manifest carries a digest for, which is the tree minus this file: a manifest cannot count the bytes it is about to contain, the same reason `self_digest` is not a digest",
+  "tree": [
+    "data/evidence/m11/pricing/recorded_2hop.json",
+    "data/evidence/m11/pricing/declared_3hop.json",
+    "data/evidence/m11/pricing/declared_4hop.json",
+    "data/evidence/m11/optimizer/recorded_2hop.json",
+    "data/evidence/m11/optimizer/declared_3hop.json",
+    "data/evidence/m11/simulation/recorded_2hop.json",
+    "data/evidence/m11/simulation/declared_3hop.json",
+    "data/evidence/m11/risk/decision.json",
+    "data/evidence/m11/lanes/lane_matrix.json",
+    "data/evidence/m11/controlled/2hop/chain.json",
+    "data/evidence/m11/controlled/3hop/chain.json",
+    "data/evidence/m11/real/execution.json",
+    "data/evidence/m11/real/failure.json",
+    "data/evidence/m11/real/reconciliation.json",
+    "data/evidence/m11/manifest.json",
+    "data/evidence/m11/README.md"
+  ],
+  "verdict": "UNKNOWN",
+  "verdict_means": "the controlled chains are measured and recomputable; the real chain's answer to §42's three questions was not asked by M11 and is not reported as zero (§41)"
+}

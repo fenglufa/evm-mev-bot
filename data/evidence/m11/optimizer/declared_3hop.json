@@ -1,0 +1,721 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "directory": "optimizer",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/optimizer/declared_3hop.json",
+  "milestone": "M11",
+  "rows": {
+    "declared-3hop-exhaustive-window": {
+      "agrees": {
+        "best_input": true,
+        "best_output": true,
+        "every_rebuilt_point_was_attempted": true
+      },
+      "chain_id": 91342,
+      "hops": [
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "reserve_in": "1000000000000000",
+          "reserve_out": "1000000000000000000000",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x7000000000000000000000000000000000000bc1",
+          "reserve_in": "2000000000000000000000",
+          "reserve_out": "2000000000000000000",
+          "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "token_out": "0x60000000000000000000000000000000000000c3"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x7000000000000000000000000000000000000ca2",
+          "reserve_in": "2000000000000000000",
+          "reserve_out": "2400000000000000",
+          "token_in": "0x60000000000000000000000000000000000000c3",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "published": {
+        "best_input": "1000000000028",
+        "best_output": "1186871066299",
+        "best_profit": "186871066271",
+        "covered_the_route_domain": false,
+        "covered_the_route_domain_means": "this flag can only be true for an exhaustive walk that reached the route's own input ceiling; on a sampled search the answer is that the search saw a grid, not the domain — it is a statement about coverage, not a failure",
+        "curve_this_file_asked_the_pipeline_for": [
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000000",
+            "output": "1186871066266"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000001",
+            "output": "1186871066267"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000002",
+            "output": "1186871066268"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000003",
+            "output": "1186871066269"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000004",
+            "output": "1186871066270"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000005",
+            "output": "1186871066271"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000006",
+            "output": "1186871066273"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000007",
+            "output": "1186871066274"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000008",
+            "output": "1186871066275"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000009",
+            "output": "1186871066276"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000010",
+            "output": "1186871066277"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000011",
+            "output": "1186871066279"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000012",
+            "output": "1186871066280"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000013",
+            "output": "1186871066281"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000014",
+            "output": "1186871066282"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000015",
+            "output": "1186871066283"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000016",
+            "output": "1186871066284"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000017",
+            "output": "1186871066286"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000018",
+            "output": "1186871066287"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000019",
+            "output": "1186871066288"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000020",
+            "output": "1186871066289"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000021",
+            "output": "1186871066290"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000022",
+            "output": "1186871066292"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000023",
+            "output": "1186871066293"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000024",
+            "output": "1186871066294"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000025",
+            "output": "1186871066295"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000026",
+            "output": "1186871066296"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000027",
+            "output": "1186871066297"
+          },
+          {
+            "gross": {
+              "amount": "186871066271",
+              "state": "gain"
+            },
+            "input": "1000000000028",
+            "output": "1186871066299"
+          },
+          {
+            "gross": {
+              "amount": "186871066271",
+              "state": "gain"
+            },
+            "input": "1000000000029",
+            "output": "1186871066300"
+          },
+          {
+            "gross": {
+              "amount": "186871066271",
+              "state": "gain"
+            },
+            "input": "1000000000030",
+            "output": "1186871066301"
+          },
+          {
+            "gross": {
+              "amount": "186871066271",
+              "state": "gain"
+            },
+            "input": "1000000000031",
+            "output": "1186871066302"
+          }
+        ],
+        "domain_max": "1000000000031",
+        "domain_min": "1000000000000",
+        "domain_width": "32",
+        "evaluations": 32,
+        "gross": {
+          "amount": "186871066271",
+          "state": "gain"
+        },
+        "policy": {
+          "coarse_points": 256,
+          "exhaustive_limit": 4096,
+          "refine_span": 64
+        },
+        "refusals": 0,
+        "search_max": "1000000000031",
+        "search_min": "1000000000000",
+        "strategy": "exhaustive",
+        "strategy_this_run_took": "exhaustive",
+        "termination": "domainexhausted"
+      },
+      "recomputed_independently": {
+        "best_input": "1000000000028",
+        "best_output": "1186871066299",
+        "best_profit": {
+          "amount": "186871066271",
+          "state": "gain"
+        },
+        "coarse_points_rebuilt": 32,
+        "curve": [
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000000",
+            "output": "1186871066266"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000001",
+            "output": "1186871066267"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000002",
+            "output": "1186871066268"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000003",
+            "output": "1186871066269"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000004",
+            "output": "1186871066270"
+          },
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000005",
+            "output": "1186871066271"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000006",
+            "output": "1186871066273"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000007",
+            "output": "1186871066274"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000008",
+            "output": "1186871066275"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000009",
+            "output": "1186871066276"
+          },
+          {
+            "gross": {
+              "amount": "186871066267",
+              "state": "gain"
+            },
+            "input": "1000000000010",
+            "output": "1186871066277"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000011",
+            "output": "1186871066279"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000012",
+            "output": "1186871066280"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000013",
+            "output": "1186871066281"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000014",
+            "output": "1186871066282"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000015",
+            "output": "1186871066283"
+          },
+          {
+            "gross": {
+              "amount": "186871066268",
+              "state": "gain"
+            },
+            "input": "1000000000016",
+            "output": "1186871066284"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000017",
+            "output": "1186871066286"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000018",
+            "output": "1186871066287"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000019",
+            "output": "1186871066288"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000020",
+            "output": "1186871066289"
+          },
+          {
+            "gross": {
+              "amount": "186871066269",
+              "state": "gain"
+            },
+            "input": "1000000000021",
+            "output": "1186871066290"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000022",
+            "output": "1186871066292"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000023",
+            "output": "1186871066293"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000024",
+            "output": "1186871066294"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000025",
+            "output": "1186871066295"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000026",
+            "output": "1186871066296"
+          },
+          {
+            "gross": {
+              "amount": "186871066270",
+              "state": "gain"
+            },
+            "input": "1000000000027",
+            "output": "1186871066297"
+          },
+          {
+            "gross": {
+              "amount": "186871066271",
+              "state": "gain"
+            },
+            "input": "1000000000028",
+            "output": "1186871066299"
+          },
+          {
+            "gross": {
+              "amount": "186871066271",
+              "state": "gain"
+            },
+            "input": "1000000000029",
+            "output": "1186871066300"
+          },
+          {
+            "gross": {
+              "amount": "186871066271",
+              "state": "gain"
+            },
+            "input": "1000000000030",
+            "output": "1186871066301"
+          },
+          {
+            "gross": {
+              "amount": "186871066271",
+              "state": "gain"
+            },
+            "input": "1000000000031",
+            "output": "1186871066302"
+          }
+        ],
+        "grid_points_rebuilt": 32,
+        "method": "this file re-ranked its own fold of every input in the grid the published domain and policy describe; the grid is rebuilt from those two fields, not taken from the search, and the refinement window is anchored on this file's own best grid point rather than on the search's answer",
+        "points_the_fold_refused": 0,
+        "refinement_anchor_this_file_found": null
+      },
+      "route_identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000bc1 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000ca2 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+      "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 6 declared accounts and 32 declared storage rows — 13 of them M10's two-hop scaffolding (the executor deployment, its configuration words, the wallet's balance and approvals) and 19 of them this cycle's declared topology (one third token and two pools replayed from the recorded pair's runtime code, their pair words, their depths as balances, the self-allowances that code consults, and the executor's allow-list entries for them). A row is declared only where it differs from the recording; the recorded market state is unedited, including 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, which leg A trades against its own recorded reserves at block 37530593 on chain 91342",
+      "target_block": 37530593,
+      "what_this_is": "a 32-input window above the fixture's stake, walked entirely"
+    },
+    "declared-3hop-single-point": {
+      "agrees": {
+        "best_input": true,
+        "best_output": true,
+        "every_rebuilt_point_was_attempted": true
+      },
+      "chain_id": 91342,
+      "hops": [
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "reserve_in": "1000000000000000",
+          "reserve_out": "1000000000000000000000",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x7000000000000000000000000000000000000bc1",
+          "reserve_in": "2000000000000000000000",
+          "reserve_out": "2000000000000000000",
+          "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "token_out": "0x60000000000000000000000000000000000000c3"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x7000000000000000000000000000000000000ca2",
+          "reserve_in": "2000000000000000000",
+          "reserve_out": "2400000000000000",
+          "token_in": "0x60000000000000000000000000000000000000c3",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "published": {
+        "best_input": "1000000000000",
+        "best_output": "1186871066266",
+        "best_profit": "186871066266",
+        "covered_the_route_domain": false,
+        "covered_the_route_domain_means": "this flag can only be true for an exhaustive walk that reached the route's own input ceiling; on a sampled search the answer is that the search saw a grid, not the domain — it is a statement about coverage, not a failure",
+        "curve_this_file_asked_the_pipeline_for": [
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000000",
+            "output": "1186871066266"
+          }
+        ],
+        "domain_max": "1000000000000",
+        "domain_min": "1000000000000",
+        "domain_width": "1",
+        "evaluations": 1,
+        "gross": {
+          "amount": "186871066266",
+          "state": "gain"
+        },
+        "policy": {
+          "coarse_points": 256,
+          "exhaustive_limit": 4096,
+          "refine_span": 64
+        },
+        "refusals": 0,
+        "search_max": "1000000000000",
+        "search_min": "1000000000000",
+        "strategy": "exhaustive",
+        "strategy_this_run_took": "exhaustive",
+        "termination": "domainexhausted"
+      },
+      "recomputed_independently": {
+        "best_input": "1000000000000",
+        "best_output": "1186871066266",
+        "best_profit": {
+          "amount": "186871066266",
+          "state": "gain"
+        },
+        "coarse_points_rebuilt": 1,
+        "curve": [
+          {
+            "gross": {
+              "amount": "186871066266",
+              "state": "gain"
+            },
+            "input": "1000000000000",
+            "output": "1186871066266"
+          }
+        ],
+        "grid_points_rebuilt": 1,
+        "method": "this file re-ranked its own fold of every input in the grid the published domain and policy describe; the grid is rebuilt from those two fields, not taken from the search, and the refinement window is anchored on this file's own best grid point rather than on the search's answer",
+        "points_the_fold_refused": 0,
+        "refinement_anchor_this_file_found": null
+      },
+      "route_identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000bc1 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000ca2 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+      "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 6 declared accounts and 32 declared storage rows — 13 of them M10's two-hop scaffolding (the executor deployment, its configuration words, the wallet's balance and approvals) and 19 of them this cycle's declared topology (one third token and two pools replayed from the recorded pair's runtime code, their pair words, their depths as balances, the self-allowances that code consults, and the executor's allow-list entries for them). A row is declared only where it differs from the recording; the recorded market state is unedited, including 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, which leg A trades against its own recorded reserves at block 37530593 on chain 91342",
+      "target_block": 37530593,
+      "what_this_is": "the triangle's one-input domain"
+    }
+  },
+  "schema": "m11-evidence-v1"
+}

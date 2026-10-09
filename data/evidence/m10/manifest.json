@@ -334,7 +334,7 @@
     "files_digest": 31,
     "note": "every file in this directory except this manifest, as a digest of the bytes this run found on disk or wrote. manifest.json is written last, so its own digest is nowhere — a file cannot stand in its own checksum table."
   },
-  "git_commit": "66b421de57e5e8db2836ec974d20a450533aa482",
+  "git_commit": "250cd26a9406ab0d8e01741a3998683419b41f3f",
   "git_commit_reading": [
     ".git/HEAD is a symbolic ref to refs/heads/main",
     "read from the loose ref refs/heads/main"

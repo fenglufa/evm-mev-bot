@@ -1,0 +1,222 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "directory": "simulation",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/simulation/recorded_2hop.json",
+  "milestone": "M11",
+  "rows": {
+    "recorded-2hop-sim-0xc80475f90db878bd5a1456bce8066eb652cce1029645c36ed650cffaa016b9e8": {
+      "agrees": {
+        "calldata_hash_with_the_published_figure": true,
+        "request_bytes_with_the_recorded_bytes": true
+      },
+      "published": {
+        "observed": {
+          "balance_rows": [
+            {
+              "after": "0",
+              "before": "100000000000000",
+              "holder": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+              "movement": "Decreased { by: 100000000000000 }",
+              "token": "0x4200000000000000000000000000000000000006"
+            },
+            {
+              "after": "0",
+              "before": "0",
+              "holder": "0x1000000000000000000000000000000000000010",
+              "movement": "Unchanged",
+              "token": "0x4200000000000000000000000000000000000006"
+            },
+            {
+              "after": "864806517171626",
+              "before": "0",
+              "holder": "0x2000000000000000000000000000000000000020",
+              "movement": "Increased { by: 864806517171626 }",
+              "token": "0x4200000000000000000000000000000000000006"
+            },
+            {
+              "after": "0",
+              "before": "0",
+              "holder": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+              "movement": "Unchanged",
+              "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            },
+            {
+              "after": "0",
+              "before": "0",
+              "holder": "0x1000000000000000000000000000000000000010",
+              "movement": "Unchanged",
+              "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            },
+            {
+              "after": "0",
+              "before": "0",
+              "holder": "0x2000000000000000000000000000000000000020",
+              "movement": "Unchanged",
+              "token": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            }
+          ],
+          "changed_slots": 13,
+          "charge": "Priced { gas_used: 274067, effective_gas_price: 362, base_fee_per_gas: Some(362), wei: 99212254, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" } }",
+          "contract_error": null,
+          "delivered": "864806517171626",
+          "gas_limit": 3000000,
+          "gas_used": 274067,
+          "logs": 13,
+          "market_moved": true,
+          "reserve_rows": [
+            {
+              "after": [
+                "909338910611985086842",
+                "1100000000000000"
+              ],
+              "before": [
+                "1000000000000000000000",
+                "1000000000000000"
+              ],
+              "changed": true,
+              "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4"
+            },
+            {
+              "after": [
+                "2090661089388014913158",
+                "19135193482828374"
+              ],
+              "before": [
+                "2000000000000000000000",
+                "20000000000000000"
+              ],
+              "changed": true,
+              "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e"
+            }
+          ],
+          "revert_kind": null,
+          "revert_reason": null,
+          "status": "Success",
+          "succeeded": true
+        },
+        "pricing_quotes_the_same_route": {
+          "delivered": "864806517171626",
+          "priced_against_delivered": {
+            "amount": "0",
+            "state": "even"
+          },
+          "quoted_hop_outputs": [
+            "90661089388014913158",
+            "864806517171626"
+          ]
+        },
+        "simulated_opportunity": {
+          "calldata": "0xfeb0554e00000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000420000000000000000000000000000000000000600000000000000000000000000000000000000000000000000005af3107a400000000000000000000000000000000000000000000000000000031289754165aa000000000000000000000000200000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000020000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a4000000000000000000000000420000000000000000000000000000000000000600000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f00000000000000000000000000000000000000000000000000005af3107a4000000000000000000000000000000000000000000000000004ea2ce4749290c686000000000000000000000000000000000000000000000004ea2ce4749290c6860000000000000000000000005b3c1e3fb6a97c0130ae015ff10f53a1a30c353e00000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f0000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000004ea2ce4749290c68600000000000000000000000000000000000000000000000000031289754165aa00000000000000000000000000000000000000000000000000031289754165aa",
+          "calldata_hash": "0xde854866b4121fea8e11d066e200c675165957649f0c83f8af3477806d18bcc4",
+          "canonical_text": "m11-multi-hop-simulation\nchain_id=91342\nblock=37530593\nblock_hash=0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7\nexecutor=0x1000000000000000000000000000000000000010\noperator=0x953e7e98562714c23bc22c7d186cdf516f9dfa6f\nrecipient=0x2000000000000000000000000000000000000020\ninput_token=0x4200000000000000000000000000000000000006\ninput_amount=100000000000000\npriced_input=100000000000000\npriced_output=864806517171626\nlegs=2\nmin_final_output=864806517171626\ngas_limit=3000000\ngas_used=274067\nstatus=delivered\nfinal_amount=864806517171626\ngross=gain:764806517171626\ncalldata_hash=0xde854866b4121fea8e11d066e200c675165957649f0c83f8af3477806d18bcc4\nroute=2 hops:0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4/0x4200000000000000000000000000000000000006>0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e/0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f>0x4200000000000000000000000000000000000006\nleg[0]|pool=0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4|token_in=0x4200000000000000000000000000000000000006|token_out=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|amount_in=100000000000000|amount_out=90661089388014913158|min_amount_out=90661089388014913158\nleg[1]|pool=0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e|token_in=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f|token_out=0x4200000000000000000000000000000000000006|amount_in=90661089388014913158|amount_out=864806517171626|min_amount_out=864806517171626",
+          "chain_id": 91342,
+          "final_amount": "864806517171626",
+          "gas_charge": "Priced { gas_used: 274067, effective_gas_price: 362, base_fee_per_gas: Some(362), wei: 99212254, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" } }",
+          "gas_used": 274067,
+          "gross": {
+            "amount": "764806517171626",
+            "state": "gain"
+          },
+          "identity": "m11-sim-91342-37530593-0xc80475f90db878bd5a1456bce8066eb652cce1029645c36ed650cffaa016b9e8",
+          "identity_hash": "0xc80475f90db878bd5a1456bce8066eb652cce1029645c36ed650cffaa016b9e8",
+          "input_amount": "100000000000000",
+          "market_moved": true,
+          "matches_pricing": true,
+          "min_final_output": "864806517171626",
+          "route_agrees_with_pricing": "agrees",
+          "simulation_block": 37530593,
+          "simulation_block_hash": "0xca54d5e51cc7d33f78f0d46486c30c881e4e932adf32b33e95596dcac2ed99b7",
+          "status": "delivered"
+        },
+        "spec": {
+          "call": {
+            "amount_in": "100000000000000",
+            "input_token": "0x4200000000000000000000000000000000000006",
+            "legs": [
+              {
+                "amount_in": "100000000000000",
+                "amount_out": "90661089388014913158",
+                "min_amount_out": "90661089388014913158",
+                "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+                "token_in": "0x4200000000000000000000000000000000000006",
+                "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+              },
+              {
+                "amount_in": "90661089388014913158",
+                "amount_out": "864806517171626",
+                "min_amount_out": "864806517171626",
+                "pool": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+                "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+                "token_out": "0x4200000000000000000000000000000000000006"
+              }
+            ],
+            "min_final_amount": "864806517171626",
+            "recipient": "0x2000000000000000000000000000000000000020",
+            "selector": "0xfeb0554e",
+            "signature": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address)"
+          },
+          "calldata": "0xfeb0554e00000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000420000000000000000000000000000000000000600000000000000000000000000000000000000000000000000005af3107a400000000000000000000000000000000000000000000000000000031289754165aa000000000000000000000000200000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000020000000000000000000000002a3ceafba30f6626170cbb0cd67392efb94bd9a4000000000000000000000000420000000000000000000000000000000000000600000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f00000000000000000000000000000000000000000000000000005af3107a4000000000000000000000000000000000000000000000000004ea2ce4749290c686000000000000000000000000000000000000000000000004ea2ce4749290c6860000000000000000000000005b3c1e3fb6a97c0130ae015ff10f53a1a30c353e00000000000000000000000007d4af6e2bc8dd82beb06b4fd279df4c9028f26f0000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000004ea2ce4749290c68600000000000000000000000000000000000000000000000000031289754165aa00000000000000000000000000000000000000000000000000031289754165aa",
+          "calldata_len": 580,
+          "chain_id": 91342,
+          "endowment": "10000000000000000000",
+          "executor": "0x1000000000000000000000000000000000000010",
+          "gas_limit": 3000000,
+          "operator": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "priced_at_block": 37530593,
+          "pricing": {
+            "kind": "eip1559",
+            "priority_fee_per_gas": "0",
+            "provenance": "block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it"
+          },
+          "pricing_debug": "Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" }",
+          "recipient": "0x953e7e98562714c23bc22c7d186cdf516f9dfa6f",
+          "rules": "Prague",
+          "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited"
+        },
+        "state": {
+          "additions_digest": {
+            "bytes": 22372,
+            "keccak256": "0x983f6373e436fb1e37c0e807debcbcffa5d00aa952d1957582972aecd93f66df"
+          },
+          "additions_file": "fixtures/simulation-m10/fixture-37530593-executor-additions.json",
+          "base_recording": "fixtures/simulation-m7/dump-37530593-07D4af6E.json",
+          "fixture": {
+            "bytes": 134403,
+            "keccak256": "0x4672cca9fecb05bcc4771b1f74b2d6fe34fbeb5bbc76ed83f3211c9ddbe4c6cd"
+          },
+          "fixture_file": "fixtures/simulation-m10/fixture-37530593-executor.json",
+          "how_to_load": "read fixture_file as an evm_simulation::state::StateDump, hand it to DumpStateProvider::new with the state_source_string above, and run the published calldata bytes against it — the run's only other state edit is the endowment ExecutorRun::setup layers from the published spec, which is the one edit §58 allows and it is named by the spec, not by this file",
+          "state_source_string": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited"
+        }
+      },
+      "recomputed_independently": {
+        "calldata_hash_agrees": true,
+        "calldata_hash_of_the_published_bytes": "0xde854866b4121fea8e11d066e200c675165957649f0c83f8af3477806d18bcc4",
+        "identity_hash_agrees": true,
+        "identity_hash_of_the_published_canonical_text": "0xc80475f90db878bd5a1456bce8066eb652cce1029645c36ed650cffaa016b9e8",
+        "method": "keccak256 taken over the published request calldata and over the published canonical text, in this file rather than by calling the simulation's own hash methods"
+      },
+      "rpc": {
+        "basis": {
+          "constructed_from": "fixtures/simulation-m10/fixture-37530593-executor.json",
+          "endpoint_variable": {
+            "name": "GIWA_RPC_URL",
+            "present_in_the_assembling_process": false,
+            "why_it_matters": "the only provider in this workspace that holds a URL reads it from this variable; the runs above are served by the type named in provider_type, which takes a dump file and a label and answers from memory"
+          },
+          "hot_path": "M11 added no read to a hot path: the milestone's production diff is audited in §49's gate, and this directory is assembled offline",
+          "local_reads_served": "every read answered from the dump or was refused; a refusal here would have failed the run rather than costing a request",
+          "provider_type": "evm_simulation::state::DumpStateProvider",
+          "state_source_string": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 3 declared accounts and 13 declared storage rows: the executor deployment with its configuration words, the holder balances and the allowances this run reads. A row is declared only where it differs from the recording — a word the recording already carries at the same value is read, not claimed. The recorded market state is unedited"
+        },
+        "rpc_count": 0
+      },
+      "what_this_is": "the recorded pair, executed by REVM over M10's committed bytecode"
+    }
+  },
+  "schema": "m11-evidence-v1"
+}

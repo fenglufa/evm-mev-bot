@@ -1,0 +1,587 @@
+{
+  "_provenance": "crates/simulation/tests/triangle_probe.rs — a measurement of which function selectors each contract of fixtures/simulation-m11/dump-37224031-triangle-03a884af.json and of fixtures/simulation-m10/fixture-37530593-executor.json exposes, counted in the runtime bytes those recordings already hold. Every selector here is computed from the signature printed beside it. It measures no price and judges no market",
+  "chain_id": 91342,
+  "triangle_block": 37224031,
+  "executor_block": 37530593,
+  "rows": [
+    {
+      "recording": "M10's executor runtime bytecode",
+      "address": "0x1000000000000000000000000000000000000010",
+      "role": "the contract every route of this repository calls",
+      "code_bytes": 7347,
+      "swap_entry": null,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 4,
+          "raw_sites": 4
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 5,
+          "raw_sites": 5
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 2,
+          "raw_sites": 2
+        }
+      ],
+      "verdict": "not a pair, so the swap entry is not expected here; this row is the control that keeps the search honest about where it does and does not fire"
+    },
+    {
+      "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+      "address": "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+      "role": "a recorded pool of the triangle",
+      "code_bytes": 16854,
+      "swap_entry": false,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 2,
+          "raw_sites": 2
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 1,
+          "raw_sites": 1
+        }
+      ],
+      "verdict": "no `PUSH4 0x022c0d9f` appears anywhere in its runtime code, so a call of the shape M10's executor issues has no dispatcher arm here — and the answer instruments 1 through 8 recorded for such a call is an empty payload"
+    },
+    {
+      "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+      "address": "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+      "role": "a recorded pool of the triangle",
+      "code_bytes": 16854,
+      "swap_entry": false,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 2,
+          "raw_sites": 2
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 1,
+          "raw_sites": 1
+        }
+      ],
+      "verdict": "no `PUSH4 0x022c0d9f` appears anywhere in its runtime code, so a call of the shape M10's executor issues has no dispatcher arm here — and the answer instruments 1 through 8 recorded for such a call is an empty payload"
+    },
+    {
+      "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+      "address": "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42",
+      "role": "a recorded pool of the triangle",
+      "code_bytes": 16854,
+      "swap_entry": false,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 2,
+          "raw_sites": 2
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 1,
+          "raw_sites": 1
+        }
+      ],
+      "verdict": "no `PUSH4 0x022c0d9f` appears anywhere in its runtime code, so a call of the shape M10's executor issues has no dispatcher arm here — and the answer instruments 1 through 8 recorded for such a call is an empty payload"
+    },
+    {
+      "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+      "address": "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+      "role": "a recorded token of the triangle",
+      "code_bytes": 7218,
+      "swap_entry": null,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 1,
+          "raw_sites": 1
+        }
+      ],
+      "verdict": "not a pair, so the swap entry is not expected here; this row is the control that keeps the search honest about where it does and does not fire"
+    },
+    {
+      "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+      "address": "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+      "role": "a recorded token of the triangle",
+      "code_bytes": 3889,
+      "swap_entry": null,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 1,
+          "raw_sites": 1
+        }
+      ],
+      "verdict": "not a pair, so the swap entry is not expected here; this row is the control that keeps the search honest about where it does and does not fire"
+    },
+    {
+      "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+      "address": "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+      "role": "a recorded token of the triangle",
+      "code_bytes": 7218,
+      "swap_entry": null,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 1,
+          "raw_sites": 1
+        }
+      ],
+      "verdict": "not a pair, so the swap entry is not expected here; this row is the control that keeps the search honest about where it does and does not fire"
+    },
+    {
+      "recording": "fixtures/simulation-m10/fixture-37530593-executor.json",
+      "address": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+      "role": "a recorded pool M10's route trades",
+      "code_bytes": 14954,
+      "swap_entry": true,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 2,
+          "raw_sites": 2
+        }
+      ],
+      "verdict": "its dispatcher writes `PUSH4 0x022c0d9f` — a call of that shape has an arm here, which is what M10's committed route through this family measures"
+    },
+    {
+      "recording": "fixtures/simulation-m10/fixture-37530593-executor.json",
+      "address": "0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e",
+      "role": "the other recorded pool M10's route trades",
+      "code_bytes": 14954,
+      "swap_entry": true,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 2,
+          "raw_sites": 2
+        }
+      ],
+      "verdict": "its dispatcher writes `PUSH4 0x022c0d9f` — a call of that shape has an arm here, which is what M10's committed route through this family measures"
+    },
+    {
+      "recording": "fixtures/simulation-m10/fixture-37530593-executor.json",
+      "address": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+      "role": "a recorded token M10's route trades",
+      "code_bytes": 3744,
+      "swap_entry": null,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 1,
+          "raw_sites": 1
+        }
+      ],
+      "verdict": "not a pair, so the swap entry is not expected here; this row is the control that keeps the search honest about where it does and does not fire"
+    },
+    {
+      "recording": "fixtures/simulation-m10/fixture-37530593-executor.json",
+      "address": "0x4200000000000000000000000000000000000006",
+      "role": "the chain's own wrapped-native token",
+      "code_bytes": 2846,
+      "swap_entry": null,
+      "entries": [
+        {
+          "purpose": "the swap entry M10's executor issues on each leg",
+          "signature": "swap(uint256,uint256,address,bytes)",
+          "selector": "0x022c0d9f",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the reserve read the graph and the price are built from",
+          "signature": "getReserves()",
+          "selector": "0x0902f1ac",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the side read discovery asks a pair for",
+          "signature": "token0()",
+          "selector": "0x0dfe1681",
+          "push_sites": 0,
+          "raw_sites": 0
+        },
+        {
+          "purpose": "the ERC20 metadata read",
+          "signature": "name()",
+          "selector": "0x06fdde03",
+          "push_sites": 1,
+          "raw_sites": 1
+        },
+        {
+          "purpose": "the token move the executor makes to settle",
+          "signature": "transfer(address,uint256)",
+          "selector": "0xa9059cbb",
+          "push_sites": 2,
+          "raw_sites": 2
+        },
+        {
+          "purpose": "the token pull the executor makes to fund",
+          "signature": "transferFrom(address,address,uint256)",
+          "selector": "0x23b872dd",
+          "push_sites": 2,
+          "raw_sites": 2
+        }
+      ],
+      "verdict": "not a pair, so the swap entry is not expected here; this row is the control that keeps the search honest about where it does and does not fire"
+    }
+  ],
+  "rpc_count": 0,
+  "reading": "2 of 2 pools of fixtures/simulation-m10/fixture-37530593-executor.json carry the swap entry M10's executor issues; 0 of 3 pools of fixtures/simulation-m11/dump-37224031-triangle-03a884af.json do. The same search finds the reserve read in 5 of the 11 contracts that have code at all, so the entry is not simply missing from every file the search looked at.",
+  "not_measured": [
+    "what the triangle's pools call their swap entry instead — naming a function needs a signature, and a guessed signature is a claim rather than a measurement; the row prints the raw sites so a reader who knows the family can check it",
+    "whether a call with no dispatcher arm is what produced the empty payload — the two facts are recorded side by side here and in instruments 1 through 8, and no run in this table was made against the triangle's pools",
+    "whether any direction of this cycle is profitable — no row of this table trades, so this instrument does not ask it; §41 keeps `REAL_PROFITABLE_ARBITRAGE` at `UNKNOWN` while the only runs in this repository that deliver a multi-hop cycle do so over the declared venues of tests/multihop_e2e.rs"
+  ]
+}

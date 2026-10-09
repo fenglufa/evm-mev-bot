@@ -1,0 +1,81 @@
+{
+  "_provenance": "crates/simulation/tests/triangle_probe.rs — a measurement of what M10's executor answers for one chained three-leg cycle when the recorded contracts of fixtures/simulation-m11/dump-37224031-triangle-03a884af.json are given native ether, over fixtures/simulation-m11/probe-37224031-native-side.json. It measures no fee and judges no market",
+  "recording": "fixtures/simulation-m11/dump-37224031-triangle-03a884af.json",
+  "chain_id": 91342,
+  "block_number": 37224031,
+  "wei": "1000000000000000000",
+  "claims": [
+    "10000000000000000000 in -> 99690060900928 out",
+    "99690060900928 in -> 347833895 out",
+    "347833895 in -> 346190116282063887395 out"
+  ],
+  "rows": [
+    {
+      "variant": "no ether declared anywhere new",
+      "endowed": [],
+      "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 143875 gas of 3000000 allowed, market moved: false",
+      "contract_error": null,
+      "revert_kind": "Empty",
+      "gas_used": 143875,
+      "market_moved": false,
+      "reserves_moved": 0,
+      "balances_moved": 0,
+      "verdict": "the same empty payload — native ether on this side did not change the answer"
+    },
+    {
+      "variant": "the three tokens hold 1 ether each",
+      "endowed": [
+        "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+        "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+        "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6"
+      ],
+      "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 143875 gas of 3000000 allowed, market moved: false",
+      "contract_error": null,
+      "revert_kind": "Empty",
+      "gas_used": 143875,
+      "market_moved": false,
+      "reserves_moved": 0,
+      "balances_moved": 0,
+      "verdict": "the same empty payload — native ether on this side did not change the answer"
+    },
+    {
+      "variant": "the three pools hold 1 ether each",
+      "endowed": [
+        "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+        "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+        "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42"
+      ],
+      "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 143875 gas of 3000000 allowed, market moved: false",
+      "contract_error": null,
+      "revert_kind": "Empty",
+      "gas_used": 143875,
+      "market_moved": false,
+      "reserves_moved": 0,
+      "balances_moved": 0,
+      "verdict": "the same empty payload — native ether on this side did not change the answer"
+    },
+    {
+      "variant": "every contract the run names holds 1 ether",
+      "endowed": [
+        "0x03a884af9fa7af6557a21496f67e781fc8d00f95",
+        "0xc5bf73bddef871bafb49d12f5d05a5b300422cdf",
+        "0x7c20cb4ab7c6d731c6a167433986ffd17c16ddc6",
+        "0x0e70f2af6bff7c9810ee613814039d95a939e3b5",
+        "0xe1a9db8507570806ef64ff8d3583787c43f9eff0",
+        "0x354f408aa2f45fd8d955070e9ef1e47c368bfc42"
+      ],
+      "answer": "execute((address,address,address,uint256,uint256,uint256)[],address,uint256,uint256,address) at block 37224031 on CONTROLLED_FIXTURE probe: fixtures/simulation-m11/dump-37224031-triangle-03a884af.json (three recorded pools, three recorded tokens, recorded header) with only M10's deployment words declared: reverted: reverted with no return data, 143875 gas of 3000000 allowed, market moved: false",
+      "contract_error": null,
+      "revert_kind": "Empty",
+      "gas_used": 143875,
+      "market_moved": false,
+      "reserves_moved": 0,
+      "balances_moved": 0,
+      "verdict": "the same empty payload — native ether on this side did not change the answer"
+    }
+  ],
+  "not_measured": [
+    "which contract the empty payload came from, if no variant changes the answer — the variants here differ only about native ether, so a finding that survives all four points at something other than a value transfer",
+    "whether any direction of this cycle is profitable — nothing in this repository trades these pools, so the question is not asked here and §41 keeps `REAL_PROFITABLE_ARBITRAGE` at `UNKNOWN`"
+  ]
+}

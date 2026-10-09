@@ -1,0 +1,192 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "directory": "risk",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/risk/decision.json",
+  "milestone": "M11",
+  "rows": {
+    "accept-declared-3hop-0x4c97ec3c6f19f9091cae011af8baa007f29deb594b59f8636da338a444e7c6d5": {
+      "case": "declared-3hop",
+      "input_amount": "1000000000000",
+      "market_facts": {
+        "head": 37530593,
+        "provenance": "block 37530593 as the recording's own header reports it; no node was asked, which is what §28 requires of this layer",
+        "state_version": 37530593
+      },
+      "policy": {
+        "chain_id": 91342,
+        "executor": "0x1000000000000000000000000000000000000010",
+        "maximum_gas": 425200,
+        "maximum_simulation_age": 3,
+        "maximum_state_age": 3,
+        "minimum_gross_profit": "0",
+        "provenance": "M11's recorded-market thresholds: the ceiling is this run's own measured burn, the floor is 0 because §27's `output > input` is the question asked above it, and both block facts come from the pinned header rather than from a node"
+      },
+      "published": {
+        "accepted": true,
+        "check": null,
+        "decision": "accept",
+        "detail": "no broadcast: this policy only judges a simulation. Delivered 1186871066266 against 1000000000000 in, a gross gain of 186871066266 above a floor of 0, 425200 gas of a ceiling 425200 (charged 153922400), guard 1186871066266 met, on the executor this policy allows, at an age within 3 and 3 blocks. Deciding to build, sign or send anything is the execution layer's question (§28), not this answer.",
+        "figures": {
+          "delivered": "1186871066266",
+          "detail": "no broadcast: this policy only judges a simulation. Delivered 1186871066266 against 1000000000000 in, a gross gain of 186871066266 above a floor of 0, 425200 gas of a ceiling 425200 (charged 153922400), guard 1186871066266 met, on the executor this policy allows, at an age within 3 and 3 blocks. Deciding to build, sign or send anything is the execution layer's question (§28), not this answer.",
+          "gas_charge_wei": "153922400",
+          "gas_used": 425200,
+          "gross_profit": "186871066266",
+          "head": 37530593,
+          "input_amount": "1000000000000",
+          "maximum_gas": 425200,
+          "min_final_output": "1186871066266",
+          "minimum_gross_profit": "0",
+          "simulation_block": 37530593,
+          "state_version": 37530593
+        },
+        "reason": null
+      },
+      "recomputed_independently": {
+        "chain_matches": true,
+        "clears_the_profit_floor": true,
+        "executor_matches": true,
+        "gross_profit": "186871066266",
+        "guard_is_met_by_the_delivery": true,
+        "method": "the six comparisons §26–§29 make, applied by this file to the figures published above",
+        "simulation_age": 0,
+        "state_age": 0,
+        "within_the_gas_ceiling": true,
+        "within_the_simulation_age": true,
+        "within_the_state_age": true
+      },
+      "route_identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000bc1 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000ca2 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+      "run": {
+        "chain_id": 91342,
+        "executor": "0x1000000000000000000000000000000000000010",
+        "final_amount": "1186871066266",
+        "gas_charge": "Priced { gas_used: 425200, effective_gas_price: 362, base_fee_per_gas: Some(362), wei: 153922400, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" } }",
+        "gas_used": 425200,
+        "min_final_output": "1186871066266",
+        "simulation_block": 37530593,
+        "status": "delivered"
+      },
+      "what_this_is": "the same policy over the triangle"
+    },
+    "accept-recorded-2hop-0xc80475f90db878bd5a1456bce8066eb652cce1029645c36ed650cffaa016b9e8": {
+      "case": "recorded-2hop",
+      "input_amount": "100000000000000",
+      "market_facts": {
+        "head": 37530593,
+        "provenance": "block 37530593 as the recording's own header reports it; no node was asked, which is what §28 requires of this layer",
+        "state_version": 37530593
+      },
+      "policy": {
+        "chain_id": 91342,
+        "executor": "0x1000000000000000000000000000000000000010",
+        "maximum_gas": 274067,
+        "maximum_simulation_age": 3,
+        "maximum_state_age": 3,
+        "minimum_gross_profit": "0",
+        "provenance": "M11's recorded-market thresholds: the ceiling is this run's own measured burn, the floor is 0 because §27's `output > input` is the question asked above it, and both block facts come from the pinned header rather than from a node"
+      },
+      "published": {
+        "accepted": true,
+        "check": null,
+        "decision": "accept",
+        "detail": "no broadcast: this policy only judges a simulation. Delivered 864806517171626 against 100000000000000 in, a gross gain of 764806517171626 above a floor of 0, 274067 gas of a ceiling 274067 (charged 99212254), guard 864806517171626 met, on the executor this policy allows, at an age within 3 and 3 blocks. Deciding to build, sign or send anything is the execution layer's question (§28), not this answer.",
+        "figures": {
+          "delivered": "864806517171626",
+          "detail": "no broadcast: this policy only judges a simulation. Delivered 864806517171626 against 100000000000000 in, a gross gain of 764806517171626 above a floor of 0, 274067 gas of a ceiling 274067 (charged 99212254), guard 864806517171626 met, on the executor this policy allows, at an age within 3 and 3 blocks. Deciding to build, sign or send anything is the execution layer's question (§28), not this answer.",
+          "gas_charge_wei": "99212254",
+          "gas_used": 274067,
+          "gross_profit": "764806517171626",
+          "head": 37530593,
+          "input_amount": "100000000000000",
+          "maximum_gas": 274067,
+          "min_final_output": "864806517171626",
+          "minimum_gross_profit": "0",
+          "simulation_block": 37530593,
+          "state_version": 37530593
+        },
+        "reason": null
+      },
+      "recomputed_independently": {
+        "chain_matches": true,
+        "clears_the_profit_floor": true,
+        "executor_matches": true,
+        "gross_profit": "764806517171626",
+        "guard_is_met_by_the_delivery": true,
+        "method": "the six comparisons §26–§29 make, applied by this file to the figures published above",
+        "simulation_age": 0,
+        "state_age": 0,
+        "within_the_gas_ceiling": true,
+        "within_the_simulation_age": true,
+        "within_the_state_age": true
+      },
+      "route_identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+      "run": {
+        "chain_id": 91342,
+        "executor": "0x1000000000000000000000000000000000000010",
+        "final_amount": "864806517171626",
+        "gas_charge": "Priced { gas_used: 274067, effective_gas_price: 362, base_fee_per_gas: Some(362), wei: 99212254, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" } }",
+        "gas_used": 274067,
+        "min_final_output": "864806517171626",
+        "simulation_block": 37530593,
+        "status": "delivered"
+      },
+      "what_this_is": "§26–§29's acceptance over the recorded run, with the six comparisons it made"
+    },
+    "reject-floor-above-the-delivery-0xc80475f90db878bd5a1456bce8066eb652cce1029645c36ed650cffaa016b9e8": {
+      "case": "recorded-2hop-floor-above-the-delivery",
+      "input_amount": "100000000000000",
+      "market_facts": {
+        "head": 37530593,
+        "provenance": "block 37530593 as the recording's own header reports it; no node was asked, which is what §28 requires of this layer",
+        "state_version": 37530593
+      },
+      "policy": {
+        "chain_id": 91342,
+        "executor": "0x1000000000000000000000000000000000000010",
+        "maximum_gas": 274067,
+        "maximum_simulation_age": 3,
+        "maximum_state_age": 3,
+        "minimum_gross_profit": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+        "provenance": "M11's recorded-market thresholds: the ceiling is this run's own measured burn, the floor is 0 because §27's `output > input` is the question asked above it, and both block facts come from the pinned header rather than from a node"
+      },
+      "published": {
+        "accepted": false,
+        "check": "MinimumGrossProfit",
+        "decision": "reject",
+        "detail": "the round trip gains 764806517171626 of the input token against a floor of 115792089237316195423570985008687907853269984665640564039457584007913129639935 — not above it (M11's recorded-market thresholds: the ceiling is this run's own measured burn, the floor is 0 because §27's `output > input` is the question asked above it, and both block facts come from the pinned header rather than from a node)",
+        "figures": null,
+        "reason": "minimum_gross_profit|the round trip gains 764806517171626 of the input token against a floor of 115792089237316195423570985008687907853269984665640564039457584007913129639935 — not above it (M11's recorded-market thresholds: the ceiling is this run's own measured burn, the floor is 0 because §27's `output > input` is the question asked above it, and both block facts come from the pinned header rather than from a node)"
+      },
+      "recomputed_independently": {
+        "chain_matches": true,
+        "clears_the_profit_floor": false,
+        "executor_matches": true,
+        "gross_profit": "764806517171626",
+        "guard_is_met_by_the_delivery": true,
+        "method": "the six comparisons §26–§29 make, applied by this file to the figures published above",
+        "simulation_age": 0,
+        "state_age": 0,
+        "within_the_gas_ceiling": true,
+        "within_the_simulation_age": true,
+        "within_the_state_age": true
+      },
+      "route_identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x5b3c1e3fb6a97c0130ae015ff10f53a1a30c353e }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+      "run": {
+        "chain_id": 91342,
+        "executor": "0x1000000000000000000000000000000000000010",
+        "final_amount": "864806517171626",
+        "gas_charge": "Priced { gas_used: 274067, effective_gas_price: 362, base_fee_per_gas: Some(362), wei: 99212254, pricing: Eip1559 { priority_fee_per_gas: 0, provenance: \"block 37530593's own base fee as the recorded header reports it, with no tip: a hypothetical transaction on a historical block is not competing to be included in it\" } }",
+        "gas_used": 274067,
+        "min_final_output": "864806517171626",
+        "simulation_block": 37530593,
+        "status": "delivered"
+      },
+      "what_this_is": "§46's NC5 arm: the same run, the same facts, a floor no delivery reaches"
+    }
+  },
+  "schema": "m11-evidence-v1"
+}

@@ -1,0 +1,177 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "directory": "pricing",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/pricing/declared_3hop.json",
+  "milestone": "M11",
+  "rows": {
+    "declared-3hop-chain91342-block37530593-0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4-0x7000000000000000000000000000000000000bc1-0x7000000000000000000000000000000000000ca2": {
+      "agrees": {
+        "identity_with_the_rotation_minimum": true,
+        "quote_with_the_fold": true
+      },
+      "chain_id": 91342,
+      "hops": [
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "reserve_in": "1000000000000000",
+          "reserve_out": "1000000000000000000000",
+          "token_in": "0x4200000000000000000000000000000000000006",
+          "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x7000000000000000000000000000000000000bc1",
+          "reserve_in": "2000000000000000000000",
+          "reserve_out": "2000000000000000000",
+          "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "token_out": "0x60000000000000000000000000000000000000c3"
+        },
+        {
+          "fee": {
+            "denominator": 1000,
+            "numerator": 997
+          },
+          "pool": "0x7000000000000000000000000000000000000ca2",
+          "reserve_in": "2000000000000000000",
+          "reserve_out": "2400000000000000",
+          "token_in": "0x60000000000000000000000000000000000000c3",
+          "token_out": "0x4200000000000000000000000000000000000006"
+        }
+      ],
+      "market_claim": {
+        "does_not_prove": "that any such triangle exists at these depths on any chain (§41)",
+        "kind": "CONTROLLED_FIXTURE",
+        "proves": "the pipeline's shape at three legs, against real pair bytecode"
+      },
+      "published": {
+        "gross": {
+          "amount": "186871066266",
+          "state": "gain"
+        },
+        "identity": "RouteIdentity([EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000bc1 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f }, token_out: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 } }, EdgeId { pool: PoolId { chain_id: ChainId(91342), address: 0x7000000000000000000000000000000000000ca2 }, token_in: TokenId { chain_id: ChainId(91342), address: 0x60000000000000000000000000000000000000c3 }, token_out: TokenId { chain_id: ChainId(91342), address: 0x4200000000000000000000000000000000000006 } }])",
+        "identity_edges": [
+          {
+            "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "token_in": "0x4200000000000000000000000000000000000006",
+            "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+          },
+          {
+            "pool": "0x7000000000000000000000000000000000000bc1",
+            "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "token_out": "0x60000000000000000000000000000000000000c3"
+          },
+          {
+            "pool": "0x7000000000000000000000000000000000000ca2",
+            "token_in": "0x60000000000000000000000000000000000000c3",
+            "token_out": "0x4200000000000000000000000000000000000006"
+          }
+        ],
+        "input": "1000000000000",
+        "price_state": "quoted",
+        "quote": {
+          "hops": [
+            {
+              "amount_in": "1000000000000",
+              "amount_out": "996006981039903216",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+              "token_in": "0x4200000000000000000000000000000000000006",
+              "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+            },
+            {
+              "amount_in": "996006981039903216",
+              "amount_out": "992526161448428",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x7000000000000000000000000000000000000bc1",
+              "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+              "token_out": "0x60000000000000000000000000000000000000c3"
+            },
+            {
+              "amount_in": "992526161448428",
+              "amount_out": "1186871066266",
+              "fee": {
+                "denominator": 1000,
+                "numerator": 997
+              },
+              "pool": "0x7000000000000000000000000000000000000ca2",
+              "token_in": "0x60000000000000000000000000000000000000c3",
+              "token_out": "0x4200000000000000000000000000000000000006"
+            }
+          ],
+          "input": "1000000000000",
+          "output": "1186871066266",
+          "truncated": false
+        }
+      },
+      "recomputed_independently": {
+        "hop_outputs": [
+          "996006981039903216",
+          "992526161448428",
+          "1186871066266"
+        ],
+        "identity_edges": [
+          {
+            "pool": "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+            "token_in": "0x4200000000000000000000000000000000000006",
+            "token_out": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f"
+          },
+          {
+            "pool": "0x7000000000000000000000000000000000000bc1",
+            "token_in": "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+            "token_out": "0x60000000000000000000000000000000000000c3"
+          },
+          {
+            "pool": "0x7000000000000000000000000000000000000ca2",
+            "token_in": "0x60000000000000000000000000000000000000c3",
+            "token_out": "0x4200000000000000000000000000000000000006"
+          }
+        ],
+        "identity_matches": true,
+        "identity_method": "minimum rotation of the published trade-order edge list, compared as a Vec<EdgeId> with EdgeId's own Ord",
+        "input": "1000000000000",
+        "method": "this file's own constant-product fold over the published hops array: in*numerator*reserve_out / (reserve_in*denominator + in*numerator), floor division, each output feeding the next input",
+        "output": "1186871066266",
+        "refused_because": null
+      },
+      "route": {
+        "hop_count": 3,
+        "input_token": "0x4200000000000000000000000000000000000006",
+        "input_upper_bound": "2399999999999999",
+        "is_priceable": true,
+        "pools": [
+          "0x2a3ceafba30f6626170cbb0cd67392efb94bd9a4",
+          "0x7000000000000000000000000000000000000bc1",
+          "0x7000000000000000000000000000000000000ca2"
+        ],
+        "tokens": [
+          "0x4200000000000000000000000000000000000006",
+          "0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
+          "0x60000000000000000000000000000000000000c3",
+          "0x4200000000000000000000000000000000000006"
+        ],
+        "unattested": null
+      },
+      "state_source": "CONTROLLED_FIXTURE: fixtures/simulation-m7/dump-37530593-07D4af6E.json (real recorded pools, tokens and header) plus 6 declared accounts and 32 declared storage rows — 13 of them M10's two-hop scaffolding (the executor deployment, its configuration words, the wallet's balance and approvals) and 19 of them this cycle's declared topology (one third token and two pools replayed from the recorded pair's runtime code, their pair words, their depths as balances, the self-allowances that code consults, and the executor's allow-list entries for them). A row is declared only where it differs from the recording; the recorded market state is unedited, including 0x2a3ceafbA30f6626170CBB0CD67392eFb94BD9A4, which leg A trades against its own recorded reserves at block 37530593 on chain 91342",
+      "target_block": 37530593,
+      "what_this_is": "the declared triangle, priced at this fixture's stake"
+    }
+  },
+  "schema": "m11-evidence-v1"
+}

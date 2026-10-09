@@ -1,0 +1,28 @@
+{
+  "assemble_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-simulation --test multihop_evidence -- --test-threads=1",
+  "assembled_by": "crates/simulation/tests/multihop_evidence.rs",
+  "check_command": "CC=clang CXX=clang++ CXXFLAGS=\"-include cstdint\" cargo test -p evm-execution --test multihop_evidence_gate -- --test-threads=1",
+  "checked_by": "crates/execution/tests/multihop_evidence_gate.rs",
+  "directory": "real",
+  "evidence_root": "data/evidence/m11",
+  "file": "data/evidence/m11/real/execution.json",
+  "milestone": "M11",
+  "rows": {
+    "real-execution": {
+      "evidence_that_does_exist_for_the_mechanism": {
+        "controlled_2hop": "data/evidence/m11/controlled/2hop/chain.json",
+        "controlled_3hop": "data/evidence/m11/controlled/3hop/chain.json",
+        "m10_real_execution": "data/evidence/m10/real/giwa_execution.json",
+        "m10_real_ladder_steps": "data/evidence/m10/real/giwa_ladder_steps.json",
+        "m10_real_preconditions": "data/evidence/m10/real/preconditions.json",
+        "note": "M10 already answered these three questions for a two-leg plan on the real chain; M11 adds no new transaction, no new contract and no new signer, so the M10 files are the nearest real evidence and are named rather than restated here. M10's reconciliation row lives inside its execution file, under `reconciliation_32`."
+      },
+      "not_measured_because": "no broadcast was authorized for M11, M11 adds no new contract to deploy, and the one real three-pool cycle in the recording lives in pools whose runtime code has no swap dispatcher arm (fixtures/simulation-m11/probe-37224031-three-leg-slots.json), so there is no real three-hop this pipeline could drive",
+      "verdict": "UNKNOWN",
+      "what_this_is": "did a M11 multi-hop plan execute on the real chain?",
+      "what_would_answer_it": "one signed, broadcast, receipted transaction of a plan built by this pipeline, with its receipt and its balance rows",
+      "why_not_zero": "§41 forbids publishing a real-market verdict from a CONTROLLED_FIXTURE run, and 0 is a verdict. An unasked question has no answer in this directory."
+    }
+  },
+  "schema": "m11-evidence-v1"
+}

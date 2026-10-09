@@ -18,7 +18,7 @@
     },
     {
       "file": "crates/opportunity/src/detector.rs",
-      "line": 102,
+      "line": 108,
       "matches": 1,
       "note": "Opportunity is declared here",
       "source": "code",
@@ -863,10 +863,10 @@
     {
       "carrier_const": "execution_sequence_report_after_the_fact",
       "crosses_a_stage_boundary": true,
-      "declared_at": "crates/opportunity/src/detector.rs:102",
+      "declared_at": "crates/opportunity/src/detector.rs:108",
       "file": "crates/opportunity/src/detector.rs",
       "holds_revm_canonical_state": false,
-      "line": 102,
+      "line": 108,
       "note": "the *claim* that travels from detection to the stages that check it. It carries reserves as data to be re-read, not as an answer to be served.",
       "sites_carried": [
         "opportunity_detection.eth_call.reserves",
