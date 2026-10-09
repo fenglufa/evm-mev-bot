@@ -27,6 +27,14 @@
 //! type, because neither names one. An `Accept` here means *the simulation satisfies
 //! these thresholds* — a sentence about a model, not permission to broadcast.
 //!
+//! ## M11's second policy
+//!
+//! [`multihop`] decides over a [`evm_simulation::SimulatedOpportunity`] — a route with legs, a
+//! deployment, a pinned header and a state version — and answers §27's checklist. M4's
+//! [`RiskThresholds`] keeps its three rules and its `RiskDecision`/`RiskRule` pair exactly as M7's
+//! and M8's evidence files quote them; the two policies share this crate, not a type, because a
+//! policy that could be handed either record could answer about the wrong one.
+//!
 //! ## Dependency direction
 //!
 //! This crate reads execution's record, so it depends on `evm-simulation` and on
@@ -38,8 +46,13 @@
 
 pub mod decision;
 pub mod executor;
+pub mod multihop;
 pub mod policy;
 
 pub use decision::{RiskDecision, RiskRule, NO_BROADCAST};
 pub use executor::{DryRunExecutor, ExecutionRequest, ExecutionResult, Executor, NullExecutor};
+pub use multihop::{
+    MarketFacts, MultihopAcceptance, MultihopRiskDecision, MultihopRiskPolicy, RiskCheck,
+    RiskRejectReason,
+};
 pub use policy::{RiskPolicy, RiskThresholds};

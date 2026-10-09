@@ -24,7 +24,7 @@ use serde::Serialize;
 use evm_core::{BlockNumber, ChainId, PoolId, TokenId};
 use evm_graph::GraphSnapshot;
 
-use crate::error::{MathError, OpportunityError, PathError, Result};
+use crate::error::{MathError, OpportunityError, PathError, Result, RouteError};
 use crate::optimizer::{
     find_optimal_input, OptimizedCycle, PricedCycle, PricedHop, SearchPolicy, SearchRecord,
 };
@@ -46,6 +46,11 @@ pub enum RejectionReason {
     Overflow,
     /// The route is not a two-pool cycle.
     InvalidPath(PathError),
+    /// M11's shape refusal, carried whole. Two-hop detection never produces it —
+    /// the route it names has more than two pools — but `OpportunityError` is one
+    /// enum, so the mapping has to be total rather than pretend the case cannot
+    /// arrive.
+    InvalidRoute(RouteError),
     /// A hop this graph does not contain.
     MissingHop(PoolId),
     /// The exit pool holds at most one unit of the input token, so no input can
@@ -65,6 +70,7 @@ impl RejectionReason {
             OpportunityError::Math(MathError::InvalidAmount) => Self::InvalidAmount,
             OpportunityError::Math(MathError::Overflow) => Self::Overflow,
             OpportunityError::Path(path) => Self::InvalidPath(*path),
+            OpportunityError::Route(route) => Self::InvalidRoute(*route),
             OpportunityError::MissingPool(pool) | OpportunityError::MissingState(pool) => {
                 Self::MissingHop(*pool)
             }

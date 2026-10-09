@@ -33,6 +33,12 @@
 //! GIWA-specific RPC knowledge lives in [`giwa`] and nowhere else; the builder, signer,
 //! intent and lifecycle modules are chain-agnostic and would compile against any
 //! EIP-1559 chain.
+//!
+//! M11 adds two modules downstream of everything above and changes none of it.
+//! [`multihop_plan`] is the translator that turns a multi-hop simulation and the acceptance granted
+//! over it into the plan [`arbitrage`] already defines, refusing the claim when §30's hash binding
+//! does not hold; [`lanes`] is §31–§36's ledger, which tracks where each candidate stands and keeps
+//! two candidates from holding one nonce, one capital pool, or one plan hash at the same time.
 
 pub mod arbitrage;
 pub mod block_context;
@@ -46,9 +52,11 @@ pub mod fee;
 pub mod gate;
 pub mod giwa;
 pub mod intent;
+pub mod lanes;
 pub mod lifecycle;
 pub mod market;
 pub mod mode;
+pub mod multihop_plan;
 pub mod nonce;
 pub mod preflight;
 pub mod profit;
@@ -88,12 +96,21 @@ pub use giwa::{
     GiwaAssetReader, GiwaSequencerDirect, PoolState, GAS_PRICE_ORACLE,
 };
 pub use intent::{ExecutionIds, SenderFunding, TransactionIntent};
+pub use lanes::{
+    CandidateLane, CapitalDomain, CapitalReservation, EndOutcome, LaneFailure, LaneId, LaneLedger,
+    LaneMove, LaneRefusal, LaneStanding, LaneState, NonceManager, NonceReservation, NonceStage,
+    ReservationDisposition, ReservationPair,
+};
 pub use lifecycle::{
     meter, Claim, ExecutionId, ExecutionLane, ExecutionOutcome, ExecutionRecord, ExecutionStatus,
     LaneRelease, Ledger, LANES,
 };
 pub use market::MarketKind;
 pub use mode::ExecutionMode;
+pub use multihop_plan::{
+    executable_plan, plan_from_simulation, MultihopBinding, MultihopPlanContext,
+    MultihopPlanRefusal,
+};
 pub use nonce::{NonceAllocator, NonceReading, NonceSource};
 pub use preflight::{
     ExecutionPreflight, HeadReading, InputAssetEvidence, PreflightCheck, PreflightFacts,

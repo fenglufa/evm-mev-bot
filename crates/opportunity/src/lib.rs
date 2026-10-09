@@ -17,6 +17,21 @@
 //! arithmetic on one block's reserves (§41 of the task). "Profitable" here means
 //! only "the two pools disagree by more than their fees".
 //!
+//! M11 widens the same question to three, four, *n* pools, in two new modules
+//! that the M3 path above does not use and does not change:
+//!
+//! ```text
+//! CycleCandidate (M9.3)  ->  multihop::MultiHopRoute   immutable, rotation identity
+//!                          ->  multihop::price          U256, per-hop attested fee
+//!                          ->  multi_optimizer::optimize bounded discrete search
+//! ```
+//!
+//! [`multihop`] is a route of any hop count and the quote it produces;
+//! [`multi_optimizer`] searches the input amount for one of those routes. The M3
+//! detector stays the two-hop machine it was — its ternary search rests on a
+//! unimodality proof that stops being true once hops are floored in between, so
+//! M11 has its own search and its own claims (§13).
+//!
 //! ```text
 //! detect_opportunities(GraphSnapshot)
 //!   -> enumerate_candidates      A -> pool1 -> B -> pool2 -> A, deduplicated
@@ -32,6 +47,8 @@ pub mod detector;
 pub mod error;
 pub mod lifecycle;
 pub mod math;
+pub mod multi_optimizer;
+pub mod multihop;
 pub mod optimizer;
 pub mod path;
 
@@ -39,12 +56,19 @@ pub use detector::{
     enumerate_candidates, CandidateRejection, Detection, Opportunity, OpportunityDetector,
     RejectionReason, SkippedPair,
 };
-pub use error::{MathError, OpportunityError, PathError, Result};
+pub use error::{MathError, OpportunityError, PathError, Result, RouteError, RouteResult};
 pub use lifecycle::{
     Direction, LedgerPolicy, LedgerStats, Lifecycle, OpportunityId, OpportunityLedger, Registered,
     Staleness, TrackedOpportunity,
 };
 pub use math::{swap_exact_in, swap_through_two_hops};
+pub use multi_optimizer::{
+    optimize, search_domain, OptimizationPolicy, OptimizationResult, OptimizationStrategy,
+    OptimizedCandidate, Termination,
+};
+pub use multihop::{
+    price, Gross, HopQuote, MultiHopQuote, MultiHopRoute, Price, RouteHop, RouteIdentity,
+};
 pub use optimizer::{
     find_optimal_input, OptimizedCycle, PricedCycle, PricedHop, SearchPolicy, SearchRecord,
     SearchStrategy,

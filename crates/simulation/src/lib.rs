@@ -46,6 +46,7 @@ pub mod engine;
 pub mod error;
 pub mod executor;
 pub mod gas;
+pub mod multihop;
 pub mod plan;
 pub mod request;
 pub mod result;
@@ -59,6 +60,9 @@ pub use engine::{dump_provider, rpc_provider, DumpSimulator, ProviderDb, RpcSimu
 pub use error::{Result, SimulationError};
 pub use executor::{BalanceRow, ExecutorOutcome, ExecutorRun, ReserveRow, ReserveSnapshot, Watch};
 pub use gas::{GasBudget, GasCharge, GasPricing};
+pub use multihop::{
+    executor_run, legs, MultiHopBuildError, RunConfig, SimulatedOpportunity, SimulationStatus,
+};
 pub use plan::{
     AmountSource, Binding, ExecutionPlan, Funding, Measurement, Measurements, PairSides, PlanStep,
     ResolvedStep, Settle,

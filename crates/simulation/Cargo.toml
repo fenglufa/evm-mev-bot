@@ -7,6 +7,7 @@ license.workspace = true
 [dependencies]
 evm-core.workspace = true
 evm-chain.workspace = true
+evm-opportunity.workspace = true
 evm-protocol.workspace = true
 alloy-primitives.workspace = true
 async-trait.workspace = true
@@ -22,6 +23,11 @@ evm-execution.workspace = true
 evm-graph.workspace = true
 evm-metrics.workspace = true
 evm-opportunity.workspace = true
+# A dev-dependency, not a production one: §37 states the end-to-end chain as beginning at a
+# `CycleCandidate`, so the fixture that walks it asks the search layer for its input rather than
+# hand-writing an edge list. Nothing in this crate's library reaches the topology layer, and
+# `evm-pathfinder` links no transport, so no test here gains an RPC it was not already making.
+evm-pathfinder.workspace = true
 # The interval analyzer the concurrency fixture reads its overlap figures from lives in
 # the layer above this crate. A dev-dependency cycle is legal here — building
 # `evm-pipeline` needs this crate's library, never its tests — and it is what keeps M8.3.3
