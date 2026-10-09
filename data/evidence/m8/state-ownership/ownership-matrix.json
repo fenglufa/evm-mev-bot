@@ -734,7 +734,7 @@
         "evidence_refs": [
           {
             "file": "crates/pipeline/src/runner.rs",
-            "line": 447,
+            "line": 450,
             "matches": 1,
             "note": "the dispatch check: hash of the announced block against the ledger's",
             "source": "code",
@@ -876,7 +876,7 @@
         "evidence_refs": [
           {
             "file": "crates/cli/src/lib.rs",
-            "line": 559,
+            "line": 718,
             "matches": 1,
             "note": "startup refusal when the registry and the node disagree",
             "source": "code",
@@ -1201,7 +1201,7 @@
           },
           {
             "file": "crates/pipeline/src/runner.rs",
-            "line": 798,
+            "line": 801,
             "matches": 1,
             "note": "the constant, with the comment above it explaining why the author considers it established",
             "source": "code",

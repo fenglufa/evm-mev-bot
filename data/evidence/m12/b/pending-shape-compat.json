@@ -1,0 +1,359 @@
+{
+  "call_accounting": {
+    "decoder_cases": 20,
+    "mock_reads_performed_by_decoder_cases": 0,
+    "node_requests": 0,
+    "scope": "the tests in this file. Every payload is a line of the committed capture or a mutation of one, and both transports are local structs with counters, so nothing here opens a socket. The read-shape guards added beside the production code live elsewhere and are counted in the §11 inventory: two unit tests in crates/live/src/preconf_provider.rs run on stubs, and one test in crates/chain/tests/readiness_gate.rs sends two requests to a 127.0.0.1 stub that records the params it was sent.",
+    "transport": {
+      "detail": "these three are the atomic counters of the local stubs in `the_radar_asks_for_the_shape_its_decoder_reads`, which asserts the table and the live counters agree; a stub that silently read twice would make this file disagree with its own run",
+      "heavy_reads_per_accepted_source": 1,
+      "light_reads_per_accepted_source": 0,
+      "reads_performed_by_the_refused_attempt": 0
+    }
+  },
+  "cases": [
+    {
+      "case": "capture verbatim",
+      "error_line": null,
+      "frame_facts": {
+        "block_number": 37961507,
+        "targets_named": 30,
+        "transaction_count": 30,
+        "wire_index_detail": "the pending payload has no frame index field of any kind (measured field set: the standard block object)",
+        "wire_index_present_on_the_payload": false
+      },
+      "input": "the first captured pending answer, unmodified",
+      "mock_reads": 0,
+      "note": "the shape M9.4 characterised and the shape §6 keeps: every transaction entry is an object, so every target is nameable.",
+      "shape": "full transaction object",
+      "verdict": "accepted",
+      "window": "window-a"
+    },
+    {
+      "case": "bare hash list",
+      "error_line": "payload transaction is not a full object (hash-only list), so the radar cannot name its target",
+      "input": "the same captured block with each transaction replaced by its own hash",
+      "mock_reads": 0,
+      "note": "this is what `pending_raw` returns; the radar refuses it rather than reporting an empty affected-pool set that would read as a quiet market.",
+      "shape": "hash-only transaction",
+      "verdict": "refused:hash_only_transaction",
+      "window": "window-a"
+    },
+    {
+      "case": "transaction without a hash",
+      "error_line": "payload field `transactions[].hash` is missing or not a hex quantity; fail-closed",
+      "input": "the captured block with transactions[0].hash removed",
+      "mock_reads": 0,
+      "note": "a frame is identified by its transactions; without a hash there is nothing to reconcile against the sealed block.",
+      "shape": "missing field",
+      "verdict": "refused:decode:transactions[].hash",
+      "window": "window-a"
+    },
+    {
+      "case": "header without a number",
+      "error_line": "payload field `number` is missing or not a hex quantity; fail-closed",
+      "input": "the captured block with its `number` removed",
+      "mock_reads": 0,
+      "note": "height is the one field a pending view cannot be held without; there is no fallback to a local counter.",
+      "shape": "missing field",
+      "verdict": "refused:decode:number",
+      "window": "window-a"
+    },
+    {
+      "case": "transaction entry is a number",
+      "error_line": "pending transactions[1] is a number, which is neither a full transaction object nor a bare hash; fail-closed",
+      "input": "the captured block with transactions[1] replaced by 42",
+      "mock_reads": 0,
+      "note": "not a hash list and not an object; the refusal names the index and the kind it found.",
+      "shape": "wrong type",
+      "verdict": "refused:unexpected_entry:1:number",
+      "window": "window-a"
+    },
+    {
+      "case": "transaction entry is an array",
+      "error_line": "pending transactions[2] is a array, which is neither a full transaction object nor a bare hash; fail-closed",
+      "input": "the captured block with transactions[2] replaced by a one-element array",
+      "mock_reads": 0,
+      "note": "a nested list would have decoded as \"hash-only\" under the previous wording, which pointed at a read parameter the payload never used.",
+      "shape": "wrong type",
+      "verdict": "refused:unexpected_entry:2:array",
+      "window": "window-a"
+    },
+    {
+      "case": "transaction entry is a truncated hash",
+      "error_line": "pending transactions[3] is a string, which is neither a full transaction object nor a bare hash; fail-closed",
+      "input": "the captured block with transactions[3] replaced by a 4-byte hex string",
+      "mock_reads": 0,
+      "note": "the near-miss: a string that is not 32 bytes is not a bare hash, and is not reported as one.",
+      "shape": "wrong type",
+      "verdict": "refused:unexpected_entry:3:string",
+      "window": "window-a"
+    },
+    {
+      "case": "transactions is an object",
+      "error_line": "payload field `transactions` is missing or not a hex quantity; fail-closed",
+      "input": "the captured block whose `transactions` is a map instead of a list",
+      "mock_reads": 0,
+      "note": "the array itself is required; a map is not \"the same thing in another shape\".",
+      "shape": "wrong type",
+      "verdict": "refused:decode:transactions",
+      "window": "window-a"
+    },
+    {
+      "case": "one unrelated extra key",
+      "error_line": null,
+      "frame_facts": {
+        "block_number": 37961507,
+        "targets_named": 30,
+        "transaction_count": 30,
+        "wire_index_detail": "the pending payload has no frame index field of any kind (measured field set: the standard block object)",
+        "wire_index_present_on_the_payload": false
+      },
+      "input": "the captured block plus a key the decoder does not read",
+      "mock_reads": 0,
+      "note": "an unmapped key cannot create a claim: every field the frame carries is read by name, so the frame is the one the unmodified payload produced.",
+      "shape": "unknown field",
+      "verdict": "accepted",
+      "window": "window-a"
+    },
+    {
+      "case": "an index-like key",
+      "error_line": null,
+      "frame_facts": {
+        "block_number": 37961507,
+        "targets_named": 30,
+        "transaction_count": 30,
+        "wire_index_detail": "the payload names an index-like key (`index` or `sequence`) that this decoder does not map, so the frame index stays local (§8)",
+        "wire_index_present_on_the_payload": true
+      },
+      "input": "the same payload plus an `index` key",
+      "mock_reads": 0,
+      "note": "kept unknown and recorded as present: §8 assigns the frame index from read order, and the detail line now says the key was named but not mapped instead of claiming no such field exists.",
+      "shape": "unknown field",
+      "verdict": "accepted",
+      "window": "window-a"
+    },
+    {
+      "case": "capture verbatim",
+      "error_line": null,
+      "frame_facts": {
+        "block_number": 37961562,
+        "targets_named": 22,
+        "transaction_count": 22,
+        "wire_index_detail": "the pending payload has no frame index field of any kind (measured field set: the standard block object)",
+        "wire_index_present_on_the_payload": false
+      },
+      "input": "the first captured pending answer, unmodified",
+      "mock_reads": 0,
+      "note": "the shape M9.4 characterised and the shape §6 keeps: every transaction entry is an object, so every target is nameable.",
+      "shape": "full transaction object",
+      "verdict": "accepted",
+      "window": "window-b"
+    },
+    {
+      "case": "bare hash list",
+      "error_line": "payload transaction is not a full object (hash-only list), so the radar cannot name its target",
+      "input": "the same captured block with each transaction replaced by its own hash",
+      "mock_reads": 0,
+      "note": "this is what `pending_raw` returns; the radar refuses it rather than reporting an empty affected-pool set that would read as a quiet market.",
+      "shape": "hash-only transaction",
+      "verdict": "refused:hash_only_transaction",
+      "window": "window-b"
+    },
+    {
+      "case": "transaction without a hash",
+      "error_line": "payload field `transactions[].hash` is missing or not a hex quantity; fail-closed",
+      "input": "the captured block with transactions[0].hash removed",
+      "mock_reads": 0,
+      "note": "a frame is identified by its transactions; without a hash there is nothing to reconcile against the sealed block.",
+      "shape": "missing field",
+      "verdict": "refused:decode:transactions[].hash",
+      "window": "window-b"
+    },
+    {
+      "case": "header without a number",
+      "error_line": "payload field `number` is missing or not a hex quantity; fail-closed",
+      "input": "the captured block with its `number` removed",
+      "mock_reads": 0,
+      "note": "height is the one field a pending view cannot be held without; there is no fallback to a local counter.",
+      "shape": "missing field",
+      "verdict": "refused:decode:number",
+      "window": "window-b"
+    },
+    {
+      "case": "transaction entry is a number",
+      "error_line": "pending transactions[1] is a number, which is neither a full transaction object nor a bare hash; fail-closed",
+      "input": "the captured block with transactions[1] replaced by 42",
+      "mock_reads": 0,
+      "note": "not a hash list and not an object; the refusal names the index and the kind it found.",
+      "shape": "wrong type",
+      "verdict": "refused:unexpected_entry:1:number",
+      "window": "window-b"
+    },
+    {
+      "case": "transaction entry is an array",
+      "error_line": "pending transactions[2] is a array, which is neither a full transaction object nor a bare hash; fail-closed",
+      "input": "the captured block with transactions[2] replaced by a one-element array",
+      "mock_reads": 0,
+      "note": "a nested list would have decoded as \"hash-only\" under the previous wording, which pointed at a read parameter the payload never used.",
+      "shape": "wrong type",
+      "verdict": "refused:unexpected_entry:2:array",
+      "window": "window-b"
+    },
+    {
+      "case": "transaction entry is a truncated hash",
+      "error_line": "pending transactions[3] is a string, which is neither a full transaction object nor a bare hash; fail-closed",
+      "input": "the captured block with transactions[3] replaced by a 4-byte hex string",
+      "mock_reads": 0,
+      "note": "the near-miss: a string that is not 32 bytes is not a bare hash, and is not reported as one.",
+      "shape": "wrong type",
+      "verdict": "refused:unexpected_entry:3:string",
+      "window": "window-b"
+    },
+    {
+      "case": "transactions is an object",
+      "error_line": "payload field `transactions` is missing or not a hex quantity; fail-closed",
+      "input": "the captured block whose `transactions` is a map instead of a list",
+      "mock_reads": 0,
+      "note": "the array itself is required; a map is not \"the same thing in another shape\".",
+      "shape": "wrong type",
+      "verdict": "refused:decode:transactions",
+      "window": "window-b"
+    },
+    {
+      "case": "one unrelated extra key",
+      "error_line": null,
+      "frame_facts": {
+        "block_number": 37961562,
+        "targets_named": 22,
+        "transaction_count": 22,
+        "wire_index_detail": "the pending payload has no frame index field of any kind (measured field set: the standard block object)",
+        "wire_index_present_on_the_payload": false
+      },
+      "input": "the captured block plus a key the decoder does not read",
+      "mock_reads": 0,
+      "note": "an unmapped key cannot create a claim: every field the frame carries is read by name, so the frame is the one the unmodified payload produced.",
+      "shape": "unknown field",
+      "verdict": "accepted",
+      "window": "window-b"
+    },
+    {
+      "case": "an index-like key",
+      "error_line": null,
+      "frame_facts": {
+        "block_number": 37961562,
+        "targets_named": 22,
+        "transaction_count": 22,
+        "wire_index_detail": "the payload names an index-like key (`index` or `sequence`) that this decoder does not map, so the frame index stays local (§8)",
+        "wire_index_present_on_the_payload": true
+      },
+      "input": "the same payload plus an `index` key",
+      "mock_reads": 0,
+      "note": "kept unknown and recorded as present: §8 assigns the frame index from read order, and the detail line now says the key was named but not mapped instead of claiming no such field exists.",
+      "shape": "unknown field",
+      "verdict": "accepted",
+      "window": "window-b"
+    }
+  ],
+  "decision": {
+    "chosen": "change the request params on the radar's own read",
+    "latency": "NOT_MEASURED: this milestone reads no real node, and a larger response on the same method cannot be claimed cheaper without a sample",
+    "read": "eth_getBlockByNumber([\"pending\", true]) via HeadReader::pending_full_transactions",
+    "unchanged_read": "eth_getBlockByNumber([\"pending\", false]) via HeadReader::pending_raw",
+    "why_not_the_decoder": "a hash list names no contract, so accepting one would turn an empty affected-pool set into a finding; §6.5 forbids relaxing validation to make an unknown shape pass",
+    "why_not_the_shared_read": "the candidate observer's fact is a count of transactions, not their targets, so it would pay the full-object byte multiple measured in size_stats for bytes it never opens; see full_over_bare_hundredths"
+  },
+  "defect": "M12-A §8.2 D5",
+  "negative_controls": [
+    {
+      "file": "crates/live/src/preconf_provider.rs",
+      "planted": "PollingFrameSource::next_view asks HeadReader::pending_raw instead of pending_full_transactions",
+      "went_red": [
+        "pending_shape_compat::the_radar_asks_for_the_shape_its_decoder_reads",
+        "preconf_provider::tests::a_polling_source_never_offers_receipts",
+        "preconf_provider::tests::a_reader_that_only_answers_the_light_shape_is_refused_not_downgraded"
+      ]
+    },
+    {
+      "file": "crates/live/src/preconf_decode.rs",
+      "planted": "the wrong-type refusal collapsed back into HashOnlyTransaction, as it was before §6",
+      "went_red": [
+        "pending_shape_compat::a_wrong_type_is_named_as_its_own_shape",
+        "pending_shape_compat::every_shape_the_task_book_names_is_covered",
+        "pending_shape_compat::the_assembled_table_is_the_one_the_evidence_file_carries"
+      ]
+    },
+    {
+      "file": "crates/live/src/preconf_decode.rs",
+      "planted": "an index-like key reported as no frame index field of any kind",
+      "went_red": [
+        "pending_shape_compat::an_unmapped_key_changes_nothing_it_cannot_name",
+        "pending_shape_compat::the_assembled_table_is_the_one_the_evidence_file_carries"
+      ]
+    },
+    {
+      "file": "crates/chain/src/head.rs",
+      "note": "the only guard for this one is the wire test: every other test in §6 sits above a stub that implements both pending methods, so the flag could regress here and stay green there",
+      "planted": "HttpChainAdapter::pending_full_transactions sends full: false",
+      "went_red": [
+        "readiness_gate::the_two_pending_reads_ask_the_node_for_the_shape_each_needs"
+      ]
+    }
+  ],
+  "replay_fixture": {
+    "files": [
+      "/Volumes/superfs/evm-mev-bot/crates/live/../../data/evidence/m9/m9.4/raw/window-a/pending-payloads.jsonl",
+      "/Volumes/superfs/evm-mev-bot/crates/live/../../data/evidence/m9/m9.4/raw/window-b/pending-payloads.jsonl"
+    ],
+    "kind": "the committed M9.4 provider answers, replayed in capture order"
+  },
+  "schema": "m12b-pending-shape-compat-v1",
+  "shapes": [
+    "full transaction object",
+    "hash-only transaction",
+    "missing field",
+    "wrong type",
+    "unknown field"
+  ],
+  "size_stats": [
+    {
+      "bare_hash_bytes_mean": 3408,
+      "bare_hash_bytes_total": 204521,
+      "bare_hash_entries": 0,
+      "full_bytes_max": 64488,
+      "full_bytes_mean": 24974,
+      "full_bytes_min": 4588,
+      "full_bytes_total": 1498497,
+      "full_object_entries": 1451,
+      "full_over_bare_hundredths": 732,
+      "payload_bytes_field_recomputed_alike": 60,
+      "reads": 60,
+      "transaction_entries": 1451,
+      "window": "window-a"
+    },
+    {
+      "bare_hash_bytes_mean": 3851,
+      "bare_hash_bytes_total": 192577,
+      "bare_hash_entries": 0,
+      "full_bytes_max": 83675,
+      "full_bytes_mean": 29921,
+      "full_bytes_min": 9105,
+      "full_bytes_total": 1496085,
+      "full_object_entries": 1530,
+      "full_over_bare_hundredths": 776,
+      "payload_bytes_field_recomputed_alike": 50,
+      "reads": 50,
+      "transaction_entries": 1530,
+      "window": "window-b"
+    }
+  ],
+  "source_of_truth": "crates/live/tests/pending_shape_compat.rs",
+  "task_book": "docs/v0.1/M12B Coding.md §6",
+  "verdicts": {
+    "EARLY_RADAR_WIRED_TO_EXECUTION": false,
+    "LOCAL_CANONICAL_RPC": "NOT_VERIFIED",
+    "LOCAL_FLASHBLOCKS": "NOT_VERIFIED",
+    "PENDING_SHAPE_MISMATCH": "CLOSED_FOR_THE_RADAR_READ",
+    "SELF_HOSTED_NODE": "NOT_RUN"
+  }
+}

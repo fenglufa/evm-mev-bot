@@ -1,0 +1,792 @@
+{
+  "schema": "m12b-manifest-v1",
+  "milestone": "M12-B single-node readiness gate and RPC access clean-up",
+  "task_book": "docs/v0.1/M12B Coding.md",
+  "generated_at_utc": "2026-10-09T23:56:28Z",
+  "git_commit": "752237105beb0352183883fbf9c952a6f54eb535",
+  "git_commit_reading": "read from .git/HEAD, then the loose ref it names — never by running git",
+  "how_this_file_was_built": "every figure below is read out of a file or a gate log by /tmp/m12b_manifest.py, which asserts on each one; a number this script cannot reach is null with the reason beside it, never a plausible value",
+  "standing_verdicts": {
+    "SELF_HOSTED_NODE": "NOT_RUN",
+    "LOCAL_CANONICAL_RPC": "NOT_VERIFIED",
+    "LOCAL_FLASHBLOCKS": "NOT_VERIFIED",
+    "note": "the readiness gate, the purpose labels and the pending-shape choice are code and local-double facts. None of them is a measurement of a node this repository never started: eth_syncing was answered by a loopback stub in crates/pipeline/tests/readiness_startup.rs, and by nothing else."
+  },
+  "defect_map": {
+    "D1": {
+      "task_book": "§9 / M12-A §16",
+      "resolution": "the two fields of ChainMismatch keep their roles at both gate sites; a test pins which side is the registry and which is the endpoint's own answer",
+      "files": [
+        "crates/pipeline/src/runner.rs",
+        "crates/pipeline/tests/readiness_startup.rs"
+      ]
+    },
+    "D2": {
+      "task_book": "§7",
+      "resolution": "GIWA_FLASHBLOCKS_URL is the only spelling in crates/; a grep test keeps the retired spelling out and proves the scan can see it",
+      "files": [
+        "crates/cli/src/lib.rs",
+        "crates/cli/tests/live_args.rs"
+      ]
+    },
+    "D3": {
+      "task_book": "§8",
+      "resolution": "the CLI reads the poll-interval defaults from the owning modules (source_defaults / flashblock_defaults) instead of repeating literals",
+      "files": [
+        "crates/cli/src/lib.rs"
+      ]
+    },
+    "D4": {
+      "task_book": "§4 + §9",
+      "resolution": "read provenance names the endpoint that answered (endpoint id digest) instead of a submission-side class word; committed evidence rows keep the labels their runs wrote",
+      "files": [
+        "crates/chain/src/endpoint.rs",
+        "crates/execution/src/giwa/sequencer_direct.rs",
+        "crates/execution/tests/real_validation_receipt.rs"
+      ]
+    },
+    "D5": {
+      "task_book": "§6",
+      "resolution": "pending reads stay hashes-only; a full-transaction pending read is an opt-in trait method whose default refuses, so an unproven transport fails closed instead of guessing",
+      "files": [
+        "crates/chain/src/head.rs",
+        "crates/live/tests/pending_shape_compat.rs",
+        "data/evidence/m12/b/pending-shape-compat.json"
+      ]
+    },
+    "D6": {
+      "task_book": "§3",
+      "resolution": "eth_syncing gate at bootstrap and at the defined recovery points; any answer other than false with a fresh head withholds the run",
+      "files": [
+        "crates/chain/src/readiness.rs",
+        "crates/pipeline/src/runner.rs",
+        "crates/chain/tests/readiness_gate.rs",
+        "crates/pipeline/tests/readiness_startup.rs"
+      ]
+    }
+  },
+  "scope": {
+    "production_files": {
+      "crates/chain/src/head.rs": {
+        "added": 38,
+        "removed": 1
+      },
+      "crates/chain/src/lib.rs": {
+        "added": 9,
+        "removed": 2
+      },
+      "crates/chain/src/rpc_trace.rs": {
+        "added": 6,
+        "removed": 1
+      },
+      "crates/cli/src/lib.rs": {
+        "added": 163,
+        "removed": 4
+      },
+      "crates/execution/src/cost.rs": {
+        "added": 1,
+        "removed": 3
+      },
+      "crates/execution/src/giwa/mod.rs": {
+        "added": 1,
+        "removed": 1
+      },
+      "crates/execution/src/giwa/sequencer_direct.rs": {
+        "added": 25,
+        "removed": 7
+      },
+      "crates/live/src/preconf.rs": {
+        "added": 6,
+        "removed": 0
+      },
+      "crates/live/src/preconf_decode.rs": {
+        "added": 49,
+        "removed": 8
+      },
+      "crates/live/src/preconf_provider.rs": {
+        "added": 55,
+        "removed": 1
+      },
+      "crates/pipeline/src/config.rs": {
+        "added": 34,
+        "removed": 0
+      },
+      "crates/pipeline/src/error.rs": {
+        "added": 11,
+        "removed": 0
+      },
+      "crates/pipeline/src/runner.rs": {
+        "added": 200,
+        "removed": 17
+      },
+      "crates/chain/src/endpoint.rs": {
+        "added": 216,
+        "removed": 0,
+        "tracked_before": false
+      },
+      "crates/chain/src/readiness.rs": {
+        "added": 597,
+        "removed": 0,
+        "tracked_before": false
+      }
+    },
+    "test_files": {
+      "crates/cli/tests/live_args.rs": {
+        "added": 440,
+        "removed": 10
+      },
+      "crates/execution/tests/real_validation_receipt.rs": {
+        "added": 157,
+        "removed": 11
+      },
+      "crates/execution/tests/sequencer_direct_probe.rs": {
+        "added": 1,
+        "removed": 1
+      },
+      "crates/execution/tests/stage_matrix.rs": {
+        "added": 121,
+        "removed": 3
+      },
+      "crates/live/tests/preconf_fixtures.rs": {
+        "added": 3,
+        "removed": 0
+      },
+      "crates/live/tests/preconf_live_giwa.rs": {
+        "added": 17,
+        "removed": 16
+      },
+      "crates/chain/tests/readiness_gate.rs": {
+        "added": 686,
+        "removed": 0,
+        "tracked_before": false
+      },
+      "crates/pipeline/tests/readiness_startup.rs": {
+        "added": 1038,
+        "removed": 0,
+        "tracked_before": false
+      },
+      "crates/pipeline/tests/node_reset_policy.rs": {
+        "added": 1128,
+        "removed": 0,
+        "tracked_before": false
+      },
+      "crates/live/tests/node_reset_pending.rs": {
+        "added": 261,
+        "removed": 0,
+        "tracked_before": false
+      },
+      "crates/live/tests/pending_shape_compat.rs": {
+        "added": 1060,
+        "removed": 0,
+        "tracked_before": false
+      }
+    },
+    "evidence_files_changed": {
+      "data/evidence/m8/state-ownership/lifecycle-contracts.json": {
+        "added": 3,
+        "removed": 3
+      },
+      "data/evidence/m8/state-ownership/ownership-matrix.json": {
+        "added": 3,
+        "removed": 3
+      },
+      "data/evidence/m8/state-ownership/stage-dependency-matrix.json": {
+        "added": 1,
+        "removed": 1
+      }
+    },
+    "production_files_touched": 15,
+    "test_files_touched": 11,
+    "note": "data/evidence/m10/manifest.json is not an M12-B edit: its git_commit field is restamped by crates/execution/tests/executor_evidence_gate.rs on any workspace test run. It was reverted before these commits so this milestone does not silently restamp another milestone's evidence."
+  },
+  "gates": {
+    "serial": true,
+    "env": "CC=clang CXX=clang++ CXXFLAGS=-include cstdint",
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --workspace --all-targets -- -D warnings",
+      "cargo test --workspace -- --test-threads=1"
+    ],
+    "fmt": {
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "re_run_exit_code": 0,
+      "re_run_note": "cargo fmt --all -- --check was run again while this manifest was being built and again returned 0 with empty output"
+    },
+    "clippy": {
+      "exit_code": 0,
+      "warning_or_error_lines": 0,
+      "crates_checked": 18,
+      "self_reported_finished": "Finished `dev` profile [unoptimized + debuginfo] target(s) in 6m 31s"
+    },
+    "test": {
+      "exit_code": 0,
+      "test_targets": 128,
+      "unittest_targets": 17,
+      "integration_targets": 95,
+      "doctest_targets": 16,
+      "passed": 1688,
+      "failed": 0,
+      "ignored": 29,
+      "measured": 0,
+      "filtered_out": 0,
+      "ignored_test_names": [
+        "capture_contiguous_corpus",
+        "capture_real_block",
+        "capture_the_real_three_hop_cycle_state",
+        "historical_census_is_reproducible_and_lands_in_the_graph",
+        "m11_cycle_state_files_are_written",
+        "measure_the_fees_the_pools_actually_charge",
+        "measure_what_each_recorded_pool_honours",
+        "measure_whether_a_recorded_pool_trades",
+        "measure_whether_native_ether_is_the_gate",
+        "measure_whether_the_cached_reserves_match_the_balances",
+        "measure_whether_the_tokens_pay_a_pool",
+        "measure_whether_the_vat_row_is_the_gate",
+        "measure_which_entry_points_each_recorded_contract_exposes",
+        "measure_which_recorded_tokens_move",
+        "measure_which_slots_a_three_leg_run_reads",
+        "one_real_preconfirmation_window_against_the_official_endpoint",
+        "probe_node_capacity_and_sync_density",
+        "query_strategies_select_the_same_sync_on_real_history",
+        "regenerate_synthetic_fixtures",
+        "simulate_the_real_route_and_freeze_the_state_it_read",
+        "target_block_reconstruction_is_reproducible",
+        "the_cycle_walks_its_own_refusals",
+        "the_fixed_tracker_reads_the_same_inclusion_the_saved_answers_describe",
+        "the_ladder_runs_on_giwa",
+        "the_live_provider_reproduces_the_recorded_state",
+        "the_sequencer_endpoint_is_measured_before_it_is_called_direct",
+        "the_three_reads_the_sequence_relies_on_are_measured_first",
+        "the_wallet_holds_what_the_frozen_cost_section_says_it_should",
+        "write_the_committed_fixture"
+      ],
+      "target_kinds_sum_to_total": 128,
+      "per_target_runtime_seconds": 102.12,
+      "compiler_warning_lines": 0,
+      "word_warning_lines_that_are_test_names": [
+        "test the_lead_is_printed_with_its_non_positive_samples_and_a_selection_warning ... ok"
+      ],
+      "summary_line_lookalikes_excluded": 14,
+      "ignored_is_not_passed": "the ignored rows are listed apart and are not in `passed`",
+      "no_ignored_test_was_added_by_this_milestone": true
+    },
+    "wall_time": {
+      "gate_start_epoch": 1791582866,
+      "gate_end_epoch": 1791587714,
+      "fmt_seconds": 0,
+      "clippy_seconds_wall": 393,
+      "test_seconds_wall": 4453,
+      "total_seconds": 4848,
+      "test_part_that_is_actual_run_time_seconds": 102.12,
+      "how_read": "GATE_START/GATE_END in the wrapper log bracket the whole series; the three gate logs' mtimes split it per gate (fmt log written at the start, clippy log when clippy finished, test log when the suite finished). The per-gate numbers are upper bounds in whole seconds from those mtimes; the test phase is mostly compilation, since the 128 targets themselves report 102.12 s in total."
+    },
+    "exit_code_provenance": "the three exit codes are the wrapper's own report (/tmp/m12b_gates.out). Each is corroborated from the artifact: fmt printed 0 bytes and was re-run here with exit 0; clippy's log has no warning or error line and ends with a Finished line; the test log has 128 summary lines, all 'ok', and no FAILED, panicked or error[ line.",
+    "per_target_re_run": {
+      "commands_run": [
+        "cargo test -p evm-chain --lib -- endpoint::tests -- --test-threads=1 ===",
+        "cargo test -p evm-chain --test readiness_gate -- --test-threads=1 ===",
+        "cargo test -p evm-pipeline --test readiness_startup -- --test-threads=1 ===",
+        "cargo test -p evm-pipeline --test node_reset_policy -- --test-threads=1 ===",
+        "cargo test -p evm-live --test node_reset_pending -- --test-threads=1 ===",
+        "cargo test -p evm-live --test pending_shape_compat -- --test-threads=1 ===",
+        "cargo test -p evm-cli --test live_args -- --test-threads=1 ===",
+        "cargo test -p evm-execution --test real_validation_receipt -- --test-threads=1 ===",
+        "cargo test -p evm-chain --lib -- readiness::tests -- --test-threads=1 ==="
+      ],
+      "results": [
+        {
+          "command": "cargo test -p evm-chain --lib -- endpoint::tests -- --test-threads=1 ===",
+          "target": "endpoint::tests",
+          "exit_code": 0,
+          "status": "ok",
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0,
+          "filtered_out": 51,
+          "runtime_seconds": 0.0
+        },
+        {
+          "command": "cargo test -p evm-chain --test readiness_gate -- --test-threads=1 ===",
+          "target": "readiness_gate",
+          "exit_code": 0,
+          "status": "ok",
+          "passed": 13,
+          "failed": 0,
+          "ignored": 0,
+          "filtered_out": 0,
+          "runtime_seconds": 40.02
+        },
+        {
+          "command": "cargo test -p evm-pipeline --test readiness_startup -- --test-threads=1 ===",
+          "target": "readiness_startup",
+          "exit_code": 0,
+          "status": "ok",
+          "passed": 10,
+          "failed": 0,
+          "ignored": 0,
+          "filtered_out": 0,
+          "runtime_seconds": 0.91
+        },
+        {
+          "command": "cargo test -p evm-pipeline --test node_reset_policy -- --test-threads=1 ===",
+          "target": "node_reset_policy",
+          "exit_code": 0,
+          "status": "ok",
+          "passed": 11,
+          "failed": 0,
+          "ignored": 0,
+          "filtered_out": 0,
+          "runtime_seconds": 0.07
+        },
+        {
+          "command": "cargo test -p evm-live --test node_reset_pending -- --test-threads=1 ===",
+          "target": "node_reset_pending",
+          "exit_code": 0,
+          "status": "ok",
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0,
+          "filtered_out": 0,
+          "runtime_seconds": 0.0
+        },
+        {
+          "command": "cargo test -p evm-live --test pending_shape_compat -- --test-threads=1 ===",
+          "target": "pending_shape_compat",
+          "exit_code": 0,
+          "status": "ok",
+          "passed": 8,
+          "failed": 0,
+          "ignored": 0,
+          "filtered_out": 0,
+          "runtime_seconds": 1.74
+        },
+        {
+          "command": "cargo test -p evm-cli --test live_args -- --test-threads=1 ===",
+          "target": "live_args",
+          "exit_code": 0,
+          "status": "ok",
+          "passed": 16,
+          "failed": 0,
+          "ignored": 0,
+          "filtered_out": 0,
+          "runtime_seconds": 0.64
+        },
+        {
+          "command": "cargo test -p evm-execution --test real_validation_receipt -- --test-threads=1 ===",
+          "target": "real_validation_receipt",
+          "exit_code": 0,
+          "status": "ok",
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0,
+          "filtered_out": 0,
+          "runtime_seconds": 0.01
+        },
+        {
+          "command": "cargo test -p evm-chain --lib -- readiness::tests -- --test-threads=1 ===",
+          "target": "readiness::tests",
+          "exit_code": 0,
+          "status": "ok",
+          "passed": 14,
+          "failed": 0,
+          "ignored": 0,
+          "filtered_out": 42,
+          "runtime_seconds": 0.01
+        }
+      ],
+      "passed_total": 89,
+      "declared_counts_all_match": true,
+      "self_reported_runtime_seconds_total": 43.4,
+      "eight_command_series_wall_seconds": 229,
+      "series_window_epochs": [
+        1791589149,
+        1791589378
+      ],
+      "ninth_command_epoch": 1791589620,
+      "ninth_command_wall_upper_bound_seconds": 242,
+      "ninth_command_wall": "not separately timed: the log records its finish (the log's own mtime, one second after the last block was appended) but no start stamp. The gap from the eighth command's block (242 s) is an upper bound that includes time not spent on the command, so no wall figure is claimed for it.",
+      "how_read": "one /tmp/m12b_rerun.log block per command: `=== cargo …`, `EXIT=n : …`, the `Running …` line naming the rebuilt binary, and the `test result:` summary. Each passed count is compared against the same target's declared test count in scans.1_new_tests.",
+      "log_path": "/tmp/m12b_rerun.log",
+      "log_mtime_epoch": 1791589620
+    }
+  },
+  "scans": {
+    "1_new_tests": {
+      "counts": {
+        "crates/chain/tests/readiness_gate.rs": 13,
+        "crates/pipeline/tests/readiness_startup.rs": 10,
+        "crates/pipeline/tests/node_reset_policy.rs": 11,
+        "crates/live/tests/node_reset_pending.rs": 5,
+        "crates/live/tests/pending_shape_compat.rs": 8,
+        "crates/cli/tests/live_args.rs": 16,
+        "crates/execution/tests/real_validation_receipt.rs": 7,
+        "crates/chain/src/endpoint.rs": 5,
+        "crates/chain/src/readiness.rs": 14
+      },
+      "gate_log_cross_check": {
+        "readiness_gate.rs": {
+          "declared_tests": 13,
+          "passed_in_gate_log": 13
+        },
+        "readiness_startup.rs": {
+          "declared_tests": 10,
+          "passed_in_gate_log": 10
+        },
+        "node_reset_policy.rs": {
+          "declared_tests": 11,
+          "passed_in_gate_log": 11
+        },
+        "node_reset_pending.rs": {
+          "declared_tests": 5,
+          "passed_in_gate_log": 5
+        },
+        "pending_shape_compat.rs": {
+          "declared_tests": 8,
+          "passed_in_gate_log": 8
+        },
+        "live_args.rs": {
+          "declared_tests": 16,
+          "passed_in_gate_log": 16
+        },
+        "real_validation_receipt.rs": {
+          "declared_tests": 7,
+          "passed_in_gate_log": 7
+        },
+        "readiness::tests": {
+          "declared_tests": 14,
+          "passed_in_gate_log": 14
+        },
+        "endpoint::tests": {
+          "declared_tests": 5,
+          "passed_in_gate_log": 5
+        }
+      },
+      "how_counted": "grep -cE '#\\[(tokio::)?test\\b' per file, which also catches attributed forms a line-anchored pattern misses; each declared count is then required to equal the passed count that the gate log reports for that target, so an empty test body cannot be counted twice"
+    },
+    "2_production_panic_risk": {
+      "constructs": [
+        "panic!",
+        "unreachable!",
+        "assert!",
+        "assert_eq!",
+        ".unwrap()",
+        ".expect("
+      ],
+      "production_hits": {
+        "panic!": 0,
+        "unreachable!": 0,
+        "assert!": 0,
+        "assert_eq!": 0,
+        ".unwrap()": 0,
+        ".expect(": 0
+      },
+      "production_lines_read": 1047,
+      "src_test_region_hits": {
+        "panic!": 3,
+        "unreachable!": 0,
+        "assert!": 14,
+        "assert_eq!": 27,
+        ".unwrap()": 4,
+        ".expect(": 1
+      },
+      "src_test_region_lines_read": 366,
+      "note": "the same patterns fire on the src test regions of the same corpus, so the zero on production lines is a clean scan and not an empty one"
+    },
+    "3_secrets": {
+      "files_scanned": 28,
+      "pem_header": [],
+      "jwt_shape": [],
+      "hex_64_literals": [
+        "crates/chain/src/rpc_trace.rs:965",
+        "crates/chain/src/rpc_trace.rs:973",
+        "crates/chain/src/rpc_trace.rs:1009",
+        "crates/chain/src/rpc_trace.rs:1013",
+        "crates/chain/src/rpc_trace.rs:1357",
+        "crates/chain/tests/readiness_gate.rs:226",
+        "crates/chain/tests/readiness_gate.rs:227",
+        "crates/live/src/preconf_decode.rs:380",
+        "crates/live/src/preconf_decode.rs:381",
+        "crates/live/src/preconf_decode.rs:389",
+        "crates/live/src/preconf_decode.rs:390",
+        "crates/live/src/preconf_decode.rs:449"
+      ],
+      "hex_64_all_single_digit_repeats": true,
+      "secret_word": [
+        "crates/cli/src/lib.rs:36",
+        "crates/execution/tests/sequencer_direct_probe.rs:620",
+        "crates/execution/tests/sequencer_direct_probe.rs:645",
+        "crates/execution/tests/sequencer_direct_probe.rs:650",
+        "crates/execution/tests/stage_matrix.rs:868",
+        "crates/execution/tests/stage_matrix.rs:886"
+      ],
+      "secret_word_classification": {
+        "crates/cli/src/lib.rs:36": "names an environment variable, no value",
+        "crates/execution/tests/sequencer_direct_probe.rs:620": "an explicitly fake stand-in value",
+        "crates/execution/tests/sequencer_direct_probe.rs:645": "a JSON-RPC method name inside a test label, not a credential",
+        "crates/execution/tests/sequencer_direct_probe.rs:650": "an explicitly fake stand-in value",
+        "crates/execution/tests/stage_matrix.rs:868": "a test name or a negative assertion about the word",
+        "crates/execution/tests/stage_matrix.rs:886": "a test name or a negative assertion about the word"
+      },
+      "note": "every hex-64 hit is a filler literal (one repeated nibble) inside a test or a storage-slot word in rpc_trace's own test module — a real key would have matched the same pattern, which is why the pattern is shown firing"
+    },
+    "4_production_diff_range": {
+      "crates_touched": [
+        "chain",
+        "cli",
+        "execution",
+        "live",
+        "pipeline"
+      ],
+      "m9_m11_semantics_changed": false,
+      "how_read": "the production files above are chain / cli / execution / live / pipeline; none of them is the pathfinder, optimizer, REVM simulation, executor contract, signer, submitter, receipt tracker or multi-lane state machine"
+    },
+    "5_new_rpc_calls": {
+      "methods_introduced": {
+        "eth_getBlockByNumber": 1,
+        "eth_syncing": 1
+      },
+      "sites": [
+        ".request_raw(\"eth_getBlockByNumber\", json!([\"pending\", true]))",
+        "crates/chain/src/readiness.rs: eth_syncing"
+      ],
+      "production_asks_per_live_run": 1,
+      "budget_checks_per_run": 8,
+      "budget_source": "DEFAULT_CHECK_BUDGET in crates/chain/src/readiness.rs",
+      "gate_call_site": "gate_readiness in crates/pipeline/src/runner.rs, reached once per run from build_canonical — before the event loop and before the execution lane is connected",
+      "not_a_per_event_call": true,
+      "note": "eth_syncing is the only new method. §6 changed a parameter on eth_getBlockByNumber (pending, false stays the production shape) and added a trait method whose default body refuses without asking."
+    },
+    "6_endpoint_label_and_masking_tests": {
+      "named_tests": [
+        "crates/chain/src/endpoint.rs: every_label_round_trips",
+        "crates/chain/src/endpoint.rs: a_label_names_one_role_and_one_locality",
+        "crates/chain/src/endpoint.rs: no_url_shape_declares_anything",
+        "crates/chain/src/endpoint.rs: silence_is_not_a_claim_about_locality",
+        "crates/cli/tests/live_args.rs: an_endpoint_purpose_is_declared_or_it_is_recorded_as_unknown",
+        "crates/pipeline/tests/readiness_startup.rs: a_run_records_the_declared_label_and_the_endpoint_identity_as_two_things",
+        "crates/execution/tests/real_validation_receipt.rs: the_read_line_names_the_endpoint_that_answered_rather_than_a_class_of_endpoint",
+        "crates/execution/tests/real_validation_receipt.rs: the_committed_rows_keep_the_labels_the_runs_actually_wrote",
+        "crates/execution/tests/stage_matrix.rs: no_output_of_a_run_names_the_private_key"
+      ],
+      "evidence_keys_added": {
+        "total_json_keys_added": 11,
+        "live_session_endpoints": [
+          "rpc_purpose",
+          "flashblocks_purpose",
+          "rpc_endpoint_id",
+          "ws_endpoint_id",
+          "flashblocks_endpoint_id",
+          "purpose_detail"
+        ],
+        "status_readiness_container": "readiness",
+        "status_readiness_sub_keys": [
+          "detail",
+          "eth_syncing_asks",
+          "head_freshness_policy",
+          "verdict"
+        ],
+        "how_read": "every `\"key\":` line the workspace diff adds in crates/pipeline/src/runner.rs; the endpoints names are taken from the masking test's own `for key in [...]` list, so the count and the test that enforces it cannot drift apart"
+      },
+      "metrics_added": [
+        "readiness.eth_syncing_asks"
+      ],
+      "error_variants_added": [
+        "PipelineError::NodeNotReady"
+      ]
+    },
+    "7_real_trade_path_untouched": {
+      "added_lines_read": 5051,
+      "submit_or_sign_surface_in_added_code": [
+        {
+          "file": "crates/pipeline/tests/readiness_startup.rs",
+          "added_line": "for banned in [\"eth_getBlockByNumber\", \"eth_sendRawTransaction\", \"eth_call\"] {"
+        },
+        {
+          "file": "crates/pipeline/tests/readiness_startup.rs",
+          "added_line": "for banned in [\"eth_getBlockByNumber\", \"eth_sendRawTransaction\", \"eth_call\"] {"
+        },
+        {
+          "file": "crates/pipeline/tests/node_reset_policy.rs",
+          "added_line": "!code.contains(\".submit(\") && !code.contains(\"sendRawTransaction\"),"
+        }
+      ],
+      "files_those_hits_live_in": [
+        "crates/pipeline/tests/node_reset_policy.rs",
+        "crates/pipeline/tests/readiness_startup.rs"
+      ],
+      "any_hit_in_a_production_file": false,
+      "how_read": "each hit is shown with its file and its added line. They are all test-side: a list of methods a stub asserts it was never asked for, and a containment check that this milestone's own code has no submission call. No production line added in M12-B names a submit or sign surface.",
+      "hosts_named_as_urls_by_new_tests": {
+        "127.0.0.1": {
+          "mentions": 13,
+          "kind": "loopback"
+        },
+        "candidate.test": {
+          "mentions": 1,
+          "kind": "reserved TLD"
+        },
+        "a": {
+          "mentions": 7,
+          "kind": "single-label host, no TLD"
+        },
+        "cand": {
+          "mentions": 2,
+          "kind": "single-label host, no TLD"
+        },
+        "node": {
+          "mentions": 10,
+          "kind": "single-label host, no TLD"
+        },
+        "sepolia-rpc.example": {
+          "mentions": 2,
+          "kind": "reserved TLD"
+        },
+        "flashblocks.example": {
+          "mentions": 1,
+          "kind": "reserved TLD"
+        },
+        "localhost": {
+          "mentions": 1,
+          "kind": "loopback"
+        }
+      },
+      "kind_explained": {
+        "loopback": "the port a stub inside the test binds, or a URL literal in a test that only builds a config — never dialled outward",
+        "reserved TLD": "an RFC 6761/8375 reserved TLD (.test/.example/.invalid), which cannot resolve",
+        "single-label host, no TLD": "a bare name with no dot; the tests that use it only hand it to the config builder and assert the run is refused before any connection"
+      },
+      "host_reading": "grouped by kind from the URLs these test files literally contain: 2 host(s) of kind 'loopback', 3 host(s) of kind 'reserved TLD', 3 host(s) of kind 'single-label host, no TLD'. Nothing here names a host on the public internet and no test in this range opens an outbound connection.",
+      "nothing_signed_or_broadcast": true
+    }
+  },
+  "evidence": {
+    "files": {
+      "node-reset-policy.json": "c041edb79a565f8671fac43571ac9e0e98498a4822d7d2971a9a9c74a76f2d63",
+      "pending-shape-compat.json": "880a7ddac679a0ee8688acd230f0b592e2e05f64b6a0b2cc4803ee13622719b5"
+    },
+    "files_note": "manifest.json is written last, so its own digest is nowhere",
+    "node_reset_policy": {
+      "schema": "m12b-node-reset-policy-v1",
+      "rows": 24,
+      "state_classes": [
+        "canonical_head_and_graph",
+        "block_identity",
+        "flashblocks_view_cache",
+        "outstanding_candidates_and_simulations",
+        "ready_unsubmitted_plan",
+        "nonce_reservation",
+        "capital_reservation",
+        "submitted_unconfirmed_transaction"
+      ],
+      "identity_bearing_classes": [
+        "canonical_head_and_graph",
+        "block_identity",
+        "flashblocks_view_cache",
+        "outstanding_candidates_and_simulations",
+        "ready_unsubmitted_plan"
+      ],
+      "node_events": [
+        "restart",
+        "reconnect",
+        "head_rollback"
+      ],
+      "strength_counts": {
+        "enforced": 22,
+        "not_enforced": 1,
+        "recorded_only": 1
+      }
+    },
+    "pending_shape_compat": {
+      "schema": "m12b-pending-shape-compat-v1",
+      "decision": {
+        "chosen": "change the request params on the radar's own read",
+        "latency": "NOT_MEASURED: this milestone reads no real node, and a larger response on the same method cannot be claimed cheaper without a sample",
+        "read": "eth_getBlockByNumber([\"pending\", true]) via HeadReader::pending_full_transactions",
+        "unchanged_read": "eth_getBlockByNumber([\"pending\", false]) via HeadReader::pending_raw",
+        "why_not_the_decoder": "a hash list names no contract, so accepting one would turn an empty affected-pool set into a finding; §6.5 forbids relaxing validation to make an unknown shape pass",
+        "why_not_the_shared_read": "the candidate observer's fact is a count of transactions, not their targets, so it would pay the full-object byte multiple measured in size_stats for bytes it never opens; see full_over_bare_hundredths"
+      },
+      "call_accounting": {
+        "decoder_cases": 20,
+        "mock_reads_performed_by_decoder_cases": 0,
+        "node_requests": 0,
+        "scope": "the tests in this file. Every payload is a line of the committed capture or a mutation of one, and both transports are local structs with counters, so nothing here opens a socket. The read-shape guards added beside the production code live elsewhere and are counted in the §11 inventory: two unit tests in crates/live/src/preconf_provider.rs run on stubs, and one test in crates/chain/tests/readiness_gate.rs sends two requests to a 127.0.0.1 stub that records the params it was sent.",
+        "transport": {
+          "detail": "these three are the atomic counters of the local stubs in `the_radar_asks_for_the_shape_its_decoder_reads`, which asserts the table and the live counters agree; a stub that silently read twice would make this file disagree with its own run",
+          "heavy_reads_per_accepted_source": 1,
+          "light_reads_per_accepted_source": 0,
+          "reads_performed_by_the_refused_attempt": 0
+        }
+      },
+      "size_stats": [
+        {
+          "bare_hash_bytes_mean": 3408,
+          "bare_hash_bytes_total": 204521,
+          "bare_hash_entries": 0,
+          "full_bytes_max": 64488,
+          "full_bytes_mean": 24974,
+          "full_bytes_min": 4588,
+          "full_bytes_total": 1498497,
+          "full_object_entries": 1451,
+          "full_over_bare_hundredths": 732,
+          "payload_bytes_field_recomputed_alike": 60,
+          "reads": 60,
+          "transaction_entries": 1451,
+          "window": "window-a"
+        },
+        {
+          "bare_hash_bytes_mean": 3851,
+          "bare_hash_bytes_total": 192577,
+          "bare_hash_entries": 0,
+          "full_bytes_max": 83675,
+          "full_bytes_mean": 29921,
+          "full_bytes_min": 9105,
+          "full_bytes_total": 1496085,
+          "full_object_entries": 1530,
+          "full_over_bare_hundredths": 776,
+          "payload_bytes_field_recomputed_alike": 50,
+          "reads": 50,
+          "transaction_entries": 1530,
+          "window": "window-b"
+        }
+      ]
+    }
+  },
+  "known_staleness": {
+    "data/evidence/m12/audit_manifest.json": "the M12-A audit records head.rs line numbers for the pending-read surface; §6 inserted lines into head.rs, so that line table is one insert behind. It is the record of the audit as of its own commit and was not patched.",
+    "data/evidence/m8/state-ownership": "three files' \"line\" anchors were refreshed through the M8.4.3 gate's own refresh switch (M843_STATE_OWNERSHIP_REFRESH=1); the diff is line numbers only, no verdict or text changed."
+  },
+  "out_of_scope_findings_recorded_not_fixed": [
+    {
+      "item": "the WS transport's full-transaction pending read stays unimplemented",
+      "measured": {
+        "HttpChainAdapter": true,
+        "WsHeadReader": false,
+        "RecordedChainAdapter": false
+      },
+      "why_not_fixed": "§6 of the task book forbids assuming a capability no run has proven. The default body refuses, so a WS candidate is refused rather than guessed at. Proving the provider answers it is a real-node experiment, which is M12-C scope."
+    },
+    {
+      "item": "the public Sequencer endpoint is still labelled by the submission-side class word",
+      "why_not_fixed": "there is no evidence the submission path changed, and §9 forbids rewriting a label to make evidence read as all-local. Only the read-provenance sentence moved to an endpoint identity."
+    },
+    {
+      "item": "data/evidence/m12/audit_manifest.json still records pre-§6 head.rs line numbers",
+      "why_not_fixed": "see known_staleness; it is the record of the M12-A audit as of its own commit."
+    },
+    {
+      "item": "data/evidence/m10/manifest.json git_commit is restamped by any workspace test run",
+      "why_not_fixed": "it is another milestone's evidence, written by crates/execution/tests/executor_evidence_gate.rs. Reverted before these commits rather than carried along."
+    },
+    {
+      "item": "node_reset_policy's evidence gate compares structure and anchors, not the whole table",
+      "measured": {
+        "pending_shape_compat_full_table_eq": true,
+        "node_reset_policy_full_table_eq": false,
+        "node_reset_policy_checks": "row count, schema, and every committed (anchor_file, anchor_token) pair still resolving against today's source"
+      },
+      "why_not_fixed": "a model change to disposition or strength that is not followed by a M12B_NODE_RESET_POLICY_REFRESH=1 re-assembly would not turn this gate red; the exposure is written into report §10.3 and §15 rather than tightened mid-milestone, since editing the test means re-running the whole recorded workspace gate series (§11 costs ~80 min warm) for a test-side hardening §5 does not ask for."
+    }
+  ]
+}
