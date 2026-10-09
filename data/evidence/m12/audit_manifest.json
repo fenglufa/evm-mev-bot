@@ -1,0 +1,1171 @@
+{
+  "milestone": "M12-A",
+  "kind": "verified-only audit manifest",
+  "figure_provenance": "Every number in this file was extracted from a file on disk by a script at the moment of writing, with an assert on each lookup; none is typed by hand. The extraction script itself lived in gitignored target/ and is not retained as evidence, so recheck_commands is the path to re-derive any figure here.",
+  "audit_date_local": "2026-10-09 (Asia/Shanghai, UTC+8)",
+  "purpose": "Structured record of what M12-A verified. Anything not listed here was not verified; unverified items appear under not_verified_yet with the method that would settle them.",
+  "how_to_use_this_file": "Every measured value names the file it came from. The repo figures re-run with the commands in recheck_commands; the official figures re-run by curl-ing the URL beside each digest.",
+  "audited_repository": {
+    "head_sha": "a1a6952ff960d723c2736d5ed2e5bc42043dc845",
+    "head_author_date": "2026-10-09T15:42:27+08:00",
+    "git_head_ref": "ref: refs/heads/main",
+    "crates": [
+      "chain",
+      "cli",
+      "core",
+      "discovery",
+      "execution",
+      "graph",
+      "live",
+      "metrics",
+      "opportunity",
+      "pathfinder",
+      "pipeline",
+      "protocol",
+      "replay",
+      "risk",
+      "simulation",
+      "state"
+    ],
+    "crate_count": 16,
+    "binary": {
+      "path": "crates/cli/src/main.rs",
+      "line": 6,
+      "text": "fn main() {"
+    },
+    "runtime_config_files_present": [],
+    "working_tree_at_audit_time": [
+      "M data/evidence/m10/manifest.json",
+      "?? data/evidence/m12/",
+      "?? \"docs/v0.1/M12-A Repo Audit.md\"",
+      "?? \"docs/v0.1/M12A Coding.md\""
+    ],
+    "working_tree_note": "data/evidence/m10/manifest.json is rewritten in place by the M10 evidence gate whenever the workspace test suite runs (crates/execution/tests/executor_evidence_gate.rs:6230 read_git_commit → :6527 manifest.json), so its git_commit field tracks the last judging run. M12-A did not author that change and did not stage it.",
+    "production_code_modified": false,
+    "diff_audit": {
+      "command": "git diff --stat HEAD -- crates",
+      "expected": "empty"
+    }
+  },
+  "verdicts": {
+    "M12_AUDIT": "COMPLETE",
+    "SELF_HOSTED_NODE": "NOT_RUN",
+    "LOCAL_CANONICAL_RPC": "NOT_VERIFIED",
+    "LOCAL_FLASHBLOCKS": "NOT_VERIFIED",
+    "MULTI_NODE_HA": "OUT_OF_SCOPE"
+  },
+  "gates": {
+    "run_serially": true,
+    "fmt": {
+      "command": "cargo fmt --all -- --check",
+      "output_bytes": 0,
+      "result": "pass"
+    },
+    "clippy": {
+      "command": "cargo clippy --workspace --all-targets -- -D warnings",
+      "warning_or_error_lines": 0,
+      "finished_in": "4m 48s",
+      "result": "pass"
+    },
+    "test": {
+      "command": "cargo test --workspace -- --test-threads=1",
+      "test_targets": 123,
+      "passed": 1611,
+      "failed": 0,
+      "ignored": 29,
+      "all_results_ok": true,
+      "wall_seconds": 3975.39,
+      "compile_time": "6m 35s",
+      "result": "pass",
+      "log_is_temporary": true,
+      "log_note": "target/m12-test.txt is scratch and is not evidence; rerun the command to regenerate."
+    }
+  },
+  "official_sources": {
+    "fetched_on": "2026-10-09",
+    "empty_body_caveat": "empty-body caveat: raw.githubusercontent.com occasionally answers 200 with zero bytes; the sha256 of the empty string is e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 — retry the fetch on seeing that digest.",
+    "no_cited_file_is_empty": true,
+    "fetch_method": "curl of raw.githubusercontent.com / github.com, parsed locally",
+    "repository_head": {
+      "repo": "giwa-io/node",
+      "main_branch_commit": "00985a5dba4ecf594d120072fd3557f095d3c51f",
+      "how_read": "https://github.com/giwa-io/node/commits/main.atom, newest entry",
+      "feed_self_reported_update": "2026-07-13T04:50:49Z"
+    },
+    "root_listing": {
+      "files": [
+        ".env",
+        ".env.sepolia",
+        ".gitignore",
+        "LICENSE",
+        "README.md",
+        "docker-compose.yaml"
+      ],
+      "directories": [
+        ".github",
+        "genesis",
+        "node",
+        "resources",
+        "reth"
+      ],
+      "how_read": "embedded root-directory payload of https://github.com/giwa-io/node",
+      "recursive_file_count": null,
+      "recursive_file_count_note": "api.github.com answers 403 from this sandbox, so the recursive total was never measured and is deliberately null."
+    },
+    "releases": {
+      "count": 9,
+      "tags": [
+        "v0.1.0",
+        "v0.2.0",
+        "v0.2.1",
+        "v0.3.0",
+        "v0.3.1",
+        "v0.3.2",
+        "v0.4.0",
+        "v0.5.1",
+        "v0.6.0"
+      ],
+      "how_read": "https://github.com/giwa-io/node/releases (page 1) plus ?page=2, which lists no tags",
+      "current_release": "v0.6.0",
+      "current_release_date": "2026-07-07T04:38:18Z"
+    },
+    "file_digests": [
+      {
+        "subject": "giwa-io/node/.env at main",
+        "bytes": 21,
+        "sha256": "e840dbd5a924edd5512622cbf74077022065e1ec69bffbe219d29a19ea50edc5"
+      },
+      {
+        "subject": "giwa-io/node/.env.sepolia at main",
+        "bytes": 3204,
+        "sha256": "9cf425b98ceee8f2882c7805c5b0ac79c7424bc572b1a29d136f863d596a2108"
+      },
+      {
+        "subject": "giwa-io/node/README.md at main",
+        "bytes": 4491,
+        "sha256": "a00b3e19611cc8f0dc099e9569b35287222d48bb0214b500bbc3358eee1e6356"
+      },
+      {
+        "subject": "giwa-io/node/docker-compose.yaml at main",
+        "bytes": 1296,
+        "sha256": "61278ffae361aa98674cc6ab0d06a5cd1e69940d01e9fd84e42e0e86f810f2f1"
+      },
+      {
+        "subject": "giwa-io/node/reth/entrypoint.sh at main",
+        "bytes": 1486,
+        "sha256": "d71975edf31f84c9531761eeacb77989cc4a11dfcb0181c31842b467b88dac03"
+      },
+      {
+        "subject": "giwa-io/node/genesis/consensus/sepolia-rollup.json at main",
+        "bytes": 1544,
+        "sha256": "2fe89131e4fa91324af61080c1845c6c79597629318137f2dd7e3f21525f543f"
+      },
+      {
+        "subject": "giwa-io/node/genesis/execution/sepolia-genesis.json at main",
+        "bytes": 9452659,
+        "sha256": "9431caa96d9a9658a94a1678aaf8469e4aad601d1ab965115adfe407effaeece"
+      }
+    ],
+    "release_timeline_used_for_version_claims": [
+      {
+        "tag": "v0.6.0",
+        "date": "2026-07-07T04:38:18Z",
+        "facts": [
+          "op-geth removed",
+          "breaking GETH_* → RETH_*",
+          "op-reth v2.3.3",
+          "op-node v1.19.1"
+        ]
+      },
+      {
+        "tag": "v0.5.1",
+        "date": "2026-07-01",
+        "facts": [
+          "karst_time 1783317600 introduced",
+          "Rust 1.94 / Go 1.26.4"
+        ]
+      },
+      {
+        "tag": "v0.3.0",
+        "date": null,
+        "facts": [
+          "self-labelled DO NOT USE THIS RELEASE"
+        ]
+      }
+    ],
+    "documentation_drift": "GIWA deploy docs pages self-report 10-12 months since update and still carry GETH_* names, while .env.sepolia at main carries RETH_*. Direction of the drift: docs lag the release.",
+    "chain_identity_from_official_files": {
+      "l2_chain_id": 91342,
+      "l1_chain_id": 11155111,
+      "block_time_seconds": 1,
+      "karst_time": 1783317600,
+      "jovian_time": 1767070800,
+      "isthmus_time": 1753349700,
+      "genesis_config_chainId": 91342,
+      "genesis_alloc_entries": 2339
+    },
+    "not_reachable_from_this_sandbox": [
+      "GitHub REST API (403) — so op-reth's internal --flashblocks-url behaviour is unverified",
+      "authenticated code search (401) — no gh CLI installed"
+    ]
+  },
+  "node_config_facts": {
+    "env_sepolia_fields": {
+      "RETH_ROLLUP_SEQUENCERHTTP": {
+        "value": "https://sepolia-sequencer.giwa.io",
+        "line": 12,
+        "commented": false
+      },
+      "RETH_HTTP_PORT": {
+        "value": "8545",
+        "line": 18,
+        "commented": false
+      },
+      "RETH_WS_PORT": {
+        "value": "8546",
+        "line": 19,
+        "commented": false
+      },
+      "RETH_AUTHRPC_PORT": {
+        "value": "8551",
+        "line": 20,
+        "commented": false
+      },
+      "RETH_AUTHRPC_JWTSECRET": {
+        "value": "/shared/jwtsecret.key",
+        "line": 21,
+        "commented": false
+      },
+      "RETH_GCMODE": {
+        "value": "full",
+        "line": 39,
+        "commented": false
+      },
+      "OP_NODE_SYNCMODE": {
+        "value": "execution-layer",
+        "line": 40,
+        "commented": false
+      },
+      "OP_NODE_RPC_PORT": {
+        "value": "9545",
+        "line": 81,
+        "commented": false
+      }
+    },
+    "flashblocks_env_line": {
+      "file": ".env.sepolia",
+      "line": 15,
+      "text": "#FLASHBLOCKS_WEBSOCKET_URL=wss://sepolia-flashblocks.giwa.io/ws",
+      "commented_out": true,
+      "hint_line_above": "# OPTIONAL - if you want to use the flashblocks feature, uncomment this line."
+    },
+    "readme_enable_step": {
+      "file": "README.md",
+      "line": 86,
+      "text": "FLASHBLOCKS_WEBSOCKET_URL=",
+      "consequence": "an empty value makes the entrypoint take its else-branch, so a node built by following the README literally runs in vanilla mode without any error"
+    },
+    "reth_entrypoint_branch": "if [[ -n \"${FLASHBLOCKS_WEBSOCKET_URL:-}\" ]]; then\n    ADDITIONAL_ARGS=\"$ADDITIONAL_ARGS --flashblocks-url=$FLASHBLOCKS_WEBSOCKET_URL\"\n    echo \"Running in flashblocks support mode\"\nelse\n    echo \"Running in vanilla mode\"\nfi",
+    "reth_execution_flags": "exec op-reth node \\",
+    "consensus_entrypoint_content": "#!/bin/bash\nset -euxo pipefail\n\nexec op-node \"$@\"",
+    "compose_published_mappings": [
+      "- \"8545:8545\"",
+      "- \"8546:8546\"",
+      "- \"7301:6060\"",
+      "- \"30303:30303\"",
+      "- \"30303:30303/udp\"",
+      "- \"9545:9545\"",
+      "- \"9222:9222\"",
+      "- \"9222:9222/udp\"",
+      "- \"7300:7300\""
+    ],
+    "engine_api_8551_published_by_compose": false,
+    "hardware_baseline_from_docs": {
+      "testnet_minimum": "4 vCPU / 8 GB RAM / 500 GB NVMe",
+      "testnet_recommended": "8+ vCPU / 16+ GB RAM / 1 TB NVMe",
+      "page_self_reported_update": "about 1 year ago",
+      "caveat": "page predates v0.6.0 (op-reth) and was not re-measured"
+    },
+    "official_sync_check": "POST eth_syncing to http://localhost:8545 (node-operators/get-started)",
+    "build_toolchain_from_dockerfiles": {
+      "reth": "FROM rust:1.94-bookworm; libclang-dev pkg-config build-essential; cargo install just; git clone --branch op-reth/$RETH_VERSION; just update-superchain-registry-submodule && just maxperf",
+      "node": "rust:1.94-bookworm + golang:1.26.4-bookworm; jq zip yq; just build-superchain-go && just op-node"
+    }
+  },
+  "flashblocks": {
+    "three_layers": {
+      "A_upstream_data_source": "official Flashblocks websocket endpoint (e.g. the commented wss://sepolia-flashblocks.giwa.io/ws in .env.sepolia)",
+      "B_node_capability": "op-reth only, via --flashblocks-url set by reth/entrypoint.sh when FLASHBLOCKS_WEBSOCKET_URL is non-empty; op-node has no flashblocks field",
+      "C_client_aware_rpc": "measured public endpoint https://sepolia-rpc-flashblocks.giwa.io; the local equivalent is NOT_VERIFIED"
+    },
+    "keyword_occurrences_per_file": {
+      ".env": {
+        "exact_env_var_name": 0,
+        "word_root_flashblocks_case_insensitive": 0,
+        "startup_flag_flashblocks_url": 0
+      },
+      ".env.sepolia": {
+        "exact_env_var_name": 1,
+        "word_root_flashblocks_case_insensitive": 3,
+        "startup_flag_flashblocks_url": 0
+      },
+      "README.md": {
+        "exact_env_var_name": 1,
+        "word_root_flashblocks_case_insensitive": 3,
+        "startup_flag_flashblocks_url": 0
+      },
+      "docker-compose.yaml": {
+        "exact_env_var_name": 0,
+        "word_root_flashblocks_case_insensitive": 0,
+        "startup_flag_flashblocks_url": 0
+      },
+      "reth/entrypoint.sh": {
+        "exact_env_var_name": 2,
+        "word_root_flashblocks_case_insensitive": 4,
+        "startup_flag_flashblocks_url": 1
+      },
+      "node/entrypoint.sh": {
+        "exact_env_var_name": 0,
+        "word_root_flashblocks_case_insensitive": 0,
+        "startup_flag_flashblocks_url": 0
+      },
+      "genesis/execution/sepolia-genesis.json": {
+        "exact_env_var_name": 0,
+        "word_root_flashblocks_case_insensitive": 0,
+        "startup_flag_flashblocks_url": 0
+      },
+      "genesis/consensus/sepolia-rollup.json": {
+        "exact_env_var_name": 0,
+        "word_root_flashblocks_case_insensitive": 0,
+        "startup_flag_flashblocks_url": 0
+      }
+    },
+    "only_enable_switch_found": "op-reth --flashblocks-url",
+    "default_state": "disabled (the line ships commented out; README's example writes an empty value)",
+    "not_established": [
+      "that a self-hosted node's HTTP port becomes flashblocks-aware",
+      "what the node does when the upstream websocket fails",
+      "whether a local flashblocks-aware entry shares the canonical port",
+      "whether wss://sepolia-flashblocks.giwa.io and https://sepolia-rpc-flashblocks.giwa.io are the same service"
+    ]
+  },
+  "repository_rpc_facts": {
+    "funnels": [
+      {
+        "kind": "http",
+        "file": "crates/chain/src/rpc.rs",
+        "line": 189,
+        "fn": "request_with"
+      },
+      {
+        "kind": "websocket-request",
+        "file": "crates/chain/src/ws.rs",
+        "line": 153,
+        "fn": "request"
+      },
+      {
+        "kind": "websocket-subscribe",
+        "file": "crates/chain/src/ws.rs",
+        "line": 188,
+        "fn": "subscribe"
+      }
+    ],
+    "bypassing_clients": [],
+    "adapter_behaviour": {
+      "endpoint_fixed_at_construction": {
+        "connect_line": 77,
+        "connect_with_trace_line": 92,
+        "url_stored_at_line": 109
+      },
+      "chain_id_learned_at": {
+        "line": 102,
+        "method": "eth_chainId"
+      },
+      "http_timeout_seconds": 20,
+      "timeout_set_at_line": 94,
+      "retry_loop_at_line": 212,
+      "retry_attempts_max": 1,
+      "retry_is_limited_to_transport_failures": true,
+      "terminal_classes": [
+        "node_rejected",
+        "decode_failed"
+      ],
+      "non_terminal_classes": [
+        "send_failed",
+        "non_json_response",
+        "http_status"
+      ],
+      "one_attempt_at_line": 304,
+      "json_rpc_error_maps_to": "ChainError::RpcRejected",
+      "null_block_becomes": {
+        "fn": "get_block",
+        "fn_line": 546,
+        "null_test_line": 550,
+        "return_line": 551,
+        "error": "ChainError::MissingData",
+        "second_site": {
+          "fn": "get_block_context",
+          "fn_line": 559,
+          "return_line": 564
+        }
+      }
+    },
+    "wire_sites_total": 27,
+    "wire_sites": [
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 102,
+        "method": "eth_chainId",
+        "line_text": "Self::request_with(&http, url, \"eth_chainId\", json!([]), None, trace.as_ref()).await?;"
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 542,
+        "method": "eth_blockNumber",
+        "line_text": "let raw = self.request(\"eth_blockNumber\", json!([])).await?;"
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 548,
+        "method": "eth_getBlockByNumber",
+        "line_text": ".request(\"eth_getBlockByNumber\", json!([block_param(number), false]))"
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 561,
+        "method": "eth_getBlockByNumber",
+        "line_text": ".request(\"eth_getBlockByNumber\", json!([block_param(number), false]))"
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 610,
+        "method": "eth_getBlockByNumber",
+        "line_text": ".request(\"eth_getBlockByNumber\", json!([block_param(number), true]))"
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 642,
+        "method": "eth_getBlockReceipts",
+        "line_text": ".request(\"eth_getBlockReceipts\", json!([block_param(number)]))"
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 710,
+        "method": "eth_getLogs",
+        "line_text": "let raw = self.request(\"eth_getLogs\", params).await?;"
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 725,
+        "method": "eth_call",
+        "line_text": "\"eth_call\","
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 734,
+        "method": "eth_getCode",
+        "line_text": ".request(\"eth_getCode\", json!([address.to_string(), block_param(at)]))"
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 742,
+        "method": "eth_getBalance",
+        "line_text": "\"eth_getBalance\","
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 752,
+        "method": "eth_getStorageAt",
+        "line_text": "\"eth_getStorageAt\","
+      },
+      {
+        "file": "crates/chain/src/rpc.rs",
+        "line": 766,
+        "method": "eth_getTransactionCount",
+        "line_text": "\"eth_getTransactionCount\","
+      },
+      {
+        "file": "crates/chain/src/head.rs",
+        "line": 133,
+        "method": "eth_getBlockByNumber",
+        "line_text": ".request_raw(\"eth_getBlockByNumber\", json!([\"pending\", false]))"
+      },
+      {
+        "file": "crates/chain/src/head.rs",
+        "line": 139,
+        "method": "eth_getBlockByHash",
+        "line_text": "self.request_raw(\"eth_getBlockByHash\", json!([format!(\"{hash:#x}\"), false]))"
+      },
+      {
+        "file": "crates/chain/src/head.rs",
+        "line": 159,
+        "method": "eth_chainId",
+        "line_text": "let raw = client.request(\"eth_chainId\", &Vec::<String>::new()).await?;"
+      },
+      {
+        "file": "crates/chain/src/head.rs",
+        "line": 179,
+        "method": "eth_getBlockByNumber",
+        "line_text": ".request(\"eth_getBlockByNumber\", &json!([tag, false]))"
+      },
+      {
+        "file": "crates/chain/src/head.rs",
+        "line": 197,
+        "method": "eth_blockNumber",
+        "line_text": ".request(\"eth_blockNumber\", &Vec::<String>::new())"
+      },
+      {
+        "file": "crates/chain/src/head.rs",
+        "line": 213,
+        "method": "eth_getBlockByNumber",
+        "line_text": ".request(\"eth_getBlockByNumber\", &json!([\"pending\", false]))"
+      },
+      {
+        "file": "crates/chain/src/head.rs",
+        "line": 220,
+        "method": "eth_getBlockByHash",
+        "line_text": ".request(\"eth_getBlockByHash\", &json!([format!(\"{hash:#x}\"), false]))"
+      },
+      {
+        "file": "crates/chain/src/ws.rs",
+        "line": 191,
+        "method": "eth_subscribe",
+        "line_text": "match self.request(\"eth_subscribe\", &[kind]).await {"
+      },
+      {
+        "file": "crates/execution/src/giwa/preflight_facts.rs",
+        "line": 381,
+        "method": "eth_getBlockByNumber",
+        "line_text": ".request_raw(\"eth_getBlockByNumber\", json!([\"latest\", false]))"
+      },
+      {
+        "file": "crates/execution/src/giwa/sequencer_direct.rs",
+        "line": 171,
+        "method": "eth_getBlockByNumber",
+        "line_text": ".request_raw(\"eth_getBlockByNumber\", json!([\"latest\", false]))"
+      },
+      {
+        "file": "crates/execution/src/giwa/sequencer_direct.rs",
+        "line": 192,
+        "method": "eth_chainId",
+        "line_text": ".request_raw(\"eth_chainId\", json!([]))"
+      },
+      {
+        "file": "crates/execution/src/giwa/sequencer_direct.rs",
+        "line": 202,
+        "method": "eth_maxPriorityFeePerGas",
+        "line_text": ".request_raw(\"eth_maxPriorityFeePerGas\", json!([]))"
+      },
+      {
+        "file": "crates/execution/src/giwa/sequencer_direct.rs",
+        "line": 307,
+        "method": "eth_getTransactionCount",
+        "line_text": "\"eth_getTransactionCount\","
+      },
+      {
+        "file": "crates/execution/src/giwa/sequencer_direct.rs",
+        "line": 359,
+        "method": "eth_sendRawTransaction",
+        "line_text": ".request_raw(\"eth_sendRawTransaction\", json!([payload]))"
+      },
+      {
+        "file": "crates/execution/src/giwa/sequencer_direct.rs",
+        "line": 407,
+        "method": "eth_getTransactionReceipt",
+        "line_text": "\"eth_getTransactionReceipt\","
+      }
+    ],
+    "method_histogram_from_wire_sites": {
+      "eth_chainId": 3,
+      "eth_blockNumber": 2,
+      "eth_getBlockByNumber": 8,
+      "eth_getBlockReceipts": 1,
+      "eth_getLogs": 1,
+      "eth_call": 1,
+      "eth_getCode": 1,
+      "eth_getBalance": 1,
+      "eth_getStorageAt": 1,
+      "eth_getTransactionCount": 2,
+      "eth_getBlockByHash": 2,
+      "eth_subscribe": 1,
+      "eth_maxPriorityFeePerGas": 1,
+      "eth_sendRawTransaction": 1,
+      "eth_getTransactionReceipt": 1
+    },
+    "pending_read": {
+      "method_and_params": "eth_getBlockByNumber [\"pending\", false]",
+      "http_line": 133,
+      "ws_line": 213,
+      "same_endpoint_as_canonical": true,
+      "null_result_handling": "Ok(None)",
+      "null_result_handling_lines": [
+        131,
+        135
+      ]
+    },
+    "canonical_gate": {
+      "file": "crates/live/src/event.rs",
+      "line": 46,
+      "fn": "is_canonical"
+    },
+    "flashblocks_candidate_decoder": {
+      "requires": [
+        "gasUsed",
+        "transactions array (length only)"
+      ],
+      "candidate_from_value_line": 146
+    },
+    "radar_decoder_shape": {
+      "rejects_hash_only_transactions": true,
+      "error": "PreconfError::HashOnlyTransaction",
+      "line": 112,
+      "recorded_public_shape": [
+        {
+          "count": 4348,
+          "shape": "full_object"
+        }
+      ],
+      "consequence": "wiring EarlyRadar onto HeadReader::pending_raw() (which sends false) fails closed on every frame; fix belongs in a new provider adapter, not in the protocol assumptions"
+    },
+    "zero_site_methods": [
+      "eth_estimateGas",
+      "eth_gasPrice",
+      "eth_feeHistory",
+      "eth_getTransactionByHash",
+      "eth_syncing"
+    ],
+    "method_never_mentioned_anywhere": [
+      "eth_feeHistory",
+      "eth_syncing"
+    ],
+    "methods_grep_evidence": {
+      "eth_syncing_hits_across_crates": 0,
+      "eth_feeHistory_hits_across_crates": 0
+    },
+    "endpoint_type_labels": {
+      "enum_definition_line": 30,
+      "variants": [
+        "PublicHttpRpc",
+        "FlashblocksHttpRpc",
+        "Recorded"
+      ],
+      "production_constructions": {
+        "stage.rs": 348,
+        "sequence.rs": 1489
+      },
+      "flashblocks_variant_constructed_only_in_unit_tests": true
+    },
+    "state_advance_gates": {
+      "registry_vs_endpoint": {
+        "condition_line": 1114,
+        "error_return_line": 1118,
+        "block_end_line": 1126,
+        "file": "crates/pipeline/src/runner.rs"
+      },
+      "flashblocks_endpoint_vs_registry": {
+        "condition_line": 1235,
+        "error_return_line": 1236,
+        "block_end_line": 1240,
+        "file": "crates/pipeline/src/runner.rs",
+        "note": "this is the site logged as defect D1 (registry/node fields inverted)"
+      },
+      "shutdown_signal_line": 1033
+    },
+    "radar_wired_outside_live_crate": 0,
+    "isolation_test_functions": [
+      "repo",
+      "read",
+      "sources",
+      "code_lines",
+      "token_hits",
+      "local_packages",
+      "package_name",
+      "production_deps",
+      "closure",
+      "preconf_sources",
+      "the_build_graph_itself_is_the_isolation",
+      "no_radar_source_file_names_a_canonical_writer",
+      "no_canonical_source_file_names_the_radar",
+      "pool_state_has_no_source_field_and_core_has_no_flashblocks_variant",
+      "the_radar_types_carry_no_reserves_or_prices",
+      "the_canonical_bridge_is_identity_only_and_one_way",
+      "the_gate_has_exposure",
+      "struct_fields"
+    ],
+    "rpc_trace_records_endpoint_as": "keccak256 digest (rpc-…), never the URL",
+    "recorded_endpoint_digests": {
+      "canonical": "rpc-faa716cada04a9ef",
+      "flashblocks": "rpc-a9eb0c34d5519e0a",
+      "note": "§33: the two digests the capture wrote itself. This table recomputes neither, because recomputing one would need the URL it replaced."
+    },
+    "m8_6_request_census": {
+      "path": "data/evidence/m8/m8.6/rpc_surface.json",
+      "physical_http_attempts": 246,
+      "methods_traced": 9,
+      "new_rpc_calls": 0,
+      "runs": 3,
+      "caveat": "receipt method counts zero here because the census covers route runs, not the M6/M7/M10 submission runs"
+    },
+    "direct_sequencer_status": "BLOCKED — no direct-sequencer protocol on the GIWA testnet endpoint (crates/execution/src/giwa/sequencer_direct.rs:156)",
+    "getlogs_capacity_probe": {
+      "range_ok_blocks": 10001,
+      "range_rejected_http_400_blocks": 20000,
+      "deepest_block_tested": 7219032,
+      "evidence": "data/evidence/m9/m9.2/raw/probe-node-capacity.json"
+    }
+  },
+  "hardcoded_url_and_chain_id_scan": {
+    "guard_test": {
+      "file": "crates/cli/tests/no_execution.rs",
+      "test": "no_endpoint_and_no_chain_identity_is_baked_into_the_code",
+      "line": 300,
+      "file_walker": "production_files at line 33, production_code at line 78",
+      "rule": {
+        "files_scanned": 147,
+        "cut_marker": "\n#[cfg(test)]",
+        "comment_lines_dropped": true
+      }
+    },
+    "offending_url_literals_in_production_code": [],
+    "offending_chain_id_literals_in_production_code": [],
+    "same_literals_inside_cfg_test_blocks_of_src": {
+      "crates/chain/src/recorded.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 1
+      },
+      "crates/chain/src/rpc_trace.rs": {
+        "url_lines_in_cfg_test": 5,
+        "91342_occurrences": 4
+      },
+      "crates/chain/src/types.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 2
+      },
+      "crates/chain/src/ws.rs": {
+        "url_lines_in_cfg_test": 1,
+        "91342_occurrences": 0
+      },
+      "crates/core/src/identity.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 2
+      },
+      "crates/core/src/pool.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 1
+      },
+      "crates/execution/src/arbitrage.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 1
+      },
+      "crates/execution/src/gate.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 2
+      },
+      "crates/live/src/flashblocks.rs": {
+        "url_lines_in_cfg_test": 2,
+        "91342_occurrences": 0
+      },
+      "crates/pipeline/src/arbitrage.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 7
+      },
+      "crates/pipeline/src/config.rs": {
+        "url_lines_in_cfg_test": 1,
+        "91342_occurrences": 0
+      },
+      "crates/pipeline/src/diagnosis.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 18
+      },
+      "crates/pipeline/src/eth_call_semantics.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 3
+      },
+      "crates/pipeline/src/evidence.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 1
+      },
+      "crates/pipeline/src/latency.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 5
+      },
+      "crates/protocol/src/registry.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 4
+      },
+      "crates/protocol/src/signatures.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 1
+      },
+      "crates/protocol/src/v2.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 1
+      },
+      "crates/simulation/src/acquisition.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 1
+      },
+      "crates/simulation/src/gas.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 3
+      },
+      "crates/simulation/src/plan.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 3
+      },
+      "crates/simulation/src/request.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 3
+      },
+      "crates/simulation/src/result.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 2
+      },
+      "crates/simulation/src/route.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 3
+      },
+      "crates/simulation/src/state.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 1
+      },
+      "crates/state/src/snapshot.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 1
+      },
+      "crates/state/src/store.rs": {
+        "url_lines_in_cfg_test": 0,
+        "91342_occurrences": 3
+      }
+    },
+    "note": "unit tests inside src files do carry fixture URLs and the number 91342; the guard's cut at #[cfg(test)] is what makes the production claim true, and this file records both sides"
+  },
+  "config_model": {
+    "carrier": {
+      "file": "crates/pipeline/src/config.rs",
+      "fields": {
+        "rpc_url": {
+          "line": 152,
+          "declaration": "pub rpc_url: Option<String>,"
+        },
+        "ws_url": {
+          "line": 153,
+          "declaration": "pub ws_url: Option<String>,"
+        },
+        "flashblocks_url": {
+          "line": 157,
+          "declaration": "pub flashblocks_url: Option<String>,"
+        },
+        "canonical_source": {
+          "line": 158,
+          "declaration": "pub canonical_source: CanonicalSource,"
+        }
+      },
+      "never_defaulted_comment_line": 148
+    },
+    "cli_flags": {
+      "file": "crates/cli/src/lib.rs",
+      "rpc_url_arg_lines": [],
+      "ws_url_arg_lines": [],
+      "flashblocks_url_arg_lines": []
+    },
+    "env_name_occurrences_in_rs_literals": {
+      "GIWA_RPC_URL": 29,
+      "GIWA_WS_URL": 5,
+      "GIWA_FLASHBLOCKS_URL": 5,
+      "GIWA_FLASHBLOCKS_RPC_URL": 2,
+      "GIWA_EXECUTION_PRIVATE_KEY": 6,
+      "RETH_ROLLUP_SEQUENCERHTTP": 1
+    },
+    "environment_reads_in_production": [],
+    "private_key_env_constant": {
+      "file": "crates/execution/src/signer.rs",
+      "line": 24
+    },
+    "decision": "keep CLI/env → PipelineConfig → adapter constructor; add no TOML, no second config source, no endpoint defaults",
+    "section_5_requirements_met_now": 9,
+    "section_5_total_requirements": 9,
+    "residual_config_debt": "interval defaults are written twice (§16 D3); endpoint values are not"
+  },
+  "minimum_change_to_point_at_a_self_hosted_node": {
+    "production_lines_changed": 0,
+    "config_values": [
+      {
+        "name": "GIWA_RPC_URL / --rpc-url",
+        "from": "https://sepolia-rpc.giwa.io",
+        "to": "http://127.0.0.1:8545",
+        "status": "value change"
+      },
+      {
+        "name": "GIWA_WS_URL / --ws-url",
+        "from": "unset",
+        "to": "ws://127.0.0.1:8546",
+        "status": "only after V5 passes"
+      },
+      {
+        "name": "GIWA_FLASHBLOCKS_URL / --flashblocks-url",
+        "from": "public flashblocks endpoint",
+        "to": "leave unset",
+        "status": "only after V4 passes; a public value must never be relabelled local"
+      }
+    ],
+    "node_side_preconditions": [
+      "a reachable Sepolia L1 eth RPC and L1 beacon (OP_NODE_L1_ETH_RPC / OP_NODE_L1_BEACON)",
+      "the node finished syncing",
+      "submission path decided: RETH_ROLLUP_SEQUENCERHTTP still defaults to the public sequencer"
+    ],
+    "explicitly_not_added": [
+      "endpoint router",
+      "HA",
+      "load balancing",
+      "failover",
+      "new RPC calls",
+      "real-node deployment dependency"
+    ]
+  },
+  "recovery": {
+    "already_present": [
+      {
+        "mechanism": "connect timeout 20s",
+        "at": "crates/chain/src/rpc.rs:94"
+      },
+      {
+        "mechanism": "one retry, transport failures only",
+        "at": "crates/chain/src/rpc.rs:212"
+      },
+      {
+        "mechanism": "ws reconnect + fall back to http polling",
+        "at": "crates/live/src/websocket.rs:76,81-95"
+      },
+      {
+        "mechanism": "shutdown signal + queue drain",
+        "at": "crates/pipeline/src/runner.rs:1033"
+      },
+      {
+        "mechanism": "canonical source failure counter",
+        "at": "crates/pipeline/src/runner.rs:300"
+      },
+      {
+        "mechanism": "pending view regression recorded as anomaly",
+        "at": "crates/live/src/flashblocks.rs:305,316"
+      },
+      {
+        "mechanism": "submission vs inclusion kept separate",
+        "at": "crates/execution/src/submitter.rs:58+"
+      }
+    ],
+    "gaps": [
+      {
+        "id": "G1",
+        "gap": "no sync-readiness gate; eth_syncing is called nowhere",
+        "risk": "an unsynced local node reads as missing data, which §7 forbids turning into zero reserves"
+      },
+      {
+        "id": "G2",
+        "gap": "absent-versus-empty not distinguishable in the type system",
+        "risk": "Ok(None) is a legitimate candidate answer"
+      },
+      {
+        "id": "G3",
+        "gap": "no written rule for which state is invalidated by a node restart",
+        "risk": "stale GraphSnapshot / reservations"
+      },
+      {
+        "id": "G4",
+        "gap": "evidence records an endpoint digest but not whether it was local or public",
+        "risk": "two batches of evidence become indistinguishable"
+      }
+    ]
+  },
+  "defects_logged_not_fixed": [
+    {
+      "id": "D1",
+      "what": "flashblocks chain check swaps the registry and node roles in the message text; comparison itself is correct and still aborts",
+      "where": {
+        "site": "crates/pipeline/src/runner.rs:1235-1240",
+        "message_template": "crates/pipeline/src/error.rs:61-68",
+        "template_binds": {
+          "{registry}": "runner.rs:1119 (registry_chains.first(), correct)",
+          "{node}": "runner.rs:1120 (chain_id.0, correct)"
+        },
+        "swapped_at_flashblocks_site": {
+          "registry": "reader.chain_id().0 — the flashblocks endpoint's own answer",
+          "node": "chain_id.0 — the canonical endpoint's answer; neither side is the registry"
+        }
+      }
+    },
+    {
+      "id": "D2",
+      "what": "flashblocks env name split between production and tests",
+      "where": "GIWA_FLASHBLOCKS_URL vs GIWA_FLASHBLOCKS_RPC_URL",
+      "occurrences": [
+        5,
+        2
+      ]
+    },
+    {
+      "id": "D3",
+      "what": "interval defaults written twice (900 and 250)",
+      "where": "crates/cli/src/lib.rs:367,371 vs crates/live/src/source.rs:51, crates/live/src/flashblocks.rs:60"
+    },
+    {
+      "id": "D4",
+      "what": "endpoint kind hardcoded to PublicHttpRpc at both lane sites while the node's own sequencer env still points public",
+      "where": {
+        "stage.rs": 348,
+        "sequence.rs": 1489
+      }
+    },
+    {
+      "id": "D5",
+      "what": "radar decoder needs full transaction objects, shared pending read sends false",
+      "where": "crates/live/src/preconf_decode.rs:112 vs crates/chain/src/head.rs:133"
+    },
+    {
+      "id": "D6",
+      "what": "no sync gate; unsynced and absent collapse to MissingData/None",
+      "where": "crates/chain/src/rpc.rs:546->551 + crates/chain/src/head.rs:131->135"
+    }
+  ],
+  "not_verified_yet": [
+    {
+      "id": "V1",
+      "item": "the 13 read methods against a local canonical port",
+      "unlocks": "LOCAL_CANONICAL_RPC"
+    },
+    {
+      "id": "V2",
+      "item": "eth_syncing answer shapes on a local node",
+      "unlocks": "G1 implementation basis"
+    },
+    {
+      "id": "V3",
+      "item": "local pending block shape (gasUsed present? transactions hash or object?)",
+      "unlocks": "candidate source on a local endpoint"
+    },
+    {
+      "id": "V4",
+      "item": "whether local pending is flashblocks-aware at ~200ms cadence",
+      "unlocks": "LOCAL_FLASHBLOCKS"
+    },
+    {
+      "id": "V5",
+      "item": "eth_subscribe(newHeads/newBlockHeaders) locally (public endpoint answers -32603)",
+      "unlocks": "GIWA_WS_URL"
+    },
+    {
+      "id": "V6",
+      "item": "whether flashblocks-aware shares the canonical port",
+      "unlocks": "a fourth config field"
+    },
+    {
+      "id": "V7",
+      "item": "http.api vs ws.api namespace difference (miner is http-only)",
+      "unlocks": null
+    },
+    {
+      "id": "V8",
+      "item": "node behaviour when --flashblocks-url cannot connect",
+      "unlocks": "silent-degrade risk"
+    },
+    {
+      "id": "V9",
+      "item": "pending continuity across a node restart",
+      "unlocks": "G3 rule"
+    },
+    {
+      "id": "V10",
+      "item": "op-reth upstream flashblocks internals (getPayloadV5, post-Karst requirements)",
+      "unlocks": null,
+      "blocker": "GitHub API 401/403 in this sandbox"
+    },
+    {
+      "id": "V11",
+      "item": "whether the .env.sepolia flashblocks websocket host and the measured flashblocks rpc host are one service",
+      "unlocks": "the value for FLASHBLOCKS_WEBSOCKET_URL"
+    }
+  ],
+  "prohibitions_honoured": {
+    "no_production_code_modified": true,
+    "no_new_rpc_call": true,
+    "no_new_signing_or_broadcast": true,
+    "no_node_deployment_dependency_added": true,
+    "no_ha_or_multi_endpoint_manager_added": true,
+    "m9_3_m9_4_m10_m11_files_untouched": true,
+    "public_flashblocks_endpoint_not_treated_as_local_rpc": true,
+    "no_assumption_that_local_http_and_ws_share_a_port": true,
+    "no_unverified_item_marked_supported": true,
+    "no_existing_retry_or_timeout_removed": true,
+    "engine_api_and_jwt_not_exposed": true
+  },
+  "evidence_files_cited": {
+    "m5_method_matrix": {
+      "path": "data/evidence/m5/method-matrix.json",
+      "bytes": 20699,
+      "sha256": "f0516ea7875bb0ee1ffa7620e46d21ee6b968fdc4f7b2d518981d5893ce40e15"
+    },
+    "m8_6_rpc_surface": {
+      "path": "data/evidence/m8/m8.6/rpc_surface.json",
+      "bytes": 113216,
+      "sha256": "0605ddb71ccf5f0b36e01d88837aa91f64faeca05c25095e7fa78509553335c9"
+    },
+    "m9_2_node_capacity": {
+      "path": "data/evidence/m9/m9.2/raw/probe-node-capacity.json",
+      "bytes": 4365,
+      "sha256": "f3bd4e340f489872916e693939a4acb3d9adb7a5c695fca61fa748961d376376"
+    },
+    "m9_4_protocol": {
+      "path": "data/evidence/m9/m9.4/protocol.json",
+      "bytes": 5449,
+      "sha256": "ccbf9654dfcf3224cb8cd0b69c01e36502a6c8daf4b2960322096b4379df35cc"
+    },
+    "m7_sequencer_direct_probe": {
+      "path": "data/evidence/m7/probe-sequencer-direct.json",
+      "bytes": 114586,
+      "sha256": "ce9f4f5a1268e92db988aef0ee67e43dfe1ecf7775b8a11f39aeaf5014b1622b"
+    }
+  },
+  "recorded_endpoint_references_in_data_dir": {
+    "canonical_https": {
+      "url_shape": "https://sepolia-rpc.giwa.io",
+      "occurrences": 185,
+      "files": 104
+    },
+    "canonical_wss": {
+      "url_shape": "wss://sepolia-rpc.giwa.io",
+      "occurrences": 6,
+      "files": 6
+    },
+    "flashblocks_https": {
+      "url_shape": "https://sepolia-rpc-flashblocks.giwa.io",
+      "occurrences": 20,
+      "files": 10
+    },
+    "flashblocks_wss": {
+      "url_shape": "wss://sepolia-rpc-flashblocks.giwa.io/ws",
+      "occurrences": 4,
+      "files": 4
+    },
+    "sequencer_https": {
+      "url_shape": "https://sepolia-sequencer.giwa.io",
+      "occurrences": 4,
+      "files": 3
+    },
+    "flashblocks_env_wss": {
+      "url_shape": "wss://sepolia-flashblocks.giwa.io",
+      "occurrences": 4,
+      "files": 1
+    }
+  },
+  "recheck_commands": [
+    "git rev-parse HEAD",
+    "git diff --stat HEAD -- crates",
+    "cargo test -p evm-cli --test no_execution -- --test-threads=1",
+    "cargo test --workspace -- --test-threads=1   (serial: shared assembly scratch)",
+    "grep -rho eth_syncing --include='*.rs' crates | wc -l   (expect 0)",
+    "grep -rho eth_feeHistory --include='*.rs' crates | wc -l   (expect 0)",
+    "grep -rn 'PollingFrameSource\\|EarlyRadar\\|PreconfLink' crates/*/src | grep -v '^crates/live/'   (expect no output)",
+    "curl -fsSL https://raw.githubusercontent.com/giwa-io/node/main/.env.sepolia | shasum -a 256   (expect 9cf425b98ceee8f2882c7805c5b0ac79c7424bc572b1a29d136f863d596a2108; retry if you get the empty-string digest e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855)",
+    "curl -fsSL https://github.com/giwa-io/node/commits/main.atom | grep -m1 'Grit::Commit'   (expect 00985a5dba4ecf594d120072fd3557f095d3c51f)"
+  ]
+}
