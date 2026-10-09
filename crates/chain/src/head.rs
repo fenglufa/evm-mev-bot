@@ -53,7 +53,8 @@ pub trait HeadReader: Send {
         Ok(None)
     }
 
-    /// The `pending` header exactly as the provider returned it.
+    /// The `pending` header exactly as the provider returned it, with its
+    /// transactions as *hashes only* (`eth_getBlockByNumber(["pending", false])`).
     ///
     /// Only the candidate source uses it, and only because a pending block's
     /// *shape* is the observation (§30): which number, which hash, how many
@@ -61,6 +62,32 @@ pub trait HeadReader: Send {
     /// normalized [`ChainBlock`] would drop the two fields the claim rests on.
     async fn pending_raw(&mut self) -> Result<Option<Value>> {
         Ok(None)
+    }
+
+    /// The same `pending` block with its transactions spelled out
+    /// (`eth_getBlockByNumber(["pending", true])`).
+    ///
+    /// A second read rather than a bolder default, because the two consumers need
+    /// opposite payloads. §30's fact is how *many* transactions a pending view holds,
+    /// which `full: false` answers; the preconfirmation radar's fact is *which
+    /// contracts* moved, which a list of hashes cannot name — it refuses such a frame
+    /// outright. Measured on the committed M9.4 capture, where every transaction
+    /// entry of both windows is a full object: a pending read costs about seven times
+    /// the bytes of the same read with bare hashes. The per-window totals and the
+    /// integer ratio are in
+    /// `data/evidence/m12/b/pending-shape-compat.json` (`size_stats`), not here, so
+    /// this line cannot drift from them. Making the shared read heavy to serve the
+    /// radar would tax the candidate observer for bytes it never opens.
+    ///
+    /// A transport that has not been shown to answer this shape returns `Err` rather
+    /// than the light payload. That is deliberate: falling back to `full: false` would
+    /// let every frame arrive as a hash list, so the radar would emit nothing but
+    /// refusals while the transport looked healthy.
+    async fn pending_full_transactions(&mut self) -> Result<Option<Value>> {
+        Err(ChainError::MissingData(format!(
+            "{} transport has not been shown to answer eth_getBlockByNumber([\"pending\", true])",
+            self.transport()
+        )))
     }
 
     /// Ask whether a candidate hash is readable at all — the question §73 has to
@@ -131,6 +158,13 @@ impl HeadReader for HttpChainAdapter {
     async fn pending_raw(&mut self) -> Result<Option<Value>> {
         let raw = self
             .request_raw("eth_getBlockByNumber", json!(["pending", false]))
+            .await?;
+        Ok(if raw.is_null() { None } else { Some(raw) })
+    }
+
+    async fn pending_full_transactions(&mut self) -> Result<Option<Value>> {
+        let raw = self
+            .request_raw("eth_getBlockByNumber", json!(["pending", true]))
             .await?;
         Ok(if raw.is_null() { None } else { Some(raw) })
     }
@@ -207,6 +241,9 @@ impl HeadReader for WsHeadReader {
         self.header("pending").await
     }
 
+    /// `["pending", false]`, and deliberately no [`HeadReader::pending_full_transactions`]
+    /// override: every pending capture this repository holds was taken over HTTP, so the
+    /// trait's fail-closed default is the accurate answer for this transport.
     async fn pending_raw(&mut self) -> Result<Option<Value>> {
         let raw = self
             .client

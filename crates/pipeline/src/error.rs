@@ -66,6 +66,17 @@ pub enum PipelineError {
         node: u64,
         endpoint: String,
     },
+    /// M12-B §3's readiness gate, and the run ends here. Separate from `Config`
+    /// because it is not a bad selection — the node was asked and answered, and
+    /// what it said was "not yet", or nothing at all.
+    ///
+    /// The two are named apart for the reason §53 states for every class in this
+    /// file: continuing would mean reading an unsynced node's "this block is not
+    /// here yet" as the market's "there is nothing here", which is §8's failure
+    /// one milestone later, and §3 forbids reporting it as a session with no
+    /// opportunities.
+    #[error("the node at {endpoint} is not ready for this run: {detail}")]
+    NodeNotReady { endpoint: String, detail: String },
 }
 
 pub type Result<T> = std::result::Result<T, PipelineError>;

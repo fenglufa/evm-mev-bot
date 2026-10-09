@@ -25,4 +25,4 @@ pub use reads::{
     estimate_l1_fee, pool_state_row, pre_signing_envelope, read_pool, GiwaAssetReader, PoolState,
     GAS_PRICE_ORACLE,
 };
-pub use sequencer_direct::{parse_receipt, GiwaSequencerDirect};
+pub use sequencer_direct::{parse_receipt, receipt_provenance, GiwaSequencerDirect};

@@ -489,6 +489,12 @@ pub enum PreconfError {
     Decode(&'static str),
     #[error("payload transaction is not a full object (hash-only list), so the radar cannot name its target")]
     HashOnlyTransaction,
+    /// An entry that is neither a full object nor a bare 32-byte hash — a number, a
+    /// bool, an array, a string of the wrong length. Naming the actual kind matters:
+    /// reporting a `null` entry as "hash-only" describes a shape the payload never
+    /// had, and sends whoever reads the line looking for the wrong provider behaviour.
+    #[error("pending transactions[{index}] is a {kind}, which is neither a full transaction object nor a bare hash; fail-closed")]
+    UnexpectedTransactionEntry { index: usize, kind: &'static str },
     #[error("provider read failed: {0}")]
     Transport(String),
     /// §49: the only failure that ends a run *as an error* rather than as a report.

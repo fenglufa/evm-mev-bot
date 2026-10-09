@@ -1,6 +1,8 @@
 pub mod adapter;
+pub mod endpoint;
 pub mod error;
 pub mod head;
+pub mod readiness;
 pub mod recorded;
 pub mod rpc;
 pub mod rpc_trace;
@@ -8,14 +10,19 @@ pub mod types;
 pub mod ws;
 
 pub use adapter::ChainAdapter;
+pub use endpoint::{EndpointPurpose, EndpointRole};
 pub use error::{ChainError, Result};
 pub use head::HeadReader;
 pub use head::WsHeadReader;
+pub use readiness::{
+    decode_syncing, judge, HeadFreshnessPolicy, Readiness, ReadinessGate, SyncProgress, SyncStatus,
+    DEFAULT_CHECK_BUDGET,
+};
 pub use recorded::RecordedChainAdapter;
 pub use rpc::{chain_block_from_value, chain_log_from_value, HttpChainAdapter};
 pub use rpc_trace::{
-    describe_call, normalize_address, RpcAttempt, RpcCallContext, RpcCallDescription, RpcCallEvent,
-    RpcCallLabel, RpcTraceSink, RpcTraceSource, TracedCall, BREAKDOWN_UNAVAILABLE,
+    describe_call, endpoint_id, normalize_address, RpcAttempt, RpcCallContext, RpcCallDescription,
+    RpcCallEvent, RpcCallLabel, RpcTraceSink, RpcTraceSource, TracedCall, BREAKDOWN_UNAVAILABLE,
     CLASS_DECODE_FAILED, CLASS_HTTP_STATUS, CLASS_NODE_REJECTED, CLASS_NON_JSON, CLASS_OK,
     CLASS_SEND_FAILED, CONTEXT_AMBIGUOUS_CONCURRENT_CALLS, CONTEXT_AMBIGUOUS_RESTAMPED_MID_CALL,
     CONTEXT_NOTES, CONTEXT_NOT_STAMPED, DEDUP_KEY_PARAMS_UNREADABLE,

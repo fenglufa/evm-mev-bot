@@ -364,9 +364,7 @@ mod tests {
             l1_base_fee_scalar: Some(U256::from(1_368u64)),
             l1_blob_base_fee: Some(U256::from(62_294_004u64)),
             l1_blob_base_fee_scalar: Some(U256::from(801_949u64)),
-            provenance: "eth_getTransactionReceipt over the configured GIWA RPC URL \
-                         (public http rpc)"
-                .to_string(),
+            provenance: crate::giwa::receipt_provenance("https://cost-fixture.invalid"),
         }
     }
 

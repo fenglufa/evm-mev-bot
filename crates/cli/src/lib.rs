@@ -71,6 +71,7 @@ use std::str::FromStr;
 use std::time::Duration;
 
 use clap::{Parser, Subcommand, ValueEnum};
+use evm_chain::HeadFreshnessPolicy;
 use serde_json::{json, Value};
 
 use evm_chain::HttpChainAdapter;
@@ -159,6 +160,24 @@ pub struct LiveArgs {
     #[arg(long, env = "GIWA_FLASHBLOCKS_URL")]
     flashblocks_url: Option<String>,
 
+    /// M12-B §4: what the canonical endpoint is — `local_canonical_rpc` or
+    /// `public_canonical_rpc`, declared by whoever points the bot at it.
+    ///
+    /// Absent is `unknown`, which §4 lists as a legal state on purpose: this bot never
+    /// decides for itself that an address on `127.0.0.1` or port `8545` is a node the
+    /// operator runs, because a localhost proxy in front of a public service is exactly
+    /// the shape that guess would get wrong, and a wrong "local" in the session record is
+    /// a wrong claim about which provider the run depended on.
+    #[arg(long, env = "GIWA_RPC_ENDPOINT_PURPOSE")]
+    rpc_endpoint_purpose: Option<String>,
+
+    /// The same declaration for the candidate endpoint. A canonical declaration says
+    /// nothing here, and this flag takes no Flashblocks-capability inference from the URL
+    /// either — §4.1 forbids guessing that an endpoint speaks the preconf protocol from
+    /// its address, its port, or the word in its name.
+    #[arg(long, env = "GIWA_FLASHBLOCKS_ENDPOINT_PURPOSE")]
+    flashblocks_endpoint_purpose: Option<String>,
+
     /// First block to process: the run reads the head when this is absent (§7).
     #[arg(long)]
     start_block: Option<u64>,
@@ -244,6 +263,20 @@ pub struct LiveArgs {
     /// Gas ceiling. Absent means each block's own gas limit answers it.
     #[arg(long)]
     maximum_gas: Option<u64>,
+
+    /// M12-B §3: the block number this run's node must be at or near, supplied by the
+    /// operator. Absent — the default — means the run judges only what `eth_syncing`
+    /// answers and states plainly that it judged nothing about head freshness: a single
+    /// node cannot report its own lag, and §3 forbids asking a public endpoint to find
+    /// out. Give both this and `--allow-head-lag`, or give neither.
+    #[arg(long)]
+    require_head_reference: Option<u64>,
+
+    /// How many blocks behind `--require-head-reference` the node may be and still start.
+    /// Only meaningful beside the reference; a tolerance without a reference is a number
+    /// comparing nothing, and the parser refuses it rather than inventing a meaning.
+    #[arg(long)]
+    allow_head_lag: Option<u64>,
 
     /// M8.1 §31: record one fourteen-stage latency trace per finding this run reads,
     /// in a directory of its own beside the run's evidence. Off by default, and "off"
@@ -342,7 +375,22 @@ impl LiveArgs {
             registry_dirs,
             self.evidence_dir.clone(),
         );
+        config.readiness = head_freshness(
+            self.require_head_reference,
+            self.allow_head_lag,
+            &canonical_source,
+        )?;
         config.flashblocks_url = self.flashblocks_url.clone();
+        config.canonical_purpose = endpoint_purpose(
+            self.rpc_endpoint_purpose.as_deref(),
+            evm_chain::EndpointRole::Canonical,
+            self.rpc_url.as_deref(),
+        )?;
+        config.flashblocks_purpose = endpoint_purpose(
+            self.flashblocks_endpoint_purpose.as_deref(),
+            evm_chain::EndpointRole::Flashblocks,
+            self.flashblocks_url.as_deref(),
+        )?;
         config.canonical_source = canonical_source;
         config.start_block = self.start_block;
         config.max_blocks = self.max_blocks;
@@ -363,13 +411,23 @@ impl LiveArgs {
                 .simulation_workers
                 .unwrap_or(defaults.simulation_workers),
         };
+        // M12-A §16 D3: the interval defaults live in the `Default` impls of the two
+        // config structs (`evm_live::SourceConfig`, `evm_live::FlashblockConfig`). A
+        // second copy of the number here was free to drift from the one that actually
+        // shapes a run, so the fallback reads from that single source.
+        let source_defaults = SourceConfig::default();
         config.source = SourceConfig {
-            poll_interval_ms: self.poll_interval_ms.unwrap_or(900),
-            ..SourceConfig::default()
+            poll_interval_ms: self
+                .poll_interval_ms
+                .unwrap_or(source_defaults.poll_interval_ms),
+            ..source_defaults
         };
+        let flashblock_defaults = FlashblockConfig::default();
         config.flashblocks = FlashblockConfig {
-            poll_interval_ms: self.flashblock_poll_interval_ms.unwrap_or(250),
-            ..FlashblockConfig::default()
+            poll_interval_ms: self
+                .flashblock_poll_interval_ms
+                .unwrap_or(flashblock_defaults.poll_interval_ms),
+            ..flashblock_defaults
         };
         config.risk = RiskConfig {
             minimum_net_profit_wei: self.minimum_net_profit_wei,
@@ -377,6 +435,107 @@ impl LiveArgs {
         };
         Ok(config)
     }
+}
+
+/// The freshness rule this run's flags ask for.
+///
+/// Three answers, and no fourth: neither flag set is `NotJudged` — the default, and the
+/// honest one, because a node cannot report its own lag against the network and §3 of
+/// M12-B forbids asking a second endpoint to find out. One flag without the other is
+/// refused rather than completed by guesswork: a tolerance with no reference compares
+/// nothing, and a reference with no tolerance silently means "exactly this height",
+/// which is a stricter rule than anyone typed. And a replay is refused too — it contacts
+/// no node, so a requirement about a node's head has nothing to apply to, and letting it
+/// through would record a judgement that was never made.
+fn head_freshness(
+    reference: Option<u64>,
+    tolerance: Option<u64>,
+    source: &CanonicalSource,
+) -> std::result::Result<HeadFreshnessPolicy, String> {
+    match (reference, tolerance) {
+        (None, None) => Ok(HeadFreshnessPolicy::NotJudged),
+        (Some(_), None) => Err(
+            "--require-head-reference needs --allow-head-lag: a reference with no \
+             tolerance means the node must be at exactly that height, which is not what \
+             any flag says"
+                .to_string(),
+        ),
+        (None, Some(_)) => Err(
+            "--allow-head-lag needs --require-head-reference: a lag has to be measured \
+             against a number, and this run has not supplied one"
+                .to_string(),
+        ),
+        (Some(head), Some(lag)) => {
+            if head == 0 {
+                return Err(
+                    "--require-head-reference 0 asks nothing of the node: every head is at \
+                     or behind height zero, so the check would always pass"
+                        .to_string(),
+                );
+            }
+            if matches!(source, CanonicalSource::Replay { .. }) {
+                return Err(
+                    "a head freshness requirement describes a live node, and this run \
+                     replays a recording — it contacts nothing to judge"
+                        .to_string(),
+                );
+            }
+            Ok(HeadFreshnessPolicy::AgainstReference {
+                reference_head: head,
+                tolerance_blocks: lag,
+            })
+        }
+    }
+}
+
+/// M12-B §4's declaration, checked at the only place that can know what it means.
+///
+/// Three refusals, each protecting one of §4's rules:
+/// * a spelling that is not one of the five labels is configuration, not `unknown` — a
+///   typo falling through to the default would leave a run whose operator believed the
+///   endpoint was labelled and the session record saying nobody said;
+/// * a label about the other role (`local_flashblocks_rpc` on the canonical flag) is
+///   refused rather than re-pointed, because the evidence would then attribute a
+///   candidate endpoint's purpose to a node that serves blocks;
+/// * a declaration for an endpoint the run does not have is refused for the same reason
+///   §3 refuses a freshness rule with no head: it would be a statement about something
+///   this session never contacted.
+///
+/// Absent is `EndpointPurpose::Unknown`, and that is the whole of what this function
+/// invents — nothing here reads the URL.
+fn endpoint_purpose(
+    declared: Option<&str>,
+    role: evm_chain::EndpointRole,
+    endpoint: Option<&str>,
+) -> std::result::Result<evm_chain::EndpointPurpose, String> {
+    let Some(text) = declared else {
+        return Ok(evm_chain::EndpointPurpose::Unknown);
+    };
+    let purpose = evm_chain::EndpointPurpose::parse(text).ok_or_else(|| {
+        format!(
+            "{text} is not an endpoint purpose; the labels are {} — a purpose is declared, \
+             and no part of this bot reads one off a URL",
+            evm_chain::EndpointPurpose::LABELS.join(", ")
+        )
+    })?;
+    if let Some(declared_role) = purpose.role() {
+        if declared_role != role {
+            return Err(format!(
+                "{text} declares a {} endpoint, which is not what this flag describes: \
+                 it labels the {} one",
+                declared_role.label(),
+                role.label()
+            ));
+        }
+    }
+    if endpoint.is_none() {
+        return Err(format!(
+            "{text} describes an endpoint this run does not have: no {} URL was given, so \
+             there is nothing for the declaration to be about",
+            role.label()
+        ));
+    }
+    Ok(purpose)
 }
 
 /// §42's exact words for what this transaction is. They go into the record and into

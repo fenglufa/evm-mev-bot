@@ -930,7 +930,12 @@ pub fn bounded_detail(text: &str) -> String {
 /// endpoint name the same id, and no evidence file ever holds the URL. §8 asks a question
 /// about whether reads share a provider; that is answerable by comparison, and comparison
 /// does not require publication.
-fn endpoint_id(url: &str) -> String {
+///
+/// Public since M12-B §4.2: the session record now names an endpoint's purpose next to
+/// its URL, and the digest has to sit beside both so a reader can tell "these two lines
+/// are the same provider" without a second rule for hashing it. One function, one shape —
+/// a second implementation is how an evidence file ends up with two ids for one node.
+pub fn endpoint_id(url: &str) -> String {
     let hash = alloy_primitives::keccak256(url.as_bytes());
     format!("rpc-{}", &hash.to_string()[2..18])
 }

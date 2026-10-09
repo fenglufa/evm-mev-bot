@@ -33,6 +33,26 @@ const ZERO_STATE_ROOT_DETAIL: &str =
     "stateRoot is the all-zero placeholder; this endpoint supplies no state credential at a pending view";
 const NO_WIRE_INDEX_DETAIL: &str =
     "the pending payload has no frame index field of any kind (measured field set: the standard block object)";
+/// A payload that *names* an index-like key is a different finding from one that names
+/// nothing: the key is still not mapped to a frame index (§8), and repeating "no frame
+/// index field of any kind" over it would state something false about the payload.
+const UNMAPPED_WIRE_INDEX_DETAIL: &str =
+    "the payload names an index-like key (`index` or `sequence`) that this decoder does not map, so the frame index stays local (§8)";
+
+/// §8: the frame index is assigned in read order and never read off the wire. An
+/// unknown index-like key is recorded as present — that is the finding — and still
+/// yields no value.
+fn wire_index_field(object: &serde_json::Map<String, Value>) -> Field<u64> {
+    let named = object.contains_key("index") || object.contains_key("sequence");
+    Field::Unknown {
+        key_present: named,
+        detail: if named {
+            UNMAPPED_WIRE_INDEX_DETAIL
+        } else {
+            NO_WIRE_INDEX_DETAIL
+        },
+    }
+}
 
 fn hex_u64(value: Option<&Value>) -> Option<u64> {
     let text = value?.as_str()?;
@@ -103,6 +123,18 @@ fn selector_of(input: Option<&Value>) -> Field<[u8; 4]> {
     Field::Known(selector)
 }
 
+/// The JSON kind of a payload value, in the words a diagnostic line prints.
+fn json_kind(value: &Value) -> &'static str {
+    match value {
+        Value::Null => "null",
+        Value::Bool(_) => "boolean",
+        Value::Number(_) => "number",
+        Value::String(_) => "string",
+        Value::Array(_) => "array",
+        Value::Object(_) => "object",
+    }
+}
+
 /// One entry of the pending block's `transactions` array.
 ///
 /// On the endpoint measured in M9.4 the array holds **full transaction objects**
@@ -111,8 +143,20 @@ fn selector_of(input: Option<&Value>) -> Field<[u8; 4]> {
 /// thing with less detail" — it cannot name a target, so the frame is refused with
 /// [`PreconfError::HashOnlyTransaction`] rather than half-decoded (§24's
 /// fail-closed rule, and the reason a `false` affected-pool count means something).
-fn transaction_from_value(value: &Value) -> Result<PreconfTransaction, PreconfError> {
-    let object = value.as_object().ok_or(PreconfError::HashOnlyTransaction)?;
+///
+/// The refusal is split by what the entry actually is. A bare 32-byte hash is the
+/// `full: false` answer — a shape that exists, with a name that tells the reader which
+/// parameter to change. Anything else (a number, an array, a truncated string) is not
+/// that shape, and calling it "hash-only" would send whoever reads the line looking for
+/// provider behaviour the provider never showed.
+fn transaction_from_value(value: &Value, index: usize) -> Result<PreconfTransaction, PreconfError> {
+    let object = value.as_object().ok_or_else(|| match value {
+        Value::String(text) if text.parse::<B256>().is_ok() => PreconfError::HashOnlyTransaction,
+        other => PreconfError::UnexpectedTransactionEntry {
+            index,
+            kind: json_kind(other),
+        },
+    })?;
     let hash = object
         .get("hash")
         .and_then(Value::as_str)
@@ -221,18 +265,15 @@ pub fn frame_from_pending_value(
         .and_then(Value::as_array)
         .ok_or(PreconfError::Decode("transactions"))?;
     let mut transactions = Vec::with_capacity(transactions_value.len());
-    for entry in transactions_value {
-        transactions.push(transaction_from_value(entry)?);
+    for (index, entry) in transactions_value.iter().enumerate() {
+        transactions.push(transaction_from_value(entry, index)?);
     }
     Ok(PreconfirmationFrame {
         identity: PreconfIdentity {
             chain_id,
             block_number: number,
             local_frame_sequence,
-            wire_index: Field::Unknown {
-                key_present: object.contains_key("index") || object.contains_key("sequence"),
-                detail: NO_WIRE_INDEX_DETAIL,
-            },
+            wire_index: wire_index_field(object),
             parent_hash,
             view_hash,
         },

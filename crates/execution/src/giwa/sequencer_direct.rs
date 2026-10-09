@@ -414,7 +414,7 @@ impl TransactionSubmitter for GiwaSequencerDirect {
         }
         Ok(Some(parse_receipt(
             self.chain_id,
-            self.endpoint,
+            self.url(),
             &raw,
             &format!("{transaction_hash:#x}"),
         )?))
@@ -427,13 +427,16 @@ impl TransactionSubmitter for GiwaSequencerDirect {
 /// additions are optional, because they exist only on this chain's receipts and an
 /// absent one is a fact about the endpoint rather than a decode failure.
 ///
+/// `endpoint_url` names the node the read went over, which is what the provenance line
+/// records; see [`receipt_provenance`] for why that is a URL rather than an endpoint kind.
+///
 /// This is public because it is the endpoint contract rather than a step of the ladder:
 /// §41's evidence is a receipt the node actually answered with, and a test that reads
 /// that answer has to turn it into a `Receipt` the same way the live lane does — not with
 /// a second decoder that could drift from the first.
 pub fn parse_receipt(
     chain_id: ChainId,
-    endpoint: EndpointKind,
+    endpoint_url: &str,
     raw: &Value,
     context: &str,
 ) -> Result<Receipt> {
@@ -513,12 +516,27 @@ pub fn parse_receipt(
         l1_base_fee_scalar: optional_big("l1BaseFeeScalar")?,
         l1_blob_base_fee: optional_big("l1BlobBaseFee")?,
         l1_blob_base_fee_scalar: optional_big("l1BlobBaseFeeScalar")?,
-        provenance: format!(
-            "eth_getTransactionReceipt over {} ({})",
-            "the configured GIWA RPC URL",
-            endpoint.name()
-        ),
+        provenance: receipt_provenance(endpoint_url),
     })
+}
+
+/// The provenance line a receipt read carries.
+///
+/// §9's D4. Until M12-B this sentence ended with the endpoint *kind* — `public_http_rpc`
+/// — which is the submission-side word for a class of provider. A class is the wrong
+/// thing for a read: the same adapter answers `eth_sendRawTransaction` and
+/// `eth_getTransactionReceipt`, so repointing the lane at a local node relabelled every
+/// read in the evidence "public" while nothing about the read had changed. The digest of
+/// the URL the read went over says which endpoint answered and nothing about who runs it,
+/// so a local node gets its own digest and no word in the line asserts either class.
+///
+/// The submission label is untouched on purpose: there the class *is* the fact §53 asks
+/// for, and the public sequencer endpoint is still the one in use.
+pub fn receipt_provenance(endpoint_url: &str) -> String {
+    format!(
+        "eth_getTransactionReceipt over the configured GIWA RPC URL (endpoint {})",
+        evm_chain::endpoint_id(endpoint_url)
+    )
 }
 
 /// A chain read that failed. §39 keeps this distinct from a submission answer: a read

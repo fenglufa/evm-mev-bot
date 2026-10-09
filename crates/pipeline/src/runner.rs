@@ -35,7 +35,10 @@ use tokio::sync::mpsc;
 use tokio::sync::mpsc::error::TrySendError;
 use tokio::task::JoinHandle;
 
-use evm_chain::{ChainAdapter, HttpChainAdapter, RecordedChainAdapter};
+use evm_chain::{
+    ChainAdapter, EndpointPurpose, HeadFreshnessPolicy, HttpChainAdapter, Readiness, ReadinessGate,
+    RecordedChainAdapter,
+};
 use evm_core::BlockNumber;
 use evm_execution::{AttemptProvenance, ExecutionStage, Freshness, SenderFunding};
 use evm_live::{
@@ -918,8 +921,8 @@ fn simulation_line(outcome: &SimOutcome) -> Value {
 /// Where the canonical blocks come from, and what reads their state.
 ///
 /// Returns the adapter every block and state read goes through, the chain id the
-/// endpoint itself reported, the source that will announce blocks, and the number
-/// to move forward from (§7).
+/// endpoint itself reported, the source that will announce blocks, the number to
+/// move forward from (§7), and what M12-B §3's readiness gate heard.
 async fn build_canonical(
     config: &PipelineConfig,
 ) -> Result<(
@@ -927,6 +930,7 @@ async fn build_canonical(
     evm_core::ChainId,
     Box<dyn MarketDataSource>,
     BlockNumber,
+    ReadinessFacts,
 )> {
     match &config.canonical_source {
         CanonicalSource::WebSocket => {
@@ -952,14 +956,28 @@ async fn build_canonical(
             // §7's head comes from this adapter rather than from the socket: the
             // subscription is opened inside `run`, so asking it for a number now
             // would be a second path to a fact the HTTP read already owns.
-            let start_after = match config.start_block {
-                Some(number) => BlockNumber(number),
-                None => http.latest_block().await.map_err(PipelineError::Chain)?,
+            // The head is also the only block number the freshness check has, so a
+            // run that pinned its start has not read one and §3's fail-closed rule
+            // applies to it.
+            let (start_after, observed_head) = match config.start_block {
+                Some(number) => (BlockNumber(number), None),
+                None => {
+                    let head = http.latest_block().await.map_err(PipelineError::Chain)?;
+                    (head, Some(head.0))
+                }
             };
+            let readiness =
+                gate_readiness(&config.readiness, &http, rpc_url, observed_head).await?;
             let source = WebSocketSource::connect(ws_url, config.source)
                 .await
                 .map_err(PipelineError::Live)?;
-            Ok((Arc::new(http), chain_id, Box::new(source), start_after))
+            Ok((
+                Arc::new(http),
+                chain_id,
+                Box::new(source),
+                start_after,
+                readiness,
+            ))
         }
         CanonicalSource::HttpPoll => {
             let rpc_url = config.rpc_url.as_deref().ok_or_else(|| {
@@ -976,11 +994,16 @@ async fn build_canonical(
             let source =
                 PollingSource::new(http.clone(), chain_id, SourceKind::HttpPoll, config.source);
             let mut source = Box::new(source);
-            let start_after = match config.start_block {
-                Some(number) => BlockNumber(number),
-                None => source.head().await.map_err(PipelineError::Live)?,
+            let (start_after, observed_head) = match config.start_block {
+                Some(number) => (BlockNumber(number), None),
+                None => {
+                    let head = source.head().await.map_err(PipelineError::Live)?;
+                    (head, Some(head.0))
+                }
             };
-            Ok((Arc::new(http), chain_id, source, start_after))
+            let readiness =
+                gate_readiness(&config.readiness, &http, rpc_url, observed_head).await?;
+            Ok((Arc::new(http), chain_id, source, start_after, readiness))
         }
         CanonicalSource::Replay { directory } => {
             // No endpoint to ask, so the directory's own blocks are the authority
@@ -1002,8 +1025,131 @@ async fn build_canonical(
                 Some(number) => BlockNumber(number),
                 None => BlockNumber(first.0.saturating_sub(1)),
             };
-            Ok((Arc::new(adapter), chain_id, Box::new(source), start_after))
+            // The gate is not run, and that is reported as an absence rather than as a
+            // verdict: a recording cannot be syncing, so there was nothing to check and
+            // no `false` to pretend it answered (§3's last rule about unverified state).
+            Ok((
+                Arc::new(adapter),
+                chain_id,
+                Box::new(source),
+                start_after,
+                ReadinessFacts::not_asked(),
+            ))
         }
+    }
+}
+
+/// What the readiness gate asked and what it heard, for the session record.
+///
+/// §3 asks for the actual call count, and this is the only honest place to get it: the
+/// gate's own tally, not an inference from how long the run took. `verdict: None` is the
+/// replay's answer — no node was asked, so there is no verdict, and writing `false` or
+/// `0 ms` there would be the "nothing measured reported as a measurement" error §9 of
+/// M8.2's rules already forbids elsewhere.
+#[derive(Clone, Debug)]
+pub struct ReadinessFacts {
+    verdict: Option<Readiness>,
+    asks: usize,
+}
+
+impl ReadinessFacts {
+    /// A run that has no node to ask.
+    const fn not_asked() -> Self {
+        Self {
+            verdict: None,
+            asks: 0,
+        }
+    }
+
+    /// Why the gate held the run, or `None` when it did not hold it.
+    fn withheld(&self) -> Option<String> {
+        self.verdict.as_ref().and_then(Readiness::withheld_because)
+    }
+
+    /// The `status.jsonl` line: the node's answer, the policy it was judged under, and
+    /// what it cost. Kept to the three facts §3 names, because the line is written from
+    /// values this run already holds and asks the node for nothing (§3's no-extra-RPC
+    /// rule for evidence).
+    fn describe(&self, policy: &HeadFreshnessPolicy) -> Value {
+        json!({
+            "readiness": {
+                "verdict": self.verdict,
+                "eth_syncing_asks": self.asks,
+                "head_freshness_policy": policy,
+                "detail": match &self.verdict {
+                    None => "this run contacts no node, so readiness was never asked",
+                    Some(Readiness::Ready) => "`false` means the node reports no sync in \
+                                               progress; it is not a claim that the node is \
+                                               at the network head",
+                    Some(_) => "the run was refused before a block was read",
+                },
+            }
+        })
+    }
+}
+
+/// M12-B §3's readiness gate: ask the node whether it is ready, and refuse the run if
+/// it is not.
+///
+/// The one call site is [`build_canonical`], which runs before the registry is read and
+/// long before any block, header or state read happens. That ordering is what makes
+/// §3's 「禁止进入会产生真实执行动作的阶段」 true by construction: a held run has no
+/// session, no event loop, and no execution lane — the lane is connected further down
+/// `run`, after this returns.
+///
+/// The recheck budget lives in [`ReadinessGate`]. This repository has one defined
+/// recovery point per process: a source that fails mid-run ends the session
+/// (`canonical_source_failed_during_run`) rather than restarting inside it, so the
+/// recheck is the next `run`, and nothing asks `eth_syncing` per market event.
+async fn gate_readiness(
+    policy: &HeadFreshnessPolicy,
+    http: &HttpChainAdapter,
+    endpoint: &str,
+    observed_head: Option<u64>,
+) -> Result<ReadinessFacts> {
+    let mut gate = ReadinessGate::new(*policy);
+    let verdict = gate.check(http, observed_head).await;
+    let facts = ReadinessFacts {
+        verdict: Some(verdict),
+        asks: gate.checks(),
+    };
+    match facts.withheld() {
+        // §3's failure must not degrade into "a session with no opportunities": this is
+        // an error out of `run`, and the words are the node's own answer rather than a
+        // guess about why it answered that way.
+        Some(detail) => Err(PipelineError::NodeNotReady {
+            endpoint: endpoint.to_string(),
+            detail,
+        }),
+        None => Ok(facts),
+    }
+}
+
+/// M12-B §4's labels in the one sentence an evidence reader needs with them: that a
+/// purpose here is a *declaration*, and what the run did not do.
+///
+/// Written as a sentence rather than left to the enum because the distinction §4 exists
+/// to protect is between three things an auditor can easily collapse: that a label says
+/// the operator told us so, that a label says nobody told us anything, and that a label
+/// was measured off the node. Only the first is ever true of this field, and `unknown`
+/// is the second, never a quiet third.
+fn endpoint_purpose_detail(canonical: EndpointPurpose, flashblocks: EndpointPurpose) -> String {
+    format!(
+        "canonical: {}; flashblocks: {} — every label here is what the operator declared \
+         with `--rpc-endpoint-purpose` or `--flashblocks-endpoint-purpose`. `not declared` \
+         is an absence, not a kind of endpoint: nothing in this run inferred a purpose from \
+         a host, a port or a URL string, and nothing verified one against the node it \
+         spoke to.",
+        purpose_words(canonical),
+        purpose_words(flashblocks),
+    )
+}
+
+/// A label, or the words that say there is none.
+fn purpose_words(purpose: EndpointPurpose) -> &'static str {
+    match purpose {
+        EndpointPurpose::Unknown => "not declared",
+        declared => declared.label(),
     }
 }
 
@@ -1100,7 +1246,7 @@ pub async fn run(config: &PipelineConfig) -> Result<SessionReport> {
                 .to_string(),
         ));
     }
-    let (chain, chain_id, canonical, start_after) = build_canonical(config).await?;
+    let (chain, chain_id, canonical, start_after, readiness) = build_canonical(config).await?;
 
     // §46: the registry attests pools for a chain, the endpoint is on a chain, and
     // nothing downstream can notice the two disagreeing.
@@ -1128,7 +1274,7 @@ pub async fn run(config: &PipelineConfig) -> Result<SessionReport> {
 
     // Where findings get their state. A live run has one answer — the node it is
     // reading blocks from — and only a run pointed at a recording has the other.
-    let engine = match &config.state_dump {
+    let mut engine = match &config.state_dump {
         None => MarketEngine::new(chain, &registry, config, clock),
         Some(file) => {
             let dump = StateDump::from_file(file).map_err(|error| PipelineError::StateDump {
@@ -1186,11 +1332,19 @@ pub async fn run(config: &PipelineConfig) -> Result<SessionReport> {
     // the previous run instead of appending to its lines and overwriting its
     // summary files (§48 asks for a session record, and two sessions in one file
     // is neither).
-    let evidence = EvidenceWriter::open(
+    let mut evidence = EvidenceWriter::open(
         &config.evidence_dir.join(&session_id),
         &session_id,
         config.execution.is_some(),
     )?;
+    // §3's 「记录实际调用次数」: the gate's own tally goes into the session record and
+    // the metrics of the run that made it, from values already in hand. Nothing here
+    // asks the node again — an evidence write that cost an RPC would be exactly the
+    // per-event call §3 forbids.
+    evidence.line(EvidenceFile::Status, &readiness.describe(&config.readiness))?;
+    engine
+        .metrics_mut()
+        .add("readiness.eth_syncing_asks", readiness.asks as u64);
     // M8.1's traces get their own directory tree for the same §48 reason and the same
     // one-directory-per-session rule, and beside rather than inside: a baseline file
     // never joins the files a run's decisions were read from, so adding telemetry
@@ -1233,9 +1387,13 @@ pub async fn run(config: &PipelineConfig) -> Result<SessionReport> {
             .await
             .map_err(PipelineError::Chain)?;
         if reader.chain_id() != chain_id {
+            // Same roles as the registry gate above: `registry` is the chain this run
+            // has already attested, `node` is what *this* endpoint answered to
+            // `eth_chainId`. M12-A §16 D1 recorded the two being printed the other way
+            // round; the comparison itself was always correct and still aborts here.
             return Err(PipelineError::ChainMismatch {
-                registry: reader.chain_id().0,
-                node: chain_id.0,
+                registry: chain_id.0,
+                node: reader.chain_id().0,
                 endpoint: endpoint.clone(),
             });
         }
@@ -1494,6 +1652,31 @@ impl Session<'_> {
                 "rpc_url": self.config.rpc_url,
                 "ws_url": self.config.ws_url,
                 "flashblocks_url": self.config.flashblocks_url,
+                // M12-B §4: what the operator declared each endpoint to be, sitting next
+                // to the URL it describes and never derived from it. The two purposes are
+                // per *role*, not per URL: a run can reach its canonical state over HTTP
+                // and its heads over WebSocket, and the declaration says who serves that
+                // role while the digests below say whether the two are one provider.
+                // `unknown` is a recorded absence, not a guess — a public node is never
+                // here as a local one, and a silent configuration is never here as public
+                // either.
+                "rpc_purpose": self.config.canonical_purpose,
+                "flashblocks_purpose": self.config.flashblocks_purpose,
+                // Identity and digest in separate keys (§4.2): the URL says which endpoint
+                // this session spoke to, the digest is what the RPC trace lines call it,
+                // and one rule computes both so the two cannot disagree about whether two
+                // lines name one provider.
+                "rpc_endpoint_id": self.config.rpc_url.as_deref().map(evm_chain::endpoint_id),
+                "ws_endpoint_id": self.config.ws_url.as_deref().map(evm_chain::endpoint_id),
+                "flashblocks_endpoint_id": self
+                    .config
+                    .flashblocks_url
+                    .as_deref()
+                    .map(evm_chain::endpoint_id),
+                "purpose_detail": endpoint_purpose_detail(
+                    self.config.canonical_purpose,
+                    self.config.flashblocks_purpose,
+                ),
             },
             // §63: a run that read its state from a recording says so, in the
             // same file that says which blocks it replayed.

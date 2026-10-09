@@ -76,6 +76,13 @@ pub trait FrameSource: Send {
 
 /// The official-endpoint source: the same [`HeadReader`] the M5 candidate source
 /// already uses, and therefore no new HTTP machinery and no new RPC method.
+///
+/// It asks for [`HeadReader::pending_full_transactions`] — `full: true` on the method
+/// the candidate path already calls — because the radar's decoder names contracts, and
+/// a pending block whose transactions are bare hashes names nothing
+/// (`PreconfError::HashOnlyTransaction`). M12-B §6 chose the read shape over the
+/// decoder for that reason; the shared `pending_raw()` stayed on `full: false` so the
+/// candidate observer keeps paying a fifth of the bytes for the shape fact it reads.
 pub struct PollingFrameSource<R> {
     reader: R,
     endpoint_id: String,
@@ -102,7 +109,7 @@ impl<R: HeadReader + Send> FrameSource for PollingFrameSource<R> {
 
     async fn next_view(&mut self) -> Result<Option<Value>, PreconfError> {
         self.reader
-            .pending_raw()
+            .pending_full_transactions()
             .await
             .map_err(|error| PreconfError::Transport(error.to_string()))
     }
@@ -209,6 +216,31 @@ mod tests {
             Ok(None)
         }
 
+        async fn pending_full_transactions(&mut self) -> evm_chain::Result<Option<Value>> {
+            Ok(Some(self.0.clone()))
+        }
+    }
+
+    /// A reader that only ever answers the light shape, `["pending", false]`.
+    struct LightOnlyReader(Value);
+
+    #[async_trait]
+    impl HeadReader for LightOnlyReader {
+        fn transport(&self) -> &'static str {
+            "stub-light-only"
+        }
+
+        async fn head(&mut self) -> evm_chain::Result<evm_core::BlockNumber> {
+            Ok(evm_core::BlockNumber(0))
+        }
+
+        async fn block_at(
+            &mut self,
+            _number: evm_core::BlockNumber,
+        ) -> evm_chain::Result<Option<evm_chain::ChainBlock>> {
+            Ok(None)
+        }
+
         async fn pending_raw(&mut self) -> evm_chain::Result<Option<Value>> {
             Ok(Some(self.0.clone()))
         }
@@ -233,6 +265,28 @@ mod tests {
                 .expect("refusal is an answer, not an error")
                 .is_none(),
             "§34: the live path reads no extra method"
+        );
+    }
+
+    /// §6's choice, witnessed as a refusal rather than as prose: a transport that has
+    /// not been shown to answer `full: true` does not get to feed the radar the light
+    /// payload instead. A silent fallback would keep the run alive and fill it with
+    /// `HashOnlyTransaction` refusals that read as a provider problem.
+    #[tokio::test]
+    async fn a_reader_that_only_answers_the_light_shape_is_refused_not_downgraded() {
+        let mut source = PollingFrameSource::new(
+            LightOnlyReader(json!({"number": "0x1", "transactions": ["0xaa"]})),
+            "rpc-2222222222222222".to_string(),
+        );
+        let error = source
+            .next_view()
+            .await
+            .expect_err("an unprobed read shape is a refusal, not a lighter answer");
+        assert!(matches!(error, PreconfError::Transport(_)), "{error}");
+        let text = error.to_string();
+        assert!(
+            text.contains("stub-light-only") && text.contains("\"pending\", true"),
+            "the refusal has to name both the transport and the params it never answered: {text}"
         );
     }
 

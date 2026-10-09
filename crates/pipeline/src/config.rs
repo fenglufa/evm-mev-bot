@@ -155,6 +155,22 @@ pub struct PipelineConfig {
     /// flashblock source runs, and the report says so rather than showing an
     /// empty table.
     pub flashblocks_url: Option<String>,
+    /// M12-B §4: what the operator declared each endpoint to be, or `Unknown` when
+    /// nobody said.
+    ///
+    /// A pair of declarations rather than one, because the two endpoints answer
+    /// different questions in evidence and can genuinely differ: a run can read
+    /// canonical blocks from a node on the same machine while its candidate feed
+    /// comes from a service. Neither is derived from the other, and neither is
+    /// derived from the URL — [`evm_chain::EndpointPurpose`] has no function that
+    /// takes one, which is §4.1's rule held at the type rather than a comment
+    /// asking a caller to be careful.
+    ///
+    /// The default is `Unknown` on purpose (§4.6): a run that was given an endpoint
+    /// and no declaration records the absence, and no path through this type turns
+    /// silence into "local".
+    pub canonical_purpose: evm_chain::EndpointPurpose,
+    pub flashblocks_purpose: evm_chain::EndpointPurpose,
     pub canonical_source: CanonicalSource,
     /// The attested pools, in the order they are merged. A run without a registry
     /// has no market: a log cannot promote an address to a pool, only the registry
@@ -175,6 +191,21 @@ pub struct PipelineConfig {
     pub latency_dir: Option<PathBuf>,
     /// §7: `None` is "the head at connect time, then forward from it".
     pub start_block: Option<u64>,
+    /// M12-B §3: what this run requires of its node before it reads a block.
+    ///
+    /// The default is the explicit one —
+    /// [`HeadFreshnessPolicy::NotJudged`] — and it is the default because §3
+    /// forbids the alternative: a head-lag tolerance with no external reference
+    /// would be a number this repository invented to look like a measurement. A
+    /// run that wants the check supplies both a reference height and a tolerance
+    /// (`--require-head-reference` with `--allow-head-lag`), and giving one
+    /// without the other is refused as configuration rather than silently
+    /// half-judged.
+    ///
+    /// A replay names no value here that matters: it has no node to ask, so the
+    /// gate is not run and the session record says so (§3's "not asked", not
+    /// "ready").
+    pub readiness: evm_chain::HeadFreshnessPolicy,
     /// Stop after this many canonical blocks, for a run with a fixed sample.
     pub max_blocks: Option<u64>,
     pub duration: Duration,
@@ -232,6 +263,8 @@ impl PipelineConfig {
             rpc_url: rpc_url.map(str::to_string),
             ws_url: ws_url.map(str::to_string),
             flashblocks_url: None,
+            canonical_purpose: evm_chain::EndpointPurpose::Unknown,
+            flashblocks_purpose: evm_chain::EndpointPurpose::Unknown,
             canonical_source: match ws_url {
                 Some(_) => CanonicalSource::WebSocket,
                 None => CanonicalSource::HttpPoll,
@@ -240,6 +273,7 @@ impl PipelineConfig {
             evidence_dir,
             latency_dir: None,
             start_block: None,
+            readiness: evm_chain::HeadFreshnessPolicy::NotJudged,
             max_blocks: None,
             duration: Duration::from_secs(60),
             queues: QueueConfig::default(),
