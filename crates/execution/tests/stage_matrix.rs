@@ -18,6 +18,7 @@
 //! over, so "no bytes left the process" is a number rather than a hope.
 
 use std::collections::{HashMap, VecDeque};
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
@@ -129,6 +130,10 @@ struct Scripted {
     /// What `eth_getBlockByNumber` holds; an unlisted height is a block the chain does not
     /// have.
     blocks: HashMap<u64, B256>,
+    /// How many times a run asked this endpoint which block one height is. M12-B §5's rule
+    /// is that the answer is never carried over, so the count belongs to the attempt, not to
+    /// the stage.
+    binding_reads: AtomicUsize,
     answers: Mutex<VecDeque<SubmissionOutcome>>,
     sent: Mutex<Vec<Vec<u8>>>,
     receipts: Mutex<VecDeque<Option<Receipt>>>,
@@ -146,6 +151,7 @@ impl Scripted {
             balance: U256::from(BALANCE_WEI),
             nonce: 0,
             blocks: HashMap::from([(BLOCK, pinned_hash()), (MINED_BLOCK, mined_block_hash())]),
+            binding_reads: AtomicUsize::new(0),
             answers: Mutex::new(VecDeque::new()),
             sent: Mutex::new(Vec::new()),
             receipts: Mutex::new(VecDeque::new()),
@@ -183,8 +189,21 @@ impl Scripted {
         }
     }
 
+    /// The node no longer holds `number` at all — the §5 case of a restart that has not
+    /// yet caught back up to the height an older decision was pinned to.
+    fn without_height(self, number: u64) -> Self {
+        let mut blocks = self.blocks.clone();
+        blocks.remove(&number);
+        Self { blocks, ..self }
+    }
+
     fn sent_count(&self) -> usize {
         self.sent.lock().expect("an unlocked counter").len()
+    }
+
+    /// How many times this endpoint was asked which block a height is.
+    fn binding_reads(&self) -> usize {
+        self.binding_reads.load(Ordering::SeqCst)
     }
 }
 
@@ -233,6 +252,7 @@ impl NonceSource for Scripted {
 #[async_trait]
 impl ChainReader for Scripted {
     async fn block_hash_at(&self, number: BlockNumber) -> evm_execution::Result<Option<B256>> {
+        self.binding_reads.fetch_add(1, Ordering::SeqCst);
         Ok(self.blocks.get(&number.0).copied())
     }
 
@@ -297,6 +317,12 @@ impl TransactionSubmitter for Scripted {
 /// and the count that proves "nothing was sent" has to be read from outside.
 fn assemble(endpoint: Scripted, mode: ExecutionMode) -> (ExecutionStage, Arc<Scripted>) {
     let scripted = Arc::new(endpoint);
+    (stage_over(&scripted, mode), scripted)
+}
+
+/// A stage reading from an endpoint that outlives it: §5's rule is about what happens
+/// between two attempts over one node, which one stage alone cannot show.
+fn stage_over(scripted: &Arc<Scripted>, mode: ExecutionMode) -> ExecutionStage {
     let abilities = Abilities {
         submitter: scripted.clone(),
         fees: scripted.clone(),
@@ -321,9 +347,8 @@ fn assemble(endpoint: Scripted, mode: ExecutionMode) -> (ExecutionStage, Arc<Scr
         ExecutionMode::BuildOnly => Signer::without_key(mode),
         other => test_signer(other),
     };
-    let stage = ExecutionStage::new(abilities, signer, setup, CHAIN, Clock::new())
-        .expect("a stage over a scripted endpoint");
-    (stage, scripted)
+    ExecutionStage::new(abilities, signer, setup, CHAIN, Clock::new())
+        .expect("a stage over a scripted endpoint")
 }
 
 fn accepted() -> SubmissionOutcome {
@@ -587,6 +612,99 @@ async fn a_pin_the_chain_no_longer_holds_blocks_before_signing() {
     );
     assert_eq!(scripted.sent_count(), 0);
     assert!(report.signed.is_none());
+}
+
+/// §5's first principle, in the shape a node restart leaves: the attempt pins a height, and
+/// the endpoint now answers nothing at all for it. A previous attempt confirmed that height,
+/// so a remembered answer would have passed the leg — the run asks instead, and stops.
+#[tokio::test]
+async fn a_height_the_node_no_longer_holds_is_asked_again_and_stops_the_run() {
+    let endpoint = Scripted::new(ExecutionMode::Submit)
+        .answer(accepted())
+        .receipt(Some(receipt(true, synthetic_address())))
+        .without_height(BLOCK);
+    let (mut stage, scripted) = assemble(endpoint, ExecutionMode::Submit);
+    let mut metrics = Metrics::default();
+    let report = validation_run(&mut stage, &mut metrics, synthetic_address()).await;
+
+    assert_eq!(report.reached, Some(ExecutionStatus::Failed));
+    assert!(
+        report.detail.contains("block_binding_valid"),
+        "{}",
+        report.detail
+    );
+    assert!(
+        report.detail.contains("not verified"),
+        "a block the node does not have is an unverified leg, not a reorg: {}",
+        report.detail
+    );
+    assert_eq!(scripted.sent_count(), 0, "nothing left the process");
+    assert!(report.signed.is_none());
+    assert!(
+        stage.lane_is_idle(),
+        "a run that never sent gives the nonce back"
+    );
+    assert_eq!(
+        scripted.binding_reads(),
+        1,
+        "the attempt asked once, at the gate, and did not reuse a decision"
+    );
+}
+
+/// §5's rule read the other way: the answer is not carried forward either. Two attempts over
+/// one endpoint each ask which block the height is, so a confirmation earned before the node
+/// went down cannot be what authorises the transaction sent after it came back.
+#[tokio::test]
+async fn each_attempt_asks_the_node_rather_than_reusing_an_earlier_answer() {
+    let endpoint = Arc::new(Scripted::new(ExecutionMode::BuildOnly));
+    let sender = Address::from_slice(&[0xa1u8; 20]);
+    let mut metrics = Metrics::default();
+
+    let mut first = stage_over(&endpoint, ExecutionMode::BuildOnly);
+    let first_report = validation_run(&mut first, &mut metrics, sender).await;
+    assert_eq!(first_report.reached, Some(ExecutionStatus::Built));
+    assert_eq!(endpoint.binding_reads(), 1);
+
+    let mut second = stage_over(&endpoint, ExecutionMode::BuildOnly);
+    let second_report = validation_run(&mut second, &mut metrics, sender).await;
+    assert_eq!(second_report.reached, Some(ExecutionStatus::Built));
+    assert_eq!(
+        endpoint.binding_reads(),
+        2,
+        "the second attempt re-read the binding instead of inheriting the first one's"
+    );
+    assert_eq!(endpoint.sent_count(), 0, "and neither mode may send");
+
+    // The counter measures attempts that reached the chain legs, not runs that started:
+    // a duplicate is turned away before a build exists, so it never asks the node anything.
+    let other = {
+        let mut tx = unsigned();
+        tx.gas_limit += 1;
+        tx
+    };
+    let distinct = TransactionIntent::validation(
+        BlockPin::new(BlockNumber(BLOCK), pinned_hash()),
+        sender,
+        &other,
+    )
+    .expect("a validation intent over a call transaction");
+    let mut third = stage_over(&endpoint, ExecutionMode::BuildOnly);
+    let _ = third
+        .on_validation(distinct.clone(), LABEL, &mut metrics)
+        .await;
+    assert_eq!(
+        endpoint.binding_reads(),
+        3,
+        "a distinct intent is a distinct attempt, and it asks too"
+    );
+
+    let duplicate = third.on_validation(distinct, LABEL, &mut metrics).await;
+    assert!(duplicate.detail.contains("§30"), "{}", duplicate.detail);
+    assert_eq!(
+        endpoint.binding_reads(),
+        3,
+        "the duplicate stopped before the chain legs, so it added no read"
+    );
 }
 
 /// §26/§O: running out of receipt reads is not a failure. The record stays where the chain

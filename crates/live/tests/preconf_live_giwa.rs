@@ -7,7 +7,7 @@
 //! Both endpoints come from the environment and neither is ever printed:
 //!
 //! ```text
-//! GIWA_FLASHBLOCKS_RPC_URL=<preconfirmation endpoint> \
+//! GIWA_FLASHBLOCKS_URL=<preconfirmation endpoint> \
 //! GIWA_RPC_URL=<canonical endpoint> \
 //! cargo test -p evm-live --test preconf_live_giwa -- --ignored \
 //!     --nocapture --test-threads=1
@@ -49,14 +49,16 @@
 //!
 //! # Why the transport wrapper exists
 //!
-//! [`evm_live::PollingFrameSource`] reads [`evm_chain::HeadReader::pending_raw`], and the
-//! HTTP adapter's implementation asks for `full: false` — the shape the M5 candidate
-//! source needs, where a pending block's *size* is the observation. A pending block whose
-//! transactions are hashes names no target, so the M9.4 decoder refuses it fail-closed
-//! ([`evm_live::PreconfError::HashOnlyTransaction`]). The gap is the read shape, not the
-//! method, so this file supplies a tests-only reader that asks the same endpoint for the
-//! full objects. Doing that here rather than in `crates/chain` keeps §57's production diff
-//! at zero and keeps the choice visible: a reader has to decide to ask for the heavy shape.
+//! [`evm_live::PollingFrameSource`] reads
+//! [`evm_chain::HeadReader::pending_full_transactions`], which is
+//! `eth_getBlockByNumber(["pending", true])` — the shape the decoder was written
+//! against (audit §2.5: 10/10 samples answered full transaction objects, 0 hash-only).
+//! The candidate path's [`evm_chain::HeadReader::pending_raw`] stays on `full: false`,
+//! where a pending block's *size* is the observation and a hash list is enough; M12-B §6
+//! chose a second read over a heavier shared one, measured on this same capture at about
+//! seven times the bytes per read (`data/evidence/m12/b/pending-shape-compat.json`,
+//! `size_stats`). This wrapper remains for what only a harness can do: count the
+//! reads it performed, and scrub a URL out of a transport error before it reaches disk.
 //!
 //! # What is committed, and what is not
 //!
@@ -203,14 +205,13 @@ impl HeadReader for PendingFullReader {
         }
     }
 
-    async fn pending_raw(&mut self) -> evm_chain::Result<Option<Value>> {
+    async fn pending_full_transactions(&mut self) -> evm_chain::Result<Option<Value>> {
         self.reads.fetch_add(1, Ordering::SeqCst);
-        let raw = self
-            .adapter
-            .request_raw("eth_getBlockByNumber", json!(["pending", true]))
+        // The production read, params included: this harness is not the place that decides
+        // what `pending` means on the wire.
+        HeadReader::pending_full_transactions(&mut self.adapter)
             .await
-            .map_err(|error| ChainError::Rpc(self.scrub.apply(&error.to_string())))?;
-        Ok(if raw.is_null() { None } else { Some(raw) })
+            .map_err(|error| ChainError::Rpc(self.scrub.apply(&error.to_string())))
     }
 }
 
@@ -642,7 +643,7 @@ fn write_json(path: &Path, value: &Value) {
 #[tokio::test]
 #[ignore]
 async fn one_real_preconfirmation_window_against_the_official_endpoint() {
-    let flashblocks_url = env_required("GIWA_FLASHBLOCKS_RPC_URL");
+    let flashblocks_url = env_required("GIWA_FLASHBLOCKS_URL");
     let canonical_url = env_required("GIWA_RPC_URL");
     let window_ms = env_number("M94_WINDOW_MS", 15_000);
     let read_interval_ms = env_number("M94_READ_INTERVAL_MS", 250);

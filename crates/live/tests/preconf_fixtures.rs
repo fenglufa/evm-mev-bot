@@ -142,6 +142,9 @@ fn decode_class(outcome: &Result<evm_live::PreconfirmationFrame, PreconfError>) 
         Ok(_) => "accepted".to_string(),
         Err(PreconfError::Decode(field)) => format!("refused:missing_or_bad:{field}"),
         Err(PreconfError::HashOnlyTransaction) => "refused:hash_only_list".to_string(),
+        Err(PreconfError::UnexpectedTransactionEntry { kind, .. }) => {
+            format!("refused:unexpected_entry:{kind}")
+        }
         Err(PreconfError::Transport(_)) | Err(PreconfError::EventQueueClosed { .. }) => {
             "refused:transport".to_string()
         }

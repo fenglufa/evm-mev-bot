@@ -22,6 +22,24 @@
 //!   keeps `Unbound` meaning what §27 needs it to mean when the block *is* named and is a
 //!   different block.
 //!
+//! M12-B §9's D4 added a third thing to pin. The receipt decoder used to end its
+//! provenance line with the endpoint *kind* — the submission-side word for a class of
+//! provider — so a run aimed at a local node still labelled every one of its reads
+//! "public". `the_read_line_names_the_endpoint_that_answered…` is that fix, and
+//! `the_committed_rows_keep_the_labels_the_runs_actually_wrote` is its pair: the M6 and M7
+//! artifacts stay exactly as the runs wrote them, including the submission line, where the
+//! class is the very fact §53 asks for. Rewriting either is how evidence ends up
+//! describing a configuration that never happened.
+//!
+//! M12-B §9's D4 added a third thing to pin. The receipt decoder used to end its
+//! provenance line with the endpoint *kind* — the submission-side word for a class of
+//! provider — so a run aimed at a local node still labelled every one of its reads
+//! "public". `the_read_line_names_the_endpoint_that_answered…` is that fix, and
+//! `the_committed_rows_keep_the_labels_the_runs_actually_wrote` is its pair: the M6/M7
+//! artifacts stay exactly as the runs wrote them, including the submission line where the
+//! class is the fact §53 asks for. Rewriting either would be how this evidence ends up
+//! claiming a configuration that never happened.
+//!
 //! No number in this file is typed: the expected sender, nonce, target, hash, gas and
 //! prices all come out of the two evidence documents, and the assertions are relations
 //! between them.
@@ -77,6 +95,24 @@ fn single_row(file: &str) -> Value {
     serde_json::from_str(row).unwrap_or_else(|error| panic!("{file}: {error}"))
 }
 
+/// Every row of a committed JSONL evidence file.
+fn json_rows(file: &str) -> Vec<Value> {
+    let path = workspace_root().join(file);
+    let text = std::fs::read_to_string(&path)
+        .unwrap_or_else(|error| panic!("{}: {error}", path.display()));
+    text.lines()
+        .filter(|line| !line.trim().is_empty())
+        .map(|line| serde_json::from_str(line).unwrap_or_else(|error| panic!("{file}: {error}")))
+        .collect()
+}
+
+/// A committed evidence file as text, for a search that is about the record rather than
+/// about a decoded field.
+fn text_file(file: &str) -> String {
+    let path = workspace_root().join(file);
+    std::fs::read_to_string(&path).unwrap_or_else(|error| panic!("{}: {error}", path.display()))
+}
+
 /// The two documents, in the shapes this file reasons about.
 struct Evidence {
     /// What the lane wrote when it signed: the hash it computed locally, the sender the
@@ -93,24 +129,37 @@ fn evidence() -> Evidence {
     }
 }
 
+/// The chain id the endpoint named in the same capture.
+fn chain_id(ev: &Evidence) -> u64 {
+    ev.node["chain_id"]["result"]
+        .as_str()
+        .and_then(|text| u64::from_str_radix(text.trim_start_matches("0x"), 16).ok())
+        .expect("the evidence file records the chain id the endpoint named")
+}
+
+/// The endpoint the evidence file says these answers came from. This is the one fact §9's
+/// D4 asks a read line to carry: which node answered.
+fn endpoint_url(ev: &Evidence) -> &str {
+    ev.node["endpoint"]
+        .as_str()
+        .expect("the evidence file names the endpoint its answers were captured from")
+}
+
 /// The receipt, decoded the way the live submitter decodes it.
 fn receipt(ev: &Evidence) -> Receipt {
+    receipt_read_over(ev, endpoint_url(ev))
+}
+
+/// The same node answer decoded as if it had been read over `url`, so a test can ask what
+/// the provenance line tracks.
+fn receipt_read_over(ev: &Evidence, url: &str) -> Receipt {
     let raw = &ev.node["attempts"]["eth_getTransactionReceipt"]["result"];
     assert!(
         !raw.is_null(),
         "the evidence file has to carry the node's answer, not a note about it"
     );
-    let chain_id = ev.node["chain_id"]["result"]
-        .as_str()
-        .and_then(|text| u64::from_str_radix(text.trim_start_matches("0x"), 16).ok())
-        .expect("the evidence file records the chain id the endpoint named");
-    parse_receipt(
-        chain_id,
-        EndpointKind::PublicHttpRpc,
-        raw,
-        "the §35 validation transaction",
-    )
-    .expect("the node's answer decodes through the same path the lane uses")
+    parse_receipt(chain_id(ev), url, raw, "the §35 validation transaction")
+        .expect("the node's answer decodes through the same path the lane uses")
 }
 
 /// §27's expected side, built from the lane's own §52 row rather than restated here.
@@ -340,5 +389,102 @@ fn what_the_chain_charged_is_what_the_wallet_lost() {
         ev.signed["value_wei"].as_str(),
         Some("0x0"),
         "a validation transaction transfers nothing, so the whole of the wallet's loss is fee"
+    );
+}
+
+/// §9's D4: what a receipt read says about its endpoint.
+///
+/// The decoder used to end the provenance line with the adapter's endpoint *kind* — the
+/// submission-side word for a class of provider. One adapter answers both `eth_sendRawTransaction`
+/// and `eth_getTransactionReceipt`, so aiming the lane at a self-hosted node left every read
+/// in the evidence still claiming "public", which is a label nothing in the read supported.
+/// The line now carries the digest of the URL the read went over: it names which endpoint
+/// answered and makes no claim about who runs it.
+#[test]
+fn the_read_line_names_the_endpoint_that_answered_rather_than_a_class_of_endpoint() {
+    let ev = evidence();
+    // A second URL as a control input rather than as a claim about a node — this repository
+    // has never connected to it, and the test only asks that naming it changes the line.
+    const ELSEWHERE: &str = "http://127.0.0.1:8545";
+    let here = receipt(&ev);
+    let there = receipt_read_over(&ev, ELSEWHERE);
+
+    for (url, line) in [
+        (endpoint_url(&ev), &here.provenance),
+        (ELSEWHERE, &there.provenance),
+    ] {
+        assert!(
+            line.contains(&evm_chain::endpoint_id(url)),
+            "the provenance has to carry the digest of the endpoint the read went over: {line}"
+        );
+        // The three words the submission side uses for a class of provider, plus the one a
+        // later overcorrection would reach for. None of them is a fact a read can establish.
+        for class in [
+            EndpointKind::PublicHttpRpc.name(),
+            EndpointKind::FlashblocksHttpRpc.name(),
+            EndpointKind::Recorded.name(),
+            "local",
+        ] {
+            assert!(
+                !line.contains(class),
+                "`{class}` is a claim about who runs the endpoint and what it is for, and a \
+                 receipt read may not make it: {line}"
+            );
+        }
+    }
+
+    // A digest that never moved would be the same defect in a new costume.
+    assert_ne!(
+        here.provenance, there.provenance,
+        "two different endpoints have to produce two different read lines"
+    );
+    // …and the endpoint is the only thing the line tracks: the same node answer decodes to
+    // the same receipt whichever URL it is filed under.
+    assert_eq!(
+        there.block_number, here.block_number,
+        "naming a different endpoint cannot change what the node said"
+    );
+    assert_eq!(
+        there.l2_cost_wei(),
+        here.l2_cost_wei(),
+        "and not the bill either"
+    );
+}
+
+/// The other half of §9: the change stops at the code that writes lines from now on.
+///
+/// Nothing already committed is relabelled — the M7 route is kept as both halves of the
+/// evidence for that, since it is the run whose file carries a submission class *and* the
+/// read wording this milestone retired. A run that wanted its evidence to read "all local"
+/// would have to edit one of these two, which is exactly what §9 forbids. It is also the
+/// positive control for the class-word loop above: the retired wording is still findable in
+/// this repository, so its absence from a fresh read line is the fix rather than a word that
+/// went missing everywhere.
+#[test]
+fn the_committed_rows_keep_the_labels_the_runs_actually_wrote() {
+    const RETIRED_READ_LINE: &str = "eth_getTransactionReceipt over the configured GIWA RPC \
+                                     URL (public_http_rpc)";
+    let route = "data/evidence/m7/route-submit/route-91342-37563264-1790908382146";
+
+    let submissions = json_rows(&format!("{route}/submissions.jsonl"));
+    assert!(
+        !submissions.is_empty(),
+        "the committed route has to still carry its submission rows"
+    );
+    for row in &submissions {
+        assert_eq!(
+            row["submission_endpoint_type"].as_str(),
+            Some(EndpointKind::PublicHttpRpc.name()),
+            "§53 asks the submission line which class of endpoint the bytes went through, and \
+             the public one is still the fact: {row}"
+        );
+    }
+
+    let run = text_file(&format!("{route}/route-run.json"));
+    assert!(
+        run.contains(RETIRED_READ_LINE),
+        "the receipt reads in that file are what the run wrote, and rewriting a committed \
+         artifact to satisfy a grep would make the evidence describe a configuration that \
+         never happened"
     );
 }

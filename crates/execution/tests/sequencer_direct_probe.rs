@@ -391,7 +391,7 @@ async fn the_sequencer_endpoint_is_measured_before_it_is_called_direct() {
         host("rpc", "GIWA_RPC_URL", true).expect("the read host"),
         host("sequencer", "RETH_ROLLUP_SEQUENCERHTTP", true).expect("the §29 host"),
     ];
-    if let Some(flashblocks) = host("flashblocks", "GIWA_FLASHBLOCKS_RPC_URL", false) {
+    if let Some(flashblocks) = host("flashblocks", "GIWA_FLASHBLOCKS_URL", false) {
         hosts.push(flashblocks);
     }
     let mut probe = Probe::new();
