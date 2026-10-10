@@ -354,7 +354,6 @@ fn stage_over(scripted: &Arc<Scripted>, mode: ExecutionMode) -> ExecutionStage {
 fn accepted() -> SubmissionOutcome {
     SubmissionOutcome::Accepted {
         transaction_hash: None,
-        hash_matches_local: true,
         endpoint: EndpointKind::PublicHttpRpc,
         detail: "scripted eth_sendRawTransaction acknowledgement".to_string(),
     }

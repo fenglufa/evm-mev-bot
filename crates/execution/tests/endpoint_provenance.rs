@@ -44,8 +44,8 @@
 //!                         and no gate reads this file.
 //! what it costs           no new dependency (tokio is this crate's own; the socket is std).
 //!                         `an_answer_that_is_not_an_acknowledgement…` sees the dropped shape
-//!                         twice, because the transport tries twice — that count is measured
-//!                         and reported, not claimed here as a design.
+//!                         once, because M12-E §3 put the send on a one-shot wire policy — that
+//!                         count is measured here, not claimed as a design.
 //! ```
 //!
 //! §8's constraint holds throughout: the synthetic scalar-1 key (§40's, whose address M6
@@ -205,7 +205,12 @@ fn reply(method: &str, send: &Send) -> Option<(&'static str, &'static str, Strin
     }
     match send {
         Send::Ack(hash) => ok(format!(r#"{{"jsonrpc":"2.0","id":1,"result":"{hash}"}}"#,)),
-        Send::Refused => json_error(-32003, "nonce too low"),
+        // The refusal has to be one a payload can be proven wrong for. M12-E §4 retired
+        // `nonce too low` from this seat — it is a state-dependent answer, so the classifier
+        // now files it as unknown and `send_uncertainty.rs` grades that — and what is left is
+        // a fact about these bytes alone: the transaction carries less gas than its own
+        // payload costs before it runs.
+        Send::Refused => json_error(-32003, "intrinsic gas too low"),
         Send::NotHash => ok(r#"{"jsonrpc":"2.0","id":1,"result":"0xdeadbeef"}"#.to_string()),
         Send::Dropped => None,
     }
@@ -325,7 +330,6 @@ async fn an_accepted_send_names_the_socket_and_not_who_runs_it() {
         .expect("the stub answered the send");
     let SubmissionOutcome::Accepted {
         transaction_hash,
-        hash_matches_local,
         detail,
         ..
     } = &outcome
@@ -336,9 +340,13 @@ async fn an_accepted_send_names_the_socket_and_not_who_runs_it() {
         );
     };
     assert_eq!(*transaction_hash, Some(transaction.hash()));
+    // §27's comparison happens before the variant is built, which is why there is no
+    // "accepted, but not of ours" field left to assert: an answer that names a different
+    // hash is an `Unknown` (`send_uncertainty.rs`'s `a_hash_that_is_not_ours…`), and this
+    // shape is only reachable by a node that named these very bytes.
     assert!(
-        *hash_matches_local,
-        "the node named the hash we computed locally over these bytes (§27)"
+        detail.contains(&format!("{:#x}", transaction.hash())),
+        "so the hash quoted in the line is the local one: {detail}"
     );
     // The node's own words survive, and the socket is named beside them.
     assert!(
@@ -385,7 +393,7 @@ async fn a_refusal_names_the_socket_and_is_the_only_answer_that_clears_the_lane(
         "§25: only a definite refusal proves the bytes are not in flight"
     );
     assert!(
-        reason.contains("nonce too low"),
+        reason.contains("intrinsic gas too low"),
         "the node's reason is quoted: {reason}"
     );
     assert_names_the_socket_and_nothing_more(reason, &digest);
@@ -442,11 +450,11 @@ async fn an_answer_that_is_not_an_acknowledgement_names_the_socket_and_keeps_the
     assert_names_the_socket_and_nothing_more(reason, &digest);
     assert_eq!(
         stub.sends(),
-        2,
-        "the transport's own single retry (crates/chain/src/rpc.rs:212) is measured here \
-         rather than assumed, because it is the fact behind the out-of-scope finding §9 asks \
-         be recorded: an accepted first attempt that never came back would be handed over \
-         twice, and that is a transport question this milestone does not answer"
+        1,
+        "M12-E §3: a send that never came back is not sent a second time. The count is the \
+         one the stub itself tallied — the read path's single transport retry \
+         (`crates/chain/src/rpc.rs`'s `WirePolicy::RetryOnce`) still applies to reads, and this \
+         line is where the send side is shown to be off it"
     );
 }
 

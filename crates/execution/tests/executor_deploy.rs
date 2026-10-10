@@ -207,7 +207,6 @@ impl Scripted {
     fn accepted() -> SubmissionOutcome {
         SubmissionOutcome::Accepted {
             transaction_hash: None,
-            hash_matches_local: true,
             endpoint: EndpointKind::PublicHttpRpc,
             detail: "eth_sendRawTransaction".to_string(),
         }

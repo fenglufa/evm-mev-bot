@@ -354,10 +354,9 @@ async fn track(run: &Prepared, submitter: &Arc<Scripted>, attempts: usize) -> Tr
         .await
 }
 
-fn accepted(hash: B256, matches: bool) -> SubmissionOutcome {
+fn accepted(hash: B256) -> SubmissionOutcome {
     SubmissionOutcome::Accepted {
         transaction_hash: Some(hash),
-        hash_matches_local: matches,
         endpoint: EndpointKind::PublicHttpRpc,
         detail: "eth_sendRawTransaction".to_string(),
     }
@@ -407,7 +406,7 @@ async fn an_accepted_transaction_walks_the_ladder_to_inclusion() {
     assert_eq!(untouched.transaction_hash, None);
 
     let submitter = Arc::new(Scripted::new(
-        vec![accepted(run.hash, true)],
+        vec![accepted(run.hash)],
         vec![Some(receipt(true, run.sender))],
     ));
     let outcome = submitter
@@ -574,7 +573,7 @@ async fn an_unknown_answer_holds_the_lane_until_a_read_resolves_it() {
 async fn a_reverted_receipt_is_a_chain_fact_and_not_a_crash() {
     let run = prepare(10, ExecutionMode::Submit);
     let submitter = Arc::new(Scripted::new(
-        vec![accepted(run.hash, true)],
+        vec![accepted(run.hash)],
         vec![Some(receipt(false, run.sender))],
     ));
     let tracked = track(&run, &submitter, 3).await;
@@ -606,7 +605,7 @@ async fn a_receipt_for_another_senders_transaction_is_unbound() {
     let run = prepare(11, ExecutionMode::Submit);
     let foreign_sender = Address::from_slice(&[0xeeu8; 20]);
     let submitter = Arc::new(Scripted::new(
-        vec![accepted(run.hash, true)],
+        vec![accepted(run.hash)],
         vec![Some(receipt(true, foreign_sender))],
     ));
     let tracked = track(&run, &submitter, 3).await;
@@ -626,7 +625,7 @@ async fn a_receipt_for_another_transaction_hash_is_unbound() {
     // node can never exercise: an endpoint that answers a lookup with a receipt for a
     // different hash has told us about a different transaction.
     let run = prepare(12, ExecutionMode::Submit);
-    let mut scripted = Scripted::new(vec![accepted(run.hash, true)], Vec::new());
+    let mut scripted = Scripted::new(vec![accepted(run.hash)], Vec::new());
     scripted.verbatim = true;
     let stranger = receipt(true, run.sender);
     scripted.receipts = Mutex::new(vec![Some(stranger)].into());
@@ -649,7 +648,7 @@ async fn a_receipt_for_another_transaction_hash_is_unbound() {
 async fn a_receipt_in_a_block_the_chain_does_not_name_is_unbound_too() {
     let run = prepare(13, ExecutionMode::Submit);
     let submitter = Arc::new(Scripted::new(
-        vec![accepted(run.hash, true)],
+        vec![accepted(run.hash)],
         vec![Some(receipt(true, run.sender))],
     ));
     submitter.set_canonical(B256::left_padding_from(&[0xaau8; 20]));
@@ -670,10 +669,7 @@ async fn a_receipt_in_a_block_the_chain_does_not_name_is_unbound_too() {
 #[tokio::test]
 async fn a_missing_receipt_times_out_without_becoming_a_failure() {
     let run = prepare(14, ExecutionMode::Submit);
-    let submitter = Arc::new(Scripted::new(
-        vec![accepted(run.hash, true)],
-        vec![None, None],
-    ));
+    let submitter = Arc::new(Scripted::new(vec![accepted(run.hash)], vec![None, None]));
     let tracked = track(&run, &submitter, 2).await;
     let TrackedReceipt::Pending {
         attempts,
@@ -869,7 +865,7 @@ async fn a_sign_only_run_holds_bytes_and_has_no_way_to_send_them() {
         );
     }
 
-    let mut submitter = Scripted::new(vec![accepted(run.hash, true)], Vec::new());
+    let mut submitter = Scripted::new(vec![accepted(run.hash)], Vec::new());
     submitter.allowed = false;
     assert!(!submitter.may_submit());
     let error = submitter

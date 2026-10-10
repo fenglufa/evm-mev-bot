@@ -1491,7 +1491,6 @@ impl TransactionSubmitter for Scripted {
             .pop_front()
             .unwrap_or(SubmissionOutcome::Accepted {
                 transaction_hash: None,
-                hash_matches_local: true,
                 endpoint: EndpointKind::PublicHttpRpc,
                 detail: "scripted eth_sendRawTransaction acknowledgement".to_string(),
             });
