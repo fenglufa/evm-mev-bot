@@ -733,14 +733,16 @@ async fn a_replay_records_that_readiness_was_never_asked() {
     assert_eq!(metrics["counters"]["readiness.eth_syncing_asks"], 0);
 }
 
-/// M12-B §4's three facts about one endpoint, held in three keys that are not derived
-/// from one another: what the operator declared the endpoint to be, which endpoint the
-/// declaration describes, and the digest the RPC trace lines call it by.
+/// M12-B §4's three facts about one endpoint, held in keys that are not derived from one
+/// another: what the operator declared the endpoint to be, the digest the RPC trace lines
+/// call it by, and the sentence that says what a declaration is.
 ///
 /// The URL is the worst shape §4 names, on purpose: a loopback address, which §4.1
 /// forbids reading as a sign of anything, with a path segment that reads like an API key,
-/// which §4.4 forbids repeating. So the two keys M12-B adds are searched for that
-/// fragment rather than trusted, and the whole directory is searched with it.
+/// which §4.4 forbids repeating. M12-B could only show that the fragment reached exactly
+/// the files holding a *whole* configured URL; M12-D §5 closed it, so the last act of this
+/// test is to search the whole evidence directory for the fragment and the host and find
+/// nothing.
 #[tokio::test]
 async fn a_run_records_the_declared_label_and_the_endpoint_identity_as_two_things() {
     let stub = Stub::spawn(Sync::Idle);
@@ -768,8 +770,9 @@ async fn a_run_records_the_declared_label_and_the_endpoint_identity_as_two_thing
         "a loopback host did not turn into a declaration: {quiet_detail}"
     );
 
-    // §4.2: identity and digest in separate keys, and the digest is the trace's own — one
-    // rule, so the two cannot disagree about whether two lines name one provider.
+    // §4.2 as M12-D leaves it: the digest is the record's only identity for an endpoint,
+    // and it is the trace's own — one rule, so the two cannot disagree about whether two
+    // lines name one provider.
     let digest = quiet["rpc_endpoint_id"]
         .as_str()
         .expect("an endpoint this run spoke to has a digest");
@@ -832,36 +835,36 @@ async fn a_run_records_the_declared_label_and_the_endpoint_identity_as_two_thing
         stub.received()
     );
 
-    // §4.4 last, and across the whole directory rather than across the keys this milestone
-    // knows about: the credential-shaped fragment reaches exactly one file per run — the
-    // session record — and inside it only ever as one of the endpoint URLs the operator
-    // configured. Those URLs already travelled before M12-B (`endpoints`, the capability
-    // table, and each source's own capability line), and §4.3 asks for that to stay the
-    // whole of it: a purpose, a digest or the sentence under them must not pick the
-    // fragment up.
-    let flashblocks_url = format!("{url}/flashblocks");
-    for (name, report, configured) in [
-        ("endpoints-undeclared", &undeclared, vec![url.clone()]),
-        (
-            "endpoints-declared",
-            &declared,
-            vec![url.clone(), flashblocks_url.clone()],
-        ),
+    // §4.4, closed by M12-D §5: the credential-shaped fragment now reaches no file in the
+    // run's directory, and the loopback host reaches none either. M12-B could only show
+    // that the fragment appears *only* as a whole configured URL; the stronger claim holds
+    // now, because the URL is not in the record at all and the digest that replaced it
+    // names the same socket every RPC trace line names.
+    for (name, report) in [
+        ("endpoints-undeclared", &undeclared),
+        ("endpoints-declared", &declared),
     ] {
-        assert_eq!(
-            files_holding(&report.evidence_dir, "abc123"),
-            vec!["live-session.json".to_string()],
-            "{name}: a fragment that looks like a key belongs to the configured URL and \
-             to no other file the run wrote"
-        );
-        let mut carriers = strings_holding(&report.session, "abc123");
-        carriers.sort();
-        carriers.dedup();
-        assert_eq!(
-            carriers, configured,
-            "{name}: every string in the record that holds the fragment is a whole \
-             endpoint the operator named — not a label, not a digest, not a detail"
-        );
+        for needle in ["abc123", "127.0.0.1"] {
+            assert!(
+                files_holding(&report.evidence_dir, needle).is_empty(),
+                "{name}: `{needle}` was written into {:?}",
+                files_holding(&report.evidence_dir, needle)
+            );
+            assert!(
+                strings_holding(&report.session, needle).is_empty(),
+                "{name}: no string in the session record holds `{needle}`: {:?}",
+                strings_holding(&report.session, needle)
+            );
+        }
+        // The digests stay; the URL keys are gone rather than emptied, so a reader cannot
+        // mistake a null URL for a run that had none to publish.
+        for key in ["rpc_url", "ws_url", "flashblocks_url"] {
+            assert!(
+                report.session["endpoints"].get(key).is_none(),
+                "{name}: the endpoints object still publishes `{key}`: {}",
+                report.session["endpoints"][key]
+            );
+        }
         for key in [
             "rpc_purpose",
             "flashblocks_purpose",
@@ -873,7 +876,7 @@ async fn a_run_records_the_declared_label_and_the_endpoint_identity_as_two_thing
             let written = report.session["endpoints"][key].to_string();
             assert!(
                 !written.contains("abc123") && !written.contains("127.0.0.1"),
-                "{name}: the new `{key}` key carries {written}"
+                "{name}: the `{key}` key carries {written}"
             );
         }
     }

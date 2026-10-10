@@ -1126,3 +1126,1200 @@ fn collect_rs(dir: &Path, out: &mut Vec<PathBuf>) {
         }
     }
 }
+
+// ---------------------------------------------------------------------------
+// M12-D §6: the whole table, column by column, against the model
+// ---------------------------------------------------------------------------
+
+/// Every column of a row the gate compares. This is exactly the generator's column set minus
+/// the one display column, and [`the_audited_columns_cover_every_column_the_generator_emits`]
+/// is what keeps that true when a column is added: a new column cannot join the table without
+/// either being audited here or failing that test.
+const AUDITED_COLUMNS: [&str; 10] = [
+    "state_class",
+    "task_book_words",
+    "node_event",
+    "disposition",
+    "mechanism",
+    "strength",
+    "clause",
+    "anchor_file",
+    "anchor_token",
+    "note",
+];
+
+/// The one column the comparison ignores, and why it may be ignored: `anchor_line` records
+/// where the anchor pointed when M12-B assembled the file, so an edit anywhere else in the
+/// anchored file moves it without moving the ruling. The anchor's identity is the
+/// `(anchor_file, anchor_token)` pair, and the gate re-resolves that pair against today's
+/// source on *both* copies — which is why [`both_copies_that_agree_on_a_dead_anchor_still_fail`]
+/// can report an anchor that the two copies agree on.
+const DISPLAY_ONLY_COLUMNS: [&str; 1] = ["anchor_line"];
+
+/// The document-level figures the gate compares. Each one is derived from the model's
+/// structure — `rows` from `POLICY.len()`, `state_classes` from `ALL_CLASSES`,
+/// `strength_counts` by counting the rows — so an expectation here is a consequence of the
+/// table's shape rather than a typed-in number the artifact and the gate could share.
+const DOCUMENT_COLUMNS: [&str; 9] = [
+    "schema",
+    "source_of_truth",
+    "task_book",
+    "rows",
+    "node_events",
+    "state_classes",
+    "strength_counts",
+    "unenforced_mechanisms",
+    "identity_bearing_classes",
+];
+
+/// Whether a probe plants a defect the gate must report, or plants nothing and must stay clear.
+/// The controls are not decoration: without `Control`, the only way to read "27 defects
+/// detected" would be to assume the gate is not simply reporting everything.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum ProbeKind {
+    Defect,
+    Control,
+}
+
+impl ProbeKind {
+    const fn as_str(self) -> &'static str {
+        match self {
+            Self::Defect => "defect",
+            Self::Control => "control",
+        }
+    }
+}
+
+/// A change to one copy of the table. Every mutation below is a constant change — no capture
+/// — so the probes can be function pointers rather than closures that outlive the call.
+type Mutation = fn(&mut Value);
+
+/// A row's semantic identity: the state class meets the node event. Never an index into a
+/// sorted array of rows, because a row that moves position would then be a different row.
+fn row_identity(row: &Value) -> String {
+    let column = |name: &str| row[name].as_str().unwrap_or("<not text>");
+    format!("{}@{}", column("state_class"), column("node_event"))
+}
+
+fn group_rows(rows: &[Value]) -> std::collections::BTreeMap<String, Vec<usize>> {
+    let mut groups: std::collections::BTreeMap<String, Vec<usize>> =
+        std::collections::BTreeMap::new();
+    for (index, row) in rows.iter().enumerate() {
+        groups.entry(row_identity(row)).or_default().push(index);
+    }
+    groups
+}
+
+/// `resolve_pair`, with the panic replaced by a finding. A planted defect points an anchor at
+/// a file that does not exist; that is a thing the gate has to *say*, not a thing that gets to
+/// end the run. The two resolvers are held together by
+/// [`the_two_anchor_resolvers_never_disagree`].
+fn resolve_in_source(file: &str, token: &str) -> Result<usize, String> {
+    let path = workspace_root().join(file);
+    let Ok(text) = std::fs::read_to_string(&path) else {
+        return Err(format!("{file}: no such file"));
+    };
+    let code = text.split("\n#[cfg(test)]").next().unwrap_or(text.as_str());
+    let hits = code
+        .lines()
+        .enumerate()
+        .filter(|(_, line)| line.contains(token))
+        .map(|(index, _)| index + 1)
+        .collect::<Vec<_>>();
+    match hits.len() {
+        1 => Ok(hits[0]),
+        0 => Err(format!("{file}: no production line contains `{token}`")),
+        n => Err(format!(
+            "{file}: {n} production lines contain `{token}` (at {}) — an anchor must name one place",
+            hits.iter()
+                .map(|line| line.to_string())
+                .collect::<Vec<_>>()
+                .join(", ")
+        )),
+    }
+}
+
+/// The anchor column pair, re-resolved: `Some` means the copy points nowhere a reader can open.
+fn anchor_finding(side: &str, row: &Value) -> Option<String> {
+    let file = row["anchor_file"].as_str()?;
+    let token = row["anchor_token"].as_str()?;
+    resolve_in_source(file, token).err().map(|why| {
+        format!(
+            "{}: the {side} anchor does not resolve — {why}",
+            row_identity(row)
+        )
+    })
+}
+
+/// A value, short enough to fit in a finding sentence. Notes run to several hundred
+/// characters, and a diff that quotes two of them in full cannot be read at a glance.
+fn excerpt(value: &Value) -> String {
+    const KEEP: usize = 72;
+    let text = value
+        .as_str()
+        .map(str::to_string)
+        .unwrap_or_else(|| value.to_string());
+    let count = text.chars().count();
+    if count <= KEEP {
+        return text;
+    }
+    let head = text.chars().take(KEEP).collect::<String>();
+    format!("`{head}…` ({count} chars)")
+}
+
+/// The row-level half of the comparison: keys first (so a lost, duplicated, or added row is a
+/// finding rather than a shifted index), then every audited column of the rows both sides
+/// hold, then each copy's anchor against the source on disk.
+fn compare_policy_rows(model: &[Value], committed: &[Value]) -> Vec<String> {
+    let left = group_rows(model);
+    let right = group_rows(committed);
+    let mut diffs = Vec::new();
+    for (key, ours) in &left {
+        if ours.len() > 1 {
+            diffs.push(format!(
+                "{key}: the model lists this row {} times",
+                ours.len()
+            ));
+        }
+        let Some(theirs) = right.get(key) else {
+            diffs.push(format!("{key}: absent from the committed table"));
+            continue;
+        };
+        if theirs.len() > 1 {
+            diffs.push(format!(
+                "{key}: the committed table carries this row {} times",
+                theirs.len()
+            ));
+        }
+        let (our_row, their_row) = (&model[ours[0]], &committed[theirs[0]]);
+        for column in AUDITED_COLUMNS {
+            if our_row[column] != their_row[column] {
+                diffs.push(format!(
+                    "{key}: {column} is {} in the model and {} in the committed table",
+                    excerpt(&our_row[column]),
+                    excerpt(&their_row[column])
+                ));
+            }
+        }
+        for (side, row) in [("model", our_row), ("committed", their_row)] {
+            if let Some(why) = anchor_finding(side, row) {
+                diffs.push(why);
+            }
+        }
+    }
+    for key in right.keys().filter(|key| !left.contains_key(*key)) {
+        diffs.push(format!(
+            "{key}: present in the committed table and absent from the model"
+        ));
+    }
+    diffs.sort();
+    diffs
+}
+
+/// The whole document: rows, then the figures that summarise them, then the verdicts. A table
+/// whose rows agree but whose `rows` count or `strength_counts` lie is a table an evidence
+/// reader would read wrong, so both are compared.
+fn compare_policy_documents(model: &Value, committed: &Value) -> Vec<String> {
+    let mut diffs = Vec::new();
+    match (model["table"].as_array(), committed["table"].as_array()) {
+        (Some(ours), Some(theirs)) => diffs.extend(compare_policy_rows(ours, theirs)),
+        _ => diffs.push("table: one side holds no array of rows".to_string()),
+    }
+    for column in DOCUMENT_COLUMNS {
+        if model[column] != committed[column] {
+            diffs.push(format!(
+                "document column {column}: the model says {} and the committed table says {}",
+                excerpt(&model[column]),
+                excerpt(&committed[column])
+            ));
+        }
+    }
+    match (
+        model["verdicts"].as_object(),
+        committed["verdicts"].as_object(),
+    ) {
+        (Some(ours), Some(theirs)) => {
+            for (name, claim) in ours {
+                match theirs.get(name) {
+                    None => diffs.push(format!("verdict {name}: absent from the committed table")),
+                    Some(theirs) => {
+                        if claim != theirs {
+                            diffs.push(format!(
+                                "verdict {name}: the model says {} and the committed table says {}",
+                                excerpt(claim),
+                                excerpt(theirs)
+                            ));
+                        }
+                    }
+                }
+            }
+            for name in theirs.keys().filter(|name| !ours.contains_key(*name)) {
+                diffs.push(format!(
+                    "verdict {name}: present in the committed table and absent from the model"
+                ));
+            }
+        }
+        _ => diffs.push("verdicts: one side holds no object of verdicts".to_string()),
+    }
+    diffs.sort();
+    diffs
+}
+
+/// The committed artifact, parsed afresh. The gate's expected side never comes from here; see
+/// [`the_gate_reads_the_model_and_the_source_and_nothing_else`] for how that is tested.
+fn committed_document() -> Value {
+    let path = workspace_root().join(EVIDENCE_FILE);
+    let text = std::fs::read_to_string(&path).unwrap_or_else(|_| {
+        panic!(
+            "{EVIDENCE_FILE} is missing; refresh it with M12B_NODE_RESET_POLICY_REFRESH=1 \
+             cargo test -p evm-pipeline --test node_reset_policy -- --test-threads=1"
+        )
+    });
+    serde_json::from_str(&text).expect("a json policy table")
+}
+
+fn table_mut(document: &mut Value) -> &mut Vec<Value> {
+    document["table"]
+        .as_array_mut()
+        .expect("the committed table is an array of rows")
+}
+
+fn row_position(rows: &[Value], key: &str) -> usize {
+    rows.iter()
+        .position(|row| row_identity(row) == key)
+        .unwrap_or_else(|| panic!("no row {key} in the committed table"))
+}
+
+fn set_column(document: &mut Value, key: &str, column: &str, value: &str) {
+    let rows = table_mut(document);
+    let index = row_position(rows, key);
+    rows[index][column] = json!(value);
+}
+
+fn delete_row(document: &mut Value, key: &str) {
+    let rows = table_mut(document);
+    let index = row_position(rows, key);
+    rows.remove(index);
+}
+
+fn repeat_row(document: &mut Value, key: &str) {
+    let rows = table_mut(document);
+    let index = row_position(rows, key);
+    let copy = rows[index].clone();
+    rows.push(copy);
+}
+
+/// A row the model has never heard of: a complete 8 × 3 grid plus one, which is what §6.5's
+/// 「额外行」 means and what a key-based comparison catches that a length check would not.
+fn add_unruled_row(document: &mut Value) {
+    let rows = table_mut(document);
+    rows.push(json!({
+        "state_class": "flashblocks_view_cache",
+        "task_book_words": "Flashblocks view cache",
+        "node_event": "transport_reset",
+        "disposition": "re_read",
+        "mechanism": "a_fourth_event_the_task_book_does_not_name",
+        "strength": "enforced",
+        "clause": "一个任务书没有列出的事件",
+        "anchor_file": "crates/live/src/flashblocks.rs",
+        "anchor_token": "number.0 < self.stats.highest_canonical",
+        "anchor_line": 377,
+        "note": "planted by the consistency gate as an extra row; the model rules on three events, not four",
+    }));
+}
+
+fn bump_anchor_line(document: &mut Value, key: &str, by: usize) {
+    let rows = table_mut(document);
+    let index = row_position(rows, key);
+    let current = rows[index]["anchor_line"].as_u64().expect("a line number");
+    rows[index]["anchor_line"] = json!(current + by as u64);
+}
+
+/// The token M12-B's own negative control uses: a string that occurs nowhere in the workspace.
+const DEAD_ANCHOR_TOKEN: &str = "this token exists in no file of this workspace";
+
+fn plant_dead_anchor(document: &mut Value) {
+    set_column(
+        document,
+        "outstanding_candidates_and_simulations@restart",
+        "anchor_token",
+        DEAD_ANCHOR_TOKEN,
+    );
+}
+
+/// One probe: change a copy, compare, and record whether the gate said anything. `mention` is
+/// the substring the report must contain, so a probe that goes red for an unrelated reason is
+/// not counted as a pass — the defect has to be caught *as the defect it is*.
+#[allow(clippy::too_many_arguments)]
+fn probe(
+    id: &'static str,
+    kind: ProbeKind,
+    model_mutated: bool,
+    target: &'static str,
+    column: &'static str,
+    planted: &'static str,
+    mention: &'static str,
+    on_model: Mutation,
+    on_committed: Mutation,
+) -> Value {
+    let mut model = table().clone();
+    let mut committed = committed_document();
+    on_model(&mut model);
+    on_committed(&mut committed);
+    let diffs = compare_policy_documents(&model, &committed);
+    let reported = diffs.iter().any(|finding| finding.contains(mention));
+    json!({
+        "id": id,
+        "kind": kind.as_str(),
+        "model_copy_mutated": model_mutated,
+        "subject": target,
+        "column": column,
+        "planted": planted,
+        "finding_count": diffs.len(),
+        "findings": diffs.iter().take(3).cloned().collect::<Vec<_>>(),
+        "named_the_planted_defect": reported,
+        "detected": !diffs.is_empty(),
+        "detection_correct": match kind {
+            ProbeKind::Defect => !diffs.is_empty() && reported,
+            ProbeKind::Control => diffs.is_empty(),
+        },
+    })
+}
+
+/// The defects §6.5 asks the gate to catch, each planted once, plus the two controls that say
+/// what the gate does *not* report. The controls are load-bearing: without them, "26 defects
+/// caught" would be consistent with a gate that reports everything it is shown.
+fn probes() -> Vec<Value> {
+    let clear: Mutation = |_| {};
+    let mut out = Vec::new();
+
+    // Every audited column, changed to a value that is legal for that column somewhere else
+    // in the table. A mutation to an illegal type would be caught by any parser; a plausible
+    // wrong ruling is only caught by a gate that knows what the model says.
+    out.push(probe(
+        "pd-column-disposition",
+        ProbeKind::Defect,
+        false,
+        "canonical_head_and_graph@restart",
+        "disposition",
+        "the ruling is replaced by another lawful disposition",
+        "disposition",
+        clear,
+        |doc| {
+            set_column(
+                doc,
+                "canonical_head_and_graph@restart",
+                "disposition",
+                "invalidated",
+            )
+        },
+    ));
+    out.push(probe(
+        "pd-column-strength",
+        ProbeKind::Defect,
+        false,
+        "block_identity@reconnect",
+        "strength",
+        "an enforced row is downgraded to not_enforced",
+        "strength",
+        clear,
+        |doc| set_column(doc, "block_identity@reconnect", "strength", "not_enforced"),
+    ));
+    out.push(probe(
+        "pd-column-mechanism",
+        ProbeKind::Defect,
+        false,
+        "flashblocks_view_cache@head_rollback",
+        "mechanism",
+        "the mechanism is renamed to another row's mechanism",
+        "mechanism",
+        clear,
+        |doc| {
+            set_column(
+                doc,
+                "flashblocks_view_cache@head_rollback",
+                "mechanism",
+                "cache_keyed_by_height_not_hash",
+            )
+        },
+    ));
+    out.push(probe(
+        "pd-column-clause",
+        ProbeKind::Defect,
+        false,
+        "ready_unsubmitted_plan@restart",
+        "clause",
+        "the row is made to answer a different sentence of §5",
+        "clause",
+        clear,
+        |doc| {
+            set_column(
+                doc,
+                "ready_unsubmitted_plan@restart",
+                "clause",
+                "旧 pending 视图必须按明确规则失效",
+            )
+        },
+    ));
+    out.push(probe(
+        "pd-column-note",
+        ProbeKind::Defect,
+        false,
+        "capital_reservation@head_rollback",
+        "note",
+        "the reason the row carries is replaced by prose that states none",
+        "note",
+        clear,
+        |doc| {
+            set_column(
+                doc,
+                "capital_reservation@head_rollback",
+                "note",
+                "the row no longer says what covers it",
+            )
+        },
+    ));
+    out.push(probe(
+        "pd-column-anchor-token-retargeted",
+        ProbeKind::Defect,
+        false,
+        "nonce_reservation@restart",
+        "anchor_token",
+        "the anchor is moved to another production line in the same file — one that still \
+         resolves, so only the column comparison can see it",
+        "anchor_token",
+        clear,
+        |doc| {
+            set_column(
+                doc,
+                "nonce_reservation@restart",
+                "anchor_token",
+                "if !status.may_be_in_flight() {",
+            )
+        },
+    ));
+    out.push(probe(
+        "pd-column-anchor-file-wrong",
+        ProbeKind::Defect,
+        false,
+        "outstanding_candidates_and_simulations@reconnect",
+        "anchor_file",
+        "the anchor keeps its token and loses its file, so it resolves nowhere",
+        "anchor_file",
+        clear,
+        |doc| {
+            set_column(
+                doc,
+                "outstanding_candidates_and_simulations@reconnect",
+                "anchor_file",
+                "crates/simulation/src/engine.rs",
+            )
+        },
+    ));
+    out.push(probe(
+        "pd-column-task-book-words",
+        ProbeKind::Defect,
+        false,
+        "nonce_reservation@reconnect",
+        "task_book_words",
+        "the row is made to quote §5 about a different state class",
+        "task_book_words",
+        clear,
+        |doc| {
+            set_column(
+                doc,
+                "nonce_reservation@reconnect",
+                "task_book_words",
+                "capital reservation",
+            )
+        },
+    ));
+    // The grid is complete, so renaming either half of a row's identity necessarily loses one
+    // cell and duplicates another; both halves are reported.
+    out.push(probe(
+        "pd-column-state-class",
+        ProbeKind::Defect,
+        false,
+        "capital_reservation@head_rollback",
+        "state_class",
+        "the row is filed under another state class, which collides with the cell that class \
+         already rules on",
+        "the committed table carries this row 2 times",
+        clear,
+        |doc| {
+            set_column(
+                doc,
+                "capital_reservation@head_rollback",
+                "state_class",
+                "nonce_reservation",
+            )
+        },
+    ));
+    out.push(probe(
+        "pd-column-node-event",
+        ProbeKind::Defect,
+        false,
+        "submitted_unconfirmed_transaction@head_rollback",
+        "node_event",
+        "the row is filed under another node event, leaving a cell of the grid unruled",
+        "absent from the committed table",
+        clear,
+        |doc| {
+            set_column(
+                doc,
+                "submitted_unconfirmed_transaction@head_rollback",
+                "node_event",
+                "restart",
+            )
+        },
+    ));
+
+    // §6.5's three shapes.
+    out.push(probe(
+        "pd-row-missing",
+        ProbeKind::Defect,
+        false,
+        "flashblocks_view_cache@reconnect",
+        "<row>",
+        "a ruled cell is deleted from the committed table",
+        "absent from the committed table",
+        clear,
+        |doc| delete_row(doc, "flashblocks_view_cache@reconnect"),
+    ));
+    out.push(probe(
+        "pd-row-duplicate",
+        ProbeKind::Defect,
+        false,
+        "block_identity@restart",
+        "<row>",
+        "a ruled cell is carried twice",
+        "carries this row 2 times",
+        clear,
+        |doc| repeat_row(doc, "block_identity@restart"),
+    ));
+    out.push(probe(
+        "pd-row-extra",
+        ProbeKind::Defect,
+        false,
+        "flashblocks_view_cache@transport_reset",
+        "<row>",
+        "a row is added for an event the task book does not name",
+        "present in the committed table and absent from the model",
+        clear,
+        add_unruled_row,
+    ));
+
+    // §6.5's document-level figures and §6.6's claims.
+    out.push(probe(
+        "pd-document-schema",
+        ProbeKind::Defect,
+        false,
+        "document",
+        "schema",
+        "the schema string is moved to a version nothing generates",
+        "document column schema",
+        clear,
+        |doc| doc["schema"] = json!("m12b-node-reset-policy-v2"),
+    ));
+    out.push(probe(
+        "pd-document-rows",
+        ProbeKind::Defect,
+        false,
+        "document",
+        "rows",
+        "the row count is off by one while the table still holds 24 rows",
+        "document column rows",
+        clear,
+        |doc| doc["rows"] = json!(23),
+    ));
+    out.push(probe(
+        "pd-document-state-classes",
+        ProbeKind::Defect,
+        false,
+        "document",
+        "state_classes",
+        "one state class is dropped from the list the table claims to cover",
+        "document column state_classes",
+        clear,
+        |doc| {
+            doc["state_classes"]
+                .as_array_mut()
+                .expect("a list of classes")
+                .pop();
+        },
+    ));
+    out.push(probe(
+        "pd-document-node-events",
+        ProbeKind::Defect,
+        false,
+        "document",
+        "node_events",
+        "the event list is reordered, which is a different claim about §5's order",
+        "document column node_events",
+        clear,
+        |doc| doc["node_events"].as_array_mut().expect("a list").reverse(),
+    ));
+    out.push(probe(
+        "pd-document-unenforced",
+        ProbeKind::Defect,
+        false,
+        "document",
+        "unenforced_mechanisms",
+        "one of the two rows that are graded but not enforced is silently re-graded as enforced",
+        "document column unenforced_mechanisms",
+        clear,
+        |doc| doc["unenforced_mechanisms"] = json!(["cache_keyed_by_height_not_hash"]),
+    ));
+    out.push(probe(
+        "pd-document-identity-bearing",
+        ProbeKind::Defect,
+        false,
+        "document",
+        "identity_bearing_classes",
+        "a class that carries no block identity is added to the identity-bearing list",
+        "document column identity_bearing_classes",
+        clear,
+        |doc| {
+            doc["identity_bearing_classes"]
+                .as_array_mut()
+                .expect("a list")
+                .push(json!("nonce_reservation"));
+        },
+    ));
+    out.push(probe(
+        "pd-document-strength-counts",
+        ProbeKind::Defect,
+        false,
+        "document",
+        "strength_counts",
+        "the enforced count is lowered without touching a row",
+        "document column strength_counts",
+        clear,
+        |doc| doc["strength_counts"]["enforced"] = json!(21),
+    ));
+    out.push(probe(
+        "pd-document-source-of-truth",
+        ProbeKind::Defect,
+        false,
+        "document",
+        "source_of_truth",
+        "the file that owns the table is pointed at a different test",
+        "document column source_of_truth",
+        clear,
+        |doc| doc["source_of_truth"] = json!("crates/pipeline/tests/readiness_startup.rs"),
+    ));
+    out.push(probe(
+        "pd-document-task-book",
+        ProbeKind::Defect,
+        false,
+        "document",
+        "task_book",
+        "the table is made to answer a different section than the one that asked for it",
+        "document column task_book",
+        clear,
+        |doc| doc["task_book"] = json!("docs/v0.1/M12B Coding.md §6"),
+    ));
+    out.push(probe(
+        "pd-verdict-restart-claimed",
+        ProbeKind::Defect,
+        false,
+        "verdicts",
+        "real_node_restart_experiment",
+        "a restart experiment that was never run is claimed as having passed",
+        "verdict real_node_restart_experiment",
+        clear,
+        |doc| {
+            doc["verdicts"]["real_node_restart_experiment"] =
+                json!("PASSED on one self-hosted node")
+        },
+    ));
+    out.push(probe(
+        "pd-verdict-new-rpc-method",
+        ProbeKind::Defect,
+        false,
+        "verdicts",
+        "new_rpc_methods_in_this_policy",
+        "a method the policy does not have is added to the list that must stay empty",
+        "verdict new_rpc_methods_in_this_policy",
+        clear,
+        |doc| doc["verdicts"]["new_rpc_methods_in_this_policy"] = json!(["eth_pendingRewind"]),
+    ));
+    out.push(probe(
+        "pd-verdict-dropped",
+        ProbeKind::Defect,
+        false,
+        "verdicts",
+        "production_behaviour_changed_by_this_policy",
+        "a verdict is removed, so the file no longer says what it does not change",
+        "verdict production_behaviour_changed_by_this_policy",
+        clear,
+        |doc| {
+            doc["verdicts"]
+                .as_object_mut()
+                .expect("verdicts")
+                .remove("production_behaviour_changed_by_this_policy");
+        },
+    ));
+
+    // §6.7: the same dead anchor written into *both* copies. Column for column the two agree,
+    // so a comparison of two texts would call this a match; it fails because the anchor is
+    // re-resolved against the source, which is the only witness that is neither copy.
+    out.push(probe(
+        "pd-both-copies-dead-anchor",
+        ProbeKind::Defect,
+        true,
+        "outstanding_candidates_and_simulations@restart",
+        "anchor_token",
+        "one dead token, planted identically in the model copy and the artifact copy",
+        "no production line",
+        plant_dead_anchor,
+        plant_dead_anchor,
+    ));
+
+    // The two controls.
+    out.push(probe(
+        "pc-clean-copy",
+        ProbeKind::Control,
+        false,
+        "document",
+        "<none>",
+        "nothing is planted: the committed file and the model are the same table",
+        "",
+        clear,
+        clear,
+    ));
+    out.push(probe(
+        "pc-anchor-line-moved",
+        ProbeKind::Control,
+        false,
+        "ready_unsubmitted_plan@reconnect",
+        "anchor_line",
+        "only the recorded line number moves, which is what an edit in gate.rs does to it",
+        "",
+        clear,
+        |doc| bump_anchor_line(doc, "ready_unsubmitted_plan@reconnect", 3),
+    ));
+    out
+}
+
+fn probe_by_id(id: &str) -> Value {
+    probes()
+        .into_iter()
+        .find(|case| case["id"] == json!(id))
+        .unwrap_or_else(|| panic!("no probe {id}"))
+}
+
+/// The evidence this gate writes: the comparison's own result, the probes' own findings, and
+/// the reason the two sides are not the same reading of the same bytes.
+const CONSISTENCY_FILE: &str = "data/evidence/m12/d/policy-table-consistency.json";
+
+fn consistency_report() -> Value {
+    let model = table();
+    let committed = committed_document();
+    let findings = compare_policy_documents(model, &committed);
+    let model_rows = model["table"].as_array().expect("the model table");
+    let committed_rows = committed["table"].as_array().expect("a committed table");
+    let groups = group_rows(model_rows);
+    let shared = group_rows(committed_rows)
+        .keys()
+        .filter(|key| groups.contains_key(*key))
+        .count();
+    let anchor_checks = model_rows
+        .iter()
+        .chain(committed_rows.iter())
+        .filter_map(|row| Some((row["anchor_file"].as_str()?, row["anchor_token"].as_str()?)))
+        .map(|(file, token)| resolve_in_source(file, token).is_ok())
+        .filter(|resolved| *resolved)
+        .count();
+    let cases = probes();
+    let defects = cases
+        .iter()
+        .filter(|case| case["kind"] == json!("defect"))
+        .collect::<Vec<_>>();
+    let controls = cases
+        .iter()
+        .filter(|case| case["kind"] == json!("control"))
+        .collect::<Vec<_>>();
+    let detected = defects
+        .iter()
+        .filter(|case| case["detection_correct"] == json!(true))
+        .count();
+    let controls_clear = controls
+        .iter()
+        .filter(|case| case["detection_correct"] == json!(true))
+        .count();
+    let both_copies = cases
+        .iter()
+        .filter(|case| case["model_copy_mutated"] == json!(true))
+        .count();
+    json!({
+        "schema": "m12d-policy-table-consistency-v1",
+        "task_book": "docs/v0.1/M12D Coding.md §6",
+        "subject": {
+            "model": "the POLICY const in crates/pipeline/tests/node_reset_policy.rs",
+            "generator": "assemble() in that file, run by the test that writes this evidence",
+            "artifact": EVIDENCE_FILE,
+        },
+        "row_identity": "state_class@node_event",
+        "columns_audited": AUDITED_COLUMNS,
+        "columns_excluded_as_display": {
+            "names": DISPLAY_ONLY_COLUMNS,
+            "why": "the recorded line number is where the anchor pointed when M12-B assembled \
+                    the table; (anchor_file, anchor_token) is the identity and is re-resolved \
+                    against today's source on both copies",
+        },
+        "document_columns_audited": DOCUMENT_COLUMNS,
+        "verdicts_audited": model["verdicts"].as_object().expect("verdicts").keys().cloned().collect::<Vec<_>>(),
+        "comparison": {
+            "model_rows": model_rows.len(),
+            "committed_rows": committed_rows.len(),
+            "rows_on_both_sides": shared,
+            "columns_per_row": AUDITED_COLUMNS.len(),
+            "column_comparisons": shared * AUDITED_COLUMNS.len(),
+            "anchors_re_resolved": anchor_checks,
+            "findings": findings,
+        },
+        "planted_defects": {
+            "total": defects.len(),
+            "caught_as_planted": detected,
+            "missed": defects.len() - detected,
+            "planted_in_the_artifact_copy_only": defects.len() - both_copies,
+        },
+        "controls": {
+            "total": controls.len(),
+            "behaved_as_expected": controls_clear,
+        },
+        "cases": cases,
+        "independence": {
+            "expected_side_inputs": [
+                "the POLICY const and the enum lists in this file",
+                "the production source files the anchors name, as they are on disk now",
+            ],
+            "expected_side_reads_the_artifact": false,
+            "proof": "every defect below is planted in one in-memory copy only, and the other \
+                      copy is rebuilt from the const table; a gate that compared the generated \
+                      file against itself could not see a change that exists in one copy of it. \
+                      pd-both-copies-dead-anchor goes further and plants the same change in \
+                      both copies, which only a check against the source can report.",
+            "identical_mutations_caught_by_source_resolution": both_copies,
+        },
+        "verdicts": {
+            "policy_table_changed": "none — no row, column, or figure of the 24 was edited to \
+                                     make this gate pass; the gate passed on the table M12-B \
+                                     committed",
+            "historical_evidence_rewritten": "none — data/evidence/m12/b/node-reset-policy.json \
+                                              is read here and never written by this file",
+            "real_node_restart_experiment": "NOT_RUN (M12-B's verdict, kept)",
+            "new_rpc_methods_in_this_gate": [],
+            "production_behaviour_changed_by_this_gate": "none — every line below is test-side \
+                                                          code in crates/pipeline/tests/",
+            "node_deployed": "NOT_RUN",
+            "real_giwa_rpc_accessed": "NO",
+            "signing_or_broadcast_performed": "NO",
+        },
+    })
+}
+
+// ---------------------------------------------------------------------------
+// M12-D §6: the gate
+// ---------------------------------------------------------------------------
+
+/// §6.4's repeatable comparison: the committed table and the model are the same 24 rows, on
+/// the same 10 columns, under the same document figures — with every anchor re-resolved
+/// against the source that is on disk right now.
+#[test]
+fn the_committed_table_matches_the_model_column_by_column() {
+    let model = table();
+    let committed = committed_document();
+    let diffs = compare_policy_documents(model, &committed);
+    assert!(
+        diffs.is_empty(),
+        "the committed policy table and the model disagree:\n{}",
+        diffs.join("\n")
+    );
+    let rows = model["table"].as_array().expect("the model table");
+    assert_eq!(rows.len(), POLICY.len());
+    assert_eq!(
+        committed["table"].as_array().expect("rows").len(),
+        24,
+        "八类状态 × 三个事件"
+    );
+}
+
+/// The column list cannot quietly fall behind the generator: the audited set plus the one
+/// display column must be exactly what `assemble()` writes per row.
+#[test]
+fn the_audited_columns_cover_every_column_the_generator_emits() {
+    let first = table()["table"]
+        .as_array()
+        .expect("rows")
+        .first()
+        .expect("a row")
+        .as_object()
+        .expect("a row object");
+    let mut emitted = first.keys().cloned().collect::<Vec<_>>();
+    emitted.sort();
+    let mut expected = AUDITED_COLUMNS.to_vec();
+    expected.extend(DISPLAY_ONLY_COLUMNS);
+    expected.sort();
+    assert_eq!(
+        emitted, expected,
+        "the generator's columns and the audited columns must be one list plus the display \
+         column; a new column is a new thing to audit"
+    );
+    for column in AUDITED_COLUMNS {
+        assert!(
+            !DISPLAY_ONLY_COLUMNS.contains(&column),
+            "{column} cannot be audited and excluded at once"
+        );
+    }
+    assert_eq!(first["state_class"], POLICY[0].class.as_str());
+}
+
+/// The gate's resolver is a second reading of the same rule as M12-B's. If they ever diverge,
+/// a row could resolve for one test and not the other, and the two would stop describing one
+/// table.
+#[test]
+fn the_two_anchor_resolvers_never_disagree() {
+    for row in &POLICY {
+        assert_eq!(
+            resolve_pair(row.anchor.file, row.anchor.token),
+            resolve_in_source(row.anchor.file, row.anchor.token),
+            "{}: the resolvers disagree about the anchor",
+            row_key(row)
+        );
+    }
+}
+
+/// §6.5 and §6.6: every defect that can be planted in the table has to be reported *as that
+/// defect*, and the two controls have to stay quiet. A probe whose findings name something
+/// else is a miss, not a pass.
+#[test]
+fn every_planted_defect_in_the_policy_table_is_reported() {
+    let cases = probes();
+    assert_eq!(
+        cases.len(),
+        28,
+        "十列 + 三形状 + 九份表级数字 + 三条声明 + 一份两侧同改 + 两个对照"
+    );
+    let mut missed = Vec::new();
+    for case in &cases {
+        if case["detection_correct"] != json!(true) {
+            missed.push(format!(
+                "{} ({}) planted `{}` and got {} finding(s): {:?}",
+                case["id"].as_str().expect("an id"),
+                case["kind"].as_str().expect("a kind"),
+                case["planted"].as_str().expect("a planted defect"),
+                case["finding_count"].as_i64().expect("a count"),
+                case["findings"].as_array().expect("findings").len(),
+            ));
+        }
+    }
+    assert!(
+        missed.is_empty(),
+        "the consistency gate does not do its job:\n{}",
+        missed.join("\n")
+    );
+    let defects = cases
+        .iter()
+        .filter(|case| case["kind"] == json!("defect"))
+        .count();
+    assert_eq!(defects, 26);
+    for case in cases.iter().filter(|case| case["kind"] == json!("defect")) {
+        assert!(
+            case["finding_count"].as_i64().expect("a count") > 0,
+            "{} was planted and reported nothing",
+            case["id"].as_str().expect("an id")
+        );
+    }
+}
+
+/// §6.7's 「证据生成器与校验器不得仅通过共同读取同一份已经生成的结果来形成循环自证」, tested as
+/// the shape of the comparison rather than asserted about it: the expected side is `assemble()`,
+/// whose only inputs are the const table and the source files, so no edit that exists only in
+/// the artifact can pass. Each probe changes exactly one of the two copies and still gets its
+/// finding — and the clean control proves the same code reports nothing when there is nothing.
+#[test]
+fn the_gate_reads_the_model_and_the_source_and_nothing_else() {
+    let text = std::fs::read_to_string(
+        workspace_root().join("crates/pipeline/tests/node_reset_policy.rs"),
+    )
+    .expect("this file is readable");
+    let start = text
+        .find("fn assemble() -> Value {")
+        .expect("the generator is in this file");
+    let body = &text[start
+        ..text
+            .find("\nconst EVIDENCE_FILE")
+            .expect("the generator ends here")];
+    assert!(
+        !body.contains("read_to_string") && !body.contains(EVIDENCE_FILE),
+        "the expected side now reads a generated artifact: the gate would be witnessing itself"
+    );
+
+    // Each defect probe is caught against a copy it does not touch — the 25 that plant the
+    // artifact only against the model, and the one that plants both against the source.
+    for case in probes().iter().filter(|c| c["kind"] == json!("defect")) {
+        assert_eq!(
+            case["detected"],
+            json!(true),
+            "{} was planted and the comparison saw nothing",
+            case["id"].as_str().expect("an id")
+        );
+    }
+}
+
+/// The strongest form of the same point: plant one change in *both* copies, identically. A
+/// comparator that only diffed the two texts would call that a perfect match. It is not, because
+/// the anchor is re-resolved against the source — which is the only witness this gate has that
+/// is neither copy.
+#[test]
+fn both_copies_that_agree_on_a_dead_anchor_still_fail() {
+    let case = probe_by_id("pd-both-copies-dead-anchor");
+    assert_eq!(
+        case["named_the_planted_defect"],
+        json!(true),
+        "both copies agreed and nothing was checked against the source: {:?}",
+        case["findings"]
+    );
+
+    // The two copies genuinely do agree on that column, so the finding cannot have come from
+    // the column comparison.
+    let mut model = table().clone();
+    let mut committed = committed_document();
+    plant_dead_anchor(&mut model);
+    plant_dead_anchor(&mut committed);
+    let key = "outstanding_candidates_and_simulations@restart";
+    let ours = model["table"]
+        .as_array()
+        .expect("rows")
+        .iter()
+        .find(|row| row_identity(row) == key)
+        .expect("the planted row")
+        .clone();
+    let theirs = committed["table"]
+        .as_array()
+        .expect("rows")
+        .iter()
+        .find(|row| row_identity(row) == key)
+        .expect("the planted row")
+        .clone();
+    assert_eq!(ours["anchor_token"], theirs["anchor_token"]);
+    assert_eq!(ours["anchor_token"], json!(DEAD_ANCHOR_TOKEN));
+    let row_diffs = compare_policy_rows(&[ours], &[theirs]);
+    assert_eq!(row_diffs.len(), 2, "{row_diffs:?}");
+    assert!(
+        row_diffs
+            .iter()
+            .all(|finding| finding.contains("no production line")),
+        "the only findings are not the anchor: {row_diffs:?}"
+    );
+    for side in ["model", "committed"] {
+        assert!(
+            row_diffs
+                .iter()
+                .any(|finding| finding.contains(&format!("the {side} anchor"))),
+            "{side} was not re-resolved: {row_diffs:?}"
+        );
+    }
+}
+
+/// The complement of the control above, stated as a rule so it cannot silently widen: the only
+/// column the comparison ignores is the one it ignores for a reason.
+#[test]
+fn only_the_display_column_is_excluded_from_the_comparison() {
+    let mut committed = committed_document();
+    let row_count = committed["table"].as_array().expect("rows").len();
+    for index in 0..row_count {
+        let line = committed["table"][index]["anchor_line"]
+            .as_u64()
+            .expect("a line number");
+        committed["table"][index]["anchor_line"] = json!(line + 11);
+    }
+    assert!(
+        compare_policy_documents(table(), &committed).is_empty(),
+        "a whole table of shifted display line numbers is now a policy disagreement — the \
+         gate would go red on an unrelated edit and stop being trusted"
+    );
+
+    // The two halves of the row's identity are compared too, but a change to either moves the
+    // key, so they are planted by name in `probes()` rather than in this loop; everything else
+    // is planted here on the table's first row and must be reported as that column.
+    let first_key = row_identity(
+        table()["table"]
+            .as_array()
+            .expect("rows")
+            .first()
+            .expect("a row"),
+    );
+    for column in AUDITED_COLUMNS
+        .into_iter()
+        .filter(|column| *column != "state_class" && *column != "node_event")
+    {
+        let mut committed = committed_document();
+        set_column(
+            &mut committed,
+            &first_key,
+            column,
+            "a value the model does not hold",
+        );
+        assert!(
+            compare_policy_documents(table(), &committed)
+                .iter()
+                .any(|finding| finding.contains(&format!("{column} is"))),
+            "{column} is compared nowhere"
+        );
+    }
+}
+
+/// The evidence file is this run's result, byte for byte — the same convention M12-B's two
+/// refresh gates use.
+#[test]
+fn the_consistency_evidence_is_this_runs_result() {
+    let report = consistency_report();
+    assert!(
+        report["comparison"]["findings"]
+            .as_array()
+            .expect("findings")
+            .is_empty(),
+        "the gate writes evidence only about a table that agrees: {}",
+        report["comparison"]["findings"]
+    );
+    assert_eq!(report["planted_defects"]["missed"], json!(0));
+    assert_eq!(
+        report["planted_defects"]["caught_as_planted"],
+        report["planted_defects"]["total"]
+    );
+    assert_eq!(report["controls"]["behaved_as_expected"], json!(2));
+    assert_eq!(
+        report["comparison"]["anchors_re_resolved"],
+        json!(48),
+        "24 anchors on each side, every one of them resolving"
+    );
+
+    if std::env::var("M12D_POLICY_GATE_REFRESH").is_ok() {
+        let path = workspace_root().join(CONSISTENCY_FILE);
+        std::fs::create_dir_all(path.parent().expect("a directory"))
+            .expect("create the m12/d evidence directory");
+        std::fs::write(
+            &path,
+            serde_json::to_string_pretty(&report).expect("json") + "\n",
+        )
+        .expect("write the consistency evidence");
+        panic!(
+            "refreshed {CONSISTENCY_FILE}; run this test again without the environment variable"
+        );
+    }
+    let path = workspace_root().join(CONSISTENCY_FILE);
+    let text = std::fs::read_to_string(&path).unwrap_or_else(|_| {
+        panic!(
+            "{CONSISTENCY_FILE} is missing; refresh it with M12D_POLICY_GATE_REFRESH=1 \
+             cargo test -p evm-pipeline --test node_reset_policy -- --test-threads=1"
+        )
+    });
+    let parsed: Value = serde_json::from_str(&text).expect("a json table");
+    assert_eq!(
+        parsed, report,
+        "{CONSISTENCY_FILE} disagrees with the comparison this run made"
+    );
+}
