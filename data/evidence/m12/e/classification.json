@@ -1,0 +1,665 @@
+{
+  "anchor_rows": 12,
+  "anchors": [
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 94,
+      "token": "Self::Once =>",
+      "why": "the send policy allows exactly one attempt"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 93,
+      "token": "Self::RetryOnce =>",
+      "why": "the read policy still allows two; §3 did not touch it"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 208,
+      "token": "pub async fn request_raw_once",
+      "why": "the one-shot path is a named call, not a method-string match"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 370,
+      "token": ".request_raw_once(\"eth_sendRawTransaction\", json!([payload]))",
+      "why": "the only production submission goes through it"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 693,
+      "token": "const DEFINITE_REFUSALS",
+      "why": "the closed list of payload facts a refusal may be read from"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 670,
+      "token": "const METHOD_NOT_FOUND",
+      "why": "the one code with its own arm in the classifier"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 738,
+      "token": "pub fn read_send_refusal",
+      "why": "the classifier is a function a test can call without a socket"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 645,
+      "token": "pub fn parse_rpc_error",
+      "why": "code and message come back out of the transport's own string"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 622,
+      "token": "pub fn without_the_endpoint",
+      "why": "a transport line loses the URL before it reaches an answer"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 608,
+      "token": "pub fn submission_provenance",
+      "why": "an answer names its socket by digest, never by URL"
+    },
+    {
+      "file": "crates/execution/src/submitter.rs",
+      "line": 147,
+      "token": "pub fn proven_not_in_flight",
+      "why": "the lane may go back only on a proof, which is `Rejected` alone"
+    },
+    {
+      "file": "crates/execution/src/submitter.rs",
+      "line": 125,
+      "token": "pub fn tracked_hash",
+      "why": "the local hash is what an outcome carries forward"
+    }
+  ],
+  "cases": 3,
+  "definite_refusal_messages_from_production": [
+    "rpc method is not whitelisted",
+    "intrinsic gas too low",
+    "transaction type not supported",
+    "max priority fee per gas higher than max fee per gas",
+    "negative value",
+    "invalid chain id"
+  ],
+  "graded_at": {
+    "classifier": 15,
+    "payload reader": 1,
+    "wire": 17
+  },
+  "lane_releases": {
+    "held": 9,
+    "released": 7
+  },
+  "max_send_arrivals_in_any_case": 1,
+  "measured_by": "crates/execution/tests/send_uncertainty.rs",
+  "measured_from": "data/evidence/m12/e/measured-rows.jsonl",
+  "method_not_found_code": -32601,
+  "never_absolves": [
+    "already known",
+    "known transaction",
+    "nonce too low",
+    "replacement transaction underpriced"
+  ],
+  "refusal_reads": {
+    "definite": 8,
+    "uncertain": 7
+  },
+  "rows": 33,
+  "rows_in_this_table": 33,
+  "rows_with_an_answered_send": 17,
+  "schema": "m12e-classification-v1",
+  "sections": {
+    "7A": 0,
+    "7B": 0,
+    "7C": 33,
+    "7D": 0,
+    "9.6": 0,
+    "9.7": 0
+  },
+  "status_words": {
+    "rejected": 7,
+    "submitted": 0,
+    "unknown": 10
+  },
+  "table": [
+    {
+      "answer_line": "eth_sendRawTransaction refused the payload (over endpoint rpc-fa19dabb4bc1b63d): [-32003] intrinsic gas too low — the payload's own gas limit is below its intrinsic cost, which makes it invalid at any node state, so no earlier request for it can have been accepted",
+      "case": "only_a_refusal_of_the_payload_itself_clears_the_lane",
+      "code": -32003,
+      "fault": "§7.C: a refusal this build can cite, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "released",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "intrinsic gas too low",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": true,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "rejected",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction refused the payload (over endpoint rpc-ed1ac8c74e484f27): [-32000] transaction type not supported — the endpoint cannot decode this transaction type at all, so it has never held one",
+      "case": "only_a_refusal_of_the_payload_itself_clears_the_lane",
+      "code": -32000,
+      "fault": "§7.C: a refusal this build can cite, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "released",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "transaction type not supported",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": true,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "rejected",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction refused the payload (over endpoint rpc-66d73285d5e11351): [-32000] max priority fee per gas higher than max fee per gas — the payload contradicts itself in its fee fields, so it is not a transaction any node could have accepted",
+      "case": "only_a_refusal_of_the_payload_itself_clears_the_lane",
+      "code": -32000,
+      "fault": "§7.C: a refusal this build can cite, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "released",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "max priority fee per gas higher than max fee per gas",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": true,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "rejected",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction refused the payload (over endpoint rpc-5c4089d6043faec0): [-32000] negative value — the payload carries a negative value, which is not a transactable transaction",
+      "case": "only_a_refusal_of_the_payload_itself_clears_the_lane",
+      "code": -32000,
+      "fault": "§7.C: a refusal this build can cite, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "released",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "negative value",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": true,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "rejected",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction refused the payload (over endpoint rpc-b90fc371e2ae564f): [-32000] invalid chain id — the payload names a chain this endpoint is not, so it could not have been accepted here or propagated as this sender's transaction",
+      "case": "only_a_refusal_of_the_payload_itself_clears_the_lane",
+      "code": -32000,
+      "fault": "§7.C: a refusal this build can cite, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "released",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "invalid chain id",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": true,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "rejected",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction refused the payload (over endpoint rpc-e0d301b5291a54b2): [-32601] rpc method is not whitelisted — the endpoint answers that the method itself is not served here, so this call carried no payload into a transaction pool",
+      "case": "only_a_refusal_of_the_payload_itself_clears_the_lane",
+      "code": -32601,
+      "fault": "§7.C: a refusal this build can cite, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "released",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "rpc method is not whitelisted",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": true,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "rejected",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction refused the payload (over endpoint rpc-0f928f3bb13b1d2b): [-32601] the method is served nowhere here — the endpoint answers that the method itself is not served here, so this call carried no payload into a transaction pool",
+      "case": "only_a_refusal_of_the_payload_itself_clears_the_lane",
+      "code": -32601,
+      "fault": "§7.C: a refusal this build can cite, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "released",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "the method is served nowhere here",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": true,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "rejected",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32601,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "rpc method is not whitelisted",
+      "refusal_read": "definite",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32003,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "Intrinsic Gas Too Low",
+      "refusal_read": "definite",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32000,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "intrinsic gas too low: have 21000, want 21204",
+      "refusal_read": "definite",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32000,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "transaction type not supported",
+      "refusal_read": "definite",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32000,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "max priority fee per gas higher than max fee per gas",
+      "refusal_read": "definite",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32000,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "negative value",
+      "refusal_read": "definite",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32000,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "invalid chain id",
+      "refusal_read": "definite",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32001,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "intrinsic gas too low",
+      "refusal_read": "definite",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32003,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "nonce too low",
+      "refusal_read": "uncertain",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32003,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "already known",
+      "refusal_read": "uncertain",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32003,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "known transaction",
+      "refusal_read": "uncertain",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32003,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "replacement transaction underpriced",
+      "refusal_read": "uncertain",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32003,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "insufficient funds",
+      "refusal_read": "uncertain",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32000,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "internal: intrinsic gas too low, reported late in a wrapper sentence",
+      "refusal_read": "uncertain",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "code": -32603,
+      "fault": "§7.C: the classifier asked directly, no socket in the way",
+      "graded_at": "classifier",
+      "message": "method not found but under the wrong code",
+      "refusal_read": "uncertain",
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "case": "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+      "fault": "§7.C: the four shapes of an `error` member, read by parse_rpc_error",
+      "graded_at": "payload reader",
+      "reads_a_code_and_a_message": true,
+      "rejects_a_bare_string": true,
+      "rejects_a_body_that_is_not_json": true,
+      "rejects_an_object_without_a_message": true,
+      "section": "7C",
+      "table": "classification"
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-ca223a41da4f7e9b): [-32003] already known — the node reports it already holds this transaction, which is an answer about these bytes rather than a refusal of them",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": -32003,
+      "fault": "§7.C: an answer about state or the pool, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "already known",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-ec73a076459f0414): [-32003] known transaction — the node reports it already holds this transaction, which is an answer about these bytes rather than a refusal of them",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": -32003,
+      "fault": "§7.C: an answer about state or the pool, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "known transaction",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-c0225bdf61693bae): [-32003] nonce too low — a transaction at this nonce has already advanced the account, and only a receipt read can say whether that transaction is ours",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": -32003,
+      "fault": "§7.C: an answer about state or the pool, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "nonce too low",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-7f9bd54b1dab949e): [-32003] replacement transaction underpriced — the endpoint holds a pending transaction at this nonce, so these bytes were not the first thing asked of it",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": -32003,
+      "fault": "§7.C: an answer about state or the pool, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "replacement transaction underpriced",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-d76a3866cf07e6cc): [-32003] nonce too high — this build cannot cite an interface guarantee that separates a refusal of a submission from an answer about one it already has; the code and message are reported and read no further",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": -32003,
+      "fault": "§7.C: an answer about state or the pool, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "nonce too high",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-dc9de2117bf672a3): [-32003] insufficient funds — this build cannot cite an interface guarantee that separates a refusal of a submission from an answer about one it already has; the code and message are reported and read no further",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": -32003,
+      "fault": "§7.C: an answer about state or the pool, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "insufficient funds",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-f84a237d17391e75): [-32000] transaction gas limit exceeds block gas limit — this build cannot cite an interface guarantee that separates a refusal of a submission from an answer about one it already has; the code and message are reported and read no further",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": -32000,
+      "fault": "§7.C: an answer about state or the pool, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "transaction gas limit exceeds block gas limit",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-06e6e398de0d3864): [4242424] a code and message this repository has never seen — this build cannot cite an interface guarantee that separates a refusal of a submission from an answer about one it already has; the code and message are reported and read no further",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": 4242424,
+      "fault": "§7.C: an answer about state or the pool, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "a code and message this repository has never seen",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-d3b77f81a72804f8): [-32603] internal error — this build cannot cite an interface guarantee that separates a refusal of a submission from an answer about one it already has; the code and message are reported and read no further",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": -32603,
+      "fault": "§7.C: an answer about state or the pool, graded at the wire and at the lane",
+      "graded_at": "wire",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "internal error",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error payload this build cannot parse (over endpoint rpc-3171e8d0569c07b1): \"gateway said no in its own words\"",
+      "case": "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+      "code": null,
+      "fault": "§7.C: an `error` member that is not a readable object at all",
+      "graded_at": "wire",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "gateway said no in its own words",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7C",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "classification",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    }
+  ],
+  "task_book": "docs/v0.1/M12E Coding.md §4, §7.C, §9 item 4",
+  "what_this_table_is": "how this build reads a submission answer: which payloads it may call refused outright, which answers it must call uncertain, and what the lane did with each. Rows graded at the `wire` went through a stub socket; rows graded at the `classifier` are the same function asked directly, with no socket in the way.",
+  "what_this_table_is_not": "a claim about any particular node's error strings. The six messages graded definite are payload facts; the -32601 arm is the whitelist refusal this repository's own M6 probe recorded. Everything else is deliberately left unread, and the semantics of those unconfirmed answers are recorded in the completion report, not asserted here."
+}

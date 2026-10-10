@@ -596,7 +596,7 @@
       "evidence_refs": [
         {
           "file": "crates/chain/src/rpc.rs",
-          "line": 396,
+          "line": 486,
           "matches": 1,
           "note": "the only block term this build sends on the state path: a number",
           "source": "code",
@@ -860,7 +860,7 @@
         "evidence_refs": [
           {
             "file": "crates/chain/src/rpc.rs",
-            "line": 84,
+            "line": 120,
             "matches": 1,
             "note": "the connect-time exception the module documents",
             "source": "code",

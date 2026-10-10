@@ -381,7 +381,7 @@
         },
         {
           "file": "crates/chain/src/rpc.rs",
-          "line": 396,
+          "line": 486,
           "matches": 1,
           "note": "the only block term this build sends on the state path: a number",
           "source": "code",
@@ -904,7 +904,7 @@
         },
         {
           "file": "crates/chain/src/rpc.rs",
-          "line": 396,
+          "line": 486,
           "matches": 1,
           "note": "the only block term this build sends on the state path: a number",
           "source": "code",
@@ -1600,7 +1600,7 @@
         },
         {
           "file": "crates/chain/src/rpc.rs",
-          "line": 396,
+          "line": 486,
           "matches": 1,
           "note": "the only block term this build sends on the state path: a number",
           "source": "code",
@@ -2123,7 +2123,7 @@
         },
         {
           "file": "crates/chain/src/rpc.rs",
-          "line": 396,
+          "line": 486,
           "matches": 1,
           "note": "the only block term this build sends on the state path: a number",
           "source": "code",
@@ -2819,7 +2819,7 @@
         },
         {
           "file": "crates/chain/src/rpc.rs",
-          "line": 396,
+          "line": 486,
           "matches": 1,
           "note": "the only block term this build sends on the state path: a number",
           "source": "code",
@@ -3342,7 +3342,7 @@
         },
         {
           "file": "crates/chain/src/rpc.rs",
-          "line": 396,
+          "line": 486,
           "matches": 1,
           "note": "the only block term this build sends on the state path: a number",
           "source": "code",

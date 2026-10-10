@@ -1,0 +1,439 @@
+{
+  "anchor_rows": 12,
+  "anchors": [
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 94,
+      "token": "Self::Once =>",
+      "why": "the send policy allows exactly one attempt"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 93,
+      "token": "Self::RetryOnce =>",
+      "why": "the read policy still allows two; §3 did not touch it"
+    },
+    {
+      "file": "crates/chain/src/rpc.rs",
+      "line": 208,
+      "token": "pub async fn request_raw_once",
+      "why": "the one-shot path is a named call, not a method-string match"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 370,
+      "token": ".request_raw_once(\"eth_sendRawTransaction\", json!([payload]))",
+      "why": "the only production submission goes through it"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 693,
+      "token": "const DEFINITE_REFUSALS",
+      "why": "the closed list of payload facts a refusal may be read from"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 670,
+      "token": "const METHOD_NOT_FOUND",
+      "why": "the one code with its own arm in the classifier"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 738,
+      "token": "pub fn read_send_refusal",
+      "why": "the classifier is a function a test can call without a socket"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 645,
+      "token": "pub fn parse_rpc_error",
+      "why": "code and message come back out of the transport's own string"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 622,
+      "token": "pub fn without_the_endpoint",
+      "why": "a transport line loses the URL before it reaches an answer"
+    },
+    {
+      "file": "crates/execution/src/giwa/sequencer_direct.rs",
+      "line": 608,
+      "token": "pub fn submission_provenance",
+      "why": "an answer names its socket by digest, never by URL"
+    },
+    {
+      "file": "crates/execution/src/submitter.rs",
+      "line": 147,
+      "token": "pub fn proven_not_in_flight",
+      "why": "the lane may go back only on a proof, which is `Rejected` alone"
+    },
+    {
+      "file": "crates/execution/src/submitter.rs",
+      "line": 125,
+      "token": "pub fn tracked_hash",
+      "why": "the local hash is what an outcome carries forward"
+    }
+  ],
+  "cases": 13,
+  "max_read_arrivals_in_any_case": 2,
+  "max_send_arrivals_in_any_case": 1,
+  "measured_by": "crates/execution/tests/send_uncertainty.rs",
+  "measured_from": "data/evidence/m12/e/measured-rows.jsonl",
+  "rows": 16,
+  "rows_in_this_table": 16,
+  "rows_with_an_answered_send": 14,
+  "schema": "m12e-request-counts-v1",
+  "sections": {
+    "7A": 9,
+    "7B": 1,
+    "7C": 0,
+    "7D": 3,
+    "9.6": 2,
+    "9.7": 1
+  },
+  "status_words": {
+    "rejected": 2,
+    "submitted": 2,
+    "unknown": 10
+  },
+  "table": [
+    {
+      "answer_line": "no answer from eth_sendRawTransaction (over endpoint rpc-51894bcd1f4b1d44): rpc request failed: non-json response (status 200 OK): error decoding response body",
+      "case": "a_body_that_is_not_json_is_one_post_and_an_unknown_answer",
+      "fault": "§7.A case 4: 200 OK whose body is not JSON",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7A",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with the hash of another transaction (over endpoint rpc-f5033ec1c5f3c860): it named 0x000000000000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee while these bytes hash to 0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47, so the answer describes something this process did not sign and cannot be read as an acknowledgement of them; the locally computed hash stays the one tracked",
+      "case": "a_hash_that_is_not_ours_is_one_post_and_never_an_acknowledgement",
+      "evidence_outcome": "unknown",
+      "evidence_tracks_local_hash": true,
+      "fault": "§7.A case 7: 200 OK naming a hash that is not these bytes'",
+      "hashes_agree": false,
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "node_returned_hash": "0x000000000000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "proven_not_in_flight": false,
+      "section": "7A",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1
+    },
+    {
+      "answer_line": "eth_sendRawTransaction refused the payload (over endpoint rpc-be6b6508f3408910): [-32003] intrinsic gas too low — the payload's own gas limit is below its intrinsic cost, which makes it invalid at any node state, so no earlier request for it can have been accepted",
+      "case": "a_json_rpc_error_is_one_post_whichever_way_it_is_read",
+      "code": -32003,
+      "fault": "§7.A case 6: 200 OK with a JSON-RPC error object, read both ways",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "intrinsic gas too low",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": true,
+      "section": "7A",
+      "send_arrivals": 1,
+      "status_word": "rejected",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-da4961f6094b2537): [-32003] nonce too low — a transaction at this nonce has already advanced the account, and only a receipt read can say whether that transaction is ours",
+      "case": "a_json_rpc_error_is_one_post_whichever_way_it_is_read",
+      "code": -32003,
+      "fault": "§7.A case 6: 200 OK with a JSON-RPC error object, read both ways",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "nonce too low",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7A",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-f12814b6808ac2f4): [-32003] already known — the node reports it already holds this transaction, which is an answer about these bytes rather than a refusal of them",
+      "case": "a_json_rpc_error_is_one_post_whichever_way_it_is_read",
+      "code": -32003,
+      "fault": "§7.A case 6: 200 OK with a JSON-RPC error object, read both ways",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "message": "already known",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7A",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1
+    },
+    {
+      "answer_line": "no answer from eth_sendRawTransaction (over endpoint rpc-7c8433ea1d7d39ef): rpc request failed: error sending request for url (rpc-7c8433ea1d7d39ef)",
+      "case": "a_response_that_comes_after_the_clients_own_timeout_is_one_post",
+      "client_waited_ms": 20003,
+      "fault": "§7.A case 3: the answer arrives after the client's own request timeout",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7A",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1,
+      "wait_was_the_adapters_own_timeout": true
+    },
+    {
+      "answer_line": "no answer from eth_sendRawTransaction (over endpoint rpc-723077a4fe4aad48): rpc request failed: error sending request for url (rpc-723077a4fe4aad48)",
+      "case": "a_socket_closed_after_reading_every_byte_is_one_post_and_an_unknown_answer",
+      "fault": "§7.A case 2: every request byte read, then the socket closed with no response",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "payload_was_fully_read": true,
+      "proven_not_in_flight": false,
+      "section": "7A",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1
+    },
+    {
+      "answer_line": "eth_sendRawTransaction returned 0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47 (over endpoint rpc-562d0770a2cae5b4)",
+      "case": "an_acknowledgement_is_not_an_inclusion_and_a_receipt_binds_to_the_local_hash_only",
+      "evidence_outcome": "submitted",
+      "evidence_receipt_block_present": false,
+      "evidence_receipt_status_present": false,
+      "fault": "§7.D: an acknowledged send, then a receipt read bound to the local hash",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "local_receipt_bound": true,
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "node_named_receipt_refused": true,
+      "proven_not_in_flight": false,
+      "section": "7D",
+      "send_arrivals": 1,
+      "status_word": "submitted",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction returned 0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47 (over endpoint rpc-1207a0d3394df75c)",
+      "case": "an_acknowledgement_of_these_bytes_is_one_post_and_the_only_accepted_answer",
+      "fault": "§7.A case 1: 200 OK whose result is the hash of these bytes",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7A",
+      "send_arrivals": 1,
+      "signed_bytes_are_what_arrived": true,
+      "status_word": "submitted",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1
+    },
+    {
+      "answer_line": "eth_sendRawTransaction answered with an error that does not prove the bytes were never taken (over endpoint rpc-838ca2e5878b8e85): [-32000] no route for rpc-838ca2e5878b8e85 in this gateway — this build cannot cite an interface guarantee that separates a refusal of a submission from an answer about one it already has; the code and message are reported and read no further",
+      "carries_the_credential": false,
+      "carries_the_url": false,
+      "case": "an_error_message_that_quotes_the_endpoint_arrives_scrubbed",
+      "classification_branch": "unknown",
+      "fault": "§9 item 6, branch 1: an error message quoting the URL the send was made through",
+      "keeps_the_nodes_words": true,
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "names_endpoint_digest": true,
+      "proven_not_in_flight": false,
+      "section": "9.6",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "eth_sendRawTransaction refused the payload (over endpoint rpc-7e6d098df5f75ccb): [-32003] intrinsic gas too low, as reported at rpc-7e6d098df5f75ccb — the payload's own gas limit is below its intrinsic cost, which makes it invalid at any node state, so no earlier request for it can have been accepted",
+      "carries_the_credential": false,
+      "carries_the_url": false,
+      "case": "an_error_message_that_quotes_the_endpoint_arrives_scrubbed",
+      "classification_branch": "rejected",
+      "fault": "§9 item 6, branch 2: a refusal whose message quotes the URL as well",
+      "keeps_the_nodes_words": true,
+      "local_hash": "0xa79be1648db534ed8eee29cb50aab2dde3a6fe0935b0c3d071f1dda84d58d54b",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "names_endpoint_digest": true,
+      "proven_not_in_flight": true,
+      "section": "9.6",
+      "send_arrivals": 1,
+      "status_word": "rejected",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "no answer from eth_sendRawTransaction (over endpoint rpc-c814aa4f74aa93b2): rpc request failed: error sending request for url (rpc-c814aa4f74aa93b2)",
+      "case": "an_http_status_that_is_not_a_refusal_is_one_post_and_an_unknown_answer",
+      "fault": "§7.A case 5: HTTP 502 from the gateway in front of the node",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "proven_not_in_flight": false,
+      "section": "7A",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1
+    },
+    {
+      "answer_line": "no answer from eth_sendRawTransaction (over endpoint rpc-54ad3aecafd23cb3): rpc request failed: error sending request for url (rpc-54ad3aecafd23cb3)",
+      "case": "the_endpoint_took_the_bytes_and_the_answer_never_arrived_sends_once_and_holds_the_lane",
+      "evidence_marks_bytes_as_sent": true,
+      "evidence_outcome": "unknown",
+      "evidence_tracks_local_hash": true,
+      "fault": "§7.B: the endpoint read and recorded the raw bytes, and no answer came back",
+      "lane_release": "held",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction"
+      ],
+      "outstanding_still_carries_the_nonce": true,
+      "proven_not_in_flight": false,
+      "second_allocate_refused": true,
+      "section": "7B",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 2,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 1
+    },
+    {
+      "case": "the_read_side_still_asks_twice_when_the_first_socket_dies",
+      "fault": "§7.D: a dead socket on a *read* (eth_getTransactionReceipt)",
+      "methods": [
+        "eth_chainId",
+        "eth_getTransactionReceipt",
+        "eth_getTransactionReceipt"
+      ],
+      "read_arrivals": 2,
+      "section": "7D",
+      "send_arrivals": 0,
+      "table": "request_counts",
+      "total_arrivals": 3,
+      "unconsumed_shapes": 0
+    },
+    {
+      "answer_line": "no answer from eth_sendRawTransaction (over endpoint rpc-0bd8cac1dd4fa888): rpc request failed: error sending request for url (rpc-0bd8cac1dd4fa888)",
+      "arrivals_in_order": [
+        "eth_chainId",
+        "eth_sendRawTransaction",
+        "eth_getTransactionReceipt",
+        "eth_getTransactionReceipt"
+      ],
+      "case": "the_same_fault_counts_once_on_a_send_and_twice_on_a_read",
+      "fault": "§7.D: one dead socket, asked first as a send then as a read",
+      "local_hash": "0x16d1f0bb41a80d306fed87471da7d911d4a779884ca3ba6ce0cd3cba559ace47",
+      "methods": [
+        "eth_chainId",
+        "eth_sendRawTransaction",
+        "eth_getTransactionReceipt",
+        "eth_getTransactionReceipt"
+      ],
+      "proven_not_in_flight": false,
+      "read_arrivals": 2,
+      "section": "7D",
+      "send_arrivals": 1,
+      "status_word": "unknown",
+      "table": "request_counts",
+      "total_arrivals": 4,
+      "tracked_hash_equals_local": true,
+      "unconsumed_shapes": 0
+    },
+    {
+      "arrivals_in_order": [
+        "eth_chainId",
+        "eth_sendRawTransaction",
+        "eth_getTransactionReceipt",
+        "eth_getTransactionReceipt"
+      ],
+      "case": "the_trace_records_one_attempt_per_request_the_socket_saw",
+      "dropped_events": 0,
+      "fault": "§9 item 7: one dead send and one read that dies then recovers, on one socket",
+      "section": "9.7",
+      "socket_receipt_arrivals": 2,
+      "socket_send_arrivals": 1,
+      "table": "trace_accounting",
+      "total_arrivals": 4,
+      "trace_receipt_attempts": 2,
+      "trace_send_attempts": 1,
+      "trace_total_attempts": 4
+    }
+  ],
+  "task_book": "docs/v0.1/M12E Coding.md §7.A, §7.B, §7.D, §9 item 6, §9 item 7",
+  "what_this_table_is": "what a stub socket on loopback actually received, per case: the method of every arrival, how many of them were `eth_sendRawTransaction`, and what the client made of the answer it got. §7.A's rule is that the count comes from the socket, not from an assertion that a client function ran.",
+  "what_this_table_is_not": "no row is a real endpoint. Nothing here says a transaction entered a block, was confirmed, or made money, and the local hash a row tracks lives in this process only — a restart forgets it (M12-D §13.2).",
+  "wire_policy": {
+    "once_attempts": 1,
+    "read_from": "crates/chain/src/rpc.rs :: WirePolicy::attempts",
+    "retry_once_attempts": 2
+  }
+}

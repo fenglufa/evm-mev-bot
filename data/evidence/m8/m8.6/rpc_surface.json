@@ -98,7 +98,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 102,
+      "line": 138,
       "matches": 1,
       "note": "site connect.eth_chainId.unstamped stamps its caller label here",
       "source": "code",
@@ -706,7 +706,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 541,
+      "line": 631,
       "matches": 1,
       "note": "eth_blockNumber reaches the wire through this adapter leg",
       "source": "code",
@@ -714,7 +714,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 559,
+      "line": 649,
       "matches": 1,
       "note": "eth_getBlockByNumber reaches the wire through this adapter leg",
       "source": "code",
@@ -722,7 +722,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 722,
+      "line": 812,
       "matches": 1,
       "note": "eth_call reaches the wire through this adapter leg",
       "source": "code",
@@ -730,7 +730,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 739,
+      "line": 829,
       "matches": 1,
       "note": "eth_getBalance reaches the wire through this adapter leg",
       "source": "code",
@@ -738,7 +738,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 749,
+      "line": 839,
       "matches": 1,
       "note": "eth_getStorageAt reaches the wire through this adapter leg",
       "source": "code",
@@ -746,7 +746,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 732,
+      "line": 822,
       "matches": 1,
       "note": "eth_getCode reaches the wire through this adapter leg",
       "source": "code",
@@ -754,7 +754,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 763,
+      "line": 853,
       "matches": 1,
       "note": "eth_getTransactionCount reaches the wire through this adapter leg",
       "source": "code",
@@ -762,7 +762,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 102,
+      "line": 138,
       "matches": 1,
       "note": "eth_chainId reaches the wire through this adapter leg",
       "source": "code",
@@ -1190,7 +1190,7 @@
       },
       "site_id": "connect.eth_chainId.unstamped",
       "source_file": "crates/chain/src/rpc.rs",
-      "source_line": 102,
+      "source_line": 138,
       "stage": null,
       "timing": {
         "asks": 3,
@@ -2667,7 +2667,7 @@
   "transports": [
     {
       "adapter_file": "crates/chain/src/rpc.rs",
-      "adapter_line": 541,
+      "adapter_line": 631,
       "adapter_token": "async fn latest_block(&self",
       "method": "eth_blockNumber",
       "note": "one ask per run, at the observation stage, and it is the ask that fixes the pin",
@@ -2675,7 +2675,7 @@
     },
     {
       "adapter_file": "crates/chain/src/rpc.rs",
-      "adapter_line": 559,
+      "adapter_line": 649,
       "adapter_token": "async fn get_block_context(&self",
       "method": "eth_getBlockByNumber",
       "note": "the largest family in the census; two of its three wire paths are raw requests (`giwa/preflight_facts.rs`'s head read and `giwa/sequencer_direct.rs`'s nonce-pair head), which is why the surface table keys a method to more than one adapter leg",
@@ -2683,7 +2683,7 @@
     },
     {
       "adapter_file": "crates/chain/src/rpc.rs",
-      "adapter_line": 722,
+      "adapter_line": 812,
       "adapter_token": "async fn call(&self",
       "method": "eth_call",
       "note": "60 asks in the corpus, graded site by site in M8.5.1",
@@ -2691,7 +2691,7 @@
     },
     {
       "adapter_file": "crates/chain/src/rpc.rs",
-      "adapter_line": 739,
+      "adapter_line": 829,
       "adapter_token": "async fn get_balance(&self",
       "method": "eth_getBalance",
       "note": "read by the gate, by the lane, by the snapshot and by REVM",
@@ -2699,7 +2699,7 @@
     },
     {
       "adapter_file": "crates/chain/src/rpc.rs",
-      "adapter_line": 749,
+      "adapter_line": 839,
       "adapter_token": "async fn get_storage_at(&self",
       "method": "eth_getStorageAt",
       "note": "every ask is a REVM demand inside one simulation, which is the scope M8.3.1's cache already serves",
@@ -2707,7 +2707,7 @@
     },
     {
       "adapter_file": "crates/chain/src/rpc.rs",
-      "adapter_line": 732,
+      "adapter_line": 822,
       "adapter_token": "fn get_code(",
       "method": "eth_getCode",
       "note": "same as storage: no pair among the 78, because the cache is asked first",
@@ -2715,7 +2715,7 @@
     },
     {
       "adapter_file": "crates/chain/src/rpc.rs",
-      "adapter_line": 763,
+      "adapter_line": 853,
       "adapter_token": "async fn get_nonce(&self",
       "method": "eth_getTransactionCount",
       "note": "always read as a pair, pending and confirmed",
@@ -2723,7 +2723,7 @@
     },
     {
       "adapter_file": "crates/chain/src/rpc.rs",
-      "adapter_line": 102,
+      "adapter_line": 138,
       "adapter_token": "request_with(&http, url, \"eth_chainId\"",
       "method": "eth_chainId",
       "note": "three asks per run and no block term on any of them; the connect leg is recorded with `context_not_stamped` because no stage exists yet to name it",

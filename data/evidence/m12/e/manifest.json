@@ -1,0 +1,913 @@
+{
+ "schema": "m12e-manifest-v1",
+ "milestone": "M12-E send-outcome uncertainty, one-shot submission, and local hash tracking",
+ "task_book": "docs/v0.1/M12E Coding.md",
+ "generated_at_utc": "2026-10-10T19:13:53Z",
+ "git_commit": "90f0b5cf8892b9b7c114732fa5ce596cd70dbf61",
+ "git_commit_reading": "read .git/HEAD (ref: refs/heads/main), then the loose ref it names",
+ "how_this_file_was_built": "every figure below is read out of a gate log, a committed evidence file, the worktree diff, or a source file by /tmp/m12e_manifest.py; no figure is typed in by hand",
+ "standing_verdicts": {
+  "node_deployed": false,
+  "real_rpc_connected": false,
+  "real_flashblocks_connected": false,
+  "l1_connected": false,
+  "real_key_used": false,
+  "transaction_signed_for_broadcast": false,
+  "transaction_broadcast": false,
+  "how_known": "the only socket in this round's measurement is a `std::net::TcpListener` bound to 127.0.0.1:0 inside the test process; production code was not run against any network, and the two verification transactions of M7 remain the only real submissions in this repository's history",
+  "process_restart_persistence": "UNSOLVED — M12-D §13.2 stays open. The local hash this round tracks is a field of an in-process enum; nothing writes it down, so a restart forgets it"
+ },
+ "scope": {
+  "production_files": [
+   {
+    "file": "crates/chain/src/rpc.rs",
+    "added": 103,
+    "removed": 13,
+    "lines_now": 862
+   },
+   {
+    "file": "crates/chain/src/rpc_trace.rs",
+    "added": 8,
+    "removed": 8,
+    "lines_now": 1511
+   },
+   {
+    "file": "crates/execution/src/evidence.rs",
+    "added": 0,
+    "removed": 2,
+    "lines_now": 420
+   },
+   {
+    "file": "crates/execution/src/giwa/mod.rs",
+    "added": 2,
+    "removed": 1,
+    "lines_now": 31
+   },
+   {
+    "file": "crates/execution/src/giwa/sequencer_direct.rs",
+    "added": 196,
+    "removed": 18,
+    "lines_now": 768
+   },
+   {
+    "file": "crates/execution/src/submitter.rs",
+    "added": 37,
+    "removed": 19,
+    "lines_now": 251
+   }
+  ],
+  "production_added": 346,
+  "production_removed": 61,
+  "production_files_touched": 6,
+  "test_files_modified": [
+   "crates/execution/tests/endpoint_provenance.rs",
+   "crates/execution/tests/executor_deploy.rs",
+   "crates/execution/tests/executor_lifecycle.rs",
+   "crates/execution/tests/lane_matrix.rs",
+   "crates/execution/tests/sequence.rs",
+   "crates/execution/tests/stage_matrix.rs",
+   "crates/execution/tests/state_lifetime_recovery.rs"
+  ],
+  "test_files_new": [
+   "crates/execution/tests/send_uncertainty.rs",
+   "crates/execution/tests/send_uncertainty_evidence.rs"
+  ],
+  "new_test_functions": {
+   "crates/execution/tests/send_uncertainty.rs": 16,
+   "crates/execution/tests/send_uncertainty_evidence.rs": 15
+  },
+  "new_test_functions_total": 31,
+  "untracked_line_counts": {
+   "crates/execution/tests/send_uncertainty.rs": 1627,
+   "crates/execution/tests/send_uncertainty_evidence.rs": 1541,
+   "data/evidence/m12/e/measured-rows.jsonl": 49,
+   "data/evidence/m12/e/request-counts.json": 439,
+   "data/evidence/m12/e/classification.json": 665
+  },
+  "ignored_added_by_this_round": 0,
+  "evidence_files_new": [
+   "classification.json",
+   "manifest.json",
+   "measured-rows.jsonl",
+   "request-counts.json"
+  ],
+  "how_measured": "production and test diffs from `git diff --numstat`; new-file line counts and `#[test]`/`#[tokio::test]` attributes counted from the files themselves"
+ },
+ "gates": {
+  "serial": true,
+  "env": "CC=clang CXX=clang++ CXXFLAGS=-include cstdint",
+  "commands": [
+   "cargo fmt --all -- --check",
+   "cargo clean -p <each of the 16 workspace packages>",
+   "cargo clippy --workspace --all-targets -- -D warnings",
+   "cargo test --workspace --no-fail-fast -- --test-threads=1"
+  ],
+  "why_no_fail_fast": "gate 3 runs with --no-fail-fast so a red target cannot hide the rest of the workspace behind it; --test-threads=1 is the repository's standing rule because target/pipeline-tests/ scratch is shared across processes",
+  "fmt": {
+   "exit_code": 0,
+   "wall_seconds": 2,
+   "start_utc": "2026-10-10T19:05:45Z",
+   "end_utc": "2026-10-10T19:05:47Z",
+   "stdout_bytes": 0,
+   "output_lines": 0,
+   "artifact": "/tmp/m12e_gate1_fmt.log"
+  },
+  "clippy": {
+   "exit_code": 0,
+   "wall_seconds": 28,
+   "start_utc": "2026-10-10T19:06:00Z",
+   "end_utc": "2026-10-10T19:06:28Z",
+   "artifact": "/tmp/m12e_gate2_clippy.log",
+   "cold_run": {
+    "packages_cleaned": 16,
+    "package_names": [
+     "evm-chain",
+     "evm-cli",
+     "evm-core",
+     "evm-discovery",
+     "evm-execution",
+     "evm-graph",
+     "evm-live",
+     "evm-metrics",
+     "evm-opportunity",
+     "evm-pathfinder",
+     "evm-pipeline",
+     "evm-protocol",
+     "evm-replay",
+     "evm-risk",
+     "evm-simulation",
+     "evm-state"
+    ],
+    "workspace_packages": [
+     "evm-chain",
+     "evm-cli",
+     "evm-core",
+     "evm-discovery",
+     "evm-execution",
+     "evm-graph",
+     "evm-live",
+     "evm-metrics",
+     "evm-opportunity",
+     "evm-pathfinder",
+     "evm-pipeline",
+     "evm-protocol",
+     "evm-replay",
+     "evm-risk",
+     "evm-simulation",
+     "evm-state"
+    ],
+    "cleaned_every_workspace_package": true,
+    "rc": 0,
+    "wall_seconds": 13,
+    "start_utc": "2026-10-10T19:05:47Z",
+    "end_utc": "2026-10-10T19:06:00Z",
+    "artifact": "/tmp/m12e_gate2_clean.log",
+    "clean_log_lines": 16,
+    "why": "a warm clippy re-analyses nothing, so the exposure of the gate could not be stated from its own log; every workspace package was cleaned first and dependencies were left cached"
+   },
+   "analysis_units": 16,
+   "distinct_packages_reanalysed": 16,
+   "package_names": [
+    "evm-chain",
+    "evm-cli",
+    "evm-core",
+    "evm-discovery",
+    "evm-execution",
+    "evm-graph",
+    "evm-live",
+    "evm-metrics",
+    "evm-opportunity",
+    "evm-pathfinder",
+    "evm-pipeline",
+    "evm-protocol",
+    "evm-replay",
+    "evm-risk",
+    "evm-simulation",
+    "evm-state"
+   ],
+   "warning_or_error_lines": 0,
+   "self_reported_finished": "Finished `dev` profile [unoptimized + debuginfo] target(s) in 27.17s"
+  },
+  "test": {
+   "exit_code": 0,
+   "wall_seconds": 280,
+   "start_utc": "2026-10-10T19:06:28Z",
+   "end_utc": "2026-10-10T19:11:08Z",
+   "artifact": "/tmp/m12e_gate3_test.log",
+   "target_headers_seen": 135,
+   "test_targets": 135,
+   "targets_without_a_result_line": [],
+   "target_kinds": {
+    "unittest": 17,
+    "integration": 102,
+    "doctest": 16
+   },
+   "passed": 1761,
+   "failed": 0,
+   "ignored": 29,
+   "measured": 0,
+   "filtered_out": 0,
+   "per_target_runtime_seconds": 128.53,
+   "compiler_warning_lines": 0,
+   "timeout_lines": 0,
+   "panic_lines": 0,
+   "ignored_is_not_passed": "the ignored names below are counted in `ignored` only, never in `passed`",
+   "ignored_test_count": 29,
+   "ignored_test_names": [
+    "capture_contiguous_corpus",
+    "capture_real_block",
+    "capture_the_real_three_hop_cycle_state",
+    "historical_census_is_reproducible_and_lands_in_the_graph",
+    "m11_cycle_state_files_are_written",
+    "measure_the_fees_the_pools_actually_charge",
+    "measure_what_each_recorded_pool_honours",
+    "measure_whether_a_recorded_pool_trades",
+    "measure_whether_native_ether_is_the_gate",
+    "measure_whether_the_cached_reserves_match_the_balances",
+    "measure_whether_the_tokens_pay_a_pool",
+    "measure_whether_the_vat_row_is_the_gate",
+    "measure_which_entry_points_each_recorded_contract_exposes",
+    "measure_which_recorded_tokens_move",
+    "measure_which_slots_a_three_leg_run_reads",
+    "one_real_preconfirmation_window_against_the_official_endpoint",
+    "probe_node_capacity_and_sync_density",
+    "query_strategies_select_the_same_sync_on_real_history",
+    "regenerate_synthetic_fixtures",
+    "simulate_the_real_route_and_freeze_the_state_it_read",
+    "target_block_reconstruction_is_reproducible",
+    "the_cycle_walks_its_own_refusals",
+    "the_fixed_tracker_reads_the_same_inclusion_the_saved_answers_describe",
+    "the_ladder_runs_on_giwa",
+    "the_live_provider_reproduces_the_recorded_state",
+    "the_sequencer_endpoint_is_measured_before_it_is_called_direct",
+    "the_three_reads_the_sequence_relies_on_are_measured_first",
+    "the_wallet_holds_what_the_frozen_cost_section_says_it_should",
+    "write_the_committed_fixture"
+   ]
+  },
+  "new_targets": {
+   "send_uncertainty": [
+    {
+     "header": "Running tests/send_uncertainty.rs (target/debug/deps/send_uncertainty-8f916c79eaceeab7)",
+     "kind": "integration",
+     "target": "tests/send_uncertainty.rs",
+     "passed": 16,
+     "failed": 0,
+     "ignored": 0,
+     "seconds": 20.25
+    }
+   ],
+   "send_uncertainty_evidence": [
+    {
+     "header": "Running tests/send_uncertainty_evidence.rs (target/debug/deps/send_uncertainty_evidence-35d654182b33a3db)",
+     "kind": "integration",
+     "target": "tests/send_uncertainty_evidence.rs",
+     "passed": 15,
+     "failed": 0,
+     "ignored": 0,
+     "seconds": 0.25
+    }
+   ]
+  }
+ },
+ "m10_m11_regression": [
+  {
+   "header": "Running tests/endpoint_provenance.rs (target/debug/deps/endpoint_provenance-fdde11aa435f0f00)",
+   "kind": "integration",
+   "passed": 8,
+   "failed": 0,
+   "ignored": 0,
+   "seconds": 0.06
+  },
+  {
+   "header": "Running tests/executor_deploy.rs (target/debug/deps/executor_deploy-1887b14b2a44b1ed)",
+   "kind": "integration",
+   "passed": 12,
+   "failed": 0,
+   "ignored": 0,
+   "seconds": 0.12
+  },
+  {
+   "header": "Running tests/executor_evidence_gate.rs (target/debug/deps/executor_evidence_gate-093922cbf93dd238)",
+   "kind": "integration",
+   "passed": 1,
+   "failed": 0,
+   "ignored": 0,
+   "seconds": 0.52
+  },
+  {
+   "header": "Running tests/executor_lifecycle.rs (target/debug/deps/executor_lifecycle-d501efcd230e1f92)",
+   "kind": "integration",
+   "passed": 9,
+   "failed": 0,
+   "ignored": 0,
+   "seconds": 0.15
+  },
+  {
+   "header": "Running tests/lane_matrix.rs (target/debug/deps/lane_matrix-2c87708614d1aff9)",
+   "kind": "integration",
+   "passed": 14,
+   "failed": 0,
+   "ignored": 0,
+   "seconds": 0.14
+  },
+  {
+   "header": "Running tests/real_validation_receipt.rs (target/debug/deps/real_validation_receipt-03a3277472a9f075)",
+   "kind": "integration",
+   "passed": 7,
+   "failed": 0,
+   "ignored": 0,
+   "seconds": 0.01
+  },
+  {
+   "header": "Running tests/sequence.rs (target/debug/deps/sequence-4890a058ce9b59a6)",
+   "kind": "integration",
+   "passed": 44,
+   "failed": 0,
+   "ignored": 0,
+   "seconds": 1.22
+  },
+  {
+   "header": "Running tests/sequencer_direct_probe.rs (target/debug/deps/sequencer_direct_probe-131d08bcf71b7013)",
+   "kind": "integration",
+   "passed": 0,
+   "failed": 0,
+   "ignored": 1,
+   "seconds": 0.0
+  },
+  {
+   "header": "Running tests/stage_matrix.rs (target/debug/deps/stage_matrix-c773222157678e18)",
+   "kind": "integration",
+   "passed": 17,
+   "failed": 0,
+   "ignored": 0,
+   "seconds": 0.11
+  },
+  {
+   "header": "Running tests/state_lifetime_recovery.rs (target/debug/deps/state_lifetime_recovery-0fe087ededd9167f)",
+   "kind": "integration",
+   "passed": 7,
+   "failed": 0,
+   "ignored": 0,
+   "seconds": 0.21
+  }
+ ],
+ "audit_9": [
+  {
+   "item": 1,
+   "question": "all production `eth_sendRawTransaction` call sites",
+   "answer": "1 production line passes the method to the transport; 1 further mention sits behind a `#[cfg(test)]` module in a src file",
+   "production_sites": [
+    {
+     "file": "crates/execution/src/giwa/sequencer_direct.rs",
+     "line": 370,
+     "text": ".request_raw_once(\"eth_sendRawTransaction\", json!([payload]))",
+     "behind_a_cfg_test_module": false
+    }
+   ],
+   "all_mentions": [
+    {
+     "file": "crates/execution/src/submitter.rs",
+     "line": 189,
+     "text": "detail: \"eth_sendRawTransaction\".to_string(),",
+     "behind_a_cfg_test_module": true
+    },
+    {
+     "file": "crates/execution/src/giwa/sequencer_direct.rs",
+     "line": 370,
+     "text": ".request_raw_once(\"eth_sendRawTransaction\", json!([payload]))",
+     "behind_a_cfg_test_module": false
+    }
+   ],
+   "how_measured": "walk of every non-test .rs file under crates/, comment lines dropped, each hit placed before or after that file's `#[cfg(test)]` line"
+  },
+  {
+   "item": 2,
+   "question": "a bypass of the one-shot path",
+   "answer": "none: the only submission site calls `request_raw_once`, asserted by `the_send_path_anchors_resolve_and_no_submission_takes_the_retrying_entry`",
+   "how_measured": "the same walk, plus the gate's per-site `request_raw_once` assertion"
+  },
+  {
+   "item": 3,
+   "question": "a submission still on the generic retry loop",
+   "answer": "none: `WirePolicy::Once` allows one attempt and `request_with` passes `RetryOnce` only through `request`/`request_raw`, which no send path uses",
+   "how_measured": "the attempt counts are read out of `WirePolicy::attempts` by the evidence gate, and every answered send row in the table carries send_arrivals equal to that figure"
+  },
+  {
+   "item": 4,
+   "question": "a path that turns `Unknown` into `Rejected`, `Accepted`, or an empty opportunity",
+   "answer": "none in production: the lifecycle matches the variant and holds the lane for `Unknown`; only `Rejected` reaches a failure path that releases it",
+   "how_measured": "`proven_not_in_flight` is the only release gate, and the rows carry both the outcome word and the release word"
+  },
+  {
+   "item": 5,
+   "question": "a lane released on a hash mismatch",
+   "answer": "impossible by construction: a mismatched or absent hash builds `Unknown`, and release is gated on `proven_not_in_flight()`, which is `Rejected` alone",
+   "how_measured": "`never_absolved`, `lane_release_word` and `classifier_recomputed` rules over the measured rows, and the two hash-mismatch cases in the matrix"
+  },
+  {
+   "item": 6,
+   "question": "errors or trace leaking an endpoint URL, API key or JWT",
+   "answer": "no row in the measurement carries any of the eleven needles, and every socket is named by an `rpc-<16 hex>` digest",
+   "how_measured": "`no_endpoint_leak` over all rows; the two §9 item 6 cases inject a URL into the transport's own message and re-read it out"
+  },
+  {
+   "item": 7,
+   "question": "trace attempt count against real HTTP requests",
+   "answer": "one trace attempt per socket arrival, and zero dropped events",
+   "how_measured": "`trace_matches_socket` over the §9 item 7 row, which carries both the stub's tally and the trace's own counts"
+  },
+  {
+   "item": 8,
+   "question": "new code introducing RPC calls",
+   "answer": {
+    "methods_in_added_production_lines": [
+     "eth_sendRawTransaction"
+    ],
+    "methods_in_removed_production_lines": [
+     "eth_sendRawTransaction"
+    ]
+   },
+   "how_measured": "`git diff -U0 -- '*/src/*'`, added and removed lines scanned for `eth_` string literals; only the send method appears, and it already existed"
+  },
+  {
+   "item": 9,
+   "question": "a test or build touching historical evidence",
+   "answer": "see cross_milestone_anchor_refresh and known_staleness below: the M10 manifest was re-stamped by a gate and restored, and the ten M8 tables differ only in anchor line numbers, which the next section checks structurally rather than asserts",
+   "how_measured": "`git status --porcelain` before and after the gate run, then a leaf-by-leaf JSON diff of each changed historical file against HEAD"
+  }
+ ],
+ "evidence": {
+  "files": {
+   "classification.json": {
+    "bytes": 28059,
+    "lines": 665
+   },
+   "measured-rows.jsonl": {
+    "bytes": 31648,
+    "lines": 49
+   },
+   "request-counts.json": {
+    "bytes": 18414,
+    "lines": 439
+   }
+  },
+  "raw_rows": 49,
+  "rows_by_table": {
+   "request_counts": 15,
+   "classification": 33,
+   "trace_accounting": 1
+  },
+  "rows_by_section": {
+   "7A": 9,
+   "7D": 3,
+   "9.6": 2,
+   "7C": 33,
+   "7B": 1,
+   "9.7": 1
+  },
+  "distinct_cases": 16,
+  "tables_re_assembled_from_the_rows": {
+   "request-counts.json": {
+    "rows": 16,
+    "max_send_arrivals_in_any_case": 1,
+    "max_read_arrivals_in_any_case": 2,
+    "wire_policy": {
+     "once_attempts": 1,
+     "read_from": "crates/chain/src/rpc.rs :: WirePolicy::attempts",
+     "retry_once_attempts": 2
+    },
+    "status_words": {
+     "rejected": 2,
+     "submitted": 2,
+     "unknown": 10
+    },
+    "anchors": 12
+   },
+   "classification.json": {
+    "rows": 33,
+    "refusal_reads": {
+     "definite": 8,
+     "uncertain": 7
+    },
+    "lane_releases": {
+     "held": 9,
+     "released": 7
+    },
+    "never_absolves": [
+     "already known",
+     "known transaction",
+     "nonce too low",
+     "replacement transaction underpriced"
+    ],
+    "definite_messages_from_production": [
+     "rpc method is not whitelisted",
+     "intrinsic gas too low",
+     "transaction type not supported",
+     "max priority fee per gas higher than max fee per gas",
+     "negative value",
+     "invalid chain id"
+    ],
+    "method_not_found_code": -32601
+   }
+  },
+  "endpoint_digests": {
+   "count": 38,
+   "distinct": 31,
+   "all_16_hex_after_the_prefix": true
+  },
+  "refresh_command": "M12E_SEND_UNCERTAINTY_REFRESH=1 cargo test -p evm-execution --test send_uncertainty_evidence -- --test-threads=1",
+  "measurement_command": "M12E_EVIDENCE_DIR=<absolute path to data/evidence/m12/e> cargo test -p evm-execution --test send_uncertainty -- --test-threads=1",
+  "tests_written_this_round": {
+   "a_body_that_is_not_json_is_one_post_and_an_unknown_answer": "ok",
+   "a_hash_that_is_not_ours_is_one_post_and_never_an_acknowledgement": "ok",
+   "a_json_rpc_error_is_one_post_whichever_way_it_is_read": "ok",
+   "a_response_that_comes_after_the_clients_own_timeout_is_one_post": "ok",
+   "a_socket_closed_after_reading_every_byte_is_one_post_and_an_unknown_answer": "ok",
+   "an_acknowledgement_is_not_an_inclusion_and_a_receipt_binds_to_the_local_hash_only": "ok",
+   "an_acknowledgement_of_these_bytes_is_one_post_and_the_only_accepted_answer": "ok",
+   "an_error_message_that_quotes_the_endpoint_arrives_scrubbed": "ok",
+   "an_http_status_that_is_not_a_refusal_is_one_post_and_an_unknown_answer": "ok",
+   "anchor_arity_is_the_claim": "ok",
+   "every_row_names_a_test_and_no_test_is_left_out_of_the_rows": "ok",
+   "nc1_a_second_post_at_the_socket_breaks_the_arrival_rules": "ok",
+   "nc2_a_row_for_a_test_that_does_not_exist_is_rejected": "ok",
+   "nc3_a_test_that_stopped_recording_leaves_the_table_short": "ok",
+   "nc4_a_pool_answer_marked_refused_is_caught_twice": "ok",
+   "nc5_a_lane_released_on_an_unknown_answer_is_caught": "ok",
+   "nc6_a_row_that_carries_the_endpoint_url_is_not_evidence": "ok",
+   "nc7_a_trace_that_disagrees_with_the_socket_is_caught": "ok",
+   "nc8_the_same_run_recorded_twice_is_not_two_measurements": "ok",
+   "nc9_a_row_read_back_out_of_a_table_is_still_a_row": "ok",
+   "only_a_refusal_of_the_payload_itself_clears_the_lane": "ok",
+   "the_definite_refusal_list_is_production_s_and_the_rows_cover_it": "ok",
+   "the_endpoint_took_the_bytes_and_the_answer_never_arrived_sends_once_and_holds_the_lane": "ok",
+   "the_measured_rows_break_no_rule_the_tables_claim": "ok",
+   "the_published_tables_are_the_rows_re_assembled": "ok",
+   "the_read_side_still_asks_twice_when_the_first_socket_dies": "ok",
+   "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown": "ok",
+   "the_same_fault_counts_once_on_a_send_and_twice_on_a_read": "ok",
+   "the_send_path_anchors_resolve_and_no_submission_takes_the_retrying_entry": "ok",
+   "the_state_dependent_answers_are_unknown_and_hold_the_lane": "ok",
+   "the_trace_records_one_attempt_per_request_the_socket_saw": "ok"
+  },
+  "tests_written_this_round_count": 31,
+  "negative_controls": {
+   "nc1_a_second_post_at_the_socket_breaks_the_arrival_rules": "ok",
+   "nc2_a_row_for_a_test_that_does_not_exist_is_rejected": "ok",
+   "nc3_a_test_that_stopped_recording_leaves_the_table_short": "ok",
+   "nc4_a_pool_answer_marked_refused_is_caught_twice": "ok",
+   "nc5_a_lane_released_on_an_unknown_answer_is_caught": "ok",
+   "nc6_a_row_that_carries_the_endpoint_url_is_not_evidence": "ok",
+   "nc7_a_trace_that_disagrees_with_the_socket_is_caught": "ok",
+   "nc8_the_same_run_recorded_twice_is_not_two_measurements": "ok",
+   "nc9_a_row_read_back_out_of_a_table_is_still_a_row": "ok"
+  },
+  "matrix_case_names_measured": [
+   "a_body_that_is_not_json_is_one_post_and_an_unknown_answer",
+   "a_hash_that_is_not_ours_is_one_post_and_never_an_acknowledgement",
+   "a_json_rpc_error_is_one_post_whichever_way_it_is_read",
+   "a_response_that_comes_after_the_clients_own_timeout_is_one_post",
+   "a_socket_closed_after_reading_every_byte_is_one_post_and_an_unknown_answer",
+   "an_acknowledgement_is_not_an_inclusion_and_a_receipt_binds_to_the_local_hash_only",
+   "an_acknowledgement_of_these_bytes_is_one_post_and_the_only_accepted_answer",
+   "an_error_message_that_quotes_the_endpoint_arrives_scrubbed",
+   "an_http_status_that_is_not_a_refusal_is_one_post_and_an_unknown_answer",
+   "only_a_refusal_of_the_payload_itself_clears_the_lane",
+   "the_endpoint_took_the_bytes_and_the_answer_never_arrived_sends_once_and_holds_the_lane",
+   "the_read_side_still_asks_twice_when_the_first_socket_dies",
+   "the_refusal_table_is_a_short_list_of_payload_facts_and_everything_else_is_unknown",
+   "the_same_fault_counts_once_on_a_send_and_twice_on_a_read",
+   "the_state_dependent_answers_are_unknown_and_hold_the_lane",
+   "the_trace_records_one_attempt_per_request_the_socket_saw"
+  ],
+  "matrix_cases_missing_from_the_log": [],
+  "what_the_evidence_is_not": "a local HTTP stub on loopback, not a GIWA node; no transaction entered a block; `submitted` is not `Mined`, `Confirmed` or realized profit; the local hash a row tracks lives in the process that wrote it"
+ },
+ "cross_milestone_anchor_refresh": {
+  "files": [
+   "data/evidence/m8/m8.5.1/call-surface.json",
+   "data/evidence/m8/m8.5.1/negative-controls.json",
+   "data/evidence/m8/m8.6/information_flow.json",
+   "data/evidence/m8/m8.6/rpc-census.json",
+   "data/evidence/m8/m8.6/rpc-reduction-candidates.json",
+   "data/evidence/m8/m8.6/rpc_surface.json",
+   "data/evidence/m8/state-ownership/lifecycle-contracts.json",
+   "data/evidence/m8/state-ownership/ownership-matrix.json",
+   "data/evidence/m8/state-ownership/reuse-verdicts.json",
+   "data/evidence/m8/state-ownership/stage-dependency-matrix.json"
+  ],
+  "changed_leaves_total": 44,
+  "every_changed_leaf_is_a_line_position": true,
+  "line_position_keys": [
+   "adapter_line",
+   "asked_at",
+   "line",
+   "producer_source_line",
+   "source_line"
+  ],
+  "per_file": {
+   "data/evidence/m8/m8.5.1/call-surface.json": {
+    "changed_leaves": 5,
+    "keys": [
+     "line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".request_parameters[].evidence_refs[].line",
+      "key": "line",
+      "before": 726,
+      "after": 816
+     },
+     {
+      "path": ".request_parameters[].evidence_refs[].line",
+      "key": "line",
+      "before": 726,
+      "after": 816
+     },
+     {
+      "path": ".request_parameters[].evidence_refs[].line",
+      "key": "line",
+      "before": 726,
+      "after": 816
+     }
+    ]
+   },
+   "data/evidence/m8/m8.5.1/negative-controls.json": {
+    "changed_leaves": 1,
+    "keys": [
+     "line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".boundary_refs[].line",
+      "key": "line",
+      "before": 725,
+      "after": 815
+     }
+    ]
+   },
+   "data/evidence/m8/m8.6/information_flow.json": {
+    "changed_leaves": 2,
+    "keys": [
+     "asked_at",
+     "line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".anchors[].line",
+      "key": "line",
+      "before": 102,
+      "after": 138
+     },
+     {
+      "path": ".flows[].asked_at",
+      "key": "asked_at",
+      "before": "crates/chain/src/rpc.rs:102",
+      "after": "crates/chain/src/rpc.rs:138"
+     }
+    ]
+   },
+   "data/evidence/m8/m8.6/rpc-census.json": {
+    "changed_leaves": 2,
+    "keys": [
+     "line",
+     "source_line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".anchors[].line",
+      "key": "line",
+      "before": 102,
+      "after": 138
+     },
+     {
+      "path": ".rows[].source_line",
+      "key": "source_line",
+      "before": 102,
+      "after": 138
+     }
+    ]
+   },
+   "data/evidence/m8/m8.6/rpc-reduction-candidates.json": {
+    "changed_leaves": 4,
+    "keys": [
+     "line",
+     "producer_source_line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".anchors[].line",
+      "key": "line",
+      "before": 102,
+      "after": 138
+     },
+     {
+      "path": ".anchors[].line",
+      "key": "line",
+      "before": 102,
+      "after": 138
+     },
+     {
+      "path": ".rows[].producer_source_line",
+      "key": "producer_source_line",
+      "before": 102,
+      "after": 138
+     }
+    ]
+   },
+   "data/evidence/m8/m8.6/rpc_surface.json": {
+    "changed_leaves": 18,
+    "keys": [
+     "adapter_line",
+     "line",
+     "source_line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".anchors[].line",
+      "key": "line",
+      "before": 102,
+      "after": 138
+     },
+     {
+      "path": ".anchors[].line",
+      "key": "line",
+      "before": 541,
+      "after": 631
+     },
+     {
+      "path": ".anchors[].line",
+      "key": "line",
+      "before": 559,
+      "after": 649
+     }
+    ]
+   },
+   "data/evidence/m8/state-ownership/lifecycle-contracts.json": {
+    "changed_leaves": 3,
+    "keys": [
+     "line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".rows[].evidence_refs[].line",
+      "key": "line",
+      "before": 396,
+      "after": 486
+     },
+     {
+      "path": ".rows[].evidence_refs[].line",
+      "key": "line",
+      "before": 396,
+      "after": 486
+     },
+     {
+      "path": ".rows[].evidence_refs[].line",
+      "key": "line",
+      "before": 84,
+      "after": 120
+     }
+    ]
+   },
+   "data/evidence/m8/state-ownership/ownership-matrix.json": {
+    "changed_leaves": 2,
+    "keys": [
+     "line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".rows[].evidence_refs[].line",
+      "key": "line",
+      "before": 396,
+      "after": 486
+     },
+     {
+      "path": ".rows[].freshness_rule.evidence_refs[].line",
+      "key": "line",
+      "before": 84,
+      "after": 120
+     }
+    ]
+   },
+   "data/evidence/m8/state-ownership/reuse-verdicts.json": {
+    "changed_leaves": 6,
+    "keys": [
+     "line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".rows[].evidence_refs[].line",
+      "key": "line",
+      "before": 396,
+      "after": 486
+     },
+     {
+      "path": ".rows[].evidence_refs[].line",
+      "key": "line",
+      "before": 396,
+      "after": 486
+     },
+     {
+      "path": ".rows[].evidence_refs[].line",
+      "key": "line",
+      "before": 396,
+      "after": 486
+     }
+    ]
+   },
+   "data/evidence/m8/state-ownership/stage-dependency-matrix.json": {
+    "changed_leaves": 1,
+    "keys": [
+     "line"
+    ],
+    "every_key_is_a_line_position": true,
+    "examples": [
+     {
+      "path": ".rows[].evidence_refs[].line",
+      "key": "line",
+      "before": 396,
+      "after": 486
+     }
+    ]
+   }
+  },
+  "refresh_variables": {
+   "M851_ETH_CALL_SEMANTICS_REFRESH=1": "crates/pipeline/tests/eth_call_semantics_evidence.rs",
+   "M86_CENSUS_REFRESH=1": "crates/pipeline/tests/rpc_reduction_evidence.rs",
+   "M843_STATE_OWNERSHIP_REFRESH=1": "crates/pipeline/tests/state_ownership_evidence.rs"
+  },
+  "why_this_is_in_scope": "this milestone moved lines in crates/chain/src/rpc.rs and crates/execution/src/giwa/sequencer_direct.rs; those gates re-resolve `file`+`token` anchors from that source, so their displayed line numbers moved"
+ },
+ "known_staleness": [
+  {
+   "artifact": "data/evidence/m10/manifest.json",
+   "what_changed": "its `git_commit` is reprinted by crates/execution/tests/executor_evidence_gate.rs on any workspace test run",
+   "handling": "restored to the committed bytes before the evidence commit; the behaviour itself is left as an out-of-scope finding rather than patched in this round"
+  },
+  {
+   "artifact": "data/evidence/m12/d/endpoint-provenance.json",
+   "what_changed": "nothing — its `public_http_rpc` class word on the submission side is superseded by M12-E §5's `over endpoint <digest>`, which the production code now emits",
+   "why_not_edited": "historical evidence is not rewritten by a later milestone"
+  },
+  {
+   "artifact": "test fixtures that construct `SubmissionOutcome::Rejected { reason: \"nonce too low\" }`",
+   "sites": [
+    "crates/execution/src/lifecycle.rs",
+    "crates/execution/tests/lane_matrix.rs",
+    "crates/execution/tests/stage_matrix.rs",
+    "crates/execution/tests/executor_deploy.rs",
+    "crates/execution/tests/executor_lifecycle.rs"
+   ],
+   "what_changed": "nothing in this round",
+   "why_recorded": "§4 says a pool answer is not a definite refusal. These are hand-built variants that never pass through the classifier, so they do not contradict the production path — but they are a poor model for a future test, and the report names them instead of editing them here"
+  }
+ ],
+ "out_of_scope_findings_recorded_not_fixed": [
+  {
+   "finding": "cross-process persistence of an uncertain send",
+   "detail": "the local hash, the lane hold and the tracking state all live in the process that sent the transaction. A restart before the receipt side resolves the outcome forgets the transaction entirely, and the next run can allocate the same nonce and re-send.",
+   "why_not_here": "M12-E §8 forbids a persistent execution ledger, and §6 forbids a second state machine or reconciliation service. M12-D §13.2 names this gap already.",
+   "suggested_task": "a ledger task that stores the unresolved send and re-adopts it on boot"
+  },
+  {
+   "finding": "the receipt side has no bound on how long it holds a lane after `Unknown`",
+   "detail": "`Unknown` holds the nonce lane and the receipt tracker keeps asking, with no deadline and no escalation to the operator. An unresolved send holds a lane for the life of the process.",
+   "why_not_here": "§6 asks only that the lane not be released as if the send had failed; a policy for when to stop waiting is a new decision, not a fix.",
+   "suggested_task": "pair with the persistence finding: an expiry or an explicit operator hand-off"
+  },
+  {
+   "finding": "a hash mismatch is carried only inside a reason string",
+   "detail": "when the node returns a hash that is not the local one, the outcome is `Unknown` whose reason text names both hashes. Nothing downstream can branch on `mismatch` as a machine value without parsing that string.",
+   "why_not_here": "§5 says to adjust `SubmissionOutcome` fields only for actual consumers, and no consumer needed the flag this round.",
+   "suggested_task": "add a typed field when a consumer exists, not before"
+  },
+  {
+   "finding": "`without_the_endpoint` scrubs exact URL strings, not a prefix tree",
+   "detail": "it replaces the endpoint URL and the URL with a trailing slash by the digest. An error that splits the URL across words, or reports a different path on the same host, would keep part of it.",
+   "why_not_here": "the eleven needles over every measured row come back clean, and the transport's own messages quote the URL whole.",
+   "suggested_task": "a host-level scrub if an upstream error is ever observed leaking a path"
+  },
+  {
+   "finding": "endpoint digests depend on the port, so they are not joinable across milestones",
+   "detail": "`evm_chain::endpoint_id(url)` hashes the URL as given. The same host on an ephemeral stub port yields a different digest in every run, so digests are only comparable inside one measurement.",
+   "why_not_here": "the evidence here never compares a digest across runs; it only checks shape and uniqueness inside one table.",
+   "suggested_task": "only matters if a later milestone wants a cross-run endpoint census"
+  },
+  {
+   "finding": "`executor_evidence_gate` re-stamps its own manifest on every workspace run",
+   "detail": "the gate writes `git_commit` into data/evidence/m10/manifest.json, so any `cargo test --workspace` leaves the historical evidence file dirty.",
+   "why_not_here": "M10's own gate design; changing it edits a historical milestone's behaviour, which §8 forbids. This round restores the committed bytes instead.",
+   "suggested_task": "make that gate compare in memory rather than write, in a maintenance task"
+  }
+ ]
+}

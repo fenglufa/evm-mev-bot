@@ -562,7 +562,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 102,
+      "line": 138,
       "matches": 1,
       "note": "site connect.eth_chainId.unstamped stamps its caller label here",
       "source": "code",
@@ -2007,7 +2007,7 @@
     },
     {
       "answer_state_kind": "chain_identity",
-      "asked_at": "crates/chain/src/rpc.rs:102",
+      "asked_at": "crates/chain/src/rpc.rs:138",
       "asked_by": "<unstamped>",
       "authority": "first_answer_at_connect",
       "block_semantics": "no block term",

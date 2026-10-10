@@ -98,7 +98,7 @@
     },
     {
       "file": "crates/chain/src/rpc.rs",
-      "line": 102,
+      "line": 138,
       "matches": 1,
       "note": "site connect.eth_chainId.unstamped stamps its caller label here",
       "source": "code",
@@ -1233,7 +1233,7 @@
       "semantic_class": "F_IDENTITY_CONNECTION",
       "site_id": "connect.eth_chainId.unstamped",
       "source_file": "crates/chain/src/rpc.rs",
-      "source_line": 102,
+      "source_line": 138,
       "stage": null,
       "state_kind": "chain_identity",
       "union_duration_ms": 2992.35,
