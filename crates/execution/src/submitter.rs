@@ -78,28 +78,35 @@ impl EndpointKind {
 /// The three answers §25 distinguishes. `Included` is not here on purpose: inclusion is
 /// a receipt question ([`crate::receipt::ReceiptStatus`]), and folding it into a
 /// submission answer would make "we sent it" and "it landed" one value again.
+///
+/// M12-E §5 fixed what each variant is allowed to claim, and the three-state separation is
+/// the point of the type: `Accepted` is an endpoint's acknowledgement of *these* bytes,
+/// `Rejected` is evidence that they are definitely not in flight, `Unknown` is that we
+/// asked and cannot tell. None of the three is a statement about the chain — an
+/// `Accepted` answer is not `Mined`, not `Confirmed`, and not a realized profit; the
+/// receipt read is what answers those, in a different type.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum SubmissionOutcome {
-    /// The node accepted the raw bytes and returned a hash.
+    /// The node accepted the raw bytes and named them: its answer is the hash this process
+    /// computed over the same bytes.
     Accepted {
         /// The hash the node returned, if it returned one.
         transaction_hash: Option<B256>,
-        /// Whether that hash equals the one we computed locally over these exact bytes.
-        /// A node that accepts bytes and names a different hash is telling us it
-        /// received something else, so the mismatch is recorded rather than smoothed
-        /// over — the receipt tracker binds against the *local* hash either way.
-        hash_matches_local: bool,
+        /// Which endpoint answered. `endpoint` stays a field of every variant because the
+        /// implementation knows it and a caller does not.
         endpoint: EndpointKind,
         /// The node's own answer or the method name, so a report can quote it.
         detail: String,
     },
-    /// The node answered and said no. Nothing is in flight.
+    /// The node answered and said no, in terms that prove these bytes were never taken
+    /// (M12-E §4). Nothing is in flight, and this is the only answer that may free a nonce.
     Rejected {
         reason: String,
         endpoint: EndpointKind,
     },
     /// We asked and do not know: a transport error, a non-JSON answer, an HTTP status
-    /// that is not a refusal. §25's prohibition lives on this variant.
+    /// that is not a refusal, an error payload whose meaning this build cannot cite, or an
+    /// answer that names a hash other than ours. §25's prohibition lives on this variant.
     Unknown {
         reason: String,
         endpoint: EndpointKind,
@@ -109,6 +116,12 @@ pub enum SubmissionOutcome {
 impl SubmissionOutcome {
     /// The hash to track, when the answer carried one — always the locally computed hash
     /// of the bytes we sent, never a node's paraphrase of it (§27).
+    ///
+    /// Since M12-E §5 an answer that names a different hash is an `Unknown` rather than an
+    /// `Accepted`, so the equality guard below is a restatement of an invariant the
+    /// variants now carry. It stays because a caller that tracked a hash it did not compute
+    /// would be the defect this function exists to prevent, not because the current
+    /// constructors allow the case.
     pub fn tracked_hash(&self, local: B256) -> B256 {
         match self {
             Self::Accepted {
@@ -169,10 +182,9 @@ pub trait TransactionSubmitter {
 mod tests {
     use super::*;
 
-    fn accepted(hash: B256, matches: bool) -> SubmissionOutcome {
+    fn accepted(hash: B256) -> SubmissionOutcome {
         SubmissionOutcome::Accepted {
             transaction_hash: Some(hash),
-            hash_matches_local: matches,
             endpoint: EndpointKind::PublicHttpRpc,
             detail: "eth_sendRawTransaction".to_string(),
         }
@@ -180,7 +192,7 @@ mod tests {
 
     #[test]
     fn an_acknowledgement_is_never_inclusion() {
-        let outcome = accepted(B256::left_padding_from(&[1]), true);
+        let outcome = accepted(B256::left_padding_from(&[1]));
         assert_eq!(outcome.status_word(), "submitted");
         assert!(!outcome.proven_not_in_flight());
     }
@@ -188,7 +200,7 @@ mod tests {
     #[test]
     fn only_a_refusal_proves_nothing_is_in_flight() {
         for outcome in [
-            accepted(B256::left_padding_from(&[1]), true),
+            accepted(B256::left_padding_from(&[1])),
             SubmissionOutcome::Unknown {
                 reason: "connection reset".to_string(),
                 endpoint: EndpointKind::PublicHttpRpc,
@@ -201,7 +213,7 @@ mod tests {
             );
         }
         let refused = SubmissionOutcome::Rejected {
-            reason: "nonce too low".to_string(),
+            reason: "intrinsic gas too low".to_string(),
             endpoint: EndpointKind::PublicHttpRpc,
         };
         assert!(refused.proven_not_in_flight());
@@ -209,15 +221,21 @@ mod tests {
     }
 
     #[test]
-    fn the_tracked_hash_is_ours_even_when_the_node_names_another_one() {
+    fn the_tracked_hash_is_ours_whichever_answer_came_back() {
         let local = B256::left_padding_from(&[5]);
+        // An `Accepted` can only be built by an answer that named these bytes, so the hash
+        // it carries and the hash we track are the same number by construction; a node that
+        // named a different one is an `Unknown` (§4), and neither answer redirects tracking.
+        assert_eq!(accepted(local).tracked_hash(local), local);
         let other = B256::left_padding_from(&[6]);
-        assert_eq!(accepted(local, true).tracked_hash(local), local);
-        // A node that returns a different hash does not get to redirect our tracking:
-        // the receipt for the bytes we signed is the only receipt that answers for them.
-        assert_eq!(accepted(other, false).tracked_hash(local), local);
+        let not_ours = SubmissionOutcome::Unknown {
+            reason: format!("the endpoint named {other:#x}, not {local:#x}"),
+            endpoint: EndpointKind::PublicHttpRpc,
+        };
+        assert_eq!(not_ours.tracked_hash(local), local);
+        assert!(!not_ours.proven_not_in_flight());
         let refused = SubmissionOutcome::Rejected {
-            reason: "invalid signature".to_string(),
+            reason: "transaction type not supported".to_string(),
             endpoint: EndpointKind::FlashblocksHttpRpc,
         };
         assert_eq!(refused.tracked_hash(local), local);

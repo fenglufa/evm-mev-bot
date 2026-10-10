@@ -336,13 +336,23 @@ impl TransactionSubmitter for GiwaSequencerDirect {
         self.mode.may_submit() && self.endpoint.may_broadcast()
     }
 
-    /// §21/§23/§25: hand the raw bytes over once, and classify the answer.
+    /// §21/§23/§25 and M12-E §3.2/§4/§5: hand the raw bytes over exactly once, and classify
+    /// the answer conservatively.
     ///
-    /// There is no retry in this function, and none in its callers: an `Unknown` answer
-    /// keeps the nonce lane reserved ([`crate::lifecycle::ExecutionLane`]) until a receipt
-    /// or a re-read resolves it. The transaction hash is computed locally from the bytes
-    /// and compared against the node's answer, so a node that names a different hash
-    /// cannot redirect what we track (§27).
+    /// The request goes out through [`evm_chain::rpc::HttpChainAdapter::request_raw_once`],
+    /// so no transport failure, timeout, non-JSON body or HTTP status can produce a second
+    /// POST inside this call. That is the whole of the retry-safety property: an endpoint
+    /// that received these bytes and lost the response on the way back leaves us holding
+    /// one nonce and one question, not two transactions.
+    ///
+    /// `Accepted` means one thing here and only one thing: the node returned the hash this
+    /// process computed locally over these exact bytes. A node that names a *different*
+    /// hash has answered about some other transaction, and an answer about another
+    /// transaction cannot be an acknowledgement of ours, so that case is `Unknown` with
+    /// both hashes in its reason (§5's 「不一致时不得继续走正常 Accepted 成功路径」). A JSON-RPC
+    /// error becomes `Rejected` only when [`read_send_refusal`] can say why these bytes
+    /// could never have been taken; every other error payload is `Unknown`, because the
+    /// lane has a receipt read to resolve it and no license to resend.
     async fn submit(&self, transaction: &SignedTransaction) -> Result<SubmissionOutcome> {
         if !self.may_submit() {
             return Err(ExecutionError::ModeGate(format!(
@@ -357,7 +367,7 @@ impl TransactionSubmitter for GiwaSequencerDirect {
         let payload = format!("0x{}", hex::encode(raw.as_ref()));
         let response = self
             .http
-            .request_raw("eth_sendRawTransaction", json!([payload]))
+            .request_raw_once("eth_sendRawTransaction", json!([payload]))
             .await;
         Ok(match response {
             Ok(value) => {
@@ -368,29 +378,66 @@ impl TransactionSubmitter for GiwaSequencerDirect {
                     None
                 };
                 match returned {
-                    Some(hash) => SubmissionOutcome::Accepted {
+                    // Only an answer that names *these* bytes is an acknowledgement.
+                    Some(hash) if hash == local_hash => SubmissionOutcome::Accepted {
                         transaction_hash: Some(hash),
-                        hash_matches_local: hash == local_hash,
                         endpoint: self.endpoint,
                         detail: format!("eth_sendRawTransaction returned {text} ({provenance})"),
+                    },
+                    Some(hash) => SubmissionOutcome::Unknown {
+                        reason: format!(
+                            "eth_sendRawTransaction answered with the hash of another \
+                             transaction ({provenance}): it named {hash:#x} while these bytes \
+                             hash to {local_hash:#x}, so the answer describes something this \
+                             process did not sign and cannot be read as an acknowledgement of \
+                             them; the locally computed hash stays the one tracked"
+                        ),
+                        endpoint: self.endpoint,
                     },
                     None => SubmissionOutcome::Unknown {
                         reason: format!(
                             "eth_sendRawTransaction answered with something that is not a \
-                             32-byte hash ({provenance}): {value}"
+                             32-byte hash ({provenance}): {}",
+                            without_the_endpoint(&value.to_string(), self.url())
                         ),
                         endpoint: self.endpoint,
                     },
                 }
             }
-            // An explicit JSON-RPC error object is the node saying no. §25 lets only this
-            // answer release the lane.
-            Err(evm_chain::ChainError::RpcRejected(error)) => SubmissionOutcome::Rejected {
-                reason: format!(
-                    "eth_sendRawTransaction refused the payload ({provenance}): {}",
-                    without_the_endpoint(&error.to_string(), self.url())
-                ),
-                endpoint: self.endpoint,
+            // The node answered with a JSON-RPC error object. Whether that proves the bytes
+            // are absent from the chain is a per-message question, and §4 answers it
+            // narrowly: a refusal proves absence only when the payload itself is what the
+            // endpoint rejected.
+            Err(evm_chain::ChainError::RpcRejected(error)) => match parse_rpc_error(&error) {
+                Some((code, message)) => match read_send_refusal(code, &message) {
+                    RefusalRead::Definite(why) => SubmissionOutcome::Rejected {
+                        reason: format!(
+                            "eth_sendRawTransaction refused the payload ({provenance}): [{code}] \
+                             {} — {why}",
+                            without_the_endpoint(&message, self.url())
+                        ),
+                        endpoint: self.endpoint,
+                    },
+                    RefusalRead::Uncertain(why) => SubmissionOutcome::Unknown {
+                        reason: format!(
+                            "eth_sendRawTransaction answered with an error that does not prove \
+                             the bytes were never taken ({provenance}): [{code}] {} — {why}",
+                            without_the_endpoint(&message, self.url())
+                        ),
+                        endpoint: self.endpoint,
+                    },
+                },
+                // An `error` member this build cannot read is still an answer, and §4's rule
+                // for that is one sentence: the presence of an error field is not evidence
+                // the transaction failed.
+                None => SubmissionOutcome::Unknown {
+                    reason: format!(
+                        "eth_sendRawTransaction answered with an error payload this build \
+                         cannot parse ({provenance}): {}",
+                        without_the_endpoint(&error, self.url())
+                    ),
+                    endpoint: self.endpoint,
+                },
             },
             // A transport failure, a non-JSON body, or an HTTP status that is not a
             // refusal: we do not know, and knowing that is the point.
@@ -587,4 +634,135 @@ fn read_error(error: evm_chain::ChainError) -> ExecutionError {
 /// A hex quantity from a provider answer, with the field named in the error.
 fn quantity_u64(value: &Value, context: &str) -> Result<u64> {
     evm_chain::rpc::parse_u64(value, context).map_err(read_error)
+}
+
+/// The node's own error object, read back out of the string the transport carried.
+///
+/// [`evm_chain`] stores a JSON-RPC error payload as its text (`ChainError::RpcRejected`), so
+/// this is where a submission regains the two fields §4 classifies on. `None` means the
+/// payload was not an object with a numeric `code` and a string `message`, and a caller that
+/// gets `None` owes the reader the node's words rather than a guess about them.
+pub fn parse_rpc_error(text: &str) -> Option<(i64, String)> {
+    let parsed: Value = serde_json::from_str(text).ok()?;
+    let code = parsed.get("code").and_then(Value::as_i64)?;
+    let message = parsed
+        .get("message")
+        .and_then(Value::as_str)?
+        .trim()
+        .to_string();
+    (!message.is_empty()).then_some((code, message))
+}
+
+/// What a JSON-RPC error on a submission proves.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum RefusalRead {
+    /// These exact bytes could not have been accepted by an endpoint that answers like
+    /// this, so nothing of ours is in flight and the lane may go back.
+    Definite(&'static str),
+    /// The node said no to *something*, and that is as far as this build can go: the
+    /// answer does not exclude the possibility that an earlier request for these bytes
+    /// was received.
+    Uncertain(&'static str),
+}
+
+/// JSON-RPC's `method not found`, which is the shape this endpoint's own whitelist refusal
+/// takes on the wire (`-32601`, recorded in the M6 probe).
+const METHOD_NOT_FOUND: i64 = -32601;
+
+/// The error messages this build reads as a definite refusal, and the reason each one
+/// carries.
+///
+/// The test an answer has to pass to be here is one question: *could these bytes have been
+/// accepted by a previous request?* A payload that is invalid as a payload — its gas limit
+/// under its own intrinsic cost, its type unsupported, its fee fields self-contradictory —
+/// could never have been accepted by anyone, at any state, so a refusal of it cannot be
+/// describing a transaction already in flight. Everything else fails that question and
+/// falls through to `Uncertain`, which is why this list is short and why it is a list of
+/// *payload properties* rather than of error codes.
+///
+/// Two of these are worth naming:
+///
+/// ```text
+/// "rpc method is not whitelisted"  measured, not assumed: this is the answer this
+///                                  repository's own M6 probe recorded from the endpoint
+///                                  (data/evidence/m6/probe-method-whitelist.txt, code
+///                                  -32601). A gateway that refuses the method never
+///                                  forwards a payload anywhere.
+/// "nonce too low" and its neighbours are NOT here, on purpose (§4).
+/// ```
+const DEFINITE_REFUSALS: [(&str, &str); 6] = [
+    (
+        "rpc method is not whitelisted",
+        "the endpoint refuses the method itself, so these bytes were never handed to a \
+         transaction pool by it",
+    ),
+    (
+        "intrinsic gas too low",
+        "the payload's own gas limit is below its intrinsic cost, which makes it invalid at \
+         any node state, so no earlier request for it can have been accepted",
+    ),
+    (
+        "transaction type not supported",
+        "the endpoint cannot decode this transaction type at all, so it has never held one",
+    ),
+    (
+        "max priority fee per gas higher than max fee per gas",
+        "the payload contradicts itself in its fee fields, so it is not a transaction any \
+         node could have accepted",
+    ),
+    (
+        "negative value",
+        "the payload carries a negative value, which is not a transactable transaction",
+    ),
+    (
+        "invalid chain id",
+        "the payload names a chain this endpoint is not, so it could not have been accepted \
+         here or propagated as this sender's transaction",
+    ),
+];
+
+/// Classify one error payload per §4: `Rejected` is allowed only on a verifiable meaning.
+///
+/// Matching is a case-insensitive prefix test against [`DEFINITE_REFUSALS`], not a search
+/// for a substring anywhere in the message: a gateway that wraps a refusal in its own
+/// wording, or an error this list has never seen, lands in `Uncertain`, and the direction
+/// of that mistake is a lane that stays held until a receipt read answers — which is what
+/// §6 wants — never a second POST.
+///
+/// `code` earns one arm and no others. A JSON-RPC `method not found` is the exception that
+/// is safe to read from a number: an endpoint that does not serve `eth_sendRawTransaction`
+/// has refused the *call*, and no payload travels behind that refusal. Every other code
+/// this repository has measured is a wrapper the endpoint chose (-32000 and -32003 both
+/// carried pool answers in the M6 probes), so the number says nothing a message does not,
+/// and it goes into the evidence line rather than into the decision.
+pub fn read_send_refusal(code: i64, message: &str) -> RefusalRead {
+    if code == METHOD_NOT_FOUND {
+        return RefusalRead::Definite(
+            "the endpoint answers that the method itself is not served here, so this call \
+             carried no payload into a transaction pool",
+        );
+    }
+    let lowered = message.to_ascii_lowercase();
+    for (needle, why) in DEFINITE_REFUSALS {
+        if lowered.starts_with(needle) {
+            return RefusalRead::Definite(why);
+        }
+    }
+    // §4's named three, stated so a reader of the evidence sees the question the answer
+    // leaves open rather than a bare "unknown".
+    let why = if lowered.starts_with("already known") || lowered.starts_with("known transaction") {
+        "the node reports it already holds this transaction, which is an answer about these \
+         bytes rather than a refusal of them"
+    } else if lowered.starts_with("nonce too low") {
+        "a transaction at this nonce has already advanced the account, and only a receipt \
+         read can say whether that transaction is ours"
+    } else if lowered.starts_with("replacement transaction underpriced") {
+        "the endpoint holds a pending transaction at this nonce, so these bytes were not the \
+         first thing asked of it"
+    } else {
+        "this build cannot cite an interface guarantee that separates a refusal of a \
+         submission from an answer about one it already has; the code and message are \
+         reported and read no further"
+    };
+    RefusalRead::Uncertain(why)
 }

@@ -28,9 +28,9 @@
 //! ([`HttpChainAdapter::with_rpc_trace`][crate::rpc::HttpChainAdapter::with_rpc_trace]),
 //! and reads that sink back when the simulation is over. An adapter clone without a
 //! sink behaves as it always did — every recording call sits behind a `None` test — so
-//! the connection pool, the request order and the single retry inside
-//! [`request_with`][crate::rpc::HttpChainAdapter::request_with] are untouched. The one
-//! new thing on that path is observation.
+//! the connection pool, the request order and the retry policy on the read path are
+//! untouched ([`request_with`][crate::rpc::HttpChainAdapter::request_with] still asks a
+//! node twice when a connection drops). The one new thing on that path is observation.
 //!
 //! ## What a `duration_ns` measures, and what it cannot
 //!
@@ -56,7 +56,7 @@
 //!
 //! ```text
 //! who stamps        the code that issues the call, through [`RpcTraceSink::set_context`]
-//! who reads it      [`request_with`][crate::rpc::HttpChainAdapter::request_with], at the
+//! who reads it      [`HttpChainAdapter`][crate::rpc::HttpChainAdapter]'s one call path, at the
 //!                   same instant it takes the start stamp
 //! what it costs     one clone of two short strings per call, on the traced path only
 //! when it lies      never, because the sink refuses to call an ambiguous label exact:
@@ -125,10 +125,10 @@ const MAX_ERROR_DETAIL_CHARS: usize = 240;
 
 /// One HTTP attempt inside one logical call.
 ///
-/// A logical call is what the caller asked for; an attempt is what the wire saw. The
-/// adapter retries a transport or HTTP-status failure once, so a run whose node
-/// flattered and failed would otherwise look like one slow call, and the distinction
-/// §25 draws between node latency and a connection that had to be re-made rests on it.
+/// A logical call is what the caller asked for; an attempt is what the wire saw. A read
+/// retries a transport or HTTP-status failure once, so a run whose node flattered and
+/// failed would otherwise look like one slow call; a submission never asks twice. The
+/// distinction §25 draws between node latency and a re-made connection rests on this list.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct RpcAttempt {
     pub started_ns: u64,

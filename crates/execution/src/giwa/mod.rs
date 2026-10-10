@@ -26,5 +26,6 @@ pub use reads::{
     GAS_PRICE_ORACLE,
 };
 pub use sequencer_direct::{
-    parse_receipt, receipt_provenance, submission_provenance, GiwaSequencerDirect,
+    parse_receipt, parse_rpc_error, read_send_refusal, receipt_provenance, submission_provenance,
+    GiwaSequencerDirect, RefusalRead,
 };

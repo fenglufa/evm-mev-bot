@@ -345,7 +345,6 @@ mod tests {
         let local = B256::left_padding_from(&[5]);
         let accepted = SubmissionOutcome::Accepted {
             transaction_hash: Some(local),
-            hash_matches_local: true,
             endpoint: EndpointKind::PublicHttpRpc,
             detail: "eth_sendRawTransaction returned the hash".to_string(),
         };
@@ -382,7 +381,6 @@ mod tests {
         let local = B256::left_padding_from(&[5]);
         let accepted = SubmissionOutcome::Accepted {
             transaction_hash: Some(local),
-            hash_matches_local: true,
             endpoint: EndpointKind::PublicHttpRpc,
             detail: String::new(),
         };

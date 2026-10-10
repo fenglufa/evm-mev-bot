@@ -41,8 +41,9 @@ pub struct HttpChainAdapter {
 
 /// What one HTTP attempt ended with.
 ///
-/// A logical call can hold two of these, because the retry loop below holds two
-/// tries. The split matters for §25: a 20 s call that was one slow answer and a 20 s
+/// A retried read can hold two of these, because [`HttpChainAdapter::request_attempting`]
+/// gives a read two tries; a one-shot submission holds exactly one, whatever the failure.
+/// The split matters for §25: a 20 s call that was one slow answer and a 20 s
 /// call that was a timed-out connection plus a second request are different
 /// bottlenecks, and only the attempt list can tell them apart.
 enum Attempt {
@@ -58,6 +59,41 @@ enum Attempt {
         detail: String,
         terminal: bool,
     },
+}
+
+/// How many times one logical call may put its bytes on the wire.
+///
+/// The read path and the submission path have always wanted different answers here, and
+/// until M12-E they were given the same one. A read that times out asks again: nothing
+/// happened on the other side, the request is idempotent by construction, and public
+/// nodes drop connections often enough that one retry is the difference between a run and
+/// a stall. A submission cannot ask again on the same evidence — a closed connection does
+/// not prove the node never took the transaction, so a second POST is a second transaction
+/// over one nonce whenever the first one landed (§25, and M12-E §3.2's 「一次交易提交请求没有
+/// 得到明确结果，不等于交易没有提交成功」).
+///
+/// This is a parameter rather than a table of method names on purpose: the code that hands
+/// bytes to a node says so at the call, and a policy the transport derived by matching a
+/// method string would let a new send-shaped caller inherit the read's retry without
+/// anyone deciding that.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum WirePolicy {
+    /// The behaviour every read in this repository has always had: a second attempt when
+    /// the first ended in a class that proves nothing about the answer.
+    RetryOnce,
+    /// Exactly one HTTP request. Every failure class ends the call, including the three
+    /// classes [`HttpChainAdapter::request_with`] retries for a read.
+    Once,
+}
+
+impl WirePolicy {
+    /// The size of the attempt loop this policy allows.
+    fn attempts(self) -> usize {
+        match self {
+            Self::RetryOnce => 2,
+            Self::Once => 1,
+        }
+    }
 }
 
 /// Turn a failed attempt back into the error this module has always returned.
@@ -147,14 +183,30 @@ impl HttpChainAdapter {
     }
 
     async fn request(&self, method: &str, params: Value) -> Result<Value> {
-        self.request_traced(method, params).await
+        self.request_traced(method, params, WirePolicy::RetryOnce)
+            .await
     }
 
     /// The same request, for a caller that needs the raw provider JSON rather
     /// than a normalized type. Only used to keep one header-parsing path between
     /// the HTTP adapter and any other transport (see [`crate::head`]).
     pub async fn request_raw(&self, method: &str, params: Value) -> Result<Value> {
-        self.request_traced(method, params).await
+        self.request_traced(method, params, WirePolicy::RetryOnce)
+            .await
+    }
+
+    /// One POST, whatever happens: the raw provider JSON for a request that must not be
+    /// asked twice.
+    ///
+    /// This is the submission side's entry point, and the only reason it exists. A read is
+    /// idempotent, so [`HttpChainAdapter::request_raw`]'s retry costs a duplicate answer;
+    /// a send is not, so the same retry costs a second transaction whenever the first
+    /// attempt was received and its response was lost (M12-E §3.2). A caller that uses
+    /// this method gets one HTTP attempt and, in the trace, one attempt record — the
+    /// request count on the wire and the count in the evidence stay equal (§3.2's last
+    /// bullet), because the loop that would have made them differ cannot run here.
+    pub async fn request_raw_once(&self, method: &str, params: Value) -> Result<Value> {
+        self.request_traced(method, params, WirePolicy::Once).await
     }
 
     /// One call, recorded into this adapter's sink when it has one.
@@ -165,15 +217,21 @@ impl HttpChainAdapter {
     /// a record taken there would be a guess about the wire in exactly the direction
     /// §5 forbids. §18 falls out of the same shape — this function already holds the
     /// method and the params, and asks the node for nothing further.
-    async fn request_traced(&self, method: &str, params: Value) -> Result<Value> {
+    async fn request_traced(
+        &self,
+        method: &str,
+        params: Value,
+        policy: WirePolicy,
+    ) -> Result<Value> {
         let chain_id = self.chain_id.0;
-        Self::request_with(
+        Self::request_attempting(
             &self.http,
             &self.url,
             method,
             params,
             Some(chain_id),
             self.trace.as_ref(),
+            policy,
         )
         .await
     }
@@ -182,7 +240,8 @@ impl HttpChainAdapter {
         &self.url
     }
 
-    /// Send one JSON-RPC request, optionally recording it.
+    /// Send one JSON-RPC request, optionally recording it, with the read path's retry
+    /// policy.
     ///
     /// The last two arguments are the whole of M8.2's hook-up; with both `None` this
     /// is the function this repository had before it, request for request.
@@ -193,6 +252,34 @@ impl HttpChainAdapter {
         params: Value,
         chain_id: Option<u64>,
         trace: Option<&RpcTraceSink>,
+    ) -> Result<Value> {
+        Self::request_attempting(
+            http,
+            url,
+            method,
+            params,
+            chain_id,
+            trace,
+            WirePolicy::RetryOnce,
+        )
+        .await
+    }
+
+    /// The same call with its wire policy stated, which is the half M12-E §3.2 adds: a
+    /// read may ask twice, a submission may not.
+    ///
+    /// Every branch below that counts, records or classifies is shared by both policies,
+    /// so a one-shot call differs from a retried one in exactly one respect — the size of
+    /// the loop — and the attempt list it records says so. Nothing here looks at `method`
+    /// to decide how hard to try.
+    async fn request_attempting(
+        http: &reqwest::Client,
+        url: &str,
+        method: &str,
+        params: Value,
+        chain_id: Option<u64>,
+        trace: Option<&RpcTraceSink>,
+        policy: WirePolicy,
     ) -> Result<Value> {
         let body = json!({"jsonrpc": "2.0", "id": 1, "method": method, "params": params});
         // Read off the params that are about to go out, so §12's key describes what the
@@ -208,8 +295,11 @@ impl HttpChainAdapter {
         let mut attempts: Vec<RpcAttempt> = Vec::new();
         let mut answer: Option<Value> = None;
         let mut failure: Option<(&'static str, String)> = None;
-        // A single retry: transient 5xx / connection resets are common on public nodes.
-        for _ in 0..2 {
+        // The policy's own bound: two tries for a read, one for a submission. Transient
+        // 5xx and connection resets are common on public nodes, which is why a read asks
+        // again; a send cannot, because a request the node received is not a request that
+        // failed (M12-E §3.2).
+        for _ in 0..policy.attempts() {
             let attempt_started_ns = trace.map(|sink| sink.mark(Instant::now()));
             let outcome = Self::one_attempt(http, url, &body).await;
             if let (Some(sink), Some(attempt_started)) = (trace, attempt_started_ns) {
@@ -249,8 +339,8 @@ impl HttpChainAdapter {
             (Some(_), _) => (None, None),
             (None, Some((class, detail))) => (Some(*class), Some(bounded_detail(detail))),
             // The loop's own floor, kept from the code before this function could
-            // record: two tries ran and neither reported a class. It says so as a
-            // send failure, which is the only thing it can honestly mean.
+            // record: an attempt ran and none reported a class. It says so as a send
+            // failure, which is the only thing it can honestly mean.
             (None, None) => (Some(CLASS_SEND_FAILED), Some("request failed".to_string())),
         };
 
@@ -299,8 +389,8 @@ impl HttpChainAdapter {
     }
 
     /// One POST and its reading: the attempt-level half of
-    /// [`HttpChainAdapter::request_with`], so the loop above only has to decide what to
-    /// do with a class, not how to obtain one.
+    /// [`HttpChainAdapter::request_attempting`], so the loop there only has to decide what
+    /// to do with a class, not how to obtain one.
     async fn one_attempt(http: &reqwest::Client, url: &str, body: &Value) -> Attempt {
         let response = match http.post(url).json(body).send().await {
             Ok(response) => response,
