@@ -1,0 +1,897 @@
+{
+  "schema": "m12d-manifest-v1",
+  "milestone": "M12-D offline execution-safety and state-recovery audit",
+  "task_book": "docs/v0.1/M12D Coding.md",
+  "generated_at_utc": "2026-10-10T16:02:41Z",
+  "git_commit": "df6d1198dd2c9d46fbc6faf04a55ff479f846c0f",
+  "git_commit_reading": "read from .git/HEAD, then the loose ref it names — never by running git",
+  "git_commit_reading_detail": "read .git/HEAD (ref: refs/heads/main), then the loose ref it names",
+  "how_this_file_was_built": "every figure below is read out of a file or a gate log by /tmp/m12d_manifest.py, which asserts on each one; a number this script cannot reach is null with the reason beside it, never a plausible value",
+  "standing_verdicts": {
+    "SELF_HOSTED_NODE": "NOT_RUN",
+    "LOCAL_CANONICAL_RPC": "NOT_VERIFIED",
+    "LOCAL_FLASHBLOCKS": "NOT_VERIFIED",
+    "MULTI_NODE_HA": "OUT_OF_SCOPE",
+    "note": "the readiness gate, the state-lifetime controls, the submission labels, the policy-table gate and the radar boundary are code and local-double facts. None of them measures a node this repository never started: every JSON-RPC answer in these runs came from a loopback stub or a recording, and the real-endpoint harnesses stayed #[ignore]d."
+  },
+  "invariant_map": {
+    "note": "the six §1 invariants, each mapped to the test that decides it and the report section that argues it; `holds` is about the code as it stands in this worktree, not about a node this repository never started",
+    "I1_node_not_ready_never_reaches_execution": {
+      "holds": true,
+      "decided_by": [
+        "crates/pipeline/tests/readiness_isolation.rs::every_production_entry_that_builds_a_lane_passes_the_gate_above_it",
+        "crates/pipeline/tests/readiness_isolation.rs::the_lane_scan_reports_an_ungated_entry_instead_of_passing_it",
+        "crates/pipeline/tests/readiness_isolation.rs::a_node_that_will_not_or_cannot_answer_is_not_ready",
+        "crates/cli/tests/validation_gate.rs (5 tests)"
+      ],
+      "production_anchors": [
+        "crates/pipeline/src/runner.rs:970",
+        "crates/pipeline/src/runner.rs:1005",
+        "crates/pipeline/src/arbitrage.rs:373",
+        "crates/cli/src/lib.rs:730"
+      ],
+      "report_section": "5"
+    },
+    "I2_an_abnormal_read_is_never_no_opportunity": {
+      "holds": true,
+      "decided_by": [
+        "crates/pipeline/tests/readiness_isolation.rs::a_refusal_is_an_error_and_not_a_route_that_found_nothing",
+        "crates/chain/tests/readiness_gate.rs (13 tests, M12-B)"
+      ],
+      "production_anchors": [
+        "crates/chain/src/readiness.rs:207",
+        "crates/pipeline/src/error.rs:79"
+      ],
+      "report_section": "5.4"
+    },
+    "I3_a_stale_view_never_supports_an_old_candidate": {
+      "holds": true,
+      "decided_by": [
+        "crates/execution/tests/state_lifetime_recovery.rs::the_identity_a_restart_rederives_names_the_execution_the_evidence_recorded",
+        "crates/execution/tests/state_lifetime_recovery.rs (the first three tests)"
+      ],
+      "evidence_file": "data/evidence/m12/d/state-lifetime-controls.json",
+      "report_section": "6"
+    },
+    "I4_submitted_transaction_tracking_survives_a_node_restart": {
+      "node_restart_holds": true,
+      "process_restart_holds": false,
+      "decided_by": [
+        "crates/execution/tests/state_lifetime_recovery.rs::a_emptied_pending_view_after_a_send_deletes_no_tracking_and_holds_the_lane",
+        "crates/execution/tests/state_lifetime_recovery.rs::no_production_path_resumes_execution_from_a_record"
+      ],
+      "the_second_half_is_a_recorded_defect": "the ledger and the nonce lane live in the process; 0 production sites deserialize an ExecutionRecord — see durable_state_limits and out_of_scope item 2",
+      "report_section": "6.4"
+    },
+    "I5_an_endpoint_label_never_contradicts_the_submission_path": {
+      "holds": true,
+      "decided_by": [
+        "crates/execution/tests/endpoint_provenance.rs::the_read_sides_label_never_crosses_into_the_submission_path",
+        "crates/execution/tests/endpoint_provenance.rs::both_halves_of_a_run_name_the_one_socket_and_a_second_socket_changes_only_the_digest",
+        "crates/execution/tests/endpoint_provenance.rs::execution_that_does_not_fit_the_configuration_is_refused_before_the_socket"
+      ],
+      "production_anchors": [
+        "crates/execution/src/stage.rs:350",
+        "crates/execution/src/sequence.rs:1492"
+      ],
+      "evidence_file": "data/evidence/m12/d/endpoint-provenance.json",
+      "report_section": "7"
+    },
+    "I6_the_evidence_gate_notices_a_policy_change": {
+      "holds": true,
+      "decided_by": [
+        "crates/pipeline/tests/node_reset_policy.rs::the_committed_table_matches_the_model_column_by_column",
+        "crates/pipeline/tests/node_reset_policy.rs::every_planted_defect_in_the_policy_table_is_reported",
+        "crates/pipeline/tests/node_reset_policy.rs::both_copies_that_agree_on_a_dead_anchor_still_fail",
+        "crates/pipeline/tests/node_reset_policy.rs::the_gate_reads_the_model_and_the_source_and_nothing_else"
+      ],
+      "evidence_file": "data/evidence/m12/d/policy-table-consistency.json",
+      "report_section": "8"
+    },
+    "I7_pending_or_radar_never_reaches_the_signer": {
+      "holds": true,
+      "not_one_of_the_six_but_D5": true,
+      "decided_by": [
+        "crates/pipeline/tests/pending_radar_boundary.rs (5 tests)"
+      ],
+      "evidence_file": "data/evidence/m12/d/radar-status.json",
+      "report_section": "9"
+    }
+  },
+  "defect_map": {
+    "note": "what this milestone changed in production behaviour, per defect letter of the task book",
+    "D1_readiness_isolation": {
+      "production_files": [
+        "crates/pipeline/src/runner.rs",
+        "crates/pipeline/src/config.rs",
+        "crates/cli/src/lib.rs"
+      ],
+      "behaviour": "gate_readiness() is pub async and is the only way a lane gets built; a refusal returns Err(PipelineError::NodeNotReady) before the session directory or the event loop exist",
+      "no_new_rpc_method": true
+    },
+    "D2_state_lifetime": {
+      "production_files": [
+        "crates/execution/src/stage.rs",
+        "crates/execution/src/sequence.rs"
+      ],
+      "behaviour": "a re-pinned block opens a new execution instead of overwriting the recorded one; an emptied pending view after a send keeps tracking and holds the lane"
+    },
+    "D3_endpoint_truth": {
+      "production_files": [
+        "crates/execution/src/submitter.rs",
+        "crates/execution/src/giwa/sequencer_direct.rs",
+        "crates/execution/src/giwa/mod.rs",
+        "crates/live/src/flashblocks.rs"
+      ],
+      "behaviour": "the submission side declares EndpointKind::Unknown regardless of URL shape; a Recorded endpoint that the configuration forbids is refused at connect; URLs are replaced by rpc-<digest> in answers and in submission records",
+      "vocabulary_change_is_forward_only": "104 `public_http_rpc` strings in seven committed files predate this round and were left alone; new runs write `unknown`"
+    },
+    "D4_evidence_gate": {
+      "test_files": [
+        "crates/pipeline/tests/node_reset_policy.rs"
+      ],
+      "behaviour": "the expected side is rebuilt from the POLICY const and the production source, never from the artifact the comparison reads"
+    },
+    "D5_pending_radar_boundary": {
+      "test_files": [
+        "crates/pipeline/tests/pending_radar_boundary.rs"
+      ],
+      "behaviour": "no production behaviour changed: the gate is a scan over 137 files that reports 0 offenders and 0 production radar constructors"
+    }
+  },
+  "scope": {
+    "production_files": {
+      "crates/cli/src/lib.rs": {
+        "added": 13,
+        "removed": 0
+      },
+      "crates/execution/src/giwa/mod.rs": {
+        "added": 3,
+        "removed": 1
+      },
+      "crates/execution/src/giwa/sequencer_direct.rs": {
+        "added": 45,
+        "removed": 6
+      },
+      "crates/execution/src/sequence.rs": {
+        "added": 4,
+        "removed": 1
+      },
+      "crates/execution/src/stage.rs": {
+        "added": 11,
+        "removed": 10
+      },
+      "crates/execution/src/submitter.rs": {
+        "added": 24,
+        "removed": 1
+      },
+      "crates/live/src/flashblocks.rs": {
+        "added": 15,
+        "removed": 2
+      },
+      "crates/pipeline/src/arbitrage.rs": {
+        "added": 25,
+        "removed": 2
+      },
+      "crates/pipeline/src/config.rs": {
+        "added": 19,
+        "removed": 2
+      },
+      "crates/pipeline/src/runner.rs": {
+        "added": 41,
+        "removed": 22
+      }
+    },
+    "test_files_modified": {
+      "crates/pipeline/tests/node_reset_policy.rs": {
+        "added": 1197,
+        "removed": 0
+      },
+      "crates/pipeline/tests/readiness_startup.rs": {
+        "added": 40,
+        "removed": 37
+      }
+    },
+    "test_files_new": {
+      "crates/cli/tests/validation_gate.rs": {
+        "lines": 451,
+        "tests": 5
+      },
+      "crates/execution/tests/endpoint_provenance.rs": {
+        "lines": 725,
+        "tests": 8
+      },
+      "crates/execution/tests/state_lifetime_recovery.rs": {
+        "lines": 1126,
+        "tests": 7
+      },
+      "crates/pipeline/tests/pending_radar_boundary.rs": {
+        "lines": 516,
+        "tests": 5
+      },
+      "crates/pipeline/tests/readiness_isolation.rs": {
+        "lines": 993,
+        "tests": 9
+      }
+    },
+    "production_files_touched": 10,
+    "production_added": 200,
+    "production_removed": 47,
+    "new_test_functions": 42,
+    "new_test_functions_split": {
+      "in_the_five_new_files": 34,
+      "added_to_node_reset_policy": 8
+    },
+    "tests_removed": 0,
+    "ignored_added_by_this_milestone": 0,
+    "evidence_files_new": [
+      "endpoint-provenance.json",
+      "manifest.json",
+      "policy-table-consistency.json",
+      "radar-status.json",
+      "state-lifetime-controls.json"
+    ]
+  },
+  "gates": {
+    "serial": true,
+    "env": "CC=clang CXX=clang++ CXXFLAGS=-include cstdint",
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clippy --workspace --all-targets -- -D warnings",
+      "cargo test --workspace --no-fail-fast -- --test-threads=1"
+    ],
+    "command_deviation_from_m12b": "gate 3 adds --no-fail-fast. The first run used plain `cargo test --workspace`, its default fail-fast stopped the run after the first failing binary, so 46 of the workspace's 117 test binaries and all 16 doc-test targets never executed — an incomplete log is what §10 warns against. --test-threads=1 is unchanged from M12-B because the assembly scratch target/pipeline-tests/ is shared.",
+    "fmt": {
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "runs_this_milestone": 5,
+      "every_log_empty": true,
+      "start_utc": "2026-10-10T14:45:52Z",
+      "end_utc": "2026-10-10T14:45:55Z",
+      "wall_seconds": 3.0,
+      "artifact": "/tmp/m12d_gate1_fmt6.log"
+    },
+    "clippy": {
+      "exit_code": 0,
+      "warning_or_error_lines": 0,
+      "cache_cleared_before_the_run": {
+        "command": "cargo clean -p <each of the 16 workspace packages>",
+        "exit_code": 0,
+        "cargo_reported": "Removed 1015754 files, 89.5GiB total",
+        "start_utc": "2026-10-10T14:38:12Z",
+        "end_utc": "2026-10-10T14:45:52Z"
+      },
+      "crates_reanalysed_by_the_authoritative_run": 16,
+      "checking_lines": 15,
+      "compiling_lines": 1,
+      "why_one_line_says_compiling": "clippy must run a crate's build script before it can check it, so evm-pipeline appears as `Compiling` — it is still analysed by clippy with -D warnings",
+      "crates": [
+        "evm-chain",
+        "evm-cli",
+        "evm-core",
+        "evm-discovery",
+        "evm-execution",
+        "evm-graph",
+        "evm-live",
+        "evm-metrics",
+        "evm-opportunity",
+        "evm-pathfinder",
+        "evm-pipeline",
+        "evm-protocol",
+        "evm-replay",
+        "evm-risk",
+        "evm-simulation",
+        "evm-state"
+      ],
+      "self_reported_finished": "Finished `dev` profile [unoptimized + debuginfo] target(s) in 37.52s",
+      "runtime_seconds": 37.52,
+      "wall_seconds": 38.0,
+      "start_utc": "2026-10-10T14:45:55Z",
+      "end_utc": "2026-10-10T14:46:33Z",
+      "artifact": "/tmp/m12d_gate2_clippy6.log",
+      "previous_warm_run": {
+        "artifact": "/tmp/m12d_gate2_clippy5.log",
+        "crates_reanalysed": 0,
+        "why_replaced": "a warm run re-analyses nothing, and per-crate accounting over the four runs before it showed 11 of 16 workspace crates had last been analysed in a run that aborted on an unrelated diagnostic — so the exposure of that gate could not be stated, and the gate was re-run cold instead of being explained away"
+      },
+      "clippy_inputs_touched_after_the_authoritative_run": [],
+      "runs": [
+        {
+          "path": "/tmp/m12d_gate2_clippy.log",
+          "role": "superseded — the run that reported the doc_lazy_continuation defect in crates/pipeline/tests/pending_radar_boundary.rs; its log ends with `error: could not compile `evm-pipeline` (test \"pending_radar_boundary\") due to 1 previous error` and `warning: build failed`, and no exit-code line from its wrapper survived, which is why every exit code in the authoritative batch is written into the summary file beside the logs"
+        },
+        {
+          "path": "/tmp/m12d_gate2_clippy2.log",
+          "role": "superseded — the clean re-check after that fix, but incremental: 6 crate lines, not the whole workspace"
+        },
+        {
+          "path": "/tmp/m12d_gate2_clippy3.log",
+          "role": "superseded — clean, 1 crate line; it ran before the three anchor refreshes"
+        },
+        {
+          "path": "/tmp/m12d_gate2_clippy5.log",
+          "role": "superseded — the serial warm-cache run: 0 crate lines, only a Finished line. Per-crate accounting showed 11 of 16 crates had been analysed last only in the run that aborted on the unrelated pipeline doc error, so this run was replaced by the cold one below"
+        },
+        {
+          "path": "/tmp/m12d_gate2_clippy6.log",
+          "role": "the authoritative gate-2 run: cache cleared with `cargo clean -p` on all 16 workspace packages, every source edit and all three anchor refreshes already in the worktree, run serially between gate 1 and gate 3"
+        }
+      ],
+      "exit_code_is_read_from_the_log_not_the_completion_notification": true
+    },
+    "test": {
+      "exit_code": 0,
+      "test_targets": 133,
+      "target_kinds": {
+        "unittest": 17,
+        "integration": 100,
+        "doctest": 16
+      },
+      "passed": 1730,
+      "failed": 0,
+      "ignored": 29,
+      "measured": 0,
+      "filtered_out": 0,
+      "per_target_runtime_seconds": 105.25,
+      "compiler_warning_lines": 0,
+      "ignored_is_not_passed": "the ignored rows are listed apart and are not in `passed`",
+      "ignored_test_names": [
+        "capture_contiguous_corpus",
+        "capture_real_block",
+        "capture_the_real_three_hop_cycle_state",
+        "historical_census_is_reproducible_and_lands_in_the_graph",
+        "m11_cycle_state_files_are_written",
+        "measure_the_fees_the_pools_actually_charge",
+        "measure_what_each_recorded_pool_honours",
+        "measure_whether_a_recorded_pool_trades",
+        "measure_whether_native_ether_is_the_gate",
+        "measure_whether_the_cached_reserves_match_the_balances",
+        "measure_whether_the_tokens_pay_a_pool",
+        "measure_whether_the_vat_row_is_the_gate",
+        "measure_which_entry_points_each_recorded_contract_exposes",
+        "measure_which_recorded_tokens_move",
+        "measure_which_slots_a_three_leg_run_reads",
+        "one_real_preconfirmation_window_against_the_official_endpoint",
+        "probe_node_capacity_and_sync_density",
+        "query_strategies_select_the_same_sync_on_real_history",
+        "regenerate_synthetic_fixtures",
+        "simulate_the_real_route_and_freeze_the_state_it_read",
+        "target_block_reconstruction_is_reproducible",
+        "the_cycle_walks_its_own_refusals",
+        "the_fixed_tracker_reads_the_same_inclusion_the_saved_answers_describe",
+        "the_ladder_runs_on_giwa",
+        "the_live_provider_reproduces_the_recorded_state",
+        "the_sequencer_endpoint_is_measured_before_it_is_called_direct",
+        "the_three_reads_the_sequence_relies_on_are_measured_first",
+        "the_wallet_holds_what_the_frozen_cost_section_says_it_should",
+        "write_the_committed_fixture"
+      ],
+      "no_ignored_test_was_added_by_this_milestone": true,
+      "start_utc": "2026-10-10T14:46:33Z",
+      "end_utc": "2026-10-10T14:51:06Z",
+      "artifact": "/tmp/m12d_gate3_test6.log",
+      "compiling_lines": 16,
+      "superseded_first_run": {
+        "path": "/tmp/m12d_gate3_test.log",
+        "command": "cargo test --workspace",
+        "result_rows": 71,
+        "passed": 1195,
+        "failed": 1,
+        "ignored": 10,
+        "runtime_seconds": 79.08,
+        "test_binaries_executed": 71,
+        "test_binaries_never_executed": 46,
+        "doctest_targets_never_executed": 16,
+        "failure": "eth_call_semantics_evidence::the_committed_directory_is_a_reassembly_of_the_model_and_the_records — three M8.5.1 tables carried two `line` values (266, 1465) that M12-D's +25/-2 edit of crates/pipeline/src/arbitrage.rs moved to 268 and 1488",
+        "why_it_is_not_the_authoritative_run": "cargo's default fail-fast stopped the run at that target, so 46 of the workspace's 117 test binaries and all 16 doc-test targets never executed; the authoritative run adds --no-fail-fast and --test-threads=1"
+      },
+      "superseded_discovery_run": {
+        "path": "/tmp/m12d_gate3_test4.log",
+        "command": "cargo test --workspace --no-fail-fast -- --test-threads=1",
+        "role": "the run that turned --no-fail-fast from a defensive choice into a necessity: it covered every target and therefore surfaced the two drifted gates the truncated first run had hidden",
+        "exit_code": 101,
+        "exit_code_source": "wrapper line in /tmp/m12d_gates_summary3.txt",
+        "result_rows": 133,
+        "passed": 1725,
+        "failed": 5,
+        "ignored": 29,
+        "runtime_seconds": 109.68,
+        "failing_targets": [
+          {
+            "target": "rpc_reduction_evidence",
+            "passed": 14,
+            "failed": 3
+          },
+          {
+            "target": "state_ownership_evidence",
+            "passed": 10,
+            "failed": 2
+          }
+        ]
+      },
+      "test_detail_per_refreshed_target": {
+        "eth_call_semantics_evidence": {
+          "declared_tests": 11,
+          "runs_in_the_authoritative_gate_log": 1,
+          "passed_in_gate_log": [
+            11
+          ],
+          "refresh_variable": "M851_ETH_CALL_SEMANTICS_REFRESH",
+          "refresh_variable_set_for_this_run": false
+        },
+        "rpc_reduction_evidence": {
+          "declared_tests": 17,
+          "runs_in_the_authoritative_gate_log": 1,
+          "passed_in_gate_log": [
+            17
+          ],
+          "refresh_variable": "M86_CENSUS_REFRESH",
+          "refresh_variable_set_for_this_run": false
+        },
+        "state_ownership_evidence": {
+          "declared_tests": 12,
+          "runs_in_the_authoritative_gate_log": 1,
+          "passed_in_gate_log": [
+            12
+          ],
+          "refresh_variable": "M843_STATE_OWNERSHIP_REFRESH",
+          "refresh_variable_set_for_this_run": false
+        }
+      }
+    },
+    "wall_time": {
+      "fmt": {
+        "start_utc": "2026-10-10T14:45:52Z",
+        "exit_code": 0,
+        "end_utc": "2026-10-10T14:45:55Z"
+      },
+      "clippy": {
+        "start_utc": "2026-10-10T14:45:55Z",
+        "exit_code": 0,
+        "end_utc": "2026-10-10T14:46:33Z"
+      },
+      "test": {
+        "start_utc": "2026-10-10T14:46:33Z",
+        "exit_code": 0,
+        "end_utc": "2026-10-10T14:51:06Z"
+      },
+      "wall_seconds": {
+        "gate1": 3.0,
+        "gate2": 38.0,
+        "gate3": 273.0
+      },
+      "clean_step": {
+        "start_utc": "2026-10-10T14:38:12Z",
+        "exit_code": 0,
+        "end_utc": "2026-10-10T14:45:52Z"
+      },
+      "run_window": {
+        "start_utc": "2026-10-10T14:38:12Z",
+        "end_utc": "2026-10-10T14:51:06Z"
+      },
+      "source": "the UTC stamps the gate wrapper wrote to /tmp/m12d_gates_summary6.txt in the same shell that ran cargo clean -p and the three gates; the superseded warm run wrote /tmp/m12d_gates_summary5.txt",
+      "log_mtimes_epoch": {
+        "fmt": 1791643552,
+        "clippy": 1791643593,
+        "test": 1791643866
+      }
+    },
+    "exit_code_provenance": "every exit code quoted in this block is read from the `G*_EXIT=` / `gate* exit=` lines the wrapper scripts wrote into their summary files beside the logs, and each of those lines is re-parsed here from the file. Two superseded runs (the doc_lazy_continuation clippy failure and its truncated first test gate) were launched before that wrapper existed and have no recoverable exit code, so their outcome is stated from the error lines inside their own logs instead",
+    "per_target_re_run": {
+      "done_separately": false,
+      "because": "the authoritative gate 3 is a single serial `--no-fail-fast` run over every target, so each of the six M12-D test files already ran inside it and its per-target passed count is matched against the declared count below",
+      "declared_vs_gate_log": {
+        "crates/pipeline/tests/readiness_isolation.rs": {
+          "declared_tests": 9,
+          "passed_in_gate_log": 9,
+          "runs": 1
+        },
+        "crates/cli/tests/validation_gate.rs": {
+          "declared_tests": 5,
+          "passed_in_gate_log": 5,
+          "runs": 1
+        },
+        "crates/execution/tests/state_lifetime_recovery.rs": {
+          "declared_tests": 7,
+          "passed_in_gate_log": 7,
+          "runs": 1
+        },
+        "crates/execution/tests/endpoint_provenance.rs": {
+          "declared_tests": 8,
+          "passed_in_gate_log": 8,
+          "runs": 1
+        },
+        "crates/pipeline/tests/pending_radar_boundary.rs": {
+          "declared_tests": 5,
+          "passed_in_gate_log": 5,
+          "runs": 1
+        },
+        "crates/pipeline/tests/node_reset_policy.rs": {
+          "declared_tests": 19,
+          "passed_in_gate_log": 19,
+          "runs": 1
+        },
+        "crates/pipeline/tests/readiness_startup.rs": {
+          "declared_tests": 10,
+          "passed_in_gate_log": 10,
+          "runs": 1
+        }
+      }
+    }
+  },
+  "scans": {
+    "production_endpoint_kind_sites": [
+      {
+        "file": "crates/execution/src/sequence.rs",
+        "line": 1492,
+        "text": "crate::submitter::EndpointKind::Unknown,"
+      },
+      {
+        "file": "crates/execution/src/stage.rs",
+        "line": 350,
+        "text": "GiwaSequencerDirect::connect(url, expected_chain_id, setup.mode, EndpointKind::Unknown)"
+      }
+    ],
+    "send_surface": {
+      "noncomment_existing_head_to_worktree": [
+        40,
+        40
+      ],
+      "noncomment_new_test_files": 9,
+      "raw_grep_head": 54,
+      "raw_grep_worktree_tracked": 55,
+      "raw_grep_worktree_including_untracked": 67,
+      "note": "the raw tracked delta of 1 is one /// line in sequencer_direct.rs; the non-comment口径 is flat"
+    },
+    "sign_surface": {
+      "dot_sign_noncomment_existing": [
+        7,
+        7
+      ],
+      "dot_sign_noncomment_new_files": 1,
+      "SigningKey_or_sign_hash_or_recoverable_added_in_production": 0
+    },
+    "new_rpc_methods": {
+      "eth_strings_added_anywhere": [
+        "\"eth_blockNumber\"",
+        "\"eth_call\"",
+        "\"eth_chainId\"",
+        "\"eth_estimateGas\"",
+        "\"eth_gasPrice\"",
+        "\"eth_getBalance\"",
+        "\"eth_getBlockByNumber\"",
+        "\"eth_getTransactionCount\"",
+        "\"eth_getTransactionReceipt\"",
+        "\"eth_maxPriorityFeePerGas\"",
+        "\"eth_pendingRewind\"",
+        "\"eth_sendRawTransaction\"",
+        "\"eth_syncing\""
+      ],
+      "eth_strings_added_in_production_lines": [],
+      "needle_location": "crates/pipeline/tests/node_reset_policy.rs:1845 (a planted defect value the D4 gate expects to be reported)"
+    },
+    "secrets": {
+      "pem_header": [],
+      "jwt_shape": [],
+      "hex_64_literals": [],
+      "non_loopback_urls": [
+        "http://candidate.test"
+      ],
+      "scanned_lines": 5421
+    },
+    "ignored": {
+      "attribute_count_worktree": 29,
+      "attribute_count_new_files": 0,
+      "names_in_gate_log": [
+        "capture_contiguous_corpus",
+        "capture_real_block",
+        "capture_the_real_three_hop_cycle_state",
+        "historical_census_is_reproducible_and_lands_in_the_graph",
+        "m11_cycle_state_files_are_written",
+        "measure_the_fees_the_pools_actually_charge",
+        "measure_what_each_recorded_pool_honours",
+        "measure_whether_a_recorded_pool_trades",
+        "measure_whether_native_ether_is_the_gate",
+        "measure_whether_the_cached_reserves_match_the_balances",
+        "measure_whether_the_tokens_pay_a_pool",
+        "measure_whether_the_vat_row_is_the_gate",
+        "measure_which_entry_points_each_recorded_contract_exposes",
+        "measure_which_recorded_tokens_move",
+        "measure_which_slots_a_three_leg_run_reads",
+        "one_real_preconfirmation_window_against_the_official_endpoint",
+        "probe_node_capacity_and_sync_density",
+        "query_strategies_select_the_same_sync_on_real_history",
+        "regenerate_synthetic_fixtures",
+        "simulate_the_real_route_and_freeze_the_state_it_read",
+        "target_block_reconstruction_is_reproducible",
+        "the_cycle_walks_its_own_refusals",
+        "the_fixed_tracker_reads_the_same_inclusion_the_saved_answers_describe",
+        "the_ladder_runs_on_giwa",
+        "the_live_provider_reproduces_the_recorded_state",
+        "the_sequencer_endpoint_is_measured_before_it_is_called_direct",
+        "the_three_reads_the_sequence_relies_on_are_measured_first",
+        "the_wallet_holds_what_the_frozen_cost_section_says_it_should",
+        "write_the_committed_fixture"
+      ]
+    },
+    "readiness_verdict_reachability": {
+      "describe_call_sites_in_runner": [
+        1358
+      ],
+      "build_canonical_unwrap_line": [
+        1263
+      ],
+      "committed_status_files": 15,
+      "committed_status_lines": 299,
+      "lines_carrying_a_url_or_unverified_verdict": 0
+    },
+    "anchor_resolution": {
+      "anchors_cited_by_m12d_evidence": 24,
+      "stale": []
+    }
+  },
+  "evidence": {
+    "files": {
+      "endpoint-provenance.json": {
+        "sha256": "cfa79b144dd343fd44a392f72868031020cd075e880cb0fb597b6e55bd8682a2",
+        "bytes": 14718,
+        "mtime_utc": "2026-10-10T12:43:56Z"
+      },
+      "policy-table-consistency.json": {
+        "sha256": "d6522c6ccb275213326eab1cef491085018bc3f6a0f3f72f97031784d7d5d611",
+        "bytes": 19513,
+        "mtime_utc": "2026-10-10T07:58:40Z"
+      },
+      "radar-status.json": {
+        "sha256": "5e78f5f7c1d90aa1e2cacf13cf9206ecac4836cde441519970f5b0922ffd4adc",
+        "bytes": 11288,
+        "mtime_utc": "2026-10-10T12:44:55Z"
+      },
+      "state-lifetime-controls.json": {
+        "sha256": "2859379caa02b9a79bf67d75d2153e0612138c91a4c77b96aac612628bfdfd3d",
+        "bytes": 14460,
+        "mtime_utc": "2026-10-10T10:40:21Z"
+      }
+    },
+    "policy_table_positive_control": 2,
+    "policy_table_negative_controls": 2,
+    "policy_table_planted_defects": {
+      "caught_as_planted": 26,
+      "missed": 0,
+      "planted_in_the_artifact_copy_only": 25,
+      "total": 26
+    },
+    "policy_table_row_identity": "state_class@node_event",
+    "policy_table_independence": {
+      "expected_side_inputs": [
+        "the POLICY const and the enum lists in this file",
+        "the production source files the anchors name, as they are on disk now"
+      ],
+      "expected_side_reads_the_artifact": false,
+      "identical_mutations_caught_by_source_resolution": 1,
+      "proof": "every defect below is planted in one in-memory copy only, and the other copy is rebuilt from the const table; a gate that compared the generated file against itself could not see a change that exists in one copy of it. pd-both-copies-dead-anchor goes further and plants the same change in both copies, which only a check against the source can report."
+    },
+    "d2_mutation_controls": 5,
+    "d5_mutation_controls": 2,
+    "d3_red_then_green": [
+      {
+        "panic_site": "crates/execution/tests/endpoint_provenance.rs:277:9",
+        "what_it_was": "a production defect: `without_the_endpoint` did not exist, so a transport error's own text — which quotes the URL it was posting to — was written verbatim into the submission answer, credential and all",
+        "still_red_after_the_fix": false
+      },
+      {
+        "panic_site": "crates/execution/tests/endpoint_provenance.rs:514:5",
+        "what_it_was": "my own over-claim, not a defect: the assertion demanded `eth_sendRawTransaction` inside the *read* half's phrase, i.e. it asserted a composition the design does not use. The send phrase names the socket only; the method belongs to the answer text around it",
+        "resolution": "the method checks moved onto the composed lines (the shared helper asserts `contains(eth_sendRawTransaction)` and `!contains(eth_getTransactionReceipt)` there), and line 514 now asserts the phrase/socket split",
+        "still_red_after_the_fix": false
+      }
+    ],
+    "d3_url_leak_measurement": {
+      "method": "grep -o 'http://127\\.0\\.0\\.1:[0-9]*' over each run's own log — a count, deliberately not the URL itself, which carried a credential-shaped path segment",
+      "pre_fix_full_url_occurrences": 1,
+      "post_fix_full_url_occurrences": 0,
+      "post_fix_note": "the green run printed no panic message at all, so it printed no line to leak; the standing guarantee is the assertion, not the log: endpoint_provenance.rs:278 and :503 fail if any composed line or evidence row contains the planted credential",
+      "stub_url_shape": "http://127.0.0.1:{ephemeral port}/token/abc123 — an authority and a path token are both things a submission line must not repeat, and loopback is §5's first bullet made executable: a localhost socket is not automatically labelled local"
+    },
+    "d5_scanned_files": {
+      "how": "each number below is what the named test computes on the current tree. The gate asserts thresholds (a zero, a `> 60`, a `>= 8`), not these exact values, so the values were re-extracted by a read-only scan that replicates the gate's rules — same file walk, same comment-stripping (line and block comments dropped, string literals kept), same position test against a file's `#[cfg(test)]` marker.",
+      "t1_scanned_files_outside_live": 137,
+      "t1_offending_files": 0,
+      "t1_needle_occurrences_in_live_src": 78,
+      "t2_radar_constructor_sites_production": 0,
+      "t2_radar_constructor_sites_test": 17,
+      "t2_constructor_split": {
+        "PreconfLink::new": 5,
+        "PollingFrameSource::new": 6,
+        "EarlyRadar::new": 4,
+        "ReplayFrameSource::new": 2,
+        "self_reference": "4 of the 17 are this test file's own `RADAR_CONSTRUCTORS` string literals, which the scan keeps because strings are kept — the count is a positive control that the needles are live, not a count of radar users"
+      },
+      "t2_real_endpoint_harness_ignored": true,
+      "t3_candidate_arm_body_characters": 131,
+      "t3_candidate_arm_forbidden_word_hits": 0,
+      "t3_canonical_arm_reaches_engine_and_dispatch": true,
+      "t3_pending_block_reads_in_downstream_crates": 0,
+      "t3_pending_block_read_files_in_live": 2,
+      "t4_lane_pending_read": "eth_getTransactionCount with the literal \"pending\", and no eth_getBlockByNumber([\"pending\" …]) and no pending_raw / pending_header / pending_full_transactions call",
+      "t5_execution_depends_on_live": false,
+      "t5_live_depends_on_execution": false,
+      "t5_pipeline_depends_on_both": true
+    }
+  },
+  "cross_milestone_anchor_refresh": {
+    "gates_refreshed": [
+      {
+        "gate_dir": "m8.5.1",
+        "evidence_files": [
+          "lifecycle-contracts.json",
+          "ownership-matrix.json",
+          "reuse-verdicts.json"
+        ],
+        "moved_values": 6,
+        "refresh_variable": "M851_ETH_CALL_SEMANTICS_REFRESH=1",
+        "gate_target": "eth_call_semantics_evidence"
+      },
+      {
+        "gate_dir": "m8.6",
+        "evidence_files": [
+          "information_flow.json",
+          "rpc-census.json",
+          "rpc-reduction-candidates.json",
+          "rpc_surface.json"
+        ],
+        "moved_values": 142,
+        "refresh_variable": "M86_CENSUS_REFRESH=1",
+        "gate_target": "rpc_reduction_evidence"
+      },
+      {
+        "gate_dir": "m8.4.3",
+        "evidence_files": [
+          "lifecycle-contracts.json",
+          "ownership-matrix.json",
+          "reuse-verdicts.json",
+          "stage-dependency-matrix.json"
+        ],
+        "moved_values": 25,
+        "refresh_variable": "M843_STATE_OWNERSHIP_REFRESH=1",
+        "gate_target": "state_ownership_evidence"
+      }
+    ],
+    "moved_by_production_file": [
+      {
+        "gate_dir": "m8.4.3",
+        "production_file": "crates/execution/src/sequence.rs",
+        "observed_line_delta": 3,
+        "moved_values": 13
+      },
+      {
+        "gate_dir": "m8.4.3",
+        "production_file": "crates/execution/src/stage.rs",
+        "observed_line_delta": 1,
+        "moved_values": 9
+      },
+      {
+        "gate_dir": "m8.4.3",
+        "production_file": "crates/pipeline/src/arbitrage.rs",
+        "observed_line_delta": 23,
+        "moved_values": 3
+      },
+      {
+        "gate_dir": "m8.5.1",
+        "production_file": "crates/pipeline/src/arbitrage.rs",
+        "observed_line_delta": 2,
+        "moved_values": 3
+      },
+      {
+        "gate_dir": "m8.5.1",
+        "production_file": "crates/pipeline/src/arbitrage.rs",
+        "observed_line_delta": 23,
+        "moved_values": 3
+      },
+      {
+        "gate_dir": "m8.6",
+        "production_file": "crates/execution/src/sequence.rs",
+        "observed_line_delta": 3,
+        "moved_values": 92
+      },
+      {
+        "gate_dir": "m8.6",
+        "production_file": "crates/pipeline/src/arbitrage.rs",
+        "observed_line_delta": 2,
+        "moved_values": 6
+      },
+      {
+        "gate_dir": "m8.6",
+        "production_file": "crates/pipeline/src/arbitrage.rs",
+        "observed_line_delta": 23,
+        "moved_values": 44
+      }
+    ],
+    "what_was_not_touched": "no note, token, verdict, count, column, file name or key was changed by any refresh — the JSON key set of every table is identical before and after, and only integers that name a source line differ",
+    "verification": "each row above is re-derived by this script from `git show HEAD:<table>` against the worktree table, and the total is cross-checked against the raw `git diff -U0` count; no figure here is typed in",
+    "why_this_is_in_scope": "the three gates re-resolve `file`+`token` from production source and compare a fresh assembly against the committed bytes; M12-D's own edits to crates/pipeline/src/arbitrage.rs, crates/execution/src/sequence.rs and crates/execution/src/stage.rs moved the lines those anchors resolve to, so the tables are related to this milestone rather than unrelated history",
+    "recheck_without_the_variables": "the authoritative gate 3 runs all three targets with the variables unset; their per-target rows are in gates.test_detail_per_refreshed_target",
+    "precedent": "M12-B moved three `line` values in data/evidence/m8/state-ownership/ the same way (commit d417f5c); the class is 'a milestone edited a file another milestone's gate re-resolves', and the gates publish their own refresh entry point for exactly this case"
+  },
+  "known_staleness": [
+    {
+      "artifact": "data/evidence/m8/m8.5.1/{lifecycle-contracts,ownership-matrix,reuse-verdicts}.json",
+      "what_changed": "six `line` values only (266→268, 1465→1488 in crates/pipeline/src/arbitrage.rs)",
+      "cause": "M12-D's own +25/-2 edit of that file moved anchors the M8.5.1 gate re-resolves from source; refreshed through the gate's M851_ETH_CALL_SEMANTICS_REFRESH=1",
+      "not_touched": "every note, token, count, verdict and file name in those tables"
+    },
+    {
+      "artifact": "data/evidence/m10/manifest.json",
+      "what_changed": "its `git_commit` is reprinted by crates/execution/tests/executor_evidence_gate.rs on any workspace test run",
+      "handling": "restored to the committed bytes before the evidence commit; the behaviour itself is recorded as out-of-scope finding 7 rather than patched"
+    },
+    {
+      "artifact": "seven committed files under data/evidence/ and crates/",
+      "what_changed": "nothing — 104 `public_http_rpc` strings written before M12-D stay as they are; the vocabulary change is forward-only",
+      "scope_of_the_scan": "1382 tracked files"
+    },
+    {
+      "artifact": "docs/v0.1/M12-B Completion Report.md and data/evidence/m12/b/",
+      "what_changed": "nothing in this round; they describe the EndpointKind vocabulary as it was before D3, and the M12-C handoff table in the completion report §14 carries the delta instead of editing them"
+    }
+  ],
+  "out_of_scope_findings_recorded_not_fixed": [
+    {
+      "id": 1,
+      "title": "the submission path shares the read path's single retry",
+      "file_function": "crates/chain/src/rpc.rs::request_with (retry loop `for _ in 0..2` at :212), classification in one_attempt (:304)",
+      "caller": "crates/execution/src/giwa/sequencer_direct.rs:346 submit → :360 request_raw",
+      "risk": "CLASS_SEND_FAILED (:311), CLASS_NON_JSON (:322) and CLASS_HTTP_STATUS (:330) are non-terminal so a POST is repeated; the last two are exactly the shape of 'the node took it and the answer was lost', which means a real broadcast window can double-send the same raw transaction with the same nonce",
+      "evidence": "endpoint-provenance.json `holes_left_open`; no test was written for it because a meaningful test would have to change the submission path itself, which §9 forbids",
+      "suggested_milestone": "first task before M12-E (real-environment validation): split the send retry policy from the read one, and add a negative test that a resend must first check whether the nonce already landed"
+    },
+    {
+      "id": 2,
+      "title": "the execution ledger is in-process; nothing replays it",
+      "file_function": "crates/execution/src/stage.rs, crates/execution/src/sequence.rs",
+      "risk": "a bot restart between send and receipt loses the tracking record, so invariant 4 holds for a node restart but not for a process restart",
+      "evidence": "state-lifetime-controls.json `durable_state_limits`; state_lifetime_recovery.rs:942 no_production_path_resumes_execution_from_a_record",
+      "suggested_milestone": "M12-E or the first execution-hardening round: a durable, replayable record with a restart test that survives the process, not just the node"
+    },
+    {
+      "id": 3,
+      "title": "redaction does not reach a gateway that echoes only the URL path",
+      "file_function": "crates/execution/src/giwa/sequencer_direct.rs::without_the_endpoint",
+      "risk": "credentials in a path (or a stub that returns just the path) survive into the message; the whole-URL replacement cannot match a path-only echo",
+      "evidence": "endpoint-provenance.json `holes_left_open`",
+      "suggested_milestone": "an evidence-shape round: redact by shape, keeping the node's original wording intact wherever it is quoted"
+    },
+    {
+      "id": 4,
+      "title": "read-side error strings are not scrubbed",
+      "file_function": "crates/execution/src/giwa/sequencer_direct.rs::read_error (:583, 20 call sites)",
+      "risk": "a transport error that embeds the endpoint URL flows to stderr untouched; every site reached this round ends in a log line rather than an evidence line",
+      "evidence": "endpoint-provenance.json `holes_left_open`",
+      "suggested_milestone": "same round as 3 — the fix class is 'scrub at the boundary', not 'rewrite the node's text'"
+    },
+    {
+      "id": 5,
+      "title": "the accepted branch interpolates the node's result value verbatim",
+      "file_function": "crates/execution/src/giwa/sequencer_direct.rs, accepted branch",
+      "risk": "the result of a send is a hash, so today nothing sensitive can appear; it only becomes a leak if a gateway starts echoing (finding 3)",
+      "evidence": "endpoint-provenance.json `holes_left_open`",
+      "suggested_milestone": "close together with 3"
+    },
+    {
+      "id": 6,
+      "title": "M9.4's radar has no production constructor, so no run can reach it",
+      "file_function": "crates/live/src/preconf.rs / preconf_loop.rs, crates/metrics/src/lib.rs",
+      "risk": "the Early Radar path cannot drive anything today; the only harness that points it at a real endpoint is #[ignore]d",
+      "evidence": "radar-status.json `status_of_the_radar` (production constructor sites = 0 against 17 sites in test code)",
+      "suggested_milestone": "a dedicated radar integration milestone — §7 requires recording its real state and §9 forbids growing it into an execution framework here"
+    },
+    {
+      "id": 7,
+      "title": "a gate reprints a committed manifest every time it runs",
+      "file_function": "crates/execution/tests/executor_evidence_gate.rs",
+      "risk": "it rewrites data/evidence/m10/manifest.json's git_commit on any workspace test run, which conflicts with §9's 'do not regenerate unrelated historical evidence'",
+      "evidence": "observed in both gate-3 runs of this milestone; restored each time",
+      "suggested_milestone": "with M10's gate owner: pin the field to a constant or write it into the scratch directory instead of the committed artifact"
+    }
+  ]
+}

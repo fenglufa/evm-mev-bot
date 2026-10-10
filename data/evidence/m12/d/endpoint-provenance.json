@@ -1,0 +1,209 @@
+{
+  "milestone": "M12-D",
+  "deliverable": "D3 — endpoint purpose versus the real submission path",
+  "task_book": "docs/v0.1/M12D Coding.md §5 (and §8's two endpoint negative tests)",
+  "recorded_at": "2026-10-10",
+  "what_this_proves": [
+    "the execution lane now labels its submit endpoint `unknown` at both of its construction sites, and the label is not derived from the URL",
+    "every submission answer the lane produces names the socket by its `rpc-<16 hex>` digest and repeats neither the URL, its authority, nor a path credential",
+    "the read side's operator-declared purpose type (`evm_chain::EndpointPurpose`) appears zero times in `crates/execution/src`'s code, so no read role can be re-printed as a submission role",
+    "the eight tests named below pass against the current tree, and two of them were red before the production fix"
+  ],
+  "what_this_does_not_prove": [
+    "it does not prove where any real GIWA node forwards an accepted `eth_sendRawTransaction`; no endpoint was contacted (§9), so the destination is still unmeasured and the label deliberately says so",
+    "it does not prove a credential can never reach evidence from a path this file does not cover — see `holes_left_open`",
+    "it does not re-label the 104 historical `public_http_rpc` occurrences in M6/M7 evidence; those rows are forward-only (§9)",
+    "it does not add endpoint routing, failover or HA (§5's last line, §9)"
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p evm-execution --test endpoint_provenance -- --test-threads=1",
+      "exit_code": 0,
+      "result_line": "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s",
+      "note": "post-fix run, log /tmp/m12d_d3_test2.log; run serially because the workspace's integration tests share target/pipeline-tests/ scratch"
+    },
+    {
+      "command": "cargo test -p evm-execution --test endpoint_provenance -- --test-threads=1  (production scrub absent — the pre-fix tree)",
+      "exit_code": 101,
+      "result_line": "test result: FAILED. 6 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s",
+      "note": "log /tmp/m12d_d3_test.log; this is the red run that located the defect, not a mutation round"
+    }
+  ],
+  "red_then_green": [
+    {
+      "panic_site": "crates/execution/tests/endpoint_provenance.rs:277:9",
+      "what_it_was": "a production defect: `without_the_endpoint` did not exist, so a transport error's own text — which quotes the URL it was posting to — was written verbatim into the submission answer, credential and all",
+      "still_red_after_the_fix": false
+    },
+    {
+      "panic_site": "crates/execution/tests/endpoint_provenance.rs:514:5",
+      "what_it_was": "my own over-claim, not a defect: the assertion demanded `eth_sendRawTransaction` inside the *read* half's phrase, i.e. it asserted a composition the design does not use. The send phrase names the socket only; the method belongs to the answer text around it",
+      "resolution": "the method checks moved onto the composed lines (the shared helper asserts `contains(eth_sendRawTransaction)` and `!contains(eth_getTransactionReceipt)` there), and line 514 now asserts the phrase/socket split",
+      "still_red_after_the_fix": false
+    }
+  ],
+  "url_leak_measurement": {
+    "method": "grep -o 'http://127\\.0\\.0\\.1:[0-9]*' over each run's own log — a count, deliberately not the URL itself, which carried a credential-shaped path segment",
+    "pre_fix_full_url_occurrences": 1,
+    "post_fix_full_url_occurrences": 0,
+    "post_fix_note": "the green run printed no panic message at all, so it printed no line to leak; the standing guarantee is the assertion, not the log: endpoint_provenance.rs:278 and :503 fail if any composed line or evidence row contains the planted credential",
+    "stub_url_shape": "http://127.0.0.1:{ephemeral port}/token/abc123 — an authority and a path token are both things a submission line must not repeat, and loopback is §5's first bullet made executable: a localhost socket is not automatically labelled local"
+  },
+  "label_vocabulary": {
+    "read_side": "evm_chain::EndpointPurpose — LocalCanonicalRpc | PublicCanonicalRpc | LocalFlashblocksRpc | PublicFlashblocksRpc | Unknown (default), operator-declared, unchanged by this milestone",
+    "submit_side_before": "EndpointKind::PublicHttpRpc, hard-coded at both lane construction sites; its wire word was `public_http_rpc`",
+    "submit_side_after": "EndpointKind::Unknown, hard-coded at both lane construction sites; its wire word is `unknown`",
+    "kept_on_purpose": [
+      "PublicHttpRpc and FlashblocksHttpRpc stay in the enum for a caller that was *told* who runs its endpoint; `the_read_sides_label_never_crosses_into_the_submission_path` asserts the words are still constructible in `submitter.rs`, so the zeros it reports are a retirement at the wiring and not a rename out of reach of the scan",
+      "EndpointKind::Unknown.may_broadcast() is true: the question that predicate answers is whether the socket can carry a send, and refusing to send over an unknown endpoint would be the opposite guess — that not knowing is a safety property",
+      "EndpointKind::Recorded.may_broadcast() stays false and `execution_that_does_not_fit_the_configuration_is_refused_before_the_socket` proves the refusal happens before a byte leaves"
+    ]
+  },
+  "production_sites": {
+    "constructors_of_the_only_production_submitter": [
+      "crates/execution/src/stage.rs:350 — ExecutionStage::connect, EndpointKind::Unknown",
+      "crates/execution/src/sequence.rs:1492 — SequenceStage::connect_with_trace, EndpointKind::Unknown"
+    ],
+    "measured_by": "endpoint_provenance.rs asserts exactly 2 occurrences of `EndpointKind::Unknown` across those two files, and 0 of `EndpointKind::PublicHttpRpc`; a third site would mean a new path choosing its own class",
+    "remaining_public_http_rpc_literal_sites_in_src": "13, every one below its file's `#[cfg(test)]` marker (submitter.rs, evidence.rs, lifecycle.rs) — classified by position, not by filename",
+    "rpc_methods": "no new JSON-RPC method; `eth_sendRawTransaction`'s call shape is untouched"
+  },
+  "redaction_rule": {
+    "submission_provenance": "over endpoint rpc-<16 hex of keccak256(url)> — names the socket, claims no class",
+    "without_the_endpoint": "replaces both reqwest shapes (the URL as configured, and the URL with a trailing slash the client normalized in) with the same digest; applied to the two error arms of `submit()` — the JSON-RPC refusal and the transport/no-answer path",
+    "why_the_digest_and_not_a_drop": "§25 forbids paraphrasing what the node's transport said, so the message travels unchanged and only the endpoint is taken back out",
+    "composition": "all four answer strings interpolate `({provenance})`; the accepted branch keeps the node's returned value, the unknown branch keeps what the body said, and the read/submit vocabularies stay separate — a submission line never contains `eth_getTransactionReceipt`"
+  },
+  "test_file": "crates/execution/tests/endpoint_provenance.rs",
+  "tests": [
+    {
+      "name": "an_accepted_send_names_the_socket_and_not_who_runs_it",
+      "line": 301,
+      "case": "§5 「未知端点应标记 Unknown」 + §8 「公共提交端点不会被描述为本地提交」",
+      "asserts": [
+        "endpoint() is Unknown and its wire word is `unknown`, while may_broadcast() stays true",
+        "the accepted answer carries the node's hash, matches the local hash, names `eth_sendRawTransaction`, and passes the shared socket/credential/class shape check"
+      ]
+    },
+    {
+      "name": "a_refusal_names_the_socket_and_is_the_only_answer_that_clears_the_lane",
+      "line": 367,
+      "case": "§5's provenance on the node-says-no path, plus §25's one-send rule",
+      "asserts": [
+        "status word `rejected`, the reason still quotes the node's own words (`nonce too low`), the reason passes the shape check",
+        "the stub saw exactly one send — a refusal is never retried by the lane"
+      ]
+    },
+    {
+      "name": "an_answer_that_is_not_an_acknowledgement_names_the_socket_and_keeps_the_lane_busy",
+      "line": 396,
+      "case": "§1's invariant 2 read on the submission side: a garbage answer is `unknown`, never `no opportunity`",
+      "asserts": [
+        "status word `unknown`, the body travels unchanged, the shape check holds",
+        "the dropped shape is seen twice because the transport itself retries once — measured and reported rather than claimed as design",
+        "a parsed answer ends the call at one send"
+      ]
+    },
+    {
+      "name": "the_evidence_row_for_a_send_says_unknown_and_carries_no_url",
+      "line": 454,
+      "case": "§5 「端点 URL、API Key、JWT … 不得进入公开证据」",
+      "asserts": [
+        "the serialized submission row says outcome `submitted`, was_sent() is true, and its JSON contains the digest",
+        "no class word (public/local/flashblocks/sequencer/recorded) and no planted credential anywhere in the serialized text"
+      ]
+    },
+    {
+      "name": "both_halves_of_a_run_name_the_one_socket_and_a_second_socket_changes_only_the_digest",
+      "line": 511,
+      "case": "§5 「本地 Canonical RPC 与公共 sequencer 可能同时存在」",
+      "asserts": [
+        "the send phrase and the read phrase each name the same endpoint id, and the read phrase keeps `eth_getTransactionReceipt` while carrying no `eth_sendRawTransaction`",
+        "the send phrase names the socket and borrows nothing from the read sentence (this is the assertion that was over-claimed pre-fix)",
+        "two different URLs give two different digests, and each provenance mentions only its own"
+      ]
+    },
+    {
+      "name": "the_read_sides_label_never_crosses_into_the_submission_path",
+      "line": 567,
+      "case": "§5 「不得把读取端点标签直接复用为提交端点标签」",
+      "asserts": [
+        "0 occurrences of `EndpointPurpose::` in crates/execution/src code (comments skipped: the retirement is *explained* in this crate's doc prose, and prose is not a call site) with the positive control that the needle is real in crates/chain/src/endpoint.rs",
+        "0 `EndpointKind::PublicHttpRpc` at the two wiring sites, with 2 `EndpointKind::Unknown`",
+        "`public_http_rpc` still appears in the retired wording of committed M7 evidence, read but not rewritten"
+      ]
+    },
+    {
+      "name": "a_conservative_label_still_describes_a_socket_and_a_read_only_one_still_refuses_to_send",
+      "line": 651,
+      "case": "§5's two questions kept apart: can it broadcast, and do we know who runs it",
+      "asserts": [
+        "Unknown broadcasts and names itself `unknown`; Recorded does not and names itself `recorded_no_submission`"
+      ]
+    },
+    {
+      "name": "execution_that_does_not_fit_the_configuration_is_refused_before_the_socket",
+      "line": 661,
+      "case": "§5's closing line — a conservative label plus a refusal, not a guess",
+      "asserts": [
+        "a Recorded endpoint asked to submit is refused at the mode gate, the error names the kind it was given, and the stub counts zero sends"
+      ]
+    }
+  ],
+  "historical_rows_left_alone": {
+    "rule": "§9 forbids reprinting or rewriting M10 and other historical evidence, so the class word is retired forward-only",
+    "tracked_evidence_files_containing_public_http_rpc": 7,
+    "occurrences_total": 104,
+    "per_file": [
+      {
+        "file": "data/evidence/m6/validation/validate-91342-1790847616435/executions.jsonl",
+        "count": 2
+      },
+      {
+        "file": "data/evidence/m6/validation/validate-91342-1790847616435/submissions.jsonl",
+        "count": 3
+      },
+      {
+        "file": "data/evidence/m6/validation/validate-91342-1790847616435/validation-session.json",
+        "count": 2
+      },
+      {
+        "file": "data/evidence/m6/validation/validate-91342-1790849090542/submissions.jsonl",
+        "count": 1
+      },
+      {
+        "file": "data/evidence/m7/route-submit/route-91342-37563264-1790908382146/executions.jsonl",
+        "count": 42
+      },
+      {
+        "file": "data/evidence/m7/route-submit/route-91342-37563264-1790908382146/route-run.json",
+        "count": 48
+      },
+      {
+        "file": "data/evidence/m7/route-submit/route-91342-37563264-1790908382146/submissions.jsonl",
+        "count": 6
+      }
+    ],
+    "measurement": "counted over `git ls-files data/evidence` (1382 tracked files) by a read-only scan, not by the gate"
+  },
+  "holes_left_open": [
+    {
+      "hole": "a gateway that answers with only the URL *path* (where a key or JWT lives) rather than the whole URL leaves the scrub untouched — `without_the_endpoint` replaces the configured URL and that URL plus a slash, not a fragment of it",
+      "why_not_fixed_here": "closing it means redacting the message, which §25 forbids; the same asymmetry was recorded on the trace side in M12-B and left the same way",
+      "suggested_milestone": "an outbound redaction contract for error bodies, if a real endpoint is ever reached with credentials in its path"
+    },
+    {
+      "hole": "the read path's error strings are not scrubbed: `read_error` in sequencer_direct.rs builds `ExecutionError` display text from the transport's own message, which can quote the URL",
+      "why_not_fixed_here": "every call site of `read_error` that this milestone can reach terminates in a log line, not an evidence row, and sweeping it would widen the production diff past the defect class (§9's scope discipline)",
+      "suggested_milestone": "the same rule applied to read-side strings before any read error is written into evidence"
+    },
+    {
+      "hole": "the accepted branch interpolates the node's raw result value unscrubbed",
+      "why_not_fixed_here": "the value is the JSON-RPC `result` for a send (a hash) or the body of a non-hash answer; the URL would have to be echoed back by the node into its own result, which is the gateway case above"
+    }
+  ],
+  "observations_for_the_report": [
+    "the transport retries a *send*: crates/chain/src/rpc.rs:212 loops at most twice for any method, so a dropped answer to `eth_sendRawTransaction` can mean two posts of the same payload — the lane's one-send assertion is about the lane, not the wire (out of scope here, §9)",
+    "M12-D found that crates/execution/tests/executor_evidence_gate.rs rewrites data/evidence/m10/manifest.json on every `cargo test --workspace`, which contradicts §9's no-reprint rule; it is reverted after each gate run in this milestone and needs its own fix (pin the field or write to scratch)"
+  ]
+}

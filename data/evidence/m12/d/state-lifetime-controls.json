@@ -1,0 +1,209 @@
+{
+  "milestone": "M12-D",
+  "deliverable": "D2 — the lifetime of execution state across a node restart and a process restart",
+  "task_book": "docs/v0.1/M12D Coding.md §4 (and §8's negative tests)",
+  "recorded_at": "2026-10-10",
+  "what_this_proves": [
+    "the seven tests named below pass against the current tree",
+    "each of them fails when the one production guard it is written against is removed, and only it fails",
+    "the production tree is byte-identical to the state before those mutations"
+  ],
+  "what_this_does_not_prove": [
+    "nothing about a self-hosted node: SELF_HOSTED_NODE = NOT_RUN, LOCAL_CANONICAL_RPC = NOT_VERIFIED, LOCAL_FLASHBLOCKS = NOT_VERIFIED",
+    "no real key, no real funds, no broadcast — every endpoint here is the §40 scripted answer, and the only signing key is the synthetic scalar-1 key",
+    "the pending-shape and Radar boundary is D5's question, not this file's",
+    "a restarted process does not resume tracking from evidence: that is a finding, recorded under durable_state_limits"
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p evm-execution --test state_lifetime_recovery -- --test-threads=1",
+      "exit_code": 0,
+      "result_line": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s",
+      "note": "run serially because the workspace's integration tests share target/pipeline-tests/ scratch"
+    },
+    {
+      "command": "cargo clippy -p evm-execution --all-targets -- -D warnings",
+      "exit_code": 0,
+      "result_line": "Finished `dev` profile [unoptimized + debuginfo] target(s) in 2m 12s",
+      "note": "warnings promoted to errors; zero emitted"
+    },
+    {
+      "command": "cargo fmt --all -- --check",
+      "exit_code": 0,
+      "result_line": "no output",
+      "note": "the new file was formatted before the check, so the check is over the committed shape"
+    }
+  ],
+  "test_file": "crates/execution/tests/state_lifetime_recovery.rs",
+  "tests": [
+    {
+      "name": "a_candidate_carried_into_a_restarted_node_is_refused_before_a_send",
+      "line": 413,
+      "case": "§4 case 1 — a candidate pinned to an old block must not execute after a restart",
+      "asserts": [
+        "control: the same intent over a node that still holds the pinned hash reaches submitted with exactly one payload",
+        "restart by reorg: reached=failed, the refusal names block_binding_valid and the block it found, zero payloads, nothing signed, lane idle",
+        "the fresh attempt asked the node which block the height is exactly once (binding_reads=1), so the answer was re-read and not remembered",
+        "restart by a height the node no longer holds: reached=failed with 'not verified', zero payloads, lane idle",
+        "the new ledger holds no tracking of the earlier send (by_transaction finds nothing), which is why a re-read is the only possible bar"
+      ]
+    },
+    {
+      "name": "re_pinning_a_candidate_after_a_restart_starts_a_new_execution_and_keeps_the_old_record",
+      "line": 504,
+      "case": "§4 case 2 — invalidatable data may be recomputed, and the recompute must not overwrite what was already sent",
+      "asserts": [
+        "the pinned block hash is inside state_binding(), so a re-pinned candidate claims a new execution id and a new idempotency key",
+        "the new record is the same opportunity and the same simulation id, at detected, naming the block the restarted node reports",
+        "the submitted record is unchanged — equal as a value and identical as the JSON the evidence file uses — and still joins by transaction hash",
+        "control: re-claiming the identical triple returns Claim::Existing at submitted rather than a second slot"
+      ]
+    },
+    {
+      "name": "a_emptied_pending_view_after_a_send_deletes_no_tracking_and_holds_the_lane",
+      "line": 597,
+      "case": "§4 case 3 plus §4's '重连不会重复预留' inside one process",
+      "asserts": [
+        "an acknowledged send whose receipt never arrives ends at submitted, receipt answer timeout, lane held",
+        "after both nonce views are reset to the pre-restart numbers, a second attempt on the same stage is refused by the lane ('single execution lane')",
+        "one payload total, one record total, the record still submitted and was_sent, and its bytes unchanged",
+        "control: a terminal receipt on a fresh stage resolves the same intent to included, releases the lane, and both processes sent byte-identical payloads"
+      ]
+    },
+    {
+      "name": "a_restarted_process_never_allocates_the_nonce_still_in_flight_and_spends_the_next",
+      "line": 687,
+      "case": "§4 case 4 across a process boundary — nonce reservation is not repeatable",
+      "asserts": [
+        "process one spends nonce 0 and leaves it in the pool",
+        "process two, reading confirmed 0 / pending 1, is refused ('did not issue'), sends nothing, claims no record at all, and leaves the lane idle",
+        "process three, reading 1 / 1, spends nonce 1 — a different nonce, not a re-allocation",
+        "a contradictory read (confirmed 5 / pending 4) is reported as 'did not come from one moment' rather than normalized",
+        "metrics: 4 attempts, 2 stops, 2 submit successes, 0 gate blocks — a refusal that never reached the chain is countable"
+      ]
+    },
+    {
+      "name": "a_restarted_process_stops_when_the_balance_it_read_cannot_cover_the_bill",
+      "line": 783,
+      "case": "§4 case 4's funding half — a capital reservation is re-earned from the chain every attempt",
+      "asserts": [
+        "the threshold is the control run's own record field estimated_execution_cost_wei, not a number typed into this file",
+        "at cost-1 the run fails on balance_sufficient naming both figures, signs nothing, sends nothing, and gives the nonce back",
+        "the restarted record re-priced the identical bill, so the refusal is the comparison rather than a changed transaction",
+        "control at exactly the bill: the run reaches submitted and one payload leaves"
+      ]
+    },
+    {
+      "name": "no_production_path_resumes_execution_from_a_record",
+      "line": 942,
+      "case": "§4 case 5 — the recovery path cannot bypass the gate, because there is nothing to resume from",
+      "asserts": [
+        "the scan covers every crates/*/src file above its own #[cfg(test)] gate with comment lines dropped, over 100 files",
+        "production Ledger::new() exists in exactly two files — crates/execution/src/sequence.rs and crates/execution/src/stage.rs",
+        "no production line deserializes an ExecutionRecord in any of the four generic forms",
+        "planted controls: the scan does find a real production deserializer (chain_block_from_value in crates/chain/src/head.rs) and the one-way executions-row write (EvidenceFile::Executions in crates/pipeline/src/arbitrage.rs)",
+        "the cut is load-bearing: lifecycle.rs contains Ledger::new() four times raw and zero times in its production text"
+      ]
+    },
+    {
+      "name": "the_identity_a_restart_rederives_names_the_execution_the_evidence_recorded",
+      "line": 1008,
+      "case": "§4 case 3's 'must be kept' side, checked at the artifact layer",
+      "asserts": [
+        "a written ledger re-reads as an identical record, and every class-2 field name is present in the row",
+        "status is written as the same word ExecutionStatus::name() returns, and transaction_hash as the hash the lookups join on",
+        "a restarted process that re-derives the identity from the same content gets the same execution id and the same idempotency key",
+        "its ledger serializes to byte-identical JSON with the file the earlier process wrote",
+        "control: re-pinning the block moves the id, which is why re-deriving from content is safe and reusing a remembered send is not"
+      ]
+    }
+  ],
+  "mutation_controls": [
+    {
+      "id": "mut-1",
+      "guard": "crates/execution/src/gate.rs PreSubmitGate::evaluate — the BlockBindingValid leg",
+      "mutation": "failures.retain(|f| f.check != GateCheck::BlockBindingValid) inserted before the empty check",
+      "expected_red": ["a_candidate_carried_into_a_restarted_node_is_refused_before_a_send"],
+      "observed": "test result: FAILED. 6 passed; 1 failed; 0 ignored",
+      "first_failing_assertion": "state_lifetime_recovery.rs:436 assertion `left == right` failed",
+      "restored": "cmp identical to the pre-mutation copy; git status clean for crates/execution/src"
+    },
+    {
+      "id": "mut-2",
+      "guard": "crates/execution/src/gate.rs PreSubmitGate::evaluate — the BalanceSufficient leg",
+      "mutation": "failures.retain(|f| f.check != GateCheck::BalanceSufficient)",
+      "expected_red": ["a_restarted_process_stops_when_the_balance_it_read_cannot_cover_the_bill"],
+      "observed": "test result: FAILED. 6 passed; 1 failed; 0 ignored",
+      "restored": "cmp identical"
+    },
+    {
+      "id": "mut-3",
+      "guard": "crates/execution/src/nonce.rs NonceAllocator::allocate — refuse while the chain reports anything in flight",
+      "mutation": "if in_flight > 0 replaced by if in_flight > 999",
+      "expected_red": ["a_restarted_process_never_allocates_the_nonce_still_in_flight_and_spends_the_next"],
+      "observed": "test result: FAILED. 6 passed; 1 failed; 0 ignored",
+      "restored": "cmp identical"
+    },
+    {
+      "id": "mut-4",
+      "guard": "both outstanding-nonce checks together — crates/execution/src/lifecycle.rs ExecutionLane::allocate and crates/execution/src/nonce.rs NonceAllocator::allocate",
+      "mutation": "each condition changed to .outstanding().filter(|_| false), so neither lane guard can fire",
+      "expected_red": ["a_emptied_pending_view_after_a_send_deletes_no_tracking_and_holds_the_lane"],
+      "observed": "test result: FAILED. 6 passed; 1 failed; 0 ignored",
+      "finding": "the run then stops on §30's duplicate claim instead — 'exec-… already owns this state binding (it is at submitted), so this attempt stopped before building a second transaction for it' — and still sends nothing. The lane hold and the ledger dedup are two independent bars, and the test is written against the first one.",
+      "restored": "cmp identical for both files"
+    },
+    {
+      "id": "mut-5",
+      "guard": "crates/execution/src/intent.rs TransactionIntent::state_binding — the pinned block hash inside the identity preimage",
+      "mutation": "bytes.extend_from_slice(self.block_hash.as_slice()) removed",
+      "expected_red": [
+        "re_pinning_a_candidate_after_a_restart_starts_a_new_execution_and_keeps_the_old_record",
+        "the_identity_a_restart_rederives_names_the_execution_the_evidence_recorded"
+      ],
+      "observed": "test result: FAILED. 5 passed; 2 failed; 0 ignored",
+      "first_failing_assertion": "state_lifetime_recovery.rs:531 'the pinned hash is inside the binding, so a re-pinned candidate cannot claim the earlier execution's slot'",
+      "restored": "cmp identical"
+    }
+  ],
+  "mutation_control_note": "no mutation round timed its wall clock, so none is recorded with a duration; each round's numbers are the pass/fail counts the test harness printed. mut-6 was not run: no_production_path_resumes_execution_from_a_record is a scan over text, so its guards are the planted positive controls it asserts on (a real production deserializer, the real one-way evidence write, and a needle that exists only under #[cfg(test)]), not a removable production check.",
+  "coverage_already_present_before_d2": [
+    {
+      "case": "§4 case 1, within one process",
+      "where": "crates/execution/tests/stage_matrix.rs:599 a_pin_the_chain_no_longer_holds_blocks_before_signing, :621 a_height_the_node_no_longer_holds_is_asked_again_and_stops_the_run"
+    },
+    {
+      "case": "§4 case 1's 'the answer is never carried over'",
+      "where": "crates/execution/tests/stage_matrix.rs:658 each_attempt_asks_the_node_rather_than_reusing_an_earlier_answer"
+    },
+    {
+      "case": "§4 case 3's timeout-is-not-a-failure half",
+      "where": "crates/execution/tests/stage_matrix.rs:713 a_receipt_that_never_arrives_is_a_timeout_and_not_a_failure"
+    },
+    {
+      "case": "§4's pending-view invalidation",
+      "where": "crates/live/tests/node_reset_pending.rs:113, :144, :157, :189, :242"
+    },
+    {
+      "case": "§4 case 4 in the M11 multi-lane shape",
+      "where": "crates/execution/tests/multihop_lanes.rs:1212 a_lane_cannot_reserve_twice, :555 nc12_a_committed_pair_cannot_be_taken_twice"
+    },
+    {
+      "case": "§4 case 5's readiness-gate bypass",
+      "where": "crates/pipeline/tests/readiness_isolation.rs:533 a_route_run_after_recovery_asks_again_and_is_admitted, :751 every_production_entry_that_builds_a_lane_passes_the_gate_above_it, :840 the_lane_scan_reports_an_ungated_entry_instead_of_passing_it"
+    }
+  ],
+  "durable_state_limits": [
+    {
+      "fact": "the execution ledger and the nonce lane are per-process: production constructs a Ledger in exactly two places (crates/execution/src/sequence.rs, crates/execution/src/stage.rs) and no production code deserializes an ExecutionRecord",
+      "evidence": "state_lifetime_recovery.rs:942 plus the mut-4 finding that §30's dedup is per-ledger",
+      "risk": "a process that restarts between a send and its receipt cannot see the send it made; it is stopped only by what the chain reports (pending view ahead of the confirmed view) and, if the pool has emptied, it can re-derive the same bytes and re-send them",
+      "why_not_fixed_here": "closing it needs a durable execution store, which is the second transaction-execution state machine §4 and §9 forbid",
+      "suggested_milestone": "a persistence milestone, after M12-D's real-environment verification, where the receipt tracker is given a store it can be replayed from"
+    }
+  ],
+  "recovery_semantics_as_read": [
+    "one readiness gate ask per process-level start, on both spending entries (crates/pipeline/src/arbitrage.rs run_once, crates/cli/src/lib.rs run_validation) and inside runner::run's build_canonical",
+    "the websocket transport has a real reconnect loop (crates/chain/src/ws.rs); the preconf loop ends the run on read-budget exhaustion instead of reconnecting in-run (crates/pipeline/src/preconf_loop.rs), and M9.4's NC7 evidence records the reconnect-invalidation path observed 0 times in real traffic, so it is fixture-only"
+  ]
+}

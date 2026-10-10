@@ -1,0 +1,504 @@
+{
+  "cases": [
+    {
+      "column": "disposition",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "canonical_head_and_graph@restart: disposition is run_ends in the model and invalidated in the committed table"
+      ],
+      "id": "pd-column-disposition",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the ruling is replaced by another lawful disposition",
+      "subject": "canonical_head_and_graph@restart"
+    },
+    {
+      "column": "strength",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "block_identity@reconnect: strength is enforced in the model and not_enforced in the committed table"
+      ],
+      "id": "pd-column-strength",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "an enforced row is downgraded to not_enforced",
+      "subject": "block_identity@reconnect"
+    },
+    {
+      "column": "mechanism",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "flashblocks_view_cache@head_rollback: mechanism is a_rewinding_pending_is_not_resumed in the model and cache_keyed_by_height_not_hash in the committed table"
+      ],
+      "id": "pd-column-mechanism",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the mechanism is renamed to another row's mechanism",
+      "subject": "flashblocks_view_cache@head_rollback"
+    },
+    {
+      "column": "clause",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "ready_unsubmitted_plan@restart: clause is 任何依赖旧 canonical block identity 的候选或仿真结果，不能仅因为重新连上 RPC 就继续执行 in the model and 旧 pending 视图必须按明确规则失效 in the committed table"
+      ],
+      "id": "pd-column-clause",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the row is made to answer a different sentence of §5",
+      "subject": "ready_unsubmitted_plan@restart"
+    },
+    {
+      "column": "note",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "capital_reservation@head_rollback: note is `the reservation names a domain and an amount, and is keyed by lane; noth…` (180 chars) in the model and the row no longer says what covers it in the committed table"
+      ],
+      "id": "pd-column-note",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the reason the row carries is replaced by prose that states none",
+      "subject": "capital_reservation@head_rollback"
+    },
+    {
+      "column": "anchor_token",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "nonce_reservation@restart: anchor_token is pub fn release_unsent in the model and if !status.may_be_in_flight() { in the committed table"
+      ],
+      "id": "pd-column-anchor-token-retargeted",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the anchor is moved to another production line in the same file — one that still resolves, so only the column comparison can see it",
+      "subject": "nonce_reservation@restart"
+    },
+    {
+      "column": "anchor_file",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 2,
+      "findings": [
+        "outstanding_candidates_and_simulations@reconnect: anchor_file is crates/simulation/src/request.rs in the model and crates/simulation/src/engine.rs in the committed table",
+        "outstanding_candidates_and_simulations@reconnect: the committed anchor does not resolve — crates/simulation/src/engine.rs: no production line contains `pub fn check_pin`"
+      ],
+      "id": "pd-column-anchor-file-wrong",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the anchor keeps its token and loses its file, so it resolves nowhere",
+      "subject": "outstanding_candidates_and_simulations@reconnect"
+    },
+    {
+      "column": "task_book_words",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "nonce_reservation@reconnect: task_book_words is nonce reservation in the model and capital reservation in the committed table"
+      ],
+      "id": "pd-column-task-book-words",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the row is made to quote §5 about a different state class",
+      "subject": "nonce_reservation@reconnect"
+    },
+    {
+      "column": "state_class",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 2,
+      "findings": [
+        "capital_reservation@head_rollback: absent from the committed table",
+        "nonce_reservation@head_rollback: the committed table carries this row 2 times"
+      ],
+      "id": "pd-column-state-class",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the row is filed under another state class, which collides with the cell that class already rules on",
+      "subject": "capital_reservation@head_rollback"
+    },
+    {
+      "column": "node_event",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 2,
+      "findings": [
+        "submitted_unconfirmed_transaction@head_rollback: absent from the committed table",
+        "submitted_unconfirmed_transaction@restart: the committed table carries this row 2 times"
+      ],
+      "id": "pd-column-node-event",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the row is filed under another node event, leaving a cell of the grid unruled",
+      "subject": "submitted_unconfirmed_transaction@head_rollback"
+    },
+    {
+      "column": "<row>",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "flashblocks_view_cache@reconnect: absent from the committed table"
+      ],
+      "id": "pd-row-missing",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "a ruled cell is deleted from the committed table",
+      "subject": "flashblocks_view_cache@reconnect"
+    },
+    {
+      "column": "<row>",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "block_identity@restart: the committed table carries this row 2 times"
+      ],
+      "id": "pd-row-duplicate",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "a ruled cell is carried twice",
+      "subject": "block_identity@restart"
+    },
+    {
+      "column": "<row>",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "flashblocks_view_cache@transport_reset: present in the committed table and absent from the model"
+      ],
+      "id": "pd-row-extra",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "a row is added for an event the task book does not name",
+      "subject": "flashblocks_view_cache@transport_reset"
+    },
+    {
+      "column": "schema",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "document column schema: the model says m12b-node-reset-policy-v1 and the committed table says m12b-node-reset-policy-v2"
+      ],
+      "id": "pd-document-schema",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the schema string is moved to a version nothing generates",
+      "subject": "document"
+    },
+    {
+      "column": "rows",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "document column rows: the model says 24 and the committed table says 23"
+      ],
+      "id": "pd-document-rows",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the row count is off by one while the table still holds 24 rows",
+      "subject": "document"
+    },
+    {
+      "column": "state_classes",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "document column state_classes: the model says `[\"canonical_head_and_graph\",\"block_identity\",\"flashblocks_view_cache\",\"o…` (214 chars) and the committed table says `[\"canonical_head_and_graph\",\"block_identity\",\"flashblocks_view_cache\",\"o…` (178 chars)"
+      ],
+      "id": "pd-document-state-classes",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "one state class is dropped from the list the table claims to cover",
+      "subject": "document"
+    },
+    {
+      "column": "node_events",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "document column node_events: the model says [\"restart\",\"reconnect\",\"head_rollback\"] and the committed table says [\"head_rollback\",\"reconnect\",\"restart\"]"
+      ],
+      "id": "pd-document-node-events",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the event list is reordered, which is a different claim about §5's order",
+      "subject": "document"
+    },
+    {
+      "column": "unenforced_mechanisms",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "document column unenforced_mechanisms: the model says `[\"canonicality_conflict_keeps_both_hashes\",\"cache_keyed_by_height_not_ha…` (76 chars) and the committed table says [\"cache_keyed_by_height_not_hash\"]"
+      ],
+      "id": "pd-document-unenforced",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "one of the two rows that are graded but not enforced is silently re-graded as enforced",
+      "subject": "document"
+    },
+    {
+      "column": "identity_bearing_classes",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "document column identity_bearing_classes: the model says `[\"canonical_head_and_graph\",\"block_identity\",\"flashblocks_view_cache\",\"o…` (136 chars) and the committed table says `[\"canonical_head_and_graph\",\"block_identity\",\"flashblocks_view_cache\",\"o…` (156 chars)"
+      ],
+      "id": "pd-document-identity-bearing",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "a class that carries no block identity is added to the identity-bearing list",
+      "subject": "document"
+    },
+    {
+      "column": "strength_counts",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "document column strength_counts: the model says {\"enforced\":22,\"not_enforced\":1,\"recorded_only\":1} and the committed table says {\"enforced\":21,\"not_enforced\":1,\"recorded_only\":1}"
+      ],
+      "id": "pd-document-strength-counts",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the enforced count is lowered without touching a row",
+      "subject": "document"
+    },
+    {
+      "column": "source_of_truth",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "document column source_of_truth: the model says crates/pipeline/tests/node_reset_policy.rs and the committed table says crates/pipeline/tests/readiness_startup.rs"
+      ],
+      "id": "pd-document-source-of-truth",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the file that owns the table is pointed at a different test",
+      "subject": "document"
+    },
+    {
+      "column": "task_book",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "document column task_book: the model says docs/v0.1/M12B Coding.md §5 and the committed table says docs/v0.1/M12B Coding.md §6"
+      ],
+      "id": "pd-document-task-book",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "the table is made to answer a different section than the one that asked for it",
+      "subject": "document"
+    },
+    {
+      "column": "real_node_restart_experiment",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "verdict real_node_restart_experiment: the model says NOT_RUN (§5 keeps this as a follow-up infrastructure item) and the committed table says PASSED on one self-hosted node"
+      ],
+      "id": "pd-verdict-restart-claimed",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "a restart experiment that was never run is claimed as having passed",
+      "subject": "verdicts"
+    },
+    {
+      "column": "new_rpc_methods_in_this_policy",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "verdict new_rpc_methods_in_this_policy: the model says [] and the committed table says [\"eth_pendingRewind\"]"
+      ],
+      "id": "pd-verdict-new-rpc-method",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "a method the policy does not have is added to the list that must stay empty",
+      "subject": "verdicts"
+    },
+    {
+      "column": "production_behaviour_changed_by_this_policy",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 1,
+      "findings": [
+        "verdict production_behaviour_changed_by_this_policy: absent from the committed table"
+      ],
+      "id": "pd-verdict-dropped",
+      "kind": "defect",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": true,
+      "planted": "a verdict is removed, so the file no longer says what it does not change",
+      "subject": "verdicts"
+    },
+    {
+      "column": "anchor_token",
+      "detected": true,
+      "detection_correct": true,
+      "finding_count": 2,
+      "findings": [
+        "outstanding_candidates_and_simulations@restart: the committed anchor does not resolve — crates/simulation/src/engine.rs: no production line contains `this token exists in no file of this workspace`",
+        "outstanding_candidates_and_simulations@restart: the model anchor does not resolve — crates/simulation/src/engine.rs: no production line contains `this token exists in no file of this workspace`"
+      ],
+      "id": "pd-both-copies-dead-anchor",
+      "kind": "defect",
+      "model_copy_mutated": true,
+      "named_the_planted_defect": true,
+      "planted": "one dead token, planted identically in the model copy and the artifact copy",
+      "subject": "outstanding_candidates_and_simulations@restart"
+    },
+    {
+      "column": "<none>",
+      "detected": false,
+      "detection_correct": true,
+      "finding_count": 0,
+      "findings": [],
+      "id": "pc-clean-copy",
+      "kind": "control",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": false,
+      "planted": "nothing is planted: the committed file and the model are the same table",
+      "subject": "document"
+    },
+    {
+      "column": "anchor_line",
+      "detected": false,
+      "detection_correct": true,
+      "finding_count": 0,
+      "findings": [],
+      "id": "pc-anchor-line-moved",
+      "kind": "control",
+      "model_copy_mutated": false,
+      "named_the_planted_defect": false,
+      "planted": "only the recorded line number moves, which is what an edit in gate.rs does to it",
+      "subject": "ready_unsubmitted_plan@reconnect"
+    }
+  ],
+  "columns_audited": [
+    "state_class",
+    "task_book_words",
+    "node_event",
+    "disposition",
+    "mechanism",
+    "strength",
+    "clause",
+    "anchor_file",
+    "anchor_token",
+    "note"
+  ],
+  "columns_excluded_as_display": {
+    "names": [
+      "anchor_line"
+    ],
+    "why": "the recorded line number is where the anchor pointed when M12-B assembled the table; (anchor_file, anchor_token) is the identity and is re-resolved against today's source on both copies"
+  },
+  "comparison": {
+    "anchors_re_resolved": 48,
+    "column_comparisons": 240,
+    "columns_per_row": 10,
+    "committed_rows": 24,
+    "findings": [],
+    "model_rows": 24,
+    "rows_on_both_sides": 24
+  },
+  "controls": {
+    "behaved_as_expected": 2,
+    "total": 2
+  },
+  "document_columns_audited": [
+    "schema",
+    "source_of_truth",
+    "task_book",
+    "rows",
+    "node_events",
+    "state_classes",
+    "strength_counts",
+    "unenforced_mechanisms",
+    "identity_bearing_classes"
+  ],
+  "independence": {
+    "expected_side_inputs": [
+      "the POLICY const and the enum lists in this file",
+      "the production source files the anchors name, as they are on disk now"
+    ],
+    "expected_side_reads_the_artifact": false,
+    "identical_mutations_caught_by_source_resolution": 1,
+    "proof": "every defect below is planted in one in-memory copy only, and the other copy is rebuilt from the const table; a gate that compared the generated file against itself could not see a change that exists in one copy of it. pd-both-copies-dead-anchor goes further and plants the same change in both copies, which only a check against the source can report."
+  },
+  "planted_defects": {
+    "caught_as_planted": 26,
+    "missed": 0,
+    "planted_in_the_artifact_copy_only": 25,
+    "total": 26
+  },
+  "row_identity": "state_class@node_event",
+  "schema": "m12d-policy-table-consistency-v1",
+  "subject": {
+    "artifact": "data/evidence/m12/b/node-reset-policy.json",
+    "generator": "assemble() in that file, run by the test that writes this evidence",
+    "model": "the POLICY const in crates/pipeline/tests/node_reset_policy.rs"
+  },
+  "task_book": "docs/v0.1/M12D Coding.md §6",
+  "verdicts": {
+    "historical_evidence_rewritten": "none — data/evidence/m12/b/node-reset-policy.json is read here and never written by this file",
+    "new_rpc_methods_in_this_gate": [],
+    "node_deployed": "NOT_RUN",
+    "policy_table_changed": "none — no row, column, or figure of the 24 was edited to make this gate pass; the gate passed on the table M12-B committed",
+    "production_behaviour_changed_by_this_gate": "none — every line below is test-side code in crates/pipeline/tests/",
+    "real_giwa_rpc_accessed": "NO",
+    "real_node_restart_experiment": "NOT_RUN (M12-B's verdict, kept)",
+    "signing_or_broadcast_performed": "NO"
+  },
+  "verdicts_audited": [
+    "new_rpc_methods_in_this_policy",
+    "production_behaviour_changed_by_this_policy",
+    "real_node_restart_experiment"
+  ]
+}

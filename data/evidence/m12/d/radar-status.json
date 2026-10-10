@@ -1,0 +1,148 @@
+{
+  "milestone": "M12-D",
+  "deliverable": "D5 — the pending/early-view boundary and the radar's real status",
+  "task_book": "docs/v0.1/M12D Coding.md §7 (and §8's fail-closed negative test)",
+  "recorded_at": "2026-10-10",
+  "status_of_the_radar": "M9.4's Early Radar exists, is tested, and has no production constructor: it is not wired into the run link, so no end-to-end radar claim is made and none is verified (§7's exact instruction)",
+  "what_this_proves": [
+    "no crate outside crates/live names the radar's vocabulary in code, and the same needles are reported 78 times inside crates/live/src — so the zeros are the boundary, not dead needles",
+    "the four calls that would put a radar on a socket occur 17 times, all of them in test code, and 0 times in code a binary builds",
+    "the run loop's `MarketEvent::Candidate` arm writes the candidates evidence file and reaches neither the engine, the dispatch, a simulation, nor a send; the sibling `Canonical` arm reaches all of them",
+    "the three pending *block* reads exist and are used by the candidate source, while the four crates that own signing, submission, simulation and the run loop call none of them",
+    "the only pending read the execution lane makes is `eth_getTransactionCount(address, \"pending\")` for the nonce, and it is named as one",
+    "evm-execution and evm-live have no production dependency edge in either direction, while evm-pipeline legitimately holds both"
+  ],
+  "what_this_does_not_prove": [
+    "it does not claim the radar works end-to-end: its only real-endpoint harness, crates/live/tests/preconf_live_giwa.rs, is #[ignore]d and was not run (§9 forbids contacting a real endpoint)",
+    "it does not re-verify the pending response shapes — that is M12-B's gate, crates/live/tests/pending_shape_compat.rs, which `cargo test --workspace` runs; this file only states where a parsed pending value may then go",
+    "it does not re-verify what crates/live/tests/preconf_isolation.rs already proves (the radar's type names absent from the discovery-side crates, and no build path from evm-live to a canonical writer); this file scans the opposite direction, from the signer outward, which that gate does not walk",
+    "no new RPC method, no node, no signature, no broadcast: the five tests are std-only text scans over this repository"
+  ],
+  "commands": [
+    {
+      "command": "cargo test -p evm-pipeline --test pending_radar_boundary -- --test-threads=1",
+      "exit_code": 0,
+      "result_line": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.56s",
+      "note": "log /tmp/m12d_d5_recheck.log, run after both mutation plants were restored"
+    },
+    {
+      "command": "cargo test -p evm-pipeline --test pending_radar_boundary -- --test-threads=1  (both plants in place)",
+      "exit_code": 101,
+      "result_line": "test result: FAILED. 3 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.55s",
+      "note": "log /tmp/m12d_d5_mutation.log; see mutation_controls"
+    }
+  ],
+  "measurements": {
+    "how": "each number below is what the named test computes on the current tree. The gate asserts thresholds (a zero, a `> 60`, a `>= 8`), not these exact values, so the values were re-extracted by a read-only scan that replicates the gate's rules — same file walk, same comment-stripping (line and block comments dropped, string literals kept), same position test against a file's `#[cfg(test)]` marker.",
+    "t1_scanned_files_outside_live": 137,
+    "t1_offending_files": 0,
+    "t1_needle_occurrences_in_live_src": 78,
+    "t2_radar_constructor_sites_production": 0,
+    "t2_radar_constructor_sites_test": 17,
+    "t2_constructor_split": {
+      "PreconfLink::new": 5,
+      "PollingFrameSource::new": 6,
+      "EarlyRadar::new": 4,
+      "ReplayFrameSource::new": 2,
+      "self_reference": "4 of the 17 are this test file's own `RADAR_CONSTRUCTORS` string literals, which the scan keeps because strings are kept — the count is a positive control that the needles are live, not a count of radar users"
+    },
+    "t2_real_endpoint_harness_ignored": true,
+    "t3_candidate_arm_body_characters": 131,
+    "t3_candidate_arm_forbidden_word_hits": 0,
+    "t3_canonical_arm_reaches_engine_and_dispatch": true,
+    "t3_pending_block_reads_in_downstream_crates": 0,
+    "t3_pending_block_read_files_in_live": 2,
+    "t4_lane_pending_read": "eth_getTransactionCount with the literal \"pending\", and no eth_getBlockByNumber([\"pending\" …]) and no pending_raw / pending_header / pending_full_transactions call",
+    "t5_execution_depends_on_live": false,
+    "t5_live_depends_on_execution": false,
+    "t5_pipeline_depends_on_both": true
+  },
+  "test_file": "crates/pipeline/tests/pending_radar_boundary.rs",
+  "tests": [
+    {
+      "name": "no_source_outside_the_live_crate_speaks_the_radars_vocabulary",
+      "line": 183,
+      "case": "§7 「不得将 Early Radar 直接接入 Signer 或 Submitter」 read as a name scan: a crate that cannot spell `EarlyRadar` cannot feed one to a signer",
+      "asserts": [
+        "control: 137 source files across 15 crates are walked, and the scan refuses to pass on a thin sweep (> 60)",
+        "0 files outside crates/live mention any of the 11 needles",
+        "positive control: the same needles occur 78 times in crates/live/src, so they are real names with a real home"
+      ]
+    },
+    {
+      "name": "the_radar_is_constructed_only_by_tests_and_its_own_test_module",
+      "line": 284,
+      "case": "§7's third instruction — record the true status rather than claiming end-to-end passage",
+      "asserts": [
+        "0 of the four constructors sit in code a binary builds; a hit in a source file counts as a test site only below that file's `#[cfg(test)]`, which is a position rather than a filename",
+        "17 constructors are found in test code, against a >= 8 floor, so the zero above is a boundary and not a missing needle",
+        "crates/live/tests/preconf_live_giwa.rs still contains #[ignore] — the harness that would spend real requests stays out of an ordinary run"
+      ]
+    },
+    {
+      "name": "the_run_loop_records_a_candidate_and_acts_only_on_a_sealed_block",
+      "line": 350,
+      "case": "§7 「不得因为 Pending 数据可解析，就认定它可以直接驱动执行」, checked in the arm of the match that consumes the event stream",
+      "asserts": [
+        "the `MarketEvent::Candidate` arm contains none of `engine`, `dispatch`, `sim`, `send(` and does contain the candidates evidence write",
+        "positive control: the sibling `Canonical` arm contains `on_canonical` and `dispatch`, so the arm extractor is returning a real body",
+        "the three pending block reads appear in 0 files under execution/simulation/pipeline/cli and in >= 2 files under crates/live/src"
+      ]
+    },
+    {
+      "name": "the_lanes_only_pending_read_is_a_nonce_and_is_named_as_one",
+      "line": 425,
+      "case": "why the ban above can afford the word `pending` at all",
+      "asserts": [
+        "sequencer_direct.rs still reads `eth_getTransactionCount` with `\"pending\"` — §26's preflight depends on it",
+        "and it reads no pending block, so a pending account view and a pending block view stay two different permissions"
+      ]
+    },
+    {
+      "name": "the_signer_and_the_radar_are_two_crates_that_never_meet_in_a_manifest",
+      "line": 448,
+      "case": "the same ban as a build fact rather than a review habit",
+      "asserts": [
+        "evm-execution's [dependencies] carries no evm-live and evm-live's carries no evm-execution",
+        "positive control: evm-pipeline's carries both, which is why the arm check above and not this one is load-bearing"
+      ]
+    }
+  ],
+  "mutation_controls": [
+    {
+      "id": "mut-1",
+      "guard": "the vocabulary scan of no_source_outside_the_live_crate_speaks_the_radars_vocabulary",
+      "mutation": "the literal `PreconfLink` planted into crates/metrics/src/lib.rs — a crate that owns no radar",
+      "expected_red": ["no_source_outside_the_live_crate_speaks_the_radars_vocabulary"],
+      "observed": "test result: FAILED. 3 passed; 2 failed; 0 ignored",
+      "first_failing_assertion": "pending_radar_boundary.rs:225 — offenders reported as [\"crates/metrics/src/lib.rs: [\\\"PreconfLink\\\"]\"]",
+      "restored": "cp from /tmp/metrics_lib.rs.bak; git status shows crates/metrics/src/lib.rs unmodified"
+    },
+    {
+      "id": "mut-2",
+      "guard": "the candidate arm of the run loop",
+      "mutation": "`\"m12d_plant\": \"dispatch\"` added to the candidate arm's evidence write in crates/pipeline/src/runner.rs, so the arm contains a forbidden word without any behaviour changing",
+      "expected_red": ["the_run_loop_records_a_candidate_and_acts_only_on_a_sealed_block"],
+      "observed": "test result: FAILED. 3 passed; 2 failed; 0 ignored",
+      "first_failing_assertion": "pending_radar_boundary.rs:362 — the candidate arm reaches `dispatch`",
+      "restored": "cp from /tmp/runner.rs.bak, then diff -q against the backup reports identical and the file's diff stat is back to its pre-mutation shape; `git checkout` was deliberately not used because the same file carries M12-D work"
+    }
+  ],
+  "corrections_found_by_re_measuring": [
+    {
+      "where": "crates/pipeline/tests/pending_radar_boundary.rs, the comment above the >= 8 floor",
+      "was": "\"Measured 13 — four PreconfLink::new, three EarlyRadar::new, five PollingFrameSource::new, one ReplayFrameSource::new\"",
+      "is": "17 — five PreconfLink::new, four EarlyRadar::new, six PollingFrameSource::new, two ReplayFrameSource::new; the 13 came from a grep that excluded this test file's own const strings, which the scan itself keeps",
+      "action": "the comment is corrected in the same commit as the test; the asserted floor (>= 8) is unchanged because it is a slack on the number, not the number"
+    }
+  ],
+  "coverage_already_present_before_d5": [
+    "crates/live/tests/preconf_isolation.rs (M9.4 §58) — the radar's type names absent from core/state/graph/pathfinder/discovery/pipeline/src, and the build-graph closure from evm-live to a canonical writer",
+    "crates/live/tests/pending_shape_compat.rs (M12-B §7) — full-transaction objects versus hash lists, missing and mistyped fields, and the radar refusing a hashes-only frame rather than reporting an empty affected-pool set",
+    "crates/pipeline/tests/readiness_isolation.rs and state_lifetime_recovery.rs (M12-D D1/D2) — a node that is not ready or has restarted cannot drive execution, which is the fate §7 forbids an early view from reaching"
+  ],
+  "radar_status_as_read": [
+    "M9.4 shipped the model, the decoder, and the transport loop; M12-A's audit and this scan agree that no binary in the workspace constructs any of it",
+    "the candidate side of the boundary IS wired: FlashblockSource::new is constructed by the run loop when config.flashblocks_url is set (crates/pipeline/src/runner.rs:1415), its output arrives as MarketEvent::Candidate, and that arm's only action is the candidates evidence file — so the accurate sentence is `a pending view is recorded and stops`, not `pending data goes nowhere` and not `the radar drives execution`"
+  ]
+}

@@ -100,7 +100,7 @@
         },
         {
           "file": "crates/pipeline/src/arbitrage.rs",
-          "line": 266,
+          "line": 268,
           "matches": 1,
           "note": "the writer that publishes each leg's answer into that run's record: every run in the corpus goes through this line, so the anchor names the code rather than one run's directory",
           "source": "code",
@@ -158,7 +158,7 @@
         },
         {
           "file": "crates/pipeline/src/arbitrage.rs",
-          "line": 1465,
+          "line": 1488,
           "matches": 1,
           "note": "the consumer",
           "source": "code",

@@ -401,7 +401,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/stage.rs",
-          "line": 420,
+          "line": 421,
           "matches": 1,
           "note": "the lane's own statement of what it re-confirms",
           "source": "code",
@@ -433,7 +433,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1625,
+          "line": 1628,
           "matches": 1,
           "note": "the build's second balance ask, at preflight's height",
           "source": "code",
@@ -441,7 +441,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1853,
+          "line": 1856,
           "matches": 1,
           "note": "the build's funding leg, at the intent's pinned height",
           "source": "code",
@@ -464,7 +464,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/stage.rs",
-          "line": 420,
+          "line": 421,
           "matches": 1,
           "note": "the lane's own statement of what it re-confirms",
           "source": "code",
@@ -686,7 +686,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1736,
+          "line": 1739,
           "matches": 1,
           "note": "the re-read this row is about",
           "source": "code",
@@ -853,7 +853,7 @@
         },
         {
           "file": "crates/pipeline/src/arbitrage.rs",
-          "line": 689,
+          "line": 712,
           "matches": 1,
           "note": "where the legs are assembled into one gate attempt",
           "source": "code",
@@ -908,7 +908,7 @@
         },
         {
           "file": "crates/pipeline/src/arbitrage.rs",
-          "line": 689,
+          "line": 712,
           "matches": 1,
           "note": "where the legs are assembled into one gate attempt",
           "source": "code",

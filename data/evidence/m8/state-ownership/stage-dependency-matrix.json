@@ -111,7 +111,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1790,
+          "line": 1793,
           "matches": 1,
           "note": "the leg, by the name the run records",
           "source": "code",
@@ -168,7 +168,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1760,
+          "line": 1763,
           "matches": 1,
           "note": "the build half, at its own step",
           "source": "code",
@@ -233,7 +233,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1625,
+          "line": 1628,
           "matches": 1,
           "note": "the build-side half of a diff, not a check",
           "source": "code",
@@ -290,7 +290,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1736,
+          "line": 1739,
           "matches": 1,
           "note": "the build half, inside the leg",
           "source": "code",
@@ -510,7 +510,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1736,
+          "line": 1739,
           "matches": 1,
           "note": "the consumer that would receive it",
           "source": "code",
@@ -551,7 +551,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1795,
+          "line": 1798,
           "matches": 1,
           "note": "the leg",
           "source": "code",
@@ -1136,7 +1136,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1853,
+          "line": 1856,
           "matches": 1,
           "note": "the leg",
           "source": "code",
