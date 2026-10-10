@@ -351,6 +351,7 @@ impl TransactionSubmitter for GiwaSequencerDirect {
                 self.mode.name()
             )));
         }
+        let provenance = submission_provenance(self.url());
         let local_hash = transaction.hash();
         let raw = transaction.raw();
         let payload = format!("0x{}", hex::encode(raw.as_ref()));
@@ -371,12 +372,12 @@ impl TransactionSubmitter for GiwaSequencerDirect {
                         transaction_hash: Some(hash),
                         hash_matches_local: hash == local_hash,
                         endpoint: self.endpoint,
-                        detail: format!("eth_sendRawTransaction returned {text}"),
+                        detail: format!("eth_sendRawTransaction returned {text} ({provenance})"),
                     },
                     None => SubmissionOutcome::Unknown {
                         reason: format!(
                             "eth_sendRawTransaction answered with something that is not a \
-                             32-byte hash: {value}"
+                             32-byte hash ({provenance}): {value}"
                         ),
                         endpoint: self.endpoint,
                     },
@@ -385,13 +386,19 @@ impl TransactionSubmitter for GiwaSequencerDirect {
             // An explicit JSON-RPC error object is the node saying no. §25 lets only this
             // answer release the lane.
             Err(evm_chain::ChainError::RpcRejected(error)) => SubmissionOutcome::Rejected {
-                reason: format!("eth_sendRawTransaction refused the payload: {error}"),
+                reason: format!(
+                    "eth_sendRawTransaction refused the payload ({provenance}): {}",
+                    without_the_endpoint(&error.to_string(), self.url())
+                ),
                 endpoint: self.endpoint,
             },
             // A transport failure, a non-JSON body, or an HTTP status that is not a
             // refusal: we do not know, and knowing that is the point.
             Err(error) => SubmissionOutcome::Unknown {
-                reason: format!("no answer from eth_sendRawTransaction: {error}"),
+                reason: format!(
+                    "no answer from eth_sendRawTransaction ({provenance}): {}",
+                    without_the_endpoint(&error.to_string(), self.url())
+                ),
                 endpoint: self.endpoint,
             },
         })
@@ -530,13 +537,45 @@ pub fn parse_receipt(
 /// the URL the read went over says which endpoint answered and nothing about who runs it,
 /// so a local node gets its own digest and no word in the line asserts either class.
 ///
-/// The submission label is untouched on purpose: there the class *is* the fact §53 asks
-/// for, and the public sequencer endpoint is still the one in use.
+/// The submission side now names itself the same way — by digest, with the class word
+/// retired ([`submission_provenance`]) — so both halves of a run's evidence describe the
+/// socket rather than an unprovable claim about who runs it.
 pub fn receipt_provenance(endpoint_url: &str) -> String {
     format!(
         "eth_getTransactionReceipt over the configured GIWA RPC URL (endpoint {})",
         evm_chain::endpoint_id(endpoint_url)
     )
+}
+
+/// The endpoint tag each submission answer carries.
+///
+/// M12-D §5 retired the class word on this side. `public_http_rpc` claimed *who runs* the
+/// node the send went to, and nothing this process can read supports that: the endpoint
+/// that accepts `eth_sendRawTransaction` may forward it onward under a node-side setting
+/// the bot never sees, so a socket can be public at its edge and local at its
+/// destination. The URL the lane actually posted to is what it does know, and its digest
+/// names that socket without publishing the URL or any credential in it
+/// ([`evm_chain::endpoint_id`]). The label beside the digest is `unknown`
+/// ([`EndpointKind::Unknown`]) — the honest word when a claim cannot be supported, and
+/// the one §5 asks for instead of a guess.
+pub fn submission_provenance(endpoint_url: &str) -> String {
+    format!("over endpoint {}", evm_chain::endpoint_id(endpoint_url))
+}
+
+/// What the transport said, with the endpoint taken back out of it.
+///
+/// A configured URL is the one place a run can be holding an API key or a JWT, and reqwest
+/// quotes the URL it was sending to inside its own error text — which this function's
+/// caller writes straight into a submission answer, and from there into `submissions.jsonl`
+/// (§5: no credential reaches public evidence). M12-B scrubbed the same string where the
+/// RPC trace stores an error detail; this is the submission side of that rule, and the
+/// digest replaces the URL rather than the message being dropped, because §25 still forbids
+/// paraphrasing what the node's transport said. Both shapes reqwest can print are replaced:
+/// the string as configured, and the same string with the path the client normalized in.
+pub fn without_the_endpoint(text: &str, endpoint_url: &str) -> String {
+    let digest = evm_chain::endpoint_id(endpoint_url);
+    text.replace(endpoint_url, &digest)
+        .replace(&format!("{endpoint_url}/"), &digest)
 }
 
 /// A chain read that failed. §39 keeps this distinct from a submission answer: a read

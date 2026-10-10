@@ -331,9 +331,15 @@ impl ExecutionStage {
     /// §6: connect to the configured endpoint and prove it answers for the expected chain
     /// before any intent can reach it.
     ///
-    /// The same adapter is cloned into all four ability slots: over GIWA's public RPC the
-    /// one connection answers the price, the nonce, the canonical chain and the send, and
-    /// §23 measured that `eth_sendRawTransaction` is whitelisted there.
+    /// The same adapter is cloned into all four ability slots: the one connection answers
+    /// the price, the nonce, the canonical chain and the send, and §23 measured that
+    /// `eth_sendRawTransaction` is whitelisted at the URL this run was configured with.
+    ///
+    /// The endpoint *class* is `Unknown` and is not derived from the URL (M12-D §5). What
+    /// this process can prove about its send is that it posted to the configured socket;
+    /// who runs that socket, and where it forwards the bytes, are node-side facts it never
+    /// reads, so claiming `public_http_rpc` here was a guess wearing an operator's clothes.
+    /// [`crate::giwa::submission_provenance`] names the socket by digest instead.
     pub async fn connect(
         url: &str,
         expected_chain_id: u64,
@@ -341,13 +347,8 @@ impl ExecutionStage {
         clock: Clock,
     ) -> Result<Self> {
         let adapter = Arc::new(
-            GiwaSequencerDirect::connect(
-                url,
-                expected_chain_id,
-                setup.mode,
-                EndpointKind::PublicHttpRpc,
-            )
-            .await?,
+            GiwaSequencerDirect::connect(url, expected_chain_id, setup.mode, EndpointKind::Unknown)
+                .await?,
         );
         let abilities = Abilities {
             submitter: adapter.clone(),

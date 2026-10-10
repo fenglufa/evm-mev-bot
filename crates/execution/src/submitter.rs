@@ -25,16 +25,34 @@ use crate::tx::SignedTransaction;
 /// Which kind of endpoint an implementation talks to. §53 requires this string in
 /// submission evidence, and it belongs to the implementation rather than to a caller
 /// because a caller can be wrong about what it pointed at.
+///
+/// M12-D §5 retired the guess those two production sites used to make. `PublicHttpRpc`
+/// says who runs the endpoint, and nothing this process can read says that: it knows the
+/// URL it was configured with, it knows the method it calls, and it does not know whether
+/// the node in front of it is the operator's own or a service, nor where that node
+/// forwards the bytes it accepts. An OP-stack node whose `--rollup.sequencer-http` points
+/// at a public sequencer takes a send over a localhost socket and propagates it to a
+/// provider, and no read this bot performs can tell that from a node that sealed the
+/// block itself. So the lane says `unknown` and names the socket by digest instead
+/// ([`crate::giwa::submission_provenance`]), which is the conservative label §5 asks for
+/// and is still enough to tell two endpoints apart. A run that wants the class word in its
+/// evidence has to be given it, the way [`evm_chain::EndpointPurpose`] is given a purpose
+/// — and that type stays on the read side: no code may carry a read role's label onto a
+/// submission line, because that is the same guess wearing the other endpoint's clothes.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum EndpointKind {
-    /// Plain `eth_sendRawTransaction` over HTTP.
+    /// Plain `eth_sendRawTransaction` over HTTP, on an endpoint the caller states is a
+    /// service. A label a production site no longer picks for itself; it is for a caller
+    /// that was told.
     PublicHttpRpc,
     /// The same method over the flashblocks endpoint, if a run chooses that path.
     FlashblocksHttpRpc,
     /// A recorded directory. Nothing is ever sent; the variant exists so replay can use
     /// the same Execution API as live (§49) without pretending to broadcast.
     Recorded,
+    /// Nobody said who runs it — the word the execution lane records.
+    Unknown,
 }
 
 impl EndpointKind {
@@ -43,10 +61,15 @@ impl EndpointKind {
             Self::PublicHttpRpc => "public_http_rpc",
             Self::FlashblocksHttpRpc => "flashblocks_http_rpc",
             Self::Recorded => "recorded_no_submission",
+            Self::Unknown => "unknown",
         }
     }
 
     /// Whether this endpoint can put a transaction on a network at all.
+    ///
+    /// `Unknown` answers yes: the question here is whether the socket can carry a send,
+    /// and a lane that refused to send because it does not know who runs its node would be
+    /// making the opposite guess — that not knowing is a safety property it never claimed.
     pub fn may_broadcast(self) -> bool {
         !matches!(self, Self::Recorded)
     }

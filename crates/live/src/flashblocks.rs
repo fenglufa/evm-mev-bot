@@ -551,7 +551,12 @@ impl<R: HeadReader + Send> MarketDataSource for FlashblockSource<R> {
 
     fn capability(&self) -> Value {
         let mut rows = self.capability.clone();
-        rows["endpoint"] = Value::String(self.endpoint.clone());
+        // §33's rule, which this crate already applies to every preconfirmation frame it
+        // records (`PreconfirmationFrame::endpoint_id`), applied at last to this source's
+        // own capability line: the digest says which endpoint the run was pointed at, and
+        // the URL — the one string that can carry an API key or a JWT in its path — stays
+        // out of the evidence directory (M12-D §5).
+        rows["endpoint_id"] = Value::String(evm_chain::endpoint_id(&self.endpoint));
         let reconciliation = if self.stats.canonical_seen == 0 {
             "NOT_OBSERVED"
         } else if self.stats.resolved > 0 {
@@ -850,7 +855,15 @@ mod tests {
         let src = source(FlashblockConfig::default());
         let rows = src.capability();
         assert_eq!(rows["probed"], json!(false));
-        assert_eq!(rows["endpoint"], json!("http://candidate.test"));
+        assert_eq!(
+            rows["endpoint_id"],
+            json!(evm_chain::endpoint_id("http://candidate.test")),
+            "the endpoint is identified by the same digest every other line uses"
+        );
+        assert!(
+            rows.get("endpoint").is_none(),
+            "and the URL it was configured from does not enter the record: {rows}"
+        );
         assert!(
             rows.get("connect").is_none() && rows.get("state_integration").is_none(),
             "the rows that quote a provider answer may only exist after a probe: {rows}"

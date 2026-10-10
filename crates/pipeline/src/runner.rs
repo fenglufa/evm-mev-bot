@@ -1091,17 +1091,31 @@ impl ReadinessFacts {
 /// M12-B §3's readiness gate: ask the node whether it is ready, and refuse the run if
 /// it is not.
 ///
-/// The one call site is [`build_canonical`], which runs before the registry is read and
-/// long before any block, header or state read happens. That ordering is what makes
-/// §3's 「禁止进入会产生真实执行动作的阶段」 true by construction: a held run has no
-/// session, no event loop, and no execution lane — the lane is connected further down
-/// `run`, after this returns.
+/// M12-D §3 put it on the paths that can spend as well as on the one that only watches, so
+/// this is now called from three places and one definition: the two live branches of the
+/// bootstrap (`build_canonical`'s WebSocket and HTTP-poll arms, ahead of the registry read,
+/// the execution lane's connect, the evidence writer and the first block), the route entry
+/// ([`crate::arbitrage::run_once`], ahead of its first block read and therefore ahead of the
+/// sequence lane that constructs a `Signer`), and the single-transaction entry
+/// (`run_validation` in `evm-cli`, ahead of `ExecutionStage::connect` for the same reason).
+/// What makes §3's 「禁止进入会产生真实执行动作的阶段」 true by construction is that
+/// ordering, in each of the three: a held run has no session, no event loop, and no
+/// execution lane.
+///
+/// The two spending entries pass [`HeadFreshnessPolicy::NotJudged`] and no observed head,
+/// because neither has a reference height to be judged against — they read their own head
+/// after the gate, and a gate that consumed it would no longer be ahead of anything. That
+/// is the policy that still refuses a node reporting sync in progress and a node that gives
+/// no usable answer, and it is not a claim of freshness; §4's `HeadBehindReference` needs a
+/// reference and this call does not have one.
 ///
 /// The recheck budget lives in [`ReadinessGate`]. This repository has one defined
 /// recovery point per process: a source that fails mid-run ends the session
 /// (`canonical_source_failed_during_run`) rather than restarting inside it, so the
-/// recheck is the next `run`, and nothing asks `eth_syncing` per market event.
-async fn gate_readiness(
+/// recheck is the next `run`, and nothing asks `eth_syncing` per market event. Each of the
+/// three call sites is a process-level start, so each asks once; no loop in this repository
+/// calls any of them.
+pub async fn gate_readiness(
     policy: &HeadFreshnessPolicy,
     http: &HttpChainAdapter,
     endpoint: &str,
@@ -1649,23 +1663,28 @@ impl Session<'_> {
                 "synced": self.engine.synced_pool_count(),
             },
             "endpoints": {
-                "rpc_url": self.config.rpc_url,
-                "ws_url": self.config.ws_url,
-                "flashblocks_url": self.config.flashblocks_url,
-                // M12-B §4: what the operator declared each endpoint to be, sitting next
-                // to the URL it describes and never derived from it. The two purposes are
-                // per *role*, not per URL: a run can reach its canonical state over HTTP
-                // and its heads over WebSocket, and the declaration says who serves that
-                // role while the digests below say whether the two are one provider.
-                // `unknown` is a recorded absence, not a guess — a public node is never
-                // here as a local one, and a silent configuration is never here as public
-                // either.
+                // M12-D §5: the URL itself is gone from this object and the digests below
+                // are what remains. A configured endpoint is the one string a run can carry
+                // into committed evidence that is partly a credential — an API key or a JWT
+                // lives in the path or query of the URL an operator pastes — and the digest
+                // answers everything the record needs to ask: is this the same socket the
+                // RPC trace names, and are two roles served by one provider. This is the
+                // rule `crates/chain/src/rpc_trace.rs` already applies to its own lines.
+                // Sessions written before this change keep what they wrote; the rule is
+                // forward-only.
+                // M12-B §4: what the operator declared each endpoint to be, and never
+                // derived from an address. The two purposes are per *role*, not per URL: a
+                // run can reach its canonical state over HTTP and its heads over WebSocket,
+                // and the declaration says who serves that role while the digests say
+                // whether the two are one provider. `unknown` is a recorded absence, not a
+                // guess — a public node is never here as a local one, and a silent
+                // configuration is never here as public either.
                 "rpc_purpose": self.config.canonical_purpose,
                 "flashblocks_purpose": self.config.flashblocks_purpose,
-                // Identity and digest in separate keys (§4.2): the URL says which endpoint
-                // this session spoke to, the digest is what the RPC trace lines call it,
-                // and one rule computes both so the two cannot disagree about whether two
-                // lines name one provider.
+                // Identity and digest in separate keys (§4.2): the purpose is what the
+                // operator declared, the digest is what the RPC trace lines call the
+                // endpoint, and one rule computes the digest here and there so the two
+                // cannot disagree about whether two lines name one provider.
                 "rpc_endpoint_id": self.config.rpc_url.as_deref().map(evm_chain::endpoint_id),
                 "ws_endpoint_id": self.config.ws_url.as_deref().map(evm_chain::endpoint_id),
                 "flashblocks_endpoint_id": self

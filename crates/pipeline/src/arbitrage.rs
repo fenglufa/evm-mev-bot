@@ -54,7 +54,9 @@ use std::sync::Arc;
 use alloy_primitives::{Address, U256};
 use serde_json::{json, Value};
 
-use evm_chain::{BlockContext, ChainAdapter, HttpChainAdapter, RpcTraceSink, RpcTraceSource};
+use evm_chain::{
+    BlockContext, ChainAdapter, HeadFreshnessPolicy, HttpChainAdapter, RpcTraceSink, RpcTraceSource,
+};
 use evm_core::{BlockNumber, ChainId, Fee, PoolId, TokenId};
 use evm_execution::giwa::{read_pool, LivePreflightReads};
 use evm_execution::{
@@ -76,7 +78,7 @@ use crate::diagnosis::{DiagnosisEvidence, SimulationDiagnosis, SimulationWindow,
 use crate::error::{PipelineError, Result};
 use crate::evidence::{EvidenceFile, EvidenceWriter};
 use crate::latency::{git_revision, record_ladder, LatencyEvidence, TraceRecorder};
-use crate::runner::attested_chain_ids;
+use crate::runner::{attested_chain_ids, gate_readiness};
 
 /// The finished run's own record, written whole through a temporary name (§49).
 const RECORD_FILE: &str = "route-run.json";
@@ -354,6 +356,27 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
             config.candidate.chain_id
         )));
     }
+
+    // M12-D §3: this entry puts a transaction on chain, so it goes through the same gate
+    // the discovery run goes through — here, ahead of the state-acquisition sink (so the
+    // ask is not something the run's own call tables later report as a read it made for
+    // pricing), ahead of the first block read, and therefore ahead of `SequenceStage`,
+    // which is what builds a `Signer`. A held run returns an error out of this function and
+    // never opens a session directory, which is the whole of §3's 「未就绪时 Signer 不被调用」
+    // for this path: there is nothing below this line that a held run can reach.
+    //
+    // `NotJudged` and no observed head, for the reason [`crate::runner::gate_readiness`]
+    // states: this entry has no reference height before it reads its own head, and the
+    // policy that still refuses a syncing node and a node that answers nothing is the one
+    // that needs no reference. One ask per `run_once`, and `run_once` is called once per
+    // process (§3's no per-event ask).
+    gate_readiness(
+        &HeadFreshnessPolicy::NotJudged,
+        &adapter,
+        &config.rpc_url,
+        None,
+    )
+    .await?;
 
     // M8.3.2 §14's other half of the same instrumentation, attached here rather than at §B
     // because the two calls that fix the pin happen two lines below: a sink added after them

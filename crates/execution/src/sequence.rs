@@ -1473,6 +1473,9 @@ impl SequenceStage {
     ///
     /// `trace` is also kept on the stage, because §9's `caller` has to be stamped by the code
     /// that issues the read and the four ability surfaces this stage holds carry no sink.
+    ///
+    /// The endpoint class is `Unknown` for the reason [`crate::stage::ExecutionStage::connect`]
+    /// gives: this process can name the socket it posts through, not who runs it.
     pub async fn connect_with_trace(
         url: &str,
         expected_chain_id: u64,
@@ -1486,7 +1489,7 @@ impl SequenceStage {
                 url,
                 expected_chain_id,
                 setup.mode,
-                crate::submitter::EndpointKind::PublicHttpRpc,
+                crate::submitter::EndpointKind::Unknown,
                 trace.clone(),
             )
             .await?,

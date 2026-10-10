@@ -309,8 +309,13 @@ impl PipelineConfig {
     /// sessions has to be able to tell "this run had no execution lane" from "this
     /// run's record did not look that far". And when the lane is present, the two
     /// facts that decide whether anything can reach a node — the mode and §34's
-    /// override rule — are stated in the same object that names the endpoint, so a
+    /// override rule — are stated in the same object that identifies the endpoint, so a
     /// `submit` run cannot be read as a promise it never made.
+    ///
+    /// The endpoint is identified by digest, not by URL (M12-D §5's credential rule). A
+    /// configured URL is the one place a run can pick up an API key or a JWT and publish
+    /// it into committed evidence, and the digest answers the reviewer's real question —
+    /// is this the same socket the rest of the record names? — without the string.
     pub fn execution_description(&self) -> serde_json::Value {
         match &self.execution {
             None => serde_json::json!({
@@ -321,7 +326,7 @@ impl PipelineConfig {
                 "lane": setup.mode.name(),
                 "may_sign": setup.mode.may_read_key(),
                 "may_submit": setup.mode.may_submit(),
-                "endpoint": self.rpc_url,
+                "endpoint_id": self.rpc_url.as_deref().map(evm_chain::endpoint_id),
                 "fee_policy": setup.fee,
                 "gas_policy": setup.build.gas.describe(),
                 "maximum_gas_limit": setup.build.maximum_gas_limit,
@@ -392,6 +397,18 @@ mod tests {
             ..config
         };
         let build_only = armed.execution_description();
+        // M12-D §5: the session record names the socket by digest and never carries the
+        // URL, so a configured endpoint that happens to hold a credential in its path
+        // cannot leak into committed evidence through this object.
+        assert!(
+            build_only.get("endpoint").is_none(),
+            "the URL key is retired; only its digest belongs in the record"
+        );
+        assert_eq!(
+            build_only["endpoint_id"],
+            evm_chain::endpoint_id("http://127.0.0.1:1"),
+            "and the digest is the digest of the configured URL"
+        );
         assert_eq!(build_only["lane"], "build-only");
         assert_eq!(build_only["may_sign"], false);
         assert_eq!(build_only["may_submit"], false);

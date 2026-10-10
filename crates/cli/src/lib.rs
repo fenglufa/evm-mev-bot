@@ -721,6 +721,19 @@ pub async fn run_validation(plan: ValidationPlan) -> evm_pipeline::Result<Valida
             endpoint: plan.rpc_url.clone(),
         });
     }
+    // M12-D §3: this is the other entry that reaches a signer — `ExecutionStage::connect`
+    // three lines below is what constructs one — so the gate runs ahead of it, and ahead of
+    // the head and header reads that only a run the gate has passed has any business
+    // making. `NotJudged` with no observed head because this entry has no reference height:
+    // the reason [`runner::gate_readiness`] gives for the route run is the same reason here,
+    // and the policy still refuses a syncing node and a node that gives no usable answer.
+    runner::gate_readiness(
+        &HeadFreshnessPolicy::NotJudged,
+        &adapter,
+        &plan.rpc_url,
+        None,
+    )
+    .await?;
     let head = adapter.latest_block().await?;
     let context = adapter.get_block_context(head).await?;
     let pin = BlockPin::new(head, context.hash);
