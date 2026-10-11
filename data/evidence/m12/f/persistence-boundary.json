@@ -1,0 +1,239 @@
+{
+  "anchor_rows": 17,
+  "anchors": [
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 64,
+      "token": "pub const JOURNAL_SCHEMA_VERSION: u64 =",
+      "why": "the version gate is one number, so a v2 file and a v1 reader disagree on exactly one field"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1578,
+      "token": "if schema_version != JOURNAL_SCHEMA_VERSION",
+      "why": "a version this build was not compiled to read is refused, never migrated"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 78,
+      "token": "pub fn journal_file_name(chain_id: u64)",
+      "why": "one file per chain, which is §6's foreign-record question answered by construction"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1405,
+      "token": ".sync_all()",
+      "why": "the append's durability step — the whole of what is promised, and only for this process"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1150,
+      "token": "pub fn open(",
+      "why": "recovery happens where a stage cannot exist yet, which is §7's ordering"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1424,
+      "token": "pub fn reload(",
+      "why": "the read-only re-read every recovery row in these tables came from"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 908,
+      "token": "fn holds_lane(",
+      "why": "the lane rule §4.3 asks about, as one function the tables re-derive from"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 180,
+      "token": "fn is_terminal(",
+      "why": "an acknowledgement is deliberately not terminal, which is §2.3's separation"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1263,
+      "token": "pub fn is_durable",
+      "why": "§11's refusal of a memory-only mode, visible on the handle a run holds"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1246,
+      "token": "pub fn volatile(",
+      "why": "the one non-durable handle, and the only place a journal is allowed to be memory-only"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 706,
+      "token": "pub fn name(&self)",
+      "why": "every refusal word in these tables is a function's output, not a typed string"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 360,
+      "token": "fn from_step",
+      "why": "the identity a line carries comes from the step, in one place"
+    },
+    {
+      "file": "crates/execution/src/stage.rs",
+      "line": 1164,
+      "token": "SendIntentPersisted",
+      "why": "the intent line is written by the stage, before the socket is reached"
+    },
+    {
+      "file": "crates/execution/src/stage.rs",
+      "line": 640,
+      "token": "execution_duplicate_in_ledger",
+      "why": "a duplicate refused is counted where it is refused, not inferred later"
+    },
+    {
+      "file": "crates/execution/src/stage.rs",
+      "line": 450,
+      "token": "fn lane_is_idle",
+      "why": "the lane reading the tables quote is the stage's own, independent of the derived state"
+    },
+    {
+      "file": "crates/execution/src/error.rs",
+      "line": 122,
+      "token": "ledger persistence",
+      "why": "§4.1's write failure is its own error class, not a warning inside another"
+    },
+    {
+      "file": "crates/execution/src/error.rs",
+      "line": 133,
+      "token": "LedgerRecovery",
+      "why": "§6 and §7's refusal to start on a damaged ledger is a distinct failure"
+    }
+  ],
+  "cases": 9,
+  "hash_shape_rule": {
+    "hex_digits": 64,
+    "prefix": "0x",
+    "why": "a §5 identity is 32 bytes; a signed payload is far longer, and this bound is what keeps one out of a table"
+  },
+  "how_measured": "M12F_EVIDENCE_DIR=data/evidence/m12/f cargo test -p evm-execution --test crash_recovery -- --test-threads=1",
+  "intent_before_dispatch_proved_by": 2,
+  "ledger_file_name_template": "execution-journal-{chain_id}.jsonl",
+  "max_ledger_lines": 4,
+  "max_send_arrivals_in_any_case": 1,
+  "measured_by": "crates/execution/tests/crash_recovery.rs",
+  "measured_from": "data/evidence/m12/f/measured-rows.jsonl",
+  "refresh": "M12F_LEDGER_REFRESH=1 cargo test -p evm-execution --test ledger_evidence -- --test-threads=1",
+  "rows_in_this_table": 9,
+  "rows_naming_a_hash": 2,
+  "schema": "m12f-persistence-boundary-v1",
+  "sections": {
+    "F1": 1,
+    "F2": 1,
+    "F3": 1,
+    "F4": 1,
+    "F5": 1,
+    "F6": 1,
+    "F7": 1,
+    "F8": 1,
+    "F9": 1
+  },
+  "send_arrivals_total": 5,
+  "supported_schema_version": 1,
+  "table": [
+    {
+      "case": "a_crash_between_the_intent_line_and_the_socket_leaves_the_nonce_possibly_in_flight",
+      "dispatch_seq": null,
+      "fault": "§8 F1 / §4.1's boundary: the intent line landed before the socket was touched",
+      "hashes_agree": true,
+      "intent_seq": 2,
+      "line_count": 3,
+      "local_hash": "0xef02c2de69b4c32c6b10db2336912960112da45b9a5dc78705222030e10391af",
+      "section": "F1",
+      "send_arrivals": 1,
+      "table": "persistence_boundary",
+      "tracked_hash": "0xef02c2de69b4c32c6b10db2336912960112da45b9a5dc78705222030e10391af"
+    },
+    {
+      "case": "a_damaged_ledger_refuses_to_open_and_the_run_never_reaches_the_endpoint",
+      "fault": "§8 F6's seed: the nine damages are copies of a file a real run wrote",
+      "line_count": 4,
+      "section": "F6",
+      "send_arrivals": 1,
+      "table": "persistence_boundary",
+      "unknown_line_in_seed": true
+    },
+    {
+      "case": "a_dispatch_line_with_no_answer_after_it_is_recovered_as_still_awaiting",
+      "dispatch_seq": 3,
+      "fault": "§8 F3 / §5's identity rule: the hash the run computed is the hash the file names",
+      "hashes_agree": true,
+      "local_hash": "0xef02c2de69b4c32c6b10db2336912960112da45b9a5dc78705222030e10391af",
+      "section": "F3",
+      "table": "persistence_boundary",
+      "tracked_hash": "0xef02c2de69b4c32c6b10db2336912960112da45b9a5dc78705222030e10391af"
+    },
+    {
+      "case": "a_ledger_emptied_before_the_intent_line_stops_the_send_and_the_next_process_refuses_it",
+      "durable_handle": true,
+      "fault": "§8 F8 / §4.1's boundary: no intent line means no socket, and no memory-only mode",
+      "intent_lines_in_file": 0,
+      "intent_seq": null,
+      "line_count": 0,
+      "persistence_refused": true,
+      "report_sent": false,
+      "section": "F8",
+      "send_arrivals": 0,
+      "stopped_at_failed_rung": true,
+      "table": "persistence_boundary"
+    },
+    {
+      "acknowledgement_lines": 1,
+      "case": "a_ledger_replaced_under_a_run_refuses_the_next_line_instead_of_forking_memory_against_it",
+      "fault": "§8 F5 / §4.1's write side: the line that could not be made durable wrote nothing",
+      "line_count": 4,
+      "persistence_refused": true,
+      "refused_line_landed": false,
+      "section": "F5",
+      "send_arrivals": 1,
+      "table": "persistence_boundary"
+    },
+    {
+      "case": "a_node_acknowledgement_is_recovered_as_an_acknowledgement_and_never_as_inclusion",
+      "fault": "§8 F4 / §4.1's boundary, seen from the acknowledgement side",
+      "section": "F4",
+      "send_arrivals": 1,
+      "table": "persistence_boundary"
+    },
+    {
+      "case": "a_recovered_hold_refuses_a_substituted_attempt_and_writes_the_need_for_a_human_once",
+      "fault": "§8 F9 / §4.3's third prohibition: a substituted attempt is refused before it can write an intent",
+      "intent_lines_in_file": 1,
+      "section": "F9",
+      "substitute_refused_at_the_lane": true,
+      "substitute_send_arrivals": 0,
+      "table": "persistence_boundary",
+      "third_process_send_arrivals": 0
+    },
+    {
+      "case": "a_restarted_process_reads_the_same_record_twice_and_refuses_a_finished_attempt_as_duplicate",
+      "duplicate_metric_lines": 1,
+      "fault": "§8 F7 / §7: recovery wrote no byte, and the duplicate it refused wrote none either",
+      "first_pass_records": 1,
+      "lines_after_recovery": 5,
+      "lines_before_recovery": 5,
+      "no_line_written_by_duplicate": true,
+      "second_pass_records": 1,
+      "section": "F7",
+      "send_arrivals": 0,
+      "table": "persistence_boundary"
+    },
+    {
+      "case": "an_unknown_answer_survives_the_restart_as_unknown_and_never_as_a_refusal",
+      "fault": "§8 F2 / §4.2's fact ordering, read off the file rather than off a type",
+      "intent_precedes_dispatch": true,
+      "line_count": 4,
+      "refusal_lines_in_file": 0,
+      "section": "F2",
+      "send_arrivals": 1,
+      "table": "persistence_boundary"
+    }
+  ],
+  "task_book": "docs/v0.1/M12F Coding.md §10 (持久化前后记录的一致性证据、各阶段发送次数和交易哈希一致性), §4.1, §5, §7",
+  "what_this_table_is": "where the write boundary actually falls: the ledger line numbers an intent and a dispatch landed on, how many times a socket saw a submission arrive, and whether the hash the run computed is the hash the file names. `intent_seq` and `dispatch_seq` are line numbers pinned by the case that cut the file at that fact.",
+  "what_this_table_is_not": "not a claim that a send happened once globally. `send_arrivals` counts one in-process scripted submitter's arrivals for one process; a row with no `intent_seq` key is a case that never looked for that line, and `null` means the case proved the line is absent. A `null` maximum means no row measured the figure, never a zero."
+}

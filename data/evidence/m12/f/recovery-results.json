@@ -1,0 +1,313 @@
+{
+  "anchor_rows": 17,
+  "anchors": [
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 64,
+      "token": "pub const JOURNAL_SCHEMA_VERSION: u64 =",
+      "why": "the version gate is one number, so a v2 file and a v1 reader disagree on exactly one field"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1578,
+      "token": "if schema_version != JOURNAL_SCHEMA_VERSION",
+      "why": "a version this build was not compiled to read is refused, never migrated"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 78,
+      "token": "pub fn journal_file_name(chain_id: u64)",
+      "why": "one file per chain, which is §6's foreign-record question answered by construction"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1405,
+      "token": ".sync_all()",
+      "why": "the append's durability step — the whole of what is promised, and only for this process"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1150,
+      "token": "pub fn open(",
+      "why": "recovery happens where a stage cannot exist yet, which is §7's ordering"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1424,
+      "token": "pub fn reload(",
+      "why": "the read-only re-read every recovery row in these tables came from"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 908,
+      "token": "fn holds_lane(",
+      "why": "the lane rule §4.3 asks about, as one function the tables re-derive from"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 180,
+      "token": "fn is_terminal(",
+      "why": "an acknowledgement is deliberately not terminal, which is §2.3's separation"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1263,
+      "token": "pub fn is_durable",
+      "why": "§11's refusal of a memory-only mode, visible on the handle a run holds"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1246,
+      "token": "pub fn volatile(",
+      "why": "the one non-durable handle, and the only place a journal is allowed to be memory-only"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 706,
+      "token": "pub fn name(&self)",
+      "why": "every refusal word in these tables is a function's output, not a typed string"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 360,
+      "token": "fn from_step",
+      "why": "the identity a line carries comes from the step, in one place"
+    },
+    {
+      "file": "crates/execution/src/stage.rs",
+      "line": 1164,
+      "token": "SendIntentPersisted",
+      "why": "the intent line is written by the stage, before the socket is reached"
+    },
+    {
+      "file": "crates/execution/src/stage.rs",
+      "line": 640,
+      "token": "execution_duplicate_in_ledger",
+      "why": "a duplicate refused is counted where it is refused, not inferred later"
+    },
+    {
+      "file": "crates/execution/src/stage.rs",
+      "line": 450,
+      "token": "fn lane_is_idle",
+      "why": "the lane reading the tables quote is the stage's own, independent of the derived state"
+    },
+    {
+      "file": "crates/execution/src/error.rs",
+      "line": 122,
+      "token": "ledger persistence",
+      "why": "§4.1's write failure is its own error class, not a warning inside another"
+    },
+    {
+      "file": "crates/execution/src/error.rs",
+      "line": 133,
+      "token": "LedgerRecovery",
+      "why": "§6 and §7's refusal to start on a damaged ledger is a distinct failure"
+    }
+  ],
+  "cases": 9,
+  "cases_covering_a_process_death": 7,
+  "fact_words_from_production": [
+    "journal_opened",
+    "ready_not_sent",
+    "send_intent_persisted",
+    "send_dispatched",
+    "endpoint_accepted",
+    "definite_refusal",
+    "outcome_unknown",
+    "receipt_observed",
+    "attention_required"
+  ],
+  "how_measured": "M12F_EVIDENCE_DIR=data/evidence/m12/f cargo test -p evm-execution --test crash_recovery -- --test-threads=1",
+  "lane_holding_states": [
+    "awaiting_receipt",
+    "possibly_in_flight"
+  ],
+  "ledger_file_name_template": "execution-journal-{chain_id}.jsonl",
+  "max_ledger_lines_a_recovery_read": 5,
+  "max_records_in_any_recovery": 1,
+  "max_restarts_a_record_survived": 2,
+  "measured_by": "crates/execution/tests/crash_recovery.rs",
+  "measured_from": "data/evidence/m12/f/measured-rows.jsonl",
+  "recovered_state_words_from_production": [
+    "resolved",
+    "possibly_in_flight",
+    "awaiting_receipt"
+  ],
+  "recovered_states": {
+    "awaiting_receipt": 7,
+    "possibly_in_flight": 1,
+    "resolved": 1
+  },
+  "refresh": "M12F_LEDGER_REFRESH=1 cargo test -p evm-execution --test ledger_evidence -- --test-threads=1",
+  "rows_in_this_table": 9,
+  "rows_naming_an_attention_line": 1,
+  "schema": "m12f-recovery-results-v1",
+  "sections": {
+    "F1": 1,
+    "F2": 1,
+    "F3": 1,
+    "F4": 1,
+    "F5": 2,
+    "F6": 0,
+    "F7": 1,
+    "F8": 0,
+    "F9": 2
+  },
+  "supported_schema_version": 1,
+  "table": [
+    {
+      "attention_lines_after_restart": 1,
+      "case": "a_crash_between_the_intent_line_and_the_socket_leaves_the_nonce_possibly_in_flight",
+      "crash_shape": "prefix cut at the intent line",
+      "damage": "process_exit",
+      "dispatch_line_claimed": false,
+      "fault": "§8 F1 / §4.2's fact 2 / §4.3's prohibition on reading an intent as an absence",
+      "last_fact_before_crash": "send_intent_persisted",
+      "lines": 2,
+      "needs_attention": true,
+      "never_recovered_as": "resolved",
+      "receipt_read": false,
+      "records": 1,
+      "recovered_state": "possibly_in_flight",
+      "restarts": 1,
+      "section": "F1",
+      "table": "recovery_results"
+    },
+    {
+      "case": "a_dispatch_line_with_no_answer_after_it_is_recovered_as_still_awaiting",
+      "crash_shape": "prefix cut at the dispatch line",
+      "damage": "process_exit",
+      "dispatch_line_claimed": true,
+      "fault": "§8 F3 / §4.2's fact 3: a dispatch line says the request went out and nothing more",
+      "last_fact_before_crash": "send_dispatched",
+      "lines": 3,
+      "never_recovered_as": "resolved",
+      "records": 1,
+      "recovered_state": "awaiting_receipt",
+      "restarts": 0,
+      "section": "F3",
+      "table": "recovery_results"
+    },
+    {
+      "case": "a_ledger_replaced_under_a_run_refuses_the_next_line_instead_of_forking_memory_against_it",
+      "crash_shape": "the file was unlinked and rewritten byte-for-byte mid-run, then re-read",
+      "damage": "file_replaced_under_run",
+      "fault": "§8 F5 / §9: a ledger replaced under a run leaves the file's own state to recover",
+      "last_fact_before_crash": "endpoint_accepted",
+      "lines": 4,
+      "never_recovered_as": "resolved",
+      "receipt_lines_in_file": 0,
+      "records": 1,
+      "recovered_state": "awaiting_receipt",
+      "restarts": 1,
+      "section": "F5",
+      "table": "recovery_results"
+    },
+    {
+      "case": "a_node_acknowledgement_is_recovered_as_an_acknowledgement_and_never_as_inclusion",
+      "crash_shape": "the file ends at the acknowledgement, which the run never followed up",
+      "damage": "process_exit",
+      "fault": "§8 F4 / §2.3's separation: an acknowledgement is not an inclusion",
+      "last_fact_before_crash": "endpoint_accepted",
+      "last_fact_is_terminal": false,
+      "never_recovered_as": "resolved",
+      "pinned_block": 37984319,
+      "pinned_block_hash": "0x0000000000000000000000000707070707070707070707070707070707070707",
+      "receipt_read": false,
+      "records": 1,
+      "recovered_state": "awaiting_receipt",
+      "restarts": 1,
+      "section": "F4",
+      "table": "recovery_results"
+    },
+    {
+      "case": "a_receipt_read_in_memory_that_never_reached_the_file_leaves_the_record_awaiting",
+      "crash_shape": "prefix cut at the acknowledgement, after the receipt was read in memory",
+      "damage": "process_exit",
+      "fault": "§8 F5 / §9's no-silent-divergence: the file's ignorance wins over memory's knowledge",
+      "lines": 4,
+      "never_recovered_as": "resolved",
+      "receipt_lines_in_file": 0,
+      "receipt_read": false,
+      "receipt_read_in_memory_before_the_cut": true,
+      "records": 1,
+      "recovered_state": "awaiting_receipt",
+      "restarts": 1,
+      "section": "F5",
+      "table": "recovery_results"
+    },
+    {
+      "attention_line_names_the_held_record": true,
+      "attention_lines_after_every_restart": 1,
+      "case": "a_recovered_hold_refuses_a_substituted_attempt_and_writes_the_need_for_a_human_once",
+      "crash_shape": "the unknown run's own lines, met again and again by later processes",
+      "damage": "process_exit",
+      "fault": "§8 F9 / §4.3's second prohibition: a hold survives two more processes and closes nothing",
+      "intent_lines_after_substitute": 1,
+      "lines": 5,
+      "needs_attention": true,
+      "never_recovered_as": "resolved",
+      "records": 1,
+      "recovered_state": "awaiting_receipt",
+      "restarts": 2,
+      "section": "F9",
+      "table": "recovery_results"
+    },
+    {
+      "case": "a_restarted_process_reads_the_same_record_twice_and_refuses_a_finished_attempt_as_duplicate",
+      "crash_shape": "no cut — the run finished, and the same file was read twice more",
+      "damage": "clean_shutdown",
+      "fault": "§8 F7 / §7's read-only recovery: one file, read twice, answers once",
+      "lane_occupancy_after_resolution": 0,
+      "records": 1,
+      "recovered_state": "resolved",
+      "restarts": 1,
+      "second_pass_line_agrees": true,
+      "second_pass_records_agree": true,
+      "section": "F7",
+      "table": "recovery_results"
+    },
+    {
+      "case": "an_accepted_transaction_whose_receipt_never_arrives_keeps_its_nonce_across_a_restart",
+      "crash_shape": "the run ended with the acknowledgement as its last word; the receipt never arrived",
+      "damage": "process_exit",
+      "fault": "§8 F9 / §4.3: a null receipt is not an answer, so the record stays open across the restart",
+      "lines": 4,
+      "never_recovered_as": "resolved",
+      "never_written_fact": "definite_refusal",
+      "receipt_read": false,
+      "records": 1,
+      "recovered_state": "awaiting_receipt",
+      "refusal_lines_in_file": 0,
+      "restarts": 1,
+      "section": "F9",
+      "table": "recovery_results"
+    },
+    {
+      "case": "an_unknown_answer_survives_the_restart_as_unknown_and_never_as_a_refusal",
+      "crash_shape": "the run's own three lines, re-read uncut",
+      "damage": "process_exit",
+      "dispatch_line_claimed": true,
+      "facts_in_order": [
+        "send_intent_persisted",
+        "send_dispatched",
+        "outcome_unknown"
+      ],
+      "fault": "§8 F2 / §4.3's core prohibition: an Unknown is never read back as a refusal",
+      "last_fact_basis": "unconfirmed_inference",
+      "last_fact_before_crash": "outcome_unknown",
+      "lines": 4,
+      "never_recovered_as": "resolved",
+      "never_written_fact": "definite_refusal",
+      "receipt_read": false,
+      "records": 1,
+      "recovered_state": "awaiting_receipt",
+      "restarts": 1,
+      "section": "F2",
+      "table": "recovery_results"
+    }
+  ],
+  "task_book": "docs/v0.1/M12F Coding.md §10 (F1–F9 故障恢复结果), §8, §4.2, §4.3",
+  "what_this_table_is": "what this build's journal says after a process dies: the last fact a surviving prefix carries, the state the file folds to, and what the case explicitly refused to read it as. §10's F1–F9 results are these rows; every one of them came out of the same [`JournalRecovery`] the case asserted against.",
+  "what_this_table_is_not": "not a node's state. A record recovered as `awaiting_receipt` means the file has no answer, which says nothing about whether a block contains the transaction — and §14 forbids writing the two as if they were the same sentence. F6 and F8's refusal cases appear in the damage table rather than here, because a refused ledger yields no recovered record to report."
+}

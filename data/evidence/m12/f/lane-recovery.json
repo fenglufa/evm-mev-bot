@@ -1,0 +1,219 @@
+{
+  "anchor_rows": 17,
+  "anchors": [
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 64,
+      "token": "pub const JOURNAL_SCHEMA_VERSION: u64 =",
+      "why": "the version gate is one number, so a v2 file and a v1 reader disagree on exactly one field"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1578,
+      "token": "if schema_version != JOURNAL_SCHEMA_VERSION",
+      "why": "a version this build was not compiled to read is refused, never migrated"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 78,
+      "token": "pub fn journal_file_name(chain_id: u64)",
+      "why": "one file per chain, which is §6's foreign-record question answered by construction"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1405,
+      "token": ".sync_all()",
+      "why": "the append's durability step — the whole of what is promised, and only for this process"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1150,
+      "token": "pub fn open(",
+      "why": "recovery happens where a stage cannot exist yet, which is §7's ordering"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1424,
+      "token": "pub fn reload(",
+      "why": "the read-only re-read every recovery row in these tables came from"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 908,
+      "token": "fn holds_lane(",
+      "why": "the lane rule §4.3 asks about, as one function the tables re-derive from"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 180,
+      "token": "fn is_terminal(",
+      "why": "an acknowledgement is deliberately not terminal, which is §2.3's separation"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1263,
+      "token": "pub fn is_durable",
+      "why": "§11's refusal of a memory-only mode, visible on the handle a run holds"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 1246,
+      "token": "pub fn volatile(",
+      "why": "the one non-durable handle, and the only place a journal is allowed to be memory-only"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 706,
+      "token": "pub fn name(&self)",
+      "why": "every refusal word in these tables is a function's output, not a typed string"
+    },
+    {
+      "file": "crates/execution/src/journal.rs",
+      "line": 360,
+      "token": "fn from_step",
+      "why": "the identity a line carries comes from the step, in one place"
+    },
+    {
+      "file": "crates/execution/src/stage.rs",
+      "line": 1164,
+      "token": "SendIntentPersisted",
+      "why": "the intent line is written by the stage, before the socket is reached"
+    },
+    {
+      "file": "crates/execution/src/stage.rs",
+      "line": 640,
+      "token": "execution_duplicate_in_ledger",
+      "why": "a duplicate refused is counted where it is refused, not inferred later"
+    },
+    {
+      "file": "crates/execution/src/stage.rs",
+      "line": 450,
+      "token": "fn lane_is_idle",
+      "why": "the lane reading the tables quote is the stage's own, independent of the derived state"
+    },
+    {
+      "file": "crates/execution/src/error.rs",
+      "line": 122,
+      "token": "ledger persistence",
+      "why": "§4.1's write failure is its own error class, not a warning inside another"
+    },
+    {
+      "file": "crates/execution/src/error.rs",
+      "line": 133,
+      "token": "LedgerRecovery",
+      "why": "§6 and §7's refusal to start on a damaged ledger is a distinct failure"
+    }
+  ],
+  "cases": 8,
+  "how_measured": "M12F_EVIDENCE_DIR=data/evidence/m12/f cargo test -p evm-execution --test crash_recovery -- --test-threads=1",
+  "lane_holding_states_from_production": [
+    "awaiting_receipt",
+    "possibly_in_flight"
+  ],
+  "lane_words": {
+    "held": 5,
+    "idle": 1
+  },
+  "ledger_file_name_template": "execution-journal-{chain_id}.jsonl",
+  "max_restored_lane_entries": 1,
+  "max_resubmissions_after_restart": 0,
+  "measured_by": "crates/execution/tests/crash_recovery.rs",
+  "measured_from": "data/evidence/m12/f/measured-rows.jsonl",
+  "refresh": "M12F_LEDGER_REFRESH=1 cargo test -p evm-execution --test ledger_evidence -- --test-threads=1",
+  "rows_in_this_table": 8,
+  "rows_naming_a_held_nonce": 1,
+  "schema": "m12f-lane-recovery-v1",
+  "sections": {
+    "F1": 1,
+    "F2": 1,
+    "F3": 0,
+    "F4": 1,
+    "F5": 2,
+    "F6": 0,
+    "F7": 1,
+    "F8": 0,
+    "F9": 2
+  },
+  "supported_schema_version": 1,
+  "table": [
+    {
+      "case": "a_crash_between_the_intent_line_and_the_socket_leaves_the_nonce_possibly_in_flight",
+      "fault": "§8 F1 / §4.3's lane rule / §11's no-release",
+      "holds_lane": true,
+      "lane_word": "held",
+      "nonce_held": 0,
+      "restored_lane_entries": 1,
+      "resubmissions_after_restart": 0,
+      "section": "F1",
+      "table": "lane_recovery"
+    },
+    {
+      "case": "a_ledger_replaced_under_a_run_refuses_the_next_line_instead_of_forking_memory_against_it",
+      "fault": "§8 F5 / §4.3's lane rule: memory kept what the file could not",
+      "holds_lane": true,
+      "lane_word": "held",
+      "resubmissions_after_restart": 0,
+      "section": "F5",
+      "table": "lane_recovery"
+    },
+    {
+      "case": "a_node_acknowledgement_is_recovered_as_an_acknowledgement_and_never_as_inclusion",
+      "fault": "§8 F4 / §4.3's lane rule: an open acknowledgement keeps the nonce",
+      "holds_lane": true,
+      "restart_refused_at_the_lane": true,
+      "resubmissions_after_restart": 0,
+      "section": "F4",
+      "table": "lane_recovery"
+    },
+    {
+      "case": "a_receipt_read_in_memory_that_never_reached_the_file_leaves_the_record_awaiting",
+      "fault": "§8 F5 / §4.3's lane rule: a receipt memory held and the file never saw frees nothing",
+      "holds_lane": true,
+      "lane_word": "held",
+      "resubmissions_after_restart": 0,
+      "section": "F5",
+      "table": "lane_recovery"
+    },
+    {
+      "case": "a_recovered_hold_refuses_a_substituted_attempt_and_writes_the_need_for_a_human_once",
+      "fault": "§8 F9 / §11's no-release: the third process still finds the lane reserved",
+      "holds_lane": true,
+      "lane_word": "held",
+      "resubmissions_after_restart": 0,
+      "section": "F9",
+      "table": "lane_recovery"
+    },
+    {
+      "case": "a_restarted_process_reads_the_same_record_twice_and_refuses_a_finished_attempt_as_duplicate",
+      "fault": "§8 F7 / §4.3's lane rule from the other side: a closed record holds nothing to hold",
+      "holds_lane": false,
+      "lane_word": "idle",
+      "nonce_held": null,
+      "restored_lane_entries": 0,
+      "resubmissions_after_restart": 0,
+      "section": "F7",
+      "table": "lane_recovery"
+    },
+    {
+      "case": "an_accepted_transaction_whose_receipt_never_arrives_keeps_its_nonce_across_a_restart",
+      "fault": "§8 F9 / §4.3's lane rule: a receipt that never arrived releases nothing",
+      "holds_lane": true,
+      "lane_word": "held",
+      "restart_refused_at_the_lane": true,
+      "resubmissions_after_restart": 0,
+      "section": "F9",
+      "table": "lane_recovery"
+    },
+    {
+      "case": "an_unknown_answer_survives_the_restart_as_unknown_and_never_as_a_refusal",
+      "fault": "§8 F2 / §4.3's lane rule across a second read",
+      "holds_lane": true,
+      "resubmissions_after_restart": 0,
+      "section": "F2",
+      "table": "lane_recovery"
+    }
+  ],
+  "task_book": "docs/v0.1/M12F Coding.md §10 (lane 恢复前后状态), §4.3, §11",
+  "what_this_table_is": "what a restarted process finds on the nonce lane: the state the file derived, whether that state keeps the lane, the stage's own reading of the same lane (the `lane_word` column, which is deliberately not the derived state restated), and how many times a record's nonce was re-submitted after the restart.",
+  "what_this_table_is_not": "not a proof that a nonce is live on a node. `holds_lane` is this build's rule about its own file, and a held lane is a debt a human closes. Only F1 and F7 name a nonce number, because only those two cases read one: the other rows leave `nonce_held` out rather than invent it."
+}

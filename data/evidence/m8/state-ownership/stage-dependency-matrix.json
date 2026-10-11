@@ -111,7 +111,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1793,
+          "line": 2012,
           "matches": 1,
           "note": "the leg, by the name the run records",
           "source": "code",
@@ -168,7 +168,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1763,
+          "line": 1974,
           "matches": 1,
           "note": "the build half, at its own step",
           "source": "code",
@@ -233,7 +233,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1628,
+          "line": 1839,
           "matches": 1,
           "note": "the build-side half of a diff, not a check",
           "source": "code",
@@ -290,7 +290,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1739,
+          "line": 1950,
           "matches": 1,
           "note": "the build half, inside the leg",
           "source": "code",
@@ -510,7 +510,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1739,
+          "line": 1950,
           "matches": 1,
           "note": "the consumer that would receive it",
           "source": "code",
@@ -551,7 +551,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1798,
+          "line": 2017,
           "matches": 1,
           "note": "the leg",
           "source": "code",
@@ -900,7 +900,7 @@
         },
         {
           "file": "crates/pipeline/src/runner.rs",
-          "line": 450,
+          "line": 452,
           "matches": 1,
           "note": "the dispatch check",
           "source": "code",
@@ -957,7 +957,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1323,
+          "line": 1325,
           "matches": 1,
           "note": "the three checks the build performs on preflight's verdict",
           "source": "code",
@@ -1136,7 +1136,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1856,
+          "line": 2075,
           "matches": 1,
           "note": "the leg",
           "source": "code",

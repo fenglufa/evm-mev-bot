@@ -82,7 +82,7 @@
     },
     {
       "file": "crates/pipeline/src/arbitrage.rs",
-      "line": 429,
+      "line": 452,
       "matches": 1,
       "note": "site observation.eth_blockNumber.pin stamps its caller label here",
       "source": "code",
@@ -90,7 +90,7 @@
     },
     {
       "file": "crates/pipeline/src/arbitrage.rs",
-      "line": 536,
+      "line": 559,
       "matches": 1,
       "note": "site observation.eth_blockNumber.pin's answer first meets a decision here",
       "source": "code",
@@ -98,7 +98,7 @@
     },
     {
       "file": "crates/pipeline/src/arbitrage.rs",
-      "line": 429,
+      "line": 452,
       "matches": 1,
       "note": "site observation.eth_getBlockByNumber.pin stamps its caller label here",
       "source": "code",
@@ -114,7 +114,7 @@
     },
     {
       "file": "crates/pipeline/src/arbitrage.rs",
-      "line": 483,
+      "line": 506,
       "matches": 1,
       "note": "site opportunity_detection.eth_call.reserves stamps its caller label here",
       "source": "code",
@@ -418,7 +418,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1793,
+      "line": 2012,
       "matches": 1,
       "note": "site build.eth_chainId.gate stamps its caller label here",
       "source": "code",
@@ -434,7 +434,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1798,
+      "line": 2017,
       "matches": 1,
       "note": "site build.eth_getBlockByNumber.binding stamps its caller label here",
       "source": "code",
@@ -450,7 +450,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1739,
+      "line": 1950,
       "matches": 1,
       "note": "site build.eth_getBlockByNumber.fee_pin stamps its caller label here",
       "source": "code",
@@ -466,7 +466,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1763,
+      "line": 1974,
       "matches": 1,
       "note": "site build.eth_getBlockByNumber.nonce_pair_head stamps its caller label here",
       "source": "code",
@@ -482,7 +482,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1763,
+      "line": 1974,
       "matches": 1,
       "note": "site build.eth_getTransactionCount.pair stamps its caller label here",
       "source": "code",
@@ -498,7 +498,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1856,
+      "line": 2075,
       "matches": 1,
       "note": "site build.eth_getBalance.gate stamps its caller label here",
       "source": "code",
@@ -506,7 +506,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1859,
+      "line": 2078,
       "matches": 1,
       "note": "site build.eth_getBalance.gate's answer first meets a decision here",
       "source": "code",
@@ -514,7 +514,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1739,
+      "line": 1950,
       "matches": 1,
       "note": "site build.eth_maxPriorityFeePerGas.pin stamps its caller label here",
       "source": "code",
@@ -530,7 +530,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1628,
+      "line": 1839,
       "matches": 1,
       "note": "site build.eth_call.before_snapshot stamps its caller label here",
       "source": "code",
@@ -538,7 +538,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1859,
+      "line": 2078,
       "matches": 1,
       "note": "site build.eth_call.before_snapshot's answer first meets a decision here",
       "source": "code",
@@ -546,7 +546,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1628,
+      "line": 1839,
       "matches": 1,
       "note": "site build.eth_getBalance.before_snapshot stamps its caller label here",
       "source": "code",
@@ -554,7 +554,7 @@
     },
     {
       "file": "crates/execution/src/sequence.rs",
-      "line": 1859,
+      "line": 2078,
       "matches": 1,
       "note": "site build.eth_getBalance.before_snapshot's answer first meets a decision here",
       "source": "code",
@@ -570,7 +570,7 @@
     },
     {
       "file": "crates/pipeline/src/arbitrage.rs",
-      "line": 346,
+      "line": 358,
       "matches": 1,
       "note": "site connect.eth_chainId.unstamped's answer first meets a decision here",
       "source": "code",
@@ -1006,7 +1006,7 @@
   "flows": [
     {
       "answer_state_kind": "block_header",
-      "asked_at": "crates/pipeline/src/arbitrage.rs:429",
+      "asked_at": "crates/pipeline/src/arbitrage.rs:452",
       "asked_by": "head and header that fixed the pin",
       "authority": "node_at_height",
       "block_semantics": "names no height: the ask is the head at the instant of asking",
@@ -1016,7 +1016,7 @@
       "decision_evidence": "crates/pipeline/src/arbitrage.rs: the answer is `head`, and the first comparison it meets is `BlockPin::new(head, header.hash)` downstream at the simulation's `check_pin`, which verifies the hash this call never returned",
       "decoded_into": "node",
       "derivable_is_not_safe_to_derive": false,
-      "first_decision": "crates/pipeline/src/arbitrage.rs:536",
+      "first_decision": "crates/pipeline/src/arbitrage.rs:559",
       "flows_onward_to": [],
       "recorded_identity": "method=eth_blockNumber|endpoint=rpc-faa716cada04a9ef|method_kind=eth_blockNumber",
       "reuse_status_inherited": {
@@ -1035,7 +1035,7 @@
     },
     {
       "answer_state_kind": "block_header",
-      "asked_at": "crates/pipeline/src/arbitrage.rs:429",
+      "asked_at": "crates/pipeline/src/arbitrage.rs:452",
       "asked_by": "head and header that fixed the pin",
       "authority": "node_at_height",
       "block_semantics": "numbered height, resolved from the height the run just fixed",
@@ -1113,7 +1113,7 @@
     },
     {
       "answer_state_kind": "pool_reserves",
-      "asked_at": "crates/pipeline/src/arbitrage.rs:483",
+      "asked_at": "crates/pipeline/src/arbitrage.rs:506",
       "asked_by": "reserves of both venues, at the pin",
       "authority": "node_canonical_logs",
       "block_semantics": "numbered height at the pin",
@@ -1748,7 +1748,7 @@
     },
     {
       "answer_state_kind": "chain_identity",
-      "asked_at": "crates/execution/src/sequence.rs:1793",
+      "asked_at": "crates/execution/src/sequence.rs:2012",
       "asked_by": "step N: gate — endpoint chain id",
       "authority": "first_answer_at_connect",
       "block_semantics": "no block term",
@@ -1777,7 +1777,7 @@
     },
     {
       "answer_state_kind": "block_header",
-      "asked_at": "crates/execution/src/sequence.rs:1798",
+      "asked_at": "crates/execution/src/sequence.rs:2017",
       "asked_by": "step N: gate — block binding at pin",
       "authority": "node_at_height",
       "block_semantics": "numbered height at the pin, with the hash asked alongside it",
@@ -1806,7 +1806,7 @@
     },
     {
       "answer_state_kind": "fee_parameters",
-      "asked_at": "crates/execution/src/sequence.rs:1739",
+      "asked_at": "crates/execution/src/sequence.rs:1950",
       "asked_by": "step N: fee at pinned block",
       "authority": "node_at_height",
       "block_semantics": "numbered height at the pin",
@@ -1835,7 +1835,7 @@
     },
     {
       "answer_state_kind": "block_header",
-      "asked_at": "crates/execution/src/sequence.rs:1763",
+      "asked_at": "crates/execution/src/sequence.rs:1974",
       "asked_by": "step N: pending and latest nonces",
       "authority": "node_at_height",
       "block_semantics": "a tag: `latest`, read as the pair's label",
@@ -1864,7 +1864,7 @@
     },
     {
       "answer_state_kind": "nonce",
-      "asked_at": "crates/execution/src/sequence.rs:1763",
+      "asked_at": "crates/execution/src/sequence.rs:1974",
       "asked_by": "step N: pending and latest nonces",
       "authority": "node_at_height",
       "block_semantics": "a tag for the pending leg, the head's number for the confirmed leg",
@@ -1892,7 +1892,7 @@
     },
     {
       "answer_state_kind": "native_balance",
-      "asked_at": "crates/execution/src/sequence.rs:1856",
+      "asked_at": "crates/execution/src/sequence.rs:2075",
       "asked_by": "step N: gate — native balance",
       "authority": "node_at_height",
       "block_semantics": "numbered height at the pin",
@@ -1902,7 +1902,7 @@
       "decision_evidence": "crates/execution/src/sequence.rs: the comparison is this step's `maximum_cost_wei`, a different basis from preflight's estimate, and a failure halts the step",
       "decoded_into": "no_owner_in_code",
       "derivable_is_not_safe_to_derive": false,
-      "first_decision": "crates/execution/src/sequence.rs:1859",
+      "first_decision": "crates/execution/src/sequence.rs:2078",
       "flows_onward_to": [],
       "recorded_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700740|chain=91342",
       "reuse_status_inherited": {
@@ -1921,7 +1921,7 @@
     },
     {
       "answer_state_kind": "fee_parameters",
-      "asked_at": "crates/execution/src/sequence.rs:1739",
+      "asked_at": "crates/execution/src/sequence.rs:1950",
       "asked_by": "step N: fee at pinned block",
       "authority": "node_at_height",
       "block_semantics": "no block term, asked under the pin's stamp",
@@ -1950,7 +1950,7 @@
     },
     {
       "answer_state_kind": "eth_call_result",
-      "asked_at": "crates/execution/src/sequence.rs:1628",
+      "asked_at": "crates/execution/src/sequence.rs:1839",
       "asked_by": "before-snapshot: native and input-token balances",
       "authority": "node_at_height",
       "block_semantics": "numbered height at the pin",
@@ -1960,7 +1960,7 @@
       "decision_evidence": "crates/execution/src/sequence.rs: the before/after pair becomes a `BalanceDelta` reconciled against the receipt's logs, and a disagreement is recorded as a mismatch rather than stopping anything",
       "decoded_into": "no_owner_in_code",
       "derivable_is_not_safe_to_derive": false,
-      "first_decision": "crates/execution/src/sequence.rs:1859",
+      "first_decision": "crates/execution/src/sequence.rs:2078",
       "flows_onward_to": [],
       "recorded_identity": "method=eth_call|block=37700753|chain=91342|data=70a08231000000000000000000000000d450630c1c55b1c7df1ebf7eeaee1fffb45e520c|to=0x07d4af6e2bc8dd82beb06b4fd279df4c9028f26f",
       "reuse_status_inherited": {
@@ -1978,7 +1978,7 @@
     },
     {
       "answer_state_kind": "native_balance",
-      "asked_at": "crates/execution/src/sequence.rs:1628",
+      "asked_at": "crates/execution/src/sequence.rs:1839",
       "asked_by": "before-snapshot: native and input-token balances",
       "authority": "node_at_height",
       "block_semantics": "numbered height at the pin",
@@ -1988,7 +1988,7 @@
       "decision_evidence": "crates/execution/src/sequence.rs: the snapshot's first decision is a binding sanity check on which snapshot it is, not on how much is there",
       "decoded_into": "no_owner_in_code",
       "derivable_is_not_safe_to_derive": false,
-      "first_decision": "crates/execution/src/sequence.rs:1859",
+      "first_decision": "crates/execution/src/sequence.rs:2078",
       "flows_onward_to": [],
       "recorded_identity": "method=eth_getBalance|address=0xd450630c1c55b1c7df1ebf7eeaee1fffb45e520c|block=37700753|chain=91342",
       "reuse_status_inherited": {
@@ -2017,7 +2017,7 @@
       "decision_evidence": "crates/pipeline/src/arbitrage.rs: the stored answer is compared against the configured chain at the start of every run, and it keys every later decode",
       "decoded_into": "chain_adapter_connection",
       "derivable_is_not_safe_to_derive": false,
-      "first_decision": "crates/pipeline/src/arbitrage.rs:346",
+      "first_decision": "crates/pipeline/src/arbitrage.rs:358",
       "flows_onward_to": [
         {
           "candidate": "chainid.connect_to_preflight",

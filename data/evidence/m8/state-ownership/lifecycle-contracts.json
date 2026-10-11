@@ -401,7 +401,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/stage.rs",
-          "line": 421,
+          "line": 461,
           "matches": 1,
           "note": "the lane's own statement of what it re-confirms",
           "source": "code",
@@ -433,7 +433,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1628,
+          "line": 1839,
           "matches": 1,
           "note": "the build's second balance ask, at preflight's height",
           "source": "code",
@@ -441,7 +441,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1856,
+          "line": 2075,
           "matches": 1,
           "note": "the build's funding leg, at the intent's pinned height",
           "source": "code",
@@ -464,7 +464,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/stage.rs",
-          "line": 421,
+          "line": 461,
           "matches": 1,
           "note": "the lane's own statement of what it re-confirms",
           "source": "code",
@@ -488,7 +488,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 171,
+          "line": 173,
           "matches": 1,
           "note": "the code's own words for this rule",
           "source": "code",
@@ -591,7 +591,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/lifecycle.rs",
-          "line": 764,
+          "line": 787,
           "matches": 1,
           "note": "the only in-process nonce advance",
           "source": "code",
@@ -686,7 +686,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1739,
+          "line": 1950,
           "matches": 1,
           "note": "the re-read this row is about",
           "source": "code",
@@ -710,7 +710,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1323,
+          "line": 1325,
           "matches": 1,
           "note": "the three checks the build actually performs on that report",
           "source": "code",
@@ -742,7 +742,7 @@
       "evidence_refs": [
         {
           "file": "crates/pipeline/src/runner.rs",
-          "line": 450,
+          "line": 452,
           "matches": 1,
           "note": "the dispatch check: hash of the announced block against the ledger's",
           "source": "code",
@@ -789,7 +789,7 @@
         },
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1323,
+          "line": 1325,
           "matches": 1,
           "note": "the three checks the build actually performs on that report",
           "source": "code",
@@ -853,7 +853,7 @@
         },
         {
           "file": "crates/pipeline/src/arbitrage.rs",
-          "line": 712,
+          "line": 735,
           "matches": 1,
           "note": "where the legs are assembled into one gate attempt",
           "source": "code",
@@ -908,7 +908,7 @@
         },
         {
           "file": "crates/pipeline/src/arbitrage.rs",
-          "line": 712,
+          "line": 735,
           "matches": 1,
           "note": "where the legs are assembled into one gate attempt",
           "source": "code",
@@ -932,7 +932,7 @@
       "evidence_refs": [
         {
           "file": "crates/cli/src/lib.rs",
-          "line": 718,
+          "line": 748,
           "matches": 1,
           "note": "startup refusal when the registry and the node disagree",
           "source": "code",
@@ -1170,7 +1170,7 @@
       "evidence_refs": [
         {
           "file": "crates/execution/src/sequence.rs",
-          "line": 1323,
+          "line": 1325,
           "matches": 1,
           "note": "the three checks, in order, in one function",
           "source": "code",
@@ -1241,7 +1241,7 @@
         },
         {
           "file": "crates/pipeline/src/runner.rs",
-          "line": 801,
+          "line": 803,
           "matches": 1,
           "note": "the constant, with the comment above it explaining why the author considers it established",
           "source": "code",

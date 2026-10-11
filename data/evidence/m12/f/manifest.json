@@ -1,0 +1,1063 @@
+{
+  "cross_milestone_anchor_refresh": {
+    "changed_leaves_total": 193,
+    "every_changed_leaf_is_a_line_position": true,
+    "files": [
+      "data/evidence/m8/m8.5.1/lifecycle-contracts.json",
+      "data/evidence/m8/m8.5.1/ownership-matrix.json",
+      "data/evidence/m8/m8.5.1/reuse-verdicts.json",
+      "data/evidence/m8/m8.6/information_flow.json",
+      "data/evidence/m8/m8.6/rpc-census.json",
+      "data/evidence/m8/m8.6/rpc-reduction-candidates.json",
+      "data/evidence/m8/m8.6/rpc_surface.json",
+      "data/evidence/m8/state-ownership/lifecycle-contracts.json",
+      "data/evidence/m8/state-ownership/ownership-matrix.json",
+      "data/evidence/m8/state-ownership/reuse-verdicts.json",
+      "data/evidence/m8/state-ownership/stage-dependency-matrix.json"
+    ],
+    "line_position_keys": [
+      "asked_at",
+      "consumer_decision_line",
+      "consumer_source_line",
+      "decision_line",
+      "first_decision",
+      "line",
+      "producer_source_line",
+      "source_line"
+    ],
+    "per_file": {
+      "data/evidence/m8/m8.5.1/lifecycle-contracts.json": {
+        "changed_leaves": 3,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 927,
+            "before": 925,
+            "path": ".sites[].evidence_refs[].line"
+          },
+          {
+            "after": 280,
+            "before": 268,
+            "path": ".sites[].evidence_refs[].line"
+          }
+        ],
+        "keys": [
+          "line"
+        ]
+      },
+      "data/evidence/m8/m8.5.1/ownership-matrix.json": {
+        "changed_leaves": 3,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 1512,
+            "before": 1488,
+            "path": ".rows[].evidence_refs[].line"
+          },
+          {
+            "after": 280,
+            "before": 268,
+            "path": ".rows[].evidence_refs[].line"
+          }
+        ],
+        "keys": [
+          "line"
+        ]
+      },
+      "data/evidence/m8/m8.5.1/reuse-verdicts.json": {
+        "changed_leaves": 3,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 1512,
+            "before": 1488,
+            "path": ".sites[].evidence_refs[].line"
+          },
+          {
+            "after": 280,
+            "before": 268,
+            "path": ".sites[].evidence_refs[].line"
+          }
+        ],
+        "keys": [
+          "line"
+        ]
+      },
+      "data/evidence/m8/m8.6/information_flow.json": {
+        "changed_leaves": 34,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 452,
+            "before": 429,
+            "path": ".anchors[].line"
+          },
+          {
+            "after": 559,
+            "before": 536,
+            "path": ".anchors[].line"
+          }
+        ],
+        "keys": [
+          "asked_at",
+          "first_decision",
+          "line"
+        ]
+      },
+      "data/evidence/m8/m8.6/rpc-census.json": {
+        "changed_leaves": 34,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 452,
+            "before": 429,
+            "path": ".anchors[].line"
+          },
+          {
+            "after": 358,
+            "before": 346,
+            "path": ".anchors[].line"
+          }
+        ],
+        "keys": [
+          "decision_line",
+          "line",
+          "source_line"
+        ]
+      },
+      "data/evidence/m8/m8.6/rpc-reduction-candidates.json": {
+        "changed_leaves": 40,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 2078,
+            "before": 1859,
+            "path": ".anchors[].line"
+          },
+          {
+            "after": 1950,
+            "before": 1739,
+            "path": ".anchors[].line"
+          }
+        ],
+        "keys": [
+          "consumer_decision_line",
+          "consumer_source_line",
+          "line",
+          "producer_source_line"
+        ]
+      },
+      "data/evidence/m8/m8.6/rpc_surface.json": {
+        "changed_leaves": 34,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 452,
+            "before": 429,
+            "path": ".anchors[].line"
+          },
+          {
+            "after": 358,
+            "before": 346,
+            "path": ".anchors[].line"
+          }
+        ],
+        "keys": [
+          "decision_line",
+          "line",
+          "source_line"
+        ]
+      },
+      "data/evidence/m8/state-ownership/lifecycle-contracts.json": {
+        "changed_leaves": 15,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 461,
+            "before": 421,
+            "path": ".rows[].evidence_refs[].line"
+          },
+          {
+            "after": 1839,
+            "before": 1628,
+            "path": ".rows[].evidence_refs[].line"
+          }
+        ],
+        "keys": [
+          "line"
+        ]
+      },
+      "data/evidence/m8/state-ownership/ownership-matrix.json": {
+        "changed_leaves": 12,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 1325,
+            "before": 1323,
+            "path": ".rows[].freshness_rule.evidence_refs[].line"
+          },
+          {
+            "after": 803,
+            "before": 801,
+            "path": ".rows[].invalidation_rule.evidence_refs[].line"
+          }
+        ],
+        "keys": [
+          "line"
+        ]
+      },
+      "data/evidence/m8/state-ownership/reuse-verdicts.json": {
+        "changed_leaves": 6,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 461,
+            "before": 421,
+            "path": ".rows[].evidence_refs[].line"
+          },
+          {
+            "after": 461,
+            "before": 421,
+            "path": ".rows[].evidence_refs[].line"
+          }
+        ],
+        "keys": [
+          "line"
+        ]
+      },
+      "data/evidence/m8/state-ownership/stage-dependency-matrix.json": {
+        "changed_leaves": 9,
+        "every_key_is_a_line_position": true,
+        "examples": [
+          {
+            "after": 452,
+            "before": 450,
+            "path": ".rows[].evidence_refs[].line"
+          },
+          {
+            "after": 1325,
+            "before": 1323,
+            "path": ".rows[].evidence_refs[].line"
+          }
+        ],
+        "keys": [
+          "line"
+        ]
+      }
+    },
+    "refresh_variables": {
+      "data/evidence/m8/m8.5.1/": "M851_ETH_CALL_SEMANTICS_REFRESH=1",
+      "data/evidence/m8/m8.6/": "M86_CENSUS_REFRESH=1",
+      "data/evidence/m8/state-ownership/": "M843_STATE_OWNERSHIP_REFRESH=1"
+    },
+    "why_this_is_in_scope": "M12-F moved lines in crates/execution/src/{journal,error,lifecycle,nonce,sequence,stage,deploy}.rs, crates/pipeline/src/{arbitrage,runner,config}.rs and crates/cli/src/lib.rs; these three generators resolve their anchors out of exactly those files, so the tables carried stale line numbers and their gates failed. Only the position leaves changed \u2014 the verdicts, counts and figures are byte-identical, which is what the leaf diff above measures rather than asserts"
+  },
+  "damage_controls": {
+    "append_refusals_that_still_sent": 0,
+    "damage_rows_leaving_the_bytes_alone": 9,
+    "fault_words_from_production": [
+      "missing_genesis",
+      "emptied_externally",
+      "torn_tail",
+      "not_json",
+      "empty_line",
+      "missing_field",
+      "bad_field",
+      "unknown_fact",
+      "mismatched_basis",
+      "checksum_mismatch",
+      "unsupported_schema",
+      "foreign_chain",
+      "duplicate_sequence",
+      "sequence_out_of_order",
+      "conflicting_identity",
+      "conflicting_transaction_hash",
+      "two_unresolved_lanes",
+      "truncated_externally",
+      "replaced_externally",
+      "io"
+    ],
+    "fault_words_observed": {
+      "bad_field": 0,
+      "checksum_mismatch": 1,
+      "conflicting_identity": 0,
+      "conflicting_transaction_hash": 0,
+      "duplicate_sequence": 1,
+      "emptied_externally": 2,
+      "empty_line": 1,
+      "foreign_chain": 1,
+      "io": 1,
+      "mismatched_basis": 1,
+      "missing_field": 0,
+      "missing_genesis": 1,
+      "not_json": 0,
+      "replaced_externally": 1,
+      "sequence_out_of_order": 0,
+      "torn_tail": 1,
+      "truncated_externally": 1,
+      "two_unresolved_lanes": 0,
+      "unknown_fact": 1,
+      "unsupported_schema": 1
+    },
+    "max_calls_after_refusal": 0,
+    "max_sends_after_refusal": 0,
+    "refusal_points": {
+      "append": 2,
+      "open": 12
+    },
+    "rows": 14,
+    "rows_refused_at_an_append": 2,
+    "rows_refused_at_the_entry": 9,
+    "task_book_section": "\u00a76 / \u00a74.1's failure branch"
+  },
+  "evidence": {
+    "distinct_cases": 13,
+    "file_sizes_bytes": {
+      "damage-controls.json": 15286,
+      "lane-recovery.json": 8246,
+      "measured-rows.jsonl": 17408,
+      "persistence-boundary.json": 9541,
+      "recovery-results.json": 12070
+    },
+    "files": [
+      "damage-controls.json",
+      "lane-recovery.json",
+      "measured-rows.jsonl",
+      "persistence-boundary.json",
+      "recovery-results.json"
+    ],
+    "gate_reads_the_manifest": false,
+    "measurement_command": "M12F_EVIDENCE_DIR=<absolute path to data/evidence/m12/f> cargo test -p evm-execution --test crash_recovery -- --test-threads=1",
+    "negative_control_names": [
+      "nc1_an_unknown_recovered_as_a_closed_record_is_caught",
+      "nc2_a_lane_rewritten_as_idle_is_caught_twice",
+      "nc3_two_submissions_for_one_attempt_is_caught",
+      "nc4_a_hash_disagreement_is_caught",
+      "nc5_a_damaged_ledger_rewritten_as_opened_is_caught",
+      "nc6_a_send_that_outran_the_intent_line_is_caught",
+      "nc7_an_unsupported_schema_disguised_as_readable_is_caught"
+    ],
+    "negative_controls": {
+      "nc1_an_unknown_recovered_as_a_closed_record_is_caught": "ok",
+      "nc2_a_lane_rewritten_as_idle_is_caught_twice": "ok",
+      "nc3_two_submissions_for_one_attempt_is_caught": "ok",
+      "nc4_a_hash_disagreement_is_caught": "ok",
+      "nc5_a_damaged_ledger_rewritten_as_opened_is_caught": "ok",
+      "nc6_a_send_that_outran_the_intent_line_is_caught": "ok",
+      "nc7_an_unsupported_schema_disguised_as_readable_is_caught": "ok"
+    },
+    "raw_rows": 40,
+    "refresh_command": "M12F_LEDGER_REFRESH=1 cargo test -p evm-execution --test ledger_evidence -- --test-threads=1",
+    "rows_by_section": {
+      "F1": 3,
+      "F2": 3,
+      "F3": 2,
+      "F4": 3,
+      "F5": 6,
+      "F6": 11,
+      "F7": 3,
+      "F8": 4,
+      "F9": 5
+    },
+    "rows_by_table": {
+      "damage_controls": 14,
+      "lane_recovery": 8,
+      "persistence_boundary": 9,
+      "recovery_results": 9
+    },
+    "tables_re_assembled_from_the_rows": true
+  },
+  "gates": {
+    "clean": {
+      "artifact": "/tmp/m12f_gate2a_clean.log",
+      "exit_code": 0,
+      "packages_cleaned": 16,
+      "why": "a warm clippy re-analyses nothing, so every workspace package was cleaned first"
+    },
+    "clippy_cold": {
+      "artifact": "/tmp/m12f_gate2b_clippy.log",
+      "end_utc": "2026-10-11T02:32:11Z",
+      "error_lines": 2,
+      "exit_code": 101,
+      "finding": "the cold run is reported as it happened: it failed on one lint in the new crates/pipeline/tests/ledger_recovery.rs (`type_complexity` on the damage table's inline type). The lint was fixed by naming the type, not by allowing it, and the gate was re-run",
+      "first_lint": "error: very complex type used. Consider factoring parts into `type` definitions",
+      "start_utc": "2026-10-11T02:31:40Z"
+    },
+    "clippy_rerun": {
+      "artifact": "/tmp/m12f_gate2c_clippy_rerun.log",
+      "end_utc": "2026-10-11T02:34:11Z",
+      "exit_code": 0,
+      "self_reported_finished": "Finished `dev` profile [unoptimized + debuginfo] target(s) in 17.33s",
+      "start_utc": "2026-10-11T02:33:53Z",
+      "units_rechecked": 3,
+      "warning_or_error_lines": 0
+    },
+    "commands": [
+      "cargo fmt --all -- --check",
+      "cargo clean -p <each of the 16 workspace packages>",
+      "cargo clippy --workspace --all-targets -- -D warnings",
+      "cargo test -p <package> --test <each of the 22 evidence and gate targets> -- --test-threads=1",
+      "cargo test --workspace --no-fail-fast -- --test-threads=1"
+    ],
+    "env": "CC=clang CXX=clang++ CXXFLAGS=-include cstdint",
+    "evidence": {
+      "all_exit_codes_zero": true,
+      "artifact": "/tmp/m12f_gate3_evidence.log",
+      "commands": [
+        {
+          "command": "cargo test -p evm-chain --test readiness_gate --",
+          "end_utc": "2026-10-11T02:39:02Z",
+          "exit_code": 0,
+          "start_utc": "2026-10-11T02:38:21Z",
+          "wall_seconds": 41.0
+        },
+        {
+          "command": "cargo test -p evm-cli --test validation_gate --",
+          "end_utc": "2026-10-11T02:39:03Z",
+          "exit_code": 0,
+          "start_utc": "2026-10-11T02:39:02Z",
+          "wall_seconds": 1.0
+        },
+        {
+          "command": "cargo test -p evm-discovery --test evidence_gate --test pathfinder_evidence_gate --test reconstruction_evidence_gate --",
+          "end_utc": "2026-10-11T02:39:20Z",
+          "exit_code": 0,
+          "start_utc": "2026-10-11T02:39:03Z",
+          "wall_seconds": 17.0
+        },
+        {
+          "command": "cargo test -p evm-execution --test block_context_evidence --test executor_evidence_gate --test ledger_evidence --test multihop_evidence_gate --test send_uncertainty_evidence --",
+          "end_utc": "2026-10-11T02:39:23Z",
+          "exit_code": 0,
+          "start_utc": "2026-10-11T02:39:20Z",
+          "wall_seconds": 3.0
+        },
+        {
+          "command": "cargo test -p evm-live --test preconf_evidence_gate --",
+          "end_utc": "2026-10-11T02:39:25Z",
+          "exit_code": 0,
+          "start_utc": "2026-10-11T02:39:23Z",
+          "wall_seconds": 2.0
+        },
+        {
+          "command": "cargo test -p evm-pipeline --test concurrency_evidence --test cross_stage_evidence --test eth_call_semantics_evidence --test post_reuse_evidence --test reuse_ab_evidence --test rpc_reduction_evidence --test state_ownership_evidence --test storage_dependency_evidence --",
+          "end_utc": "2026-10-11T02:39:43Z",
+          "exit_code": 0,
+          "start_utc": "2026-10-11T02:39:25Z",
+          "wall_seconds": 18.0
+        },
+        {
+          "command": "cargo test -p evm-simulation --test executor_evidence --test historical_gate --test multihop_evidence --",
+          "end_utc": "2026-10-11T02:39:45Z",
+          "exit_code": 0,
+          "start_utc": "2026-10-11T02:39:43Z",
+          "wall_seconds": 2.0
+        }
+      ],
+      "failed": 0,
+      "ignored": 1,
+      "passed": 239,
+      "test_targets": 22,
+      "wall_seconds": 84.0
+    },
+    "fmt": {
+      "artifact": "/tmp/m12f_gate1_fmt.log",
+      "end_utc": "2026-10-11T02:31:08Z",
+      "exit_code": 0,
+      "output_lines": 0,
+      "start_utc": "2026-10-11T02:31:05Z"
+    },
+    "serial": true,
+    "test": {
+      "artifact": "/tmp/m12f_gate4_test.log",
+      "end_utc": "2026-10-11T02:44:18Z",
+      "exit_code": 0,
+      "failed": 0,
+      "history_rewritten_by_a_test": {
+        "artifact": "data/evidence/m10/manifest.json",
+        "diff_lines": 4,
+        "fields_that_changed": [
+          "git_commit"
+        ],
+        "gate_touched_the_file": true,
+        "measured_by": "gate 4 is not the only witness: the reprint was measured on its own by copying the committed file aside, running `cargo test -p evm-execution --test executor_evidence_gate -- --test-threads=1`, and diffing the result (/tmp/m10_reprint_status.txt, /tmp/m10_reprint_diff.txt)",
+        "restored": true,
+        "restored_by": "git checkout -- data/evidence/m10/manifest.json"
+      },
+      "ignored": 29,
+      "passed": 1824,
+      "self_reported_finished": "Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 12s",
+      "start_utc": "2026-10-11T02:40:11Z",
+      "target_headers_seen": 138,
+      "target_kinds": {
+        "doctest": 16,
+        "integration": 105,
+        "unittest": 17
+      },
+      "targets_with_a_result_line": 138,
+      "targets_without_a_result_line": 0,
+      "timed_out": 0,
+      "wall_seconds": 247.0
+    },
+    "why_no_fail_fast": "gate 4 runs with --no-fail-fast so a red target cannot hide the rest of the workspace; --test-threads=1 is the repository's standing rule because target/pipeline-tests/ scratch is shared across processes"
+  },
+  "generated_at_utc": "2026-10-11T02:51:05Z",
+  "git_commit": "d4d047f3163b7de4bd427831d88047be90b576a6",
+  "git_commit_reading": [
+    "ref: refs/heads/main",
+    "symbolic ref to refs/heads/main",
+    "read from the loose ref refs/heads/main",
+    "branch main",
+    "merge-base with origin/main d4d047f3163b7de4bd427831d88047be90b576a6"
+  ],
+  "how_this_file_was_built": "every figure in this file is read out of a gate log under /tmp/m12f_gate*, a committed evidence artifact in data/evidence/m12/f/, the worktree diff, or a source file, by /tmp/m12f_manifest.py; no figure is typed in by hand",
+  "known_staleness": [
+    {
+      "artifact": "data/evidence/m10/manifest.json",
+      "handling": "restored with `git checkout -- data/evidence/m10/manifest.json` after gate 4, so the M10 evidence committed is the pre-round historical version; the reprint behaviour is recorded, not patched here",
+      "what_changed": "crates/execution/tests/executor_evidence_gate.rs reprints its `git_commit` on any workspace test run"
+    }
+  ],
+  "lane_recovery": {
+    "free_rows": 1,
+    "holding_rows": 7,
+    "lane_words": [
+      "held",
+      "idle"
+    ],
+    "max_restored_lane_entries": 1,
+    "nonces_held": [
+      "0",
+      "None"
+    ],
+    "resubmissions_after_restart": {
+      "a_crash_between_the_intent_line_and_the_socket_leaves_the_nonce_possibly_in_flight": 0,
+      "a_ledger_replaced_under_a_run_refuses_the_next_line_instead_of_forking_memory_against_it": 0,
+      "a_node_acknowledgement_is_recovered_as_an_acknowledgement_and_never_as_inclusion": 0,
+      "a_receipt_read_in_memory_that_never_reached_the_file_leaves_the_record_awaiting": 0,
+      "a_recovered_hold_refuses_a_substituted_attempt_and_writes_the_need_for_a_human_once": 0,
+      "a_restarted_process_reads_the_same_record_twice_and_refuses_a_finished_attempt_as_duplicate": 0,
+      "an_accepted_transaction_whose_receipt_never_arrives_keeps_its_nonce_across_a_restart": 0,
+      "an_unknown_answer_survives_the_restart_as_unknown_and_never_as_a_refusal": 0
+    },
+    "rows": 8,
+    "task_book_section": "\u00a74.3 / \u00a79"
+  },
+  "m10_m11_regression": [
+    {
+      "failed": 0,
+      "header": "tests/executor_deploy.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 12,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/executor_evidence_gate.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 1,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/executor_giwa_live.rs",
+      "ignored": 1,
+      "kind": "integration",
+      "passed": 1,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/executor_lifecycle.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 9,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/lane_matrix.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 14,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_evidence_gate.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 6,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_lanes.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 35,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/sequence.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 44,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/sequencer_direct_probe.rs",
+      "ignored": 1,
+      "kind": "integration",
+      "passed": 0,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/stage_matrix.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 17,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 21,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/executor_evidence.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 2,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/executor_revm.rs",
+      "ignored": 1,
+      "kind": "integration",
+      "passed": 31,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_adapter.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 30,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_capture.rs",
+      "ignored": 1,
+      "kind": "integration",
+      "passed": 0,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_determinism.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 5,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_e2e.rs",
+      "ignored": 1,
+      "kind": "integration",
+      "passed": 9,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_evidence.rs",
+      "ignored": 1,
+      "kind": "integration",
+      "passed": 2,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_negative_controls.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 13,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_revm.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 18,
+      "status": "ok"
+    },
+    {
+      "failed": 0,
+      "header": "tests/multihop_risk.rs",
+      "ignored": 0,
+      "kind": "integration",
+      "passed": 40,
+      "status": "ok"
+    }
+  ],
+  "milestone": "M12-F",
+  "not_claimed": [
+    "a ledger recovered locally is not a node-confirmed transaction state",
+    "no receipt in the file is not evidence a transaction was not accepted",
+    "no fsync or power-loss durability claim is made; the sync points are the ones \u00a76 names",
+    "no automatic rebroadcast, endpoint failover, or background reconciliation is implemented"
+  ],
+  "persistence_boundary": {
+    "hashes_agree": {
+      "a_crash_between_the_intent_line_and_the_socket_leaves_the_nonce_possibly_in_flight": true,
+      "a_dispatch_line_with_no_answer_after_it_is_recovered_as_still_awaiting": true
+    },
+    "intent_seq_named_rows": 1,
+    "local_hash_shape_rule": {
+      "hex_digits": 64,
+      "prefix": "0x",
+      "why": "a \u00a75 identity is 32 bytes; a signed payload is far longer, and this bound is what keeps one out of a table"
+    },
+    "rows": 9,
+    "rows_naming_a_hash": 2,
+    "send_arrivals_by_case": {
+      "a_crash_between_the_intent_line_and_the_socket_leaves_the_nonce_possibly_in_flight": 1,
+      "a_damaged_ledger_refuses_to_open_and_the_run_never_reaches_the_endpoint": 1,
+      "a_dispatch_line_with_no_answer_after_it_is_recovered_as_still_awaiting": null,
+      "a_ledger_emptied_before_the_intent_line_stops_the_send_and_the_next_process_refuses_it": 0,
+      "a_ledger_replaced_under_a_run_refuses_the_next_line_instead_of_forking_memory_against_it": 1,
+      "a_node_acknowledgement_is_recovered_as_an_acknowledgement_and_never_as_inclusion": 1,
+      "a_recovered_hold_refuses_a_substituted_attempt_and_writes_the_need_for_a_human_once": null,
+      "a_restarted_process_reads_the_same_record_twice_and_refuses_a_finished_attempt_as_duplicate": 0,
+      "an_unknown_answer_survives_the_restart_as_unknown_and_never_as_a_refusal": 1
+    },
+    "supported_schema_version": 1,
+    "task_book_section": "\u00a74.1"
+  },
+  "recovery_matrix": {
+    "cases_total": 13,
+    "measured_by": "crates/execution/tests/crash_recovery.rs, recorded into measured-rows.jsonl",
+    "never_recovered_as_values": [
+      "resolved"
+    ],
+    "process_death_cases": [
+      "a_crash_between_the_intent_line_and_the_socket_leaves_the_nonce_possibly_in_flight",
+      "a_dispatch_line_with_no_answer_after_it_is_recovered_as_still_awaiting",
+      "a_node_acknowledgement_is_recovered_as_an_acknowledgement_and_never_as_inclusion",
+      "a_receipt_read_in_memory_that_never_reached_the_file_leaves_the_record_awaiting",
+      "a_recovered_hold_refuses_a_substituted_attempt_and_writes_the_need_for_a_human_once",
+      "an_accepted_transaction_whose_receipt_never_arrives_keeps_its_nonce_across_a_restart",
+      "an_unknown_answer_survives_the_restart_as_unknown_and_never_as_a_refusal"
+    ],
+    "recovered_states_observed": [
+      "awaiting_receipt",
+      "possibly_in_flight",
+      "resolved"
+    ],
+    "rows": 9,
+    "rows_naming_an_attention_line": 2,
+    "sections": {
+      "F1": {
+        "cases": [
+          "a_crash_between_the_intent_line_and_the_socket_leaves_the_nonce_possibly_in_flight"
+        ],
+        "needs_attention": [
+          true
+        ],
+        "never_recovered_as": [
+          "resolved"
+        ],
+        "recovered_states": [
+          "possibly_in_flight"
+        ]
+      },
+      "F2": {
+        "cases": [
+          "an_unknown_answer_survives_the_restart_as_unknown_and_never_as_a_refusal"
+        ],
+        "needs_attention": [
+          null
+        ],
+        "never_recovered_as": [
+          "resolved"
+        ],
+        "recovered_states": [
+          "awaiting_receipt"
+        ]
+      },
+      "F3": {
+        "cases": [
+          "a_dispatch_line_with_no_answer_after_it_is_recovered_as_still_awaiting"
+        ],
+        "needs_attention": [
+          null
+        ],
+        "never_recovered_as": [
+          "resolved"
+        ],
+        "recovered_states": [
+          "awaiting_receipt"
+        ]
+      },
+      "F4": {
+        "cases": [
+          "a_node_acknowledgement_is_recovered_as_an_acknowledgement_and_never_as_inclusion"
+        ],
+        "needs_attention": [
+          null
+        ],
+        "never_recovered_as": [
+          "resolved"
+        ],
+        "recovered_states": [
+          "awaiting_receipt"
+        ]
+      },
+      "F5": {
+        "cases": [
+          "a_ledger_replaced_under_a_run_refuses_the_next_line_instead_of_forking_memory_against_it",
+          "a_receipt_read_in_memory_that_never_reached_the_file_leaves_the_record_awaiting"
+        ],
+        "needs_attention": [
+          null,
+          null
+        ],
+        "never_recovered_as": [
+          "resolved",
+          "resolved"
+        ],
+        "recovered_states": [
+          "awaiting_receipt",
+          "awaiting_receipt"
+        ]
+      },
+      "F7": {
+        "cases": [
+          "a_restarted_process_reads_the_same_record_twice_and_refuses_a_finished_attempt_as_duplicate"
+        ],
+        "needs_attention": [
+          null
+        ],
+        "never_recovered_as": [
+          null
+        ],
+        "recovered_states": [
+          "resolved"
+        ]
+      },
+      "F9": {
+        "cases": [
+          "a_recovered_hold_refuses_a_substituted_attempt_and_writes_the_need_for_a_human_once",
+          "an_accepted_transaction_whose_receipt_never_arrives_keeps_its_nonce_across_a_restart"
+        ],
+        "needs_attention": [
+          true,
+          null
+        ],
+        "never_recovered_as": [
+          "resolved",
+          "resolved"
+        ],
+        "recovered_states": [
+          "awaiting_receipt",
+          "awaiting_receipt"
+        ]
+      }
+    },
+    "task_book_section": "\u00a78"
+  },
+  "schema": 1,
+  "scope": {
+    "evidence_files_new": [
+      "data/evidence/m12/f/damage-controls.json",
+      "data/evidence/m12/f/lane-recovery.json",
+      "data/evidence/m12/f/measured-rows.jsonl",
+      "data/evidence/m12/f/persistence-boundary.json",
+      "data/evidence/m12/f/recovery-results.json"
+    ],
+    "how_measured": "`git diff --numstat` for tracked files, `git ls-files --others --exclude-standard` plus a line count for new ones, and `#[test]`/`#[tokio::test]`/`#[ignore` attribute counts read off each new target's source",
+    "ignored_added_by_this_round": 0,
+    "new_test_functions_in_modified_files": [],
+    "production_added": 3683,
+    "production_files": [
+      {
+        "added": 64,
+        "path": "crates/cli/src/lib.rs",
+        "removed": 1
+      },
+      {
+        "added": 179,
+        "path": "crates/execution/src/deploy.rs",
+        "removed": 15
+      },
+      {
+        "added": 28,
+        "path": "crates/execution/src/error.rs",
+        "removed": 0
+      },
+      {
+        "added": 15,
+        "path": "crates/execution/src/lib.rs",
+        "removed": 2
+      },
+      {
+        "added": 34,
+        "path": "crates/execution/src/lifecycle.rs",
+        "removed": 0
+      },
+      {
+        "added": 20,
+        "path": "crates/execution/src/nonce.rs",
+        "removed": 0
+      },
+      {
+        "added": 293,
+        "path": "crates/execution/src/sequence.rs",
+        "removed": 10
+      },
+      {
+        "added": 257,
+        "path": "crates/execution/src/stage.rs",
+        "removed": 17
+      },
+      {
+        "added": 28,
+        "path": "crates/pipeline/src/arbitrage.rs",
+        "removed": 3
+      },
+      {
+        "added": 13,
+        "path": "crates/pipeline/src/config.rs",
+        "removed": 0
+      },
+      {
+        "added": 13,
+        "path": "crates/pipeline/src/runner.rs",
+        "removed": 2
+      },
+      {
+        "added": 2739,
+        "path": "crates/execution/src/journal.rs",
+        "removed": 0
+      }
+    ],
+    "production_files_new": [
+      "crates/execution/src/journal.rs"
+    ],
+    "production_removed": 50,
+    "test_files_modified": [
+      {
+        "added": 3,
+        "path": "crates/cli/tests/validation_gate.rs",
+        "removed": 0
+      },
+      {
+        "added": 18,
+        "path": "crates/execution/tests/executor_deploy.rs",
+        "removed": 6
+      },
+      {
+        "added": 25,
+        "path": "crates/execution/tests/executor_giwa_live.rs",
+        "removed": 10
+      },
+      {
+        "added": 13,
+        "path": "crates/execution/tests/executor_lifecycle.rs",
+        "removed": 6
+      },
+      {
+        "added": 4,
+        "path": "crates/execution/tests/sequence.rs",
+        "removed": 3
+      },
+      {
+        "added": 16,
+        "path": "crates/execution/tests/stage_matrix.rs",
+        "removed": 7
+      },
+      {
+        "added": 14,
+        "path": "crates/execution/tests/state_lifetime_recovery.rs",
+        "removed": 7
+      },
+      {
+        "added": 18,
+        "path": "crates/pipeline/tests/readiness_isolation.rs",
+        "removed": 0
+      },
+      {
+        "added": 4,
+        "path": "crates/simulation/tests/historical_gate.rs",
+        "removed": 3
+      }
+    ],
+    "test_files_new": [
+      "crates/execution/tests/crash_recovery.rs",
+      "crates/execution/tests/ledger_evidence.rs",
+      "crates/pipeline/tests/ledger_recovery.rs"
+    ],
+    "test_functions_by_file_in_new_targets": {
+      "crates/execution/src/journal.rs": {
+        "ignore_attribute": 0,
+        "test_attribute_total": 25
+      },
+      "crates/execution/tests/crash_recovery.rs": {
+        "ignore_attribute": 0,
+        "test_attribute_total": 13
+      },
+      "crates/execution/tests/ledger_evidence.rs": {
+        "ignore_attribute": 0,
+        "test_attribute_total": 18
+      },
+      "crates/pipeline/tests/ledger_recovery.rs": {
+        "ignore_attribute": 0,
+        "test_attribute_total": 7
+      }
+    },
+    "untracked_line_counts": {
+      "crates/execution/src/journal.rs": 2739,
+      "crates/execution/tests/crash_recovery.rs": 2106,
+      "crates/execution/tests/ledger_evidence.rs": 2418,
+      "crates/pipeline/tests/ledger_recovery.rs": 843
+    }
+  },
+  "standing_verdicts": {
+    "how_known": "every case ran against scratch directories and a loopback std::net::TcpListener spawned by the test process; no endpoint outside this machine was contacted",
+    "l1_connected": false,
+    "local_canonical_rpc": "NOT_VERIFIED",
+    "local_flashblocks": "NOT_VERIFIED",
+    "multi_node_ha": "OUT_OF_SCOPE",
+    "node_deployed": false,
+    "process_restart_persistence": "CLOSED FOR THE LOCAL LEDGER \u2014 a durable append-only journal now exists, the send intent is written before the socket is touched, and F1\u2013F9 show what a restart reads back. This says nothing about a node's view of a transaction: a recovered Unknown is a local fact that still holds its nonce, not a confirmed chain state",
+    "real_flashblocks_connected": false,
+    "real_key_used": false,
+    "real_profitable_arbitrage": "UNKNOWN",
+    "real_rpc_connected": false,
+    "self_hosted_node": "NOT_RUN",
+    "transaction_broadcast": false,
+    "transaction_signed_for_broadcast": false
+  },
+  "task_book": "docs/v0.1/M12F Coding.md",
+  "toolchain": {
+    "arch": "arm64",
+    "cargo": "cargo 1.96.1 (356927216 2026-06-26)",
+    "clang": "Apple clang version 17.0.0 (clang-1700.0.13.5)",
+    "os": "Darwin 24.6.0",
+    "rust_toolchain_file": "[toolchain]\nchannel = \"1.96.1\"",
+    "rustc": "rustc 1.96.1 (31fca3adb 2026-06-26)"
+  }
+}
