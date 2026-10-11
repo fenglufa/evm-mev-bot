@@ -40,10 +40,10 @@ use evm_core::BlockNumber;
 use evm_execution::{
     decode_raw, recover_sender, Abilities, AmountDerivation, ArbitrageExecutionPlan, BuildPolicy,
     ChainReader, ClassFacts, DecodedTransaction, EndpointKind, ExecutablePlan, ExecutionBinding,
-    ExecutionClass, ExecutionError, ExecutionKey, ExecutionMode, ExecutionRecord, ExecutionSetup,
-    ExecutionStage, ExecutionStatus, FeePolicy, FeeReading, FeeSource, Freshness, LaneRelease,
-    MarketKind, NonceReading, NonceSource, PlanLeg, PlanValidity, ProfitDenomination, ProfitPolicy,
-    Receipt, ReceiptPolicy, ReceiptStatus, SenderFunding, SignedTransaction, Signer,
+    ExecutionClass, ExecutionError, ExecutionJournal, ExecutionKey, ExecutionMode, ExecutionRecord,
+    ExecutionSetup, ExecutionStage, ExecutionStatus, FeePolicy, FeeReading, FeeSource, Freshness,
+    LaneRelease, MarketKind, NonceReading, NonceSource, PlanLeg, PlanValidity, ProfitDenomination,
+    ProfitPolicy, Receipt, ReceiptPolicy, ReceiptStatus, SenderFunding, SignedTransaction, Signer,
     SimulationContext, SimulationOutcome, StageReport, SubmissionOutcome, TransactionSubmitter,
     TransactionType,
 };
@@ -423,8 +423,15 @@ fn assemble(endpoint: Scripted, mode: ExecutionMode) -> (ExecutionStage, Arc<Scr
         ExecutionMode::BuildOnly => Signer::without_key(mode),
         other => test_signer(other),
     };
-    let stage = ExecutionStage::new(abilities, signer, setup, CHAIN, Clock::new())
-        .expect("a stage over a scripted endpoint");
+    let stage = ExecutionStage::new(
+        abilities,
+        signer,
+        setup,
+        CHAIN,
+        Clock::new(),
+        ExecutionJournal::volatile(),
+    )
+    .expect("a stage over a scripted endpoint");
     (stage, scripted)
 }
 

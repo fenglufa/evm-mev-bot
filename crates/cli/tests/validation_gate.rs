@@ -245,6 +245,9 @@ fn plan(stub: &Stub, name: &str, mode: ExecutionMode) -> ValidationPlan {
             workspace_root().join("data/protocols"),
             workspace_root().join("data/protocols-m3"),
         ],
+        // M12-F: the same emptied scratch dir the evidence goes to, so a run built here
+        // writes its own ledger and never reads one left by a previous test process.
+        ledger_dir: dir.join("ledger"),
         evidence_dir: dir,
     }
 }

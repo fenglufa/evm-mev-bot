@@ -36,9 +36,9 @@ use async_trait::async_trait;
 use evm_core::BlockNumber;
 use evm_execution::{
     Abilities, AttemptProvenance, ChainReader, EndpointKind, ExecutionError, ExecutionIds,
-    ExecutionMode, ExecutionSetup, ExecutionStage, FeePolicy, FeeReading, FeeSource, Freshness,
-    NonceReading, NonceSource, Receipt, Result as ExecutionResult, SenderFunding,
-    SignedTransaction, Signer, StageReport, SubmissionOutcome, TransactionIntent,
+    ExecutionJournal, ExecutionMode, ExecutionSetup, ExecutionStage, FeePolicy, FeeReading,
+    FeeSource, Freshness, NonceReading, NonceSource, Receipt, Result as ExecutionResult,
+    SenderFunding, SignedTransaction, Signer, StageReport, SubmissionOutcome, TransactionIntent,
     TransactionSubmitter, TransactionType,
 };
 use evm_metrics::{Clock, Metrics};
@@ -199,6 +199,7 @@ async fn gate(fixture: &Fixture, request: &SimulationRequest) -> Gate {
         ExecutionSetup::default(),
         run.chain_id.0,
         Clock::new(),
+        ExecutionJournal::volatile(),
     )
     .expect("a lane over a scripted endpoint assembles");
     let mut metrics = Metrics::default();

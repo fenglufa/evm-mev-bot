@@ -35,9 +35,9 @@ use evm_execution::{
     audit_route, broadcastable, reconcile_flows, signing_hash_for_chain, swap_observations,
     transfer_flows, wrap_moves, Abilities, AssetReader, AssetReading, BlockContextScope,
     BlockIdentity, BuildPolicy, ChainReader, ContextRefusal, DeltaAudit, EndpointKind,
-    ExecutionError, ExecutionKey, ExecutionMode, ExecutionSetup, ExecutionStatus, FeePolicy,
-    FeeReading, FeeSource, GasPolicy, GateAttempt, LaneRelease, MarketKind, NonceReading,
-    NonceSource, PreflightCheck, PreflightFinding, PreflightReport, ProducerOutcome,
+    ExecutionError, ExecutionJournal, ExecutionKey, ExecutionMode, ExecutionSetup, ExecutionStatus,
+    FeePolicy, FeeReading, FeeSource, GasPolicy, GateAttempt, LaneRelease, MarketKind,
+    NonceReading, NonceSource, PreflightCheck, PreflightFinding, PreflightReport, ProducerOutcome,
     ProfitVerificationStatus, Receipt, ReceiptPolicy, ReceiptStatus, SenderFunding, SequencePlan,
     SequenceStage, SignedTransaction, Signer, SnapshotPin, SubmissionOutcome, TokenFlow, Tolerance,
     TransactionIntent, TransactionSubmitter, TransactionType, UnsignedTransaction,
@@ -1562,6 +1562,7 @@ fn assemble(
         setup,
         CHAIN,
         Clock::new(),
+        ExecutionJournal::volatile(),
         tolerance,
     )
     .expect("a sequence stage over a scripted endpoint");

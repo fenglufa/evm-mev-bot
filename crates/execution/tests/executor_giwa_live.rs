@@ -55,13 +55,14 @@ use serde_json::{json, Value};
 use evm_chain::{CallRequest, ChainAdapter, HttpChainAdapter};
 use evm_core::{BlockNumber, ChainId, Fee};
 use evm_execution::{
-    Abilities, AmountDerivation, ArbitrageExecutionPlan, BuildPolicy, ChainHead, DeployPolicy,
-    Deployer, EndpointKind, ExecutablePlan, ExecutionBinding, ExecutionKey, ExecutionMode,
-    ExecutionSetup, ExecutionStage, FeePolicy, Freshness, GasPolicy, GiwaSequencerDirect,
-    MarketKind, PlanLeg, PlanValidity, ProfitDenomination, ProfitPolicy, ReceiptPolicy,
-    SenderFunding, Signer, SimulationContext, SimulationOutcome, TransactionType, PRIVATE_KEY_ENV,
+    ledger_dir, Abilities, AmountDerivation, ArbitrageExecutionPlan, BuildPolicy, ChainHead,
+    DeployPolicy, Deployer, EndpointKind, ExecutablePlan, ExecutionBinding, ExecutionJournal,
+    ExecutionKey, ExecutionMode, ExecutionSetup, ExecutionStage, FeePolicy, Freshness, GasPolicy,
+    GiwaSequencerDirect, MarketKind, PlanLeg, PlanValidity, ProfitDenomination, ProfitPolicy,
+    ReceiptPolicy, SenderFunding, Signer, SimulationContext, SimulationOutcome, TransactionType,
+    PRIVATE_KEY_ENV,
 };
-use evm_metrics::{Clock, Metrics};
+use evm_metrics::{unix_ms, Clock, Metrics};
 use evm_opportunity::math::swap_exact_in;
 use evm_protocol::{CallReturn, ExecutorCall, ExecutorLeg, V2Call};
 use evm_simulation::executor::{run as executor_run, ExecutorRun};
@@ -506,8 +507,15 @@ async fn run_ladder(url: &str, key_text: &str) -> Result<Value, String> {
             between_attempts: RECEIPT_POLL,
         },
     };
-    let mut deployer = Deployer::new(node.abilities(), signer()?, policy.clone(), CHAIN)
-        .map_err(|e| format!("the operator session refused to open: {e}"))?;
+    let mut deployer = Deployer::new(
+        node.abilities(),
+        signer()?,
+        policy.clone(),
+        CHAIN,
+        ExecutionJournal::open(&ledger_dir(), CHAIN, unix_ms())
+            .map_err(|e| format!("the ledger refused to open: {e}"))?,
+    )
+    .map_err(|e| format!("the operator session refused to open: {e}"))?;
     let verified_chain = deployer
         .verify_chain()
         .await
@@ -1020,8 +1028,15 @@ async fn run_ladder(url: &str, key_text: &str) -> Result<Value, String> {
                 between_attempts: RECEIPT_POLL,
             },
         };
-        ExecutionStage::new(node.abilities(), signer()?, setup, CHAIN, Clock::new())
-            .map_err(|e| format!("the lifecycle stage refused to open: {e}"))?
+        ExecutionStage::new(
+            node.abilities(),
+            signer()?,
+            setup,
+            CHAIN,
+            Clock::new(),
+            ExecutionJournal::volatile(),
+        )
+        .map_err(|e| format!("the lifecycle stage refused to open: {e}"))?
     };
 
     let send_head = node.head().await?;

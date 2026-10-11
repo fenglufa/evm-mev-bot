@@ -29,11 +29,11 @@ use alloy_primitives::{Address, Bytes, B256, U256};
 use async_trait::async_trait;
 use evm_core::BlockNumber;
 use evm_execution::{
-    Abilities, BuildPolicy, ChainReader, Claim, EndpointKind, ExecutionError, ExecutionKey,
-    ExecutionMode, ExecutionRecord, ExecutionSetup, ExecutionStage, ExecutionStatus, FeePolicy,
-    FeeReading, FeeSource, LaneRelease, Ledger, NonceReading, NonceSource, Receipt, ReceiptPolicy,
-    ReceiptStatus, SignedTransaction, Signer, StageReport, SubmissionOutcome, TransactionIntent,
-    TransactionSubmitter, TransactionType, UnsignedTransaction,
+    Abilities, BuildPolicy, ChainReader, Claim, EndpointKind, ExecutionError, ExecutionJournal,
+    ExecutionKey, ExecutionMode, ExecutionRecord, ExecutionSetup, ExecutionStage, ExecutionStatus,
+    FeePolicy, FeeReading, FeeSource, LaneRelease, Ledger, NonceReading, NonceSource, Receipt,
+    ReceiptPolicy, ReceiptStatus, SignedTransaction, Signer, StageReport, SubmissionOutcome,
+    TransactionIntent, TransactionSubmitter, TransactionType, UnsignedTransaction,
 };
 use evm_metrics::{Clock, Metrics};
 use evm_simulation::BlockPin;
@@ -350,8 +350,15 @@ fn stage_over(scripted: &Arc<Scripted>, mode: ExecutionMode) -> ExecutionStage {
             between_attempts: Duration::from_millis(1),
         },
     };
-    ExecutionStage::new(abilities, test_signer(mode), setup, CHAIN, Clock::new())
-        .expect("a stage over a scripted endpoint")
+    ExecutionStage::new(
+        abilities,
+        test_signer(mode),
+        setup,
+        CHAIN,
+        Clock::new(),
+        ExecutionJournal::volatile(),
+    )
+    .expect("a stage over a scripted endpoint")
 }
 
 fn accepted() -> SubmissionOutcome {

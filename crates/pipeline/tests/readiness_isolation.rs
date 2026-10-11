@@ -264,8 +264,13 @@ fn content_length(headers: &str) -> Option<usize> {
 /// here gets far enough to price anything. The evidence directory is per test and emptied
 /// first, so a directory left by an earlier build cannot be read as this run's record.
 fn route(stub: &Stub, name: &str, mode: ExecutionMode) -> ArbitrageConfig {
+    // M12-F §7 puts a ledger-directory creation on the admitted path, before the head read.
+    // It sits beside the evidence directory rather than inside it so that the assertions
+    // below, which ask whether a run opened a *session*, keep answering that question and
+    // only that question.
     let dir = workspace_root().join("target/pipeline-tests").join(name);
     let _ = std::fs::remove_dir_all(&dir);
+    let _ = std::fs::remove_dir_all(ledger_dir(name));
     ArbitrageConfig {
         rpc_url: stub.url.clone(),
         registry_dirs: registries(),
@@ -295,6 +300,7 @@ fn route(stub: &Stub, name: &str, mode: ExecutionMode) -> ArbitrageConfig {
             minimum_net_profit_wei: 0,
             maximum_gas: None,
         },
+        ledger_dir: ledger_dir(name),
         evidence_dir: dir,
         latency_dir: None,
         diagnosis_dir: None,
@@ -308,6 +314,18 @@ fn route(stub: &Stub, name: &str, mode: ExecutionMode) -> ArbitrageConfig {
 
 fn evidence_dir(name: &str) -> PathBuf {
     workspace_root().join("target/pipeline-tests").join(name)
+}
+
+/// The ledger this run persists to: a sibling of the evidence directory, never inside it.
+///
+/// Opening a journal makes its directory (§4.1 has to be able to refuse an unwritable one),
+/// so a nested path would turn every 「no session was opened」 assertion below into a check of
+/// whether a file handle exists — which an admitted run does create, one line above the head
+/// read, and which says nothing about the gate.
+fn ledger_dir(name: &str) -> PathBuf {
+    workspace_root()
+        .join("target/pipeline-tests")
+        .join(format!("{name}-ledger"))
 }
 
 /// The error a held run has to return.

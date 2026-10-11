@@ -35,9 +35,9 @@ use async_trait::async_trait;
 use evm_core::BlockNumber;
 use evm_execution::{
     decode_raw, recover_sender, Abilities, ChainHead, ChainReader, DeployPolicy, Deployer,
-    EndpointKind, ExecutionError, ExecutionKey, ExecutionMode, FeePolicy, FeeReading, FeeSource,
-    NonceReading, NonceSource, Receipt, ReceiptPolicy, ReceiptStatus, Signer, SubmissionOutcome,
-    TransactionSubmitter, TransactionType, UnsignedTransaction,
+    EndpointKind, ExecutionError, ExecutionJournal, ExecutionKey, ExecutionMode, FeePolicy,
+    FeeReading, FeeSource, NonceReading, NonceSource, Receipt, ReceiptPolicy, ReceiptStatus,
+    Signer, SubmissionOutcome, TransactionSubmitter, TransactionType, UnsignedTransaction,
 };
 use evm_protocol::{decode_calldata, ExecutorCall};
 
@@ -358,8 +358,14 @@ fn assemble(endpoint: Scripted, mode: ExecutionMode) -> (Deployer, Arc<Scripted>
         nonces: scripted.clone(),
         chain: scripted.clone(),
     };
-    let deployer = Deployer::new(abilities, test_signer(mode), policy(), CHAIN)
-        .expect("a submit-mode session on a named chain");
+    let deployer = Deployer::new(
+        abilities,
+        test_signer(mode),
+        policy(),
+        CHAIN,
+        ExecutionJournal::volatile(),
+    )
+    .expect("a submit-mode session on a named chain");
     (deployer, scripted)
 }
 
@@ -730,7 +736,13 @@ async fn a_session_that_may_not_broadcast_is_refused_at_construction() {
             nonces: scripted.clone(),
             chain: scripted.clone(),
         };
-        let built = Deployer::new(abilities, test_signer(mode), policy(), CHAIN);
+        let built = Deployer::new(
+            abilities,
+            test_signer(mode),
+            policy(),
+            CHAIN,
+            ExecutionJournal::volatile(),
+        );
         let error = match built {
             Ok(_) => panic!("a session that cannot broadcast was constructed anyway"),
             Err(error) => error,

@@ -26,11 +26,11 @@ use alloy_primitives::{Address, Bytes, B256, U256};
 use async_trait::async_trait;
 use evm_core::BlockNumber;
 use evm_execution::{
-    Abilities, BuildPolicy, ChainReader, EndpointKind, ExecutionError, ExecutionKey, ExecutionMode,
-    ExecutionRecord, ExecutionSetup, ExecutionStage, ExecutionStatus, FeePolicy, FeeReading,
-    FeeSource, LaneRelease, NonceReading, NonceSource, Receipt, ReceiptPolicy, SenderFunding,
-    SignedTransaction, Signer, StageReport, SubmissionOutcome, TransactionIntent,
-    TransactionSubmitter, TransactionType, UnsignedTransaction,
+    Abilities, BuildPolicy, ChainReader, EndpointKind, ExecutionError, ExecutionJournal,
+    ExecutionKey, ExecutionMode, ExecutionRecord, ExecutionSetup, ExecutionStage, ExecutionStatus,
+    FeePolicy, FeeReading, FeeSource, LaneRelease, NonceReading, NonceSource, Receipt,
+    ReceiptPolicy, SenderFunding, SignedTransaction, Signer, StageReport, SubmissionOutcome,
+    TransactionIntent, TransactionSubmitter, TransactionType, UnsignedTransaction,
 };
 use evm_metrics::{Clock, Metrics};
 use evm_simulation::BlockPin;
@@ -347,8 +347,15 @@ fn stage_over(scripted: &Arc<Scripted>, mode: ExecutionMode) -> ExecutionStage {
         ExecutionMode::BuildOnly => Signer::without_key(mode),
         other => test_signer(other),
     };
-    ExecutionStage::new(abilities, signer, setup, CHAIN, Clock::new())
-        .expect("a stage over a scripted endpoint")
+    ExecutionStage::new(
+        abilities,
+        signer,
+        setup,
+        CHAIN,
+        Clock::new(),
+        ExecutionJournal::volatile(),
+    )
+    .expect("a stage over a scripted endpoint")
 }
 
 fn accepted() -> SubmissionOutcome {
@@ -941,6 +948,7 @@ fn a_stage_refuses_to_be_assembled_against_itself() {
         },
         CHAIN,
         Clock::new(),
+        ExecutionJournal::volatile(),
     );
     match mismatched {
         Err(ExecutionError::ModeGate(why)) => assert!(why.contains("one run has one mode")),
@@ -961,6 +969,7 @@ fn a_stage_refuses_to_be_assembled_against_itself() {
         },
         42_424_242,
         Clock::new(),
+        ExecutionJournal::volatile(),
     );
     match wrong_chain {
         Err(ExecutionError::ChainMismatch(why)) => {
