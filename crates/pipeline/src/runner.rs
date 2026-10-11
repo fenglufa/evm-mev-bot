@@ -40,7 +40,9 @@ use evm_chain::{
     RecordedChainAdapter,
 };
 use evm_core::BlockNumber;
-use evm_execution::{AttemptProvenance, ExecutionStage, Freshness, SenderFunding};
+use evm_execution::{
+    journal_stamp, AttemptProvenance, ExecutionJournal, ExecutionStage, Freshness, SenderFunding,
+};
 use evm_live::{
     now_unix_ms, BlockAnnouncement, FlashblockSource, MarketDataSource, MarketEvent, PollingSource,
     SourceKind, SourceStatus, WebSocketSource,
@@ -1335,8 +1337,17 @@ pub async fn run(config: &PipelineConfig) -> Result<SessionReport> {
                     setup.mode.name()
                 ))
             })?;
+            // M12-F §7: the ledger is read back before the lane exists. The stage builds a
+            // `Signer` in its constructor and allocates a nonce at its first send, so a record
+            // a dead process left in flight has to be on that lane before either happens —
+            // otherwise this run allocates the nonce the previous one already spent. An unreadable
+            // or contradictory file is an error out of `run`, not a warning: §7 forbids clearing
+            // the ledger and trading on, and §11 forbids degrading to a memory-only lane, which
+            // is the silent fork a missing file would otherwise start.
+            let journal = ExecutionJournal::open(&config.ledger_dir, chain_id.0, journal_stamp())
+                .map_err(|error| PipelineError::Execution(error.to_string()))?;
             Some(
-                ExecutionStage::connect(url, chain_id.0, setup.clone(), clock)
+                ExecutionStage::connect(url, chain_id.0, setup.clone(), clock, journal)
                     .await
                     .map_err(|error| PipelineError::Execution(error.to_string()))?,
             )

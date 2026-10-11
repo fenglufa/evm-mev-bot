@@ -60,9 +60,9 @@ use evm_chain::{
 use evm_core::{BlockNumber, ChainId, Fee, PoolId, TokenId};
 use evm_execution::giwa::{read_pool, LivePreflightReads};
 use evm_execution::{
-    ExecutionMode, ExecutionRecord, ExecutionSetup, Freshness, GateAttempt, Ledger, MarketKind,
-    ProfitVerificationStatus, SenderFunding, SequencePlan, SequenceReport, SequenceStage,
-    Tolerance,
+    journal_stamp, ExecutionJournal, ExecutionMode, ExecutionRecord, ExecutionSetup, Freshness,
+    GateAttempt, Ledger, MarketKind, ProfitVerificationStatus, SenderFunding, SequencePlan,
+    SequenceReport, SequenceStage, Tolerance,
 };
 use evm_metrics::{Clock, LatencyTrace, Metrics, Stage, TraceSource};
 use evm_opportunity::swap_exact_in;
@@ -128,6 +128,18 @@ pub struct ArbitrageConfig {
     pub tolerance: Tolerance,
     pub risk: RiskConfig,
     pub evidence_dir: PathBuf,
+    /// M12-F §7: the directory this run's execution ledger lives in.
+    ///
+    /// One directory per chain, not per session: the file is the record of what this wallet
+    /// put on chain, and a restart has to find the previous process's lines. That makes it a
+    /// different kind of path from [`Self::evidence_dir`], which is a run's output and gets a
+    /// subdirectory named after its session — a ledger under that rule would be a fresh empty
+    /// file per run, which recovers nothing.
+    ///
+    /// There is no "off" value. §11 forbids a memory-only production mode, so a run that
+    /// configures an execution lane opens this file or stops; a run without a lane never
+    /// reaches it.
+    pub ledger_dir: PathBuf,
     /// M8.1 §40: the base directory this run also writes its latency traces to, or `None`
     /// for a run that measures nothing. The run makes its own subdirectory of this one,
     /// named after the session, so a baseline already on disk is never rewritten (§46).
@@ -377,6 +389,17 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         None,
     )
     .await?;
+
+    // M12-F §7: the execution ledger is opened and read back before the lane exists, because
+    // the lane this file describes is not this process's to invent. A record a dead process
+    // left unresolved is installed on the stage's nonce lane by its constructor, so a run
+    // restarted over a crashed send meets the same one-lane refusal its predecessor would
+    // have met instead of spending a nonce that is still in flight. An unreadable or
+    // unrecoverable file is an error out of this function: §7 forbids clearing the ledger and
+    // trading on, and nothing below this point — which is above every read, build and send —
+    // is reachable without it.
+    let journal = ExecutionJournal::open(&config.ledger_dir, chain_id, journal_stamp())
+        .map_err(|error| PipelineError::Execution(error.to_string()))?;
 
     // M8.3.2 §14's other half of the same instrumentation, attached here rather than at §B
     // because the two calls that fix the pin happen two lines below: a sink added after them
@@ -761,6 +784,7 @@ pub async fn run_once(config: &ArbitrageConfig) -> Result<ArbitrageRun> {
         chain_id,
         config.setup.clone(),
         clock,
+        journal,
         config.tolerance,
         // M8.4.1 §11: the lane opens its own socket because it must price and send over one
         // connection, and that socket was the one surface the published evidence could only
@@ -1898,6 +1922,7 @@ mod tests {
                 maximum_gas: None,
             },
             evidence_dir: PathBuf::from("unused-by-these-tests"),
+            ledger_dir: PathBuf::from("unused-by-these-tests"),
             latency_dir,
             diagnosis_dir: None,
             state_read_reuse: true,

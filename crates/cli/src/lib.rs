@@ -205,6 +205,18 @@ pub struct LiveArgs {
     #[arg(long)]
     registry_dir: Vec<PathBuf>,
 
+    /// M12-F §7: the directory this run's execution ledger lives in, where a send intent is
+    /// written before the bytes go out and where a restarted process looks for the previous
+    /// one's unresolved records.
+    ///
+    /// Without it the run takes `GIWA_EXECUTION_LEDGER_DIR`, and without that the milestone's
+    /// default — the same resolution every other execution path in this crate uses, in
+    /// [`evm_execution::ledger_dir`]. It is deliberately not [`Self::evidence_dir`]: evidence
+    /// is a session's output and gets a subdirectory named after the session, so a ledger kept
+    /// there would be a new empty file every run and would recover nothing.
+    #[arg(long)]
+    ledger_dir: Option<PathBuf>,
+
     /// Where this session's evidence files go. Created if missing.
     #[arg(long, default_value = "data/evidence/m5/live")]
     evidence_dir: PathBuf,
@@ -392,6 +404,7 @@ impl LiveArgs {
             self.flashblocks_url.as_deref(),
         )?;
         config.canonical_source = canonical_source;
+        config.ledger_dir = ledger_dir(self.ledger_dir.clone());
         config.start_block = self.start_block;
         config.max_blocks = self.max_blocks;
         config.duration = Duration::from_secs(self.duration);
@@ -592,6 +605,18 @@ pub struct ValidateArgs {
     #[arg(long)]
     registry_dir: Vec<PathBuf>,
 
+    /// M12-F §7: the directory this run's execution ledger lives in, where a send intent is
+    /// written before the bytes go out and where a restarted process looks for the previous
+    /// one's unresolved records.
+    ///
+    /// Without it the run takes `GIWA_EXECUTION_LEDGER_DIR`, and without that the milestone's
+    /// default — the same resolution every other execution path in this crate uses, in
+    /// [`evm_execution::ledger_dir`]. It is deliberately not [`Self::evidence_dir`]: evidence
+    /// is a session's output and gets a subdirectory named after the session, so a ledger kept
+    /// there would be a new empty file every run and would recover nothing.
+    #[arg(long)]
+    ledger_dir: Option<PathBuf>,
+
     /// Where this attempt's §52/§53 rows go. Created if missing.
     #[arg(long, default_value = "data/evidence/m6/validation")]
     evidence_dir: PathBuf,
@@ -612,6 +637,10 @@ pub struct ValidationPlan {
     pub gas_limit: u64,
     pub registry_dirs: Vec<PathBuf>,
     pub evidence_dir: PathBuf,
+    /// M12-F §7: where this attempt's send intent is written before the bytes go out. A
+    /// validation transaction is a real transaction on the chain, so it goes through the same
+    /// ledger as a market run rather than around it.
+    pub ledger_dir: PathBuf,
 }
 
 impl ValidateArgs {
@@ -662,6 +691,7 @@ impl ValidateArgs {
                 self.registry_dir.clone()
             },
             evidence_dir: self.evidence_dir.clone(),
+            ledger_dir: ledger_dir(self.ledger_dir.clone()),
         })
     }
 }
@@ -695,7 +725,7 @@ pub struct ValidationOutcome {
 /// named in the evidence, so a reader can tell what was read when (§51).
 pub async fn run_validation(plan: ValidationPlan) -> evm_pipeline::Result<ValidationOutcome> {
     use evm_chain::ChainAdapter as _;
-    use evm_execution::{ExecutionStage, TransactionIntent};
+    use evm_execution::{journal_stamp, ExecutionJournal, ExecutionStage, TransactionIntent};
     use evm_simulation::BlockPin;
 
     let expected = {
@@ -738,6 +768,14 @@ pub async fn run_validation(plan: ValidationPlan) -> evm_pipeline::Result<Valida
     let context = adapter.get_block_context(head).await?;
     let pin = BlockPin::new(head, context.hash);
 
+    // M12-F §7: the same read-back the runner does, ahead of the same constructor. This entry
+    // can build a signer and spend a nonce exactly as a route run can, so a record a dead
+    // process left in flight has to be on the lane before either happens — and a file that
+    // will not fold is an error out of `run_validation`, not a warning and not an empty
+    // ledger (§6's fail-closed, §11's no memory-only fallback).
+    let journal = ExecutionJournal::open(&plan.ledger_dir, chain_id, journal_stamp())
+        .map_err(|error| PipelineError::Execution(error.to_string()))?;
+
     let mut stage = ExecutionStage::connect(
         &plan.rpc_url,
         chain_id,
@@ -746,6 +784,7 @@ pub async fn run_validation(plan: ValidationPlan) -> evm_pipeline::Result<Valida
             ..ExecutionSetup::default()
         },
         Clock::new(),
+        journal,
     )
     .await
     .map_err(|error| PipelineError::Execution(error.to_string()))?;
@@ -926,6 +965,17 @@ fn latency_dir(trace: bool, output: Option<PathBuf>) -> Option<PathBuf> {
     output.or_else(|| trace.then(|| PathBuf::from(DEFAULT_LATENCY_DIR)))
 }
 
+/// M12-F §7: the ledger directory one of the three spending entries writes to.
+///
+/// Flag, then `GIWA_EXECUTION_LEDGER_DIR`, then `data/ledger` — the last two of those are
+/// [`evm_execution::ledger_dir`]'s answer rather than a second copy of it, because §11's
+/// fail-closed rule depends on every entry resolving the path the same way: an entry that
+/// read a different environment variable would open a different ledger, find it empty, and
+/// recover nothing while looking exactly like a run that had recovered.
+fn ledger_dir(flag: Option<PathBuf>) -> PathBuf {
+    flag.unwrap_or_else(evm_execution::ledger_dir)
+}
+
 /// M8.2 §22's default home for the simulation diagnosis. Its own directory for the same
 /// §44 reason the latency files have one: this milestone measures the run M8.1 measured,
 /// and it must not be able to rewrite what that milestone wrote.
@@ -1084,6 +1134,18 @@ pub struct ArbitrageArgs {
     /// Attested pools, for §46's chain-id boundary. Repeatable.
     #[arg(long)]
     registry_dir: Vec<PathBuf>,
+
+    /// M12-F §7: the directory this run's execution ledger lives in, where a send intent is
+    /// written before the bytes go out and where a restarted process looks for the previous
+    /// one's unresolved records.
+    ///
+    /// Without it the run takes `GIWA_EXECUTION_LEDGER_DIR`, and without that the milestone's
+    /// default — the same resolution every other execution path in this crate uses, in
+    /// [`evm_execution::ledger_dir`]. It is deliberately not [`Self::evidence_dir`]: evidence
+    /// is a session's output and gets a subdirectory named after the session, so a ledger kept
+    /// there would be a new empty file every run and would recover nothing.
+    #[arg(long)]
+    ledger_dir: Option<PathBuf>,
 
     /// Where this attempt's evidence goes. Created if missing. Each invocation should get
     /// its own directory: §27 means a second candidate is a second run, and two runs
@@ -1378,6 +1440,7 @@ impl ArbitrageArgs {
                 maximum_gas: self.maximum_gas,
             },
             evidence_dir: self.evidence_dir.clone(),
+            ledger_dir: ledger_dir(self.ledger_dir.clone()),
             latency_dir: latency_dir(self.latency_trace, self.latency_output.clone()),
             diagnosis_dir: diagnosis_home,
             state_read_reuse: !self.no_state_read_reuse,

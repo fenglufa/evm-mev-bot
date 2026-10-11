@@ -179,6 +179,18 @@ pub struct PipelineConfig {
     pub registry_dirs: Vec<PathBuf>,
     /// Where this session's evidence files go. Created if missing.
     pub evidence_dir: PathBuf,
+    /// M12-F §7: the directory this run's execution ledger lives in.
+    ///
+    /// A path rather than an `Option`, because §11 forbids a memory-only production mode: a
+    /// run that configures an execution lane either writes to this directory or stops before
+    /// it sends. A run *without* a lane never reads it, which is why a replay can carry the
+    /// default and touch nothing — the ledger is opened where a lane is built, not here.
+    ///
+    /// Not the evidence directory, and deliberately so: evidence is per session and gets a
+    /// subdirectory named after it, while the ledger has to be found again by the *next*
+    /// process after a crash. A per-session ledger would be an empty file every run, which
+    /// recovers nothing (§7).
+    pub ledger_dir: PathBuf,
     /// M8.1's latency traces: `None` is the run M5–M7 ran, and `Some(dir)` is that
     /// same run plus one `traces.jsonl` line per finding's lifecycle in
     /// `dir/<session-id>/`.
@@ -271,6 +283,7 @@ impl PipelineConfig {
             },
             registry_dirs,
             evidence_dir,
+            ledger_dir: evm_execution::ledger_dir(),
             latency_dir: None,
             start_block: None,
             readiness: evm_chain::HeadFreshnessPolicy::NotJudged,

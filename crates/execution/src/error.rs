@@ -112,6 +112,34 @@ pub enum ExecutionError {
     /// An evidence file could not be written, or a session call failed.
     #[error("evidence: {0}")]
     Evidence(String),
+
+    /// M12-F §4.1: the execution journal could not be made durable.
+    ///
+    /// The variant exists because the answer to a failed write has to be *loud*: no send
+    /// path is entered, the nonce is not released, and nothing is remembered in memory as
+    /// a substitute for the record that did not reach disk. A caller that could read this
+    /// as a warning would turn §4.1 into an option.
+    #[error("ledger persistence: {0}")]
+    LedgerPersistence(String),
+
+    /// M12-F §6/§7: a journal line was read and could not be trusted — a torn tail, a
+    /// checksum that does not match, a schema this build does not define, a missing
+    /// genesis, an unparseable field.
+    ///
+    /// Distinct from `LedgerPersistence` because the write side is fine and the *record*
+    /// is the problem, and the required response differs: recovery refuses and says which
+    /// line, rather than refusing to send.
+    #[error("ledger recovery: {0}")]
+    LedgerRecovery(String),
+
+    /// M12-F §9: two records claim one lane, or one record claims two incompatible
+    /// things (same execution id under a different sender or nonce, one step with two
+    /// transaction hashes).
+    ///
+    /// The conflict is checked before bytes go to disk, so a refusal here means the file
+    /// still holds the last consistent state.
+    #[error("ledger conflict: {0}")]
+    LedgerConflict(String),
 }
 
 pub type Result<T> = std::result::Result<T, ExecutionError>;

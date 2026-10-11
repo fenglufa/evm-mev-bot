@@ -112,6 +112,26 @@ impl NonceAllocator {
         Ok(nonce)
     }
 
+    /// M12-F §7: hand the lane back the nonce a recovered execution is still holding.
+    ///
+    /// This is not `allocate`. `allocate` mints a nonce from a fresh pending reading and
+    /// refuses while anything is outstanding; recovery has no reading to mint from and no
+    /// intention to spend anything — it only has to make the lane say *occupied* so the
+    /// first allocation attempt after restart fails exactly the way §4.3 requires. A
+    /// second `restore` is an error for the same reason two `allocate` calls are: one
+    /// lane holds one transaction.
+    pub fn restore(&mut self, address: Address, nonce: u64) -> Result<()> {
+        if let Some((held_address, held_nonce)) = self.outstanding {
+            return Err(ExecutionError::NonceUnavailable(format!(
+                "the lane already holds nonce {held_nonce} for {held_address}; a recovery \
+                 could not place nonce {nonce} for {address} without putting two possibly-live \
+                 transactions on one lane"
+            )));
+        }
+        self.outstanding = Some((address, nonce));
+        Ok(())
+    }
+
     /// Release the lane after the transaction it issued is resolved (included,
     /// definitively rejected, or proven never accepted). A release of a nonce the lane
     /// does not hold is an error, because it means two callers think they own one

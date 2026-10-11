@@ -43,8 +43,10 @@ use crate::gate::{
 };
 use crate::giwa::GiwaSequencerDirect;
 use crate::intent::{SenderFunding, TransactionIntent};
+use crate::journal::{journal_stamp, ExecutionJournal, JournalFact, JournalRecord};
 use crate::lifecycle::{
-    meter, Claim, ExecutionLane, ExecutionRecord, ExecutionStatus, LaneRelease, Ledger,
+    execution_id_for, lane_held_unwritten, meter, Claim, ExecutionLane, ExecutionRecord,
+    ExecutionStatus, LaneRelease, Ledger,
 };
 use crate::mode::ExecutionMode;
 use crate::nonce::{NonceReading, NonceSource};
@@ -314,6 +316,13 @@ struct Run {
     owns_lane: bool,
     /// Bytes went to a node, so §25 — not §11 — decides whether the lane may be released.
     sent: bool,
+    /// M12-F §9: at least one line about this attempt is already on disk, so the lane this
+    /// attempt holds is now a fact a restarted process will rebuild. Releasing it here would
+    /// fork memory against the file — the run would say "the nonce is free" while the ledger
+    /// says "possibly in flight" — which is why a durable lane outranks `sent` in the release
+    /// test, and why an attempt that persisted its intent and then lost the disk is the one
+    /// outcome §4.1 wants it to have.
+    lane_is_durable: bool,
 }
 
 /// §55's ladder as one object with one entry per §35 path.
@@ -323,6 +332,7 @@ pub struct ExecutionStage {
     setup: ExecutionSetup,
     lane: ExecutionLane,
     ledger: Ledger,
+    journal: ExecutionJournal,
     clock: Clock,
     configured_chain_id: u64,
 }
@@ -345,6 +355,7 @@ impl ExecutionStage {
         expected_chain_id: u64,
         setup: ExecutionSetup,
         clock: Clock,
+        journal: ExecutionJournal,
     ) -> Result<Self> {
         let adapter = Arc::new(
             GiwaSequencerDirect::connect(url, expected_chain_id, setup.mode, EndpointKind::Unknown)
@@ -359,17 +370,25 @@ impl ExecutionStage {
         // §19: this is the only key read in the milestone, it happens once, and in
         // `BuildOnly` it reads nothing at all even when the variable is set.
         let signer = Signer::from_env(setup.mode)?;
-        Self::new(abilities, signer, setup, expected_chain_id, clock)
+        Self::new(abilities, signer, setup, expected_chain_id, clock, journal)
     }
 
     /// The stage over any endpoint that answers the four traits — the live adapter above,
     /// or a scripted one in a test (§40).
+    ///
+    /// `journal` is a required argument rather than something this function reaches for, and
+    /// that is the whole of M12-F §9's concurrency answer: one append-only file can only be
+    /// written by one handle, because two handles each keep their own sequence numbers and the
+    /// next reader refuses their collision as `duplicate_sequence`. So the entry point opens the
+    /// ledger once — which is also where §7's recovery runs, before a stage exists to sign or
+    /// send anything — and hands the one handle down.
     pub fn new(
         abilities: Abilities,
         signer: Signer,
         mut setup: ExecutionSetup,
         configured_chain_id: u64,
         clock: Clock,
+        journal: ExecutionJournal,
     ) -> Result<Self> {
         if signer.mode() != setup.mode {
             return Err(ExecutionError::ModeGate(format!(
@@ -388,12 +407,26 @@ impl ExecutionStage {
                 setup.build.expected_chain_id, configured_chain_id
             )));
         }
+        // §7's steps 1–4 happen here, at construction, because a stage that exists is a stage a
+        // caller can send with. The journal handle this comes from already read and validated
+        // every line — recovery that failed refused to open, and an open that succeeded says
+        // what it found.
+        let mut lane = ExecutionLane::new();
+        for (address, nonce, execution_id) in journal.restored_lane() {
+            lane.restore(*address, *nonce).map_err(|error| {
+                crate::error::ExecutionError::NonceUnavailable(format!(
+                    "{error}; the ledger also names {execution_id} as holding nonce {nonce}, so \
+                     one lane was being claimed twice"
+                ))
+            })?;
+        }
         Ok(Self {
             abilities,
             signer,
             setup,
-            lane: ExecutionLane::new(),
+            lane,
             ledger: Ledger::new(),
+            journal,
             clock,
             configured_chain_id,
         })
@@ -405,6 +438,13 @@ impl ExecutionStage {
 
     pub fn ledger(&self) -> &Ledger {
         &self.ledger
+    }
+
+    /// The durable store this run writes into before it touches a socket (§4.1). Read-only
+    /// through here: what it recovered is the entry point's business, and what it writes next is
+    /// this stage's.
+    pub fn journal(&self) -> &ExecutionJournal {
+        &self.journal
     }
 
     pub fn lane_is_idle(&self) -> bool {
@@ -568,13 +608,48 @@ impl ExecutionStage {
             nonce_reading: None,
             owns_lane: false,
             sent: false,
+            lane_is_durable: false,
         };
         // The price and the nonce are read *before* the record is claimed, because the
         // record is the evidence of the transaction that was built: claiming first and
         // pricing after would leave every record carrying the nonce the simulation
         // assumed instead of the one the chain handed over.
         if let Err(error) = self.price(&mut intent, &mut run).await {
+            if matches!(error, ExecutionError::NonceUnavailable(_)) {
+                self.note_restored_hold(&intent, &mut run);
+            }
             self.stop(&mut run, &error, metrics);
+            self.close(&mut run);
+            return run.report;
+        }
+        // §7's step 3, one rung ahead of the ledger's own §30 answer: the file may hold this
+        // triple from a process that is gone, and the in-memory ledger has never seen it. Lines
+        // *this* run wrote are deliberately out of scope — the ledger is the authority for those,
+        // and §9 wants one store to answer each question rather than two to answer it differently.
+        let idempotency_key = intent.ids.idempotency_key(&intent.state_binding());
+        let derived_id = execution_id_for(&idempotency_key);
+        let restored = self.journal.restored_executed(&derived_id).map(|record| {
+            (
+                record.execution_id.clone(),
+                record.state.name(),
+                record.last_fact,
+                record.nonce,
+            )
+        });
+        if let Some((execution_id, state, last_fact, nonce)) = restored {
+            metrics.bump("execution_duplicate_in_ledger");
+            self.hand_lane_back(&mut run);
+            run.report.detail = format!(
+                "M12-F §7: {execution_id} is already durable in the execution ledger (state \
+                 {state}, last fact {}, nonce {}), so this attempt stopped before \
+                 building a second transaction for the same state binding",
+                last_fact.name(),
+                nonce
+                    .map(|nonce| nonce.to_string())
+                    .unwrap_or_else(|| "-".to_string())
+            );
+            run.execution_id = Some(execution_id.clone());
+            run.report.execution_id = Some(execution_id);
             self.close(&mut run);
             return run.report;
         }
@@ -587,10 +662,7 @@ impl ExecutionStage {
                 // duplicate's handling, and it happens before a build exists. The lane this
                 // attempt allocated and never used goes back.
                 metrics.bump("execution_duplicate");
-                if run.owns_lane {
-                    run.report.lane = self.lane.release_unsent();
-                    run.owns_lane = false;
-                }
+                self.hand_lane_back(&mut run);
                 let status = existing.status.name();
                 run.report.detail = format!(
                     "§30: {} already owns this state binding (it is at {}), so this attempt \
@@ -774,10 +846,13 @@ impl ExecutionStage {
         // anyway and recording the mode's refusal as a failure would report a run that did
         // exactly what it was allowed to do as a broken one.
         if !self.signer.mode().may_read_key() {
-            return Err(Halt::Blocked(format!(
+            let reason = format!(
                 "{} stops at Built: no key was read and no bytes exist (§19, §20)",
                 self.signer.mode().name()
-            )));
+            );
+            self.journal_ready_not_sent(intent, &reason)
+                .map_err(Halt::Failed)?;
+            return Err(Halt::Blocked(reason));
         }
 
         let (signed, recovered) = self.signer.sign_and_recover(&build.unsigned)?;
@@ -821,19 +896,45 @@ impl ExecutionStage {
                 reason.clone(),
                 at,
             ));
+            self.journal_ready_not_sent(intent, &reason)
+                .map_err(Halt::Failed)?;
             return Err(Halt::Blocked(reason));
         }
 
+        // §4.1's boundary, and it is a call rather than a comment: both the intent line and the
+        // dispatch line are on disk before this process touches the socket, and an `Err` here
+        // returns before `submit` is reached.
+        let intent_line = self
+            .persist_send_intent(intent, local_hash, run)
+            .map_err(Halt::Failed)?;
         let submitter = self.abilities.submitter.clone();
         let outcome = submitter.submit(&signed).await?;
         metrics.bump(&format!("execution_submission_{}", outcome.status_word()));
         // From this line §25 owns the lane: whatever the answer was, bytes went to a node,
         // so only a definite refusal or a terminal receipt may let the nonce go.
         run.sent = true;
-        run.report.lane = self.lane.resolve_submission(&outcome);
         let mut submission =
             SubmissionEvidence::from_outcome(local_hash, &outcome, self.clock.now_ms());
         run.report.submission = Some(submission.clone());
+        // §9's ordering, and it is the same rule §4.1 states for the send: the fact goes to disk
+        // before this process acts on it in memory. Appending first means a ledger that will not
+        // take the answer leaves the nonce held — which is what the file will still say about a
+        // `send_dispatched` line after a restart. Releasing before the append would open exactly
+        // the window §9 forbids: this process freeing a nonce the ledger reserves.
+        self.journal
+            .append(
+                journal_stamp(),
+                JournalRecord::from_outcome(
+                    &intent_line,
+                    &outcome,
+                    self.abilities.submitter.endpoint(),
+                ),
+            )
+            .map_err(|error| {
+                run.report.lane = lane_held_unwritten(&error);
+                Halt::Failed(error)
+            })?;
+        run.report.lane = self.lane.resolve_submission(&outcome);
         match outcome {
             SubmissionOutcome::Rejected { reason, .. } => {
                 // The one answer §25 lets be a failure: the node said no, the transaction
@@ -903,6 +1004,26 @@ impl ExecutionStage {
                         self.meter_rung(&owner, Some(ExecutionStatus::Submitted), metrics);
                         submission = submission.with_receipt(&receipt);
                         run.report.submission = Some(submission);
+                        // Durable before remembered, for the reason given at the submission line
+                        // above: a receipt the ledger would not take must not have freed this
+                        // nonce, because the file still holds the transaction unconfirmed and a
+                        // restart would recover a hold this process had already dropped.
+                        self.journal
+                            .append(
+                                journal_stamp(),
+                                JournalRecord::from_intent(intent, JournalFact::ReceiptObserved)
+                                    .with_hash(Some(local_hash))
+                                    .with_status(outcome_was.name())
+                                    .with_detail(format!(
+                                    "receipt read in block {} — the chain's own answer, and the \
+                                     only fact that closes the nonce §4.3 held open",
+                                    receipt.block_number
+                                )),
+                            )
+                            .map_err(|error| {
+                                run.report.lane = lane_held_unwritten(&error);
+                                Halt::Failed(error)
+                            })?;
                         run.report.lane = self.lane.resolve_receipt(outcome_was);
                         // §2.4: included is not profitable. The receipt says what the chain
                         // charged and nothing here turns that into a realised gain — that
@@ -979,10 +1100,7 @@ impl ExecutionStage {
                 }
             }
         }
-        if run.owns_lane && !run.sent {
-            run.report.lane = self.lane.release_unsent();
-            run.owns_lane = false;
-        }
+        self.hand_lane_back(run);
     }
 
     /// A stop that is not a failure (§24's endpoint, §20's mode, §26's budget): the record
@@ -1001,10 +1119,132 @@ impl ExecutionStage {
                 );
             }
         }
-        if run.owns_lane && !run.sent {
-            run.report.lane = self.lane.release_unsent();
-            run.owns_lane = false;
+        self.hand_lane_back(run);
+    }
+
+    /// §4.2's fact 1 at the moment it becomes one: bytes or an intent exist and this run is not
+    /// allowed to send them. The line is written where the refusal happens rather than at the end
+    /// of the run because after a restart "the mode refused" is a fact about the file, and a
+    /// record of it that a crash can lose is a record of nothing.
+    ///
+    /// A refusal here is what §4.1 asks for: the run stops with an explicit local error instead
+    /// of carrying on as though the ledger had agreed. Nothing was sent either way, so the
+    /// failure cannot make a duplicate transaction — but it does make an unauditable one, and
+    /// that is the difference this milestone exists to keep.
+    fn journal_ready_not_sent(
+        &mut self,
+        intent: &TransactionIntent,
+        reason: &str,
+    ) -> std::result::Result<(), ExecutionError> {
+        let at = journal_stamp();
+        let record = JournalRecord::from_intent(intent, JournalFact::ReadyNotSent)
+            .with_endpoint(self.abilities.submitter.endpoint())
+            .with_detail(reason.to_string());
+        self.journal.append(at, record).map(|_| ())
+    }
+
+    /// §4.1's boundary as one call: the intent line and the dispatch line, both durable, both
+    /// written before this process touches the socket. The two lines are one call because §8's
+    /// F3 and F4 are crashes on either side of the POST, and the pair is what lets recovery tell
+    /// "signed, never dispatched" from "dispatched, answer lost" — the first is a fact about this
+    /// process, the second is §4.3's `Unknown` and is not resolvable from disk.
+    ///
+    /// Returns the record the node's answer and the receipt are stamped from, so no caller can
+    /// write either of those with an identity that differs from the intent line. An `Err` means
+    /// at least one line is missing and `submit` must not be reached; `lane_is_durable` is set as
+    /// soon as the first line lands, because from that moment §9 forbids freeing the nonce even
+    /// though nothing was dispatched.
+    fn persist_send_intent(
+        &mut self,
+        intent: &TransactionIntent,
+        local_hash: B256,
+        run: &mut Run,
+    ) -> std::result::Result<JournalRecord, ExecutionError> {
+        let at = journal_stamp();
+        let intent_line = JournalRecord::from_intent(intent, JournalFact::SendIntentPersisted)
+            .with_hash(Some(local_hash))
+            .with_endpoint(self.abilities.submitter.endpoint())
+            .with_detail(format!(
+            "signed bytes exist with local hash {local_hash:#x} and this line is on disk before \
+             the request is dispatched (§4.1)"
+        ));
+        self.journal.append(at, intent_line.clone())?;
+        run.lane_is_durable = true;
+        let dispatch_line = JournalRecord::from_intent(intent, JournalFact::SendDispatched)
+            .with_hash(Some(local_hash))
+            .with_endpoint(self.abilities.submitter.endpoint())
+            .with_detail(
+                "the request went to the configured socket and the answer is not known yet; \
+                 everything between this line and the next is what §25 forbids resending"
+                    .to_string(),
+            );
+        self.journal.append(at, dispatch_line)?;
+        Ok(intent_line)
+    }
+
+    /// §4.2's fact 8, written at the one moment the need stops being an inference: a fresh
+    /// attempt could not allocate its nonce because a record from a process that is gone still
+    /// reserves it. The line names that record, so "a human must look at this" survives the
+    /// process that noticed it.
+    ///
+    /// A failure here is diagnostic only and does not change the run's stop — the run was
+    /// already refusing to send, and a ledger that cannot say why must not turn a refusal into
+    /// a different answer.
+    fn note_restored_hold(&mut self, intent: &TransactionIntent, run: &mut Run) {
+        let Some((address, nonce, execution_id)) = self
+            .journal
+            .restored_lane()
+            .iter()
+            .find(|(holder, _, _)| *holder == intent.sender)
+            .cloned()
+        else {
+            return;
+        };
+        let Some(record) = self.journal.recovery().by_execution_id(&execution_id) else {
+            return;
+        };
+        let line = JournalRecord::from_recovered(
+            record,
+            JournalFact::AttentionRequired,
+            format!(
+                "a new attempt for {} could not allocate nonce {nonce} at {address} because \
+                 this record, written by a process that is gone, still reserves it; §4.3 keeps \
+                 it unresolved and §11 forbids releasing it to let the new attempt through",
+                intent.ids.opportunity_id
+            ),
+        );
+        let at = journal_stamp();
+        match self.journal.append(at, line) {
+            Ok(outcome) => run.report.sources.push(format!(
+                "ledger: attention_required written for {execution_id} holding nonce {nonce} ({})",
+                outcome.name()
+            )),
+            Err(error) => run
+                .report
+                .sources
+                .push(format!("ledger: attention_required refused: {error}")),
         }
+    }
+
+    /// §11's rule for a lane this attempt allocated and never sent with, plus §9's M12-F
+    /// exception: once a line about this attempt is on disk, memory may not free what the file
+    /// still reserves. A restarted process rebuilds its lane from the ledger, so releasing here
+    /// would let two processes hold one nonce — which is why the durable fact outranks `sent`.
+    fn hand_lane_back(&mut self, run: &mut Run) {
+        if !run.owns_lane || run.sent {
+            return;
+        }
+        if run.lane_is_durable {
+            run.report.lane = LaneRelease::Held {
+                reason: "M12-F §9: a line about this attempt is durable in the execution \
+                         ledger, so its nonce stays reserved even though this process reached \
+                         no dispatch and no node answer"
+                    .to_string(),
+            };
+            return;
+        }
+        run.report.lane = self.lane.release_unsent();
+        run.owns_lane = false;
     }
 
     /// Fill in what the ledger now holds, so the report and the record cannot disagree.

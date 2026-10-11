@@ -537,6 +537,15 @@ fn derive_execution_id(idempotency_key: &str) -> String {
     format!("exec-{}", &hash.to_string()[2..18])
 }
 
+/// M12-F §5: the same derivation, reachable from outside this module.
+///
+/// The journal records the id of the execution it persisted, and it must compute the id
+/// from the same idempotency key the record would have used — an id the ledger minted and
+/// the journal re-derived by hand would let one execution reach disk under two names.
+pub fn execution_id_for(idempotency_key: &str) -> String {
+    derive_execution_id(idempotency_key)
+}
+
 /// §30's dedup store, plus §37's loggable index by transaction hash.
 #[derive(Clone, Debug, Default)]
 pub struct Ledger {
@@ -738,6 +747,20 @@ pub enum LaneRelease {
     },
 }
 
+/// The report's answer for a fact that did not reach disk (§9).
+///
+/// A run whose journal append failed keeps the nonce in memory, because the line the file does
+/// hold still reserves it. Its report was built with `LaneRelease::Released`, which would then
+/// describe a lane this process never gave back — this is the word that replaces it.
+pub fn lane_held_unwritten(error: &ExecutionError) -> LaneRelease {
+    LaneRelease::Held {
+        reason: format!(
+            "M12-F §9: the fact this step would have acted on ({error}) never reached the \
+             ledger, so the nonce the file still reserves stays held"
+        ),
+    }
+}
+
 impl ExecutionLane {
     pub fn new() -> Self {
         Self::default()
@@ -769,6 +792,17 @@ impl ExecutionLane {
             )));
         }
         self.nonce.allocate(reading)
+    }
+
+    /// M12-F §7: put a recovered, still-unresolved nonce back on the lane.
+    ///
+    /// Recovery calls this before any entry that could sign or send, so the first
+    /// `allocate` after a restart meets the same "one lane, one transaction" refusal it
+    /// would have met in the process that crashed. Refused when the lane already holds
+    /// something, which is the duplicate-recovery case §6 asks about: replaying the same
+    /// ledger twice must not occupy the nonce twice.
+    pub fn restore(&mut self, address: Address, nonce: u64) -> Result<()> {
+        self.nonce.restore(address, nonce)
     }
 
     /// §25's rule, applied to the lane: only a definite refusal releases it. An `Unknown`
